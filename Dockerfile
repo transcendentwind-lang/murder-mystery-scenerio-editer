@@ -2,8 +2,8 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-# Alpine compatibility dependencies
-RUN apk add --no-cache libc6-compat
+# Alpine compatibility dependencies & git
+RUN apk add --no-cache libc6-compat git
 
 # Copy dependency manifests
 COPY package.json package-lock.json* ./
