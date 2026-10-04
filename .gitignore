@@ -27,8 +27,6 @@ yarn-error.log*
 .DS_Store
 *.pem
 
-# IDE
-.vscode
-.idea
-*.swp
-*.swo
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
