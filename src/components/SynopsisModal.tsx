@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { MMProject } from "@/types/schema";
-import { X, Copy, Check, Download, FileText, Sparkles, BookOpen, Layers } from "lucide-react";
+import { X, Copy, Check, Download, FileText, Sparkles, BookOpen, Layers, CheckCheck } from "lucide-react";
+import { copyToClipboard, downloadTextFile } from "@/utils/copyText";
 
 interface SynopsisModalProps {
   project: MMProject;
@@ -18,7 +19,7 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
   onUpdateProject,
 }) => {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<"view" | "edit">("view");
+  const [activeTab, setActiveTab] = useState<"view" | "raw" | "edit">("raw");
 
   if (!isOpen) return null;
 
@@ -53,23 +54,20 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
     return text;
   };
 
-  const handleCopy = () => {
+  const handleCopy = async () => {
     const text = generateSynopsisText();
-    navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    const success = await copyToClipboard(text);
+    if (success) {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
   };
 
   const handleDownload = () => {
     const text = generateSynopsisText();
-    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `${project.title}_企画概要・プロット紹介.txt`;
-    a.click();
-    URL.revokeObjectURL(url);
+    downloadTextFile(`${project.title}_企画概要・プロット紹介.txt`, text);
   };
+
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
@@ -92,6 +90,16 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
           <div className="flex items-center gap-2">
             <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 p-1 mr-2">
               <button
+                onClick={() => setActiveTab("raw")}
+                className={`rounded px-2.5 py-1 text-xs font-semibold transition ${
+                  activeTab === "raw"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                📋 テキスト全文出力
+              </button>
+              <button
                 onClick={() => setActiveTab("view")}
                 className={`rounded px-2.5 py-1 text-xs font-medium transition ${
                   activeTab === "view"
@@ -99,7 +107,7 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                閲覧・出力
+                デザイン表示
               </button>
               <button
                 onClick={() => setActiveTab("edit")}
@@ -141,8 +149,27 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
 
         {/* モーダルコンテンツ */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 text-xs">
-          {activeTab === "view" ? (
+          {activeTab === "raw" ? (
+            /* プレーンテキスト全文表示モード */
+            <div className="flex h-full flex-col space-y-3">
+              <div className="flex items-center justify-between text-xs text-slate-400">
+                <span className="font-semibold text-indigo-300">
+                  企画概要・プロット紹介 プレーンテキスト出力
+                </span>
+                <span className="text-[11px] text-slate-500">
+                  ※下のテキストエリア内を直接ドラッグして手動コピー（Cmd+C / Ctrl+C）も可能です
+                </span>
+              </div>
+              <textarea
+                value={generateSynopsisText()}
+                readOnly
+                rows={20}
+                className="w-full flex-1 rounded-xl border border-slate-800 bg-slate-950 p-4 font-mono text-xs leading-relaxed text-slate-200 focus:outline-none focus:border-indigo-500 selection:bg-indigo-600 selection:text-white"
+              />
+            </div>
+          ) : activeTab === "view" ? (
             /* 閲覧モード */
+
             <div className="space-y-6">
               {/* 基本情報バナー */}
               <div className="rounded-xl border border-indigo-500/30 bg-indigo-950/20 p-4">

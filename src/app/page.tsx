@@ -9,6 +9,7 @@ import { HandoutEditor } from "@/components/HandoutEditor";
 import { CrypticMatrix } from "@/components/CrypticMatrix";
 import { AudioSimulator } from "@/components/AudioSimulator";
 import { GmDashboard } from "@/components/GmDashboard";
+import { TextExportView } from "@/components/TextExportView";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
 import { SynopsisModal } from "@/components/SynopsisModal";
 import {
@@ -27,7 +28,8 @@ type ActiveTab =
   | "handouts"
   | "puzzle_matrix"
   | "audio_simulator"
-  | "gm_dashboard";
+  | "gm_dashboard"
+  | "export";
 
 export default function WorkbenchPage() {
   const [project, setProject] = useState<MMProject>(initialProject);
@@ -172,7 +174,20 @@ export default function WorkbenchPage() {
               <Radio className="h-3.5 w-3.5" />
               ⑥ GMダッシュボード
             </button>
+
+            <button
+              onClick={() => setActiveTab("export")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition ${
+                activeTab === "export"
+                  ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
+                  : "text-indigo-300 hover:text-white hover:bg-slate-900"
+              }`}
+            >
+              <FileText className="h-3.5 w-3.5" />
+              ⑦ テキスト出力 ＆ 企画書
+            </button>
           </div>
+
 
           {/* 企画概要・プロット紹介モーダルボタン */}
           <button
@@ -247,8 +262,11 @@ export default function WorkbenchPage() {
           {activeTab === "audio_simulator" && <AudioSimulator />}
 
           {activeTab === "gm_dashboard" && <GmDashboard project={project} />}
+
+          {activeTab === "export" && <TextExportView project={project} />}
         </main>
       </div>
+
 
       {/* 企画概要・プロット紹介モーダル */}
       <SynopsisModal
