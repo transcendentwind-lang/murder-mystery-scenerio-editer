@@ -10,6 +10,7 @@ import { CrypticMatrix } from "@/components/CrypticMatrix";
 import { AudioSimulator } from "@/components/AudioSimulator";
 import { GmDashboard } from "@/components/GmDashboard";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
+import { SynopsisModal } from "@/components/SynopsisModal";
 import {
   Compass,
   Users,
@@ -17,7 +18,7 @@ import {
   Grid,
   Activity,
   Radio,
-  FileCheck,
+  FileText,
 } from "lucide-react";
 
 type ActiveTab =
@@ -32,6 +33,7 @@ export default function WorkbenchPage() {
   const [project, setProject] = useState<MMProject>(initialProject);
   const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
   const [externalPrompt, setExternalPrompt] = useState<string>("");
+  const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
 
   // AIチャット初期メッセージ
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -95,81 +97,95 @@ export default function WorkbenchPage() {
           </div>
         </div>
 
-        {/* タブナビゲーション (6大画面) */}
-        <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
-          <button
-            onClick={() => setActiveTab("timeline")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "timeline"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Compass className="h-3.5 w-3.5" />
-            ① 7日間タイムライン
-          </button>
+        {/* 右側アクション＆タブ */}
+        <div className="flex items-center gap-3">
+          {/* タブナビゲーション (6大画面) */}
+          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+            <button
+              onClick={() => setActiveTab("timeline")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "timeline"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Compass className="h-3.5 w-3.5" />
+              ① 7日間タイムライン
+            </button>
 
-          <button
-            onClick={() => setActiveTab("characters_evidence")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "characters_evidence"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Users className="h-3.5 w-3.5" />
-            ② キャラ設定 ＆ 証拠管理
-          </button>
+            <button
+              onClick={() => setActiveTab("characters_evidence")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "characters_evidence"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Users className="h-3.5 w-3.5" />
+              ② キャラ設定 ＆ 証拠管理
+            </button>
 
-          <button
-            onClick={() => setActiveTab("handouts")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "handouts"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <BookOpen className="h-3.5 w-3.5" />
-            ③ ハンドアウト共創
-          </button>
+            <button
+              onClick={() => setActiveTab("handouts")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "handouts"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <BookOpen className="h-3.5 w-3.5" />
+              ③ ハンドアウト共創
+            </button>
 
-          <button
-            onClick={() => setActiveTab("puzzle_matrix")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "puzzle_matrix"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Grid className="h-3.5 w-3.5" />
-            ④ クジラ言語パズル
-          </button>
+            <button
+              onClick={() => setActiveTab("puzzle_matrix")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "puzzle_matrix"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Grid className="h-3.5 w-3.5" />
+              ④ クジラ言語パズル
+            </button>
 
-          <button
-            onClick={() => setActiveTab("audio_simulator")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "audio_simulator"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Activity className="h-3.5 w-3.5" />
-            ⑤ 深海音響シミュレータ
-          </button>
+            <button
+              onClick={() => setActiveTab("audio_simulator")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "audio_simulator"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Activity className="h-3.5 w-3.5" />
+              ⑤ 深海音響シミュレータ
+            </button>
 
+            <button
+              onClick={() => setActiveTab("gm_dashboard")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "gm_dashboard"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              <Radio className="h-3.5 w-3.5" />
+              ⑥ GMダッシュボード
+            </button>
+          </div>
+
+          {/* 企画概要・プロット紹介モーダルボタン */}
           <button
-            onClick={() => setActiveTab("gm_dashboard")}
-            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
-              activeTab === "gm_dashboard"
-                ? "bg-indigo-600 text-white shadow"
-                : "text-slate-400 hover:text-slate-200"
-            }`}
+            onClick={() => setIsSynopsisOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-indigo-500/40 bg-indigo-950/60 px-3 py-1.5 text-xs font-bold text-indigo-200 hover:bg-indigo-900/80 hover:text-white transition shadow"
+            title="タイトル、コンセプト、プロット紹介をテキスト出力・編集"
           >
-            <Radio className="h-3.5 w-3.5" />
-            ⑥ GMダッシュボード
+            <FileText className="h-3.5 w-3.5 text-indigo-400" />
+            企画・プロット紹介
           </button>
         </div>
       </header>
+
 
       {/* メインレイアウト：左ペイン（AI Chat）＋ 右ペイン（作業画面） */}
       <div className="flex flex-1 overflow-hidden">
@@ -233,6 +249,15 @@ export default function WorkbenchPage() {
           {activeTab === "gm_dashboard" && <GmDashboard project={project} />}
         </main>
       </div>
+
+      {/* 企画概要・プロット紹介モーダル */}
+      <SynopsisModal
+        project={project}
+        isOpen={isSynopsisOpen}
+        onClose={() => setIsSynopsisOpen(false)}
+        onUpdateProject={setProject}
+      />
     </div>
   );
 }
+

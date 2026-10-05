@@ -57,11 +57,36 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
     }
   };
 
-  // シナリオ台本のMarkdown一括生成
+  const [copiedType, setCopiedType] = useState<"full" | "synopsis" | null>(null);
+
+  // 企画概要・プロット紹介のMarkdown生成
+  const generateSynopsisMarkdown = () => {
+    let md = `# ${project.title}\n## ${project.subtitle}\n\n`;
+    md += `- 想定プレイ時間: ${project.durationHours}時間\n`;
+    md += `- プレイヤー人数: ${project.playerCount}名（GM必須）\n\n`;
+    md += `## 🌟 1. 作品コンセプト・世界観\n${project.concept}\n\n`;
+    md += `## 🎭 2. プレイヤー体験 (Player Experience)\n${project.targetExperience}\n\n`;
+    md += `## 📜 3. プロット紹介 (あらすじ・真相・解決法)\n${project.plotSummary}\n\n`;
+    md += `## 💡 4. コアギミック (生態系捕食 × クジラ言語パズル)\n${project.gimmickOverview}\n\n`;
+    md += `## 👥 5. 登場人物（海難救助対策チーム 6名）\n`;
+    project.characters.forEach((c) => {
+      md += `- **${c.name}** (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
+      md += `  ${c.handout.publicProfile}\n`;
+    });
+    return md;
+  };
+
+  // 完全版シナリオ台本のMarkdown一括生成
   const generateFullMarkdown = () => {
     let md = `# ${project.title}\n## ${project.subtitle}\n\n`;
     md += `- 想定プレイ時間: ${project.durationHours}時間\n`;
     md += `- プレイヤー人数: ${project.playerCount}名（GM必須）\n\n`;
+
+    md += `## 🌟 作品コンセプト ＆ プロット概要\n`;
+    md += `### コンセプト\n${project.concept}\n\n`;
+    md += `### プレイヤー体験\n${project.targetExperience}\n\n`;
+    md += `### プロット紹介（真相・あらすじ）\n${project.plotSummary}\n\n`;
+    md += `### コアギミック\n${project.gimmickOverview}\n\n`;
 
     md += `## 👥 登場人物一覧（6名）\n\n`;
     project.characters.forEach((c) => {
@@ -93,11 +118,26 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
     return md;
   };
 
-  const handleCopyMarkdown = () => {
-    const text = generateFullMarkdown();
+  const handleCopy = (type: "full" | "synopsis") => {
+    const text = type === "full" ? generateFullMarkdown() : generateSynopsisMarkdown();
     navigator.clipboard.writeText(text);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+    setCopiedType(type);
+    setTimeout(() => setCopiedType(null), 2000);
+  };
+
+  const handleDownload = (type: "full" | "synopsis") => {
+    const text = type === "full" ? generateFullMarkdown() : generateSynopsisMarkdown();
+    const filename =
+      type === "full"
+        ? `${project.title}_完全台本.md`
+        : `${project.title}_企画概要・プロット紹介.txt`;
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const currentTimelineStep = project.timeline.find((t) => t.dayNumber === currentDay);
@@ -138,16 +178,53 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
           </div>
         </div>
 
-        {/* 台本エクスポートボタン */}
+        {/* テキストエクスポートボタン群 */}
         <div className="flex items-center gap-2">
-          <button
-            onClick={handleCopyMarkdown}
-            className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
-          >
-            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" /> : <Copy className="h-3.5 w-3.5" />}
-            {copied ? "台本をコピーしました！" : "台本Markdownをコピー"}
-          </button>
+          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+            <button
+              onClick={() => handleCopy("synopsis")}
+              className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-slate-900 transition"
+              title="企画書・プロット紹介をクリップボードにコピー"
+            >
+              {copiedType === "synopsis" ? (
+                <Check className="h-3.5 w-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="h-3.5 w-3.5" />
+              )}
+              {copiedType === "synopsis" ? "概要コピー完了！" : "企画・プロット概要をコピー"}
+            </button>
+            <button
+              onClick={() => handleDownload("synopsis")}
+              className="rounded p-1 text-slate-400 hover:text-white hover:bg-slate-900 transition"
+              title="企画・プロット概要をテキストファイル(.txt)保存"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
+          <div className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 p-1">
+            <button
+              onClick={() => handleCopy("full")}
+              className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
+              title="全設定・HO・タイムライン・証拠を含む完全台本をコピー"
+            >
+              {copiedType === "full" ? (
+                <Check className="h-3.5 w-3.5 text-emerald-400" />
+              ) : (
+                <Copy className="h-3.5 w-3.5" />
+              )}
+              {copiedType === "full" ? "完全台本コピー完了！" : "完全台本をコピー"}
+            </button>
+            <button
+              onClick={() => handleDownload("full")}
+              className="rounded p-1 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              title="完全台本をMarkdownファイル(.md)保存"
+            >
+              <Download className="h-3.5 w-3.5" />
+            </button>
+          </div>
         </div>
+
       </div>
 
       {/* メインGM作業エリア */}

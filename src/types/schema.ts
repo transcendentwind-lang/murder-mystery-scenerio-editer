@@ -105,6 +105,10 @@ export interface CandidateLockStatus {
 export interface MMProject {
   title: string;
   subtitle: string;
+  concept: string;             // 作品コンセプト・世界観
+  targetExperience: string;    // プレイヤーが味わう体験
+  plotSummary: string;         // プロット紹介（あらすじ・真相・解決法）
+  gimmickOverview: string;     // コアギミック（クジラ言語・生態系捕食）の紹介
   playerCount: number;
   durationHours: number;
   hasGm: boolean;
