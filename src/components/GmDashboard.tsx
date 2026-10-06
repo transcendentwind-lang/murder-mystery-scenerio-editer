@@ -269,13 +269,45 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
               </h4>
 
               {currentDay === 1 && (
-                <div className="space-y-2 text-xs leading-relaxed">
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-slate-300">【GMナレーション（導入）】:</span>
-                    <p className="text-slate-400 mt-1 italic">
-                      「小笠原南西沖にて民間船が全電源喪失。荒れ狂う海の中、あなたたち6名の合同救難オペレーションが開通します……」
+                <div className="space-y-3 text-xs leading-relaxed">
+                  <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
+                    <span className="font-bold text-indigo-300">【フェーズ1：緊急招集 ＆ 自己紹介】</span>
+                    <p className="text-slate-300 mt-1 italic">
+                      「小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源喪失。AISも停波し、救難信号を発信した直後に通信途絶しました。これより東京司令部と小笠原現地の合同海難救助チームを開設します。まずは各員、氏名・所属・現場で担える役割について自己紹介を行ってください」
                     </p>
                   </div>
+
+                  <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3">
+                    <span className="font-bold text-amber-300">【フェーズ2：状況提示 ＆ なぜ衛星が使えないか】</span>
+                    <p className="text-slate-300 mt-1 italic">
+                      「救難信号発信から既に20分が経過。救難艇が現場海域へ到達するまでさらに40分――合計1時間、船は漂流し続けます。全体に【漂流海図】を開示します。どこへ救難艇を急行させるべきか、6名で協力して結論を出してください」
+                    </p>
+                    <div className="mt-2 rounded bg-slate-900/90 p-2 text-[11px] text-slate-300 border border-slate-800">
+                      <span className="font-bold text-cyan-400">PC2からの開示情報（衛星不可の理由）:</span>
+                      <p className="mt-0.5">
+                        「気象衛星ひまわりは解像度不足で40tの小型船を捕捉不可。低軌道偵察衛星は軌道通過まで4時間＋現場の雨雲で光学視界ゼロ。全電源喪失でAISも途絶。衛星画像頼みの捜索は不可能です！現場の海流と風から計算するしかありません！」
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded border border-emerald-900/60 bg-emerald-950/20 p-3">
+                    <span className="font-bold text-emerald-300">【フェーズ3：漂流予測パズル（GM用正解メモ）】</span>
+                    <div className="mt-1 space-y-1 text-[11px] text-slate-300">
+                      <p>・<strong className="text-white">PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
+                      <p>・<strong className="text-white">PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
+                      <p>・<strong className="text-white">PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
+                      <p>・<strong className="text-white">PC6 (無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
+                      <p>・<strong className="text-white">PC3 (海難救助)</strong>: 東側には危険な暗礁群（地点C）。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の地点D】へ急行して救出！</p>
+                    </div>
+                  </div>
+
+                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
+                    <span className="font-bold text-slate-300">【フェーズ4：救助成功ナレーション】</span>
+                    <p className="text-slate-400 mt-1 italic">
+                      「救難艇が東北東の地点Dへ全速力で到達。東の暗礁群に叩きつけられる直前、激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功しました！」
+                    </p>
+                  </div>
+
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-red-400">【NPC 船長（救助直後・錯乱）】:</span>
                     <p className="text-slate-400 mt-1">
