@@ -310,14 +310,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <p>・<strong className="text-white">PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
                       <p>・<strong className="text-white">PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
                       <p>・<strong className="text-white">PC6 (無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
-                      <p>・<strong className="text-white">PC3 (海難救助)</strong>: 東側には危険な暗礁群（地点C）。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の地点D】へ急行して救出！</p>
+                      <p>・<strong className="text-white">PC3 (海難救助)</strong>: 東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
                     </div>
                   </div>
 
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-slate-300">【フェーズ4：救助成功ナレーション】</span>
                     <p className="text-slate-400 mt-1 italic">
-                      「救難艇が東北東の地点Dへ全速力で到達。東の暗礁群に叩きつけられる直前、激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功しました！」
+                      「救難艇が東北東の漂流予測海域へ全速力で到達。東の暗礁群に叩きつけられる直前、激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功しました！」
                     </p>
                   </div>
 
