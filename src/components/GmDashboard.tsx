@@ -311,13 +311,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-red-400">【NPC 船長（救助直後・錯乱）】:</span>
                     <p className="text-slate-400 mt-1">
-                      「あ、あれはクジラなんかじゃない！海の下に……巨大な目玉と無数の触手があったんだ！船の計器を全部焼き切られちまった！」
+                      「あ、あれはクジラなんかじゃない！海の下に……巨大な目玉と無数の触手があったんだ！計器を全部焼き切られただけじゃない、スクリューが何かに巻き付かれたのか、急にビクとも動かなくなっちまったんだ！……それに、あのダイバー連中も怪しい！潜水の手際はプロ並みに手慣れていたが、俺が案内したのは今回が初めてだ。1ヶ月ほど前からこの海域で継続的に潜りを繰り返していたらしい……！」
                     </p>
                   </div>
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-blue-400">【NPC ダイバー（不気味な冷静さ）】:</span>
+                    <span className="font-bold text-blue-400">【NPC ダイバー（不気味な冷静さ・大型冷凍ボックスを抱えて）】:</span>
                     <p className="text-slate-400 mt-1">
-                      「船長は大袈裟ですね。ただの大型クジラですよ。……それより、この金属箱を本土行きの定期便に乗せていただけますか？」
+                      「船長は大袈裟ですね。ただの大型クジラですよ。私たちはこの近辺での魚の生態調査をしており、珍しい魚を採集していただけです。漂流事故で大変でしたが、これで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。……この冷凍ボックス、本土行きの定期便に急ぎ乗せていただけますか？」
                     </p>
                   </div>
                 </div>
