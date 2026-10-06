@@ -14,14 +14,16 @@ import {
   Clock,
   FileText,
   AlertTriangle,
+  Navigation,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 
 interface GmDashboardProps {
   project: MMProject;
+  onNavigateToChart?: () => void;
 }
 
-export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
+export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToChart }) => {
   const [currentDay, setCurrentDay] = useState(1);
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
@@ -278,7 +280,18 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project }) => {
                   </div>
 
                   <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3">
-                    <span className="font-bold text-amber-300">【フェーズ2：状況提示 ＆ なぜ衛星が使えないか】</span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-amber-300">【フェーズ2：状況提示 ＆ なぜ衛星が使えないか】</span>
+                      {onNavigateToChart && (
+                        <button
+                          onClick={onNavigateToChart}
+                          className="flex items-center gap-1 rounded bg-cyan-700/80 px-2 py-1 text-[11px] font-bold text-white hover:bg-cyan-600 transition shadow"
+                        >
+                          <Navigation className="h-3 w-3" />
+                          海図画面を開く
+                        </button>
+                      )}
+                    </div>
                     <p className="text-slate-300 mt-1 italic">
                       「救難信号発信から既に20分が経過。救難艇が現場海域へ到達するまでさらに40分――合計1時間、船は漂流し続けます。全体に【漂流海図】を開示します。どこへ救難艇を急行させるべきか、6名で協力して結論を出してください」
                     </p>

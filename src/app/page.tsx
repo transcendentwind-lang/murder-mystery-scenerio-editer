@@ -12,6 +12,7 @@ import { GmDashboard } from "@/components/GmDashboard";
 import { TextExportView } from "@/components/TextExportView";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
 import { SynopsisModal } from "@/components/SynopsisModal";
+import { NauticalChartView } from "@/components/NauticalChartView";
 import {
   Compass,
   Users,
@@ -20,6 +21,7 @@ import {
   Activity,
   Radio,
   FileText,
+  Navigation,
 } from "lucide-react";
 
 type ActiveTab =
@@ -29,6 +31,7 @@ type ActiveTab =
   | "puzzle_matrix"
   | "audio_simulator"
   | "gm_dashboard"
+  | "nautical_chart"
   | "export";
 
 export default function WorkbenchPage() {
@@ -176,6 +179,18 @@ export default function WorkbenchPage() {
             </button>
 
             <button
+              onClick={() => setActiveTab("nautical_chart")}
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                activeTab === "nautical_chart"
+                  ? "bg-indigo-600 text-white shadow ring-2 ring-cyan-400/50"
+                  : "text-cyan-300 hover:text-white hover:bg-slate-900"
+              }`}
+            >
+              <Navigation className="h-3.5 w-3.5" />
+              ⑦ 航海海図 (Day 1)
+            </button>
+
+            <button
               onClick={() => setActiveTab("export")}
               className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition ${
                 activeTab === "export"
@@ -184,7 +199,7 @@ export default function WorkbenchPage() {
               }`}
             >
               <FileText className="h-3.5 w-3.5" />
-              ⑦ テキスト出力 ＆ 企画書
+              ⑧ テキスト出力 ＆ 企画書
             </button>
           </div>
 
@@ -261,7 +276,16 @@ export default function WorkbenchPage() {
 
           {activeTab === "audio_simulator" && <AudioSimulator />}
 
-          {activeTab === "gm_dashboard" && <GmDashboard project={project} />}
+          {activeTab === "gm_dashboard" && (
+            <GmDashboard
+              project={project}
+              onNavigateToChart={() => setActiveTab("nautical_chart")}
+            />
+          )}
+
+          {activeTab === "nautical_chart" && (
+            <NauticalChartView onBackToDashboard={() => setActiveTab("gm_dashboard")} />
+          )}
 
           {activeTab === "export" && <TextExportView project={project} />}
         </main>
