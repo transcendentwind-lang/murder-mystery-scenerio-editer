@@ -20,7 +20,7 @@ interface NauticalChartViewProps {
 }
 
 export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDashboard }) => {
-  // 表示モード: 'investigation' (プレイヤー用白図: 父島とSOS位置のみ) | 'tactical' (対策本部作戦図: ベクトル・解答全表示)
+  // 表示モード: 'investigation' (プレイヤー用白図: 中心がSOS地点、父島・南島、暗礁記号のみ) | 'tactical' (対策本部作戦図: ベクトル・解答全表示)
   const [viewMode, setViewMode] = useState<"investigation" | "tactical">("investigation");
 
   // レイヤー表示トグル (対策本部モード時に有効)
@@ -106,13 +106,13 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 小笠原南西海域 航海用海図（CHART NO. W-2704）
               </h2>
               <span className="rounded bg-cyan-950 px-2 py-0.5 text-[11px] font-mono text-cyan-300 border border-cyan-800">
-                縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM)
+                中心: SOS発信位置 / 縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM)
               </span>
             </div>
             <p className="text-xs text-slate-400 mt-0.5">
               {viewMode === "investigation"
-                ? "【プレイヤー提示用】父島とSOS発信位置のみの白地図。各員の情報を持ち寄り、漂流位置を自力で作図・計算します。"
-                : "【対策本部解析図】海流（2.0kt 真東）× 風浪（1.5kt 北東）の合成ベクトルと救助目標海域の全解答表示。"}
+                ? "【プレイヤー提示用】SOS地点を中心とし、父島・南島および複数箇所の暗礁記号が配置された白地図。漂流先を自力で計算します。"
+                : "【対策本部解析図】海流（2.0kt 真東）× 風浪（1.5kt 北東）の合成ベクトルと東・南東暗礁群の回避ルート全表示。"}
             </p>
           </div>
         </div>
@@ -128,7 +128,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                   ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
                   : "text-slate-400 hover:text-slate-200"
               }`}
-              title="プレイヤー提示用：父島とSOS位置のみの白地図"
+              title="プレイヤー提示用：SOS地点中心の白地図"
             >
               <EyeOff className="h-3.5 w-3.5" />
               白地図（プレイヤー提示用）
@@ -234,8 +234,8 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                   <line x1="0" y1="0" x2="0" y2="12" stroke="#ef4444" strokeWidth="2.5" opacity="0.35" />
                 </pattern>
 
-                {/* 浅瀬グラデーション */}
-                <radialGradient id="shallow-grad" cx="880" cy="120" r="240" gradientUnits="userSpaceOnUse">
+                {/* 浅瀬グラデーション（南島・父島沿岸） */}
+                <radialGradient id="shallow-grad-ogasawara" cx="890" cy="110" r="260" gradientUnits="userSpaceOnUse">
                   <stop offset="0%" stopColor="#bae6fd" stopOpacity="0.85" />
                   <stop offset="50%" stopColor="#e0f2fe" stopOpacity="0.5" />
                   <stop offset="100%" stopColor="#fdfefe" stopOpacity="0.05" />
@@ -245,149 +245,170 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               {/* 背景：海図用紙のオフホワイト地 */}
               <rect x="0" y="0" width="1000" height="700" fill="#fcfdfd" />
 
-              {/* 浅瀬・陸地（右上：父島南西端） */}
+              {/* 浅瀬・陸地（右上：北東方向にある南島 ＆ 父島南西海岸） */}
               {showBathymetry && (
                 <>
-                  <circle cx="920" cy="80" r="280" fill="url(#shallow-grad)" />
-                  {/* 父島の陸地輪郭 */}
+                  <circle cx="890" cy="110" r="260" fill="url(#shallow-grad-ogasawara)" />
+
+                  {/* 父島（南西海岸・南崎・ハートロック方面） */}
                   <path
-                    d="M 870 0 Q 855 70 885 120 T 965 145 L 1000 135 L 1000 0 Z"
+                    d="M 870 0 Q 860 60 890 100 T 960 120 L 1000 110 L 1000 0 Z"
                     fill="#e2e8f0"
                     stroke="#475569"
                     strokeWidth="1.8"
                   />
-                  {/* 沿岸の暗礁・小島 */}
-                  <ellipse cx="850" cy="95" rx="12" ry="8" fill="#cbd5e1" stroke="#475569" strokeWidth="1" />
-                  <text x="830" y="118" fontSize="8" fill="#475569">南島方面</text>
-
-                  <text x="910" y="55" fontSize="12" fontWeight="bold" fill="#1e293b" letterSpacing="3">
+                  <text x="910" y="45" fontSize="12" fontWeight="bold" fill="#1e293b" letterSpacing="2">
                     父 島
                   </text>
-                  <text x="900" y="72" fontSize="9" fontWeight="semibold" fill="#475569" letterSpacing="1">
+                  <text x="895" y="62" fontSize="9" fontWeight="semibold" fill="#475569" letterSpacing="1">
                     CHICHI-JIMA
                   </text>
-                  <text x="890" y="86" fontSize="8" fill="#64748b">
-                    (南西海岸)
+                  <text x="890" y="76" fontSize="8" fill="#64748b">
+                    (南崎・ジョンビーチ)
+                  </text>
+
+                  {/* 南島（父島の南西沖約1kmにある島） */}
+                  {/* 南島海嶺・カルスト礁 */}
+                  <path
+                    d="M 790 140 C 805 125 825 130 835 150 C 840 170 820 185 800 180 C 785 175 780 155 790 140 Z"
+                    fill="#e2e8f0"
+                    stroke="#475569"
+                    strokeWidth="1.6"
+                  />
+                  {/* 南島周辺の小岩礁 */}
+                  <circle cx="778" cy="165" r="3.5" fill="#94a3b8" stroke="#475569" strokeWidth="1" />
+                  <circle cx="842" cy="140" r="2.5" fill="#94a3b8" stroke="#475569" strokeWidth="1" />
+                  <ellipse cx="810" cy="158" rx="4" ry="2" fill="#bae6fd" /> {/* 扇池の入江 */}
+
+                  <text x="805" y="198" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#1e293b">
+                    南 島
+                  </text>
+                  <text x="805" y="210" textAnchor="middle" fontSize="8" fill="#475569">
+                    MINAMI-JIMA
+                  </text>
+                  <text x="850" y="145" fontSize="7.5" fill="#0284c7" fontStyle="italic">
+                    南島瀬戸
                   </text>
 
                   {/* 等深線 (Bathymetric contours) */}
                   <path
-                    d="M 650 0 C 670 120 720 220 840 280 C 910 320 950 350 1000 370"
+                    d="M 680 0 C 700 130 750 240 850 300 C 920 340 960 360 1000 375"
                     fill="none"
                     stroke="#7dd3fc"
                     strokeWidth="1.2"
                     strokeDasharray="4 2"
                   />
-                  <text x="730" y="210" fontSize="9" fill="#0284c7" transform="rotate(35 730 210)">
+                  <text x="760" y="225" fontSize="9" fill="#0284c7" transform="rotate(35 760 225)">
                     -200m
                   </text>
 
                   <path
-                    d="M 450 0 C 480 180 560 350 720 480 C 820 560 900 620 1000 660"
+                    d="M 480 0 C 510 180 600 350 750 490 C 850 570 920 620 1000 655"
                     fill="none"
                     stroke="#93c5fd"
                     strokeWidth="1"
                   />
-                  <text x="560" y="320" fontSize="9" fill="#3b82f6" transform="rotate(40 560 320)">
+                  <text x="590" y="315" fontSize="9" fill="#3b82f6" transform="rotate(38 590 315)">
                     -500m
                   </text>
 
                   <path
-                    d="M 280 0 C 310 240 400 480 580 620 L 680 700"
+                    d="M 300 0 C 330 220 420 460 600 620 L 680 700"
                     fill="none"
                     stroke="#bfdbfe"
                     strokeWidth="0.8"
                   />
-                  <text x="380" y="420" fontSize="9" fill="#60a5fa" transform="rotate(45 380 420)">
+                  <text x="400" y="420" fontSize="9" fill="#60a5fa" transform="rotate(45 400 420)">
                     -1000m
                   </text>
 
                   {/* 散布水深値 (Soundings in metres) */}
                   <g fontSize="9" fill="#64748b" fontFamily="monospace">
-                    <text x="860" y="160">68</text>
-                    <text x="780" y="130">142</text>
-                    <text x="820" y="220">195</text>
-                    <text x="720" y="270">310</text>
-                    <text x="640" y="210">285</text>
-                    <text x="760" y="390">420</text>
-                    <text x="600" y="430">650</text>
-                    <text x="470" y="260">580</text>
-                    <text x="360" y="280">1120</text>
-                    <text x="420" y="520">1240</text>
-                    <text x="250" y="450">1850</text>
-                    <text x="180" y="260">2100</text>
-                    <text x="150" y="520">2320</text>
+                    <text x="870" y="145">52</text>
+                    <text x="825" y="115">84</text>
+                    <text x="750" y="130">125</text>
+                    <text x="840" y="240">210</text>
+                    <text x="720" y="270">340</text>
+                    <text x="630" y="200">290</text>
+                    <text x="760" y="410">450</text>
+                    <text x="610" y="430">620</text>
+                    <text x="440" y="240">540</text>
+                    <text x="360" y="270">980</text>
+                    <text x="410" y="520">1150</text>
+                    <text x="250" y="450">1780</text>
+                    <text x="170" y="250">2150</text>
+                    <text x="140" y="520">2380</text>
+                    <text x="560" y="580">1420</text>
                   </g>
                 </>
               )}
 
-              {/* 緯度経度グリッド線 (1目盛り = 1海里 = 80px) */}
+              {/* 緯度経度グリッド線 (1目盛り = 1海里 = 80px, 中心SOS: 500, 350) */}
               {showGrid && (
                 <g stroke="#cbd5e1" strokeWidth="0.6" strokeDasharray="2 3">
                   {/* 経度線 (垂直) */}
-                  <line x1="120" y1="40" x2="120" y2="660" />
-                  <line x1="200" y1="40" x2="200" y2="660" />
-                  <line x1="280" y1="40" x2="280" y2="660" />
-                  <line x1="360" y1="40" x2="360" y2="660" />
-                  <line x1="440" y1="40" x2="440" y2="660" />
-                  <line x1="520" y1="40" x2="520" y2="660" />
-                  <line x1="600" y1="40" x2="600" y2="660" />
-                  <line x1="680" y1="40" x2="680" y2="660" />
-                  <line x1="760" y1="40" x2="760" y2="660" />
-                  <line x1="840" y1="40" x2="840" y2="660" />
-                  <line x1="920" y1="40" x2="920" y2="660" />
+                  <line x1="100" y1="40" x2="100" y2="660" />
+                  <line x1="180" y1="40" x2="180" y2="660" />
+                  <line x1="260" y1="40" x2="260" y2="660" />
+                  <line x1="340" y1="40" x2="340" y2="660" />
+                  <line x1="420" y1="40" x2="420" y2="660" />
+                  <line x1="500" y1="40" x2="500" y2="660" stroke="#94a3b8" strokeWidth="0.9" /> {/* 経度中心線 */}
+                  <line x1="580" y1="40" x2="580" y2="660" />
+                  <line x1="660" y1="40" x2="660" y2="660" />
+                  <line x1="740" y1="40" x2="740" y2="660" />
+                  <line x1="820" y1="40" x2="820" y2="660" />
+                  <line x1="900" y1="40" x2="900" y2="660" />
 
                   {/* 緯度線 (水平) */}
-                  <line x1="60" y1="100" x2="960" y2="100" />
-                  <line x1="60" y1="180" x2="960" y2="180" />
-                  <line x1="60" y1="260" x2="960" y2="260" />
-                  <line x1="60" y1="340" x2="960" y2="340" />
-                  <line x1="60" y1="420" x2="960" y2="420" />
-                  <line x1="60" y1="500" x2="960" y2="500" />
-                  <line x1="60" y1="580" x2="960" y2="580" />
+                  <line x1="60" y1="110" x2="960" y2="110" />
+                  <line x1="60" y1="190" x2="960" y2="190" />
+                  <line x1="60" y1="270" x2="960" y2="270" />
+                  <line x1="60" y1="350" x2="960" y2="350" stroke="#94a3b8" strokeWidth="0.9" /> {/* 緯度中心線 */}
+                  <line x1="60" y1="430" x2="960" y2="430" />
+                  <line x1="60" y1="510" x2="960" y2="510" />
+                  <line x1="60" y1="590" x2="960" y2="590" />
                 </g>
               )}
 
               {/* 外枠（ボーダー）：航海用海図の本格的マージンと目盛り */}
-              {/* 外枠ダブルライン */}
               <rect x="58" y="38" width="904" height="624" fill="none" stroke="#0f172a" strokeWidth="2.5" />
               <rect x="62" y="42" width="896" height="616" fill="none" stroke="#0f172a" strokeWidth="0.8" />
 
-              {/* 緯度・経度の目盛り数値 */}
+              {/* 緯度・経度の目盛り数値 (中心 500,350 が 27°04'N, 142°06'E) */}
               <g fontSize="10" fontWeight="bold" fill="#0f172a" fontFamily="monospace">
                 {/* 経度 (上・下) */}
-                <text x="270" y="32">142°04&apos;E</text>
-                <text x="510" y="32">142°07&apos;E</text>
-                <text x="750" y="32">142°10&apos;E</text>
+                <text x="245" y="32">142°03&apos;E</text>
+                <text x="485" y="32">142°06&apos;E</text>
+                <text x="725" y="32">142°09&apos;E</text>
 
-                <text x="270" y="676">142°04&apos;E</text>
-                <text x="510" y="676">142°07&apos;E</text>
-                <text x="750" y="676">142°10&apos;E</text>
+                <text x="245" y="676">142°03&apos;E</text>
+                <text x="485" y="676">142°06&apos;E</text>
+                <text x="725" y="676">142°09&apos;E</text>
 
                 {/* 緯度 (左・右) */}
-                <text x="8" y="184">27°06&apos;N</text>
-                <text x="8" y="344">27°04&apos;N</text>
-                <text x="8" y="504">27°02&apos;N</text>
+                <text x="8" y="194">27°06&apos;N</text>
+                <text x="8" y="354">27°04&apos;N</text>
+                <text x="8" y="514">27°02&apos;N</text>
 
-                <text x="965" y="184">27°06&apos;N</text>
-                <text x="965" y="344">27°04&apos;N</text>
-                <text x="965" y="504">27°02&apos;N</text>
+                <text x="965" y="194">27°06&apos;N</text>
+                <text x="965" y="354">27°04&apos;N</text>
+                <text x="965" y="514">27°02&apos;N</text>
               </g>
 
-              {/* 方位盤（コンパスローズ：Compass Rose） */}
-              <g transform="translate(180, 180)">
+              {/* 方位盤（コンパスローズ：Compass Rose）- 左上に配置 */}
+              <g transform="translate(180, 160)">
                 {/* 外円（度数目盛り） */}
-                <circle cx="0" cy="0" r="85" fill="none" stroke="#64748b" strokeWidth="1.2" />
-                <circle cx="0" cy="0" r="78" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+                <circle cx="0" cy="0" r="80" fill="none" stroke="#64748b" strokeWidth="1.2" />
+                <circle cx="0" cy="0" r="73" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
 
                 {/* 10度刻みの細線 */}
                 {Array.from({ length: 36 }).map((_, i) => (
                   <line
                     key={i}
                     x1="0"
-                    y1="-85"
+                    y1="-80"
                     x2="0"
-                    y2={i % 9 === 0 ? "-70" : i % 3 === 0 ? "-74" : "-78"}
+                    y2={i % 9 === 0 ? "-65" : i % 3 === 0 ? "-70" : "-73"}
                     stroke="#475569"
                     strokeWidth={i % 9 === 0 ? "1.5" : "0.7"}
                     transform={`rotate(${i * 10} 0 0)`}
@@ -395,21 +416,21 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 ))}
 
                 {/* 16方位テキスト */}
-                <text x="0" y="-89" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#0f172a">N (0°)</text>
-                <text x="94" y="4" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#0f172a">E (90°)</text>
-                <text x="0" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#0f172a">S (180°)</text>
-                <text x="-98" y="4" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#0f172a">W (270°)</text>
-                <text x="64" y="-62" textAnchor="middle" fontSize="9" fill="#475569">NE (45°)</text>
-                <text x="64" y="68" textAnchor="middle" fontSize="9" fill="#475569">SE (135°)</text>
-                <text x="-64" y="68" textAnchor="middle" fontSize="9" fill="#475569">SW (225°)</text>
-                <text x="-64" y="-62" textAnchor="middle" fontSize="9" fill="#475569">NW (315°)</text>
+                <text x="0" y="-84" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">N (0°)</text>
+                <text x="88" y="4" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">E (90°)</text>
+                <text x="0" y="92" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">S (180°)</text>
+                <text x="-88" y="4" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">W (270°)</text>
+                <text x="60" y="-58" textAnchor="middle" fontSize="8.5" fill="#475569">NE (45°)</text>
+                <text x="60" y="64" textAnchor="middle" fontSize="8.5" fill="#475569">SE (135°)</text>
+                <text x="-60" y="64" textAnchor="middle" fontSize="8.5" fill="#475569">SW (225°)</text>
+                <text x="-60" y="-58" textAnchor="middle" fontSize="8.5" fill="#475569">NW (315°)</text>
 
                 {/* 磁北偏差の破線矢印 (Var 7°05' W) */}
                 <line
                   x1="0"
-                  y1="50"
+                  y1="45"
                   x2="0"
-                  y2="-75"
+                  y2="-70"
                   stroke="#dc2626"
                   strokeWidth="1.2"
                   strokeDasharray="4 2"
@@ -417,8 +438,8 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 />
                 <text
                   x="-12"
-                  y="-62"
-                  fontSize="8"
+                  y="-58"
+                  fontSize="7.5"
                   fontWeight="bold"
                   fill="#dc2626"
                   transform="rotate(-7.1 0 0)"
@@ -428,7 +449,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
 
                 {/* 中心スター */}
                 <path
-                  d="M 0 -22 L 4 -6 L 20 0 L 4 6 L 0 22 L -4 6 L -20 0 L -4 -6 Z"
+                  d="M 0 -20 L 4 -5 L 18 0 L 4 5 L 0 20 L -4 5 L -18 0 L -4 -5 Z"
                   fill="#0f172a"
                 />
                 <circle cx="0" cy="0" r="2.5" fill="#f8fafc" />
@@ -489,18 +510,18 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               </g>
 
               {/* ======================================================== */}
-              {/* 海図本来の地形・暗礁記号（常に海図上に存在する自然な記号） */}
+              {/* 海図本来の暗礁記号（東側 ＆ 南東側 の2箇所に設定） */}
               {/* ======================================================== */}
 
-              {/* 東側（発信地点から真東約3海里）の暗礁・浅礁群 */}
+              {/* ① 東側の暗礁群（発信地点から真東へ約3海里: 740, 350） */}
               <g>
                 {/* 対策本部モード時のみ危険ハッチングと警告ラベルを表示 */}
                 {viewMode === "tactical" && showReefDanger && (
                   <ellipse
-                    cx="605"
-                    cy="360"
-                    rx="60"
-                    ry="45"
+                    cx="740"
+                    cy="350"
+                    rx="55"
+                    ry="40"
                     fill="url(#reef-pattern)"
                     stroke="#ef4444"
                     strokeWidth="1.8"
@@ -508,55 +529,108 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                   />
                 )}
 
-                {/* 海図記号としての暗礁・洗岩（＋記号・点線）は通常海図として自然に配置 */}
+                {/* 海図記号としての暗礁・洗岩（＋記号・点線） */}
                 <ellipse
-                  cx="605"
-                  cy="360"
-                  rx="45"
-                  ry="32"
+                  cx="740"
+                  cy="350"
+                  rx="42"
+                  ry="28"
                   fill="none"
                   stroke={viewMode === "tactical" ? "#ef4444" : "#94a3b8"}
                   strokeWidth="0.8"
                   strokeDasharray="2 2"
                 />
                 <g stroke={viewMode === "tactical" ? "#b91c1c" : "#475569"} strokeWidth="1.5">
-                  <line x1="585" y1="350" x2="595" y2="350" /><line x1="590" y1="345" x2="590" y2="355" />
-                  <line x1="615" y1="355" x2="625" y2="355" /><line x1="620" y1="350" x2="620" y2="360" />
-                  <line x1="595" y1="370" x2="605" y2="370" /><line x1="600" y1="365" x2="600" y2="375" />
-                  <line x1="610" y1="375" x2="620" y2="375" /><line x1="615" y1="370" x2="615" y2="380" />
+                  <line x1="720" y1="340" x2="730" y2="340" /><line x1="725" y1="335" x2="725" y2="345" />
+                  <line x1="750" y1="345" x2="760" y2="345" /><line x1="755" y1="340" x2="755" y2="350" />
+                  <line x1="730" y1="360" x2="740" y2="360" /><line x1="735" y1="355" x2="735" y2="365" />
+                  <line x1="745" y1="365" x2="755" y2="365" /><line x1="750" y1="360" x2="750" y2="370" />
                 </g>
-                <text x="605" y="340" textAnchor="middle" fontSize="8" fill={viewMode === "tactical" ? "#dc2626" : "#64748b"}>
-                  + + 暗礁 + +
+                <text x="740" y="330" textAnchor="middle" fontSize="8" fill={viewMode === "tactical" ? "#dc2626" : "#64748b"}>
+                  + + 東暗礁群 + +
+                </text>
+                <text x="740" y="388" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
+                  (最浅水深 3.2m)
                 </text>
 
                 {viewMode === "tactical" && showReefDanger && (
                   <g>
-                    <rect x="550" y="415" width="115" height="22" fill="#fef2f2" stroke="#dc2626" rx="3" />
-                    <text x="607" y="430" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#b91c1c">
-                      ⚠️ 座礁危険暗礁群
+                    <rect x="685" y="400" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
+                    <text x="740" y="414" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
+                      ⚠️ 東側 座礁危険礁
+                    </text>
+                  </g>
+                )}
+              </g>
+
+              {/* ② 南東側の暗礁群（発信地点から南東へ約2.5海里: 660, 480） - 新規追加！ */}
+              <g>
+                {/* 対策本部モード時のみ危険ハッチングと警告ラベルを表示 */}
+                {viewMode === "tactical" && showReefDanger && (
+                  <ellipse
+                    cx="660"
+                    cy="480"
+                    rx="50"
+                    ry="35"
+                    fill="url(#reef-pattern)"
+                    stroke="#ef4444"
+                    strokeWidth="1.8"
+                    strokeDasharray="5 3"
+                  />
+                )}
+
+                {/* 海図記号としての暗礁・洗岩（＋記号・点線） */}
+                <ellipse
+                  cx="660"
+                  cy="480"
+                  rx="38"
+                  ry="25"
+                  fill="none"
+                  stroke={viewMode === "tactical" ? "#ef4444" : "#94a3b8"}
+                  strokeWidth="0.8"
+                  strokeDasharray="2 2"
+                />
+                <g stroke={viewMode === "tactical" ? "#b91c1c" : "#475569"} strokeWidth="1.5">
+                  <line x1="645" y1="470" x2="655" y2="470" /><line x1="650" y1="465" x2="650" y2="475" />
+                  <line x1="670" y1="475" x2="680" y2="475" /><line x1="675" y1="470" x2="675" y2="480" />
+                  <line x1="655" y1="490" x2="665" y2="490" /><line x1="660" y1="485" x2="660" y2="495" />
+                </g>
+                <text x="660" y="460" textAnchor="middle" fontSize="8" fill={viewMode === "tactical" ? "#dc2626" : "#64748b"}>
+                  + + 南東浅礁群 + +
+                </text>
+                <text x="660" y="515" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
+                  (最浅水深 4.8m)
+                </text>
+
+                {viewMode === "tactical" && showReefDanger && (
+                  <g>
+                    <rect x="605" y="525" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
+                    <text x="660" y="539" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
+                      ⚠️ 南東 浅礁洗岩域
                     </text>
                   </g>
                 )}
               </g>
 
               {/* ======================================================== */}
-              {/* 遭難信号 発信地点（メーデー地点 S: 360, 360） */}
+              {/* 遭難信号 発信地点（海図の中心: 500, 350） */}
               {/* ======================================================== */}
-              <g transform="translate(360, 360)">
+              <g transform="translate(500, 350)">
                 <circle cx="0" cy="0" r="16" fill="none" stroke="#dc2626" strokeWidth="1.5" opacity="0.6" />
                 <circle cx="0" cy="0" r="28" fill="none" stroke="#dc2626" strokeWidth="1" strokeDasharray="3 2" opacity="0.4" />
                 {/* ×印 */}
                 <line x1="-8" y1="-8" x2="8" y2="8" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
                 <line x1="-8" y1="8" x2="8" y2="-8" stroke="#dc2626" strokeWidth="3.5" strokeLinecap="round" />
 
-                <rect x="-155" y="-55" width="150" height="48" fill="#ffffff" stroke="#dc2626" strokeWidth="1.5" rx="3" />
-                <text x="-80" y="-40" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#dc2626">
+                {/* 座標プレート（左上に配置し、東・北東の作図空間を邪魔しない） */}
+                <rect x="-165" y="-55" width="155" height="48" fill="#ffffff" stroke="#dc2626" strokeWidth="1.5" rx="3" />
+                <text x="-87" y="-40" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#dc2626">
                   SOS発信位置 (09:00)
                 </text>
-                <text x="-80" y="-26" textAnchor="middle" fontSize="9" fontWeight="medium" fill="#0f172a">
-                  27°03.5&apos;N, 142°05.0&apos;E
+                <text x="-87" y="-26" textAnchor="middle" fontSize="9" fontWeight="medium" fill="#0f172a">
+                  27°04.0&apos;N, 142°06.0&apos;E
                 </text>
-                <text x="-80" y="-13" textAnchor="middle" fontSize="8" fill="#64748b">
+                <text x="-87" y="-13" textAnchor="middle" fontSize="8" fill="#64748b">
                   民間船(40t) 全電源喪失・AIS停波
                 </text>
               </g>
@@ -566,52 +640,52 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               {/* ======================================================== */}
               {viewMode === "tactical" && (
                 <g>
-                  {/* 海流ベクトル（真東 2.0ノット × 1時間 = 2.0海里 = 160px） */}
+                  {/* 海流ベクトル（中心 500,350 から真東 2.0NM = 160px => 660, 350） */}
                   {showCurrentVector && (
                     <g>
                       <line
-                        x1="360"
-                        y1="360"
-                        x2="520"
-                        y2="360"
+                        x1="500"
+                        y1="350"
+                        x2="660"
+                        y2="350"
                         stroke="#0284c7"
                         strokeWidth="3.5"
                         markerEnd="url(#arrow-current)"
                       />
-                      <rect x="400" y="368" width="115" height="18" fill="#f0f9ff" stroke="#38bdf8" rx="2" />
-                      <text x="457" y="381" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#0369a1">
+                      <rect x="535" y="358" width="125" height="18" fill="#f0f9ff" stroke="#38bdf8" rx="2" />
+                      <text x="597" y="371" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#0369a1">
                         黒潮支流 2.0kt (真東2.0NM)
                       </text>
 
                       {/* 海流のみの到達点 */}
-                      <circle cx="520" cy="360" r="5" fill="#0284c7" />
-                      <text x="520" y="405" textAnchor="middle" fontSize="8" fill="#0284c7" fontWeight="bold">
+                      <circle cx="660" cy="350" r="5" fill="#0284c7" />
+                      <text x="660" y="395" textAnchor="middle" fontSize="8" fill="#0284c7" fontWeight="bold">
                         (海流のみ進んだ場合)
                       </text>
                     </g>
                   )}
 
-                  {/* 風圧流ベクトル（南西風15m/s → 北東へ約1.5ノット = 1.5海里 = 120px, dx=85, dy=-85） */}
+                  {/* 風圧流ベクトル（中心 500,350 から北東へ 1.5NM = dx:+85, dy:-85 => 585, 265） */}
                   {showWindVector && (
                     <g>
                       <line
-                        x1="360"
-                        y1="360"
-                        x2="445"
-                        y2="275"
+                        x1="500"
+                        y1="350"
+                        x2="585"
+                        y2="265"
                         stroke="#0d9488"
                         strokeWidth="3.5"
                         strokeDasharray="6 3"
                         markerEnd="url(#arrow-wind)"
                       />
-                      <rect x="360" y="275" width="120" height="18" fill="#f0fdfa" stroke="#2dd4bf" rx="2" />
-                      <text x="420" y="288" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#0f766e">
+                      <rect x="500" y="265" width="125" height="18" fill="#f0fdfa" stroke="#2dd4bf" rx="2" />
+                      <text x="562" y="278" textAnchor="middle" fontSize="9" fontWeight="bold" fill="#0f766e">
                         風圧流 約1.5kt (北東1.5NM)
                       </text>
 
                       {/* 風のみの到達点 */}
-                      <circle cx="445" cy="275" r="5" fill="#0d9488" />
-                      <text x="445" y="260" textAnchor="middle" fontSize="8" fill="#0d9488" fontWeight="bold">
+                      <circle cx="585" cy="265" r="5" fill="#0d9488" />
+                      <text x="585" y="250" textAnchor="middle" fontSize="8" fill="#0d9488" fontWeight="bold">
                         (風のみ進んだ場合)
                       </text>
                     </g>
@@ -620,44 +694,44 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                   {/* ベクトル合成の補助線（平行四辺形の点線） */}
                   {showResultVector && (
                     <g>
-                      {/* 海流矢印の先 (520,360) から風ベクトル (dx=85, dy=-85) で合成点 (605, 275) へ */}
+                      {/* 海流矢印先 (660,350) から風ベクトル (dx:+85, dy:-85) => 合成点 (745, 265) へ */}
                       <line
-                        x1="520"
-                        y1="360"
-                        x2="605"
-                        y2="275"
+                        x1="660"
+                        y1="350"
+                        x2="745"
+                        y2="265"
                         stroke="#0d9488"
                         strokeWidth="2"
                         strokeDasharray="3 3"
                       />
-                      {/* 風矢印の先 (445,275) から海流ベクトル (dx=160, dy=0) で合成点 (605, 275) へ */}
+                      {/* 風矢印先 (585,265) から海流ベクトル (dx:+160, dy:0) => 合成点 (745, 265) へ */}
                       <line
-                        x1="445"
-                        y1="275"
-                        x2="605"
-                        y2="275"
+                        x1="585"
+                        y1="265"
+                        x2="745"
+                        y2="265"
                         stroke="#0284c7"
                         strokeWidth="2"
                         strokeDasharray="3 3"
                       />
 
-                      {/* 合成移動ベクトル（発信地点から目標地点への太い赤矢印） */}
+                      {/* 合成移動ベクトル（中心 500,350 から目標点 745,265 への太い赤矢印） */}
                       <line
-                        x1="360"
-                        y1="360"
-                        x2="605"
-                        y2="275"
+                        x1="500"
+                        y1="350"
+                        x2="745"
+                        y2="265"
                         stroke="#dc2626"
                         strokeWidth="4"
                         markerEnd="url(#arrow-result)"
                       />
-                      <rect x="475" y="300" width="125" height="20" fill="#fef2f2" stroke="#f87171" rx="3" />
-                      <text x="537" y="314" textAnchor="middle" fontSize="10" fontWeight="extrabold" fill="#b91c1c">
+                      <rect x="610" y="295" width="130" height="20" fill="#fef2f2" stroke="#f87171" rx="3" />
+                      <text x="675" y="309" textAnchor="middle" fontSize="10" fontWeight="extrabold" fill="#b91c1c">
                         合成漂流ベクトル (東北東)
                       </text>
 
-                      {/* 1時間後の到達予測・救助海域 (605, 275) */}
-                      <g transform="translate(605, 275)">
+                      {/* 1時間後の到達予測・救助海域 (745, 265) */}
+                      <g transform="translate(745, 265)">
                         <circle cx="0" cy="0" r="18" fill="#dcfce7" stroke="#16a34a" strokeWidth="3" />
                         <circle cx="0" cy="0" r="28" fill="none" stroke="#22c55e" strokeWidth="1.5" strokeDasharray="3 2" />
                         <rect x="-85" y="-45" width="170" height="32" fill="#ffffff" stroke="#22c55e" strokeWidth="2" rx="3" />
@@ -716,7 +790,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 <label className="flex items-center justify-between rounded-lg border border-slate-800 bg-slate-950 p-2.5 cursor-pointer hover:border-slate-700 transition">
                   <div className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4 text-red-400" />
-                    <span className="font-medium text-slate-200">東側暗礁群・座礁危険域 (PC3)</span>
+                    <span className="font-medium text-slate-200">東側・南東側 暗礁座礁危険域 (PC3)</span>
                   </div>
                   <input
                     type="checkbox"
@@ -747,12 +821,14 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 プレイヤー提示用 白地図について
               </h3>
               <p className="text-xs text-slate-300 leading-relaxed">
-                この白地図には、<strong>父島南西端の陸地</strong>と、遭難船が最後に救難信号を出した<strong>SOS発信位置</strong>のみが記されています。
+                この白地図は<strong>SOS発信位置を中心</strong>とし、北東方向に<strong>南島および父島南西海岸</strong>が描かれています。また海図上には<strong>東側と南東側に暗礁記号</strong>が記されています。
               </p>
-              <div className="mt-3 rounded border border-slate-800 bg-slate-950/80 p-2.5 text-[11px] text-slate-400 space-y-1">
-                <p>・緯度目盛り：1分（1&apos;）＝ 1海里（NM）</p>
-                <p>・コンパスローズ：真北（0°）/ 東（90°）/ 南西（225°）</p>
-                <p>・プレイヤーたちは各自の専門知識を照らし合わせ、白地図上で方位と距離を計算して救助地点を導き出します。</p>
+              <div className="mt-3 rounded border border-slate-800 bg-slate-950/80 p-2.5 text-[11px] text-slate-400 space-y-1.5">
+                <p>・<strong>中心</strong>: SOS発信位置（27°04&apos;N, 142°06&apos;E）</p>
+                <p>・<strong>北東方向</strong>: 南島 ＆ 父島南西海岸</p>
+                <p>・<strong>暗礁記号</strong>: 東側および南東側に洗岩・浅礁記号（＋）</p>
+                <p>・<strong>縮尺</strong>: 緯度1分（1&apos;）＝ 1海里（NM）＝ 80px</p>
+                <p>・<strong>コンパスローズ</strong>: 左上に配置（真北0°/東90°/南西225°）</p>
               </div>
             </div>
           )}
@@ -768,7 +844,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               <div className="rounded border border-slate-800 bg-slate-950 p-2.5">
                 <span className="font-bold text-teal-300">① 風の影響 (PC1)</span>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  南西の強風15m/s。40t船の風圧流により【北東へ約1.5ノット】押し流される（1時間で北東へ1.5海里）。風だけ追うと北東の海域へ向かってしまう。
+                  南西の強風15m/s。船体は【北東へ約1.5ノット】押し流される（1時間で北東へ1.5海里）。風だけ追うと北東の南島手前へ向かってしまう。
                 </p>
               </div>
 
@@ -787,16 +863,16 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               </div>
 
               <div className="rounded border border-slate-800 bg-slate-950 p-2.5">
-                <span className="font-bold text-red-300">④ 危険の回避 (PC3 海難救助)</span>
+                <span className="font-bold text-red-300">④ 暗礁の罠 (PC3 海難救助)</span>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  発信地点から真東約3海里には危険な暗礁群。海流だけに流された場合、暗礁の三角波で座礁沈没する致命的リスクがある。
+                  真東3海里に「東暗礁群」、南東2.5海里に「南東浅礁群」。海流単体や風の弱まりで東〜南東に流されると、荒波の三角波で座礁沈没する致命的危険がある。
                 </p>
               </div>
 
               <div className="rounded border border-emerald-900/60 bg-emerald-950/30 p-2.5">
-                <span className="font-bold text-emerald-300">🎯 結論：東北東の海域へ先回り急行</span>
+                <span className="font-bold text-emerald-300">🎯 結論：東と南東の暗礁を抜けた東北東海域へ急行</span>
                 <p className="text-[11px] text-emerald-200 mt-0.5">
-                  北東1.5海里（風）＋ 真東2.0海里（海流）のベクトル合成＝【東北東へ約2.5海里】の海域！暗礁群の手前で先回り捕捉し、救出成功となる。
+                  北東1.5海里（風）＋ 真東2.0海里（海流）のベクトル合成＝【東北東へ約2.5海里】！東と南東の暗礁を北側にすり抜けた海域で先回り捕捉し、救出成功となる。
                 </p>
               </div>
             </div>
