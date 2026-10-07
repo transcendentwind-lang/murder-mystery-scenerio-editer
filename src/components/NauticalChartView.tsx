@@ -13,13 +13,107 @@ import {
   CheckCircle2,
   Info,
   Navigation,
+  Globe,
+  Maximize2,
+  X,
+  Flame,
+  ShieldAlert,
+  Clock,
+  ArrowUpRight,
+  MapPin,
+  Layers,
 } from "lucide-react";
+
+export const THEATER_TIMELINE_POINTS = [
+  {
+    day: 1,
+    name: "父島南西沖（小笠原）",
+    distance: "0 km",
+    depth: "約1,200m",
+    status: "遭難船救助完了",
+    summary: "民間船の全電源喪失。海流・風のベクトル合成計算で漂流船を救助。スクリューにダイオウイカの触手。",
+    coords: "27°05'N, 142°11'E",
+    tag: "Day 1 救助",
+    color: "cyan",
+  },
+  {
+    day: 2,
+    name: "西之島沖",
+    distance: "約130 km",
+    depth: "約2,000m",
+    status: "海底火山突発噴火",
+    summary: "西之島海底火山の突発大噴火。熱水回避のため水深10〜20mに急浮上したケルビン波と数百mの影を空撮。",
+    coords: "27°15'N, 140°53'E",
+    tag: "Day 2 噴火",
+    color: "amber",
+  },
+  {
+    day: 3,
+    name: "孀婦岩 〜 鳥島沖",
+    distance: "約420 km",
+    depth: "約3,500m",
+    status: "鳥島カルデラ連動噴火",
+    summary: "時速6kmでの北上ペースと連動噴火が確定。火山フロント沿いに北上する怪異と過去の歴史調査。",
+    coords: "30°29'N, 140°18'E",
+    tag: "Day 3 現在地",
+    color: "rose",
+  },
+  {
+    day: 4,
+    name: "須美寿島 〜 青ヶ島沖",
+    distance: "約600 km",
+    depth: "約4,000m",
+    status: "有人島接近・避難葛藤",
+    summary: "伊豆諸島有人島（青ヶ島・八丈島）への接近。東京司令部と現地救難隊の間で情報隠蔽と避難の対立激化。",
+    coords: "32°27'N, 139°46'E",
+    tag: "Day 4 予測",
+    color: "indigo",
+  },
+  {
+    day: 5,
+    name: "八丈島 〜 三宅島沖",
+    distance: "約800 km",
+    depth: "約2,500m",
+    status: "自衛隊魚雷迎撃・無効化",
+    summary: "海上自衛隊の重魚雷が直撃するも泥のように瞬時再結合。通常兵器による武力阻止の完全失敗。",
+    coords: "34°05'N, 139°31'E",
+    tag: "Day 5 予測",
+    color: "purple",
+  },
+  {
+    day: 6,
+    name: "伊豆大島 〜 駿河湾入口",
+    distance: "約950 km",
+    depth: "約1,500m",
+    status: "駿河トラフ深海潜航",
+    summary: "物体は駿河トラフ深海へ突入。恩師の録音テープと古文書から、マッコウクジラ言語パズルを解析。",
+    coords: "34°44'N, 138°50'E",
+    tag: "Day 6 予測",
+    color: "blue",
+  },
+  {
+    day: 7,
+    name: "駿河トラフ奥 〜 富士山直下",
+    distance: "約1,000 km",
+    depth: "陸上地下",
+    status: "破局噴火リミット・大捕食",
+    summary: "富士山マグマ溜まり到達まで残り数時間。全ソナー網からクジラ召喚祝詞を放流し数千頭で大捕食作戦決行。",
+    coords: "35°21'N, 138°44'E",
+    tag: "Day 7 決戦",
+    color: "emerald",
+  },
+];
 
 interface NauticalChartViewProps {
   onBackToDashboard?: () => void;
 }
 
 export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDashboard }) => {
+  // 海図種別: 'theater_wide' (広域作戦海図 W1001: 小笠原〜富士山) | 'day1_drift' (局所漂流海図 W2704: Day 1 SOS救助)
+  const [chartType, setChartType] = useState<"theater_wide" | "day1_drift">("theater_wide");
+  const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
+  const [selectedDayFocus, setSelectedDayFocus] = useState<number>(3);
+
   // 表示モード: 'investigation' (プレイヤー用白図: 中心がSOS地点、父島・南島、暗礁記号のみ) | 'tactical' (対策本部作戦図: ベクトル・解答全表示)
   const [viewMode, setViewMode] = useState<"investigation" | "tactical">("investigation");
 
@@ -94,66 +188,222 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
-      {/* 上部コントロールバー */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900/90 p-4 shadow-lg backdrop-blur">
-        <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-700/30 text-cyan-400 border border-cyan-500/30">
-            <Navigation className="h-5 w-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-white">
-                小笠原南西海域 航海用海図（CHART NO. W-2704）
-              </h2>
-              <span className="rounded bg-cyan-950 px-2 py-0.5 text-[11px] font-mono text-cyan-300 border border-cyan-800">
-                中心: SOS発信位置 / 縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM)
-              </span>
+      {/* 最上部：海図種別切り替えタブ */}
+      <div className="flex items-center gap-2.5 mb-4 border-b border-slate-800 pb-3">
+        <button
+          onClick={() => setChartType("theater_wide")}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition shadow ${
+            chartType === "theater_wide"
+              ? "bg-indigo-600 text-white ring-2 ring-indigo-400/50"
+              : "border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
+          }`}
+        >
+          <Globe className="h-4 w-4 text-cyan-400" />
+          【広域作戦海図 W1001】小笠原〜伊豆〜富士山 縦断監視マップ (Day 2-7)
+        </button>
+        <button
+          onClick={() => setChartType("day1_drift")}
+          className={`flex items-center gap-2 rounded-lg px-4 py-2 text-xs font-bold transition shadow ${
+            chartType === "day1_drift"
+              ? "bg-cyan-700 text-white ring-2 ring-cyan-400/50"
+              : "border border-slate-800 bg-slate-900 text-slate-400 hover:text-white hover:bg-slate-800"
+          }`}
+        >
+          <Navigation className="h-4 w-4 text-teal-400" />
+          【局所漂流海図 W2704】小笠原南西海域 SOS救助パズル (Day 1)
+        </button>
+      </div>
+
+      {chartType === "theater_wide" ? (
+        /* 広域作戦海図 W1001 */
+        <div className="grid flex-1 grid-cols-12 gap-5 overflow-hidden">
+          {/* 左側：作戦マップ画面 */}
+          <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-[#070d18] p-4 shadow-xl overflow-y-auto">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2.5">
+              <div className="flex items-center gap-2">
+                <Globe className="h-4 w-4 text-cyan-400" />
+                <span className="font-bold text-xs text-white">
+                  防衛省・海保庁 統合司令部作戦ディスプレイ（NORTH-WEST PACIFIC THEATER）
+                </span>
+                <span className="rounded bg-rose-950/80 px-2 py-0.5 text-[10px] font-bold text-rose-300 border border-rose-800 animate-pulse">
+                  LIVE TRACKING
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-slate-400 font-mono hidden md:inline">
+                  時速: 約6.0km (3.3kt) | 深度: 800m以深 | 方位: 355°(北北西)
+                </span>
+                <button
+                  onClick={() => setIsTheaterModalOpen(true)}
+                  className="flex items-center gap-1 rounded bg-indigo-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-indigo-500 transition shadow"
+                >
+                  <Maximize2 className="h-3.5 w-3.5" /> 全画面拡大
+                </button>
+              </div>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
-              {viewMode === "investigation"
-                ? "【プレイヤー提示用】SOS地点を中心とし、父島・南島および複数箇所の暗礁記号が配置された白地図。漂流先を自力で計算します。"
-                : "【対策本部解析図】海流（2.0kt 真東）× 風浪（1.5kt 北東）の合成ベクトルと東・南東暗礁群の回避ルート全表示。"}
-            </p>
+
+            {/* 高精細画像マップ */}
+            <div
+              onClick={() => setIsTheaterModalOpen(true)}
+              className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-black aspect-video flex items-center justify-center shadow-2xl"
+            >
+              <img
+                src="/images/theater_map_wide.jpg"
+                alt="小笠原〜富士山 縦断作戦海図"
+                className="h-full w-full object-contain transition duration-300 group-hover:scale-102"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none">
+                <span className="text-xs font-semibold text-slate-200">
+                  赤破線: 火山フロント（連動噴火線） | 橙色線: 接触体アルファ北上追跡ルート (Day 1〜7)
+                </span>
+                <span className="flex items-center gap-1 rounded bg-black/60 px-2 py-1 text-[11px] text-indigo-300 backdrop-blur">
+                  <Maximize2 className="h-3 w-3" /> クリックで拡大表示
+                </span>
+              </div>
+            </div>
+
+            {/* 下部：地質・作戦メカニズムの解説 */}
+            <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
+              <div className="rounded-lg border border-rose-900/60 bg-rose-950/20 p-3">
+                <div className="flex items-center gap-1.5 font-bold text-rose-300 mb-1">
+                  <Flame className="h-3.5 w-3.5 text-rose-400" />
+                  火山フロント連動の科学的立証
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  小笠原から富士山まで一直線に伸びる伊豆・小笠原・マリアナ島弧（IBM弧）。水深800m以深のプレート境界沿いを北上する巨大質量の通過が、直下のマグマ溜まりをドミノ倒しのように刺激し連動噴火を誘発している。
+                </p>
+              </div>
+
+              <div className="rounded-lg border border-amber-900/60 bg-amber-950/20 p-3">
+                <div className="flex items-center gap-1.5 font-bold text-amber-300 mb-1">
+                  <ShieldAlert className="h-3.5 w-3.5 text-amber-400" />
+                  終着点：富士山直下の破局噴火阻止
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  駿河トラフ最深部は富士山直下の巨大マグマ溜まりへ直結。物体が到達すれば連動して富士山が大破局噴火を起こす。Day 7（駿河湾内）での阻止が人類の絶対タイムリミット。
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* 右側：Day 1〜7 トラッキング詳細パネル */}
+          <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 shadow-xl overflow-y-auto">
+            <div className="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+              <div className="flex items-center gap-1.5">
+                <Clock className="h-4 w-4 text-indigo-400" />
+                <h4 className="font-bold text-xs text-white">7日間 縦断タイムライン詳細</h4>
+              </div>
+              <span className="text-[10px] text-slate-400 font-mono">全長約1,000 km</span>
+            </div>
+
+            <div className="space-y-2.5 flex-1">
+              {THEATER_TIMELINE_POINTS.map((pt) => {
+                const isFocused = selectedDayFocus === pt.day;
+                return (
+                  <div
+                    key={pt.day}
+                    onClick={() => setSelectedDayFocus(pt.day)}
+                    className={`cursor-pointer rounded-lg border p-2.5 text-xs transition ${
+                      isFocused
+                        ? "border-indigo-500 bg-indigo-950/50 shadow-md ring-1 ring-indigo-400/50"
+                        : "border-slate-800 bg-slate-950/70 hover:bg-slate-900/80"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-1.5">
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                            pt.day === 3
+                              ? "bg-rose-600 text-white animate-pulse"
+                              : isFocused
+                              ? "bg-indigo-600 text-white"
+                              : "bg-slate-800 text-slate-300"
+                          }`}
+                        >
+                          Day {pt.day}
+                        </span>
+                        <span className="font-bold text-white text-xs">{pt.name}</span>
+                      </div>
+                      <span className="text-[10px] text-slate-400 font-mono">{pt.distance}</span>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 leading-relaxed mt-1">
+                      {pt.summary}
+                    </p>
+
+                    <div className="mt-1.5 flex items-center justify-between text-[10px] text-slate-400 border-t border-slate-800/80 pt-1">
+                      <span>深度: {pt.depth}</span>
+                      <span className="font-mono text-cyan-400">{pt.coords}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
+      ) : (
+        /* Day 1 局所漂流海図 W2704 */
+        <div className="flex flex-1 flex-col overflow-hidden">
+          {/* 上部コントロールバー */}
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-4 rounded-xl border border-slate-800 bg-slate-900/90 p-4 shadow-lg backdrop-blur">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cyan-700/30 text-cyan-400 border border-cyan-500/30">
+                <Navigation className="h-5 w-5" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-bold text-white">
+                    小笠原南西海域 航海用海図（CHART NO. W-2704）
+                  </h2>
+                  <span className="rounded bg-cyan-950 px-2 py-0.5 text-[11px] font-mono text-cyan-300 border border-cyan-800">
+                    中心: SOS発信位置 / 縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM)
+                  </span>
+                </div>
+                <p className="text-xs text-slate-400 mt-0.5">
+                  {viewMode === "investigation"
+                    ? "【プレイヤー提示用】SOS地点を中心とし、父島・南島および複数箇所の暗礁記号が配置された白地図。漂流先を自力で計算します。"
+                    : "【対策本部解析図】海流（2.0kt 真東）× 風浪（1.5kt 北東）の合成ベクトルと東・南東暗礁群の回避ルート全表示。"}
+                </p>
+              </div>
+            </div>
 
-        {/* モード切替 ＆ アクションボタン */}
-        <div className="flex items-center gap-2.5">
-          {/* 視点切替 */}
-          <div className="flex items-center rounded-lg border border-slate-800 bg-slate-950 p-1">
-            <button
-              onClick={setPlayerMode}
-              className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition ${
-                viewMode === "investigation"
-                  ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              title="プレイヤー提示用：SOS地点中心の白地図"
-            >
-              <EyeOff className="h-3.5 w-3.5" />
-              白地図（プレイヤー提示用）
-            </button>
-            <button
-              onClick={setTacticalMode}
-              className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition ${
-                viewMode === "tactical"
-                  ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-              title="対策本部解析用：風・海流・暗礁・正解ベクトル全表示"
-            >
-              <Eye className="h-3.5 w-3.5" />
-              対策本部解析図（GM・全情報）
-            </button>
-          </div>
+            {/* モード切替 ＆ アクションボタン */}
+            <div className="flex items-center gap-2.5">
+              {/* 視点切替 */}
+              <div className="flex items-center rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  onClick={setPlayerMode}
+                  className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition ${
+                    viewMode === "investigation"
+                      ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                  title="プレイヤー提示用：SOS地点中心の白地図"
+                >
+                  <EyeOff className="h-3.5 w-3.5" />
+                  白地図（プレイヤー提示用）
+                </button>
+                <button
+                  onClick={setTacticalMode}
+                  className={`flex items-center gap-1.5 rounded px-3 py-1.5 text-xs font-semibold transition ${
+                    viewMode === "tactical"
+                      ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                  title="対策本部解析用：風・海流・暗礁・正解ベクトル全表示"
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                  対策本部解析図（GM・全情報）
+                </button>
+              </div>
 
-          {/* 出力ボタン */}
-          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
-            <button
-              onClick={handleDownloadPng}
-              className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-900 transition"
-              title="印刷用PNG画像を保存"
-            >
+              {/* 出力ボタン */}
+              <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  onClick={handleDownloadPng}
+                  className="flex items-center gap-1.5 rounded px-2.5 py-1.5 text-xs font-medium text-slate-300 hover:bg-slate-900 transition"
+                  title="印刷用PNG画像を保存"
+                >
               <Download className="h-3.5 w-3.5 text-indigo-400" />
               PNG保存
             </button>
@@ -879,6 +1129,58 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
           </div>
         </div>
       </div>
+    </div>
+  )}
+
+      {/* 広域作戦海図 全画面モーダル */}
+      {isTheaterModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsTheaterModalOpen(false)}
+        >
+          <div
+            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <Globe className="h-5 w-5 text-cyan-400" />
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    防衛省・海上保安庁 合同作戦海図 W1001（小笠原〜富士山 火山フロント縦断監視図）
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    OPERATION &quot;DEEP CALL&quot; STRATEGIC THEATER MAP | 縮尺 1:1,000,000 | 座標系: WGS84
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsTheaterModalOpen(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-black flex items-center justify-center">
+              <img
+                src="/images/theater_map_wide.jpg"
+                alt="小笠原〜富士山 縦断作戦海図"
+                className="w-full h-auto max-h-[70vh] object-contain"
+              />
+            </div>
+
+            <div className="mt-3 flex items-center justify-between text-xs text-slate-400">
+              <span className="text-slate-300">
+                ※ 赤色破線：火山フロント（海底カルデラ連動噴火線） | 橙色実線：深海接触体（時速6km北上）
+              </span>
+              <span className="font-mono text-indigo-400">
+                DAY 1 (父島 0km) ➔ DAY 3 (鳥島 420km) ➔ DAY 7 (富士山 1,000km)
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
