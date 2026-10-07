@@ -15,8 +15,96 @@ import {
   FileText,
   AlertTriangle,
   Navigation,
+  Image as ImageIcon,
+  Eye,
+  X,
+  Search,
+  Building2,
+  Anchor,
+  HelpCircle,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
+
+export interface Day2ActionOption {
+  id: string;
+  title: string;
+  organization: string;
+  evidenceId: string;
+  badge: string;
+  summary: string;
+  detail: string;
+  hasPhoto?: boolean;
+}
+
+export const TOKYO_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "T-1",
+    title: "T-1: 防衛省 水中聴音（ソナー）データの照会",
+    organization: "防衛省 / 海上自衛隊",
+    evidenceId: "ev-sonar-shadow",
+    badge: "深海ソナー",
+    summary: "水深800m以深を時速約6km（日速約150km / 3.3ノット）で北上する、全長数百メートルの巨大な深海シグネチャーを捕捉。",
+    detail: "防衛省のパッシブソナー網が捕捉した記録。通常潜水艦の数倍に達する異様な超巨大生体ノイズが、伊豆・小笠原海溝沿いを一定ペースで北上中であることが判明する。",
+  },
+  {
+    id: "T-2",
+    title: "T-2: 西之島避難船舶の無線傍受ログ解析",
+    organization: "海上保安庁 警備救難部",
+    evidenceId: "ev-evacuation-radio-log",
+    badge: "通信傍受",
+    summary: "避難中の複数船舶より『噴火の数分前、船底を巨大な黒い影が通過し計器異常が発生。その直後に海底が大爆発した』との交信記録。",
+    detail: "時系列解析の結果、海底火山の噴火が先ではなく、「海面下の巨大な影の通過が引き金となって海底火山が連動噴火した」という因果関係が強く示唆される。",
+  },
+  {
+    id: "T-3",
+    title: "T-3: 海保捜索機MA722 緊急航空偵察レポート（空撮写真）",
+    organization: "海上保安庁 羽田航空基地",
+    evidenceId: "ev-aerial-recon-report",
+    badge: "航空写真",
+    summary: "西之島の噴煙下、海底火山の熱水を避けるため一時的に水深10〜20mに急浮上した全長300〜400mの巨大な影と明瞭なケルビン波を撮影。",
+    detail: "撮影から数分後、影は急速に水深800m以深へ潜航した。写真には海面下の巨大な影の輪郭と航跡波が鮮明に写し出されている。",
+    hasPhoto: true,
+  },
+];
+
+export const FIELD_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "F-1",
+    title: "F-1: Day 1遭難船スクリュー付着物の生体組織鑑定",
+    organization: "小笠原水産センター / 研究所",
+    evidenceId: "ev-propeller-tissue",
+    badge: "生体組織鑑定",
+    summary: "巨大な吸盤と筋肉組織から、深海600m以深に生息する【ダイオウイカの触手】と特定！",
+    detail: "Day 1で船を襲い、スクリューを停止させた生物の正体が判明。しかし、通常のダイオウイカ（全長十数m）と、目撃されている『数百メートルの影』との間で巨大なサイズ矛盾が生じる。",
+  },
+  {
+    id: "F-2",
+    title: "F-2: 避難漁船・ホエールウォッチング船長の目撃聴取",
+    organization: "二見港 漁業協同組合",
+    evidenceId: "ev-fisherman-guide-testimony",
+    badge: "ベテラン目撃調書",
+    summary: "『大きさはクジラよりも明らかに巨大だが、クジラ特有の潮吹き（ブロー）やスパイホップを一切しない。ぬめるように海面直下を這って北上していった』",
+    detail: "海を知り尽くしたベテラン漁師と鯨ガイドが『あんなものはクジラではない』と証言。生物としての異様さが浮き彫りになる。",
+  },
+  {
+    id: "F-3",
+    title: "F-3: 緊急浮上ダイバーの救護聴取カルテ",
+    organization: "小笠原村診療所 救護所",
+    evidenceId: "ev-diver-trauma-record",
+    badge: "潜水士カルテ",
+    summary: "『海中でクジラではありえない異形を目撃。海底の底から奇妙な振動が響き恐怖で緊急浮上した直後に海底火山が噴火した』",
+    detail: "減圧症寸前で救助された潜水士の恐怖の肉声。海底火山の噴火直前に何かが海底を刺激していた事実を現場ダイバーの視点から裏付ける。",
+  },
+  {
+    id: "F-4",
+    title: "F-4: 小笠原気象観測所の海底地震計・移動震源解析",
+    organization: "気象庁 小笠原気象観測所",
+    evidenceId: "ev-moving-epicenter",
+    badge: "海底地震計解析",
+    summary: "海底800mを時速約6kmで移動する局所的な震源が、西之島直下を通過した直後にマグマ溜まりが刺激されて噴火した波形を特定。",
+    detail: "通常の火山性微動や群発地震とは全く異なり、巨大な質量が海底地殻を圧迫しながら一定速度で北上している物理的証拠。",
+  },
+];
 
 interface GmDashboardProps {
   project: MMProject;
@@ -28,6 +116,25 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [timerSeconds, setTimerSeconds] = useState(0);
   const [isTimerRunning, setIsTimerRunning] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  // Day 2 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
+  const [selectedTokyoAction, setSelectedTokyoAction] = useState<string>("T-3");
+  const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
+  const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+
+  const handleToggleFieldAction = (id: string) => {
+    setSelectedFieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
+          // すでに2つ選択されている場合は古い方を押し出す
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
 
   // タイマー
   useEffect(() => {
@@ -336,6 +443,290 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 </div>
               )}
 
+              {currentDay === 2 && (
+                <div className="space-y-4 text-xs leading-relaxed">
+                  {/* フェーズ1：緊急通達＆チーム維持命令 */}
+                  <div className="rounded-lg border border-red-900/60 bg-red-950/25 p-3.5 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <span className="inline-block h-2 w-2 rounded-full bg-red-400 animate-ping" />
+                      <span className="font-bold text-red-300">
+                        【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
+                      </span>
+                    </div>
+                    <div className="mt-2 rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
+                      <p className="font-semibold text-white">
+                        🚨 緊急速報：西之島周辺海底火山が突発的大規模噴火
+                      </p>
+                      <p className="mt-0.5 text-slate-300">
+                        西之島周辺の海底火山が突発的に大噴火。噴煙高度は上空数千メートルに到達。周辺海域に航行警報および緊急退避命令が発令。
+                      </p>
+                    </div>
+                    <p className="text-slate-300 mt-2.5 italic">
+                      「東京司令部・小笠原救難隊の各員へ上層部より緊急通達。西之島沖での海底火山突発噴火に伴い、周辺船舶の避難誘導および火山活動の厳重監視を行う必要がある。よって上層部の決定に基づき、当合同海難対策チームは当面の間【即応体制を維持】せよ」
+                    </p>
+                    <div className="mt-2 text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
+                      💡 <strong>GMメモ</strong>: Day 1で招集された急造チームの解散が撤回され、このチームが当面維持される必然性を全員に提示します。
+                    </div>
+                  </div>
+
+                  {/* フェーズ2：合議制アクションの提示 */}
+                  <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/20 p-3.5">
+                    <span className="font-bold text-indigo-300">
+                      【フェーズ2：情報収集・合議制アクションの提示】
+                    </span>
+                    <p className="text-slate-300 mt-1 italic">
+                      「西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで入っています。しかし混乱の極みにある現場では、すべての調査に手を回す余裕はありません。我々に許された調査枠は――【東京司令部で1枠】、【小笠原現地で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議して決定してください」
+                    </p>
+                  </div>
+
+                  {/* インタラクティブ操作：合議制アクション選択コンソール */}
+                  <div className="rounded-xl border border-slate-700 bg-slate-900 p-4 shadow-md space-y-4">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Search className="h-4 w-4 text-cyan-400" />
+                        <span className="font-bold text-white text-xs">
+                          合議制アクション選択コンソール（GM操作盤）
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-2 text-[10px]">
+                        <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                          東京: 1枠
+                        </span>
+                        <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                          現地: {selectedFieldActions.length}/2枠
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 東京司令部側（1択） */}
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Building2 className="h-3.5 w-3.5 text-indigo-400" />
+                        <span className="font-bold text-indigo-300 text-[11px]">
+                          東京司令部アクション（全3枠中 1つ選択）
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {TOKYO_ACTIONS.map((action) => {
+                          const isSelected = selectedTokyoAction === action.id;
+                          return (
+                            <button
+                              key={action.id}
+                              onClick={() => setSelectedTokyoAction(action.id)}
+                              className={`flex items-start justify-between rounded-lg p-2.5 text-left transition border ${
+                                isSelected
+                                  ? "border-indigo-500 bg-indigo-950/60 shadow-sm"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800/60"
+                              }`}
+                            >
+                              <div className="flex-1 pr-2">
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`inline-block h-3.5 w-3.5 rounded-full border flex items-center justify-center text-[9px] font-bold ${
+                                      isSelected
+                                        ? "border-indigo-400 bg-indigo-500 text-white"
+                                        : "border-slate-600 bg-slate-800 text-transparent"
+                                    }`}
+                                  >
+                                    ✓
+                                  </span>
+                                  <span className="font-bold text-xs text-white">
+                                    {action.title}
+                                  </span>
+                                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] text-slate-300 font-mono">
+                                    {action.badge}
+                                  </span>
+                                  {action.hasPhoto && (
+                                    <span className="flex items-center gap-0.5 rounded bg-amber-900/60 border border-amber-700/60 px-1.5 py-0.5 text-[9px] font-bold text-amber-200">
+                                      <ImageIcon className="h-2.5 w-2.5" /> 写真有
+                                    </span>
+                                  )}
+                                </div>
+                                <p className="mt-1 text-[11px] text-slate-400 pl-5 leading-normal">
+                                  {action.summary}
+                                </p>
+                              </div>
+                              <span className="text-[10px] text-slate-500 whitespace-nowrap">
+                                {action.organization}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* 小笠原現地側（2択） */}
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-2">
+                        <Anchor className="h-3.5 w-3.5 text-teal-400" />
+                        <span className="font-bold text-teal-300 text-[11px]">
+                          小笠原現地アクション（全4枠中 2つ選択）
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-1 gap-2">
+                        {FIELD_ACTIONS.map((action) => {
+                          const isSelected = selectedFieldActions.includes(action.id);
+                          return (
+                            <button
+                              key={action.id}
+                              onClick={() => handleToggleFieldAction(action.id)}
+                              className={`flex items-start justify-between rounded-lg p-2.5 text-left transition border ${
+                                isSelected
+                                  ? "border-teal-500 bg-teal-950/60 shadow-sm"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800/60"
+                              }`}
+                            >
+                              <div className="flex-1 pr-2">
+                                <div className="flex items-center gap-2">
+                                  <span
+                                    className={`inline-block h-3.5 w-3.5 rounded border flex items-center justify-center text-[9px] font-bold ${
+                                      isSelected
+                                        ? "border-teal-400 bg-teal-500 text-white"
+                                        : "border-slate-600 bg-slate-800 text-transparent"
+                                    }`}
+                                  >
+                                    ✓
+                                  </span>
+                                  <span className="font-bold text-xs text-white">
+                                    {action.title}
+                                  </span>
+                                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] text-slate-300 font-mono">
+                                    {action.badge}
+                                  </span>
+                                </div>
+                                <p className="mt-1 text-[11px] text-slate-400 pl-5 leading-normal">
+                                  {action.summary}
+                                </p>
+                              </div>
+                              <span className="text-[10px] text-slate-500 whitespace-nowrap">
+                                {action.organization}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 選択されたアクションの調査結果 ＆ 開示内容 */}
+                  <div className="space-y-3 rounded-lg border border-cyan-900/60 bg-cyan-950/20 p-3.5">
+                    <span className="font-bold text-cyan-300 flex items-center gap-1.5 text-xs">
+                      <FileText className="h-3.5 w-3.5" />
+                      【開示された調査結果 ＆ 証拠レポート】
+                    </span>
+
+                    {/* 東京側結果 */}
+                    {(() => {
+                      const action = TOKYO_ACTIONS.find((a) => a.id === selectedTokyoAction);
+                      if (!action) return null;
+                      return (
+                        <div className="rounded-lg border border-indigo-900/80 bg-slate-950 p-3">
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="rounded bg-indigo-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                                東京結果
+                              </span>
+                              <span className="font-bold text-white text-xs">{action.title}</span>
+                            </div>
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              証拠ID: {action.evidenceId}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                            {action.detail}
+                          </p>
+
+                          {/* T-3 空撮写真プレビュー */}
+                          {action.hasPhoto && (
+                            <div className="mt-3 rounded border border-slate-700 bg-slate-900 p-2.5">
+                              <div className="flex items-center justify-between mb-2">
+                                <span className="font-bold text-amber-300 text-[11px] flex items-center gap-1">
+                                  <ImageIcon className="h-3.5 w-3.5" />
+                                  海上保安庁 MA722撮影 広角空撮写真（熱水回避浮上時）
+                                </span>
+                                <button
+                                  onClick={() => setIsPhotoModalOpen(true)}
+                                  className="flex items-center gap-1 rounded bg-indigo-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-indigo-500 transition"
+                                >
+                                  <Eye className="h-3 w-3" /> 拡大表示
+                                </button>
+                              </div>
+                              <div
+                                onClick={() => setIsPhotoModalOpen(true)}
+                                className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-black aspect-video max-h-48 flex items-center justify-center"
+                              >
+                                <img
+                                  src="/images/aerial_recon_wide.jpg"
+                                  alt="西之島北西海域 空撮写真"
+                                  className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-2">
+                                  <span className="text-[10px] text-slate-200">
+                                    噴煙を背景に海面直下（水深10〜20m）に生じたケルビン波と巨大な影（数分後、深海800mへ急速潜航）
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                    {/* 小笠原側結果 */}
+                    {selectedFieldActions.map((fieldId) => {
+                      const action = FIELD_ACTIONS.find((a) => a.id === fieldId);
+                      if (!action) return null;
+                      return (
+                        <div
+                          key={action.id}
+                          className="rounded-lg border border-teal-900/80 bg-slate-950 p-3"
+                        >
+                          <div className="flex items-center justify-between mb-1">
+                            <div className="flex items-center gap-1.5">
+                              <span className="rounded bg-teal-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                                現地結果
+                              </span>
+                              <span className="font-bold text-white text-xs">{action.title}</span>
+                            </div>
+                            <span className="text-[10px] text-slate-400 font-mono">
+                              証拠ID: {action.evidenceId}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-300 mt-1 leading-relaxed">
+                            {action.detail}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* フェーズ3：合議・因果関係の結論（GM用正解メモ） */}
+                  <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/20 p-3.5">
+                    <span className="font-bold text-emerald-300 text-xs">
+                      【フェーズ3：合議・因果関係の結論（GM用正解メモ）】
+                    </span>
+                    <div className="mt-2 space-y-1.5 text-[11px] text-slate-300">
+                      <p>
+                        ・<strong className="text-white">① Day 1の元凶</strong>: スクリューの付着物から、遭難船を襲ったのは深海600m以深の「ダイオウイカ」と特定（F-1）。
+                      </p>
+                      <p>
+                        ・<strong className="text-white">② 巨大なサイズ矛盾</strong>: しかし観測された影は「全長300〜400m（数百メートル）」（T-1 / T-3 / F-2）。通常のダイオウイカ（十数m）とは桁違いであり、単体生物では説明がつかない！
+                      </p>
+                      <p>
+                        ・<strong className="text-white">③ 噴火の因果関係</strong>: 影の北上移動（時速約6km）が西之島直下を通過した直後に噴火が誘発された（T-2 / F-3 / F-4）。噴火のせいで怪異が現れたのではなく、怪異の通過が海底火山を刺激して噴火させている！
+                      </p>
+                    </div>
+
+                    <div className="mt-2.5 rounded bg-red-950/50 p-2.5 border border-red-900/50 text-[11px] text-red-200">
+                      ⚠️ <strong>GM演出上の最重要注意（ネタバレ防止）</strong>:
+                      <p className="mt-0.5 text-slate-300">
+                        このDay 2の段階では、<strong>「ダイオウイカの超群体である」という正体は絶対に明かさないでください</strong>。プレイヤーたちには「ダイオウイカの触手のはずなのに、なぜ数百mもの超巨大な影なのか？」「海底火山を噴火させながら北上しているものは一体何なのか？」という強烈なサイズ矛盾とサスペンスを抱かせ、議論を深めてもらいます。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {currentDay === 5 && (
                 <div className="space-y-2 text-xs leading-relaxed">
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
@@ -386,27 +777,83 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
         {/* 右側：このフェーズで公開すべき証拠とプレイヤー管理 */}
         <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
-          <h4 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-300">
-            Day {currentDay} 配布・開示証拠チェック
-          </h4>
+          <div className="flex items-center justify-between mb-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+              Day {currentDay} 配布・開示証拠チェック
+            </h4>
+            {currentDay === 2 && (
+              <span className="text-[10px] text-indigo-400 font-semibold">
+                合議選択連動中
+              </span>
+            )}
+          </div>
 
           <div className="space-y-2.5">
             {project.evidences
               .filter((e) => e.foundPhase === currentDay)
               .map((ev) => {
                 const owner = project.characters.find((c) => c.id === ev.ownerId);
+
+                // Day 2の場合のアクション連動チェック
+                let isActionSelected = false;
+                let linkedActionName = "";
+                if (currentDay === 2) {
+                  const tokyoMatch = TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const fieldMatch = FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  if (tokyoMatch) {
+                    linkedActionName = tokyoMatch.id;
+                    isActionSelected = selectedTokyoAction === tokyoMatch.id;
+                  } else if (fieldMatch) {
+                    linkedActionName = fieldMatch.id;
+                    isActionSelected = selectedFieldActions.includes(fieldMatch.id);
+                  }
+                }
+
                 return (
                   <div
                     key={ev.id}
-                    className="rounded-lg border border-slate-800 bg-slate-950 p-3 text-xs"
+                    className={`rounded-lg border p-3 text-xs transition ${
+                      currentDay === 2 && isActionSelected
+                        ? "border-emerald-600/70 bg-emerald-950/25 shadow-sm"
+                        : "border-slate-800 bg-slate-950"
+                    }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-indigo-300">{ev.title}</span>
-                      <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {currentDay === 2 && linkedActionName && (
+                          <span
+                            className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
+                              isActionSelected
+                                ? "bg-emerald-600 text-white"
+                                : "bg-slate-800 text-slate-400"
+                            }`}
+                          >
+                            {linkedActionName} {isActionSelected ? "開示中" : "未選択"}
+                          </span>
+                        )}
+                        <span
+                          className={`font-bold ${
+                            currentDay === 2 && isActionSelected
+                              ? "text-emerald-300"
+                              : "text-indigo-300"
+                          }`}
+                        >
+                          {ev.title}
+                        </span>
+                      </div>
+                      <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400 whitespace-nowrap">
                         {owner ? owner.name.split(":")[0] : "全体"}
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed">{ev.description}</p>
+                    {ev.id === "ev-aerial-recon-report" && isActionSelected && (
+                      <button
+                        onClick={() => setIsPhotoModalOpen(true)}
+                        className="mt-2 flex items-center gap-1 text-[10px] font-semibold text-amber-300 hover:text-amber-200 transition"
+                      >
+                        <ImageIcon className="h-3 w-3" /> 空撮写真をモーダルで確認
+                      </button>
+                    )}
                   </div>
                 );
               })}
@@ -419,6 +866,60 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           </div>
         </div>
       </div>
+
+      {/* 空撮写真拡大モーダル */}
+      {isPhotoModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-6"
+          onClick={() => setIsPhotoModalOpen(false)}
+        >
+          <div
+            className="relative max-w-4xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <ImageIcon className="h-5 w-5 text-amber-400" />
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    海上保安庁 羽田航空基地 MA722撮影 緊急偵察写真
+                  </h3>
+                  <p className="text-[11px] text-slate-400">
+                    撮影日時: Day 2 08:42 | 撮影高度: 3,000ft | 撮影位置: 西之島北西約25海里
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsPhotoModalOpen(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="mt-4 relative rounded-xl overflow-hidden border border-slate-800 bg-black flex items-center justify-center max-h-[60vh]">
+              <img
+                src="/images/aerial_recon_wide.jpg"
+                alt="西之島北西海域 空撮写真"
+                className="w-full h-auto max-h-[60vh] object-contain"
+              />
+            </div>
+
+            <div className="mt-4 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">
+              <p className="font-semibold text-amber-300">
+                【画像解析所見（海上保安庁 警備救難部 航空分析班）】
+              </p>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                ・背景（写真上方）に西之島海底火山の噴煙が明瞭に確認できる。<br />
+                ・中央部海面に、時速約6km（約3.3ノット）で北上する水面下物体が形成した明瞭なV字型の<strong>ケルビン波（航跡波）</strong>を観測。<br />
+                ・ケルビン波が海面に現れていることから、撮影当時、対象は海底火山の高温熱水を回避するために一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
+                ・水面下に透けて見える影の推定全長は<strong>300〜400メートル</strong>。<br />
+                ・なお、撮影から数分後、影は急速に水深800m以深の深海へ潜航し、光学視界から消失した。
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
