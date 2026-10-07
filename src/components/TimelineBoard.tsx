@@ -26,79 +26,81 @@ import {
   Volume2,
   HelpCircle,
   ExternalLink,
+  Radar,
+  Crosshair,
+  Scroll,
 } from "lucide-react";
 import { TOKYO_ACTIONS, FIELD_ACTIONS } from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 
-// Day 3 アクションの定義
-export const DAY3_TOKYO_ACTIONS = [
-  {
-    id: "D3-T1",
-    title: "T-1: 気象庁・火山噴火予知連 広域深海圧力解析",
-    organization: "気象庁 地震火山部",
-    evidenceId: "ev-volcano-chain-log",
-    badge: "地質解析",
-    summary: "鳥島海底カルデラの噴火トリガーが「深海800mを通過した巨大質量」による地殻圧力変化であることを科学的に立証。",
-    detail: "海底火山の爆発は偶然ではなく、物体が火山フロント沿いに北上する物理的刺激によって順次引き起こされている事実が完全に確定する。",
-  },
-  {
-    id: "D3-T2",
-    title: "T-2: 防衛省 広域ソナー探知 ＆ 本土到達タイムリミット算出",
-    organization: "防衛省 / 海上自衛隊",
-    evidenceId: "ev-eruption-countdown",
-    badge: "防衛分析",
-    summary: "物体が一時的に中層・海面付近へ再浮上しようとしている音響反応を検知。残り4日（Day 7）で駿河湾・富士山直下に到達する破局リミットを確定。",
-    detail: "時速6km（日速約150km）の一定速度を維持。このままではDay 7に富士山直下の巨大マグマ溜まりに到達し、日本列島規模の大破局噴火が誘発される。",
-  },
-  {
-    id: "D3-T3",
-    title: "T-3: 国立国会図書館・海洋気象アーカイブ調査（過去の歴史・地質史）",
-    organization: "国立国会図書館 / 地質調査所",
-    evidenceId: "ev-cult-cargo",
-    badge: "歴史文献",
-    summary: "明治・大正期の伊豆諸島群発噴火記録を調査。南から順番に連動噴火した特異な過去記録と、海難の変異記録を発見。",
-    detail: "過去数百年間にわたり、周期的にこの海域で不可解な局所的連動噴火と巨大海洋生物の目撃が語り継がれていた歴史的痕跡が浮かび上がる。",
-  },
-];
+// Day 3 ヘリコプター洋上捜索（ソナー投下地点）の定義
+export interface SonarDropPoint {
+  id: string;
+  name: string;
+  sectorLabel: string;
+  coordinates: string;
+  isPlumeHazard: boolean; // 熱水プルームの罠か？
+  distanceKm?: number;    // 成功時の反響距離 (km)
+  hazardReason?: string;  // 失敗時の理由
+  description: string;
+}
 
-export const DAY3_FIELD_ACTIONS = [
+export const DAY3_SONAR_POINTS: SonarDropPoint[] = [
   {
-    id: "D3-F1",
-    title: "F-1: 海上保安庁巡視船による鳥島沖観測レポート（再浮上物体の確認）",
-    organization: "海上保安庁 警備救難部",
-    evidenceId: "ev-sonar-shadow",
-    badge: "洋上観測",
-    summary: "鳥島南方に展開する大型巡視船からの緊急打電。噴煙の中、海面を大きく盛り上げて再浮上しようとする超巨大な影を目視確認。",
-    detail: "海面下で蠢く影は全長数百メートル。高熱の海底火山熱水を回避しながら、正確に北上ルートを維持している。",
+    id: "drop-A",
+    name: "ポイントA: 鳥島北東カルデラ海域",
+    sectorLabel: "セクターα",
+    coordinates: "30°40'N, 140°45'E",
+    isPlumeHazard: true,
+    hazardReason: "鳥島海底カルデラ中心から25km以内の熱水プルーム域！ 火山性微細気泡群による激しい音響クラッターで波形が飽和し、測距不能（自動失敗）！",
+    description: "Day 2に噴火した鳥島海底カルデラから約18km（25km危険圏内）。気泡と熱水が激しく滞留する危険海域。",
   },
   {
-    id: "D3-F2",
-    title: "F-2: 小笠原の捕鯨船航海日誌・漁業史調査（過去の歴史・生態系）",
-    organization: "二見港 郷土資料館",
-    evidenceId: "ev-folk-song-rhythm",
-    badge: "捕鯨歴史",
-    summary: "かつて小笠原を母港としていた捕鯨船の古い日誌を発掘。『深海より現れし黒き魔物と、マッコウクジラの群れが死闘を繰り広げた』記録。",
-    detail: "クジラが怪異の天敵であり、太古からこの海で捕食関係にあったことを示唆する極めて重要な歴史的証言（Day 6への伏線）。",
+    id: "drop-B",
+    name: "ポイントB: 須美寿島東・海底火山フロント帯",
+    sectorLabel: "セクターβ",
+    coordinates: "31°25'N, 140°35'E",
+    isPlumeHazard: true,
+    hazardReason: "須美寿島東の海底熱水噴出孔群から25km以内の警戒域！ 急激な水温躍層による音波屈折と気泡乱反射で探知不能（NO RETURN / 自動失敗）！",
+    description: "熱水噴出孔群から約15km（25km危険圏内）。活動的海底海嶺部で海底湧昇流が激しい。",
   },
   {
-    id: "D3-F3",
-    title: "F-3: 島の古い神社・社家の郷土伝承調査（過去の歴史・信仰伝承）",
-    organization: "父島 大神山神社 社務所",
-    evidenceId: "ev-ancient-shrine-scroll",
-    badge: "神事伝承",
-    summary: "島に古くから伝わる言い伝え。『海鳴りと共に黒き魔物が通るとき、島人は海に祈りを捧げて災厄を逃れた』という太古の伝承の端緒。",
-    detail: "先祖が遺した土蔵の記録の中に、怪異を鎮めるための神事や古い祝詞が存在していた手がかりを発見する。",
+    id: "drop-C",
+    name: "ポイントC: 鳥島北西・深海静穏域",
+    sectorLabel: "セクターγ",
+    coordinates: "30°50'N, 139°45'E",
+    isPlumeHazard: false,
+    distanceKm: 32,
+    description: "火山フロントから西へ外れた、水深2,500mの静穏な海盆平原。熱水の影響がなくクリア。",
   },
   {
-    id: "D3-F4",
-    title: "F-4: 西之島〜鳥島間 海底観測ブイ・水温異常の現場解析（PC4/PC5）",
-    organization: "気象庁 小笠原観測所",
-    evidenceId: "ev-volcano-chain-log",
-    badge: "海洋観測",
-    summary: "物体が通過した航跡に沿って局所的な水温上昇と熱水噴出が起きており、物体の通過が海底火山を誘発している物理的確証を立証。",
-    detail: "地殻の断層に沿って、時速約6kmの速度で地温・水温の異常スパイクが北上している波形データを完璧に特定。",
+    id: "drop-D",
+    name: "ポイントD: 須美寿島西・海嶺西側平原",
+    sectorLabel: "セクターδ",
+    coordinates: "31°30'N, 139°30'E",
+    isPlumeHazard: false,
+    distanceKm: 20,
+    description: "海嶺西側の安定した音響伝搬層を持つ海域。障害物がなくソナー反響の通りが良い。",
+  },
+  {
+    id: "drop-E",
+    name: "ポイントE: 青ヶ島南西・深海盆",
+    sectorLabel: "セクターε",
+    coordinates: "32°05'N, 139°25'E",
+    isPlumeHazard: false,
+    distanceKm: 28,
+    description: "青ヶ島南方、海嶺西縁に広がる音響ノイズの極めて少ない深海セクター。",
+  },
+  {
+    id: "drop-F",
+    name: "ポイントF: 八丈島南西・沖合海域",
+    sectorLabel: "セクターζ",
+    coordinates: "32°45'N, 139°10'E",
+    isPlumeHazard: false,
+    distanceKm: 75,
+    description: "北方の警戒海域。目標からはやや離れているが海況は安定。",
   },
 ];
 
@@ -132,9 +134,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day2TokyoAction, setDay2TokyoAction] = useState<string>("T-3");
   const [day2FieldActions, setDay2FieldActions] = useState<string[]>(["F-1", "F-3"]);
 
-  // Day 3 アクション選択状態
-  const [day3TokyoAction, setDay3TokyoAction] = useState<string>("D3-T1");
-  const [day3FieldActions, setDay3FieldActions] = useState<string[]>(["D3-F2", "D3-F3"]);
+  // Day 3 ソナー投下パズル状態
+  const [day3DroppedPoints, setDay3DroppedPoints] = useState<string[]>([]);
+  const [day3IsReportUnlocked, setDay3IsReportUnlocked] = useState<boolean>(false);
+  const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
 
   const handleToggleDay2FieldAction = (id: string) => {
     setDay2FieldActions((prev) => {
@@ -144,12 +147,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     });
   };
 
-  const handleToggleDay3FieldAction = (id: string) => {
-    setDay3FieldActions((prev) => {
-      if (prev.includes(id)) return prev.filter((i) => i !== id);
-      if (prev.length >= 2) return [prev[1], id];
+  const handleToggleDay3SonarDrop = (id: string) => {
+    setDay3DroppedPoints((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((p) => p !== id);
+      }
+      if (prev.length >= 3) {
+        return [...prev.slice(1), id];
+      }
       return [...prev, id];
     });
+  };
+
+  const handleResetDay3Sonar = () => {
+    setDay3DroppedPoints([]);
+    setDay3IsReportUnlocked(false);
   };
 
   const handleUpdateCurrentStep = (field: keyof IncidentStep, value: any) => {
@@ -464,18 +476,19 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
-            {/* --- DAY 3 プレイヤー提供情報：火山活動監視状況図 ＆ 歴史調査 --- */}
+            {/* --- DAY 3 プレイヤー提供情報：火山活動監視 ＆ ヘリコプター洋上索敵パズル --- */}
             {selectedDay === 3 && (
               <div className="rounded-xl border border-rose-800 bg-[#160b13] p-4 shadow-lg space-y-4">
+                {/* ヘッダー */}
                 <div className="flex items-center justify-between border-b border-rose-900/60 pb-2">
                   <div className="flex items-center gap-2">
                     <Flame className="h-4 w-4 text-rose-400" />
                     <div>
                       <span className="font-bold text-xs text-white">
-                        【プレイヤー提供情報】海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺）
+                        【合同緊急任務】鳥島沖海底噴火 ＆ 長距離ヘリ洋上ソナー索敵作戦
                       </span>
                       <span className="ml-2 text-[10px] text-rose-300 font-mono">
-                        噴火日程記録: 西之島(Day 1) ➔ 鳥島沖(Day 2)
+                        海上保安庁・自衛隊 洋上給油連携オペレーション
                       </span>
                     </div>
                   </div>
@@ -483,11 +496,24 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     onClick={() => setIsTheaterModalOpen(true)}
                     className="flex items-center gap-1 rounded bg-rose-700 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-rose-600 transition shadow"
                   >
-                    <Maximize2 className="h-3 w-3" /> 全画面拡大表示
+                    <Maximize2 className="h-3 w-3" /> 海図を全画面拡大
                   </button>
                 </div>
 
-                {/* プレイヤー提示用：噴火監視状況図（日本語版） */}
+                {/* ① GMオープニングアナウンス */}
+                <div className="rounded-lg bg-amber-950/40 border border-amber-600/40 p-3 text-xs text-amber-200 space-y-1.5 shadow">
+                  <div className="flex items-center gap-2 font-bold text-amber-300">
+                    <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
+                    【合同対策本部 GMアナウンス】鳥島沖海底大噴火 ＆ 緊急洋上捜索命令
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    昨夜、西之島（Day 1）から北へ約380km離れた「鳥島沖海底カルデラ」において突発的な大規模水蒸気爆発が発生しました。24時間で約380km。時速約6km（日速約150km）の一定ペースで深海を北上する巨大物体が海底火山を次々と刺激している可能性が濃厚です。<br />
+                    これを受け、小笠原基地より<strong>大型捜索ヘリ</strong>を緊急発進させ、洋上に展開する巡視船での洋上給油を中継して現場海域へ投入します。<br />
+                    <strong>任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して相手との距離を割り出し、その姿（映像）を捉えよ！』</strong>
+                  </p>
+                </div>
+
+                {/* ② 海上保安庁 火山活動監視状況図（日本語版プレビュー） */}
                 <div
                   onClick={() => setIsTheaterModalOpen(true)}
                   className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-[#081325] aspect-video max-h-56 flex items-center justify-center shadow-lg"
@@ -495,7 +521,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102" />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                     <span className="text-[11px] font-semibold text-slate-200">
-                      🔴 噴火観測記録: 西之島(Day 1) ｜ 鳥島沖(Day 2)（時系列記録から物体の動向を分析）
+                      🔴 噴火観測記録: 西之島(Day 1) ｜ 鳥島沖(Day 2)（熱水プルーム・音響クラッター注意）
                     </span>
                     <span className="rounded bg-black/60 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
                       クリックで拡大
@@ -503,68 +529,169 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* Day 3 合議制アクション選択 */}
-                <div className="space-y-3">
-                  <div>
-                    <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択）:
-                    </span>
-                    <div className="grid grid-cols-3 gap-2">
-                      {DAY3_TOKYO_ACTIONS.map((a) => (
+                {/* ③ メイン協力パズル：アクティブソナー3点投下作戦 */}
+                <div className="rounded-xl border border-slate-800 bg-slate-950/90 p-3.5 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Radar className="h-4 w-4 text-cyan-400" />
+                      <span className="font-bold text-xs text-white">
+                        【メイン協力パズル】アクティブ・ソノブイ投下（三辺測量索敵）
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-mono text-slate-300">
+                        ヘリ搭載ソノブイ:{" "}
+                        <strong className={day3DroppedPoints.length === 3 ? "text-amber-400" : "text-cyan-400"}>
+                          {3 - day3DroppedPoints.length}機 残り
+                        </strong>{" "}
+                        ({day3DroppedPoints.length} / 3 投下済)
+                      </span>
+                      {day3DroppedPoints.length > 0 && (
                         <button
-                          key={a.id}
-                          onClick={() => setDay3TokyoAction(a.id)}
-                          className={`rounded-lg p-2 text-left border transition ${
-                            day3TokyoAction === a.id
-                              ? "border-rose-500 bg-rose-950/70 shadow ring-1 ring-rose-400"
-                              : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                          onClick={handleResetDay3Sonar}
+                          className="rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition"
+                        >
+                          リセット
+                        </button>
+                      )}
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    怪物はDay 2朝の鳥島沖から時速約6kmで北上中。ヘリからソノブイを投下する海域セクターを合議で選んでください。<br />
+                    <span className="text-amber-300 font-semibold">
+                      ※海底カルデラや熱水噴出孔から【半径25km以内（約13.5海里）】に投下すると、火山性微細気泡群による激しい音響クラッター障害で自動失敗（測距不能）となります！
+                    </span>
+                  </p>
+
+                  {/* 投下候補セクターグリッド */}
+                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                    {DAY3_SONAR_POINTS.map((pt) => {
+                      const isDropped = day3DroppedPoints.includes(pt.id);
+                      return (
+                        <button
+                          key={pt.id}
+                          onClick={() => handleToggleDay3SonarDrop(pt.id)}
+                          className={`rounded-lg p-2 text-left border transition relative overflow-hidden ${
+                            isDropped
+                              ? pt.isPlumeHazard
+                                ? "border-red-600 bg-red-950/80 shadow ring-1 ring-red-500"
+                                : "border-cyan-500 bg-cyan-950/80 shadow ring-1 ring-cyan-400"
+                              : "border-slate-800 bg-slate-900/60 hover:bg-slate-800"
                           }`}
                         >
-                          <div className="font-bold text-white text-[11px]">{a.title.split(":")[0]} {a.badge}</div>
-                          <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono px-1 rounded bg-slate-800 text-slate-300">
+                              {pt.sectorLabel}
+                            </span>
+                            <span
+                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
+                                isDropped
+                                  ? pt.isPlumeHazard
+                                    ? "bg-red-700 text-white animate-pulse"
+                                    : "bg-cyan-600 text-white"
+                                  : "text-slate-500 bg-slate-950"
+                              }`}
+                            >
+                              {isDropped ? (pt.isPlumeHazard ? "💥 投下失敗" : "📡 測距成功") : "未投下"}
+                            </span>
+                          </div>
+                          <div className="font-bold text-white text-[11px] mt-1 line-clamp-1">
+                            {pt.name.split(":")[1]}
+                          </div>
+                          <div className="text-[9px] font-mono text-slate-400">{pt.coordinates}</div>
+
+                          {/* 投下後の結果表示 */}
+                          {isDropped && (
+                            <div className="mt-1.5 pt-1 border-t border-slate-700/60 text-[10px]">
+                              {pt.isPlumeHazard ? (
+                                <p className="text-red-300 font-semibold leading-tight">
+                                  {pt.hazardReason}
+                                </p>
+                              ) : (
+                                <p className="text-cyan-300 font-bold">
+                                  反響エコー捕捉！ 目標まで距離: 約<strong>{pt.distanceKm} km</strong>
+                                </p>
+                              )}
+                            </div>
+                          )}
                         </button>
-                      ))}
-                    </div>
+                      );
+                    })}
                   </div>
 
-                  <div>
-                    <span className="font-bold text-amber-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（過去の歴史調査 2つ選択）:
-                    </span>
-                    <div className="grid grid-cols-2 gap-2">
-                      {DAY3_FIELD_ACTIONS.map((a) => {
-                        const isSelected = day3FieldActions.includes(a.id);
-                        return (
-                          <button
-                            key={a.id}
-                            onClick={() => handleToggleDay3FieldAction(a.id)}
-                            className={`rounded-lg p-2 text-left border transition ${
-                              isSelected
-                                ? "border-amber-500 bg-amber-950/70 shadow ring-1 ring-amber-400"
-                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.title.split(":")[0]} {a.badge}</span>
-                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-amber-600 text-white" : "text-slate-500"}`}>
-                                {isSelected ? "選択中" : "未選択"}
-                              </span>
+                  {/* 3投完了時の結果判定 ＆ レポートアンロック */}
+                  {day3DroppedPoints.length === 3 && (
+                    <div className="mt-3 rounded-lg border border-cyan-800 bg-cyan-950/40 p-3 space-y-2">
+                      {day3DroppedPoints.filter((id) => !DAY3_SONAR_POINTS.find((p) => p.id === id)?.isPlumeHazard).length >= 2 ? (
+                        <>
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                              <Crosshair className="h-4 w-4 text-cyan-400 animate-spin-slow" />
+                              【三辺測量 成功】怪物の現在位置を特定（須美寿島西方・水深約400m）！
+                            </span>
+                            {!day3IsReportUnlocked && (
+                              <button
+                                onClick={() => setDay3IsReportUnlocked(true)}
+                                className="rounded bg-cyan-600 hover:bg-cyan-500 px-3 py-1 text-xs font-bold text-white shadow transition animate-bounce"
+                              >
+                                ヘリ急行！ 映像・音響データを捉える
+                              </button>
+                            )}
+                          </div>
+                          <p className="text-[11px] text-slate-300 leading-relaxed">
+                            熱水プルーム域を回避し、複数地点からの音響エコーの交点を特定。時速約6kmの北上ベクトルと完全に合致する座標を割り出しました。
+                          </p>
+
+                          {/* 解放された観測レポート */}
+                          {day3IsReportUnlocked && (
+                            <div className="mt-3 rounded-lg border border-rose-700 bg-slate-950 p-3 text-xs space-y-2 shadow-2xl animate-fade-in">
+                              <div className="flex items-center gap-2 border-b border-rose-900/60 pb-1.5">
+                                <ImageIcon className="h-4 w-4 text-rose-400" />
+                                <span className="font-bold text-white">
+                                  【長距離ヘリ洋上観測所見】深度400m 北上物体 撮影・測位レポート
+                                </span>
+                              </div>
+                              <p className="text-[11px] text-slate-300 leading-relaxed">
+                                ・ヘリの吊下式高感度ソナーおよび暗視光学機器により、水深約400mの中層を北上する<strong>「全長300〜400メートルの巨大な生体シグネチャー」</strong>の姿を鮮明に記録。<br />
+                                ・移動速度は実測値で<strong>時速約6km（日速約150km）</strong>。鳥島から正確に北上していることが現場観測で100%確定。<br />
+                                ・<strong>【破局タイムリミット】</strong>：このまま北上を続けた場合、<strong>残り4日（Day 7）で駿河湾・富士山直下に到達</strong>し、本土規模の大破局噴火を誘発することが科学的に確定した。
+                              </p>
                             </div>
-                            <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
-                          </button>
-                        );
-                      })}
+                          )}
+                        </>
+                      ) : (
+                        <div className="text-red-300 text-xs">
+                          ⚠️ <strong>【探知失敗】</strong> 熱水プルームの乱反射により有効な測距データが不足しています。熱水プルーム域を避けて再度ソナー投下を行ってください。（「リセット」をクリック）
+                        </div>
+                      )}
                     </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* 火山連動と歴史調査の考察 */}
-                <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
-                  <span className="font-bold text-rose-300">
-                    🔬 火山連動と過去の歴史調査の意義:
-                  </span>
-                  <p>・<strong>火山連動の立証</strong>: 物体の時速6kmでの北上ペースと、鳥島海底カルデラの大爆発が完全に時間一致。物体の通過が海底火山を刺激していることが科学的に確定。</p>
-                  <p>・<strong>過去の歴史調査</strong>: 現代兵器が効くか不透明な中、小笠原の捕鯨船日誌（クジラとの死闘）や神社の古い言い伝えを調査することで、Day 6のクジラ言語パズルへの決定的な布石を打ちます。</p>
+                {/* ④ PC6 専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
+                <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-3.5 space-y-2">
+                  <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
+                    <div className="flex items-center gap-1.5">
+                      <Scroll className="h-4 w-4 text-indigo-400" />
+                      <span className="font-bold text-xs text-white">
+                        【PC6（神職）専用 個別ハンドアウト】社家に伝わる海鳴りの言い伝え
+                      </span>
+                    </div>
+                    <button
+                      onClick={() => setDay3IsPC6ModalOpen(true)}
+                      className="rounded bg-indigo-600 hover:bg-indigo-500 px-2.5 py-0.5 text-[10px] font-bold text-white transition shadow"
+                    >
+                      個別シートを全画面で開く
+                    </button>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed italic">
+                    「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
+                  </p>
+                  <div className="rounded bg-indigo-950/60 border border-indigo-900/80 p-2 text-[10px] text-amber-200">
+                    ⚠️ <strong>【PC6 プレイヤー心得（重要制約）】</strong>:
+                    現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）
+                  </div>
                 </div>
               </div>
             )}
@@ -878,7 +1005,101 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
           </div>
         </div>
+      {/* Day 3 PC6 個別ハンドアウト モーダル */}
+      {day3IsPC6ModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setDay3IsPC6ModalOpen(false)}
+        >
+          <div
+            className="relative max-w-2xl w-full rounded-2xl border border-indigo-700/70 bg-[#0c0d1e] p-6 shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex items-center justify-between pb-3 border-b border-indigo-900/60">
+              <div className="flex items-center gap-2.5">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-indigo-950 border border-indigo-700 text-indigo-400">
+                  <Scroll className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    【PC6（神職）専用 個別ハンドアウト】
+                  </h3>
+                  <p className="text-[11px] text-indigo-300 font-medium">
+                    小笠原・大神神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setDay3IsPC6ModalOpen(false)}
+                className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* モーダル本文 */}
+            <div className="mt-4 flex-1 overflow-y-auto space-y-4 pr-1 text-xs">
+              {/* 伝承の文言（引用枠） */}
+              <div className="rounded-xl border border-indigo-800/80 bg-slate-950/80 p-4 shadow-inner">
+                <div className="text-[11px] font-bold text-indigo-400 mb-2 flex items-center gap-1.5">
+                  <span>📜</span> 社家相伝の言い伝え（祖父から聞かされた口伝）
+                </div>
+                <blockquote className="border-l-2 border-indigo-500 pl-3.5 py-1 text-slate-200 text-xs leading-relaxed italic">
+                  「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……<br />
+                  島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ。<br />
+                  さすれば海鳴りは鎮まり、災いは海の深みへと帰らん」
+                </blockquote>
+              </div>
+
+              {/* 背景説明 */}
+              <div className="rounded-lg bg-slate-900/70 border border-slate-800 p-3 space-y-1.5 text-slate-300 leading-relaxed">
+                <span className="font-bold text-slate-200 text-xs block">
+                  ◆ 現地で起こっている事態との符合
+                </span>
+                <p>
+                  西之島（Day 1）の大噴火に続き、昨夜は鳥島沖（Day 2）の海底カルデラが噴火した。
+                  海保や対策本部は「巨大な物体が時速約6kmで海中を北上している」と結論づけている。<br />
+                  この状況は、幼い頃に聞かされた『火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へ泳ぎ去る』という伝承の情景と完全に一致している。
+                </p>
+              </div>
+
+              {/* 最重要ルール・制約 */}
+              <div className="rounded-xl bg-amber-950/40 border border-amber-600/60 p-4 space-y-2 text-amber-200 shadow">
+                <div className="flex items-center gap-2 font-bold text-amber-300 text-xs">
+                  <AlertTriangle className="h-4 w-4 text-amber-400" />
+                  【PC6 プレイヤーの心得と重要制約】
+                </div>
+                <div className="text-[11px] leading-relaxed space-y-1.5 text-slate-300">
+                  <p>
+                    1. <strong className="text-white">Day 3であなたが知っている限界</strong>：<br />
+                    「火山が連続で爆発し、巨大なものが海を移動しているときには、海に出て毎日祝詞を唱える特別な儀式が存在する」という<strong>【事実の存在】まで</strong>です。
+                  </p>
+                  <p>
+                    2. <strong className="text-white">祝詞の具体的な文言・所作は一切不明（厳禁事項）</strong>：<br />
+                    具体的にどんな文言を唱えるのか、どのような抑揚・音階で奏上するのかは、社記の本文が一部欠損・封印されているため、<strong>現時点ではあなたにも全く分かりません</strong>。（※Day 6の恩師の研究ノートおよび音響解析を経て初めて判明します）
+                  </p>
+                  <p>
+                    3. <strong className="text-white">他プレイヤーとの情報共有</strong>：<br />
+                    「海に出て毎日祝詞を唱えなければならない儀式がある」という伝承の存在は、合議の席で自由に明かして構いません。
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* モーダルフッター */}
+            <div className="mt-4 pt-3 border-t border-slate-800 flex justify-end">
+              <button
+                onClick={() => setDay3IsPC6ModalOpen(false)}
+                className="rounded-lg bg-indigo-600 hover:bg-indigo-500 px-4 py-1.5 text-xs font-bold text-white transition shadow"
+              >
+                ハンドアウトを閉じる
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
+
