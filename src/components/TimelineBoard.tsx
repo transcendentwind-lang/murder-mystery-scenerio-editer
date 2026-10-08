@@ -972,21 +972,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </div>
 
                           <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
-                            <div>高度: <strong>1,500 ft (約450m)</strong></div>
+                            <div>高度: <strong>320 m (約1,050 ft)</strong></div>
                             <div>海域: <strong>鳥島北西 約40km</strong></div>
                             <div>速度: <strong>時速約6km 北上</strong></div>
-                            <div>機材: <strong>光学・赤外線ポッド</strong></div>
+                            <div>機材: <strong>FLIR赤外光学ポッド</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">遊泳形態</strong>: 前進遊泳する巨大生物の後方からの撮影に成功。胴体と触手が<strong>流線型の紡錘形（トルペード状）</strong>に整然とまとまり、その背後へ<strong>極めて長く伸びる無数の触手</strong>が海面下に確認できる。
+                              ・<strong className="text-white">海面下シャドウ</strong>: 本体は完全に海面下に没しており、巨大な外套膜が黒い深海シルエットとして確認できる。
                             </p>
                             <p>
-                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下十数mを高速遊泳する巨大な質量により、V字型の巨大な白波が周囲へ押し出されている。
+                              ・<strong className="text-white">数十本の触手群（超群体）</strong>: 背後には<strong>ダイオウイカ少なくとも20匹分に相当する無数の触手</strong>が密集し、海中を長く直線的にたなびく異様な光景を記録。
                             </p>
                             <p>
-                              ・<strong className="text-white">生態矛盾</strong>: Day 1のダイオウイカ組織鑑定（F-1）と一致するが、全長数百mは異常。無数の個体が結合した<strong>「超群体」</strong>である疑いが濃厚。
+                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下を泳ぎ去る巨大な質量により、幅数百メートルに及ぶ猛烈な白波と渦流が発生。
                             </p>
                           </div>
                         </div>
@@ -1695,10 +1695,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 {day3PhotoModal === "success" ? (
                   <>
-                    ・高度1,500フィート、捜索ヘリより前進遊泳する巨大生物の後方からの撮影に成功。<br />
-                    ・海面下を前進遊泳する胴体と触手が<strong>流線型の紡錘形（トルペード状）</strong>に整然とまとまり、背後へ<strong>極めて長く伸びる無数の触手</strong>が海面下に鮮明に確認できる。<br />
-                    ・背後には猛烈な白波とV字型のケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上中。<br />
-                    ・ダイオウイカの形態特徴を持つが、全長300〜400メートルに及ぶサイズは単体生物としては説明がつかず、「超群体」である疑いが強まる。
+                    ・高度320m、捜索ヘリFLIRカメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
+                    ・本体は完全に海面下に没しており、巨大な外套膜が暗い深海シルエットとして確認できる。<br />
+                    ・背後には<strong>ダイオウイカ少なくとも20匹分に相当する無数の触手群</strong>が密集して海中を長く直線的にたなびいており、単体生物ではなく無数の個体が融合した「超群体（コロニー）」であることが決定づけられた。<br />
+                    ・海面には猛烈な白波とケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上を継続中。
                   </>
                 ) : (
                   <>
