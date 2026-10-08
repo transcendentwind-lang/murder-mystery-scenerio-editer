@@ -2629,50 +2629,6 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
               </div>
-
-                    <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
-                      <div className="flex items-center justify-between">
-                        <span className="font-semibold text-slate-200">
-                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[1.8kHz Ping] ➔ [敵・獲物・集まれ] ➔ [広域呼応待機]</span>
-                        </span>
-                        <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
-                          day6BroadcastStatus === "idle"
-                            ? "bg-slate-800 text-slate-400"
-                            : day6BroadcastStatus === "broadcasting"
-                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
-                            : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                        }`}>
-                          {day6BroadcastStatus === "idle" && "待機中"}
-                          {day6BroadcastStatus === "broadcasting" && "放流中・音響走査中..."}
-                          {day6BroadcastStatus === "received" && "太平洋全域から応答コーダ検知！"}
-                        </span>
-                      </div>
-
-                      {day6BroadcastStatus === "received" && (
-                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1 animate-fade-in">
-                          <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
-                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群からの呼応シグナルを確認！
-                          </strong>
-                          <p className="text-slate-200 leading-relaxed font-mono">
-                            「駿河湾沖、伊豆諸島、鳥島沖の全ソナー受信機に数十〜数百頭のマッコウクジラからの返信クリック（共鳴コーダ）が殺到しています！ クジラ群は怪異群体を『巨大な獲物』と認識し、駿河トラフへ向けて超高速で反転・集結を開始しました！」
-                          </p>
-                        </div>
-                      )}
-
-                      <button
-                        onClick={handleDay6Broadcast}
-                        disabled={day6BroadcastStatus === "broadcasting"}
-                        className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
-                      >
-                        <Radio className="h-4 w-4" />
-                        {day6BroadcastStatus === "idle" && "海上自衛隊ソナー網から新言語パルスを放流する（テスト送信）"}
-                        {day6BroadcastStatus === "broadcasting" && "ソナー波形放射中……深海からの応答待機中……"}
-                        {day6BroadcastStatus === "received" && "新言語パルスを再放流し、クジラ群との同調を維持する"}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
             )}
 
             {/* --- DAY 7 クライマックス大捕食 --- */}
