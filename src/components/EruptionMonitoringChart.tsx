@@ -221,20 +221,6 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <text x="589.2" y="382.9" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">須美寿島</text>
       <text x="589.2" y="394.9" fill="#eab308" fontSize="9" textAnchor="start">未噴火</text>
 
-      {/* 熱水プルーム②（須美寿島東・海底火山性擾乱域） */}
-      <g transform="translate(630, 365) rotate(15)">
-        <ellipse cx="0" cy="0" rx="38" ry="22" fill="#f97316" fillOpacity="0.1" stroke="#f97316" strokeDasharray="3,3" strokeWidth="1.2" />
-        <text x="0" y="-3" fill="#f97316" fontSize="9" fontWeight="bold" textAnchor="middle">海底熱水噴出帯</text>
-        <text x="0" y="9" fill="#fdba74" fontSize="8" textAnchor="middle">(音響クラッター注意)</text>
-      </g>
-
-      {/* 熱水プルーム①（鳥島カルデラ北東熱水プルーム域） */}
-      <g transform="translate(690, 415) rotate(-15)">
-        <ellipse cx="0" cy="0" rx="46" ry="28" fill="#f97316" fillOpacity="0.12" stroke="#f97316" strokeDasharray="3,3" strokeWidth="1.2" />
-        <text x="0" y="-3" fill="#f97316" fontSize="9" fontWeight="bold" textAnchor="middle">熱水プルーム域</text>
-        <text x="0" y="9" fill="#fdba74" fontSize="8" textAnchor="middle">(ガス気泡・音響散乱)</text>
-      </g>
-
       {/* 鳥島 (Day 2 噴火) */}
       <g transform="translate(623.5, 442.0)">
         {/* 噴火パルスエフェクト */}
@@ -372,12 +358,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         <line x1="12" y1="52" x2="28" y2="52" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3,3" />
         <text x="34" y="56" fill="#94a3b8" fontSize="10">火山フロント (伊豆・小笠原火山弧：北端 伊豆半島)</text>
         {/* 凡例3 */}
-        <ellipse cx="20" cy="72" rx="7" ry="4" fill="#f97316" fillOpacity="0.2" stroke="#f97316" strokeDasharray="2,2" strokeWidth="1" />
-        <text x="34" y="75" fill="#fdba74" fontSize="10">熱水プルーム域 (気泡擾乱・ソナー測距不能)</text>
-        {/* 凡例4 */}
-        <circle cx="20" cy="92" r="4" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
-        <text x="34" y="95" fill="#eab308" fontSize="10">未噴火（今後の北上警戒海域）</text>
-        <text x="12" y="110" fill="#64748b" fontSize="8">※フィリピン海プレート上の島弧火山列（伊豆諸島〜伊豆半島）</text>
+        <circle cx="20" cy="74" r="4" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
+        <text x="34" y="77" fill="#eab308" fontSize="10">未噴火（今後の北上警戒海域）</text>
+        <text x="12" y="96" fill="#64748b" fontSize="8">※フィリピン海プレート上の島弧火山列（伊豆諸島〜伊豆半島）</text>
       </g>
 
       {/* コンパスローズ (方位記号) */}

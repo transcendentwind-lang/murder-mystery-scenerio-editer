@@ -103,6 +103,9 @@ export interface CandidateLockStatus {
 }
 
 export interface MMProject {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
   title: string;
   subtitle: string;
   concept: string;             // 作品コンセプト・世界観

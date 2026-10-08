@@ -51,21 +51,21 @@ export interface SonarDropPoint {
 export const DAY3_SONAR_POINTS: SonarDropPoint[] = [
   {
     id: "drop-A",
-    name: "ポイントA: 鳥島北東カルデラ海域",
+    name: "ポイントA: 鳥島北東海域",
     sectorLabel: "セクターα",
     coordinates: "30°40'N, 140°45'E",
     isPlumeHazard: true,
-    hazardReason: "鳥島海底カルデラ中心から25km以内の熱水プルーム域！ 火山性微細気泡群による激しい音響クラッターで波形が飽和し、測距不能（自動失敗）！",
-    description: "Day 2に噴火した鳥島海底カルデラから約18km（25km危険圏内）。気泡と熱水が激しく滞留する危険海域。",
+    hazardReason: "海底カルデラからの火山性微細気泡群を検知！ 激しい音響クラッター障害により波形が飽和し、測距不能！",
+    description: "鳥島北東側の外洋セクター。水深約1,500m。",
   },
   {
     id: "drop-B",
-    name: "ポイントB: 須美寿島東・海底火山フロント帯",
+    name: "ポイントB: 須美寿島東海域",
     sectorLabel: "セクターβ",
     coordinates: "31°25'N, 140°35'E",
     isPlumeHazard: true,
-    hazardReason: "須美寿島東の海底熱水噴出孔群から25km以内の警戒域！ 急激な水温躍層による音波屈折と気泡乱反射で探知不能（NO RETURN / 自動失敗）！",
-    description: "熱水噴出孔群から約15km（25km危険圏内）。活動的海底海嶺部で海底湧昇流が激しい。",
+    hazardReason: "海底熱水湧昇流による急激な水温躍層を検知！ 音波屈折と乱反射により測距不能（NO RETURN）！",
+    description: "須美寿島東側に広がる海底海嶺セクター。",
   },
   {
     id: "drop-C",
@@ -609,8 +609,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     怪物はDay 2朝の鳥島沖から時速約6kmで北上中。ヘリからソノブイを投下する海域セクターを合議で選んでください。<br />
-                    <span className="text-amber-300 font-semibold">
-                      ※海底カルデラや熱水噴出孔から【半径25km以内（約13.5海里）】に投下すると、火山性微細気泡群による激しい音響クラッター障害で自動失敗（測距不能）となります！
+                    <span className="text-slate-400">
+                      ※海況や海底地形、音響伝搬層の状態によっては、音波の散乱・クラッター障害により測距不能（失敗）となる場合があります。海図の地形をよく確認して選定してください。
                     </span>
                   </p>
 
@@ -712,7 +712,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </>
                       ) : (
                         <div className="text-red-300 text-xs">
-                          ⚠️ <strong>【探知失敗】</strong> 熱水プルームの乱反射により有効な測距データが不足しています。熱水プルーム域を避けて再度ソナー投下を行ってください。（「リセット」をクリック）
+                          ⚠️ <strong>【探知失敗】</strong> 海底の火山性微細気泡や水温躍層の乱反射により有効な測距データが不足しています。音響擾乱の少ない安定した海域を選んで再度ソナー投下を行ってください。（「リセット」をクリック）
                         </div>
                       )}
                     </div>
@@ -1023,7 +1023,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 <div className="flex items-center justify-between text-[11px] leading-relaxed">
                   <div>
                     <span className="font-bold text-cyan-300">【海図作戦要項】</span>
-                    鳥島沖カルデラから半径25kmの熱水気泡障害圏（自動失敗）を回避し、クリアな平原海盆にソノブイを投下して三辺測量を実施せよ。
+                    海図上の海況と海底地形を分析し、クリアな海盆平原にソノブイを投下して三辺測量を実施せよ。
                   </div>
                   <div className="font-mono text-slate-400">
                     給油拠点: 須美寿島南西 PLH-31「あきつしま」

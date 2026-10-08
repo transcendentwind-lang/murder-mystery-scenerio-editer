@@ -294,28 +294,32 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           </g>
 
           {/* ======================================================== */}
-          {/* 6. 熱水プルーム音響クラッター障害危険圏（半径25km） */}
+          {/* 6. GM専用：音響クラッター障害危険圏（半径25km） */}
           {/* ======================================================== */}
-          {/* 罠ポイントA（鳥島北東）の25km危険円 (R=48px ≒ 25km) */}
-          <g transform="translate(639, 613)">
-            <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
-            <text x="-52" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
-              [熱水プルーム障害圏 R=25km]
-            </text>
-          </g>
+          {mode === "gm" && (
+            <g className="animate-fade-in">
+              {/* ポイントA（鳥島北東）の25km危険円 */}
+              <g transform="translate(639, 613)">
+                <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
+                <text x="-52" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                  [熱水クラッター障害圏 R=25km]
+                </text>
+              </g>
 
-          {/* 罠ポイントB（須美寿島東）の熱水噴出孔群と25km危険円 (x:722, y:396) */}
-          <g transform="translate(722, 396)">
-            <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
-            <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#ffffff" />
-            <text x="-45" y="-14" fill="#fb923c" fontSize="11" fontWeight="bold">
-              ♨ 須美寿東 海底熱水噴出孔群
-            </text>
-            <text x="-45" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
-              [熱水プルーム障害圏 R=25km]
-            </text>
-          </g>
+              {/* ポイントB（須美寿島東）の熱水噴出孔群と25km危険円 */}
+              <g transform="translate(722, 396)">
+                <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
+                <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
+                <circle cx="0" cy="0" r="3" fill="#ffffff" />
+                <text x="-45" y="-14" fill="#fb923c" fontSize="11" fontWeight="bold">
+                  ♨ 須美寿東 海底熱水域
+                </text>
+                <text x="-45" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                  [熱水クラッター障害圏 R=25km]
+                </text>
+              </g>
+            </g>
+          )}
 
           {/* ======================================================== */}
           {/* 7. 洋上給油巡視船（PLH-31 あきつしま）位置 ＆ 航路 */}
@@ -360,32 +364,32 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           {/* ======================================================== */}
           {/* 8. ソナー投下可能地点（グリッド候補 A〜F） */}
           {/* ======================================================== */}
-          {/* ポイントA（罠: x:785, y:567） */}
+          {/* ポイントA（x:785, y:567） */}
           <g
             transform="translate(785, 567)"
             className="cursor-pointer"
             onClick={() => onSelectDropPoint && onSelectDropPoint("drop-A")}
           >
-            <circle cx="0" cy="0" r="14" fill="#450a0a" stroke="#dc2626" strokeWidth="2" strokeDasharray="3,2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#dc2626" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#dc2626" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#f87171" />
-            <text x="16" y="-6" fill="#f87171" fontSize="11" fontWeight="bold">地点A [セクターα]</text>
-            <text x="16" y="8" fill="#fca5a5" fontSize="8.5">鳥島北東カルデラ海域</text>
+            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
+            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
+            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
+            <circle cx="0" cy="0" r="3" fill="#34d399" />
+            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点A [セクターα]</text>
+            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">鳥島北東カルデラ外海</text>
           </g>
 
-          {/* ポイントB（罠: x:722, y:396） */}
+          {/* ポイントB（x:722, y:396） */}
           <g
             transform="translate(722, 396)"
             className="cursor-pointer"
             onClick={() => onSelectDropPoint && onSelectDropPoint("drop-B")}
           >
-            <circle cx="0" cy="0" r="14" fill="#450a0a" stroke="#dc2626" strokeWidth="2" strokeDasharray="3,2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#dc2626" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#dc2626" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#f87171" />
-            <text x="16" y="-6" fill="#f87171" fontSize="11" fontWeight="bold">地点B [セクターβ]</text>
-            <text x="16" y="8" fill="#fca5a5" fontSize="8.5">須美寿島東・海嶺帯</text>
+            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
+            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
+            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
+            <circle cx="0" cy="0" r="3" fill="#34d399" />
+            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点B [セクターβ]</text>
+            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">須美寿島東・海嶺東側</text>
           </g>
 
           {/* ポイントC（クリア: x:405, y:530） */}
@@ -547,21 +551,17 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <circle cx="20" cy="34" r="5" fill="#f43f5e" />
             <text x="32" y="37" fill="#cbd5e1" fontSize="9">海底カルデラ（噴火震源地）</text>
 
-            {/* 熱水プルーム */}
-            <rect x="15" y="46" width="10" height="10" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="0.8" />
-            <text x="32" y="54" fill="#cbd5e1" fontSize="9">熱水プルーム域 (R=25km 自動失敗)</text>
-
             {/* 給油巡視船 */}
-            <polygon points="14,72 26,72 28,66 22,64 16,64" fill="#0284c7" />
-            <text x="32" y="70" fill="#cbd5e1" fontSize="9">洋上給油巡視船 PLH「あきつしま」</text>
+            <polygon points="14,52 26,52 28,46 22,44 16,44" fill="#0284c7" />
+            <text x="32" y="50" fill="#cbd5e1" fontSize="9">洋上給油巡視船 PLH「あきつしま」</text>
 
             {/* ソナー投下地点 */}
-            <circle cx="20" cy="85" r="5" fill="#064e3b" stroke="#10b981" strokeWidth="1" />
-            <text x="32" y="88" fill="#cbd5e1" fontSize="9">ソナー投下候補グリッド (A〜F)</text>
+            <circle cx="20" cy="67" r="5" fill="#064e3b" stroke="#10b981" strokeWidth="1" />
+            <text x="32" y="70" fill="#cbd5e1" fontSize="9">ソナー投下候補グリッド (A〜F)</text>
 
             {/* 噴煙拡散域 */}
-            <ellipse cx="20" cy="100" rx="7" ry="4" fill="#dc2626" opacity="0.7" />
-            <text x="32" y="103" fill="#cbd5e1" fontSize="9">噴煙柱・降灰拡散域 (8,000m)</text>
+            <ellipse cx="20" cy="84" rx="7" ry="4" fill="#dc2626" opacity="0.7" />
+            <text x="32" y="87" fill="#cbd5e1" fontSize="9">噴煙柱・降灰拡散域 (8,000m)</text>
           </g>
 
           {/* 方位盤（コンパスローズ） */}
@@ -595,7 +595,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
         <div className="flex items-center gap-3 font-mono text-[10px]">
           <span>給油中継: PLH-31（須美寿島南西）</span>
           <span>投下制限: 最大3機</span>
-          <span className="text-amber-400">熱水プルーム障害: R=25km</span>
+          {mode === "gm" && <span className="text-amber-400">熱水プルーム障害: R=25km</span>}
         </div>
       </div>
     </div>

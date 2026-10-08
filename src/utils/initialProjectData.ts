@@ -6,6 +6,9 @@
 import { MMProject } from "@/types/schema";
 
 export const initialProject: MMProject = {
+  id: "project-deep-sea",
+  createdAt: "2026-10-01T00:00:00.000Z",
+  updatedAt: "2026-10-07T21:00:00.000Z",
   title: "深海からの呼び声",
   subtitle: "合同海難対策本部、7日間の記録",
   concept:

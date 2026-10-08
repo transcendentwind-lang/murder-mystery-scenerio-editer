@@ -1,8 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MMProject } from "@/types/schema";
 import { initialProject } from "@/utils/initialProjectData";
+import {
+  getStoredProjects,
+  saveProjectToStorage,
+  getActiveProjectId,
+  setActiveProjectId,
+} from "@/utils/projectStorage";
 import { TimelineBoard } from "@/components/TimelineBoard";
 import { CharactersEvidenceManager } from "@/components/CharactersEvidenceManager";
 import { HandoutEditor } from "@/components/HandoutEditor";
@@ -11,6 +17,7 @@ import { GmDashboard } from "@/components/GmDashboard";
 import { TextExportView } from "@/components/TextExportView";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
 import { SynopsisModal } from "@/components/SynopsisModal";
+import { ProjectManagerModal } from "@/components/ProjectManagerModal";
 import {
   Compass,
   Users,
@@ -18,6 +25,8 @@ import {
   FileText,
   BookOpen,
   Grid,
+  FolderKanban,
+  ChevronDown,
 } from "lucide-react";
 
 type ActiveTab =
@@ -27,12 +36,62 @@ type ActiveTab =
   | "export_synopsis";
 
 export default function WorkbenchPage() {
+  const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
   const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
   const [characterSubTab, setCharacterSubTab] = useState<"profiles" | "handouts">("profiles");
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState<boolean>(false);
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
+  const [isProjectManagerOpen, setIsProjectManagerOpen] = useState<boolean>(false);
+
+  // 初期ロード：ローカルストレージからプロジェクト一覧とアクティブプロジェクトを復元
+  useEffect(() => {
+    const stored = getStoredProjects();
+    setProjects(stored);
+    const activeId = getActiveProjectId();
+    if (activeId) {
+      const found = stored.find((p) => p.id === activeId);
+      if (found) {
+        setProject(found);
+        return;
+      }
+    }
+    if (stored.length > 0) {
+      setProject(stored[0]);
+    }
+  }, []);
+
+  // プロジェクト更新ヘルパー（state更新＋ストレージ自動保存）
+  const handleUpdateProject = (updater: MMProject | ((prev: MMProject) => MMProject)) => {
+    setProject((prev) => {
+      const next = typeof updater === "function" ? updater(prev) : updater;
+      saveProjectToStorage(next);
+      setProjects((currentList) =>
+        currentList.map((p) => (p.id === next.id ? next : p))
+      );
+      return next;
+    });
+  };
+
+  // プロジェクト切り替えハンドラー
+  const handleSelectProject = (newProject: MMProject) => {
+    setProject(newProject);
+    if (newProject.id) {
+      setActiveProjectId(newProject.id);
+    }
+    // 切り替え時にチャットに案内メッセージを追加
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `switch-${Date.now()}`,
+        sender: "ai",
+        persona: "drama_director",
+        text: `シナリオ『${newProject.title}』へ切り替えました（${newProject.playerCount}人用）。\n\n登場人物、タイムライン、証拠の配置、ハンドアウトの壁打ちなど、いつでも対話しながら進めましょう！`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+  };
 
   // AIチャット初期メッセージ
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -40,7 +99,7 @@ export default function WorkbenchPage() {
       id: "init-1",
       sender: "ai",
       persona: "drama_director",
-      text: "こんにちは。『深海からの呼び声 ―合同海難対策本部、7日間の記録―』の制作スタジオへようこそ！\n\n小笠原〜富士山直下の7日間インシデント進行、6名の海難救助隊のイントロと固有能力、全証拠カードの管理、そしてマッコウクジラの言語パズルまで、すべて連携して作業できます。どの部分から編集・推敲を進めますか？",
+      text: "こんにちは！ マーダーミステリー共創ワークベンチ（MM-Workbench）へようこそ！\n\n『深海からの呼び声』の編集はもちろん、上部の「📁 シナリオ管理」から新しく別のシナリオを立ち上げて、登場人物やパズル、タイムラインをゼロから一緒に設計することも可能です。どの作業から進めましょうか？",
       timestamp: "12:00",
     },
   ]);
@@ -59,11 +118,11 @@ export default function WorkbenchPage() {
     setTimeout(() => {
       let replyText = "";
       if (persona === "logic_checker") {
-        replyText = `【論理チェッカー視点】\n「${text}」について論理的検証を行いました。\n・物体の移動速度（日速約150km / 時速6km）と小笠原〜駿河湾（約1,000km）のタイムリミットに矛盾はありません。\n・6名全員が情報を持ち寄らないとクジラ言語の文法（敵＋獲物＋集まれ）が完成しない二重ロックも堅牢に機能しています。`;
+        replyText = `【論理チェッカー視点】\n「${text}」について論理的検証を行いました。\n・現在のシナリオ『${project.title}』(${project.playerCount}名)のタイムラインと情報開示順序を照合しています。\n・特定プレイヤー1名への多重ロック（動機・機会・手段）および反証可能性のバランスを検討できます。`;
       } else if (persona === "drama_director") {
-        replyText = `【ドラマ演出視点】\n「${text}」についてドラマツルギーを検討しました！\n・Day 1の救難時の緊迫感から、Day 5の自衛隊魚雷迎撃の完全無効化による絶望、そしてDay 7の数千頭のマッコウクジラ集結という感情曲線が極めて美しく機能しています。\n・PC1の隠蔽苦悩とPC3の現場の怒りの対立をより鮮明にすると、さらに通信劇が白熱します。`;
+        replyText = `【ドラマ演出視点】\n「${text}」についてドラマツルギーを検討しました！\n・各PCの「誇り・後ろめたさ・喪失体験」のスロットと連動させ、プレイヤーが自発的に葛藤を抱くハンドアウト展開を構築できます。\n・オープニングからクライマックスに至る緊張曲線の設計を進めましょう。`;
       } else {
-        replyText = `【推敲アシスタント視点】\n「${text}」について文章表現を推敲しました。\n・公的機関の報告書としてのリアリティと、深海のコズミックホラーとしての不気味さの対比を意識した語彙に調整可能です。`;
+        replyText = `【推敲アシスタント視点】\n「${text}」について文章表現を推敲しました。\n・世界観（${project.concept.slice(0, 30)}...）に即した臨場感ある語彙や、プレイヤーが没入しやすい描写を提案します。`;
       }
 
       const aiMsg: ChatMessage = {
@@ -82,22 +141,43 @@ export default function WorkbenchPage() {
       {/* グローバル・トップヘッダー */}
       <header className="flex h-14 items-center justify-between border-b border-slate-800 bg-slate-900/90 px-6 backdrop-blur z-20">
         <div className="flex items-center gap-3">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-lg shadow-indigo-500/30">
-            D
-          </div>
+          <button
+            onClick={() => setIsProjectManagerOpen(true)}
+            className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 transition"
+            title="シナリオ・プロジェクト一覧を開く"
+          >
+            <FolderKanban className="h-4 w-4" />
+          </button>
           <div>
-            <h1 className="text-sm font-bold tracking-wide text-white flex items-center gap-2">
-              {project.title}
+            <button
+              onClick={() => setIsProjectManagerOpen(true)}
+              className="text-left group flex items-center gap-2"
+              title="クリックしてシナリオを切り替え・新規作成"
+            >
+              <h1 className="text-sm font-bold tracking-wide text-white group-hover:text-indigo-300 transition flex items-center gap-1.5">
+                {project.title}
+                <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-400 transition" />
+              </h1>
               <span className="text-xs font-normal text-slate-400">― {project.subtitle} ―</span>
-            </h1>
+            </button>
             <p className="text-[11px] text-indigo-400 font-mono">
-              MM-Workbench : 現代クトゥルフ × 海難対策本部 LARP/マダミス
+              MM-Workbench : {project.playerCount}人用 マダミス・LARP制作
             </p>
           </div>
         </div>
 
-        {/* グローバルナビゲーション（4大分類） */}
+        {/* グローバルナビゲーション（4大分類） ＆ アクション */}
         <div className="flex items-center gap-3">
+          {/* シナリオ切り替え・新規作成ボタン */}
+          <button
+            onClick={() => setIsProjectManagerOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg border border-indigo-500/50 bg-indigo-600/20 px-3 py-1.5 text-xs font-bold text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition shadow"
+            title="別シナリオの新規立ち上げ・切り替え・保存管理"
+          >
+            <FolderKanban className="h-3.5 w-3.5 text-indigo-400" />
+            シナリオ切替・新規作成
+          </button>
+
           <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
             {/* ① 7日間タイムライン（プレイヤー提供情報・作戦海図を完全内包） */}
             <button
@@ -109,7 +189,7 @@ export default function WorkbenchPage() {
               }`}
             >
               <Compass className="h-4 w-4 text-cyan-400" />
-              ① 7日間タイムライン ＆ 作戦海図
+              ① タイムライン ＆ 海図
             </button>
 
             {/* ② キャラクター ＆ ハンドアウト */}
@@ -159,7 +239,7 @@ export default function WorkbenchPage() {
             title="タイトル、コンセプト、プロット紹介をクイック確認"
           >
             <BookOpen className="h-3.5 w-3.5 text-indigo-400" />
-            企画概要ポップアップ
+            企画概要
           </button>
         </div>
       </header>
@@ -181,7 +261,7 @@ export default function WorkbenchPage() {
               evidences={project.evidences}
               project={project}
               onUpdateTimeline={(newTimeline) =>
-                setProject((prev) => ({ ...prev, timeline: newTimeline }))
+                handleUpdateProject((prev) => ({ ...prev, timeline: newTimeline }))
               }
               onNavigateToPuzzle={() => setIsPuzzleModalOpen(true)}
             />
@@ -222,17 +302,17 @@ export default function WorkbenchPage() {
                     characters={project.characters}
                     evidences={project.evidences}
                     onUpdateCharacters={(newChars) =>
-                      setProject((prev) => ({ ...prev, characters: newChars }))
+                      handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                     }
                     onUpdateEvidences={(newEvs) =>
-                      setProject((prev) => ({ ...prev, evidences: newEvs }))
+                      handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
                     }
                   />
                 ) : (
                   <HandoutEditor
                     characters={project.characters}
                     onUpdateCharacters={(newChars) =>
-                      setProject((prev) => ({ ...prev, characters: newChars }))
+                      handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                     }
                     onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
                   />
@@ -256,12 +336,22 @@ export default function WorkbenchPage() {
         </main>
       </div>
 
+      {/* シナリオ管理・切り替え・新規作成モーダル */}
+      <ProjectManagerModal
+        isOpen={isProjectManagerOpen}
+        onClose={() => setIsProjectManagerOpen(false)}
+        currentProject={project}
+        projects={projects}
+        onSelectProject={handleSelectProject}
+        onProjectsChange={setProjects}
+      />
+
       {/* 企画概要・プロット紹介モーダル */}
       <SynopsisModal
         project={project}
         isOpen={isSynopsisOpen}
         onClose={() => setIsSynopsisOpen(false)}
-        onUpdateProject={setProject}
+        onUpdateProject={handleUpdateProject}
       />
 
       {/* クジラ言語パズルモーダル（Day 6から直接呼び出し可能） */}
@@ -294,10 +384,10 @@ export default function WorkbenchPage() {
                 grammar={project.crypticGrammar}
                 characters={project.characters}
                 onUpdateWords={(newWords) =>
-                  setProject((prev) => ({ ...prev, crypticWords: newWords }))
+                  handleUpdateProject((prev) => ({ ...prev, crypticWords: newWords }))
                 }
                 onUpdateGrammar={(newGrammar) =>
-                  setProject((prev) => ({ ...prev, crypticGrammar: newGrammar }))
+                  handleUpdateProject((prev) => ({ ...prev, crypticGrammar: newGrammar }))
                 }
               />
             </div>
