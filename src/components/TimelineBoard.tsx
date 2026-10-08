@@ -36,74 +36,86 @@ import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
 
-// Day 3 ヘリコプター洋上捜索（ソナー投下地点）の定義
-export interface SonarDropPoint {
-  id: string;
-  name: string;
-  sectorLabel: string;
-  coordinates: string;
-  isPlumeHazard: boolean; // 熱水プルームの罠か？
-  distanceKm?: number;    // 成功時の反響距離 (km)
-  hazardReason?: string;  // 失敗時の理由
-  description: string;
+// Day 3 ヘリコプター洋上捜索（36セクター索敵盤）の定義
+export const DAY3_SECTOR_ROWS = ["A", "B", "C", "D", "E", "F"] as const;
+export const DAY3_SECTOR_COLS = [1, 2, 3, 4, 5, 6] as const;
+
+export const CREATURE_SECTOR = "B-3";
+export const HEAT_CLUTTER_SECTORS = ["D-2", "E-2"];
+
+export interface SectorSonarResult {
+  sectorId: string;
+  status: "direct_hit" | "adjacent_detect" | "clutter_hazard" | "no_return";
+  title: string;
+  summary: string;
+  details: string;
 }
 
-export const DAY3_SONAR_POINTS: SonarDropPoint[] = [
-  {
-    id: "drop-A",
-    name: "ポイントA: 鳥島北東海域",
-    sectorLabel: "セクターα",
-    coordinates: "30°40'N, 140°45'E",
-    isPlumeHazard: true,
-    hazardReason: "海底カルデラからの火山性微細気泡群を検知！ 激しい音響クラッター障害により波形が飽和し、測距不能！",
-    description: "鳥島北東側の外洋セクター。水深約1,500m。",
-  },
-  {
-    id: "drop-B",
-    name: "ポイントB: 須美寿島東海域",
-    sectorLabel: "セクターβ",
-    coordinates: "31°25'N, 140°35'E",
-    isPlumeHazard: true,
-    hazardReason: "海底熱水湧昇流による急激な水温躍層を検知！ 音波屈折と乱反射により測距不能（NO RETURN）！",
-    description: "須美寿島東側に広がる海底海嶺セクター。",
-  },
-  {
-    id: "drop-C",
-    name: "ポイントC: 鳥島北西・深海静穏域",
-    sectorLabel: "セクターγ",
-    coordinates: "30°50'N, 139°45'E",
-    isPlumeHazard: false,
-    distanceKm: 32,
-    description: "火山フロントから西へ外れた、水深2,500mの静穏な海盆平原。熱水の影響がなくクリア。",
-  },
-  {
-    id: "drop-D",
-    name: "ポイントD: 須美寿島西・海嶺西側平原",
-    sectorLabel: "セクターδ",
-    coordinates: "31°30'N, 139°30'E",
-    isPlumeHazard: false,
-    distanceKm: 20,
-    description: "海嶺西側の安定した音響伝搬層を持つ海域。障害物がなくソナー反響の通りが良い。",
-  },
-  {
-    id: "drop-E",
-    name: "ポイントE: 青ヶ島南西・深海盆",
-    sectorLabel: "セクターε",
-    coordinates: "32°05'N, 139°25'E",
-    isPlumeHazard: false,
-    distanceKm: 28,
-    description: "青ヶ島南方、海嶺西縁に広がる音響ノイズの極めて少ない深海セクター。",
-  },
-  {
-    id: "drop-F",
-    name: "ポイントF: 八丈島南西・沖合海域",
-    sectorLabel: "セクターζ",
-    coordinates: "32°45'N, 139°10'E",
-    isPlumeHazard: false,
-    distanceKm: 75,
-    description: "北方の警戒海域。目標からはやや離れているが海況は安定。",
-  },
-];
+export function evaluateSectorSonar(sectorId: string): SectorSonarResult {
+  const parts = sectorId.split("-");
+  const row = parts[0];
+  const col = parseInt(parts[1], 10);
+  const rowIndex = DAY3_SECTOR_ROWS.indexOf(row as any);
+
+  // 1. 直下ヒット（B-3）
+  if (sectorId === CREATURE_SECTOR) {
+    return {
+      sectorId,
+      status: "direct_hit",
+      title: "🎯【直下探知・潜航目標捕捉！】",
+      summary: "深度400mに巨大生体エコーを捕捉！ 目標が音波に反応して海面十数mへ浮上開始！",
+      details:
+        "水深400mより全長300〜400mの超巨大な生体シグネチャーを直下探知。アクティブソナーの強力なピン音に刺激されたのか、物体は急速に海面（水深10〜20m）へ浮上を開始した。ヘリ急行により目視および写真撮影が可能！",
+    };
+  }
+
+  // 2. 熱水クラッター判定（D-2, E-2 またはその隣接8マス）
+  const isAdjacentToClutter = HEAT_CLUTTER_SECTORS.some((clutter) => {
+    const [cRow, cColStr] = clutter.split("-");
+    const cCol = parseInt(cColStr, 10);
+    const cRowIndex = DAY3_SECTOR_ROWS.indexOf(cRow as any);
+    return Math.abs(rowIndex - cRowIndex) <= 1 && Math.abs(col - cCol) <= 1;
+  });
+
+  if (isAdjacentToClutter) {
+    const isDirectClutter = HEAT_CLUTTER_SECTORS.includes(sectorId);
+    return {
+      sectorId,
+      status: "clutter_hazard",
+      title: isDirectClutter ? "💥【熱水プルーム直撃・測距不能】" : "⚠️【熱水クラッター障害・周囲探知不能】",
+      summary: "投下セクター直下には不在確定。ただし海底熱水の微細気泡散乱により周囲探知は不能！",
+      details:
+        "直下には不在。しかし近隣の海底カルデラ（D-2/E-2）から噴出する微細気泡群と急激な水温躍層により、音波が激しく散乱・クラッター化。周囲セクターの生体エコーは完全に掻き消され探知不能。",
+    };
+  }
+
+  // 3. 巨大生物の隣接マス（B-3の周囲8マス）
+  const [bRow, bColStr] = CREATURE_SECTOR.split("-");
+  const bCol = parseInt(bColStr, 10);
+  const bRowIndex = DAY3_SECTOR_ROWS.indexOf(bRow as any);
+  const isAdjacentToCreature = Math.abs(rowIndex - bRowIndex) <= 1 && Math.abs(col - bCol) <= 1;
+
+  if (isAdjacentToCreature) {
+    return {
+      sectorId,
+      status: "adjacent_detect",
+      title: "📡【至近エコー捕捉・隣接セクター反応】",
+      summary: "直下には不在。ただし約20km先の隣接セクターより極めて強力な生体反響を検知！",
+      details:
+        "投下地点の直下には不在。しかし隣接するマス（約20km先）の方向から、海底地殻を震わせる超低周波の生体パルス反響を受信！ 怪物は隣接セクターのいずれかに潜伏中！",
+    };
+  }
+
+  // 4. 反応なし
+  return {
+    sectorId,
+    status: "no_return",
+    title: "⭕【反応なし・不在確定】",
+    summary: "投下セクター直下および有効探知圏内に生体シグネチャーなし。",
+    details:
+      "海況は安定。反響音波を解析するも、探知半径20km圏内に巨大生物の音響反応は認められない。このセクターおよび周囲には不在と判定。",
+  };
+}
 
 interface TimelineBoardProps {
   timeline: IncidentStep[];
@@ -135,8 +147,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day2TokyoAction, setDay2TokyoAction] = useState<string>("T-3");
   const [day2FieldActions, setDay2FieldActions] = useState<string[]>(["F-1", "F-3"]);
 
-  // Day 3 ソナー投下パズル状態
+  // Day 3 ソナー投下パズル & 写真観測状態
   const [day3DroppedPoints, setDay3DroppedPoints] = useState<string[]>([]);
+  const [day3TargetSector, setDay3TargetSector] = useState<string>("B-3");
+  const [day3SearchOutcome, setDay3SearchOutcome] = useState<"none" | "success" | "failure">("none");
+  const [day3ActivePhotoTab, setDay3ActivePhotoTab] = useState<"success" | "failure">("success");
+  const [day3PhotoModal, setDay3PhotoModal] = useState<"success" | "failure" | null>(null);
   const [day3IsReportUnlocked, setDay3IsReportUnlocked] = useState<boolean>(false);
   const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
   const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
@@ -150,6 +166,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         setIsTheaterModalOpen(false);
         setIsDay1ChartModalOpen(false);
         setDay3IsPC6ModalOpen(false);
+        setDay3PhotoModal(null);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -164,21 +181,34 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     });
   };
 
-  const handleToggleDay3SonarDrop = (id: string) => {
+  const handleToggleDay3SonarDrop = (sectorId: string) => {
     setDay3DroppedPoints((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((p) => p !== id);
+      if (prev.includes(sectorId)) {
+        return prev.filter((p) => p !== sectorId);
       }
       if (prev.length >= 3) {
-        return [...prev.slice(1), id];
+        return [...prev.slice(1), sectorId];
       }
-      return [...prev, id];
+      return [...prev, sectorId];
     });
+    // 直下ヒットの場合は目標セクターも自動設定
+    if (sectorId === CREATURE_SECTOR) {
+      setDay3TargetSector(CREATURE_SECTOR);
+    }
   };
 
   const handleResetDay3Sonar = () => {
     setDay3DroppedPoints([]);
+    setDay3SearchOutcome("none");
     setDay3IsReportUnlocked(false);
+  };
+
+  const handleExecuteDay3HelicopterSearch = () => {
+    const isSuccess = day3TargetSector === CREATURE_SECTOR;
+    setDay3SearchOutcome(isSuccess ? "success" : "failure");
+    setDay3ActivePhotoTab(isSuccess ? "success" : "failure");
+    setDay3IsReportUnlocked(true);
+    audioEngine.playSfx(isSuccess ? "climax-call" : "coda-tape");
   };
 
   const handleUpdateCurrentStep = (field: keyof IncidentStep, value: any) => {
@@ -649,13 +679,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ③ メイン協力パズル：アクティブソナー3点投下作戦 */}
-                <div className="rounded-xl border border-slate-800 bg-slate-950/90 p-3.5 space-y-3">
-                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                {/* ③ メイン協力パズル：アクティブソナー投下作戦（全36セクター索敵盤） */}
+                <div className="rounded-xl border border-slate-800 bg-slate-950/90 p-4 space-y-3.5 shadow-lg">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
                     <div className="flex items-center gap-2">
                       <Radar className="h-4 w-4 text-cyan-400" />
                       <span className="font-bold text-xs text-white">
-                        【メイン協力パズル】アクティブ・ソノブイ投下（三辺測量索敵）
+                        【メイン協力パズル】アクティブ・ソノブイ投下（全36セクター索敵盤）
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
@@ -678,113 +708,360 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
 
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    怪物はDay 2朝の鳥島沖から時速約6kmで北上中。ヘリからソノブイを投下する海域セクターを合議で選んでください。<br />
+                    怪物はDay 2朝の鳥島沖から時速約6kmで北上中。全36セクター（ROW-A〜F × COL-1〜6）の中から、ソノブイを投下する海域セクターをクリックして選定してください（最大3機）。<br />
                     <span className="text-slate-400">
-                      ※海況や海底地形、音響伝搬層の状態によっては、音波の散乱・クラッター障害により測距不能（失敗）となる場合があります。海図の地形をよく確認して選定してください。
+                      ※海底カルデラ（D-2 / E-2）付近は海底熱水の微細気泡散乱（クラッター障害）により周囲探知が不能となります。海図の熱水域を避けて投下してください。
                     </span>
                   </p>
 
-                  {/* 投下候補セクターグリッド */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {DAY3_SONAR_POINTS.map((pt) => {
-                      const isDropped = day3DroppedPoints.includes(pt.id);
-                      return (
-                        <button
-                          key={pt.id}
-                          onClick={() => handleToggleDay3SonarDrop(pt.id)}
-                          className={`rounded-lg p-2 text-left border transition relative overflow-hidden ${
-                            isDropped
-                              ? pt.isPlumeHazard
-                                ? "border-red-600 bg-red-950/80 shadow ring-1 ring-red-500"
-                                : "border-cyan-500 bg-cyan-950/80 shadow ring-1 ring-cyan-400"
-                              : "border-slate-800 bg-slate-900/60 hover:bg-slate-800"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            <span className="text-[10px] font-mono px-1 rounded bg-slate-800 text-slate-300">
-                              {pt.sectorLabel}
-                            </span>
-                            <span
-                              className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${
-                                isDropped
-                                  ? pt.isPlumeHazard
-                                    ? "bg-red-700 text-white animate-pulse"
-                                    : "bg-cyan-600 text-white"
-                                  : "text-slate-500 bg-slate-950"
-                              }`}
-                            >
-                              {isDropped ? (pt.isPlumeHazard ? "💥 投下失敗" : "📡 測距成功") : "未投下"}
-                            </span>
-                          </div>
-                          <div className="font-bold text-white text-[11px] mt-1 line-clamp-1">
-                            {pt.name.split(":")[1]}
-                          </div>
-                          <div className="text-[9px] font-mono text-slate-400">{pt.coordinates}</div>
+                  {/* 全36セクター グリッド盤（ROW-A〜F × COL-1〜6） */}
+                  <div className="rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 overflow-x-auto">
+                    <div className="min-w-[320px] space-y-1">
+                      {/* 列番号ヘッダー */}
+                      <div className="grid grid-cols-7 gap-1 text-center font-mono text-[10px] text-cyan-400 font-bold">
+                        <div className="text-slate-500">ROW\COL</div>
+                        {DAY3_SECTOR_COLS.map((c) => (
+                          <div key={c}>- {c} -</div>
+                        ))}
+                      </div>
 
-                          {/* 投下後の結果表示 */}
-                          {isDropped && (
-                            <div className="mt-1.5 pt-1 border-t border-slate-700/60 text-[10px]">
-                              {pt.isPlumeHazard ? (
-                                <p className="text-red-300 font-semibold leading-tight">
-                                  {pt.hazardReason}
-                                </p>
-                              ) : (
-                                <p className="text-cyan-300 font-bold">
-                                  反響エコー捕捉！ 目標まで距離: 約<strong>{pt.distanceKm} km</strong>
-                                </p>
-                              )}
-                            </div>
-                          )}
-                        </button>
-                      );
-                    })}
+                      {/* 各行のセクターボタン */}
+                      {DAY3_SECTOR_ROWS.map((r) => (
+                        <div key={r} className="grid grid-cols-7 gap-1 items-center">
+                          <div className="text-center font-mono text-[10px] text-cyan-400 font-bold">
+                            {r}
+                          </div>
+                          {DAY3_SECTOR_COLS.map((c) => {
+                            const sectorId = `${r}-${c}`;
+                            const isDropped = day3DroppedPoints.includes(sectorId);
+                            const evalRes = isDropped ? evaluateSectorSonar(sectorId) : null;
+                            const isTarget = day3TargetSector === sectorId;
+                            return (
+                              <button
+                                key={sectorId}
+                                type="button"
+                                onClick={() => handleToggleDay3SonarDrop(sectorId)}
+                                className={`rounded p-1 text-center font-mono transition border relative flex flex-col items-center justify-center min-h-[38px] ${
+                                  isDropped
+                                    ? evalRes?.status === "direct_hit"
+                                      ? "border-emerald-400 bg-emerald-950 text-emerald-200 ring-2 ring-emerald-400 shadow"
+                                      : evalRes?.status === "adjacent_detect"
+                                      ? "border-cyan-400 bg-cyan-950 text-cyan-200 ring-1 ring-cyan-400"
+                                      : evalRes?.status === "clutter_hazard"
+                                      ? "border-amber-500 bg-amber-950 text-amber-200 ring-1 ring-amber-400"
+                                      : "border-slate-700 bg-slate-950 text-slate-400"
+                                    : isTarget
+                                    ? "border-cyan-500 bg-cyan-950/40 text-cyan-200"
+                                    : "border-slate-800 bg-slate-950/60 hover:bg-slate-800 text-slate-300"
+                                }`}
+                                title={`セクター ${sectorId} ${isDropped ? "（投下済）" : "（クリックで投下）"}`}
+                              >
+                                <span className="text-[10px] font-bold leading-none">{sectorId}</span>
+                                {isDropped && evalRes && (
+                                  <span className="text-[8px] font-semibold mt-0.5 leading-none">
+                                    {evalRes.status === "direct_hit" && "🎯HIT"}
+                                    {evalRes.status === "adjacent_detect" && "📡至近"}
+                                    {evalRes.status === "clutter_hazard" && "⚠️障害"}
+                                    {evalRes.status === "no_return" && "⭕不在"}
+                                  </span>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      ))}
+                    </div>
                   </div>
 
-                  {/* 3投完了時の結果判定 ＆ レポートアンロック */}
-                  {day3DroppedPoints.length === 3 && (
-                    <div className="mt-3 rounded-lg border border-cyan-800 bg-cyan-950/40 p-3 space-y-2">
-                      {day3DroppedPoints.filter((id) => !DAY3_SONAR_POINTS.find((p) => p.id === id)?.isPlumeHazard).length >= 2 ? (
-                        <>
-                          <div className="flex items-center justify-between">
-                            <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
-                              <Crosshair className="h-4 w-4 text-cyan-400 animate-spin-slow" />
-                              【三辺測量 成功】怪物の現在位置を特定（須美寿島西方・水深約400m）！
-                            </span>
-                            {!day3IsReportUnlocked && (
-                              <button
-                                onClick={() => setDay3IsReportUnlocked(true)}
-                                className="rounded bg-cyan-600 hover:bg-cyan-500 px-3 py-1 text-xs font-bold text-white shadow transition animate-bounce"
-                              >
-                                ヘリ急行！ 映像・音響データを捉える
-                              </button>
-                            )}
-                          </div>
-                          <p className="text-[11px] text-slate-300 leading-relaxed">
-                            熱水プルーム域を回避し、複数地点からの音響エコーの交点を特定。時速約6kmの北上ベクトルと完全に合致する座標を割り出しました。
-                          </p>
-
-                          {/* 解放された観測レポート */}
-                          {day3IsReportUnlocked && (
-                            <div className="mt-3 rounded-lg border border-rose-700 bg-slate-950 p-3 text-xs space-y-2 shadow-2xl animate-fade-in">
-                              <div className="flex items-center gap-2 border-b border-rose-900/60 pb-1.5">
-                                <ImageIcon className="h-4 w-4 text-rose-400" />
-                                <span className="font-bold text-white">
-                                  【長距離ヘリ洋上観測所見】深度400m 北上物体 撮影・測位レポート
+                  {/* 投下済みセクターのソナー反響ログ */}
+                  {day3DroppedPoints.length > 0 && (
+                    <div className="space-y-1.5 pt-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                        投下ソナー反響解析ログ ({day3DroppedPoints.length}機):
+                      </span>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        {day3DroppedPoints.map((sectorId) => {
+                          const evalRes = evaluateSectorSonar(sectorId);
+                          return (
+                            <div
+                              key={sectorId}
+                              className={`rounded-lg border p-2.5 text-xs ${
+                                evalRes.status === "direct_hit"
+                                  ? "border-emerald-600 bg-emerald-950/40 text-emerald-200"
+                                  : evalRes.status === "adjacent_detect"
+                                  ? "border-cyan-700 bg-cyan-950/40 text-cyan-200"
+                                  : evalRes.status === "clutter_hazard"
+                                  ? "border-amber-700 bg-amber-950/40 text-amber-200"
+                                  : "border-slate-800 bg-slate-900/60 text-slate-300"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between mb-1">
+                                <span className="font-mono font-bold text-white bg-slate-800 px-1.5 py-0.5 rounded text-[10px]">
+                                  セクター {sectorId}
                                 </span>
+                                <span className="text-[10px] font-bold">{evalRes.title}</span>
                               </div>
-                              <p className="text-[11px] text-slate-300 leading-relaxed">
-                                ・ヘリの吊下式高感度ソナーおよび暗視光学機器により、水深約400mの中層を北上する<strong>「全長300〜400メートルの巨大な生体シグネチャー」</strong>の姿を鮮明に記録。<br />
-                                ・移動速度は実測値で<strong>時速約6km（日速約150km）</strong>。鳥島から正確に北上していることが現場観測で100%確定。<br />
-                                ・<strong>【破局タイムリミット】</strong>：このまま北上を続けた場合、<strong>残り4日（Day 7）で駿河湾・富士山直下に到達</strong>し、本土規模の大破局噴火を誘発することが科学的に確定した。
+                              <p className="text-[11px] leading-tight font-medium">
+                                {evalRes.summary}
+                              </p>
+                              <p className="text-[10px] text-slate-400 mt-1 leading-normal">
+                                {evalRes.details}
                               </p>
                             </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* 捜索ヘリ急行・セクター特定宣言バー */}
+                  <div className="rounded-lg border border-slate-800 bg-slate-900/80 p-3 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <div className="flex items-center gap-2">
+                        <span className="text-xs font-bold text-white">
+                          🚁 捜索ヘリ急行目標セクター選定:
+                        </span>
+                        <select
+                          value={day3TargetSector}
+                          onChange={(e) => setDay3TargetSector(e.target.value)}
+                          className="rounded bg-slate-950 border border-slate-700 text-cyan-300 font-mono text-xs px-2 py-1 focus:outline-none focus:ring-1 focus:ring-cyan-500"
+                        >
+                          {DAY3_SECTOR_ROWS.flatMap((r) =>
+                            DAY3_SECTOR_COLS.map((c) => {
+                              const sId = `${r}-${c}`;
+                              return (
+                                <option key={sId} value={sId}>
+                                  セクター {sId}
+                                </option>
+                              );
+                            })
                           )}
-                        </>
-                      ) : (
-                        <div className="text-red-300 text-xs">
-                          ⚠️ <strong>【探知失敗】</strong> 海底の火山性微細気泡や水温躍層の乱反射により有効な測距データが不足しています。音響擾乱の少ない安定した海域を選んで再度ソナー投下を行ってください。（「リセット」をクリック）
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() => setDay3TargetSector(CREATURE_SECTOR)}
+                          className="text-[10px] text-cyan-400 hover:text-cyan-300 underline font-mono"
+                        >
+                          (B-3を選択)
+                        </button>
+                      </div>
+
+                      <button
+                        type="button"
+                        onClick={handleExecuteDay3HelicopterSearch}
+                        className="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg transition"
+                      >
+                        <Navigation className="h-3.5 w-3.5" />
+                        捜索ヘリ急行！ 浮上海域の目視・写真撮影を決行
+                      </button>
+                    </div>
+
+                    {/* 実行結果バナー */}
+                    {day3SearchOutcome === "success" && (
+                      <div className="rounded-md border border-emerald-500/80 bg-emerald-950/60 p-2.5 text-emerald-200 text-xs flex items-start gap-2 shadow">
+                        <Crosshair className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5 animate-spin-slow" />
+                        <div>
+                          <strong className="text-white block font-bold">
+                            🎉【セクター特定 成功！】（セクター B-3 水深400m）
+                          </strong>
+                          <p className="mt-0.5 text-[11px] text-emerald-300">
+                            ソナー音波を捉えられた怪物が海面近く（水深10〜20m）へ急速浮上！ 急行した捜索ヘリが上空後方から目視確認し、巨大な触手と胴体の写真撮影に成功しました！
+                          </p>
+                          <span className="text-[10px] text-slate-300 mt-1 inline-block">
+                            👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された高解像度写真と観測所見を確認できます。
+                          </span>
                         </div>
-                      )}
+                      </div>
+                    )}
+
+                    {day3SearchOutcome === "failure" && (
+                      <div className="rounded-md border border-amber-600/80 bg-amber-950/60 p-2.5 text-amber-200 text-xs flex items-start gap-2 shadow">
+                        <AlertTriangle className="h-4 w-4 text-amber-400 shrink-0 mt-0.5" />
+                        <div>
+                          <strong className="text-white block font-bold">
+                            ⚠️【セクター特定 失敗（捜索空振り）】（セクター {day3TargetSector}）
+                          </strong>
+                          <p className="mt-0.5 text-[11px] text-amber-300">
+                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました。
+                          </p>
+                          <span className="text-[10px] text-slate-300 mt-1 inline-block">
+                            👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された遠方波紋写真と捜索失敗ログを確認できます。
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* ④ 【Day 3 洋上ヘリ航空偵察 写真記録（光学・赤外線カメラ所見）】 */}
+                <div className="rounded-xl border border-cyan-800/80 bg-[#071322] p-4 space-y-3 shadow-xl">
+                  {/* ヘッダー ＆ 写真切り替えタブ */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-900/60 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <ImageIcon className="h-4 w-4 text-cyan-400" />
+                      <div>
+                        <span className="font-bold text-xs text-white">
+                          【Day 3 洋上ヘリ航空偵察 写真記録】光学・赤外線カメラ所見
+                        </span>
+                        <span className="ml-2 text-[10px] text-cyan-300 font-mono">
+                          海上保安庁 羽田航空基地 / 小笠原救難隊 捜索ヘリ撮影記録
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 成功 / 失敗 写真切り替えボタン */}
+                    <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                      <button
+                        type="button"
+                        onClick={() => setDay3ActivePhotoTab("success")}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition ${
+                          day3ActivePhotoTab === "success"
+                            ? "bg-emerald-600 text-white shadow ring-1 ring-emerald-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        📷 【特定成功時】巨大生物 後方空撮写真
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDay3ActivePhotoTab("failure")}
+                        className={`flex items-center gap-1.5 px-3 py-1 rounded text-xs font-semibold transition ${
+                          day3ActivePhotoTab === "failure"
+                            ? "bg-amber-600 text-white shadow ring-1 ring-amber-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        🌊 【特定失敗時】20km彼方 航跡波写真
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* タブに応じた写真カード */}
+                  {day3ActivePhotoTab === "success" ? (
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-stretch">
+                      {/* 写真プレビュー（左側 7カラム） */}
+                      <div
+                        onClick={() => setDay3PhotoModal("success")}
+                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-emerald-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
+                      >
+                        <img
+                          src="/images/day3_sonar_success_photo.jpg"
+                          alt="巨大生物 後方空撮写真（特定成功）"
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                          <span className="text-[11px] font-semibold text-emerald-200">
+                            🎯 セクター特定成功：深度10〜20m浮上中・後方撮影
+                          </span>
+                          <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-white backdrop-blur flex items-center gap-1">
+                            <Maximize2 className="h-3 w-3" /> クリックで拡大
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 観測所見・テレメトリ（右側 5カラム） */}
+                      <div className="md:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
+                        <div>
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
+                            <span className="font-bold text-emerald-300 text-xs">
+                              【特定成功：光学・赤外線観測調書】
+                            </span>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300">
+                              セクター B-3
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
+                            <div>高度: <strong>350 ft (約105m)</strong></div>
+                            <div>海域: <strong>鳥島北西 約40km</strong></div>
+                            <div>速度: <strong>時速約6km 北上</strong></div>
+                            <div>機材: <strong>FLIR赤外光学ポッド</strong></div>
+                          </div>
+
+                          <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+                            <p>
+                              ・<strong className="text-white">目視確認</strong>: 巨大生物の後方からの撮影に成功。海面下に不鮮明ながら<strong>無数の巨大な触手と胴体のシルエット</strong>がはっきりと確認できる。
+                            </p>
+                            <p>
+                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下を泳ぎ去る巨大な質量により、幅数百メートルに及ぶ猛烈な白波と渦流が発生。
+                            </p>
+                            <p>
+                              ・<strong className="text-white">生態矛盾</strong>: Day 1のダイオウイカ組織鑑定（F-1）と一致するが、全長数百mは異常。無数の個体が結合した<strong>「超群体」</strong>である疑いが濃厚。
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setDay3PhotoModal("success")}
+                          className="mt-2 w-full flex items-center justify-center gap-1.5 rounded bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3.5 w-3.5" /> 成功写真を大画面で検証する
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-stretch">
+                      {/* 写真プレビュー（左側 7カラム） */}
+                      <div
+                        onClick={() => setDay3PhotoModal("failure")}
+                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-amber-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
+                      >
+                        <img
+                          src="/images/day3_sonar_failure_photo.jpg"
+                          alt="20km彼方 航跡波写真（特定失敗）"
+                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                          <span className="text-[11px] font-semibold text-amber-200">
+                            ⚠️ セクター特定失敗：約20km彼方に航跡波のみ確認
+                          </span>
+                          <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-white backdrop-blur flex items-center gap-1">
+                            <Maximize2 className="h-3 w-3" /> クリックで拡大
+                          </span>
+                        </div>
+                      </div>
+
+                      {/* 観測所見・テレメトリ（右側 5カラム） */}
+                      <div className="md:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
+                        <div>
+                          <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
+                            <span className="font-bold text-amber-300 text-xs">
+                              【特定失敗：遠方目視観測調書】
+                            </span>
+                            <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700 text-amber-300">
+                              捜索空振り
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
+                            <div>高度: <strong>1,500 ft (約450m)</strong></div>
+                            <div>距離: <strong>目標まで約20km離脱</strong></div>
+                            <div>潜航: <strong>深度800mへ急速潜航</strong></div>
+                            <div>機材: <strong>超望遠光学レンズ</strong></div>
+                          </div>
+
+                          <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
+                            <p>
+                              ・<strong className="text-white">目視状況</strong>: <strong>約20km先の海で巨大生物の起こす波</strong>が見えるが、ヘリが近づいたときにはすでに深海へと急速潜航してしまっており捉えられない。
+                            </p>
+                            <p>
+                              ・<strong className="text-white">海面の痕跡</strong>: 巨大な渦紋と白波の泡立ちのみが残留。本体の直接撮影には至らず、音響捜索の重要性を痛感させる。
+                            </p>
+                            <p>
+                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時はこの写真を提示し、「20km先で大波を目視したが、急行した時にはすでに潜航してしまっていた」と説明してください。
+                            </p>
+                          </div>
+                        </div>
+
+                        <button
+                          type="button"
+                          onClick={() => setDay3PhotoModal("failure")}
+                          className="mt-2 w-full flex items-center justify-center gap-1.5 rounded bg-amber-700 hover:bg-amber-600 px-3 py-1.5 text-xs font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3.5 w-3.5" /> 失敗写真を大画面で検証する
+                        </button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -1299,6 +1576,138 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               >
                 ハンドアウトを閉じる
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 3 洋上ヘリ航空偵察 写真拡大モーダル（成功 / 失敗） */}
+      {day3PhotoModal !== null && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-md p-6"
+          onClick={() => setDay3PhotoModal(null)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2.5">
+                <div
+                  className={`flex h-9 w-9 items-center justify-center rounded-lg border ${
+                    day3PhotoModal === "success"
+                      ? "bg-emerald-950 border-emerald-700 text-emerald-400"
+                      : "bg-amber-950 border-amber-700 text-amber-400"
+                  }`}
+                >
+                  <ImageIcon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    {day3PhotoModal === "success"
+                      ? "【特定成功】海上保安庁 捜索ヘリ撮影 巨大生物 後方空撮写真"
+                      : "【特定失敗】海上保安庁 捜索ヘリ撮影 20km彼方 航跡波・急潜航写真"}
+                    <span
+                      className={`text-[10px] font-mono px-2 py-0.5 rounded border ${
+                        day3PhotoModal === "success"
+                          ? "bg-emerald-950 border-emerald-800 text-emerald-300"
+                          : "bg-amber-950 border-amber-800 text-amber-300"
+                      }`}
+                    >
+                      {day3PhotoModal === "success" ? "セクター B-3 直上" : "目標より約20km離脱"}
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    {day3PhotoModal === "success"
+                      ? "TIME: 14:38:21 UTC | ALT: 350 FT | SENSOR: FLIR OPTICAL POD | TARGET: SUB-SURFACE ENTITY"
+                      : "TIME: 14:35:12 UTC | ALT: 1,500 FT | SENSOR: TELEPHOTO OPTICAL | STATUS: TARGET DIVED"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {/* 成功 / 失敗 切り替え */}
+                <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setDay3PhotoModal("success")}
+                    className={`px-2.5 py-1 rounded font-semibold transition ${
+                      day3PhotoModal === "success"
+                        ? "bg-emerald-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    成功写真
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDay3PhotoModal("failure")}
+                    className={`px-2.5 py-1 rounded font-semibold transition ${
+                      day3PhotoModal === "failure"
+                        ? "bg-amber-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    失敗写真
+                  </button>
+                </div>
+                <button
+                  onClick={() => setDay3PhotoModal(null)}
+                  className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* 写真画像 */}
+            <div className="mt-3 relative rounded-xl overflow-hidden border border-slate-800 bg-black flex items-center justify-center flex-1 max-h-[62vh]">
+              <img
+                src={
+                  day3PhotoModal === "success"
+                    ? "/images/day3_sonar_success_photo.jpg"
+                    : "/images/day3_sonar_failure_photo.jpg"
+                }
+                alt={day3PhotoModal === "success" ? "巨大生物 後方空撮写真" : "20km彼方 航跡波写真"}
+                className="w-full h-auto max-h-[62vh] object-contain select-none"
+              />
+            </div>
+
+            {/* 解説ノート */}
+            <div
+              className={`mt-3 rounded-lg border p-3 text-xs text-slate-300 space-y-1 ${
+                day3PhotoModal === "success"
+                  ? "bg-emerald-950/30 border-emerald-900/60"
+                  : "bg-amber-950/30 border-amber-900/60"
+              }`}
+            >
+              <div className="flex items-center justify-between font-bold">
+                <span className={day3PhotoModal === "success" ? "text-emerald-300" : "text-amber-300"}>
+                  {day3PhotoModal === "success"
+                    ? "【特定成功 画像解析所見（海上保安庁 警備救難部 航空分析班）】"
+                    : "【特定失敗 捜索空振り記録（海上保安庁 警備救難部 航空分析班）】"}
+                </span>
+                <span className="font-mono text-[10px] text-slate-400">
+                  {day3PhotoModal === "success" ? "北上速度: 約6 km/h" : "潜航速度: 急速深海移行"}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                {day3PhotoModal === "success" ? (
+                  <>
+                    ・高度350フィート、捜索ヘリより怪物の後方からの撮影に成功。<br />
+                    ・海面下十数メートルをうねる巨大な胴体と、放射状に広がる不鮮明ながら無数の触手シルエットを目視確認。<br />
+                    ・背後には猛烈な白波とV字型のケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上中。<br />
+                    ・ダイオウイカの形態特徴を持つが、全長300〜400メートルに及ぶサイズは単体生物としては説明がつかず、「超群体」である疑いが強まる。
+                  </>
+                ) : (
+                  <>
+                    ・高度1,500フィートからの望遠撮影。約20km彼方の海面に怪物が起こした異常な海水隆起と白波を目視観測。<br />
+                    ・しかしヘリが急行したときには、怪物はヘリの接近を警戒してすでに深海800m以深へ急速潜航してしまっていた。<br />
+                    ・直接の姿を捉えることはできなかったが、海面に残された波の規模から全長数百mの質量が実在することを裏付けている。
+                  </>
+                )}
+              </p>
             </div>
           </div>
         </div>

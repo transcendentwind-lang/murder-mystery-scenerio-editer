@@ -917,8 +917,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         セクターB-3（水深約400m）。
                       </p>
                       <p>
-                        📋 <strong className="text-white">位置特定・包囲成功時</strong>：
-                        プレイヤーがB-3または隣接セクターにソノブイを展開し位置を絞り込んだら、ヘリが急行して「水深400mを北上する全長300〜400mの生体シグネチャー」の撮影レポートが開示されます。
+                        📋 <strong className="text-white">位置特定・浮上撮影成功時</strong>：
+                        プレイヤーがB-3または隣接セクターにソノブイを展開して位置を絞り込んだ場合、潜航していた巨大生物が海面近く（水深10〜20m）へ浮上。急行した捜索ヘリが上空後方から目視確認し、海面下にうごめく巨大な触手と胴体を捉えた写真の撮影に成功します（特定失敗時は約20km彼方に波紋のみを確認）。
                       </p>
                     </div>
                   </div>
