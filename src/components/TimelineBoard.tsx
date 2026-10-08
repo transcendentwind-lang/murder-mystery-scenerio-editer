@@ -1637,12 +1637,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
+                  <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
                     <p>
                       ・<strong>須美寿島〜青ヶ島沖の噴火地点</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖（31°40&apos;N, 139°50&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 須美寿〜青ヶ島沖海底噴火」として他の地名に被らずプロット。
                     </p>
                     <p>
-                      ・<strong>青ヶ島・八丈島の地震観測</strong>：連動噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。島民に不穏な動揺が広がっています。
+                      ・<strong>青ヶ島・八丈島の地震観測 ＆ 富士山到達危機</strong>：連動噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
+                    </p>
+                    <p>
+                      ・<strong>持ち帰られた隕石片と怪物の北上動機</strong>：東京側へ持ち帰られた『隕石のかけら』を生物が追って北上しているのではないかという重大仮説を検討するフェーズです。東京・小笠原の双方が『隕石について調べる』共通アクションを実行可能です。
                     </p>
                   </div>
                 </div>
@@ -1724,7 +1727,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-cyan-400" />
                       <span className="font-bold text-xs text-white">
-                        【合議制アクション】八丈島情報照会 ＆ 小笠原現地4大真相調査
+                        【Day 4 合議制アクション】東京司令部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px]">
@@ -1740,9 +1743,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 東京司令部アクション */}
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択：八丈島島民証言 vs 漁船魚探ソナー）:
+                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
                     </span>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {DAY4_TOKYO_ACTIONS.map((a) => {
                         const isSelected = day4TokyoAction === a.id;
                         return (
@@ -1772,7 +1775,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 小笠原現地アクション */}
                   <div>
                     <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：神社・恩師・隕石・ダイバー）:
+                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：隕石調査 ｜ 神社調査 ｜ ダイバー追跡 ｜ 写真画像解析）:
                     </span>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {DAY4_FIELD_ACTIONS.map((a) => {
