@@ -231,6 +231,19 @@ export function getStoredProjects(): MMProject[] {
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
+      // プリセット初期プロジェクトがコード側で更新されている場合は最新化して保存
+      const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
+      if (initialIdx >= 0) {
+        const storedInit = parsed[initialIdx];
+        if (!storedInit.updatedAt || storedInit.updatedAt < initialProject.updatedAt) {
+          parsed[initialIdx] = {
+            ...storedInit,
+            ...initialProject,
+            updatedAt: initialProject.updatedAt,
+          };
+          localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
+        }
+      }
       return parsed;
     }
     return [initialProject];

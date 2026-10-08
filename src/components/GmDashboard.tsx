@@ -453,9 +453,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   </div>
 
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-red-400">【NPC 船長（救助直後・錯乱）】:</span>
-                    <p className="text-slate-400 mt-1">
-                      「あ、あれはクジラなんかじゃない！海の下に……巨大な目玉と無数の触手があったんだ！計器を全部焼き切られただけじゃない、スクリューが何かに巻き付かれたのか、急にビクとも動かなくなっちまったんだ！……それに、あのダイバー連中も怪しい！潜水の手際はプロ並みに手慣れていたが、俺が案内したのは今回が初めてだ。1ヶ月ほど前からこの海域で継続的に潜りを繰り返していたらしい……！」
+                    <span className="font-bold text-amber-400">【NPC 船長（救助直後）】:</span>
+                    <p className="text-slate-300 mt-1">
+                      「あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかった。船はスクリューが何かに巻き付かれたように故障して、計器類も壊れてしまったんだ。とにかく助かってよかった。ダイバーたちはこの1ヶ月前ぐらいから頻繁にだいぶを繰り返していて、だいぶ慣れた様子だった。あのあとすぐに帰ると言っていたよ。ちょっと神社にお参りしてくるようにするよ」
                     </p>
                   </div>
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
@@ -935,6 +935,42 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
                       ⚠️ <strong>【重要制約】</strong>:
                       PC6に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentDay === 4 && (
+                <div className="space-y-3 text-xs leading-relaxed">
+                  <div className="rounded-lg border border-red-900/60 bg-red-950/25 p-3.5 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="h-4 w-4 text-red-400" />
+                      <span className="font-bold text-red-300">
+                        【フェーズ1：防衛出動の決定 ＆ 官邸隠蔽圧力】
+                      </span>
+                    </div>
+                    <div className="mt-2 rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
+                      <p className="font-semibold text-white">
+                        🚨 海上自衛隊への武力迎撃出動を要請・決定
+                      </p>
+                      <p className="mt-0.5 text-slate-300">
+                        物体の継続的な北上と火山連動噴火の危機を受け、海上自衛隊への武力迎撃出動を決定。潜水艦隊および対潜哨戒機が八丈島南方に迎撃陣形を展開する。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
+                    <span className="font-bold text-amber-400">【東京司令部 vs 現地救難隊の対立・ドラマ】:</span>
+                    <div className="mt-2 space-y-1.5 text-slate-300 text-[11px]">
+                      <p>
+                        ・<strong>官邸からの隠蔽圧力</strong>：官邸・上層部より『社会パニック防止のための完全隠蔽命令』がPC1に下る。怪異や連動噴火の真相を伏せ、海底地震として処理するよう激しい圧力がかかる。
+                      </p>
+                      <p>
+                        ・<strong>現地の葛藤と反発</strong>：島民の避難準備を急ぐ現地救難隊（PC3・PC4・PC5・PC6）は、東京側の不自然な情報統制と隠蔽姿勢に激しく反発。東京と現地の通信回線に緊張が走る。
+                      </p>
+                      <p>
+                        ・<strong>公安ルートの極秘調査</strong>：東京側（PC1）は公安ルートを通じ、Day 1で救助されたダイバーたちが持ち去った大型冷凍ボックスと身元に関する追跡調査を開始する。
+                      </p>
                     </div>
                   </div>
                 </div>
