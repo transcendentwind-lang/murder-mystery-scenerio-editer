@@ -2293,10 +2293,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Radio className="h-5 w-5 text-indigo-400 animate-pulse" />
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                        【Day 6 作戦核心】古代祝詞の舌クリック音 × 海中筒 × マッコウクジラ新言語ソナー作戦
+                        【Day 6 作戦核心】舌クリック祝詞 × 海中筒 × マッコウクジラ新言語ソナー作戦
                       </h3>
                       <p className="text-[11px] text-indigo-300/80">
-                        海底噴火連動と巨大生物の統率メカニズムを解読し、海自大出力ソナー網から新言語を放流する
+                        自衛隊攻撃による深海潜航（一時沈静化）から終盤の再浮上・微動復活へ ｜ 太古の巨大イカ捕食前例と新言語の創出
                       </p>
                     </div>
                   </div>
@@ -2308,6 +2308,41 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <ExternalLink className="h-4 w-4" /> 祝詞解読マトリクスへ
                     </button>
                   )}
+                </div>
+
+                {/* --- Day 6 戦況推移パネル：自衛隊攻撃による一時沈静化 ➔ 終盤の急激な再浮上と火山性微動復活 --- */}
+                <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-3 text-xs space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-slate-200 flex items-center gap-1.5">
+                      <Clock className="h-4 w-4 text-amber-400" />
+                      【Day 6 状況推移：一時的な小康状態から破局直前の再浮上へ】
+                    </span>
+                    <span className="text-[10px] font-mono text-red-400 font-bold bg-red-950/60 px-2 py-0.5 rounded border border-red-800/60">
+                      富士山破局噴火まで残り 24時間
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-[11px]">
+                    <div className="rounded bg-slate-900/80 border border-slate-800 p-2.5 space-y-1">
+                      <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
+                        <CheckCircle2 className="h-3.5 w-3.5 text-cyan-400" />
+                        <span>Day 6 前半〜昼：一時的沈静化（潜航）</span>
+                      </div>
+                      <p className="text-slate-300 leading-relaxed">
+                        自衛隊の魚雷・爆雷攻撃を受け、物体は水深1,200m以下の超深海へ深く潜航。御蔵島沖の噴火は弱まり、八丈島および富士山地下の火山性微動はいったん沈静化の傾向を見せ、司令部に一時的な小康状態が訪れます。
+                      </p>
+                    </div>
+
+                    <div className="rounded bg-rose-950/40 border border-rose-900/60 p-2.5 space-y-1">
+                      <div className="flex items-center gap-1.5 text-rose-300 font-bold">
+                        <AlertTriangle className="h-3.5 w-3.5 text-rose-400" />
+                        <span>Day 6 夕刻〜夜：急激な再浮上 ＆ 微動復活！</span>
+                      </div>
+                      <p className="text-slate-300 leading-relaxed">
+                        深海ソナーが駿河トラフ境界へ向けて<strong>急速に再浮上する巨大影</strong>を探知！ 同時に富士山地下の火山性微動が突如として以前を超える大振幅で復活・再活性化。敵は死んでおらず、最終突入を開始したのです！
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
                 {/* 4本の柱 ナビゲーションタブ */}
@@ -2330,7 +2365,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>🎋 2. 古代の海中筒作法</span>
+                    <span>🎋 2. 海中筒と太古の伝承</span>
                   </button>
                   <button
                     onClick={() => setDay6ActiveTab("coda_grammar")}
@@ -2374,9 +2409,22 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </button>
                     </div>
 
+                    {/* 重要な解明：祝詞の日本語自体は無意味 */}
+                    <div className="rounded-lg bg-amber-950/30 border border-amber-800/60 p-3 space-y-1.5 text-[11px]">
+                      <strong className="text-amber-200 block font-bold text-xs flex items-center gap-1.5">
+                        ⚠️ 【核心の真相：祝詞を単純に日本語として読んだだけでは無力！】
+                      </strong>
+                      <p className="text-slate-200 leading-relaxed">
+                        古文書の注記にはこう断言されています――『<strong>祝詞の言の葉（日本語の意味や音読）そのものに験があるにあらず。祝詞を唱うる口蓋の動きにて舌を弾き、神音（クリック音）を鳴らすことこそが誠の祈りなり。言の葉をただ声高に読むのみでは海面に弾かれ水底へ届かじ</strong>』。
+                      </p>
+                      <p className="text-slate-400 leading-relaxed border-t border-amber-900/40 pt-1">
+                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>特定の口蓋・舌の動作を必然的に引き起こす『祝詞の型』</strong>として口伝パッケージングしていたのです！
+                      </p>
+                    </div>
+
                     <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800">
                       <div className="rounded bg-red-950/40 border border-red-900/60 p-3 space-y-1">
-                        <span className="font-bold text-red-300 block text-[11px]">❌ なぜ喉の声では届かないのか？</span>
+                        <span className="font-bold text-red-300 block text-[11px]">❌ なぜ喉の声（日本語の音読）では届かないのか？</span>
                         <p className="text-[11px] text-slate-300 leading-relaxed">
                           空気と海水の境界面（水面）では音響インピーダンスが約3,600倍も異なるため、<strong>喉の歌声・叫び声は99.9%が水面で跳ね返り反射</strong>され、水深数百メートルの深海には一切届きません。
                         </p>
@@ -2391,13 +2439,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ2: 古代の海中筒（通海竹筒）の作法 --- */}
+                {/* --- タブ2: 古代の海中筒作法 ＆ 過去の巨大イカ捕食の伝承 --- */}
                 {day6ActiveTab === "sea_tube" && (
                   <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1.5">
                         <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
-                          <span>🎋 【海中筒（通海竹筒）の作法：インピーダンス整合の古代テクノロジー】</span>
+                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 太古の巨大イカ捕食の伝承】</span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed">
                           かつて小笠原の島人や神職は、沖合に浮かべた小舟（サバニ）から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
@@ -2409,6 +2457,19 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <Volume2 className="h-4 w-4" /> 海中筒の音響を試聴
                       </button>
+                    </div>
+
+                    {/* 太古の歴史的解答：巨大なイカの塊りをクジラに捕食させた記録 */}
+                    <div className="rounded-lg bg-indigo-950/50 border border-indigo-800/80 p-3 space-y-1.5 text-[11px]">
+                      <strong className="text-indigo-200 block font-bold text-xs flex items-center gap-1.5">
+                        📜 【神社の古文書に残る前例：『巨大な烏賊（イカ）の塊り』を捕食させた歴史】
+                      </strong>
+                      <p className="italic text-slate-200 leading-relaxed font-mono">
+                        『太古、海より触手うごめく巨大な烏賊（イカ）の如き魔物の塊り現れ海を黒く染めしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもは海面を割って現れ、その巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は再び平穏を取り戻せり』
+                      </p>
+                      <p className="text-amber-300 font-semibold pt-1 border-t border-indigo-900/60">
+                        💡 <strong>解答の直感</strong>: あの怪異の正体は、深海の軟体動物（ダイオウイカ）が同調した「巨大なイカの塊り」であり、マッコウクジラにとって極上の好物であるという真実を完璧に裏付ける前例です！
+                      </p>
                     </div>
 
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 text-[11px] space-y-2">
@@ -2454,7 +2515,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="grid grid-cols-3 gap-2">
                       <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-red-400">単語1：敵（怪異）</span>
+                          <span className="font-bold text-red-400">単語1：敵（怪異・巨大イカ塊）</span>
                           <button
                             onClick={() => audioEngine?.playWordSound("word-enemy")}
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
@@ -2464,12 +2525,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </button>
                         </div>
                         <span className="text-[10px] text-slate-400 block font-mono">3.1kHz / 不規則乱れ打ち</span>
-                        <p className="text-[10px] text-slate-400">異形・触手・危険な集合体を示すコーダ</p>
+                        <p className="text-[10px] text-slate-400">巨大なイカの超群体を示すコーダ</p>
                       </div>
 
                       <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
                         <div className="flex items-center justify-between">
-                          <span className="font-bold text-emerald-400">単語2：獲物（捕食対象）</span>
+                          <span className="font-bold text-emerald-400">単語2：獲物（捕食対象・ご馳走）</span>
                           <button
                             onClick={() => audioEngine?.playWordSound("word-prey")}
                             className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
@@ -2479,7 +2540,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </button>
                         </div>
                         <span className="text-[10px] text-slate-400 block font-mono">3.6kHz / 超高速バースト</span>
-                        <p className="text-[10px] text-slate-400">大王イカや極上の食料を指す捕食コーダ</p>
+                        <p className="text-[10px] text-slate-400">極上のイカを指す捕食コーダ</p>
                       </div>
 
                       <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
@@ -2500,7 +2561,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800">
                       <span className="text-slate-300">
-                        祝詞多重ロック構文: <strong className="text-amber-300">「敵（怪異）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
+                        祝詞多重ロック構文: <strong className="text-amber-300">「敵（巨大イカ塊）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
                       </span>
                       <button
                         onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
@@ -2521,9 +2582,53 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <span>📡 【海上自衛隊大出力ソナー網による『合成新言語』放流オペレーション】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群）</strong>に置き換え、人間が再構成した『祝詞 × クジラ言語の合成新言語』を太平洋全域へメガワット級出力でパルス放流します！
+                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群 SOSUS）</strong>に置き換え、人間が再構成した『祝詞 × クジラ言語の合成新言語』を太平洋全域へメガワット級出力でパルス放流します！
                       </p>
                     </div>
+
+                    <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-slate-200">
+                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[1.8kHz Ping] ➔ [敵・獲物・集まれ] ➔ [広域呼応待機]</span>
+                        </span>
+                        <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
+                          day6BroadcastStatus === "idle"
+                            ? "bg-slate-800 text-slate-400"
+                            : day6BroadcastStatus === "broadcasting"
+                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
+                            : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                        }`}>
+                          {day6BroadcastStatus === "idle" && "待機中"}
+                          {day6BroadcastStatus === "broadcasting" && "放流中・音響走査中..."}
+                          {day6BroadcastStatus === "received" && "太平洋全域から応答コーダ検知！"}
+                        </span>
+                      </div>
+
+                      {day6BroadcastStatus === "received" && (
+                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1 animate-fade-in">
+                          <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
+                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群からの呼応シグナルを確認！
+                          </strong>
+                          <p className="text-slate-200 leading-relaxed font-mono">
+                            「駿河湾沖、伊豆諸島、鳥島沖の全ソナー受信機に数十〜数百頭のマッコウクジラからの返信クリック（共鳴コーダ）が殺到しています！ クジラ群は再浮上した怪異の超群体を『巨大なイカの獲物』と認識し、駿河トラフへ向けて超高速で反転・集結を開始しました！」
+                          </p>
+                        </div>
+                      )}
+
+                      <button
+                        onClick={handleDay6Broadcast}
+                        disabled={day6BroadcastStatus === "broadcasting"}
+                        className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
+                      >
+                        <Radio className="h-4 w-4" />
+                        {day6BroadcastStatus === "idle" && "海上自衛隊ソナー網から新言語パルスを放流する（テスト送信）"}
+                        {day6BroadcastStatus === "broadcasting" && "ソナー波形放射中……深海からの応答待機中……"}
+                        {day6BroadcastStatus === "received" && "新言語パルスを再放流し、クジラ群との同調を維持する"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
 
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex items-center justify-between">

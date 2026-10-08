@@ -141,9 +141,14 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             <p className="text-xs text-slate-300 leading-relaxed">
               {grammar.ruleDescription}
             </p>
-            <p className="text-[11px] text-slate-400 border-t border-slate-800/80 pt-1">
-              💡 <strong>太古の知恵</strong>: 人間の声は海面で反射しますが、舌のクリック音を「海中へ差し入れた竹筒」を通して放つことで水底へダイレクトに音波が伝達されていました。現代は海自のソナー網がその役割を果たします。
-            </p>
+            <div className="rounded bg-slate-900 border border-slate-800 p-2 text-[11px] text-slate-300 space-y-1">
+              <p>
+                📜 <strong>太古の前例</strong>: 古文書には『海より現れし巨大な烏賊（イカ）の如き触手の塊りを、鯨を呼び寄せて喰らわせた』とあり、怪異の正体（巨大なイカの群体）と捕食解決の決定打が記されています。
+              </p>
+              <p className="text-amber-300/90 pt-0.5 border-t border-slate-800">
+                ⚠️ <strong>祝詞の真実</strong>: 祝詞の日本語（文言）自体に力があるのではなく、祝詞を唱える口と舌の動きによって『舌クリック音』を発生させることが本体です。普通に読んだだけでは海面で反射するため、音響パルスとしてソナー網から放流する必要があります。
+              </p>
+            </div>
           </div>
         </div>
 

@@ -1535,11 +1535,39 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 6 && (
                 <div className="space-y-3.5 text-xs leading-relaxed">
-                  {/* フェーズ1：舌クリック音の秘密判明 */}
+                  {/* 状況推移：一時的沈静化（潜航）から終盤の再浮上・微動復活へ */}
+                  <div className="rounded-xl border border-rose-900/60 bg-[#19101c] p-3.5 space-y-2 shadow-md">
+                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <Clock className="h-4 w-4 text-amber-400" />
+                        【Day 6 戦況推移：一時的沈静化（潜航） ➔ 終盤の急激な再浮上・微動復活】
+                      </span>
+                      <span className="text-[10px] font-mono text-red-400 font-bold bg-red-950/80 px-2 py-0.5 rounded border border-red-800/80">
+                        破局噴火まで残り 24時間
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2.5 text-[11px]">
+                      <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
+                        <strong className="text-cyan-300 block">昼の演出（一時的沈静化）:</strong>
+                        <p className="italic text-slate-300 leading-relaxed font-mono">
+                          「自衛隊の猛攻により、物体は水深1,200mへ深く潜航。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化します。司令部には『もしや退けたのか？』と安堵の空気が流れますが……」
+                        </p>
+                      </div>
+                      <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 space-y-1">
+                        <strong className="text-rose-300 block">夕〜夜の演出（急激な再浮上と微動復活！）:</strong>
+                        <p className="italic text-rose-100 leading-relaxed font-mono">
+                          「――警報！深海ソナーが駿河トラフ境界へ向けて超高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如以前を超える大振幅で復活！ 敵は死んでおらず、最終突入を開始したのです！」
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* フェーズ1：舌クリック音の秘密判明 ＆ 祝詞の日本語自体は無意味 */}
                   <div className="rounded-xl border border-indigo-900/60 bg-[#101026] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
                       <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                        <span>👅 【フェーズ1：古代祝詞の「舌クリック音（吸着音）」の判明】</span>
+                        <span>👅 【フェーズ1：祝詞の「舌クリック音」判明 ＆ 日本語自体は無意味】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("tongue-click")}
@@ -1551,19 +1579,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
                       「――古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。PC3とPC5が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
                     </p>
-                    <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2 rounded border border-indigo-900/40 space-y-1">
-                      <strong className="text-amber-200">💡 GM解説ガイダンス（音響物理のトリック）:</strong>
-                      <p className="text-slate-300">
-                        「空気と水面の境界面では音響インピーダンスが約3,600倍も異なるため、喉の歌声・叫び声は99.9%が水面で反射され深海には届きません。しかし舌を弾く急峻なパルス音は、水中へ高圧透過する物理的特性を備えています。古代人は音響物理の法則を神事として体得していたのです。」
+                    <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2 text-[11px] text-amber-200 space-y-1">
+                      <strong>⚠️ GM進行ヒント（プレイヤーが「祝詞を読めばいいのか？」と誤解した時の誘導）:</strong>
+                      <p className="text-slate-200 leading-relaxed">
+                        「祝詞を普通に日本語として読んでも、空気と水面の境界面で99.9%が跳ね返り反射して深海には届きません。祝詞の言の葉（言葉）そのものに力があるのではなく、祝詞を唱える口と舌の動きによって『舌クリック音』を発生させることが本体です。太古の島人は、音響物理を知らない後世の人間にこのクリック音を誤りなく継承させるため、『祝詞の型』として口伝に残したのです。」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ2：古代の海中筒（通海竹筒）の作法 */}
+                  {/* フェーズ2：古代の海中筒作法 ＆ 過去の巨大イカ捕食の伝承 */}
                   <div className="rounded-xl border border-cyan-900/60 bg-[#0d1829] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-900/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
-                        <span>🎋 【フェーズ2：海中筒（通海竹筒）の作法 ＆ インピーダンス整合】</span>
+                        <span>🎋 【フェーズ2：海中筒の作法 ＆ 過去の「巨大なイカの塊り」捕食の伝承】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("sea-tube")}
@@ -1573,12 +1601,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
-                      「小笠原の古老が語り継ぐ儀礼――島人たちは小舟（サバニ）から水深数メートルの海中へ『長い竹筒（海中筒）』を深く差し入れ、その筒口に口を密着させて海中へ直接祝詞を放っていた。水面の反射を完全に迂回し、水深千メートルの海溝へ祈りを直撃させる古代の音響テクノロジーです！」
+                      「小笠原の古文書に驚くべき歴史的記録が記されています。『太古、海より触手うごめく巨大な烏賊（イカ）の如き魔物の塊り現れしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもはその巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は平穏を取り戻せり』……！」
                     </p>
-                    <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2 rounded border border-cyan-900/40">
-                      <strong className="text-cyan-200">💡 GM解説ガイダンス（なぜ海中筒なのか）:</strong>
-                      <p className="text-slate-300 mt-0.5">
-                        海面直接発声では透過率わずか0.1%ですが、海中筒を用いることで透過率は85%まで跳ね上がります。深海に棲むマッコウクジラ（海神・神使）へ直接メッセージを届けるための合理的な神具でした。
+                    <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2 rounded border border-cyan-900/40 space-y-1">
+                      <strong className="text-cyan-200">💡 GM解説ガイダンス（過去の前例と海中筒）:</strong>
+                      <p className="text-slate-300">
+                        「過去にも『巨大なイカの塊り』をマッコウクジラに捕食させた歴史があったという解答に極めて近い前例です。また島人たちは小舟（サバニ）から水深数メートルの海中へ長い竹筒（海中筒）を差し込み、水面での反射を防いで水深千メートルの海溝へ直接音波を放射（透過率85%）していました。」
                       </p>
                     </div>
                   </div>
