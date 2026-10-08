@@ -125,27 +125,18 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
     title: "T-4A: 八丈島・底土港 避難住民および漁船団の緊急無線聴取",
     organization: "八丈島総合開発センター / 底土港漁協",
     evidenceId: "ev-hachijo-resident-voice",
-    badge: "八丈島避難証言",
+    badge: "八丈島島民証言",
     summary: "『南の海が煮え立つように激しく白波立ち、沖合から地響きのような唸りが届いた。群発微動が止まらない』",
     detail: "八丈島住民の証言調書。スミス島〜青ヶ島沖の噴火に伴い、海底の異様な地響きと海水の異常な温度上昇が八丈島至近まで迫っている事実を報告。",
   },
   {
     id: "T-4B",
-    title: "T-4B: 八丈島南東沖 民間商船レーダー擾乱・磁気偏向解析",
-    organization: "第三管区海上保安本部 運用司令センター",
-    evidenceId: "ev-merchant-ship-radar",
-    badge: "商船レーダー異常",
-    summary: "青ヶ島南方を航行中のコンテナ船レーダーに巨大擾乱。電子羅針盤に激しい磁気偏向ノイズが発生。",
-    detail: "民間コンテナ船の航跡ログ。海底から巨大な磁気ノイズと海水隆起が観測され、生物の接近に伴い電磁気的な影響が生じていることを客観的に裏付ける。",
-  },
-  {
-    id: "T-4C",
-    title: "T-4C: 官邸・警察庁 メディア情報統制（完全緘口令）指示の受領",
-    organization: "内閣官房危機管理センター / 警察庁警備局",
-    evidenceId: "ev-media-blackout-directive",
-    badge: "完全緘口令",
-    summary: "全国テレビ・新聞・ネットメディアへの一切の情報遮断を通達。SNSの『海が光った』等の投稿を緊急削除・検閲。",
-    detail: "官邸から合同対策本部への極秘通達文書。パニック防止を名目に全情報が隠蔽され、東京司令部（PC1, PC2）は厳しい情報統制の枷を嵌められる。",
+    title: "T-4B: 八丈島近海 漁船アクティブソナー（魚探）巨大物体捕捉記録",
+    organization: "八丈島漁協所属 遠洋一本釣り漁船",
+    evidenceId: "ev-fishing-boat-sonar",
+    badge: "漁船魚探ソナー",
+    summary: "漁船の魚群探知用アクティブソナーが、通常の魚群とは桁違いの全長数百mに及ぶ巨大反射体を深度500mに捕捉！",
+    detail: "八丈島南方沖で操業していた漁船の魚群探知機（高周波アクティブソナー）記録。海面下500mを時速約6kmで北上する超巨大な生体エコーを鮮明に捉え、深海に潜む物体のスケールが民間漁船からも裏付けられる。",
   },
 ];
 
@@ -1290,9 +1281,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     {/* 東京司令部アクション */}
                     <div>
                       <span className="font-bold text-indigo-300 text-[11px] block mb-1">
-                        🏢 東京司令部アクション（1つ選択：八丈島・メディア情報）:
+                        🏢 東京司令部アクション（1つ選択：八丈島島民証言 vs 漁船魚探ソナー）:
                       </span>
-                      <div className="grid grid-cols-3 gap-2">
+                      <div className="grid grid-cols-2 gap-2">
                         {DAY4_TOKYO_ACTIONS.map((a) => (
                           <button
                             key={a.id}

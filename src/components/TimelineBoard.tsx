@@ -1732,9 +1732,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 東京司令部アクション */}
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択：八丈島・メディア情報）:
+                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択：八丈島島民証言 vs 漁船魚探ソナー）:
                     </span>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {DAY4_TOKYO_ACTIONS.map((a) => {
                         const isSelected = day4TokyoAction === a.id;
                         return (
