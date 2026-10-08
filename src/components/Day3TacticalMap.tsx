@@ -638,7 +638,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
         <div className="flex items-center gap-3 font-mono text-[10px]">
           <span>給油中継: PLH-31（海図左下・セクターF-1）</span>
           <span>1セクター: 約20km四方</span>
-          {mode === "gm" && <span className="text-amber-400">熱水クラッター: E-2 / カルデラ R=20km</span>}
+          {mode === "gm" && <span className="text-amber-400">熱水判定: 直上=探知不能 / 隣接=直下不在確定＆周囲妨害</span>}
         </div>
       </div>
     </div>

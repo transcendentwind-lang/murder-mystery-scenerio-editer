@@ -897,15 +897,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <strong className="text-rose-300 block mb-1">🎯 直上捕捉 ＆ 隣接反響判定:</strong>
                         ・<strong>セクター B-3（直上）に投下</strong>: <br />
                         　「同セクター直下に超巨大な反響音！目標を直上捕捉！」<br />
-                        ・<strong>隣接セクター（B-2, B-4, A-3, C-3, 斜めA2/A4/C2/C4）に投下</strong>: <br />
+                        ・<strong>怪物の隣接セクター（B-2, B-4, A-3, C-3, 斜め）に投下</strong>: <br />
                         　「隣接セクター方向から強い反響音（約20km先）をキャッチ！」
                       </div>
                       <div className="rounded bg-amber-950/40 border border-amber-900/60 p-2.5 text-amber-200">
-                        <strong className="text-amber-300 block mb-1">⚠️ トラップ ＆ 索敵限界判定:</strong>
-                        ・<strong>熱水域（E-2 または E-5カルデラ）に投下</strong>: <br />
-                        　「海底熱水気泡クラッターにより探知不能（NO RETURN）！」<br />
+                        <strong className="text-amber-300 block mb-1">⚠️ 熱水クラッター影響 ＆ 限界判定:</strong>
+                        ・<strong>熱水の直上（E-2 または E-5カルデラ）に投下</strong>: <br />
+                        　「直下から吹き上がる気泡で音波が散乱！探知不能（NO RETURN）」<br />
+                        ・<strong>熱水の隣接セクター（D-2, F-2, E-1, E-3等）に投下</strong>: <br />
+                        　「<strong className="text-emerald-300">投下地点直下には怪物は不在！</strong>ただし隣接海域の熱水散乱ノイズが干渉し、周囲セクターは探知不能！」<br />
                         ・<strong>上記以外の離れたセクターに投下</strong>: <br />
-                        　「距離減衰により反響なし（探知限界外）」
+                        　「直下に怪物は不在。周囲（約20km）にも反響なし（索敵限界外）」
                       </div>
                     </div>
 
@@ -1246,7 +1248,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               <div className="flex items-center justify-between text-[11px] leading-relaxed">
                 <div>
                   <span className="font-bold text-rose-300">【GM真相情報】</span>
-                  怪物はセクターB-3（水深400m）を北上中。直上投下（B-3）なら同セクター直下捕捉、隣接セクターなら約20km先反響と大雑把に判定してください。
+                  怪物はセクターB-3（水深400m）。判定: B-3直上=直下捕捉 ｜ B-3隣接=約20km先反響 ｜ 熱水直上(E-2/カルデラ)=探知不能 ｜ 熱水隣接=直下不在確定＆周囲妨害
                 </div>
                 <div className="font-mono text-cyan-400">
                   1セクター: 約20km四方
