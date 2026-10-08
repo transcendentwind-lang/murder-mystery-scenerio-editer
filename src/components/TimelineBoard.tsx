@@ -2222,36 +2222,47 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ⑤ 【Day 5 結末（衝撃の入電）】防衛庁からの緊急連絡：「魚雷群での撃退に失敗」 */}
+                {/* ⑤ 【Day 5 結末（緊急入電）】防衛庁からの連絡：魚雷直撃・飽和攻撃の是非とPC5への緊急意見照会 */}
                 <div className="rounded-xl border border-red-700/90 bg-[#1e0d13] p-4 shadow-xl space-y-3">
                   <div className="flex items-center justify-between border-b border-red-800/70 pb-2">
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
                       <span className="font-bold text-sm text-white">
-                        【Day 5 結末：緊急入電】防衛庁より「魚雷群での撃退に失敗」の報
+                        【Day 5 結末：緊急入電】防衛庁より魚雷直撃報告 ＆ PC2経由での緊急意見照会
                       </span>
                     </div>
                     <span className="rounded bg-red-950 px-2.5 py-0.5 text-[10px] font-bold text-red-300 border border-red-800 animate-pulse">
-                      通常兵器完全無力化
+                      軍部再照会・統率の謎
                     </span>
                   </div>
 
-                  <div className="rounded-lg bg-black/70 border border-red-800 p-3.5 space-y-2 text-xs text-red-100">
+                  <div className="rounded-lg bg-black/70 border border-red-800 p-3.5 space-y-2.5 text-xs text-red-100">
                     <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
-                      <span>📡 【八丈島〜御蔵島沖 作戦海域よりの悲痛な暗号無線通信】</span>
+                      <span>📡 【八丈島〜御蔵島沖 作戦海域より防衛庁リエゾン（PC2）への緊急入電】</span>
                     </div>
                     <p className="italic leading-relaxed text-[11px] text-slate-100">
-                      「――対策本部、応答せよ！ 防衛庁リエゾンだ……！
-                      潜水艦および護衛艦部隊により、八丈島〜御蔵島沖にて最新鋭魚雷・深海爆雷の一斉射撃を敢行した……直撃、命中した！
-                      しかし……爆砕されたはずの巨大黒影は、無数の触手とダイオウイカが絡み合う【超巨大群体】であり、まるで泥のように一瞬で再結合した……！
-                      <strong>ダメージ、ゼロ……！ 通常兵器群による駆除作戦は……完全に失敗した！</strong>」
+                      「――PC2、聞こえるか！ 防衛庁作戦本部だ……！
+                      潜水艦部隊により、八丈島〜御蔵島沖にて魚雷群の一斉射撃を敢行した……直撃、命中した！
+                      しかし……爆砕されたはずの巨大黒影は、無数の触手とダイオウイカが絡み合う超巨大群体であり、まるで泥のように瞬時に再結合した……！
+                      軍部上層部は<strong>『命中している以上、さらに大量の魚雷を集中投入（飽和攻撃）すれば破砕できるはずだ』</strong>と主張している。
+                      だが……それだけで本当に止められるのか？ 火力集中だけで適切なのか、極めて重大な疑念が生じている！」
                     </p>
-                    <div className="rounded bg-red-950/60 border border-red-800/80 p-2 text-[10px] text-red-200 leading-relaxed">
-                      💥 <strong>絶望の現況</strong>:
-                      物体は時速約6kmの速度を変えず、駿河トラフ・富士山直下に向けて直進中。
-                      富士山破局噴火までのタイムリミットは<strong>【残り48時間】</strong>。<br />
-                      通常兵器が完全に無力化された今、この未曾有の災厄を止める術はあるのか――？
-                      物語は【<strong>Day 6：太古の祝詞 × 恩師の音響研究の融合</strong>】へと突入します！
+
+                    <div className="rounded-lg bg-red-950/70 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-1.5">
+                      <strong className="text-red-300 block font-bold text-xs">
+                        🔬 【防衛庁より海洋生物学者（PC5）への至急確認事項】
+                      </strong>
+                      <p className="leading-relaxed text-slate-200">
+                        「PC2、直ちにあの生物のソナー写真を直接解析した<strong>海洋生物学者（PC5）</strong>の所見を確認してくれ！
+                        もし通常兵器の集中攻撃で倒せないのだとすれば――
+                      </p>
+                      <ul className="list-disc list-inside space-y-1 pl-1 text-amber-200 font-semibold">
+                        <li>奴らは一体どうやって、無数の個体を『一つの個体』として統率（情報伝達・再結合）しているのか？</li>
+                        <li>そして、物体は富士山を含む噴火を一体どうやって制御（連動）しているのか？</li>
+                      </ul>
+                      <p className="text-[10px] text-slate-400 pt-1 border-t border-red-800/60">
+                        ※物体の北上により富士山地下の微動は激化中。駿河トラフ到達・破局噴火まで<strong>【残り48時間】</strong>。生物学的な統率メカニズムの解明が急務となる！
+                      </p>
                     </div>
                   </div>
                 </div>

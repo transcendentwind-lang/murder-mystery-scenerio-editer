@@ -1501,20 +1501,27 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：Day 5 結末（防衛庁からの悲痛な緊急無線「魚雷撃退失敗」） */}
+                  {/* フェーズ3：Day 5 結末（防衛庁からPC2への緊急打診：魚雷集中攻撃の是非とPC5への諮問） */}
                   <div className="rounded-xl border border-red-800 bg-[#1e0d14] p-3.5 space-y-2.5 shadow-lg">
                     <span className="font-bold text-red-400 text-xs flex items-center gap-1.5 border-b border-red-900/50 pb-1.5">
                       <ShieldAlert className="h-4 w-4 text-red-400 animate-pulse" />
-                      【フェーズ3（Day 5 結末）：防衛庁からの緊急入電「魚雷群撃退失敗」】
+                      【フェーズ3（Day 5 結末）：防衛庁からの緊急入電「魚雷直撃・PC5への統率メカニズム照会」】
                     </span>
-                    <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-1.5">
-                      <strong className="text-red-300 block font-bold">💥 【衝撃の交戦速報（GM鬼気迫るナレーション）】</strong>
+                    <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-2">
+                      <strong className="text-red-300 block font-bold">💥 【防衛庁よりPC2への無線（GM読み上げ用台本）】</strong>
                       <p className="italic text-slate-100 leading-relaxed font-mono">
-                        「――対策本部、応答せよ！ 防衛庁リエゾンだ……！ 潜水艦および護衛艦部隊により、八丈島〜御蔵島沖にて最新鋭魚雷・爆雷の一斉射撃を敢行した……直撃、命中した！ しかし……爆砕された影は、無数の触手とダイオウイカが絡み合う超巨大群体であり、まるで泥のように一瞬で再結合した……！ ダメージ、ゼロ……！ 通常兵器群による駆除作戦は……完全に失敗した！」
+                        「――PC2、防衛庁作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ PC2、直ちにあの生物の写真解析を行った海洋生物学者（PC5）の意見を確認してくれ！」
                       </p>
-                      <p className="text-red-300 font-bold text-[10px] pt-1 border-t border-red-900/50">
-                        ⏰ <strong>タイムリミット宣告</strong>: 物体は時速6kmの速度を変えず駿河トラフへ直進。富士山破局噴火まで残り48時間！ 通常武力の敗北から、Day 6の「祝詞 × 音響（超常の解決策）」へと一気に雪崩れ込みます。
-                      </p>
+                      <div className="rounded bg-red-950/70 border border-red-800/80 p-2 text-[10px] text-amber-200 space-y-1">
+                        <strong>🎯 GM聞き出しポイント（PC2 ➔ PC5へ確認させる問い）:</strong>
+                        <ul className="list-disc list-inside space-y-0.5 pl-1 text-slate-200">
+                          <li>「通常兵器で倒せないなら、あいつらは一体どうやって一つの個体として統率（情報伝達）されているのか？」</li>
+                          <li>「そして、富士山を含む噴火をどうやって制御（連動）しているのか？」</li>
+                        </ul>
+                        <p className="text-slate-400 pt-0.5">
+                          ※海底噴火自体の根本原因は謎のままで構いません。この問いがPC5に「生物同士の音響統御・クジラ言語（コーダ）」を結びつけさせ、Day 6の祝詞×音響パズルへと繋がります！
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
