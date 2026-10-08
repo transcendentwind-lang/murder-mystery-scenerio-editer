@@ -146,6 +146,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
   const [isDay1ChartModalOpen, setIsDay1ChartModalOpen] = useState(false);
   const [isDay4MapModalOpen, setIsDay4MapModalOpen] = useState(false);
+  const [isDay5MapModalOpen, setIsDay5MapModalOpen] = useState(false);
 
   // Day 1 漂流海図の表示モード（白地図 vs 対策本部解析図）
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
@@ -175,6 +176,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
   const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
 
+  // Day 5 アクション選択状態（東京1枠、現地2枠）
+  const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-5A");
+  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-5B"]);
+
   // ESCキーで開いているモーダルを閉じる
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -183,6 +188,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         setIsTheaterModalOpen(false);
         setIsDay1ChartModalOpen(false);
         setIsDay4MapModalOpen(false);
+        setIsDay5MapModalOpen(false);
         setDay3IsPC6ModalOpen(false);
         setDay3PhotoModal(null);
       }
@@ -1976,6 +1982,282 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
+            {/* --- DAY 5 プレイヤー提供情報：御蔵島沖噴火・富士山地下微動・自衛隊機密遮断と魚雷撃退作戦 --- */}
+            {selectedDay === 5 && (
+              <div className="space-y-4">
+                {/* ① 海上保安庁 火山活動監視状況図（Day 5版：御蔵島沖海底噴火 ＆ 富士山地下微動開始） */}
+                <div className="rounded-xl border border-rose-900/70 bg-[#0c1322] p-4 shadow-md space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Flame className="h-4 w-4 text-rose-400" />
+                      <div>
+                        <span className="font-bold text-xs text-white">
+                          【火山活動監視図 WGS84】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測（Day 5最新版）
+                        </span>
+                        <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                          CHART NO. V-2024 / 富士山連動危機
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href="/images/eruption_monitoring_chart_day5.svg"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
+                      >
+                        <ExternalLink className="h-3 w-3" /> 別タブで開く
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setIsDay5MapModalOpen(true)}
+                        className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
+                      >
+                        <Maximize2 className="h-3 w-3" /> 大画面で開く
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 海図カード */}
+                  <div
+                    onClick={() => setIsDay5MapModalOpen(true)}
+                    className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-[16/10] max-h-72 flex items-center justify-center p-2 shadow-2xl transition hover:border-rose-500"
+                  >
+                    <EruptionMonitoringChart
+                      day={5}
+                      className="w-full h-full object-contain transition duration-200 group-hover:scale-[1.01]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none opacity-0 group-hover:opacity-100 transition">
+                      <span className="text-[11px] font-bold text-white bg-black/60 px-2 py-0.5 rounded backdrop-blur">
+                        🔴 御蔵島沖海底噴火 ｜ ⚡ 八丈島 M4/震度3地震 ｜ ⚠️ 富士山地下 深部微動観測
+                      </span>
+                      <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
+                        <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 海図要綱解説 */}
+                  <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
+                    <p>
+                      ・<strong>御蔵島沖の海底噴火（第4の噴火）</strong>：須美寿島沖を通過した物体が北上し、御蔵島沖（33°45&apos;N, 139°30&apos;E）の海底カルデラで連動爆発が発生。
+                    </p>
+                    <p>
+                      ・<strong>八丈島への地震波及（M4.0・震度3）</strong>：御蔵島沖の海底噴火を震源とするマグニチュード4クラスの地震が発生し、八丈島全域で震度3の強い揺れを観測。
+                    </p>
+                    <p>
+                      ・<strong>富士山直下・深部での火山性微動観測</strong>：最も恐れていた【富士山地下深部からの火山性微動】の発生を気象庁火山監視課が正式確認。物体の北上によって地下マグマ網が連動刺激されており、駿河トラフ到達・富士山破局噴火までの猶予時間は<strong>【残り48時間】</strong>と算出されました。
+                    </p>
+                  </div>
+                </div>
+
+                {/* ② 【全国緊急特報】メディア各社による「富士山連動大噴火」推論・パニック報道 */}
+                <div className="rounded-xl border border-red-900/80 bg-[#1a0f12] p-4 shadow-lg space-y-2.5">
+                  <div className="flex items-center justify-between border-b border-red-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white animate-pulse">
+                        NEWS FLASH
+                      </span>
+                      <span className="font-bold text-xs text-white">
+                        【全国緊急特報】メディア各社による「富士山連動大噴火」推論報道
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-red-300 font-mono">11/27 午前 全国各局一斉速報</span>
+                  </div>
+                  <div className="rounded-lg bg-black/60 border border-red-800/60 p-3 text-xs text-red-100 space-y-2">
+                    <p className="leading-relaxed italic">
+                      「――臨時ニュースをお伝えします。伊豆諸島を北上する連続海底噴火と群発地震を受け、気象庁は富士山地下深部において微弱な火山性微動が観測されたと発表しました。専門家は『小笠原から伊豆諸島、そして富士山へと連なるマグマ供給網が活性化しており、一連の震動ドミノが富士山の破局的大噴火を誘発する壊滅的恐れがある』との推論をテレビ・新聞で一斉に発表。首都圏をはじめ日本全土に激震とパニックが広がっています」
+                    </p>
+                    <div className="text-[10px] text-slate-300 border-t border-red-900/40 pt-1.5">
+                      ⚠️ <strong>社会的情勢</strong>: 富士山噴火パニックにより首都圏機能の混乱が始まり、対策本部には全国からの問い合わせが殺到。事態の収拾が急務となっています。
+                    </div>
+                  </div>
+                </div>
+
+                {/* ③ 【防衛庁からの通達】軍事作戦の「機密指定」および情報遮断 ＆ プレイヤー独自行動の開始 */}
+                <div className="rounded-xl border border-blue-900/80 bg-[#0e1626] p-4 shadow-lg space-y-3">
+                  <div className="flex items-center justify-between border-b border-blue-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-blue-400" />
+                      <span className="font-bold text-xs text-white">
+                        【防衛庁・統合幕僚監部通達】作戦行動の「極秘指定」および情報遮断
+                      </span>
+                    </div>
+                    <span className="rounded bg-blue-950 px-2 py-0.5 text-[10px] font-bold text-blue-300 border border-blue-800">
+                      防衛庁リエゾン連絡
+                    </span>
+                  </div>
+
+                  <div className="rounded-lg border border-blue-800/70 bg-blue-950/40 p-3 text-xs text-blue-100 space-y-2">
+                    <p className="italic leading-relaxed">
+                      「――対策本部および小笠原現地緊急チームの諸君、これまでの多大なる情報提供と索敵支援に心より感謝する。
+                      しかし、昨日決定した『害獣駆除名目』に基づく海上自衛隊の潜水艦・護衛艦による実弾迎撃作戦は、これより<strong>【防衛最高軍事機密（特別保全対象）】</strong>へと移行する。
+                      現場海域の交戦状況や部隊動向についての作戦情報は、ここを以て提供を遮断させていただく。貴隊は自衛隊の作戦干渉を解かれ、各自の管轄・調査任務へと戻られたし」
+                    </p>
+                    <div className="rounded bg-black/50 border border-blue-700/60 p-2.5 text-[11px] text-blue-200">
+                      💡 <strong>プレイヤーたちの状況（自由行動の獲得）</strong>:
+                      自衛隊が洋上で極秘撃滅作戦を展開している間、プレイヤーたちは軍事作戦の拘束から解放され、<strong>東京側および小笠原現地にて【独自に自由な行動・真相調査】を進めることが可能</strong>となります！
+                    </div>
+                  </div>
+                </div>
+
+                {/* ④ 【Day 5 独自調査アクション】東京・小笠原クロス調査 */}
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                      <CheckCircle2 className="h-4 w-4 text-amber-400" />
+                      【Day 5 独自調査アクション】自衛隊の作戦中に真相を解明せよ（東京1枠 / 現地2枠）
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      東京組・現地組で手分けして調査を実行
+                    </span>
+                  </div>
+
+                  {/* 東京側アクション（1枠選択） */}
+                  <div className="rounded-xl border border-sky-900/70 bg-[#0e1628] p-3.5 space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-sky-900/60 pb-1.5">
+                      <span className="font-bold text-xs text-sky-300 flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-sky-400" />
+                        【東京側アクション（対策本部・公安・警察ルート）】 1枠選択
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDay5TokyoAction("T-5A")}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day5TokyoAction === "T-5A"
+                            ? "border-sky-400 bg-sky-950/80 shadow ring-1 ring-sky-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">
+                          【T-5A】富士山麓民家の捜索照会（静岡県警・公安協力）
+                        </div>
+                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
+                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、大型冷凍ボックスの中身は深海から引き揚げられた<strong>「超巨大コア隕石」</strong>であったと発覚。しかし広大な富士山麓の山林深くへ極秘搬入された後であり、捜索は時間切れとなる。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay5TokyoAction("T-5B")}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day5TokyoAction === "T-5B"
+                            ? "border-sky-400 bg-sky-950/80 shadow ring-1 ring-sky-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">
+                          【T-5B】都内・元神主の子どもの捜索（盟約祝詞の解読）
+                        </div>
+                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
+                          小笠原大神宮の元神主の子どもを都内で特定し接触。亡き父が遺した言葉の中に「海へ向かって唱える祝詞の作法」や「神社の宝物殿に眠る古文書の点刻記号」に関する決定的な口伝記憶が存在することが裏付けられる。
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 現地側アクション（2枠選択） */}
+                  <div className="rounded-xl border border-emerald-900/70 bg-[#0d1e18] p-3.5 space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-emerald-900/60 pb-1.5">
+                      <span className="font-bold text-xs text-emerald-300 flex items-center gap-1.5">
+                        <Users className="h-3.5 w-3.5 text-emerald-400" />
+                        【小笠原現地アクション（父島・研究室・古老）】 2枠選択
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (day5FieldActions.includes("F-5A")) {
+                            if (day5FieldActions.length > 1) {
+                              setDay5FieldActions(day5FieldActions.filter((a) => a !== "F-5A"));
+                            }
+                          } else {
+                            setDay5FieldActions([...day5FieldActions, "F-5A"]);
+                          }
+                        }}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day5FieldActions.includes("F-5A")
+                            ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">
+                          【F-5A】故・朝倉教授の音響遺品・研究ノートの再精査
+                        </div>
+                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
+                          朝倉教授の研究室遺品から未発表の音響ノートを発掘。マッコウクジラのクリック音（コーダ）が単なる鳴き声ではなく「文法構造を持つ言語（自分、集まれ等の単語連結）」であるという周波数データを解明する。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (day5FieldActions.includes("F-5B")) {
+                            if (day5FieldActions.length > 1) {
+                              setDay5FieldActions(day5FieldActions.filter((a) => a !== "F-5B"));
+                            }
+                          } else {
+                            setDay5FieldActions([...day5FieldActions, "F-5B"]);
+                          }
+                        }}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day5FieldActions.includes("F-5B")
+                            ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">
+                          【F-5B】島の古老・漁師への小笠原古謡（捕鯨唄）聞き取り
+                        </div>
+                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
+                          父島の古い漁師唄の拍子の中に、高音で急速に連打される『餌（獲物・ご馳走）』のリズムがそのまま口伝で残されていた事実を発見。太古の祝詞と音響の融合への重大ピースが揃う。
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ⑤ 【Day 5 結末（衝撃の入電）】防衛庁からの緊急連絡：「魚雷群での撃退に失敗」 */}
+                <div className="rounded-xl border border-red-700/90 bg-[#1e0d13] p-4 shadow-xl space-y-3">
+                  <div className="flex items-center justify-between border-b border-red-800/70 pb-2">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
+                      <span className="font-bold text-sm text-white">
+                        【Day 5 結末：緊急入電】防衛庁より「魚雷群での撃退に失敗」の報
+                      </span>
+                    </div>
+                    <span className="rounded bg-red-950 px-2.5 py-0.5 text-[10px] font-bold text-red-300 border border-red-800 animate-pulse">
+                      通常兵器完全無力化
+                    </span>
+                  </div>
+
+                  <div className="rounded-lg bg-black/70 border border-red-800 p-3.5 space-y-2 text-xs text-red-100">
+                    <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
+                      <span>📡 【八丈島〜御蔵島沖 作戦海域よりの悲痛な暗号無線通信】</span>
+                    </div>
+                    <p className="italic leading-relaxed text-[11px] text-slate-100">
+                      「――対策本部、応答せよ！ 防衛庁リエゾンだ……！
+                      潜水艦および護衛艦部隊により、八丈島〜御蔵島沖にて最新鋭魚雷・深海爆雷の一斉射撃を敢行した……直撃、命中した！
+                      しかし……爆砕されたはずの巨大黒影は、無数の触手とダイオウイカが絡み合う【超巨大群体】であり、まるで泥のように一瞬で再結合した……！
+                      <strong>ダメージ、ゼロ……！ 通常兵器群による駆除作戦は……完全に失敗した！</strong>」
+                    </p>
+                    <div className="rounded bg-red-950/60 border border-red-800/80 p-2 text-[10px] text-red-200 leading-relaxed">
+                      💥 <strong>絶望の現況</strong>:
+                      物体は時速約6kmの速度を変えず、駿河トラフ・富士山直下に向けて直進中。
+                      富士山破局噴火までのタイムリミットは<strong>【残り48時間】</strong>。<br />
+                      通常兵器が完全に無力化された今、この未曾有の災厄を止める術はあるのか――？
+                      物語は【<strong>Day 6：太古の祝詞 × 恩師の音響研究の融合</strong>】へと突入します！
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* --- DAY 6 プレイヤー提供情報：クジラ言語パズル ＆ 音響シミュレータ --- */}
             {selectedDay === 6 && (
               <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-4 shadow-lg space-y-3">
@@ -2722,6 +3004,68 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 須美寿島〜青ヶ島沖の海底カルデラ噴火（Day 3マーク）および青ヶ島・八丈島での火山性微動（震度1〜2）を網羅。他の島名や地形と被らないよう海図西側に配置。
               </div>
               <span className="font-mono text-cyan-400">連動速度: 時速約6km 北上</span>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 5 火山活動監視図 大画面モーダル */}
+      {isDay5MapModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsDay5MapModalOpen(false)}
+        >
+          <div
+            className="relative max-w-6xl w-full rounded-2xl border border-rose-800 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-950 border border-rose-800 text-rose-400">
+                  <Flame className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    海上保安庁 火山活動監視状況図（Day 5：御蔵島沖海底噴火 ＆ 富士山地下深部微動観測）
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84)
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href="/images/eruption_monitoring_chart_day5.svg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsDay5MapModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            {/* モーダルメイン表示部 */}
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px] p-2">
+              <EruptionMonitoringChart day={5} className="w-full h-full max-h-[70vh] object-contain select-none" />
+            </div>
+
+            {/* モーダル下部解説 */}
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-rose-300">【Day 5 観測要綱】</span>
+                御蔵島沖海底カルデラ噴火、八丈島でのM4.0・震度3地震波及、および富士山地下深部での火山性微動観測を反映。
+              </div>
+              <span className="font-mono text-rose-400 font-bold">駿河トラフ到達・破局噴火まで残り48時間</span>
             </div>
           </div>
         </div>

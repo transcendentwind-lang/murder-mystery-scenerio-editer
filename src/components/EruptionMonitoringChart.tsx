@@ -4,7 +4,7 @@ import React from "react";
 
 interface EruptionMonitoringChartProps {
   className?: string;
-  day?: number; // 3: Day 3時点 (西之島・鳥島沖のみ) | 4: Day 4時点 (須美寿〜青ヶ島沖噴火 ＆ 青ヶ島・八丈島地震)
+  day?: number; // 3: Day 3時点 | 4: Day 4時点 | 5: Day 5時点 (御蔵島沖噴火・八丈島震度3・富士山地下微動)
 }
 
 export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = ({
@@ -12,6 +12,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
   day = 3,
 }) => {
   const isDay4OrLater = day >= 4;
+  const isDay5OrLater = day >= 5;
 
   return (
     <svg
@@ -147,10 +148,25 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
 
       {/* 富士山 */}
       <g transform="translate(357.8, 119.3)">
+        {isDay5OrLater && (
+          <g>
+            <circle r="30" fill="url(#seismic-wave)" />
+            <circle r="22" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.85" />
+            <circle r="14" fill="none" stroke="#dc2626" strokeWidth="2" opacity="0.95" />
+          </g>
+        )}
         <path d="M -10 10 L 0 -10 L 10 10 Z" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1.5" />
         <path d="M -4 -2 L 0 -10 L 4 -2 L 2 -1 L 0 -3 L -2 -1 Z" fill="#38bdf8" />
         <text x="14" y="-2" fill="#f8fafc" fontSize="12" fontWeight="bold">富士山</text>
         <text x="14" y="9" fill="#94a3b8" fontSize="9" fontFamily="monospace">(3,776m)</text>
+        {isDay5OrLater && (
+          <g transform="translate(-140, -32)">
+            <rect width="185" height="24" rx="4" fill="#7f1d1d" stroke="#f87171" strokeWidth="1.2" filter="url(#glow-red)" />
+            <text x="92" y="16" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">
+              ⚠️ 深部火山性微動観測（連動危機）
+            </text>
+          </g>
+        )}
       </g>
 
       {/* 東京 */}
@@ -203,22 +219,68 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <text x="504.2" y="220.7" fill="#eab308" fontSize="9" textAnchor="start">未噴火（警戒海域）</text>
 
       {/* 御蔵島 */}
-      <ellipse cx="505.0" cy="219.8" rx="4" ry="4" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
-      <text x="514.0" y="222.8" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">御蔵島</text>
+      <ellipse cx="505.0" cy="219.8" rx="4" ry="4" fill="#1e293b" stroke={isDay5OrLater ? "#ef4444" : "#64748b"} strokeWidth={isDay5OrLater ? 2 : 1.2} />
+      <text x="514.0" y="222.8" fill={isDay5OrLater ? "#cbd5e1" : "#94a3b8"} fontSize={isDay5OrLater ? "11" : "10"} fontWeight={isDay5OrLater ? "bold" : "normal"} textAnchor="start">御蔵島</text>
 
-      {/* 八丈島 (Day 4: 火山性微動・軽度地震観測) */}
+      {/* 🌟 Day 5 新規追加：御蔵島沖 海底噴火 (Day 4夜〜Day 5朝マーク) */}
+      {isDay5OrLater && (
+        <g transform="translate(480.0, 230.0)">
+          <circle r="20" fill="#ef4444" opacity="0.4" filter="url(#glow-red)" />
+          <circle r="11" fill="#dc2626" opacity="0.7" />
+          <polygon
+            points="0,-11 4,-4 10,-4 5,2 7,8 0,4 -7,8 -5,2 -10,-4 -4,-4"
+            fill="#fbbf24"
+            stroke="#b45309"
+            strokeWidth="1"
+          />
+          <circle r="2.5" fill="#ffffff" />
+          <text x="0" y="22" fill="#ffffff" fontSize="10" fontWeight="bold" textAnchor="middle">
+            御蔵島沖
+          </text>
+          <text x="0" y="32" fill="#cbd5e1" fontSize="8" fontFamily="monospace" textAnchor="middle">
+            33°45&apos;N, 139°30&apos;E
+          </text>
+          <line x1="-12" y1="-3" x2="-45" y2="-10" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="2,2" />
+          <g transform="translate(-235, -28)">
+            <rect
+              width="185"
+              height="36"
+              rx="4"
+              fill="#991b1b"
+              stroke="#fca5a5"
+              strokeWidth="1.5"
+              filter="url(#glow-red)"
+            />
+            <text x="92" y="15" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
+              🔴 Day 4 御蔵島沖海底噴火
+            </text>
+            <text x="92" y="28" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
+              海底カルデラ噴火（M4地震誘発）
+            </text>
+          </g>
+        </g>
+      )}
+
+      {/* 八丈島 (Day 4: 火山性微動 / Day 5: M4震度3地震観測) */}
       <g>
         {isDay4OrLater && (
           <g transform="translate(537.2, 270.3)">
             {/* 地震波紋エフェクト */}
-            <circle r="26" fill="url(#seismic-wave)" />
-            <circle r="18" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="3 2" opacity="0.8" />
-            <circle r="10" fill="none" stroke="#d97706" strokeWidth="1.5" opacity="0.9" />
+            <circle r={isDay5OrLater ? "32" : "26"} fill="url(#seismic-wave)" />
+            <circle r={isDay5OrLater ? "22" : "18"} fill="none" stroke={isDay5OrLater ? "#ef4444" : "#f59e0b"} strokeWidth="1.2" strokeDasharray="3 2" opacity="0.8" />
+            <circle r={isDay5OrLater ? "14" : "10"} fill="none" stroke={isDay5OrLater ? "#dc2626" : "#d97706"} strokeWidth="1.5" opacity="0.9" />
           </g>
         )}
-        <ellipse cx="537.2" cy="270.3" rx="8" ry="10" fill="#1e293b" stroke={isDay4OrLater ? "#f59e0b" : "#64748b"} strokeWidth={isDay4OrLater ? 2 : 1.2} />
+        <ellipse cx="537.2" cy="270.3" rx="8" ry="10" fill="#1e293b" stroke={isDay5OrLater ? "#ef4444" : isDay4OrLater ? "#f59e0b" : "#64748b"} strokeWidth={isDay4OrLater ? 2 : 1.2} />
         <text x="550.2" y="268.3" fill="#cbd5e1" fontSize="11" fontWeight="bold" textAnchor="start">八丈島</text>
-        {isDay4OrLater ? (
+        {isDay5OrLater ? (
+          <g>
+            <rect x="548" y="274" width="165" height="16" rx="3" fill="#5c1d1d" stroke="#ef4444" strokeWidth="1" />
+            <text x="552" y="286" fill="#fca5a5" fontSize="9" fontWeight="bold">
+              ⚡ M4.0 震度3地震観測（御蔵島連動）
+            </text>
+          </g>
+        ) : isDay4OrLater ? (
           <g>
             <rect x="548" y="274" width="135" height="16" rx="3" fill="#451a03" stroke="#f59e0b" strokeWidth="1" />
             <text x="552" y="286" fill="#fbbf24" fontSize="9" fontWeight="bold">
@@ -431,7 +493,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
 
       <rect x="740" y="8" width="440" height="32" rx="4" fill="#1e293b" stroke="#334155" strokeWidth="1" />
       <text x="960" y="28" fill="#f87171" fontSize="11" fontWeight="bold" textAnchor="middle">
-        {isDay4OrLater
+        {isDay5OrLater
+          ? "噴火記録：西之島(D1) ｜ 鳥島沖(D2) ｜ 須美寿沖(D3) ｜ 御蔵島沖(D4)"
+          : isDay4OrLater
           ? "噴火記録：西之島(Day 1) ｜ 鳥島沖(Day 2) ｜ 須美寿〜青ヶ島沖(Day 3)"
           : "噴火観測記録：西之島(Day 1) ｜ 鳥島沖(Day 2)"}
       </text>
@@ -443,19 +507,28 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         {/* 凡例1 */}
         <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444" />
         <text x="32" y="36" fill="#fca5a5" fontSize="10" fontWeight="bold">
-          {isDay4OrLater
+          {isDay5OrLater
+            ? "噴火地点（西之島 / 鳥島沖 / 須美寿沖 / 御蔵島沖）"
+            : isDay4OrLater
             ? "噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 須美寿〜青ヶ島沖）"
             : "噴火確認地点（Day 1 西之島 / Day 2 鳥島）"}
         </text>
         {/* 凡例2 */}
-        {isDay4OrLater && (
+        {isDay5OrLater ? (
+          <g>
+            <circle cx="20" cy="54" r="6" fill="none" stroke="#ef4444" strokeWidth="1.5" />
+            <text x="32" y="58" fill="#fca5a5" fontSize="10" fontWeight="bold">
+              ⚠️ 八丈島 震度3地震 ＆ 富士山地下 微動観測
+            </text>
+          </g>
+        ) : isDay4OrLater ? (
           <g>
             <circle cx="20" cy="54" r="6" fill="none" stroke="#f59e0b" strokeWidth="1.5" />
             <text x="32" y="58" fill="#fbbf24" fontSize="10" fontWeight="bold">
               ⚡ 火山性軽度地震・微動観測（青ヶ島・八丈島）
             </text>
           </g>
-        )}
+        ) : null}
         {/* 凡例3 */}
         <line x1="12" y1="74" x2="28" y2="74" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3,3" />
         <text x="34" y="78" fill="#94a3b8" fontSize="10">火山フロント (伊豆・小笠原火山弧：北端 伊豆半島)</text>

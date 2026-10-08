@@ -1428,12 +1428,94 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               )}
 
               {currentDay === 5 && (
-                <div className="space-y-2 text-xs leading-relaxed">
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-red-400">【自衛隊魚雷迎撃の瞬間】:</span>
-                    <p className="text-slate-400 mt-1 italic">
-                      「魚雷直撃。爆砕。しかし――吹き飛んだはずの黒い影が、まるで泥のように一瞬で再結合していく……！ダメージ、ゼロ。物体は時速6kmの速度を変えず、富士山直下へ向けて直進しています！」
-                    </p>
+                <div className="space-y-4 text-xs leading-relaxed">
+                  {/* フェーズ1：御蔵島沖噴火・八丈島地震 ＆ 富士山地下微動開始 */}
+                  <div className="rounded-xl border border-rose-900/60 bg-[#140f1a] p-3.5 space-y-3 shadow-md">
+                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <Flame className="h-4 w-4 text-rose-400" />
+                        【フェーズ1：御蔵島沖海底噴火 ＆ 富士山地下火山性微動開始】
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <a
+                          href="/images/eruption_monitoring_chart_day5.svg"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
+                        >
+                          <ExternalLink className="h-3 w-3" /> 別タブ
+                        </a>
+                        <button
+                          onClick={() => {
+                            setChartModalDay(5);
+                            setIsChartModalOpen(true);
+                          }}
+                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3 w-3" /> 大画面
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 海図サムネイル */}
+                    <div
+                      onClick={() => {
+                        setChartModalDay(5);
+                        setIsChartModalOpen(true);
+                      }}
+                      className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-56 flex items-center justify-center shadow-inner"
+                    >
+                      <EruptionMonitoringChart day={5} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                        <span className="text-[11px] font-semibold text-rose-200">
+                          🔴 御蔵島沖海底噴火 ｜ ⚡ 八丈島 M4/震度3 ｜ ⚠️ 富士山地下 微動観測
+                        </span>
+                        <span className="text-[10px] text-rose-300 bg-black/60 px-2 py-0.5 rounded">
+                          拡大表示
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg bg-black/50 border border-rose-900/50 p-2.5 text-[11px] text-rose-100 space-y-1">
+                      <strong className="text-rose-300 block font-bold">📢 【GMナレーション：メディアの富士山連動大噴火報道】</strong>
+                      <p className="italic text-slate-200 leading-relaxed">
+                        「伊豆諸島を北上する連続海底噴火と群発地震。気象庁は富士山地下深部において火山性微動を公式確認しました。テレビ各局は『伊豆・小笠原火山弧の連動刺激により、富士山破局的大噴火の危険性が極めて高い』と速報を連呼し、日本中がパニックに包まれています」
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ2：防衛庁からの「機密指定」通達とプレイヤー独自行動 */}
+                  <div className="rounded-xl border border-blue-900/60 bg-[#0d1527] p-3.5 space-y-2.5 shadow-md">
+                    <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
+                      <Shield className="h-4 w-4 text-blue-400" />
+                      【フェーズ2：防衛庁通達「軍事機密指定」による情報遮断 ＆ 自由行動】
+                    </span>
+                    <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-2.5 text-[11px] text-blue-200 space-y-1.5">
+                      <strong className="text-blue-300 block font-bold">🛡️ 【防衛庁通達セリフ（GM読み上げ用）】</strong>
+                      <p className="italic text-slate-200 leading-relaxed">
+                        「――対策本部および小笠原現地チームの協力に感謝する。しかし、これより自衛隊が実施する『害獣駆除名目での実弾迎撃作戦』は【最高軍事機密】に移行する。現場の交戦状況についての情報提供はここを以て遮断する。諸君は自衛隊の作戦干渉を解かれ、独自の調査任務へと戻られたし」
+                      </p>
+                      <p className="text-slate-400 text-[10px] pt-1 border-t border-blue-900/50">
+                        💡 <strong>GM進行のコツ</strong>: 自衛隊が部隊を展開してくれたことで、プレイヤーは自衛隊を信じて一息つきつつ、「自分たちにしかできない調査（富士山麓の荷物の真相、神主の子どもの捜索、音響遺品等）」に自由に動ける時間となります。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ3：Day 5 結末（防衛庁からの悲痛な緊急無線「魚雷撃退失敗」） */}
+                  <div className="rounded-xl border border-red-800 bg-[#1e0d14] p-3.5 space-y-2.5 shadow-lg">
+                    <span className="font-bold text-red-400 text-xs flex items-center gap-1.5 border-b border-red-900/50 pb-1.5">
+                      <ShieldAlert className="h-4 w-4 text-red-400 animate-pulse" />
+                      【フェーズ3（Day 5 結末）：防衛庁からの緊急入電「魚雷群撃退失敗」】
+                    </span>
+                    <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-1.5">
+                      <strong className="text-red-300 block font-bold">💥 【衝撃の交戦速報（GM鬼気迫るナレーション）】</strong>
+                      <p className="italic text-slate-100 leading-relaxed font-mono">
+                        「――対策本部、応答せよ！ 防衛庁リエゾンだ……！ 潜水艦および護衛艦部隊により、八丈島〜御蔵島沖にて最新鋭魚雷・爆雷の一斉射撃を敢行した……直撃、命中した！ しかし……爆砕された影は、無数の触手とダイオウイカが絡み合う超巨大群体であり、まるで泥のように一瞬で再結合した……！ ダメージ、ゼロ……！ 通常兵器群による駆除作戦は……完全に失敗した！」
+                      </p>
+                      <p className="text-red-300 font-bold text-[10px] pt-1 border-t border-red-900/50">
+                        ⏰ <strong>タイムリミット宣告</strong>: 物体は時速6kmの速度を変えず駿河トラフへ直進。富士山破局噴火まで残り48時間！ 通常武力の敗北から、Day 6の「祝詞 × 音響（超常の解決策）」へと一気に雪崩れ込みます。
+                      </p>
+                    </div>
                   </div>
                 </div>
               )}
@@ -1653,7 +1735,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       : "海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）"}
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
-                    {chartModalDay === 4
+                    {chartModalDay === 5
+                      ? "JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84) | 富士山連動危機"
+                      : chartModalDay === 4
                       ? "JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84)"
                       : "JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (WGS84) | 観測記録海図"}
                   </p>
@@ -1661,7 +1745,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href={chartModalDay === 4 ? "/images/eruption_monitoring_chart_day4.svg" : "/images/eruption_monitoring_chart.svg"}
+                  href={chartModalDay === 5 ? "/images/eruption_monitoring_chart_day5.svg" : chartModalDay === 4 ? "/images/eruption_monitoring_chart_day4.svg" : "/images/eruption_monitoring_chart.svg"}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -1683,7 +1767,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             </div>
 
             <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">
-              {chartModalDay === 4 ? (
+              {chartModalDay === 5 ? (
+                <>
+                  <div className="flex items-center justify-between font-semibold text-rose-300">
+                    <span>【Day 5 観測要綱および富士山連動危機所見】</span>
+                    <span className="font-mono text-rose-400 font-bold">駿河トラフ到達まで残り48時間</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    ・<strong>御蔵島沖の噴火（Day 4海底噴火）</strong>：須美寿島沖を通過した物体が北上し、御蔵島沖海底カルデラで連動爆発。<br />
+                    ・<strong>八丈島への地震波及</strong>：御蔵島沖噴火を震源とするM4.0・震度3の地震を八丈島で観測。<br />
+                    ・<strong>富士山直下・深部火山性微動観測</strong>：富士山地下のマグマ網が連動刺激され、深部低周波微動が観測開始。破局噴火までのカウントダウン宣告。
+                  </p>
+                </>
+              ) : chartModalDay === 4 ? (
                 <>
                   <div className="flex items-center justify-between font-semibold text-rose-300">
                     <span>【Day 4 観測要綱および噴火連動所見】</span>

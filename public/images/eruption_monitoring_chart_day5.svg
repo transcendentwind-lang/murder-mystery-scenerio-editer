@@ -1,0 +1,286 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800" style="background:#081325; font-family:'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;">
+  <defs>
+    <radialGradient id="trench-glow" cx="75%" cy="60%" r="50%">
+      <stop offset="0%" stop-color="#020b18" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#081325" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow-red" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <radialGradient id="seismic-wave" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#f59e0b" stop-opacity="0.5" />
+      <stop offset="70%" stop-color="#f59e0b" stop-opacity="0.15" />
+      <stop offset="100%" stop-color="#f59e0b" stop-opacity="0" />
+    </radialGradient>
+  </defs>
+
+  <rect width="1200" height="800" fill="#081325"/>
+  <rect x="780.0" y="55" width="385.0" height="700" fill="url(#trench-glow)" opacity="0.7"/>
+
+  <!-- 緯度経度グリッド線 -->
+  <line x1="234.2" y1="55" x2="234.2" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="234.2" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">138°E</text>
+  <text x="234.2" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">138°E</text>
+  <line x1="403.5" y1="55" x2="403.5" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="403.5" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">139°E</text>
+  <text x="403.5" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">139°E</text>
+  <line x1="572.7" y1="55" x2="572.7" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="572.7" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">140°E</text>
+  <text x="572.7" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">140°E</text>
+  <line x1="741.9" y1="55" x2="741.9" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="741.9" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">141°E</text>
+  <text x="741.9" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">141°E</text>
+  <line x1="911.2" y1="55" x2="911.2" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="911.2" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">142°E</text>
+  <text x="911.2" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">142°E</text>
+  <line x1="1080.4" y1="55" x2="1080.4" y2="755" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="1080.4" y="45" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">143°E</text>
+  <text x="1080.4" y="775" fill="#64748b" font-size="11" font-family="monospace" text-anchor="middle">143°E</text>
+
+  <line x1="65" y1="724.2" x2="1165" y2="724.2" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="728.2" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">26°N</text>
+  <line x1="65" y1="662.2" x2="1165" y2="662.2" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="666.2" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">27°N</text>
+  <line x1="65" y1="599.7" x2="1165" y2="599.7" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="603.7" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">28°N</text>
+  <line x1="65" y1="536.6" x2="1165" y2="536.6" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="540.6" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">29°N</text>
+  <line x1="65" y1="472.8" x2="1165" y2="472.8" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="476.8" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">30°N</text>
+  <line x1="65" y1="408.4" x2="1165" y2="408.4" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="412.4" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">31°N</text>
+  <line x1="65" y1="343.4" x2="1165" y2="343.4" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="347.4" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">32°N</text>
+  <line x1="65" y1="277.6" x2="1165" y2="277.6" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="281.6" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">33°N</text>
+  <line x1="65" y1="211.1" x2="1165" y2="211.1" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="215.1" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">34°N</text>
+  <line x1="65" y1="143.8" x2="1165" y2="143.8" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="147.8" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">35°N</text>
+  <line x1="65" y1="75.6" x2="1165" y2="75.6" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3"/>
+  <text x="55" y="79.6" fill="#64748b" font-size="11" font-family="monospace" text-anchor="end">36°N</text>
+
+  <!-- 本州陸地 -->
+  <polygon points="65.0,157.3 107.3,167.4 166.5,166.1 234.2,168.1 271.5,170.8 288.4,157.3 310.4,145.1 342.5,135.6 384.8,141.7 364.5,160.7 376.4,170.8 395.0,166.1 420.4,145.8 415.3,137.0 430.5,126.8 462.7,123.4 496.5,123.4 508.4,134.9 528.7,126.1 513.5,113.2 533.8,99.6 564.2,99.6 559.2,118.0 540.5,122.7 549.0,143.8 552.4,150.5 625.2,133.6 640.4,123.4 718.2,96.1 674.2,75.6 674.2,55.0 65.0,55.0" fill="#1e293b" stroke="#38bdf8" stroke-width="1.8" opacity="0.95"/>
+  <text x="215" y="100" fill="#94a3b8" font-size="13" font-weight="bold" letter-spacing="2">本州（中部・関東）</text>
+  <text x="135" y="160.7" fill="#64748b" font-size="10">遠州灘</text>
+  <text x="318.8" y="153.9" fill="#0284c7" font-size="11" font-weight="bold">駿河湾</text>
+  <text x="454.2" y="133.6" fill="#0284c7" font-size="11" font-weight="bold">相模湾</text>
+  <text x="538.8" y="113.2" fill="#0284c7" font-size="10">東京湾</text>
+  <text x="386.5" y="165.9" fill="#cbd5e1" font-size="11" font-weight="bold">伊豆半島</text>
+  <text x="589.6" y="126.8" fill="#cbd5e1" font-size="11">房総半島</text>
+
+  <!-- 富士山 (Day 5: 深部火山性微動観測) -->
+  <g transform="translate(357.8, 119.3)">
+    <circle r="30" fill="url(#seismic-wave)"/>
+    <circle r="22" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,2" opacity="0.85"/>
+    <circle r="14" fill="none" stroke="#dc2626" stroke-width="2" opacity="0.95"/>
+    <path d="M -10 10 L 0 -10 L 10 10 Z" fill="#f8fafc" stroke="#e2e8f0" stroke-width="1.5"/>
+    <path d="M -4 -2 L 0 -10 L 4 -2 L 2 -1 L 0 -3 L -2 -1 Z" fill="#38bdf8"/>
+    <text x="14" y="-2" fill="#f8fafc" font-size="12" font-weight="bold">富士山</text>
+    <text x="14" y="9" fill="#94a3b8" font-size="9" font-family="monospace">(3,776m)</text>
+    <g transform="translate(-140, -32)">
+      <rect width="185" height="24" rx="4" fill="#7f1d1d" stroke="#f87171" stroke-width="1.2" filter="url(#glow-red)"/>
+      <text x="92" y="16" fill="#ffffff" font-size="9.5" font-weight="bold" text-anchor="middle">⚠️ 深部火山性微動観測（連動危機）</text>
+    </g>
+  </g>
+
+  <!-- 東京 -->
+  <g transform="translate(533.8, 97.5)">
+    <circle r="4" fill="#38bdf8" stroke="#ffffff" stroke-width="1.5"/>
+    <text x="8" y="-4" fill="#38bdf8" font-size="11" font-weight="bold">東京</text>
+  </g>
+
+  <!-- 火山フロント線 -->
+  <polyline points="719.9,647.3 630.2,486.3 623.5,442.0 581.2,379.9 555.0,345.0 533.8,313.2 537.2,270.3 493.2,205.7 469.5,162.0 422.0,150.0" fill="none" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5,4" opacity="0.65"/>
+  <text x="635.0" y="295.0" fill="#f87171" font-size="10" opacity="0.85" transform="rotate(80 635.0,295.0)">--- 火山フロント (伊豆・小笠原火山弧：北端 伊豆半島) ---</text>
+
+  <!-- 伊豆大島 -->
+  <ellipse cx="469.5" cy="162.0" rx="7" ry="9" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="481.5" y="165.0" fill="#cbd5e1" font-size="11" font-weight="bold">伊豆大島</text>
+  <text x="481.5" y="177.0" fill="#eab308" font-size="9">未噴火（警戒海域）</text>
+
+  <!-- 利島・新島・神津島 -->
+  <ellipse cx="450.8" cy="176.2" rx="3" ry="3" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="442.8" y="179.2" fill="#94a3b8" font-size="10" text-anchor="end">利島</text>
+  <ellipse cx="447.5" cy="186.3" rx="4" ry="7" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="438.5" y="189.3" fill="#94a3b8" font-size="10" text-anchor="end">新島</text>
+  <ellipse cx="427.2" cy="197.0" rx="4" ry="5" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="418.2" y="200.0" fill="#94a3b8" font-size="10" text-anchor="end">神津島</text>
+
+  <!-- 三宅島・御蔵島 -->
+  <ellipse cx="493.2" cy="205.7" rx="6" ry="6" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="504.2" y="208.7" fill="#cbd5e1" font-size="11" font-weight="bold">三宅島</text>
+  <text x="504.2" y="220.7" fill="#eab308" font-size="9">未噴火（警戒海域）</text>
+
+  <!-- 御蔵島 -->
+  <ellipse cx="505.0" cy="219.8" rx="4" ry="4" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+  <text x="514.0" y="222.8" fill="#cbd5e1" font-size="11" font-weight="bold">御蔵島</text>
+
+  <!-- 🌟 Day 5 (Day 4噴火マーク) 御蔵島沖 海底噴火 -->
+  <g transform="translate(480.0, 230.0)">
+    <circle r="20" fill="#ef4444" opacity="0.4" filter="url(#glow-red)"/>
+    <circle r="11" fill="#dc2626" opacity="0.7"/>
+    <polygon points="0,-11 4,-4 10,-4 5,2 7,8 0,4 -7,8 -5,2 -10,-4 -4,-4" fill="#fbbf24" stroke="#b45309" stroke-width="1"/>
+    <circle r="2.5" fill="#ffffff"/>
+    <text x="0" y="22" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">御蔵島沖</text>
+    <text x="0" y="32" fill="#cbd5e1" font-size="8" font-family="monospace" text-anchor="middle">33°45'N, 139°30'E</text>
+    <line x1="-12" y1="-3" x2="-45" y2="-10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <g transform="translate(-235, -28)">
+      <rect width="185" height="36" rx="4" fill="#991b1b" stroke="#fca5a5" stroke-width="1.5" filter="url(#glow-red)"/>
+      <text x="92" y="15" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 4 御蔵島沖海底噴火</text>
+      <text x="92" y="28" fill="#fecaca" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ噴火（M4地震誘発）</text>
+    </g>
+  </g>
+
+  <!-- 八丈島 (Day 5: M4震度3 地震観測) -->
+  <g transform="translate(537.2, 270.3)">
+    <circle r="32" fill="url(#seismic-wave)"/>
+    <circle r="22" fill="none" stroke="#ef4444" stroke-width="1.2" stroke-dasharray="3,2" opacity="0.8"/>
+    <circle r="14" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.9"/>
+  </g>
+  <ellipse cx="537.2" cy="270.3" rx="8" ry="10" fill="#1e293b" stroke="#ef4444" stroke-width="2"/>
+  <text x="550.2" y="268.3" fill="#cbd5e1" font-size="11" font-weight="bold">八丈島</text>
+  <rect x="548" y="274" width="165" height="16" rx="3" fill="#5c1d1d" stroke="#ef4444" stroke-width="1"/>
+  <text x="552" y="286" fill="#fca5a5" font-size="9" font-weight="bold">⚡ M4.0 震度3地震観測（御蔵島連動）</text>
+
+  <ellipse cx="520.2" cy="269.0" rx="3" ry="3" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="512.2" y="272.0" fill="#94a3b8" font-size="10" text-anchor="end">八丈小島</text>
+
+  <!-- 青ヶ島 (火山性群発微動 観測) -->
+  <g>
+    <circle cx="533.8" cy="313.2" r="24" fill="url(#seismic-wave)"/>
+    <circle cx="533.8" cy="313.2" r="16" fill="none" stroke="#f59e0b" stroke-width="1.2" stroke-dasharray="3,2" opacity="0.8"/>
+    <ellipse cx="533.8" cy="313.2" rx="4" ry="4" fill="#1e293b" stroke="#f59e0b" stroke-width="2"/>
+    <text x="544.8" y="312.2" fill="#cbd5e1" font-size="11" font-weight="bold">青ヶ島</text>
+    <rect x="543" y="318" width="135" height="16" rx="3" fill="#451a03" stroke="#f59e0b" stroke-width="1"/>
+    <text x="547" y="330" fill="#fbbf24" font-size="9" font-weight="bold">⚡ 火山性群発微小地震 観測</text>
+  </g>
+
+  <!-- ベヨネース列岩 -->
+  <ellipse cx="559.2" cy="351.2" rx="2" ry="2" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="566.2" y="354.2" fill="#94a3b8" font-size="10">ベヨネース列岩</text>
+
+  <!-- 須美寿島（スミス島） -->
+  <ellipse cx="581.2" cy="379.9" rx="3" ry="3" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="589.2" y="382.9" fill="#94a3b8" font-size="10">須美寿島</text>
+  <text x="589.2" y="394.9" fill="#94a3b8" font-size="9">スミス島</text>
+
+  <!-- Day 3 須美寿島〜青ヶ島沖 海底噴火 -->
+  <g transform="translate(555.0, 345.0)">
+    <circle r="22" fill="#ef4444" opacity="0.35" filter="url(#glow-red)"/>
+    <circle r="12" fill="#dc2626" opacity="0.65"/>
+    <polygon points="0,-12 4,-4 11,-4 6,2 8,9 0,5 -8,9 -6,2 -11,-4 -4,-4" fill="#fbbf24" stroke="#b45309" stroke-width="1"/>
+    <circle r="3" fill="#ffffff"/>
+    <text x="0" y="24" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle">須美寿島〜青ヶ島沖</text>
+    <text x="0" y="35" fill="#cbd5e1" font-size="8" font-family="monospace" text-anchor="middle">31°40'N, 139°50'E</text>
+    <line x1="-12" y1="-4" x2="-45" y2="-12" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <g transform="translate(-255, -30)">
+      <rect width="205" height="38" rx="4" fill="#991b1b" stroke="#fca5a5" stroke-width="1.5" filter="url(#glow-red)"/>
+      <text x="102" y="16" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 3 須美寿〜青ヶ島沖海底噴火</text>
+      <text x="102" y="29" fill="#fecaca" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ連動噴火（Day 4朝 観測）</text>
+    </g>
+  </g>
+
+  <!-- 鳥島 (Day 2 噴火) -->
+  <g transform="translate(623.5, 442.0)">
+    <circle r="22" fill="#ef4444" opacity="0.3" filter="url(#glow-red)"/>
+    <circle r="12" fill="#dc2626" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="4.5" ry="5.5" fill="#334155" stroke="#38bdf8" stroke-width="1.5"/>
+    <polygon points="0,-12 4,-4 11,-4 6,2 8,9 0,5 -8,9 -6,2 -11,-4 -4,-4" fill="#fbbf24" stroke="#b45309" stroke-width="1"/>
+    <circle r="3" fill="#ffffff"/>
+    <text x="-12" y="3" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="end">鳥島</text>
+    <text x="-12" y="16" fill="#94a3b8" font-size="9" font-family="monospace" text-anchor="end">30°29'N, 140°18'E</text>
+    <line x1="8" y1="0" x2="26" y2="0" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <g transform="translate(26, -18)">
+      <rect width="165" height="36" rx="4" fill="#991b1b" stroke="#fca5a5" stroke-width="1.5" filter="url(#glow-red)"/>
+      <text x="82" y="15" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 2 鳥島沖海底噴火</text>
+      <text x="82" y="28" fill="#fecaca" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ連動大爆発</text>
+    </g>
+  </g>
+
+  <!-- 孀婦岩 -->
+  <ellipse cx="630.2" cy="486.3" rx="2" ry="2" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="637.2" y="489.3" fill="#94a3b8" font-size="10">孀婦岩</text>
+
+  <!-- 西之島 (Day 1 噴火) -->
+  <g transform="translate(719.9, 647.3)">
+    <circle r="22" fill="#ef4444" opacity="0.3" filter="url(#glow-red)"/>
+    <circle r="12" fill="#dc2626" opacity="0.6"/>
+    <ellipse cx="0" cy="0" rx="5" ry="6" fill="#334155" stroke="#38bdf8" stroke-width="1.5"/>
+    <polygon points="0,-12 4,-4 11,-4 6,2 8,9 0,5 -8,9 -6,2 -11,-4 -4,-4" fill="#fbbf24" stroke="#b45309" stroke-width="1"/>
+    <circle r="3" fill="#ffffff"/>
+    <text x="14" y="4" fill="#ffffff" font-size="13" font-weight="bold">西之島</text>
+    <text x="14" y="18" fill="#cbd5e1" font-size="9" font-family="monospace">27°15'N, 140°53'E</text>
+    <line x1="-8" y1="-2" x2="-26" y2="-10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
+    <g transform="translate(-205, -28)">
+      <rect width="175" height="36" rx="4" fill="#991b1b" stroke="#fca5a5" stroke-width="1.5" filter="url(#glow-red)"/>
+      <text x="87" y="15" fill="#ffffff" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 1 突発的大規模噴火</text>
+      <text x="87" y="28" fill="#fecaca" font-size="9" font-family="monospace" text-anchor="middle">火山灰・噴煙・周辺航行警報</text>
+    </g>
+  </g>
+
+  <!-- 小笠原諸島 -->
+  <ellipse cx="933.2" cy="618.5" rx="4" ry="4" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="942.2" y="621.5" fill="#94a3b8" font-size="10">聟島列島</text>
+  <ellipse cx="943.3" cy="656.6" rx="7" ry="9" fill="#334155" stroke="#38bdf8" stroke-width="1.5"/>
+  <circle cx="943.3" cy="656.6" r="2.5" fill="#38bdf8"/>
+  <text x="956.3" y="660.6" fill="#e2e8f0" font-size="11" font-weight="bold">父島</text>
+  <text x="956.3" y="672.6" fill="#0284c7" font-size="9">小笠原救難隊 本拠地（現地組帰還）</text>
+  <ellipse cx="936.5" cy="684.0" rx="6" ry="8" fill="#334155" stroke="#38bdf8" stroke-width="1.5"/>
+  <text x="948.5" y="688.0" fill="#e2e8f0" font-size="11" font-weight="bold">母島</text>
+  <ellipse cx="789.3" cy="758.7" rx="4" ry="5" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+  <text x="798.3" y="761.7" fill="#94a3b8" font-size="10">北硫黄島</text>
+
+  <!-- 海図外枠 -->
+  <rect x="65" y="55" width="1100" height="700" fill="none" stroke="#475569" stroke-width="2"/>
+
+  <!-- ヘッダーバナー -->
+  <rect x="0" y="0" width="1200" height="48" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+  <text x="24" y="22" fill="#ffffff" font-size="13" font-weight="bold">
+    海上保安庁 海洋情報部 - 火山活動監視状況図（伊豆・小笠原海嶺）
+  </text>
+  <text x="24" y="38" fill="#94a3b8" font-size="10" font-family="monospace">
+    JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (CHART NO. V-2024 / WGS84)
+  </text>
+  <rect x="740" y="8" width="440" height="32" rx="4" fill="#1e293b" stroke="#334155" stroke-width="1"/>
+  <text x="960" y="28" fill="#f87171" font-size="11" font-weight="bold" text-anchor="middle">
+    噴火記録：西之島(D1) ｜ 鳥島沖(D2) ｜ 須美寿沖(D3) ｜ 御蔵島沖(D4)
+  </text>
+
+  <!-- 凡例パネル -->
+  <g transform="translate(80, 600)">
+    <rect width="280" height="140" rx="6" fill="#0f172a" stroke="#334155" stroke-width="1.2" opacity="0.95"/>
+    <text x="12" y="18" fill="#ffffff" font-size="11" font-weight="bold">【海図凡例 ＆ 観測要綱】</text>
+    <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444"/>
+    <text x="32" y="36" fill="#fca5a5" font-size="10" font-weight="bold">
+      噴火地点（西之島 / 鳥島沖 / 須美寿沖 / 御蔵島沖）
+    </text>
+    <circle cx="20" cy="54" r="6" fill="none" stroke="#ef4444" stroke-width="1.5"/>
+    <text x="32" y="58" fill="#fca5a5" font-size="10" font-weight="bold">
+      ⚠️ 八丈島 震度3地震 ＆ 富士山地下 微動観測
+    </text>
+    <line x1="12" y1="74" x2="28" y2="74" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3"/>
+    <text x="34" y="78" fill="#94a3b8" font-size="10">火山フロント (伊豆・小笠原火山弧：北端 伊豆半島)</text>
+    <circle cx="20" cy="94" r="4" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
+    <text x="34" y="97" fill="#eab308" font-size="10">未噴火（今後の北上警戒海域）</text>
+    <text x="12" y="118" fill="#64748b" font-size="8">※物体の時速約6km北上に伴い、マグマ溜まりが刺激され連動爆発</text>
+  </g>
+
+  <!-- コンパスローズ -->
+  <g transform="translate(1100, 120)">
+    <circle r="32" fill="#0f172a" stroke="#334155" stroke-width="1" opacity="0.9"/>
+    <polygon points="0,-28 5,-8 0,0 -5,-8" fill="#ef4444"/>
+    <polygon points="0,28 5,8 0,0 -5,8" fill="#64748b"/>
+    <polygon points="28,0 8,5 0,0 8,-5" fill="#64748b"/>
+    <polygon points="-28,0 -8,5 0,0 -8,-5" fill="#64748b"/>
+    <text x="0" y="-32" fill="#ef4444" font-size="11" font-weight="bold" text-anchor="middle">N</text>
+    <text x="34" y="4" fill="#94a3b8" font-size="9">E</text>
+    <text x="0" y="40" fill="#94a3b8" font-size="9" text-anchor="middle">S</text>
+    <text x="-36" y="4" fill="#94a3b8" font-size="9" text-anchor="end">W</text>
+  </g>
+</svg>
