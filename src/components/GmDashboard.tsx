@@ -1227,33 +1227,45 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     {day3GmHqDecision === "defense_dispatch" ? (
-                      <div className="rounded-lg border border-rose-800/80 bg-rose-950/30 p-3 text-[11px] text-rose-200 space-y-1.5">
-                        <strong className="text-rose-300 block font-bold text-xs flex items-center gap-1.5">
-                          🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣不作為）】
-                        </strong>
-                        <p className="italic text-slate-200">
-                          「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
-                        </p>
+                      <div className="rounded-lg border border-rose-800/80 bg-rose-950/30 p-3 text-[11px] text-rose-200 space-y-2">
+                        <div>
+                          <strong className="text-rose-300 block font-bold text-xs flex items-center gap-1.5">
+                            🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣不作為）】
+                          </strong>
+                          <p className="italic text-slate-200 mt-1 leading-relaxed">
+                            「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
+                          </p>
+                        </div>
+                        <div className="rounded border border-amber-800/60 bg-amber-950/30 p-2 text-amber-200">
+                          <strong className="text-amber-300 block font-bold text-[11px] flex items-center gap-1">
+                            🛡️ 防衛庁・防衛省リエゾン（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
+                          </strong>
+                          <p className="italic text-slate-200 mt-0.5 leading-relaxed">
+                            「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と捉えている。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
+                          </p>
+                        </div>
                         <p className="text-slate-400">
-                          💡 <strong>GM進行メモ</strong>: 司令官が必死に出動要請したにもかかわらず、政治的判断と法理の壁によって自衛隊が動かない「国家的不作為」の冷酷さを演出してください。
+                          💡 <strong>GM進行メモ</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員が大きく変わる</strong>ことをプレイヤーに示唆してください。
                         </p>
                       </div>
                     ) : (
-                      <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 text-[11px] text-indigo-200 space-y-1.5">
-                        <strong className="text-indigo-300 block font-bold text-xs flex items-center gap-1.5">
-                          🛡️ 【防衛省・統合幕僚監部からの照会：生物の進路に関する緊急意見聴取】
-                        </strong>
-                        <p className="italic text-slate-200">
-                          「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。この生物は一体どこに向かっているのか？ 進路および最終到達予測地点に関する対策本部の推定意見を至急提出されたし』」
-                        </p>
+                      <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 text-[11px] text-indigo-200 space-y-2">
+                        <div>
+                          <strong className="text-indigo-300 block font-bold text-xs flex items-center gap-1.5">
+                            🛡️ 【防衛省・統合幕僚監部からの照会：生物の進路に関する緊急意見聴取】
+                          </strong>
+                          <p className="italic text-slate-200 mt-1 leading-relaxed">
+                            「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。【この生物は一体どこへ向かっている見立てなのか？】進路および最終到達予測地点に関する対策本部の推定意見を至急提出されたし』」
+                          </p>
+                        </div>
                         <p className="text-slate-400">
-                          💡 <strong>GM進行メモ</strong>: 防衛出動を求めなかった場合、防衛庁側から生物の進路と目的についての意見を強く求められ、対策本部としての分析・責任が問われる展開となります。
+                          💡 <strong>GM進行メモ</strong>: 防衛出動を求めなかった場合も、防衛庁から生物の進路と目的についての意見を強く求められます。どのような進路予測を回答するかによって、今後の防衛庁の警戒レベルや協力関係、内閣への働きかけが変わることを示唆してください。
                         </p>
                       </div>
                     )}
                   </div>
 
-                  {/* フェーズ3：部隊再配置と東京メディア完全緘口令 */}
+                  {/* フェーズ3：部隊再配置と八丈島・近海前線情報の緊急収集 */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     <div className="rounded-lg border border-teal-900/60 bg-teal-950/20 p-3 text-[11px] space-y-1">
                       <span className="font-bold text-teal-300 block text-xs flex items-center gap-1.5">
@@ -1264,12 +1276,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </p>
                     </div>
 
-                    <div className="rounded-lg border border-red-900/60 bg-red-950/20 p-3 text-[11px] space-y-1">
-                      <span className="font-bold text-red-300 block text-xs flex items-center gap-1.5">
-                        <ShieldAlert className="h-3.5 w-3.5" /> 🚫 東京組（PC1, PC2）：メディア完全緘口令（情報統制）
+                    <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/20 p-3 text-[11px] space-y-1">
+                      <span className="font-bold text-indigo-300 block text-xs flex items-center gap-1.5">
+                        <Radio className="h-3.5 w-3.5" /> 📡 東京組（PC1, PC2）：八丈島前線情報の緊急収集
                       </span>
                       <p className="text-slate-300">
-                        官邸および警察庁より最高機密指令。パニック防止を名目に全メディア（テレビ・新聞・ネット）への情報提供を一切遮断。八丈島等のSNS投稿を緊急削除・検閲する命令が下る。
+                        八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
                       </p>
                     </div>
                   </div>

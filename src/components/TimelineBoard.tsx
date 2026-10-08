@@ -1523,7 +1523,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </p>
                         <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
                           🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
-                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（須美寿島沖海底噴火・内閣不作為とメディア緘口令・現地4大真相調査）</strong>】へと繋がります！
+                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（須美寿島沖海底噴火・内閣不作為と防衛庁意見聴取・八丈島前線情報収集と現地4大真相調査）</strong>】へと繋がります！
                         </div>
                       </div>
                     )}
@@ -1552,13 +1552,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
                       現地組: 父島本島帰還
                     </span>
-                    <span className="rounded bg-rose-950 px-2 py-0.5 font-bold text-rose-300 border border-rose-800">
-                      東京組: 完全緘口令
+                    <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                      東京組: 八丈島・近海情報収集
                     </span>
                   </div>
                 </div>
 
-                {/* 部隊再配置＆メディア緘口令バナー */}
+                {/* 部隊再配置＆八丈島情報収集バナー */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                   <div className="rounded-lg border border-teal-900/80 bg-teal-950/30 p-2.5 text-xs text-teal-200 flex items-start gap-2">
                     <Anchor className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
@@ -1572,14 +1572,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  <div className="rounded-lg border border-red-900/80 bg-red-950/30 p-2.5 text-xs text-red-200 flex items-start gap-2">
-                    <ShieldAlert className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                  <div className="rounded-lg border border-indigo-900/80 bg-indigo-950/30 p-2.5 text-xs text-indigo-200 flex items-start gap-2">
+                    <Radio className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-white block font-bold text-[11px]">
-                        🚫 東京司令部（PC1, PC2）：メディア完全緘口令（情報統制命令）
+                        📡 東京司令部（PC1, PC2）：八丈島前線情報の緊急収集
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                        内閣官房・警察庁より最高機密指令。パニック防止を名目に全報道機関への情報開示を完全封鎖。伊豆諸島住民のSNS投稿も緊急検閲・削除対象。
+                        八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
                       </p>
                     </div>
                   </div>
@@ -1682,29 +1682,37 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
 
                   {(day3HqFinalDecision === "defense_dispatch" || !day3HqFinalDecision) ? (
-                    <div className="rounded-lg border border-rose-800/80 bg-rose-950/40 p-3 text-xs text-rose-200 space-y-1.5">
+                    <div className="rounded-lg border border-rose-800/80 bg-rose-950/40 p-3 text-xs text-rose-200 space-y-2">
                       <div className="flex items-center gap-2 font-bold text-rose-300 text-xs">
                         <ShieldAlert className="h-4 w-4 text-rose-400" />
                         🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣の不作為）】
                       </div>
                       <p className="text-[11px] text-slate-200 italic leading-relaxed">
-                        「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。防衛出動の要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が警戒にあたれ』」
+                        「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。防衛出動の要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
                       </p>
-                      <p className="text-[10px] text-slate-400">
-                        ※対策本部司令官（PC1）の要請は、国家上層部の冷酷な不作為と法理の壁によって却下されました。自衛隊は動かず、現場の海上保安庁だけで対処せねばなりません。
+                      <div className="rounded bg-rose-900/40 border border-amber-700/60 p-2.5 text-[11px] text-amber-100 space-y-1">
+                        <strong className="text-amber-300 block font-bold flex items-center gap-1">
+                          🛡️ 防衛庁・防衛省リエゾン（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
+                        </strong>
+                        <p className="italic text-slate-200 leading-relaxed">
+                          「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と認識している。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
+                        </p>
+                      </div>
+                      <p className="text-[10px] text-amber-200/90 font-medium">
+                        💡 <strong>戦略的示唆</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員への働きかけが大きく左右されます</strong>。
                       </p>
                     </div>
                   ) : (
-                    <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/40 p-3 text-xs text-indigo-200 space-y-1.5">
+                    <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/40 p-3 text-xs text-indigo-200 space-y-2">
                       <div className="flex items-center gap-2 font-bold text-indigo-300 text-xs">
                         <Radio className="h-4 w-4 text-indigo-400" />
                         🛡️ 【防衛省・統合幕僚監部からの緊急照会：生物の北上進路に関する意見聴取】
                       </div>
                       <p className="text-[11px] text-slate-200 italic leading-relaxed">
-                        「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。この生物は一体どこに向かっているのか？ 進路および最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』」
+                        「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。【この生物は一体どこへ向かっている見立てなのか？】進路および最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』」
                       </p>
-                      <p className="text-[10px] text-slate-400">
-                        ※防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。
+                      <p className="text-[10px] text-indigo-200/90 font-medium">
+                        💡 <strong>戦略的示唆</strong>: 防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。回答内容によって今後の防衛庁の警戒態勢や協力関係、内閣への働きかけが変わることが示唆されます。
                       </p>
                     </div>
                   )}
