@@ -142,6 +142,20 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
 
+  // ESCキーで開いているモーダルを閉じる
+  React.useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsPhotoModalOpen(false);
+        setIsTheaterModalOpen(false);
+        setIsDay1ChartModalOpen(false);
+        setDay3IsPC6ModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   const handleToggleDay2FieldAction = (id: string) => {
     setDay2FieldActions((prev) => {
       if (prev.includes(id)) return prev.filter((i) => i !== id);
@@ -516,64 +530,108 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </p>
                 </div>
 
-                {/* ② Day 3 作戦海図 ＆ 広域火山監視図プレビュー（タブ切り替え） */}
-                <div className="space-y-2">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                {/* ② 【海図・火山監視図】タブ切り替え表示エリア */}
+                <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-4 shadow-lg space-y-3">
+                  {/* 海図ヘッダー ＆ タブ切り替えバー */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2.5">
+                    {/* タブ切り替えボタン群 */}
+                    <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
                       <button
+                        type="button"
                         onClick={() => setDay3MapTab("tactical")}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
+                        className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition shadow ${
                           day3MapTab === "tactical"
-                            ? "bg-cyan-600 text-white shadow"
-                            : "text-slate-400 hover:text-slate-200"
+                            ? "bg-cyan-600 text-white ring-1 ring-cyan-400"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                         }`}
                       >
-                        <Navigation className="h-3.5 w-3.5" />
-                        【メイン作戦海図 W-3100】ソノブイ投下・噴煙・給油艦
+                        <Navigation className="h-3.5 w-3.5 text-cyan-400" />
+                        【作戦海図 W-3100】洋上ソナー索敵作戦図
                       </button>
                       <button
+                        type="button"
                         onClick={() => setDay3MapTab("overview")}
-                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
+                        className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition shadow ${
                           day3MapTab === "overview"
-                            ? "bg-rose-700 text-white shadow"
-                            : "text-slate-400 hover:text-slate-200"
+                            ? "bg-rose-700 text-white ring-1 ring-rose-400"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                         }`}
                       >
-                        <Flame className="h-3.5 w-3.5" />
-                        【広域監視図】伊豆・小笠原火山弧 全域
+                        <Flame className="h-3.5 w-3.5 text-rose-400" />
+                        【火山活動監視図】伊豆・小笠原火山弧 全域
                       </button>
                     </div>
 
-                    <button
-                      onClick={() => setIsTheaterModalOpen(true)}
-                      className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-200 border border-slate-700 transition"
-                    >
-                      <Maximize2 className="h-3.5 w-3.5 text-cyan-400" />
-                      大画面で全機能を開く
-                    </button>
+                    {/* アクションボタン群 */}
+                    <div className="flex items-center gap-2">
+                      <a
+                        href={
+                          day3MapTab === "tactical"
+                            ? "/images/day3_sonar_tactical_chart.svg"
+                            : "/images/eruption_monitoring_chart.svg"
+                        }
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-[11px] text-slate-300 transition border border-slate-700"
+                        title="別タブで原寸SVGを開く"
+                      >
+                        <ExternalLink className="h-3 w-3" /> 別タブで開く
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setIsTheaterModalOpen(true)}
+                        className={`flex items-center gap-1 rounded px-3 py-1 text-[11px] font-bold text-white transition shadow ${
+                          day3MapTab === "tactical"
+                            ? "bg-cyan-700 hover:bg-cyan-600"
+                            : "bg-rose-700 hover:bg-rose-600"
+                        }`}
+                      >
+                        <Maximize2 className="h-3 w-3" /> 大画面で全機能を開く
+                      </button>
+                    </div>
                   </div>
 
-                  {/* マップコンポーネント表示部 */}
+                  {/* タブに応じたメイン表示部 */}
                   {day3MapTab === "tactical" ? (
-                    <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
-                      <Day3TacticalMap
-                        defaultMode={day3MapMode}
-                        onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
-                      />
+                    <div className="space-y-2">
+                      <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
+                        <Day3TacticalMap
+                          defaultMode={day3MapMode}
+                          onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between rounded-lg bg-slate-950/80 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
+                        <span>
+                          📍 <strong>縮尺 1:200,000</strong> ｜ 給油拠点: 須美寿島南西 PLH-31「あきつしま」 ｜ 噴煙高度: 8,000m
+                        </span>
+                        <span className="text-cyan-400 font-mono">
+                          海図上の照準をクリックしてソナーを投下できます
+                        </span>
+                      </div>
                     </div>
                   ) : (
-                    <div
-                      onClick={() => setIsTheaterModalOpen(true)}
-                      className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-video max-h-80 flex items-center justify-center shadow-lg"
-                    >
-                      <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
-                        <span className="text-[11px] font-semibold text-slate-200">
-                          🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2)（時速6km北上）
-                        </span>
-                        <span className="rounded bg-black/60 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                          クリックで拡大
-                        </span>
+                    <div className="space-y-2">
+                      <div
+                        onClick={() => setIsTheaterModalOpen(true)}
+                        className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-video max-h-80 flex items-center justify-center shadow-lg"
+                      >
+                        <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none">
+                          <span className="text-[11px] font-semibold text-slate-200">
+                            🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2) ｜ 北上速度: 時速約6km (日速約150km)
+                          </span>
+                          <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
+                            クリックして大画面拡大
+                          </span>
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
+                        <p>
+                          ・<strong>連動噴火の確認</strong>：西之島から鳥島までの約380kmを24時間で正確に到達。深海を北上する物体の通過が海底火山を次々と刺激して噴火を誘発している動かぬ証拠。
+                        </p>
+                        <p>
+                          ・<strong>未噴火警戒海域</strong>：北方に連なる須美寿島、青ヶ島、八丈島、伊豆諸島、駿河湾・富士山方面は現時点で未噴火（残り4日で本土直下に到達する計算）。
+                        </p>
                       </div>
                     </div>
                   )}
@@ -964,24 +1022,26 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="flex items-center gap-2">
                 <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
                   <button
+                    type="button"
                     onClick={() => setDay3MapTab("tactical")}
                     className={`px-3 py-1 rounded font-semibold transition ${
                       day3MapTab === "tactical"
-                        ? "bg-cyan-600 text-white shadow"
+                        ? "bg-cyan-600 text-white shadow ring-1 ring-cyan-400"
                         : "text-slate-400 hover:text-slate-200"
                     }`}
                   >
-                    作戦海図 W-3100 (Day 3)
+                    作戦海図 W-3100
                   </button>
                   <button
+                    type="button"
                     onClick={() => setDay3MapTab("overview")}
                     className={`px-3 py-1 rounded font-semibold transition ${
                       day3MapTab === "overview"
-                        ? "bg-rose-700 text-white shadow"
+                        ? "bg-rose-700 text-white shadow ring-1 ring-rose-400"
                         : "text-slate-400 hover:text-slate-200"
                     }`}
                   >
-                    広域火山監視図 (全域)
+                    火山活動監視図
                   </button>
                 </div>
 
@@ -995,10 +1055,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
                 </a>
                 <button
+                  type="button"
                   onClick={() => setIsTheaterModalOpen(false)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                  title="閉じる (Escキーでも閉じられます)"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" /> 閉じる
                 </button>
               </div>
             </div>
