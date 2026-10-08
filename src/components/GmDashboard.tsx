@@ -202,6 +202,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
+  const [chartModalDay, setChartModalDay] = useState<3 | 4>(3);
   const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
   const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
@@ -907,7 +908,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           <ExternalLink className="h-3 w-3" /> 別タブで開く
                         </a>
                         <button
-                          onClick={() => setIsChartModalOpen(true)}
+                          onClick={() => {
+                            setChartModalDay(3);
+                            setIsChartModalOpen(true);
+                          }}
                           className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
                         >
                           <Maximize2 className="h-3 w-3" /> 大画面で開く
@@ -917,7 +921,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     {/* 海図プレビューカード */}
                     <div
-                      onClick={() => setIsChartModalOpen(true)}
+                      onClick={() => {
+                        setChartModalDay(3);
+                        setIsChartModalOpen(true);
+                      }}
                       className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-64 flex items-center justify-center shadow-inner"
                     >
                       <EruptionMonitoringChart day={3} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
@@ -1145,7 +1152,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           <ExternalLink className="h-3 w-3" /> 別タブで開く
                         </a>
                         <button
-                          onClick={() => setIsChartModalOpen(true)}
+                          onClick={() => {
+                            setChartModalDay(4);
+                            setIsChartModalOpen(true);
+                          }}
                           className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
                         >
                           <Maximize2 className="h-3 w-3" /> 大画面で開く
@@ -1155,7 +1165,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     {/* 海図プレビューカード */}
                     <div
-                      onClick={() => setIsChartModalOpen(true)}
+                      onClick={() => {
+                        setChartModalDay(4);
+                        setIsChartModalOpen(true);
+                      }}
                       className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-60 flex items-center justify-center shadow-inner"
                     >
                       <EruptionMonitoringChart day={4} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
@@ -1558,16 +1571,20 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 <Flame className="h-5 w-5 text-rose-400" />
                 <div>
                   <h3 className="font-bold text-sm text-white">
-                    海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）
+                    {chartModalDay === 4
+                      ? "海上保安庁 火山活動監視状況図（Day 4：須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測）"
+                      : "海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）"}
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
-                    JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (WGS84) | 観測記録海図
+                    {chartModalDay === 4
+                      ? "JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84)"
+                      : "JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (WGS84) | 観測記録海図"}
                   </p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="/images/eruption_monitoring_chart.svg"
+                  href={chartModalDay === 4 ? "/images/eruption_monitoring_chart_day4.svg" : "/images/eruption_monitoring_chart.svg"}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -1585,20 +1602,36 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             </div>
 
             <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#081325] flex items-center justify-center p-2 min-h-[420px]">
-              <EruptionMonitoringChart day={3} className="w-full h-full max-h-[68vh] object-contain select-none" />
+              <EruptionMonitoringChart day={chartModalDay} className="w-full h-full max-h-[68vh] object-contain select-none" />
             </div>
 
             <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">
-              <div className="flex items-center justify-between font-semibold text-rose-300">
-                <span>【噴火日程および連動性観測所見】</span>
-                <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
-              </div>
-              <p className="text-[11px] text-slate-300 leading-relaxed">
-                ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
-                ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
-                ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
-                ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
-              </p>
+              {chartModalDay === 4 ? (
+                <>
+                  <div className="flex items-center justify-between font-semibold text-rose-300">
+                    <span>【Day 4 観測要綱および噴火連動所見】</span>
+                    <span className="font-mono text-cyan-400">連動速度: 時速約6km 北上</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    ・<strong>須美寿島〜青ヶ島沖の噴火（Day 3海底噴火）</strong>：鳥島沖を通過した深海物体が北上を継続し、須美寿島〜青ヶ島沖の海底カルデラで第3の連動大爆発が発生。他島名と重ならない海図西側に明瞭に記録。<br />
+                    ・<strong>青ヶ島・八丈島の火山性地震</strong>：海底噴火に伴い、両島にて有感を含む火山性群発微動（震度1〜2）が観測。島民に不穏な空気が広がる。<br />
+                    ・<strong>小笠原救難隊</strong>：現地捜索組は母船とともに父島本島（二見港）へ無事帰還・集結。
+                  </p>
+                </>
+              ) : (
+                <>
+                  <div className="flex items-center justify-between font-semibold text-rose-300">
+                    <span>【噴火日程および連動性観測所見】</span>
+                    <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
+                    ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
+                    ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
+                    ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
+                  </p>
+                </>
+              )}
             </div>
           </div>
         </div>
