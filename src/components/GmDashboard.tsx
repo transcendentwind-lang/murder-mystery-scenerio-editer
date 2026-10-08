@@ -920,7 +920,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       onClick={() => setIsChartModalOpen(true)}
                       className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-64 flex items-center justify-center shadow-inner"
                     >
-                      <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                      <EruptionMonitoringChart day={3} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                         <span className="text-[11px] font-semibold text-slate-200">
                           🔴 西之島 ➔ 鳥島沖 連動噴火軸 ｜ 北上速度: 時速約6km (日速約150km)
@@ -1585,7 +1585,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             </div>
 
             <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#081325] flex items-center justify-center p-2 min-h-[420px]">
-              <EruptionMonitoringChart className="w-full h-full max-h-[68vh] object-contain select-none" />
+              <EruptionMonitoringChart day={3} className="w-full h-full max-h-[68vh] object-contain select-none" />
             </div>
 
             <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">

@@ -731,7 +731,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         onClick={() => setIsTheaterModalOpen(true)}
                         className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-video max-h-80 flex items-center justify-center shadow-lg"
                       >
-                        <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                        <EruptionMonitoringChart day={3} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none">
                           <span className="text-[11px] font-semibold text-slate-200">
                             🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2) ｜ 北上速度: 時速約6km (日速約150km)
@@ -2159,7 +2159,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 />
               ) : (
                 <div className="w-full h-full p-2 flex items-center justify-center">
-                  <EruptionMonitoringChart className="w-full h-full max-h-[70vh] object-contain select-none" />
+                  <EruptionMonitoringChart day={3} className="w-full h-full max-h-[70vh] object-contain select-none" />
                 </div>
               )}
             </div>

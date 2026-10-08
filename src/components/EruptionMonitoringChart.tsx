@@ -9,7 +9,7 @@ interface EruptionMonitoringChartProps {
 
 export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = ({
   className = "w-full h-full",
-  day = 4,
+  day = 3,
 }) => {
   const isDay4OrLater = day >= 4;
 
@@ -404,7 +404,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <ellipse cx="943.3" cy="656.6" rx="7" ry="9" fill="#334155" stroke="#38bdf8" strokeWidth="1.5" />
       <circle cx="943.3" cy="656.6" r="2.5" fill="#38bdf8" />
       <text x="956.3" y="660.6" fill="#e2e8f0" fontSize="11" fontWeight="bold">父島</text>
-      <text x="956.3" y="672.6" fill="#0284c7" fontSize="9">小笠原救難隊 本拠地（現地組帰還）</text>
+      <text x="956.3" y="672.6" fill="#0284c7" fontSize="9">
+        {isDay4OrLater ? "小笠原救難隊 本拠地（現地組帰還）" : "小笠原救難隊 本拠地"}
+      </text>
 
       {/* 母島 */}
       <ellipse cx="936.5" cy="684.0" rx="6" ry="8" fill="#334155" stroke="#38bdf8" strokeWidth="1.5" />
@@ -441,7 +443,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         {/* 凡例1 */}
         <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444" />
         <text x="32" y="36" fill="#fca5a5" fontSize="10" fontWeight="bold">
-          噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 須美寿〜青ヶ島沖）
+          {isDay4OrLater
+            ? "噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 須美寿〜青ヶ島沖）"
+            : "噴火確認地点（Day 1 西之島 / Day 2 鳥島）"}
         </text>
         {/* 凡例2 */}
         {isDay4OrLater && (
