@@ -34,6 +34,7 @@ import { TOKYO_ACTIONS, FIELD_ACTIONS } from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
+import { Day3TacticalMap } from "./Day3TacticalMap";
 
 // Day 3 ヘリコプター洋上捜索（ソナー投下地点）の定義
 export interface SonarDropPoint {
@@ -138,6 +139,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3DroppedPoints, setDay3DroppedPoints] = useState<string[]>([]);
   const [day3IsReportUnlocked, setDay3IsReportUnlocked] = useState<boolean>(false);
   const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
+  const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
+  const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
 
   const handleToggleDay2FieldAction = (id: string) => {
     setDay2FieldActions((prev) => {
@@ -513,20 +516,67 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </p>
                 </div>
 
-                {/* ② 海上保安庁 火山活動監視状況図（日本語版プレビュー） */}
-                <div
-                  onClick={() => setIsTheaterModalOpen(true)}
-                  className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-[#081325] aspect-video max-h-56 flex items-center justify-center shadow-lg"
-                >
-                  <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
-                    <span className="text-[11px] font-semibold text-slate-200">
-                      🔴 噴火観測記録: 西之島(Day 1) ｜ 鳥島沖(Day 2)（熱水プルーム・音響クラッター注意）
-                    </span>
-                    <span className="rounded bg-black/60 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                      クリックで拡大
-                    </span>
+                {/* ② Day 3 作戦海図 ＆ 広域火山監視図プレビュー（タブ切り替え） */}
+                <div className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+                      <button
+                        onClick={() => setDay3MapTab("tactical")}
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
+                          day3MapTab === "tactical"
+                            ? "bg-cyan-600 text-white shadow"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        <Navigation className="h-3.5 w-3.5" />
+                        【メイン作戦海図 W-3100】ソノブイ投下・噴煙・給油艦
+                      </button>
+                      <button
+                        onClick={() => setDay3MapTab("overview")}
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
+                          day3MapTab === "overview"
+                            ? "bg-rose-700 text-white shadow"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        <Flame className="h-3.5 w-3.5" />
+                        【広域監視図】伊豆・小笠原火山弧 全域
+                      </button>
+                    </div>
+
+                    <button
+                      onClick={() => setIsTheaterModalOpen(true)}
+                      className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-200 border border-slate-700 transition"
+                    >
+                      <Maximize2 className="h-3.5 w-3.5 text-cyan-400" />
+                      大画面で全機能を開く
+                    </button>
                   </div>
+
+                  {/* マップコンポーネント表示部 */}
+                  {day3MapTab === "tactical" ? (
+                    <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
+                      <Day3TacticalMap
+                        defaultMode={day3MapMode}
+                        onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
+                      />
+                    </div>
+                  ) : (
+                    <div
+                      onClick={() => setIsTheaterModalOpen(true)}
+                      className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-video max-h-80 flex items-center justify-center shadow-lg"
+                    >
+                      <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                        <span className="text-[11px] font-semibold text-slate-200">
+                          🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2)（時速6km北上）
+                        </span>
+                        <span className="rounded bg-black/60 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
+                          クリックで拡大
+                        </span>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* ③ メイン協力パズル：アクティブソナー3点投下作戦 */}
@@ -882,34 +932,64 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         </div>
       )}
 
-      {/* Day 3 火山活動監視状況図モーダル */}
+      {/* Day 3 作戦海図 ＆ 火山活動監視図モーダル */}
       {isTheaterModalOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
           onClick={() => setIsTheaterModalOpen(false)}
         >
           <div
-            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* モーダルヘッダー */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Flame className="h-5 w-5 text-rose-400" />
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-950 border border-cyan-800 text-cyan-400">
+                  <Navigation className="h-5 w-5" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white">
-                    海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺）
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    {day3MapTab === "tactical"
+                      ? "【作戦海図 W-3100】鳥島〜須美寿島海域 ヘリコプター洋上ソナー索敵作戦図"
+                      : "海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）"}
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
-                    JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (WGS84) | 観測記録海図
+                    JAPAN COAST GUARD &amp; SDF TACTICAL MARITIME CHART (WGS84)
                   </p>
                 </div>
               </div>
+
+              {/* タブ切り替え ＆ アクションボタン */}
               <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+                  <button
+                    onClick={() => setDay3MapTab("tactical")}
+                    className={`px-3 py-1 rounded font-semibold transition ${
+                      day3MapTab === "tactical"
+                        ? "bg-cyan-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    作戦海図 W-3100 (Day 3)
+                  </button>
+                  <button
+                    onClick={() => setDay3MapTab("overview")}
+                    className={`px-3 py-1 rounded font-semibold transition ${
+                      day3MapTab === "overview"
+                        ? "bg-rose-700 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    広域火山監視図 (全域)
+                  </button>
+                </div>
+
                 <a
-                  href="/images/eruption_monitoring_chart.svg"
+                  href={day3MapTab === "tactical" ? "/images/day3_sonar_tactical_chart.svg" : "/images/eruption_monitoring_chart.svg"}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
                   title="原寸ベクターSVGを別タブで表示"
                 >
                   <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
@@ -923,21 +1003,41 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             </div>
 
-            <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#081325] flex items-center justify-center p-2 min-h-[420px]">
-              <EruptionMonitoringChart className="w-full h-full max-h-[68vh] object-contain select-none" />
+            {/* モーダルメイン表示部 */}
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px]">
+              {day3MapTab === "tactical" ? (
+                <Day3TacticalMap
+                  defaultMode={day3MapMode}
+                  onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
+                />
+              ) : (
+                <div className="w-full h-full p-2 flex items-center justify-center">
+                  <EruptionMonitoringChart className="w-full h-full max-h-[70vh] object-contain select-none" />
+                </div>
+              )}
             </div>
 
-            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">
-              <div className="flex items-center justify-between font-semibold text-rose-300">
-                <span>【噴火日程および連動性観測所見】</span>
-                <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
-              </div>
-              <p className="text-[11px] text-slate-300 leading-relaxed">
-                ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
-                ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
-                ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
-                ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火。
-              </p>
+            {/* モーダル下部解説 */}
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
+              {day3MapTab === "tactical" ? (
+                <div className="flex items-center justify-between text-[11px] leading-relaxed">
+                  <div>
+                    <span className="font-bold text-cyan-300">【海図作戦要項】</span>
+                    鳥島沖カルデラから半径25kmの熱水気泡障害圏（自動失敗）を回避し、クリアな平原海盆にソノブイを投下して三辺測量を実施せよ。
+                  </div>
+                  <div className="font-mono text-slate-400">
+                    給油拠点: 須美寿島南西 PLH-31「あきつしま」
+                  </div>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between text-[11px] leading-relaxed">
+                  <div>
+                    <span className="font-bold text-rose-300">【広域噴火観測】</span>
+                    Day 1 西之島 ➔ Day 2 鳥島沖。時速約6km（日速約150km）のペースで海底火山を刺激しながら北上中。
+                  </div>
+                  <span className="font-mono text-cyan-400">未噴火警戒域: 須美寿島〜伊豆半島</span>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -1005,6 +1105,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
           </div>
         </div>
+      )}
+
       {/* Day 3 PC6 個別ハンドアウト モーダル */}
       {day3IsPC6ModalOpen && (
         <div

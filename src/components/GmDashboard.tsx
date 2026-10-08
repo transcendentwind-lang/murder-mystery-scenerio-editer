@@ -22,8 +22,15 @@ import {
   Building2,
   Anchor,
   HelpCircle,
+  Flame,
+  Maximize2,
+  ExternalLink,
+  Compass,
+  Radar,
+  Scroll,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
+import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 
 export interface Day2ActionOption {
   id: string;
@@ -121,6 +128,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [selectedTokyoAction, setSelectedTokyoAction] = useState<string>("T-3");
   const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
+  const [isChartModalOpen, setIsChartModalOpen] = useState(false);
 
   const handleToggleFieldAction = (id: string) => {
     setSelectedFieldActions((prev) => {
@@ -727,6 +735,150 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 </div>
               )}
 
+              {currentDay === 3 && (
+                <div className="space-y-4 text-xs leading-relaxed">
+                  {/* フェーズ1：鳥島沖海底大噴火 GMアナウンス */}
+                  <div className="rounded-lg border border-amber-900/60 bg-amber-950/25 p-3.5 shadow-sm">
+                    <div className="flex items-center gap-2">
+                      <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
+                      <span className="font-bold text-amber-300">
+                        【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
+                      </span>
+                    </div>
+                    <div className="mt-2 rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
+                      <p className="font-semibold text-white">
+                        🚨 緊急速報：鳥島沖海底カルデラが連動大爆発（Day 2未明）
+                      </p>
+                      <p className="mt-0.5 text-slate-300">
+                        西之島から北へ約380km。時速約6km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
+                      </p>
+                    </div>
+                    <p className="text-slate-300 mt-2.5 italic">
+                      「小笠原基地より大型捜索ヘリを緊急発進。洋上に展開する巡視船PLH-31『あきつしま』での洋上給油を中継して現場海域へ投入する。任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して三辺測量で距離を割り出し、その姿を捉えよ！』」
+                    </p>
+                  </div>
+
+                  {/* フェーズ2：西之島と鳥島沖 火山フロント全体像（監視状況図） */}
+                  <div className="rounded-xl border border-rose-900/60 bg-slate-900 p-4 shadow-md space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Flame className="h-4 w-4 text-rose-400" />
+                        <div>
+                          <span className="font-bold text-white text-xs">
+                            【火山フロント全体像】海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺）
+                          </span>
+                          <span className="ml-2 text-[10px] text-slate-400 font-mono">
+                            西之島(Day 1) ➔ 鳥島沖(Day 2) 北上軌跡
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href="/images/eruption_monitoring_chart.svg"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
+                        >
+                          <ExternalLink className="h-3 w-3" /> 別タブで開く
+                        </a>
+                        <button
+                          onClick={() => setIsChartModalOpen(true)}
+                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3 w-3" /> 大画面で開く
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 海図プレビューカード */}
+                    <div
+                      onClick={() => setIsChartModalOpen(true)}
+                      className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-64 flex items-center justify-center shadow-inner"
+                    >
+                      <EruptionMonitoringChart className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                        <span className="text-[11px] font-semibold text-slate-200">
+                          🔴 西之島 ➔ 鳥島沖 連動噴火軸 ｜ 北上速度: 時速約6km (日速約150km)
+                        </span>
+                        <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
+                          クリックで拡大
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* GM用 火山フロント観測解説ノート */}
+                    <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-3 space-y-1.5 text-[11px] text-slate-300">
+                      <div className="flex items-center justify-between font-semibold text-rose-300">
+                        <span>【GM用 火山フロント観測解説ノート】</span>
+                        <span className="font-mono text-cyan-400">タイムリミット: 残り4日（Day 7駿河湾到達）</span>
+                      </div>
+                      <p>
+                        ・<strong>連動噴火のドミノ倒し</strong>：Day 1（西之島）➔ Day 2（鳥島沖海底カルデラ）。距離約380kmを24時間で正確に到達しており、深海800mを時速約6kmで北上する物体が、通過した先々のマグマ溜まりを刺激して噴火させている動かぬ証拠。
+                      </p>
+                      <p>
+                        ・<strong>未噴火海域（北方）</strong>：須美寿島、青ヶ島、八丈島、三宅島、伊豆諸島、駿河湾・富士山直下は現時点で未噴火。このペースで直進すると4日後に本土直下へ到達。
+                      </p>
+                      <p>
+                        ・<strong>熱水プルーム警戒域（音響障害）</strong>：鳥島北東カルデラおよび須美寿島東熱水噴出孔の周辺（半径25km圏内）は、気泡と熱水により激しい音響散乱（クラッター）が発生する危険海域。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ3：アクティブ・ソノブイ3点投下作戦（GM正解メモ） */}
+                  <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/20 p-3.5 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                        <Radar className="h-4 w-4 text-cyan-400" />
+                        【フェーズ3：アクティブソナー3点投下作戦（GM正解・判定メモ）】
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-mono">
+                        ヘリ搭載ソノブイ: 最大3機
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="rounded bg-red-950/40 border border-red-900/60 p-2 text-red-200">
+                        <strong className="text-red-300 block mb-0.5">💥 自動失敗トラップ（半径25km圏内）:</strong>
+                        ・地点A（鳥島北東）: カルデラ直近の微細気泡でクラッター飽和！<br />
+                        ・地点B（須美寿東）: 熱水噴出孔の水温躍層でNO RETURN！
+                      </div>
+                      <div className="rounded bg-emerald-950/40 border border-emerald-900/60 p-2 text-emerald-200">
+                        <strong className="text-emerald-300 block mb-0.5">📡 有効測距地点（三辺測量正解）:</strong>
+                        ・地点C（鳥島北西）: 反響距離 <strong>約32km</strong><br />
+                        ・地点D（須美寿西）: 反響距離 <strong>約20km</strong><br />
+                        ・地点E（青ヶ島南西）: 反響距離 <strong>約28km</strong>
+                      </div>
+                    </div>
+
+                    <div className="rounded bg-slate-900 p-2.5 border border-slate-800 text-[11px] text-slate-300 space-y-1">
+                      <p>
+                        🎯 <strong className="text-cyan-300">怪物の現在潜航位置</strong>：
+                        須美寿島の西方約35km（31°22&apos;N, 139°42&apos;E）、水深約400m。
+                      </p>
+                      <p>
+                        📋 <strong className="text-white">三辺測量成功時</strong>：
+                        ヘリが直上へ急行し、「水深400mを北上する全長300〜400mの生体シグネチャー」の撮影レポートが開示される。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ4：PC6 個別ハンドアウト（神職の儀式）GMガイド */}
+                  <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-3 space-y-1.5">
+                    <div className="flex items-center gap-1.5 font-bold text-indigo-300 text-xs">
+                      <Scroll className="h-4 w-4 text-indigo-400" />
+                      【フェーズ4：PC6（神職）個別ハンドアウト GMガイド】
+                    </div>
+                    <blockquote className="border-l-2 border-indigo-500 pl-3 py-0.5 text-slate-300 text-[11px] italic">
+                      「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
+                    </blockquote>
+                    <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
+                      ⚠️ <strong>【重要制約】</strong>:
+                      PC6に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {currentDay === 5 && (
                 <div className="space-y-2 text-xs leading-relaxed">
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
@@ -915,6 +1067,67 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 ・ケルビン波が海面に現れていることから、撮影当時、対象は海底火山の高温熱水を回避するために一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
                 ・水面下に透けて見える影の推定全長は<strong>300〜400メートル</strong>。<br />
                 ・なお、撮影から数分後、影は急速に水深800m以深の深海へ潜航し、光学視界から消失した。
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 火山活動監視状況図 大画面モーダル */}
+      {isChartModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsChartModalOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2">
+                <Flame className="h-5 w-5 text-rose-400" />
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (WGS84) | 観測記録海図
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/images/eruption_monitoring_chart.svg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                  title="原寸ベクターSVGを別タブで表示"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+                <button
+                  onClick={() => setIsChartModalOpen(false)}
+                  className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#081325] flex items-center justify-center p-2 min-h-[420px]">
+              <EruptionMonitoringChart className="w-full h-full max-h-[68vh] object-contain select-none" />
+            </div>
+
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1">
+              <div className="flex items-center justify-between font-semibold text-rose-300">
+                <span>【噴火日程および連動性観測所見】</span>
+                <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
+              </div>
+              <p className="text-[11px] text-slate-300 leading-relaxed">
+                ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
+                ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
+                ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
+                ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
               </p>
             </div>
           </div>

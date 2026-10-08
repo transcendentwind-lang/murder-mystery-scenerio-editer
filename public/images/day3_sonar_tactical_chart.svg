@@ -1,0 +1,258 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800" style="background:#07111e; font-family:'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;">
+  <defs>
+    <radialGradient id="trench-deep" cx="80%" cy="50%" r="60%">
+      <stop offset="0%" stop-color="#020813" stop-opacity="0.95" />
+      <stop offset="100%" stop-color="#07111e" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="ash-cloud-grad" cx="40%" cy="50%" r="55%">
+      <stop offset="0%" stop-color="#dc2626" stop-opacity="0.85" />
+      <stop offset="30%" stop-color="#78350f" stop-opacity="0.65" />
+      <stop offset="70%" stop-color="#451a03" stop-opacity="0.45" />
+      <stop offset="100%" stop-color="#1e293b" stop-opacity="0" />
+    </radialGradient>
+
+    <pattern id="plume-dots" width="12" height="12" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.5" fill="#f59e0b" opacity="0.4" />
+      <circle cx="9" cy="9" r="2.0" fill="#f97316" opacity="0.5" />
+      <circle cx="9" cy="3" r="1.0" fill="#ef4444" opacity="0.4" />
+    </pattern>
+
+    <filter id="monster-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- 背景海域 -->
+  <rect width="1000" height="800" fill="#07111e" />
+  <rect x="750" y="50" width="220" height="700" fill="url(#trench-deep)" />
+
+  <!-- 1. 経緯度グリッド線 -->
+  <line x1="120" y1="50" x2="120" y2="750" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="120" y="42" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">139°00'E</text>
+  <text x="120" y="768" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">139°00'E</text>
+
+  <line x1="310" y1="50" x2="310" y2="750" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="310" y="42" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">139°30'E</text>
+  <text x="310" y="768" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">139°30'E</text>
+
+  <line x1="500" y1="50" x2="500" y2="750" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4" />
+  <text x="500" y="42" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">140°00'E</text>
+  <text x="500" y="768" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold" text-anchor="middle">140°00'E</text>
+
+  <line x1="690" y1="50" x2="690" y2="750" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="690" y="42" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">140°30'E</text>
+  <text x="690" y="768" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">140°30'E</text>
+
+  <line x1="880" y1="50" x2="880" y2="750" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="880" y="42" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">141°00'E</text>
+  <text x="880" y="768" fill="#64748b" font-size="10" font-family="monospace" text-anchor="middle">141°00'E</text>
+
+  <line x1="90" y1="720" x2="910" y2="720" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="80" y="724" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">30°00'N</text>
+
+  <line x1="90" y1="605" x2="910" y2="605" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="80" y="609" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">30°30'N</text>
+
+  <line x1="90" y1="491" x2="910" y2="491" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4" />
+  <text x="80" y="495" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold" text-anchor="end">31°00'N</text>
+
+  <line x1="90" y1="377" x2="910" y2="377" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="80" y="381" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">31°30'N</text>
+
+  <line x1="90" y1="263" x2="910" y2="263" stroke="#334155" stroke-width="1.2" stroke-dasharray="4,4" />
+  <text x="80" y="267" fill="#94a3b8" font-size="11" font-family="monospace" font-weight="bold" text-anchor="end">32°00'N</text>
+
+  <line x1="90" y1="148" x2="910" y2="148" stroke="#1e293b" stroke-width="1" stroke-dasharray="3,3" />
+  <text x="80" y="152" fill="#64748b" font-size="10" font-family="monospace" text-anchor="end">32°30'N</text>
+
+  <!-- 2. 作戦セクターグリッド -->
+  <g stroke="#0e3a5a" stroke-width="1" stroke-dasharray="6,4" fill="none">
+    <line x1="120" y1="263" x2="880" y2="263" />
+    <line x1="120" y1="491" x2="880" y2="491" />
+    <line x1="380" y1="50" x2="380" y2="750" />
+    <line x1="640" y1="50" x2="640" y2="750" />
+  </g>
+
+  <g fill="#38bdf8" opacity="0.3" font-size="12" font-weight="bold" font-family="monospace">
+    <text x="140" y="80">SECTOR-1 [NORTH-WEST]</text>
+    <text x="400" y="80">SECTOR-2 [NORTH-AXIS]</text>
+    <text x="660" y="80">SECTOR-3 [NORTH-EAST]</text>
+    <text x="140" y="295">SECTOR-4 [MID-WEST]</text>
+    <text x="400" y="295">SECTOR-5 [MID-AXIS]</text>
+    <text x="660" y="295">SECTOR-6 [MID-EAST]</text>
+    <text x="140" y="525">SECTOR-7 [SOUTH-WEST]</text>
+    <text x="400" y="525">SECTOR-8 [SOUTH-AXIS]</text>
+    <text x="660" y="525">SECTOR-9 [SOUTH-EAST]</text>
+  </g>
+
+  <!-- 3. 火山フロント軸 -->
+  <path d="M 620 740 Q 580 500 520 380 T 410 160" fill="none" stroke="#991b1b" stroke-width="2.5" stroke-dasharray="6,4" opacity="0.6" />
+  <text x="475" y="280" fill="#f87171" font-size="10" opacity="0.75" transform="rotate(-65 475 280)">◀ 伊豆・小笠原火山フロント軸（海底海嶺）</text>
+
+  <!-- 4. 主要島嶼 -->
+  <!-- 青ヶ島 -->
+  <g transform="translate(411, 160)">
+    <ellipse rx="7" ry="9" fill="#15803d" stroke="#22c55e" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="2.5" fill="#facc15" />
+    <text x="14" y="4" fill="#ffffff" font-size="12" font-weight="bold">青ヶ島</text>
+    <text x="14" y="16" fill="#86efac" font-size="9" font-family="monospace">Aogashima (32°27'N)</text>
+  </g>
+
+  <!-- 須美寿島 -->
+  <g transform="translate(519, 392)">
+    <ellipse rx="5" ry="6" fill="#166534" stroke="#4ade80" stroke-width="1.2" />
+    <circle cx="0" cy="0" r="2" fill="#facc15" />
+    <text x="12" y="4" fill="#ffffff" font-size="12" font-weight="bold">須美寿島</text>
+    <text x="12" y="16" fill="#86efac" font-size="9" font-family="monospace">Sumisu Jima (31°26'N)</text>
+  </g>
+
+  <!-- 鳥島 -->
+  <g transform="translate(614, 610)">
+    <ellipse rx="8" ry="8" fill="#15803d" stroke="#22c55e" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#ef4444" />
+    <text x="-12" y="-12" fill="#ffffff" font-size="12" font-weight="bold" text-anchor="end">鳥島</text>
+    <text x="-12" y="0" fill="#86efac" font-size="9" font-family="monospace" text-anchor="end">Torishima (30°29'N)</text>
+  </g>
+
+  <!-- 5. 鳥島沖海底カルデラ ＆ 噴煙範囲 -->
+  <g transform="translate(639, 613)">
+    <circle cx="0" cy="0" r="28" fill="#1e1b4b" opacity="0.6" stroke="#f43f5e" stroke-width="2" stroke-dasharray="4,2" />
+    <circle cx="0" cy="0" r="16" fill="#4c0519" opacity="0.8" stroke="#fb7185" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="6" fill="#f43f5e" />
+    <circle cx="0" cy="0" r="3" fill="#ffffff" />
+    <text x="34" y="-10" fill="#f43f5e" font-size="13" font-weight="bold">★ 鳥島沖海底カルデラ（噴火震源地）</text>
+    <text x="34" y="6" fill="#fda4af" font-size="10">Day 2突発的大水蒸気爆発 | 水深-800m</text>
+    <text x="34" y="18" fill="#fda4af" font-size="9" font-family="monospace">30°28'N, 140°22'E (直径約9km)</text>
+  </g>
+
+  <!-- 噴煙柱および降灰域 -->
+  <g>
+    <ellipse cx="700" cy="580" rx="105" ry="65" transform="rotate(-25 700 580)" fill="url(#ash-cloud-grad)" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4,3" opacity="0.85" />
+    <line x1="610" y1="650" x2="720" y2="520" stroke="#f87171" stroke-width="2" stroke-dasharray="3,3" />
+    <polygon points="725,515 712,522 721,531" fill="#f87171" />
+    <text x="640" y="670" fill="#fca5a5" font-size="10" font-weight="bold">風向: 南西 ➔ 北東 (噴煙・火山灰拡散軸)</text>
+    <rect x="680" y="520" width="165" height="42" rx="4" fill="#0f172a" opacity="0.85" stroke="#ef4444" stroke-width="1" />
+    <text x="688" y="536" fill="#fca5a5" font-size="10" font-weight="bold">⚠️ 噴煙柱高度 8,000m 拡散域</text>
+    <text x="688" y="552" fill="#cbd5e1" font-size="9">航空危険空域 (NOTAM) / 降灰域</text>
+  </g>
+
+  <!-- 6. 熱水プルーム音響クラッター障害危険圏 (R=25km) -->
+  <g transform="translate(639, 613)">
+    <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,4" />
+    <text x="-52" y="70" fill="#f97316" font-size="9" font-weight="bold" font-family="monospace">[熱水プルーム障害圏 R=25km]</text>
+  </g>
+
+  <g transform="translate(722, 396)">
+    <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" stroke-width="1.5" stroke-dasharray="4,4" />
+    <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#fed7aa" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#ffffff" />
+    <text x="-45" y="-14" fill="#fb923c" font-size="11" font-weight="bold">♨ 須美寿東 海底熱水噴出孔群</text>
+    <text x="-45" y="70" fill="#f97316" font-size="9" font-weight="bold" font-family="monospace">[熱水プルーム障害圏 R=25km]</text>
+  </g>
+
+  <!-- 7. 洋上給油巡視船 PLH-31「あきつしま」 -->
+  <g transform="translate(278, 510)">
+    <circle cx="0" cy="0" r="22" fill="#0369a1" opacity="0.3" stroke="#38bdf8" stroke-width="1.2" stroke-dasharray="3,3" />
+    <polygon points="-14,5 14,5 18,-2 10,-6 -10,-6 -14,5" fill="#0284c7" stroke="#38bdf8" stroke-width="1.5" />
+    <circle cx="6" cy="0" r="4" fill="none" stroke="#ffffff" stroke-width="1" />
+    <text x="6" y="2.5" fill="#ffffff" font-size="5" font-weight="bold" text-anchor="middle">H</text>
+    <rect x="-8" y="-9" width="8" height="4" fill="#e0f2fe" />
+
+    <rect x="25" y="-18" width="185" height="46" rx="4" fill="#082f49" opacity="0.9" stroke="#0ea5e9" stroke-width="1" />
+    <text x="32" y="-4" fill="#38bdf8" font-size="11" font-weight="bold">⚓ 海上保安庁 PLH-31「あきつしま」</text>
+    <text x="32" y="10" fill="#e0f2fe" font-size="9">ヘリ甲板搭載・洋上給油中継拠点 (FARP)</text>
+    <text x="32" y="22" fill="#7dd3fc" font-size="8.5" font-family="monospace">30°55'N, 139°25'E (静穏深海域に待機)</text>
+
+    <path d="M 18 -15 Q 150 -50 250 -100" fill="none" stroke="#38bdf8" stroke-width="1.8" stroke-dasharray="4,3" />
+    <text x="120" y="-70" fill="#bae6fd" font-size="9" font-weight="bold">✈ 捜索ヘリ洋上進出ルート</text>
+  </g>
+
+  <!-- 8. ソナー投下地点グリッド (A〜F) -->
+  <g transform="translate(785, 567)">
+    <circle cx="0" cy="0" r="14" fill="#450a0a" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#dc2626" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#dc2626" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#f87171" />
+    <text x="16" y="-6" fill="#f87171" font-size="11" font-weight="bold">地点A [セクターα]</text>
+    <text x="16" y="8" fill="#fca5a5" font-size="8.5">鳥島北東カルデラ海域</text>
+  </g>
+
+  <g transform="translate(722, 396)">
+    <circle cx="0" cy="0" r="14" fill="#450a0a" stroke="#dc2626" stroke-width="2" stroke-dasharray="3,2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#dc2626" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#dc2626" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#f87171" />
+    <text x="16" y="-6" fill="#f87171" font-size="11" font-weight="bold">地点B [セクターβ]</text>
+    <text x="16" y="8" fill="#fca5a5" font-size="8.5">須美寿島東・海嶺帯</text>
+  </g>
+
+  <g transform="translate(405, 530)">
+    <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#34d399" />
+    <text x="16" y="-6" fill="#34d399" font-size="11" font-weight="bold">地点C [セクターγ]</text>
+    <text x="16" y="8" fill="#a7f3d0" font-size="8.5">鳥島北西・静穏海盆</text>
+  </g>
+
+  <g transform="translate(310, 377)">
+    <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#34d399" />
+    <text x="16" y="-6" fill="#34d399" font-size="11" font-weight="bold">地点D [セクターδ]</text>
+    <text x="16" y="8" fill="#a7f3d0" font-size="8.5">須美寿島西・海嶺西平原</text>
+  </g>
+
+  <g transform="translate(278, 244)">
+    <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#34d399" />
+    <text x="16" y="-6" fill="#34d399" font-size="11" font-weight="bold">地点E [セクターε]</text>
+    <text x="16" y="8" fill="#a7f3d0" font-size="8.5">青ヶ島南西・深海盆</text>
+  </g>
+
+  <g transform="translate(215, 110)">
+    <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" stroke-width="2" />
+    <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" stroke-width="1.5" />
+    <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" stroke-width="1.5" />
+    <circle cx="0" cy="0" r="3" fill="#34d399" />
+    <text x="16" y="-6" fill="#34d399" font-size="11" font-weight="bold">地点F [セクターζ]</text>
+    <text x="16" y="8" fill="#a7f3d0" font-size="8.5">八丈島南西・北方沖</text>
+  </g>
+
+  <!-- 凡例 -->
+  <g transform="translate(30, 620)">
+    <rect width="210" height="110" rx="6" fill="#091424" opacity="0.92" stroke="#1e293b" stroke-width="1.2" />
+    <text x="12" y="18" fill="#94a3b8" font-size="10" font-weight="bold">【海図凡例 / LEGEND】</text>
+    <circle cx="20" cy="34" r="5" fill="#f43f5e" />
+    <text x="32" y="37" fill="#cbd5e1" font-size="9">海底カルデラ（噴火震源地）</text>
+    <rect x="15" y="46" width="10" height="10" fill="url(#plume-dots)" stroke="#f97316" stroke-width="0.8" />
+    <text x="32" y="54" fill="#cbd5e1" font-size="9">熱水プルーム域 (R=25km 自動失敗)</text>
+    <polygon points="14,72 26,72 28,66 22,64 16,64" fill="#0284c7" />
+    <text x="32" y="70" fill="#cbd5e1" font-size="9">洋上給油巡視船 PLH「あきつしま」</text>
+    <circle cx="20" cy="85" r="5" fill="#064e3b" stroke="#10b981" stroke-width="1" />
+    <text x="32" y="88" fill="#cbd5e1" font-size="9">ソナー投下候補グリッド (A〜F)</text>
+    <ellipse cx="20" cy="100" rx="7" ry="4" fill="#dc2626" opacity="0.7" />
+    <text x="32" y="103" fill="#cbd5e1" font-size="9">噴煙柱・降灰拡散域 (8,000m)</text>
+  </g>
+
+  <!-- 方位盤 -->
+  <g transform="translate(930, 110)">
+    <circle cx="0" cy="0" r="28" fill="none" stroke="#334155" stroke-width="1" />
+    <line x1="0" y1="-28" x2="0" y2="28" stroke="#475569" stroke-width="1" />
+    <line x1="-28" y1="0" x2="28" y2="0" stroke="#475569" stroke-width="1" />
+    <polygon points="0,-28 -5,-10 0,-15 5,-10" fill="#38bdf8" />
+    <polygon points="0,28 -5,10 0,15 5,10" fill="#64748b" />
+    <text x="0" y="-32" fill="#38bdf8" font-size="10" font-weight="bold" text-anchor="middle">N</text>
+    <text x="0" y="40" fill="#64748b" font-size="9" text-anchor="middle">S</text>
+    <text x="36" y="3" fill="#64748b" font-size="9" text-anchor="middle">E</text>
+    <text x="-36" y="3" fill="#64748b" font-size="9" text-anchor="middle">W</text>
+  </g>
+</svg>
