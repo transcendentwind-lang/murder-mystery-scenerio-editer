@@ -972,21 +972,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </div>
 
                           <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
-                            <div>高度: <strong>320 m (約1,050 ft)</strong></div>
+                            <div>高度: <strong>2,500 ft (約760m)</strong></div>
                             <div>海域: <strong>鳥島北西 約40km</strong></div>
                             <div>速度: <strong>時速約6km 北上</strong></div>
-                            <div>機材: <strong>FLIR赤外光学ポッド</strong></div>
+                            <div>機材: <strong>FLIR赤外光学ポッド (WHOT)</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">海面下シャドウ</strong>: 本体は完全に海面下に没しており、巨大な外套膜が黒い深海シルエットとして確認できる。
+                              ・<strong className="text-white">広大な横幅の超群体</strong>: 単体のイカ頭部ではなく、<strong>横幅数百メートルに及ぶ広大な海面下の生体質量</strong>として深海シャドウを記録。
                             </p>
                             <p>
-                              ・<strong className="text-white">数十本の触手群（超群体）</strong>: 背後には<strong>ダイオウイカ少なくとも20匹分に相当する無数の触手</strong>が密集し、海中を長く直線的にたなびく異様な光景を記録。
+                              ・<strong className="text-white">無数の増殖触手群</strong>: 幅広い後背部全体から、<strong>ダイオウイカ多数が結合した膨大な本数の触手</strong>が束ねられ、海中深くを直線的にたなびく圧倒的シルエット。
                             </p>
                             <p>
-                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下を泳ぎ去る巨大な質量により、幅数百メートルに及ぶ猛烈な白波と渦流が発生。
+                              ・<strong className="text-white">巨大な航跡波</strong>: 広大な横幅の遊泳に伴い、海面には猛烈な白波とV字型のケルビン波が発生。
                             </p>
                           </div>
                         </div>
@@ -1620,7 +1620,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
                     {day3PhotoModal === "success"
-                      ? "TIME: 14:32:01 UTC | ALT: 1,500 FT | GPS: 14°N 165°W | TARGET: SUB-SURFACE ENTITY (SPINDLE FORM)"
+                      ? "TIME: 03:45:12 UTC | ALT: 2,500 FT | CAM: FLIR (WHOT) | TARGET: UNKNOWN-MASSIVE COLONY"
                       : "TIME: 09:14:23 UTC | ALT: 1,850 FT | RANGE: 21.3 KM | STATUS: EMPTY OCEAN / TARGET DIVED"}
                   </p>
                 </div>
@@ -1695,10 +1695,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 {day3PhotoModal === "success" ? (
                   <>
-                    ・高度320m、捜索ヘリFLIRカメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
-                    ・本体は完全に海面下に没しており、巨大な外套膜が暗い深海シルエットとして確認できる。<br />
-                    ・背後には<strong>ダイオウイカ少なくとも20匹分に相当する無数の触手群</strong>が密集して海中を長く直線的にたなびいており、単体生物ではなく無数の個体が融合した「超群体（コロニー）」であることが決定づけられた。<br />
-                    ・海面には猛烈な白波とケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上を継続中。
+                    ・高度2,500フィート、捜索ヘリFLIR赤外熱画像カメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
+                    ・単体のイカ頭部ではなく、<strong>横幅数百メートルに達する広大な生体質量（超群体）</strong>が海面下の黒い深海シャドウとして確認できる。<br />
+                    ・その幅広い後背部全体から、<strong>無数に増殖した膨大な触手群</strong>が海中を長く直線的にたなびいており、ダイオウイカ多数の個体が緊密に結合した「超群体（コロニー）」の全貌を捉えた。<br />
+                    ・海面には広大な横幅に伴う猛烈な白波とケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上を継続中。
                   </>
                 ) : (
                   <>
