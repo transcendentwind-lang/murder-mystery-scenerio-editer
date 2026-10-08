@@ -579,6 +579,18 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </a>
                       <button
                         type="button"
+                        onClick={() => {
+                          setDay3MapTab("tactical");
+                          setDay3MapMode("gm");
+                          setIsTheaterModalOpen(true);
+                        }}
+                        className="flex items-center gap-1 rounded bg-rose-800 hover:bg-rose-700 px-2.5 py-1 text-[11px] font-bold text-white transition shadow border border-rose-700"
+                        title="GM用マップ（真相・怪物の位置）を大画面で開く"
+                      >
+                        <ShieldAlert className="h-3 w-3 text-amber-300" /> GM用大画面
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => setIsTheaterModalOpen(true)}
                         className={`flex items-center gap-1 rounded px-3 py-1 text-[11px] font-bold text-white transition shadow ${
                           day3MapTab === "tactical"
@@ -586,7 +598,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             : "bg-rose-700 hover:bg-rose-600"
                         }`}
                       >
-                        <Maximize2 className="h-3 w-3" /> 大画面で全機能を開く
+                        <Maximize2 className="h-3 w-3" /> 大画面で開く
                       </button>
                     </div>
                   </div>
@@ -602,10 +614,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                       <div className="flex items-center justify-between rounded-lg bg-slate-950/80 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
                         <span>
-                          📍 <strong>縮尺 1:200,000</strong> ｜ 給油拠点: 須美寿島南西 PLH-31「あきつしま」 ｜ 噴煙高度: 8,000m
+                          📍 <strong>縮尺 1:200,000</strong> ｜ 給油拠点: 海図左下 PLH-31「あきつしま」(セクターF-1) ｜ 1セクター: 約20km四方
                         </span>
                         <span className="text-cyan-400 font-mono">
-                          海図上の照準をクリックしてソナーを投下できます
+                          全36セクター（6×6グリッド）索敵盤
                         </span>
                       </div>
                     </div>
@@ -1045,6 +1057,34 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </button>
                 </div>
 
+                {/* 作戦海図時の プレイヤー / GM モードトグル */}
+                {day3MapTab === "tactical" && (
+                  <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+                    <button
+                      type="button"
+                      onClick={() => setDay3MapMode("player")}
+                      className={`px-2.5 py-1 rounded font-semibold transition ${
+                        day3MapMode === "player"
+                          ? "bg-cyan-600 text-white shadow"
+                          : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      プレイヤー表示
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDay3MapMode("gm")}
+                      className={`px-2.5 py-1 rounded font-semibold transition ${
+                        day3MapMode === "gm"
+                          ? "bg-rose-600 text-white shadow"
+                          : "text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      GM真相表示（怪物の位置）
+                    </button>
+                  </div>
+                )}
+
                 <a
                   href={day3MapTab === "tactical" ? "/images/day3_sonar_tactical_chart.svg" : "/images/eruption_monitoring_chart.svg"}
                   target="_blank"
@@ -1085,10 +1125,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 <div className="flex items-center justify-between text-[11px] leading-relaxed">
                   <div>
                     <span className="font-bold text-cyan-300">【海図作戦要項】</span>
-                    海図上の海況と海底地形を分析し、クリアな海盆平原にソノブイを投下して三辺測量を実施せよ。
+                    全36セクター（1区画 約20km四方）。海況と海底地形を分析し、クリアな海盆平原にソノブイを投下して索敵を実施せよ。
                   </div>
                   <div className="font-mono text-slate-400">
-                    給油拠点: 須美寿島南西 PLH-31「あきつしま」
+                    給油拠点: 海図左下 PLH-31「あきつしま」(セクターF-1)
                   </div>
                 </div>
               ) : (

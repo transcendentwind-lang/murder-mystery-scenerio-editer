@@ -28,9 +28,11 @@ import {
   Compass,
   Radar,
   Scroll,
+  ShieldAlert,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
+import { Day3TacticalMap } from "./Day3TacticalMap";
 
 export interface Day2ActionOption {
   id: string;
@@ -129,6 +131,20 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
+  const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
+
+  // ESCキーでモーダルを閉じる
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsPhotoModalOpen(false);
+        setIsChartModalOpen(false);
+        setIsTacticalModalOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
 
   const handleToggleFieldAction = (id: string) => {
     setSelectedFieldActions((prev) => {
@@ -824,40 +840,83 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：アクティブ・ソノブイ3点投下作戦（GM正解メモ） */}
+                  {/* フェーズ2.5：【GM専用作戦海図 W-3100】洋上ソナー索敵 ＆ 巨大生物潜航マップ */}
+                  <div className="rounded-xl border border-rose-900/60 bg-slate-900 p-4 shadow-md space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Navigation className="h-4 w-4 text-cyan-400" />
+                        <div>
+                          <span className="font-bold text-white text-xs">
+                            【GM専用 作戦海図 W-3100】全36セクター索敵盤 ＆ 巨大生物潜航マップ
+                          </span>
+                          <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                            GM真相表示: 深度400m潜航座標・三辺測量反響円
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsTacticalModalOpen(true)}
+                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3 w-3" /> 大画面で開く（GM全画面）
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
+                      <Day3TacticalMap defaultMode="gm" />
+                    </div>
+
+                    <div className="flex items-center justify-between rounded-lg bg-slate-950/80 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
+                      <span>
+                        🚨 <strong>怪物の潜航現在位置</strong>: セクターB-3（水深400m） ｜ 北上速度: 時速約6km ｜ 1セクター: 約20km四方
+                      </span>
+                      <span className="text-cyan-400 font-mono">
+                        給油拠点: 海図左下 PLH-31「あきつしま」(セクターF-1)
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* フェーズ3：アクティブ・ソノブイ投下作戦（GM判定早見ガイド） */}
                   <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/20 p-3.5 space-y-2">
                     <div className="flex items-center justify-between">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radar className="h-4 w-4 text-cyan-400" />
-                        【フェーズ3：アクティブソナー3点投下作戦（GM正解・判定メモ）】
+                        【フェーズ3：アクティブソナー投下作戦（GM判定早見ガイド）】
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">
-                        ヘリ搭載ソノブイ: 最大3機
+                      <span className="text-[10px] text-cyan-300 font-mono bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                        1セクター ＝ 約20km四方
                       </span>
                     </div>
 
+                    {/* ソナー判定早見グリッド */}
                     <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div className="rounded bg-red-950/40 border border-red-900/60 p-2 text-red-200">
-                        <strong className="text-red-300 block mb-0.5">💥 自動失敗トラップ（半径25km圏内）:</strong>
-                        ・地点A（鳥島北東）: カルデラ直近の微細気泡でクラッター飽和！<br />
-                        ・地点B（須美寿東）: 熱水噴出孔の水温躍層でNO RETURN！
+                      <div className="rounded bg-rose-950/40 border border-rose-900/60 p-2.5 text-rose-200">
+                        <strong className="text-rose-300 block mb-1">🎯 直上捕捉 ＆ 隣接反響判定:</strong>
+                        ・<strong>セクター B-3（直上）に投下</strong>: <br />
+                        　「同セクター直下に超巨大な反響音！目標を直上捕捉！」<br />
+                        ・<strong>隣接セクター（B-2, B-4, A-3, C-3, 斜めA2/A4/C2/C4）に投下</strong>: <br />
+                        　「隣接セクター方向から強い反響音（約20km先）をキャッチ！」
                       </div>
-                      <div className="rounded bg-emerald-950/40 border border-emerald-900/60 p-2 text-emerald-200">
-                        <strong className="text-emerald-300 block mb-0.5">📡 有効測距地点（三辺測量正解）:</strong>
-                        ・地点C（鳥島北西）: 反響距離 <strong>約32km</strong><br />
-                        ・地点D（須美寿西）: 反響距離 <strong>約20km</strong><br />
-                        ・地点E（青ヶ島南西）: 反響距離 <strong>約28km</strong>
+                      <div className="rounded bg-amber-950/40 border border-amber-900/60 p-2.5 text-amber-200">
+                        <strong className="text-amber-300 block mb-1">⚠️ トラップ ＆ 索敵限界判定:</strong>
+                        ・<strong>熱水域（E-2 または E-5カルデラ）に投下</strong>: <br />
+                        　「海底熱水気泡クラッターにより探知不能（NO RETURN）！」<br />
+                        ・<strong>上記以外の離れたセクターに投下</strong>: <br />
+                        　「距離減衰により反響なし（探知限界外）」
                       </div>
                     </div>
 
                     <div className="rounded bg-slate-900 p-2.5 border border-slate-800 text-[11px] text-slate-300 space-y-1">
                       <p>
                         🎯 <strong className="text-cyan-300">怪物の現在潜航位置</strong>：
-                        須美寿島の西方約35km（31°22&apos;N, 139°42&apos;E）、水深約400m。
+                        セクターB-3（水深約400m）。
                       </p>
                       <p>
-                        📋 <strong className="text-white">三辺測量成功時</strong>：
-                        ヘリが直上へ急行し、「水深400mを北上する全長300〜400mの生体シグネチャー」の撮影レポートが開示される。
+                        📋 <strong className="text-white">位置特定・包囲成功時</strong>：
+                        プレイヤーがB-3または隣接セクターにソノブイを展開し位置を絞り込んだら、ヘリが急行して「水深400mを北上する全長300〜400mの生体シグネチャー」の撮影レポートが開示されます。
                       </p>
                     </div>
                   </div>
@@ -1129,6 +1188,70 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
                 ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 3 作戦海図 W-3100 GM用大画面モーダル */}
+      {isTacticalModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsTacticalModalOpen(false)}
+        >
+          <div
+            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-950 border border-rose-700 text-rose-400">
+                  <ShieldAlert className="h-5 w-5 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    【GM専用 大画面作戦海図 W-3100】全36セクター索敵盤 ＆ 巨大生物潜航マップ（真相）
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    縮尺 1:200,000 / WGS84 ｜ 深度400m潜航座標・三辺測量反響円表示
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/images/day3_sonar_tactical_chart.svg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                  title="原寸ベクターSVGを別タブで表示"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsTacticalModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                  title="閉じる (Escキーでも閉じられます)"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px]">
+              <Day3TacticalMap defaultMode="gm" />
+            </div>
+
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
+              <div className="flex items-center justify-between text-[11px] leading-relaxed">
+                <div>
+                  <span className="font-bold text-rose-300">【GM真相情報】</span>
+                  怪物はセクターB-3（水深400m）を北上中。直上投下（B-3）なら同セクター直下捕捉、隣接セクターなら約20km先反響と大雑把に判定してください。
+                </div>
+                <div className="font-mono text-cyan-400">
+                  1セクター: 約20km四方
+                </div>
+              </div>
             </div>
           </div>
         </div>

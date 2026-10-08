@@ -70,7 +70,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
       <div className="relative flex-1 w-full h-full min-h-[520px] bg-[#07111e] flex items-center justify-center p-1">
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 1000 800"
+          viewBox="0 0 1180 800"
           className="w-full h-full max-h-[75vh] object-contain"
           style={{
             background: "#07111e",
@@ -117,12 +117,22 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
                 <feMergeNode in="SourceGraphic" />
               </feMerge>
             </filter>
+            {/* 寸法表示用マーカー */}
+            <marker id="arrow-dim" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto-start-reverse">
+              <path d="M 0 2 L 8 5 L 0 8 z" fill="#38bdf8" />
+            </marker>
+            <marker id="arrow-dim-rev" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="4" markerHeight="4" orient="auto">
+              <path d="M 8 2 L 0 5 L 8 8 z" fill="#38bdf8" />
+            </marker>
           </defs>
 
           {/* 背景深海 */}
-          <rect width="1000" height="800" fill="#07111e" />
+          <rect width="1180" height="800" fill="#07111e" />
           {/* 海溝部暗色 */}
-          <rect x="750" y="50" width="220" height="700" fill="url(#trench-deep)" />
+          <rect x="750" y="50" width="410" height="700" fill="url(#trench-deep)" />
+
+          {/* 枠外情報欄との境界線 */}
+          <line x1="895" y1="50" x2="895" y2="750" stroke="#1e293b" strokeWidth="1.2" strokeDasharray="3,3" />
 
           {/* ======================================================== */}
           {/* 1. 経緯度グリッド線 ＆ 目盛 */}
@@ -168,29 +178,120 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           <text x="80" y="152" fill="#64748b" fontSize="10" fontFamily="monospace" textAnchor="end">32°30&apos;N</text>
 
           {/* ======================================================== */}
-          {/* 2. 作戦セクターグリッド（TACTICAL GRIDS） */}
+          {/* 2. 作戦セクターグリッド（6 × 6 = 全36セクター） */}
           {/* ======================================================== */}
-          {/* セクター区切り線（薄い青のブロック） */}
-          <g stroke="#0e3a5a" strokeWidth="1" strokeDasharray="6,4" fill="none">
-            {/* 水平線 */}
-            <line x1="120" y1="263" x2="880" y2="263" />
-            <line x1="120" y1="491" x2="880" y2="491" />
-            {/* 垂直線 */}
-            <line x1="380" y1="50" x2="380" y2="750" />
-            <line x1="640" y1="50" x2="640" y2="750" />
+          {/* セクター区切り線（薄いシアンの破線：全幅760px ÷ 6 = 126.67px / 高572px ÷ 6 = 95.33px） */}
+          <g stroke="#0284c7" strokeWidth="1" strokeDasharray="4,4" opacity="0.45" fill="none">
+            {/* 垂直セクター線（x: 120, 246.7, 373.3, 500, 626.7, 753.3, 880） */}
+            <line x1="246.7" y1="148" x2="246.7" y2="720" />
+            <line x1="373.3" y1="148" x2="373.3" y2="720" />
+            <line x1="500.0" y1="148" x2="500.0" y2="720" />
+            <line x1="626.7" y1="148" x2="626.7" y2="720" />
+            <line x1="753.3" y1="148" x2="753.3" y2="720" />
+
+            {/* 水平セクター線（y: 148, 243.3, 338.7, 434, 529.3, 624.7, 720） */}
+            <line x1="120" y1="243.3" x2="880" y2="243.3" />
+            <line x1="120" y1="338.7" x2="880" y2="338.7" />
+            <line x1="120" y1="434.0" x2="880" y2="434.0" />
+            <line x1="120" y1="529.3" x2="880" y2="529.3" />
+            <line x1="120" y1="624.7" x2="880" y2="624.7" />
           </g>
 
-          {/* セクター識別ラベル */}
-          <g fill="#38bdf8" opacity="0.35" fontSize="13" fontWeight="bold" fontFamily="monospace">
-            <text x="140" y="80">SECTOR-1 [NORTH-WEST]</text>
-            <text x="400" y="80">SECTOR-2 [NORTH-AXIS]</text>
-            <text x="660" y="80">SECTOR-3 [NORTH-EAST]</text>
-            <text x="140" y="295">SECTOR-4 [MID-WEST]</text>
-            <text x="400" y="295">SECTOR-5 [MID-AXIS]</text>
-            <text x="660" y="295">SECTOR-6 [MID-EAST]</text>
-            <text x="140" y="525">SECTOR-7 [SOUTH-WEST]</text>
-            <text x="400" y="525">SECTOR-8 [SOUTH-AXIS]</text>
-            <text x="660" y="525">SECTOR-9 [SOUTH-EAST]</text>
+          {/* セクター作戦枠外枠（強調） */}
+          <rect x="120" y="148" width="760" height="572" fill="none" stroke="#0ea5e9" strokeWidth="1.8" opacity="0.75" />
+
+          {/* 列ヘッダー（上端 1〜6） */}
+          <g fill="#38bdf8" opacity="0.8" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+            <text x="183.3" y="140">COL-1</text>
+            <text x="310.0" y="140">COL-2</text>
+            <text x="436.7" y="140">COL-3</text>
+            <text x="563.3" y="140">COL-4</text>
+            <text x="690.0" y="140">COL-5</text>
+            <text x="816.7" y="140">COL-6</text>
+          </g>
+
+          {/* 行ヘッダー（左端 A〜F） */}
+          <g fill="#38bdf8" opacity="0.8" fontSize="11" fontWeight="bold" fontFamily="monospace" textAnchor="end">
+            <text x="112" y="200">ROW-A</text>
+            <text x="112" y="295">ROW-B</text>
+            <text x="112" y="390">ROW-C</text>
+            <text x="112" y="485">ROW-D</text>
+            <text x="112" y="580">ROW-E</text>
+            <text x="112" y="675">ROW-F</text>
+          </g>
+
+          {/* 36セクター識別ラベル（各マス左上にスタイリッシュに表示） */}
+          <g fill="#38bdf8" opacity="0.38" fontSize="10" fontWeight="bold" fontFamily="monospace">
+            {/* 行 A */}
+            <text x="126" y="163">A-1</text>
+            <text x="253" y="163">A-2</text>
+            <text x="380" y="163">A-3</text>
+            <text x="506" y="163">A-4</text>
+            <text x="633" y="163">A-5</text>
+            <text x="760" y="163">A-6</text>
+            {/* 行 B */}
+            <text x="126" y="258">B-1</text>
+            <text x="253" y="258">B-2</text>
+            <text x="380" y="258">B-3</text>
+            <text x="506" y="258">B-4</text>
+            <text x="633" y="258">B-5</text>
+            <text x="760" y="258">B-6</text>
+            {/* 行 C */}
+            <text x="126" y="353">C-1</text>
+            <text x="253" y="353">C-2</text>
+            <text x="380" y="353">C-3</text>
+            <text x="506" y="353">C-4</text>
+            <text x="633" y="353">C-5</text>
+            <text x="760" y="353">C-6</text>
+            {/* 行 D */}
+            <text x="126" y="449">D-1</text>
+            <text x="253" y="449">D-2</text>
+            <text x="380" y="449">D-3</text>
+            <text x="506" y="449">D-4</text>
+            <text x="633" y="449">D-5</text>
+            <text x="760" y="449">D-6</text>
+            {/* 行 E */}
+            <text x="126" y="544">E-1</text>
+            <text x="253" y="544">E-2</text>
+            <text x="380" y="544">E-3</text>
+            <text x="506" y="544">E-4</text>
+            <text x="633" y="544">E-5</text>
+            <text x="760" y="544">E-6</text>
+            {/* 行 F */}
+            <text x="126" y="639">F-1</text>
+            <text x="253" y="639">F-2</text>
+            <text x="380" y="639">F-3</text>
+            <text x="506" y="639">F-4</text>
+            <text x="633" y="639">F-5</text>
+            <text x="760" y="639">F-6</text>
+          </g>
+
+          {/* ======================================================== */}
+          {/* 【セクター寸法規格サンプル】（A-1セクター内に明示） */}
+          {/* ======================================================== */}
+          <g transform="translate(126, 154)">
+            {/* 1セクターの背景ハイライト */}
+            <rect x="0" y="0" width="120.7" height="89.3" fill="#0284c7" opacity="0.08" rx="2" />
+
+            {/* 横幅寸法矢印 (約20km) */}
+            <line x1="8" y1="22" x2="112" y2="22" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+            <rect x="25" y="13" width="70" height="16" rx="3" fill="#0c2340" stroke="#0284c7" strokeWidth="0.8" />
+            <text x="60" y="25" fill="#e0f2fe" fontSize="9" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+              横 約20 km
+            </text>
+
+            {/* 縦高寸法矢印 (約20km) */}
+            <line x1="22" y1="32" x2="22" y2="84" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+            <rect x="28" y="47" width="70" height="16" rx="3" fill="#0c2340" stroke="#0284c7" strokeWidth="0.8" />
+            <text x="63" y="59" fill="#e0f2fe" fontSize="9" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+              縦 約20 km
+            </text>
+
+            {/* サンプル規格バッジ */}
+            <rect x="4" y="68" width="112" height="17" rx="3" fill="#0369a1" opacity="0.9" />
+            <text x="60" y="80" fill="#ffffff" fontSize="8.5" fontWeight="bold" textAnchor="middle">
+              📐 1セクター規格: 約20km四方
+            </text>
           </g>
 
           {/* ======================================================== */}
@@ -294,38 +395,50 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           </g>
 
           {/* ======================================================== */}
-          {/* 6. GM専用：音響クラッター障害危険圏（半径25km） */}
+          {/* 6. GM専用：音響クラッター障害危険圏（半径20km ＝ 約1セクター） */}
           {/* ======================================================== */}
           {mode === "gm" && (
             <g className="animate-fade-in">
-              {/* ポイントA（鳥島北東）の25km危険円 */}
+              {/* ポイント1：鳥島沖海底カルデラ（E-5）の20km危険円 */}
               <g transform="translate(639, 613)">
-                <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
-                <text x="-52" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                  [熱水クラッター障害圏 R=25km]
+                <circle cx="0" cy="0" r="52" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
+                <text x="-52" y="68" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                  [E-5 カルデラクラッター障害圏 R=20km]
                 </text>
               </g>
 
-              {/* ポイントB（須美寿島東）の熱水噴出孔群と25km危険円 */}
+              {/* ポイント2：須美寿東（C-5）の熱水噴出孔群と20km危険円 */}
               <g transform="translate(722, 396)">
-                <circle cx="0" cy="0" r="54" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
-                <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
-                <circle cx="0" cy="0" r="3" fill="#ffffff" />
-                <text x="-45" y="-14" fill="#fb923c" fontSize="11" fontWeight="bold">
+                <circle cx="0" cy="0" r="52" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
+                <circle cx="0" cy="0" r="7" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
+                <circle cx="0" cy="0" r="2.5" fill="#ffffff" />
+                <text x="-45" y="-12" fill="#fb923c" fontSize="10.5" fontWeight="bold">
                   ♨ 須美寿東 海底熱水域
                 </text>
-                <text x="-45" y="70" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                  [熱水クラッター障害圏 R=25km]
+                <text x="-45" y="68" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                  [C-5 熱水クラッター障害圏 R=20km]
+                </text>
+              </g>
+
+              {/* ポイント3：セクターE-2（西鳥島海山）の熱水噴出孔群と20km危険円 */}
+              <g transform="translate(310, 577)">
+                <circle cx="0" cy="0" r="52" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
+                <circle cx="0" cy="0" r="7" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
+                <circle cx="0" cy="0" r="2.5" fill="#ffffff" />
+                <text x="-48" y="-12" fill="#fb923c" fontSize="10.5" fontWeight="bold">
+                  ♨ 西鳥島海山 海底熱水域 (E-2)
+                </text>
+                <text x="-52" y="68" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
+                  [E-2 熱水クラッター障害圏 R=20km]
                 </text>
               </g>
             </g>
           )}
 
+          {/* 7. 洋上給油巡視船（PLH-31 あきつしま）画面左下配置 */}
           {/* ======================================================== */}
-          {/* 7. 洋上給油巡視船（PLH-31 あきつしま）位置 ＆ 航路 */}
-          {/* ======================================================== */}
-          {/* 巡視船座標 (30°55'N, 139°25'E -> x:278, y:510) */}
-          <g transform="translate(278, 510)">
+          {/* 巡視船座標 (画面左下・セクターF-1海域: x:160, y:680) */}
+          <g transform="translate(160, 680)">
             {/* 安全補給海域サークル */}
             <circle cx="0" cy="0" r="22" fill="#0369a1" opacity="0.3" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3,3" />
 
@@ -336,168 +449,54 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <text x="6" y="2.5" fill="#ffffff" fontSize="5" fontWeight="bold" textAnchor="middle">H</text>
             <rect x="-8" y="-9" width="8" height="4" fill="#e0f2fe" />
 
-            {/* ラベル */}
-            <rect x="25" y="-18" width="185" height="46" rx="4" fill="#082f49" opacity="0.9" stroke="#0ea5e9" strokeWidth="1" />
-            <text x="32" y="-4" fill="#38bdf8" fontSize="11" fontWeight="bold">
+            {/* ラベル（船の右側にすっきり横並び配置） */}
+            <rect x="26" y="-20" width="200" height="40" rx="4" fill="#082f49" opacity="0.95" stroke="#0ea5e9" strokeWidth="1" />
+            <text x="34" y="-6" fill="#38bdf8" fontSize="10.5" fontWeight="bold">
               ⚓ 海上保安庁 PLH-31「あきつしま」
             </text>
-            <text x="32" y="10" fill="#e0f2fe" fontSize="9">
-              ヘリ甲板搭載・洋上給油中継拠点 (FARP)
+            <text x="34" y="6" fill="#e0f2fe" fontSize="8.5">
+              ヘリ洋上給油中継拠点 (FARP) ｜ 待機海域
             </text>
-            <text x="32" y="22" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">
-              30°55&apos;N, 139°25&apos;E (静穏深海域に待機)
-            </text>
-
-            {/* ヘリ哨戒ルート破線 */}
-            <path
-              d="M 18 -15 Q 150 -50 250 -100"
-              fill="none"
-              stroke="#38bdf8"
-              strokeWidth="1.8"
-              strokeDasharray="4,3"
-            />
-            <text x="120" y="-70" fill="#bae6fd" fontSize="9" fontWeight="bold">
-              ✈ 捜索ヘリ洋上進出ルート
+            <text x="34" y="16" fill="#7dd3fc" fontSize="8" fontFamily="monospace">
+              30°08&apos;N, 139°10&apos;E (セクターF-1)
             </text>
           </g>
 
           {/* ======================================================== */}
-          {/* 8. ソナー投下可能地点（グリッド候補 A〜F） */}
-          {/* ======================================================== */}
-          {/* ポイントA（x:785, y:567） */}
-          <g
-            transform="translate(785, 567)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-A")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点A [セクターα]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">鳥島北東カルデラ外海</text>
-          </g>
-
-          {/* ポイントB（x:722, y:396） */}
-          <g
-            transform="translate(722, 396)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-B")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点B [セクターβ]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">須美寿島東・海嶺東側</text>
-          </g>
-
-          {/* ポイントC（クリア: x:405, y:530） */}
-          <g
-            transform="translate(405, 530)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-C")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点C [セクターγ]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">鳥島北西・静穏海盆</text>
-          </g>
-
-          {/* ポイントD（クリア: x:310, y:377） */}
-          <g
-            transform="translate(310, 377)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-D")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点D [セクターδ]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">須美寿島西・海嶺西平原</text>
-          </g>
-
-          {/* ポイントE（クリア: x:278, y:244） */}
-          <g
-            transform="translate(278, 244)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-E")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点E [セクターε]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">青ヶ島南西・深海盆</text>
-          </g>
-
-          {/* ポイントF（クリア: x:215, y:110） */}
-          <g
-            transform="translate(215, 110)"
-            className="cursor-pointer"
-            onClick={() => onSelectDropPoint && onSelectDropPoint("drop-F")}
-          >
-            <circle cx="0" cy="0" r="14" fill="#064e3b" stroke="#10b981" strokeWidth="2" />
-            <line x1="-18" y1="0" x2="18" y2="0" stroke="#10b981" strokeWidth="1.5" />
-            <line x1="0" y1="-18" x2="0" y2="18" stroke="#10b981" strokeWidth="1.5" />
-            <circle cx="0" cy="0" r="3" fill="#34d399" />
-            <text x="16" y="-6" fill="#34d399" fontSize="11" fontWeight="bold">地点F [セクターζ]</text>
-            <text x="16" y="8" fill="#a7f3d0" fontSize="8.5">八丈島南西・北方沖</text>
-          </g>
-
-          {/* ======================================================== */}
-          {/* 9. GM用マップ限定表示：巨大生物の現在位置 ＆ 三辺測量交点 */}
+          {/* 8. GM用マップ限定表示：巨大生物の現在位置（セクターB-3） ＆ ソナー判定円 */}
           {/* ======================================================== */}
           {mode === "gm" && (
             <g className="animate-fade-in">
-              {/* 三辺測量ソナー反響円 */}
-              {/* ポイントCからの距離円 (32km ≒ 半径68px) */}
-              <circle
-                cx="405"
-                cy="530"
-                r="125"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="1.5"
-                strokeDasharray="6,4"
-                opacity="0.6"
-              />
-              <text x="405" y="668" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                反響半径: 32km (地点C)
-              </text>
+              {/* 巨大生物の現在位置（セクターB-3中心: x:437, y:291） */}
+              <g transform="translate(437, 291)">
+                {/* 判定目安円1：隣接セクター判定圏（半径 約115px ＝ 約20km圏） */}
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="115"
+                  fill="#38bdf8"
+                  fillOpacity="0.05"
+                  stroke="#38bdf8"
+                  strokeWidth="1.8"
+                  strokeDasharray="6,4"
+                  opacity="0.7"
+                />
+                <text x="0" y="128" fill="#38bdf8" fontSize="9.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
+                  隣接セクター判定圏 (R≒20km: B2, B4, A3, C3, 斜めセクター)
+                </text>
 
-              {/* ポイントDからの距離円 (20km ≒ 半径78px) */}
-              <circle
-                cx="310"
-                cy="377"
-                r="82"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="1.5"
-                strokeDasharray="6,4"
-                opacity="0.6"
-              />
-              <text x="235" y="445" fill="#38bdf8" fontSize="9" fontFamily="monospace">
-                反響半径: 20km (地点D)
-              </text>
+                {/* 判定目安円2：直上至近距離反響圏（半径 35px） */}
+                <circle
+                  cx="0"
+                  cy="0"
+                  r="35"
+                  fill="#ef4444"
+                  fillOpacity="0.1"
+                  stroke="#ef4444"
+                  strokeWidth="1.5"
+                  strokeDasharray="3,3"
+                />
 
-              {/* ポイントEからの距離円 (28km ≒ 半径110px) */}
-              <circle
-                cx="278"
-                cy="244"
-                r="194"
-                fill="none"
-                stroke="#38bdf8"
-                strokeWidth="1.5"
-                strokeDasharray="6,4"
-                opacity="0.4"
-              />
-
-              {/* 巨大生物の現在位置（須美寿島西方沖・深度400m: x:386, y:408） */}
-              <g transform="translate(386, 408)">
                 {/* 警戒エリア赤パルス */}
                 <circle cx="0" cy="0" r="42" fill="#ef4444" opacity="0.2" className="animate-ping" />
                 <circle cx="0" cy="0" r="26" fill="#7f1d1d" opacity="0.6" stroke="#ef4444" strokeWidth="2" />
@@ -525,47 +524,29 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
                   北上進行ベクトル (時速約6km / 深度400m)
                 </text>
 
-                {/* GM解説情報ボックス */}
-                <rect x="-195" y="48" width="235" height="52" rx="4" fill="#0f172a" opacity="0.95" stroke="#ef4444" strokeWidth="1.5" />
-                <text x="-185" y="64" fill="#ef4444" fontSize="11" fontWeight="bold">
-                  🚨 【GM真相】潜航目標・現在位置
+                {/* GM解説情報ボックス（左下に配置して視認性確保） */}
+                <rect x="-215" y="38" width="245" height="66" rx="5" fill="#0f172a" opacity="0.95" stroke="#ef4444" strokeWidth="1.5" />
+                <text x="-205" y="55" fill="#ef4444" fontSize="11" fontWeight="bold">
+                  🚨 【GM真相】潜航目標・現在位置（B-3）
                 </text>
-                <text x="-185" y="79" fill="#f87171" fontSize="9.5">
+                <text x="-205" y="70" fill="#f87171" fontSize="9.5">
                   全長300〜400m 巨大生体質量（深度400m）
                 </text>
-                <text x="-185" y="93" fill="#cbd5e1" fontSize="9" fontFamily="monospace">
-                  座標: 31°22&apos;N, 139°42&apos;E (須美寿島西方約35km)
+                <text x="-205" y="84" fill="#cbd5e1" fontSize="8.5" fontFamily="monospace">
+                  直上: B-3 ｜ 隣接(反響約20km): B2/B4/A3/C3/斜め
+                </text>
+                <text x="-205" y="97" fill="#7dd3fc" fontSize="8" fontFamily="monospace">
+                  座標: 31°52&apos;N, 139°48&apos;E (セクターB-3 / 水深400m)
                 </text>
               </g>
             </g>
           )}
 
           {/* ======================================================== */}
-          {/* 10. 海図凡例（LEGEND） */}
+          {/* 9. 作戦枠外：海図情報パネル（方位盤 ＆ 凡例 ＆ 仕様欄） */}
           {/* ======================================================== */}
-          <g transform="translate(30, 620)">
-            <rect width="210" height="110" rx="6" fill="#091424" opacity="0.92" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="12" y="18" fill="#94a3b8" fontSize="10" fontWeight="bold">【海図凡例 / LEGEND】</text>
-
-            {/* カルデラ */}
-            <circle cx="20" cy="34" r="5" fill="#f43f5e" />
-            <text x="32" y="37" fill="#cbd5e1" fontSize="9">海底カルデラ（噴火震源地）</text>
-
-            {/* 給油巡視船 */}
-            <polygon points="14,52 26,52 28,46 22,44 16,44" fill="#0284c7" />
-            <text x="32" y="50" fill="#cbd5e1" fontSize="9">洋上給油巡視船 PLH「あきつしま」</text>
-
-            {/* ソナー投下地点 */}
-            <circle cx="20" cy="67" r="5" fill="#064e3b" stroke="#10b981" strokeWidth="1" />
-            <text x="32" y="70" fill="#cbd5e1" fontSize="9">ソナー投下候補グリッド (A〜F)</text>
-
-            {/* 噴煙拡散域 */}
-            <ellipse cx="20" cy="84" rx="7" ry="4" fill="#dc2626" opacity="0.7" />
-            <text x="32" y="87" fill="#cbd5e1" fontSize="9">噴煙柱・降灰拡散域 (8,000m)</text>
-          </g>
-
-          {/* 方位盤（コンパスローズ） */}
-          <g transform="translate(930, 110)">
+          {/* 方位盤（コンパスローズ：枠外右上） */}
+          <g transform="translate(1035, 115)">
             <circle cx="0" cy="0" r="28" fill="none" stroke="#334155" strokeWidth="1" />
             <line x1="0" y1="-28" x2="0" y2="28" stroke="#475569" strokeWidth="1" />
             <line x1="-28" y1="0" x2="28" y2="0" stroke="#475569" strokeWidth="1" />
@@ -575,6 +556,58 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <text x="0" y="40" fill="#64748b" fontSize="9" textAnchor="middle">S</text>
             <text x="36" y="3" fill="#64748b" fontSize="9" textAnchor="middle">E</text>
             <text x="-36" y="3" fill="#64748b" fontSize="9" textAnchor="middle">W</text>
+          </g>
+
+          {/* 海図凡例（LEGEND：枠外中央右・青い四角の外側） */}
+          <g transform="translate(915, 185)">
+            <rect width="245" height="265" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="22" fill="#94a3b8" fontSize="11" fontWeight="bold">【海図凡例 / LEGEND】</text>
+
+            {/* 36作戦セクター */}
+            <rect x="16" y="38" width="12" height="12" fill="none" stroke="#0ea5e9" strokeWidth="1.2" strokeDasharray="2,2" />
+            <text x="36" y="48" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">36作戦セクター (6×6グリッド)</text>
+            <text x="36" y="60" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 約20km四方 (東西20km × 南北20km)</text>
+
+            {/* 給油巡視船 */}
+            <polygon points="16,84 28,84 30,78 24,76 18,76" fill="#0284c7" />
+            <text x="36" y="82" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
+            <text x="36" y="94" fill="#94a3b8" fontSize="8.5">画面左下 セクターF-1海域 (待機中)</text>
+
+            {/* カルデラ */}
+            <circle cx="22" cy="116" r="6" fill="#f43f5e" />
+            <text x="36" y="116" fill="#fda4af" fontSize="9.5" fontWeight="bold">鳥島沖海底カルデラ</text>
+            <text x="36" y="128" fill="#94a3b8" fontSize="8.5">Day 2突発的大爆発 震源地</text>
+
+            {/* 噴煙拡散域 */}
+            <ellipse cx="22" cy="150" rx="8" ry="5" fill="#dc2626" opacity="0.75" />
+            <text x="36" y="150" fill="#fca5a5" fontSize="9.5" fontWeight="bold">噴煙柱・降灰拡散域 (8,000m)</text>
+            <text x="36" y="162" fill="#94a3b8" fontSize="8.5">航空危険空域 (NOTAM)</text>
+
+            {/* 火山フロント軸 */}
+            <line x1="16" y1="184" x2="28" y2="184" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
+            <text x="36" y="184" fill="#cbd5e1" fontSize="9.5" fontWeight="bold">伊豆・小笠原火山フロント軸</text>
+            <text x="36" y="196" fill="#94a3b8" fontSize="8.5">海底海嶺・マグマ上昇帯</text>
+
+            {/* GM真相時のみ凡例に熱水クラッターも記載 */}
+            {mode === "gm" && (
+              <>
+                <circle cx="22" cy="224" r="7" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
+                <text x="36" y="222" fill="#fb923c" fontSize="9.5" fontWeight="bold">海底熱水音響障害圏 (R=20km)</text>
+                <text x="36" y="234" fill="#f97316" fontSize="8.5">セクターE-2 / カルデラ (NO RETURN)</text>
+              </>
+            )}
+          </g>
+
+          {/* 作戦海図仕様スペック欄（枠外右下） */}
+          <g transform="translate(915, 465)">
+            <rect width="245" height="135" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="22" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
+            <text x="14" y="42" fill="#cbd5e1" fontSize="9">縮尺: 1:200,000 ｜ 漸長緯度図法</text>
+            <text x="14" y="58" fill="#cbd5e1" fontSize="9">測地系: 世界測地系 (WGS-84)</text>
+            <text x="14" y="74" fill="#cbd5e1" fontSize="9">管轄: 海上保安庁・自衛隊 統合本部</text>
+            <text x="14" y="96" fill="#38bdf8" fontSize="9.5" fontWeight="bold">作戦セクター規格:</text>
+            <text x="14" y="112" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 東西 約20km × 南北 約20km</text>
+            <text x="14" y="124" fill="#94a3b8" fontSize="8" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
           </g>
         </svg>
       </div>
@@ -588,14 +621,14 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             </span>
           ) : (
             <span className="flex items-center gap-1 text-rose-400 font-semibold animate-pulse">
-              <ShieldAlert className="h-3.5 w-3.5" /> GM閲覧中: 深度400m潜航座標および三辺測量交点を表示中。
+              <ShieldAlert className="h-3.5 w-3.5" /> GM閲覧中: 目標位置（セクターB-3・深度400m）および索敵判定圏を表示中。
             </span>
           )}
         </div>
         <div className="flex items-center gap-3 font-mono text-[10px]">
-          <span>給油中継: PLH-31（須美寿島南西）</span>
-          <span>投下制限: 最大3機</span>
-          {mode === "gm" && <span className="text-amber-400">熱水プルーム障害: R=25km</span>}
+          <span>給油中継: PLH-31（海図左下・セクターF-1）</span>
+          <span>1セクター: 約20km四方</span>
+          {mode === "gm" && <span className="text-amber-400">熱水クラッター: E-2 / カルデラ R=20km</span>}
         </div>
       </div>
     </div>
