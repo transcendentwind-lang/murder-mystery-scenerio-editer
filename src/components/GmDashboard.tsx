@@ -119,6 +119,75 @@ export const FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
+export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "T-4A",
+    title: "T-4A: 八丈島・底土港 避難住民および漁船団の緊急無線聴取",
+    organization: "八丈島総合開発センター / 底土港漁協",
+    evidenceId: "ev-hachijo-resident-voice",
+    badge: "八丈島避難証言",
+    summary: "『南の海が煮え立つように激しく白波立ち、沖合から地響きのような唸りが届いた。群発微動が止まらない』",
+    detail: "八丈島住民の証言調書。スミス島〜青ヶ島沖の噴火に伴い、海底の異様な地響きと海水の異常な温度上昇が八丈島至近まで迫っている事実を報告。",
+  },
+  {
+    id: "T-4B",
+    title: "T-4B: 八丈島南東沖 民間商船レーダー擾乱・磁気偏向解析",
+    organization: "第三管区海上保安本部 運用司令センター",
+    evidenceId: "ev-merchant-ship-radar",
+    badge: "商船レーダー異常",
+    summary: "青ヶ島南方を航行中のコンテナ船レーダーに巨大擾乱。電子羅針盤に激しい磁気偏向ノイズが発生。",
+    detail: "民間コンテナ船の航跡ログ。海底から巨大な磁気ノイズと海水隆起が観測され、生物の接近に伴い電磁気的な影響が生じていることを客観的に裏付ける。",
+  },
+  {
+    id: "T-4C",
+    title: "T-4C: 官邸・警察庁 メディア情報統制（完全緘口令）指示の受領",
+    organization: "内閣官房危機管理センター / 警察庁警備局",
+    evidenceId: "ev-media-blackout-directive",
+    badge: "完全緘口令",
+    summary: "全国テレビ・新聞・ネットメディアへの一切の情報遮断を通達。SNSの『海が光った』等の投稿を緊急削除・検閲。",
+    detail: "官邸から合同対策本部への極秘通達文書。パニック防止を名目に全情報が隠蔽され、東京司令部（PC1, PC2）は厳しい情報統制の枷を嵌められる。",
+  },
+];
+
+export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "F-4A",
+    title: "F-4A: 神社宝物殿・古文書の深層調査（PC6：神職）",
+    organization: "小笠原大神宮 宝物殿",
+    evidenceId: "ev-shrine-curse-stone",
+    badge: "太古の盟約祝詞",
+    summary: "『空より落ちたる黒き星石（隕石）は海の主の呼び水となり、海鳴りと火の山を招く。神石を社に封じ、鯨の歌で盟約を結ぶ』",
+    detail: "PC6の家系に伝わる禁忌の古記録を発掘。太古の昔にも同様の怪異があり、空から落ちた隕石が怪物を呼び寄せていたこと、そして『鯨の歌』が怪異を鎮める鍵であることが示唆される。",
+  },
+  {
+    id: "F-4B",
+    title: "F-4B: 恩師・朝倉名誉教授 研究室遺品調査（PC5：海洋生物学者）",
+    organization: "小笠原海洋生物研究所 朝倉研究室",
+    evidenceId: "ev-asakura-lab-tape",
+    badge: "鯨音素・音響テープ",
+    summary: "『クジラのクリック音には文法がある。深海生物の捕食を促す特定のパルス周波数が存在する』",
+    detail: "故・朝倉教授の残した未発表草稿と深海音響テープ。学会から異端視された『クジラ言語』が実在し、怪異を捕食するマッコウクジラを誘導できる可能性の学術的証拠。",
+  },
+  {
+    id: "F-4C",
+    title: "F-4C: 1ヶ月前落下 隕石片の磁気共鳴分析（PC4：観測員）",
+    organization: "気象庁 小笠原気象観測所 地質研究室",
+    evidenceId: "ev-meteorite-thermal-pulse",
+    badge: "隕石磁気共鳴パルス",
+    summary: "1ヶ月前に落下した隕石片が特異な電磁パルスを継続放出。海底熱水プルームの鉱物と強く共鳴している事実が判明！",
+    detail: "PC4が保管していた机上の隕石片の詳細分析。海底火山の熱水噴出孔やマグマ活動と共鳴する波長を放っており、怪物が海底火山を辿る理由が『隕石の磁気パルスへの誘引』である物理的証拠。",
+  },
+  {
+    id: "F-4D",
+    title: "F-4D: 二見港定期船 不審ダイバー足取り・輸送伝票追跡（PC3：救難隊長）",
+    organization: "小笠原海運 二見港貨物取扱所",
+    evidenceId: "ev-diver-shipping-waybill",
+    badge: "貨物輸送伝票",
+    summary: "Day 1の大型冷凍ボックスの送り先は『静岡県・富士山麓の民間山林・特異研究施設』宛て！",
+    detail: "PC3が港の貨物台帳を執念で追跡。ダイバーたちが『採集した魚』と称して運び出した超重量ボックスは、富士山麓へ極秘輸送されていた。怪物が駿河湾・富士山へ向かう動機と直結する。",
+  },
+];
+
 interface GmDashboardProps {
   project: MMProject;
   onNavigateToChart?: () => void;
@@ -133,6 +202,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   // Day 2 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
   const [selectedTokyoAction, setSelectedTokyoAction] = useState<string>("T-3");
   const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
+
+  // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
+  const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4A");
+  const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+  // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
+  const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
+
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
   const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
@@ -160,6 +236,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
       } else {
         if (prev.length >= 2) {
           // すでに2つ選択されている場合は古い方を押し出す
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleToggleDay4FieldAction = (id: string) => {
+    setSelectedDay4FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
           return [prev[1], id];
         }
         return [...prev, id];
@@ -1041,35 +1130,217 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 4 && (
                 <div className="space-y-3 text-xs leading-relaxed">
-                  <div className="rounded-lg border border-red-900/60 bg-red-950/25 p-3.5 shadow-sm">
-                    <div className="flex items-center gap-2">
-                      <ShieldAlert className="h-4 w-4 text-red-400" />
-                      <span className="font-bold text-red-300">
-                        【フェーズ1：防衛出動の決定 ＆ 官邸隠蔽圧力】
-                      </span>
+                  {/* フェーズ1：スミス島〜青ヶ島沖海底噴火 ＆ 火山活動監視図 */}
+                  <div className="rounded-xl border border-rose-900/60 bg-slate-900 p-4 shadow-md space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Flame className="h-4 w-4 text-rose-400" />
+                        <div>
+                          <span className="font-bold text-white text-xs">
+                            【Day 4 火山フロント最新状況】スミス島〜青ヶ島沖海底噴火 ＆ 火山活動監視図
+                          </span>
+                          <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                            須美寿島〜青ヶ島沖 連動噴火 ＆ 八丈島・青ヶ島 微動観測
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href="/images/eruption_monitoring_chart_day4.svg"
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
+                        >
+                          <ExternalLink className="h-3 w-3" /> 別タブで開く
+                        </a>
+                        <button
+                          onClick={() => setIsChartModalOpen(true)}
+                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <Maximize2 className="h-3 w-3" /> 大画面で開く
+                        </button>
+                      </div>
                     </div>
-                    <div className="mt-2 rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
-                      <p className="font-semibold text-white">
-                        🚨 海上自衛隊への武力迎撃出動を要請・決定
+
+                    {/* 海図プレビューカード */}
+                    <div
+                      onClick={() => setIsChartModalOpen(true)}
+                      className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-60 flex items-center justify-center shadow-inner"
+                    >
+                      <EruptionMonitoringChart day={4} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
+                        <span className="text-[11px] font-semibold text-slate-200">
+                          🔴 Day 3 須美寿〜青ヶ島沖海底噴火 ｜ ⚡ 青ヶ島・八丈島 火山性軽度地震（震度1〜2）
+                        </span>
+                        <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
+                          クリックで拡大
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
+                      <p>
+                        ・<strong>スミス島〜青ヶ島沖の噴火</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖の海底カルデラで連動爆発が発生（Day 3海底噴火）。他の島名や地形と被らないよう海図西側に明瞭にプロット。
                       </p>
-                      <p className="mt-0.5 text-slate-300">
-                        物体の継続的な北上と火山連動噴火の危機を受け、海上自衛隊への武力迎撃出動を決定。潜水艦隊および対潜哨戒機が八丈島南方に迎撃陣形を展開する。
+                      <p>
+                        ・<strong>八丈島・青ヶ島の地震</strong>：噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。島民に不穏な空気が広がる。
                       </p>
                     </div>
                   </div>
 
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-amber-400">【東京司令部 vs 現地救難隊の対立・ドラマ】:</span>
-                    <div className="mt-2 space-y-1.5 text-slate-300 text-[11px]">
-                      <p>
-                        ・<strong>官邸からの隠蔽圧力</strong>：官邸・上層部より『社会パニック防止のための完全隠蔽命令』がPC1に下る。怪異や連動噴火の真相を伏せ、海底地震として処理するよう激しい圧力がかかる。
+                  {/* フェーズ2：Day 3の意思決定に基づく内閣・防衛省の反応分岐 */}
+                  <div className="rounded-xl border border-amber-900/60 bg-slate-900 p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <div className="flex items-center gap-1.5 font-bold text-amber-300 text-xs">
+                        <Scale className="h-4 w-4 text-amber-400" />
+                        【フェーズ2：Day 3意思決定に基づく政府・防衛省の反応分岐】
+                      </div>
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded border border-slate-800 text-[10px]">
+                        <span className="text-slate-400">Day 3の決定:</span>
+                        <button
+                          type="button"
+                          onClick={() => setDay3GmHqDecision("defense_dispatch")}
+                          className={`px-2 py-0.5 rounded transition ${
+                            day3GmHqDecision === "defense_dispatch"
+                              ? "bg-rose-700 text-white font-bold"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          防衛出動要請あり
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDay3GmHqDecision("no_dispatch")}
+                          className={`px-2 py-0.5 rounded transition ${
+                            day3GmHqDecision === "no_dispatch"
+                              ? "bg-indigo-700 text-white font-bold"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          要請なし
+                        </button>
+                      </div>
+                    </div>
+
+                    {day3GmHqDecision === "defense_dispatch" ? (
+                      <div className="rounded-lg border border-rose-800/80 bg-rose-950/30 p-3 text-[11px] text-rose-200 space-y-1.5">
+                        <strong className="text-rose-300 block font-bold text-xs flex items-center gap-1.5">
+                          🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣不作為）】
+                        </strong>
+                        <p className="italic text-slate-200">
+                          「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
+                        </p>
+                        <p className="text-slate-400">
+                          💡 <strong>GM進行メモ</strong>: 司令官が必死に出動要請したにもかかわらず、政治的判断と法理の壁によって自衛隊が動かない「国家的不作為」の冷酷さを演出してください。
+                        </p>
+                      </div>
+                    ) : (
+                      <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 text-[11px] text-indigo-200 space-y-1.5">
+                        <strong className="text-indigo-300 block font-bold text-xs flex items-center gap-1.5">
+                          🛡️ 【防衛省・統合幕僚監部からの照会：生物の進路に関する緊急意見聴取】
+                        </strong>
+                        <p className="italic text-slate-200">
+                          「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。この生物は一体どこに向かっているのか？ 進路および最終到達予測地点に関する対策本部の推定意見を至急提出されたし』」
+                        </p>
+                        <p className="text-slate-400">
+                          💡 <strong>GM進行メモ</strong>: 防衛出動を求めなかった場合、防衛庁側から生物の進路と目的についての意見を強く求められ、対策本部としての分析・責任が問われる展開となります。
+                        </p>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* フェーズ3：部隊再配置と東京メディア完全緘口令 */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                    <div className="rounded-lg border border-teal-900/60 bg-teal-950/20 p-3 text-[11px] space-y-1">
+                      <span className="font-bold text-teal-300 block text-xs flex items-center gap-1.5">
+                        <Anchor className="h-3.5 w-3.5" /> ⚓ 小笠原現地組（PC3〜PC6）：父島本島へ帰還
+                      </span>
+                      <p className="text-slate-300">
+                        洋上展開（巡視船あきつしま洋上補給・長距離ヘリ索敵）を完遂した現地部隊は、父島・二見港の本拠地へ無事帰還。島民避難の受け入れ体制を整えつつ、小笠原に残る謎の解明に着手。
                       </p>
-                      <p>
-                        ・<strong>現地の葛藤と反発</strong>：島民の避難準備を急ぐ現地救難隊（PC3・PC4・PC5・PC6）は、東京側の不自然な情報統制と隠蔽姿勢に激しく反発。東京と現地の通信回線に緊張が走る。
+                    </div>
+
+                    <div className="rounded-lg border border-red-900/60 bg-red-950/20 p-3 text-[11px] space-y-1">
+                      <span className="font-bold text-red-300 block text-xs flex items-center gap-1.5">
+                        <ShieldAlert className="h-3.5 w-3.5" /> 🚫 東京組（PC1, PC2）：メディア完全緘口令（情報統制）
+                      </span>
+                      <p className="text-slate-300">
+                        官邸および警察庁より最高機密指令。パニック防止を名目に全メディア（テレビ・新聞・ネット）への情報提供を一切遮断。八丈島等のSNS投稿を緊急削除・検閲する命令が下る。
                       </p>
-                      <p>
-                        ・<strong>公安ルートの極秘調査</strong>：東京側（PC1）は公安ルートを通じ、Day 1で救助されたダイバーたちが持ち去った大型冷凍ボックスと身元に関する追跡調査を開始する。
-                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ4：Day 4 合議制アクション操作パネル */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                        <Users className="h-4 w-4 text-indigo-400" />
+                        【フェーズ4：Day 4 合議制アクション（東京1枠 ＋ 現地2枠）】
+                      </span>
+                      <div className="flex items-center gap-2 text-[10px]">
+                        <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                          東京: 1枠
+                        </span>
+                        <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                          現地: {selectedDay4FieldActions.length}/2枠
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* 東京司令部アクション */}
+                    <div>
+                      <span className="font-bold text-indigo-300 text-[11px] block mb-1">
+                        🏢 東京司令部アクション（1つ選択：八丈島・メディア情報）:
+                      </span>
+                      <div className="grid grid-cols-3 gap-2">
+                        {DAY4_TOKYO_ACTIONS.map((a) => (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => setSelectedDay4TokyoAction(a.id)}
+                            className={`rounded-lg p-2 text-left border transition ${
+                              selectedDay4TokyoAction === a.id
+                                ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="font-bold text-white text-[11px]">{a.id} {a.badge}</div>
+                            <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 小笠原現地アクション */}
+                    <div>
+                      <span className="font-bold text-teal-300 text-[11px] block mb-1">
+                        🏝️ 小笠原現地アクション（4枠中2枠選択：神社・恩師・隕石・ダイバー）:
+                      </span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {DAY4_FIELD_ACTIONS.map((a) => {
+                          const isSelected = selectedDay4FieldActions.includes(a.id);
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => handleToggleDay4FieldAction(a.id)}
+                              className={`rounded-lg p-2 text-left border transition ${
+                                isSelected
+                                  ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white" : "text-slate-500"}`}>
+                                  {isSelected ? "選択中" : "未選択"}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -1129,7 +1400,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Day {currentDay} 配布・開示証拠チェック
             </h4>
-            {currentDay === 2 && (
+            {(currentDay === 2 || currentDay === 4) && (
               <span className="text-[10px] text-indigo-400 font-semibold">
                 合議選択連動中
               </span>
@@ -1142,7 +1413,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               .map((ev) => {
                 const owner = project.characters.find((c) => c.id === ev.ownerId);
 
-                // Day 2の場合のアクション連動チェック
+                // Day 2 / Day 4 の場合のアクション連動チェック
                 let isActionSelected = false;
                 let linkedActionName = "";
                 if (currentDay === 2) {
@@ -1155,20 +1426,32 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     linkedActionName = fieldMatch.id;
                     isActionSelected = selectedFieldActions.includes(fieldMatch.id);
                   }
+                } else if (currentDay === 4) {
+                  const tokyoMatch = DAY4_TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const fieldMatch = DAY4_FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  if (tokyoMatch) {
+                    linkedActionName = tokyoMatch.id;
+                    isActionSelected = selectedDay4TokyoAction === tokyoMatch.id;
+                  } else if (fieldMatch) {
+                    linkedActionName = fieldMatch.id;
+                    isActionSelected = selectedDay4FieldActions.includes(fieldMatch.id);
+                  }
                 }
+
+                const isLinkedAndActive = (currentDay === 2 || currentDay === 4) && isActionSelected;
 
                 return (
                   <div
                     key={ev.id}
                     className={`rounded-lg border p-3 text-xs transition ${
-                      currentDay === 2 && isActionSelected
+                      isLinkedAndActive
                         ? "border-emerald-600/70 bg-emerald-950/25 shadow-sm"
                         : "border-slate-800 bg-slate-950"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        {currentDay === 2 && linkedActionName && (
+                        {(currentDay === 2 || currentDay === 4) && linkedActionName && (
                           <span
                             className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
                               isActionSelected
@@ -1181,7 +1464,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         )}
                         <span
                           className={`font-bold ${
-                            currentDay === 2 && isActionSelected
+                            isLinkedAndActive
                               ? "text-emerald-300"
                               : "text-indigo-300"
                           }`}

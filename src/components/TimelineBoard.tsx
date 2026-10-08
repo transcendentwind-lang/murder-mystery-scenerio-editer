@@ -35,7 +35,7 @@ import {
   MessageSquare,
   Sparkles,
 } from "lucide-react";
-import { TOKYO_ACTIONS, FIELD_ACTIONS } from "./GmDashboard";
+import { TOKYO_ACTIONS, FIELD_ACTIONS, DAY4_TOKYO_ACTIONS, DAY4_FIELD_ACTIONS } from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
@@ -145,6 +145,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isTheaterModalOpen, setIsTheaterModalOpen] = useState(false);
   const [isDay1ChartModalOpen, setIsDay1ChartModalOpen] = useState(false);
+  const [isDay4MapModalOpen, setIsDay4MapModalOpen] = useState(false);
 
   // Day 1 漂流海図の表示モード（白地図 vs 対策本部解析図）
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
@@ -168,6 +169,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3Pc2Decision, setDay3Pc2Decision] = useState<string>("defense_action");
   const [day3HqFinalDecision, setDay3HqFinalDecision] = useState<string | null>(null);
 
+  // Day 4 アクション選択状態（東京1枠、現地2枠）
+  const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
+  const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+
   // ESCキーで開いているモーダルを閉じる
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -175,6 +180,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         setIsPhotoModalOpen(false);
         setIsTheaterModalOpen(false);
         setIsDay1ChartModalOpen(false);
+        setIsDay4MapModalOpen(false);
         setDay3IsPC6ModalOpen(false);
         setDay3PhotoModal(null);
       }
@@ -185,6 +191,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
   const handleToggleDay2FieldAction = (id: string) => {
     setDay2FieldActions((prev) => {
+      if (prev.includes(id)) return prev.filter((i) => i !== id);
+      if (prev.length >= 2) return [prev[1], id];
+      return [...prev, id];
+    });
+  };
+
+  const handleToggleDay4FieldAction = (id: string) => {
+    setDay4FieldActions((prev) => {
       if (prev.includes(id)) return prev.filter((i) => i !== id);
       if (prev.length >= 2) return [prev[1], id];
       return [...prev, id];
@@ -1509,10 +1523,339 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </p>
                         <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
                           🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
-                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（防衛出動の決定と隠蔽圧力・迎撃陣形の展開）</strong>】へと繋がります！
+                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（スミス島沖海底噴火・内閣不作為とメディア緘口令・現地4大真相調査）</strong>】へと繋がります！
                         </div>
                       </div>
                     )}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* --- DAY 4 プレイヤー提供情報：スミス島沖海底噴火 ＆ 合議制アクション --- */}
+            {selectedDay === 4 && (
+              <div className="rounded-xl border border-red-800 bg-[#140810] p-4 shadow-lg space-y-4">
+                {/* ヘッダー */}
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-red-900/60 pb-2.5">
+                  <div className="flex items-center gap-2">
+                    <Flame className="h-4 w-4 text-rose-400" />
+                    <div>
+                      <span className="font-bold text-xs text-white">
+                        【Day 4 緊急事態】スミス島〜青ヶ島沖海底噴火 ＆ 政府・現地真相調査作戦
+                      </span>
+                      <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                        須美寿〜青ヶ島沖 連動大爆発 ｜ 八丈島・青ヶ島 群発微動 ｜ 父島帰還
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2 text-[10px]">
+                    <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                      現地組: 父島本島帰還
+                    </span>
+                    <span className="rounded bg-rose-950 px-2 py-0.5 font-bold text-rose-300 border border-rose-800">
+                      東京組: 完全緘口令
+                    </span>
+                  </div>
+                </div>
+
+                {/* 部隊再配置＆メディア緘口令バナー */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
+                  <div className="rounded-lg border border-teal-900/80 bg-teal-950/30 p-2.5 text-xs text-teal-200 flex items-start gap-2">
+                    <Anchor className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-white block font-bold text-[11px]">
+                        ⚓ 小笠原現地組（PC3〜PC6）：洋上展開終了・父島本島へ帰還
+                      </strong>
+                      <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
+                        長距離ヘリ捜索および巡視船給油ミッションを完遂し、父島二見港へ帰還。島民避難の受け入れと、島に残された記録の調査体制へ移行。
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg border border-red-900/80 bg-red-950/30 p-2.5 text-xs text-red-200 flex items-start gap-2">
+                    <ShieldAlert className="h-4 w-4 text-red-400 shrink-0 mt-0.5" />
+                    <div>
+                      <strong className="text-white block font-bold text-[11px]">
+                        🚫 東京司令部（PC1, PC2）：メディア完全緘口令（情報統制命令）
+                      </strong>
+                      <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
+                        内閣官房・警察庁より最高機密指令。パニック防止を名目に全報道機関への情報開示を完全封鎖。伊豆諸島住民のSNS投稿も緊急検閲・削除対象。
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ① 海上保安庁 火山活動監視状況図（Day 4更新版） */}
+                <div className="rounded-xl border border-rose-900/70 bg-[#0c1322] p-4 shadow-md space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Flame className="h-4 w-4 text-rose-400" />
+                      <div>
+                        <span className="font-bold text-xs text-white">
+                          【火山活動監視図 WGS84】須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測（Day 4更新版）
+                        </span>
+                        <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                          CHART NO. V-2024 / 噴火ドミノ北上
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <a
+                        href="/images/eruption_monitoring_chart_day4.svg"
+                        target="_blank"
+                        rel="noreferrer"
+                        className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
+                      >
+                        <ExternalLink className="h-3 w-3" /> 別タブで開く
+                      </a>
+                      <button
+                        type="button"
+                        onClick={() => setIsDay4MapModalOpen(true)}
+                        className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
+                      >
+                        <Maximize2 className="h-3 w-3" /> 大画面で開く
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 海図カード */}
+                  <div
+                    onClick={() => setIsDay4MapModalOpen(true)}
+                    className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-[16/10] max-h-72 flex items-center justify-center p-2 shadow-2xl transition hover:border-rose-500"
+                  >
+                    <EruptionMonitoringChart
+                      day={4}
+                      className="w-full h-full object-contain transition duration-200 group-hover:scale-[1.01]"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none opacity-0 group-hover:opacity-100 transition">
+                      <span className="text-[11px] font-bold text-white bg-black/60 px-2 py-0.5 rounded backdrop-blur">
+                        🔴 【Day 3 噴火】須美寿〜青ヶ島沖海底カルデラ連動噴火 ｜ ⚡ 八丈島・青ヶ島 地震観測
+                      </span>
+                      <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
+                        <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
+                    <p>
+                      ・<strong>スミス島〜青ヶ島沖の噴火地点</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖（31°40&apos;N, 139°50&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 須美寿〜青ヶ島沖海底噴火」として他の地名に被らずプロット。
+                    </p>
+                    <p>
+                      ・<strong>青ヶ島・八丈島の地震観測</strong>：連動噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。島民に不穏な動揺が広がっています。
+                    </p>
+                  </div>
+                </div>
+
+                {/* ② Day 3 司令官決定に基づく内閣・防衛省の反応分岐バナー */}
+                <div className="rounded-xl border border-amber-700/70 bg-[#16100e] p-3.5 space-y-2.5 shadow-md">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-900/60 pb-1.5">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-300 text-xs">
+                      <Scale className="h-4 w-4 text-amber-400" />
+                      【Day 3 意思決定の結末】政府（内閣官房）および防衛省からの返答
+                    </div>
+                    <div className="flex items-center gap-1 bg-slate-950 p-1 rounded border border-slate-800 text-[10px]">
+                      <span className="text-slate-400">Day 3 司令官の決断:</span>
+                      <button
+                        type="button"
+                        onClick={() => setDay3HqFinalDecision("defense_dispatch")}
+                        className={`px-2 py-0.5 rounded transition ${
+                          (day3HqFinalDecision === "defense_dispatch" || !day3HqFinalDecision)
+                            ? "bg-rose-700 text-white font-bold ring-1 ring-rose-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        防衛出動要請
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDay3HqFinalDecision("maritime_guard")}
+                        className={`px-2 py-0.5 rounded transition ${
+                          day3HqFinalDecision === "maritime_guard"
+                            ? "bg-indigo-700 text-white font-bold ring-1 ring-indigo-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                      >
+                        要請なし
+                      </button>
+                    </div>
+                  </div>
+
+                  {(day3HqFinalDecision === "defense_dispatch" || !day3HqFinalDecision) ? (
+                    <div className="rounded-lg border border-rose-800/80 bg-rose-950/40 p-3 text-xs text-rose-200 space-y-1.5">
+                      <div className="flex items-center gap-2 font-bold text-rose-300 text-xs">
+                        <ShieldAlert className="h-4 w-4 text-rose-400" />
+                        🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣の不作為）】
+                      </div>
+                      <p className="text-[11px] text-slate-200 italic leading-relaxed">
+                        「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。防衛出動の要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が警戒にあたれ』」
+                      </p>
+                      <p className="text-[10px] text-slate-400">
+                        ※対策本部司令官（PC1）の要請は、国家上層部の冷酷な不作為と法理の壁によって却下されました。自衛隊は動かず、現場の海上保安庁だけで対処せねばなりません。
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/40 p-3 text-xs text-indigo-200 space-y-1.5">
+                      <div className="flex items-center gap-2 font-bold text-indigo-300 text-xs">
+                        <Radio className="h-4 w-4 text-indigo-400" />
+                        🛡️ 【防衛省・統合幕僚監部からの緊急照会：生物の北上進路に関する意見聴取】
+                      </div>
+                      <p className="text-[11px] text-slate-200 italic leading-relaxed">
+                        「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。この生物は一体どこに向かっているのか？ 進路および最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』」
+                      </p>
+                      <p className="text-[10px] text-slate-400">
+                        ※防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* ③ Day 4 合議制アクション操作パネル（東京1枠 ＋ 小笠原現地2枠） */}
+                <div className="rounded-xl border border-indigo-900/60 bg-[#0c1024] p-4 shadow-md space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-cyan-400" />
+                      <span className="font-bold text-xs text-white">
+                        【合議制アクション】八丈島情報照会 ＆ 小笠原現地4大真相調査
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px]">
+                      <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                        東京: 1枠
+                      </span>
+                      <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                        現地: {day4FieldActions.length}/2枠
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 東京司令部アクション */}
+                  <div>
+                    <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
+                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択：八丈島・メディア情報）:
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      {DAY4_TOKYO_ACTIONS.map((a) => {
+                        const isSelected = day4TokyoAction === a.id;
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => setDay4TokyoAction(a.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-indigo-400 bg-indigo-950/80 shadow ring-1 ring-indigo-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white" : "text-slate-500"}`}>
+                                {isSelected ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 小笠原現地アクション */}
+                  <div>
+                    <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
+                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：神社・恩師・隕石・ダイバー）:
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {DAY4_FIELD_ACTIONS.map((a) => {
+                        const isSelected = day4FieldActions.includes(a.id);
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => handleToggleDay4FieldAction(a.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-teal-400 bg-teal-950/80 shadow ring-1 ring-teal-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                                isSelected ? "bg-teal-600 text-white" : "text-slate-500"
+                              }`}>
+                                {isSelected ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ④ 【選択されたアクションの調査結果レポート（解禁情報詳細）】 */}
+                <div className="rounded-xl border border-slate-700 bg-slate-950/90 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                      <FileText className="h-4 w-4" />
+                      【Day 4 選択アクション 調査結果・機密レポート】
+                    </span>
+                    <span className="text-[10px] text-slate-400">
+                      合議で選定した情報（東京1件 ＋ 現地2件）の詳細調書
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* 東京側レポート */}
+                    {(() => {
+                      const tokyoActionObj = DAY4_TOKYO_ACTIONS.find((a) => a.id === day4TokyoAction);
+                      if (!tokyoActionObj) return null;
+                      return (
+                        <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
+                            <span className="font-bold text-indigo-300 text-[11px]">
+                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
+                              {tokyoActionObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {tokyoActionObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {tokyoActionObj.detail}
+                          </p>
+                        </div>
+                      );
+                    })()}
+
+                    {/* 現地側レポート（2件） */}
+                    {day4FieldActions.map((fId) => {
+                      const fObj = DAY4_FIELD_ACTIONS.find((a) => a.id === fId);
+                      if (!fObj) return null;
+                      return (
+                        <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
+                            <span className="font-bold text-teal-300 text-[11px]">
+                              🏝️ {fObj.id} {fObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
+                              {fObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {fObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {fObj.detail}
+                          </p>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
@@ -2202,6 +2545,68 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </>
                 )}
               </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 4 火山活動監視図 大画面モーダル */}
+      {isDay4MapModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsDay4MapModalOpen(false)}
+        >
+          <div
+            className="relative max-w-6xl w-full rounded-2xl border border-rose-800 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-950 border border-rose-800 text-rose-400">
+                  <Flame className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    海上保安庁 火山活動監視状況図（Day 4：須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測）
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84)
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <a
+                  href="/images/eruption_monitoring_chart_day4.svg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsDay4MapModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            {/* モーダルメイン表示部 */}
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px] p-2">
+              <EruptionMonitoringChart day={4} className="w-full h-full max-h-[70vh] object-contain select-none" />
+            </div>
+
+            {/* モーダル下部解説 */}
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300 flex items-center justify-between">
+              <div>
+                <span className="font-bold text-rose-300">【Day 4 観測要綱】</span>
+                スミス島〜青ヶ島沖の海底カルデラ噴火（Day 3マーク）および青ヶ島・八丈島での火山性微動（震度1〜2）を網羅。他の島名や地形と被らないよう海図西側に配置。
+              </div>
+              <span className="font-mono text-cyan-400">連動速度: 時速約6km 北上</span>
             </div>
           </div>
         </div>
