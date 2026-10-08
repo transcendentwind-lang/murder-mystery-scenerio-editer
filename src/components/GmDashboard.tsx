@@ -30,10 +30,13 @@ import {
   ShieldAlert,
   Scale,
   Users,
+  EyeOff,
+  Compass,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
+import { Day1NauticalMap } from "./Day1NauticalMap";
 
 export interface Day2ActionOption {
   id: string;
@@ -133,6 +136,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
   const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
+  const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
+  const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
 
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -141,6 +146,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         setIsPhotoModalOpen(false);
         setIsChartModalOpen(false);
         setIsTacticalModalOpen(false);
+        setIsDay1ModalOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -411,20 +417,42 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </p>
                   </div>
 
-                  <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3">
-                    <div className="flex items-center justify-between">
+                  <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="font-bold text-amber-300">【フェーズ2：状況提示 ＆ なぜ衛星が使えないか】</span>
-                      {onNavigateToChart && (
+                      <div className="flex items-center gap-1.5 text-xs">
                         <button
-                          onClick={onNavigateToChart}
-                          className="flex items-center gap-1 rounded bg-cyan-700/80 px-2 py-1 text-[11px] font-bold text-white hover:bg-cyan-600 transition shadow"
+                          type="button"
+                          onClick={() => {
+                            setDay1ViewMode("investigation");
+                            setIsDay1ModalOpen(true);
+                          }}
+                          className="flex items-center gap-1 rounded bg-cyan-700 hover:bg-cyan-600 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
                         >
-                          <Navigation className="h-3 w-3" />
-                          海図画面を開く
+                          <EyeOff className="h-3 w-3" /> 白地図を開く
                         </button>
-                      )}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setDay1ViewMode("tactical");
+                            setIsDay1ModalOpen(true);
+                          }}
+                          className="flex items-center gap-1 rounded bg-indigo-600 hover:bg-indigo-500 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
+                        >
+                          <Eye className="h-3 w-3" /> GM解析図を開く
+                        </button>
+                        {onNavigateToChart && (
+                          <button
+                            type="button"
+                            onClick={onNavigateToChart}
+                            className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] font-bold text-slate-300 transition border border-slate-700"
+                          >
+                            <Navigation className="h-3 w-3" /> 専用海図画面
+                          </button>
+                        )}
+                      </div>
                     </div>
-                    <p className="text-slate-300 mt-1 italic">
+                    <p className="text-slate-300 italic">
                       「救難信号発信から既に20分が経過。救難艇が現場海域へ到達するまでさらに40分――合計1時間、船は漂流し続けます。全体に【漂流海図】を開示します。どこへ救難艇を急行させるべきか、6名で協力して結論を出してください」
                     </p>
                     <div className="mt-2 rounded bg-slate-900/90 p-2 text-[11px] text-slate-300 border border-slate-800">
@@ -1361,6 +1389,124 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   1セクター: 約20km四方
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 1 航海用海図 大画面モーダル（GM・白地図両対応） */}
+      {isDay1ModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
+          onClick={() => setIsDay1ModalOpen(false)}
+        >
+          <div
+            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-950 border border-cyan-800 text-cyan-400">
+                  <Navigation className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    小笠原南西海域 航海用海図（CHART NO. W-2704）
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300">
+                      {day1ViewMode === "investigation" ? "白地図（プレイヤー提示用）" : "対策本部解析図（GM用）"}
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-slate-400 font-mono">
+                    縮尺 1:50,000 / 緯度1分 = 1海里 (NM) | 中心: 27°04.0&apos;N, 142°06.0&apos;E (SOS地点)
+                  </p>
+                </div>
+              </div>
+
+              {/* モード切り替えタブ ＆ アクション */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setDay1ViewMode("investigation")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded font-semibold transition ${
+                      day1ViewMode === "investigation"
+                        ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    <EyeOff className="h-3 w-3" /> 白地図（プレイヤー用）
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDay1ViewMode("tactical")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded font-semibold transition ${
+                      day1ViewMode === "tactical"
+                        ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    <Eye className="h-3 w-3" /> GM解析図
+                  </button>
+                </div>
+
+                <a
+                  href={
+                    day1ViewMode === "investigation"
+                      ? "/images/day1_nautical_chart_white.svg"
+                      : "/images/day1_nautical_chart_gm.svg"
+                  }
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                  title="別タブで原寸SVGを表示"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => setIsDay1ModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                  title="閉じる"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            {/* モーダルメイン表示部 */}
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#0f172a] p-2 flex items-center justify-center min-h-[460px]">
+              <div className="w-full h-full max-h-[72vh] flex items-center justify-center">
+                <Day1NauticalMap
+                  mode={day1ViewMode === "investigation" ? "player" : "gm"}
+                  className="w-full h-full object-contain select-none"
+                />
+              </div>
+            </div>
+
+            {/* モーダル下部解説 */}
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300">
+              {day1ViewMode === "investigation" ? (
+                <div>
+                  <strong className="text-cyan-300 block mb-1">
+                    【プレイヤー提示用 白地図】漂流予測パズル作図要領:
+                  </strong>
+                  <p className="text-[11px] text-slate-300">
+                    救難信号発信位置を中心に、北東に父島・南島、東側および南東側に危険な暗礁群が点在。各PCの専門知識（風・海流・潮目・船の姿勢）を合成して自力で作図計算させます（解答非表示）。
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <div className="flex items-center justify-between font-semibold text-amber-300 mb-1">
+                    <span>【対策本部解析図（GM用）】漂流予測の正解とベクトル合成:</span>
+                    <span className="text-emerald-400 font-bold">⭐ 救助海域: 東北東へ約2.5海里</span>
+                  </div>
+                  <p className="text-[11px] text-slate-300">
+                    南西強風15m/sによる風圧流（北東へ約1.5kt）＋ 黒潮支流（真東へ2.0kt）＝【東北東へ約2.5kt】。東側・南東側の暗礁群を北側にすり抜け、発信から1時間後の遭難船を救助成功！
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

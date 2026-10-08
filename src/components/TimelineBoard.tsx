@@ -40,6 +40,7 @@ import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
+import { Day1NauticalMap } from "./Day1NauticalMap";
 
 // Day 3 ヘリコプター洋上捜索（36セクター索敵盤）の定義
 export const DAY3_SECTOR_ROWS = ["A", "B", "C", "D", "E", "F"] as const;
@@ -354,61 +355,111 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             {/* --- DAY 1 プレイヤー提供情報：漂流海図 ＆ 救助パズル --- */}
             {selectedDay === 1 && (
               <div className="rounded-xl border border-cyan-800 bg-[#081325] p-4 shadow-lg space-y-3">
-                <div className="flex items-center justify-between border-b border-cyan-900/60 pb-2">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-900/60 pb-2.5">
                   <div className="flex items-center gap-2">
                     <Navigation className="h-4 w-4 text-cyan-400" />
-                    <span className="font-bold text-xs text-white">
-                      【プレイヤー提供情報】小笠原南西海域 航海用海図（CHART NO. W-2704）
-                    </span>
+                    <div>
+                      <span className="font-bold text-xs text-white">
+                        【プレイヤー提供情報】小笠原南西海域 航海用海図（CHART NO. W-2704）
+                      </span>
+                      <span className="ml-2 text-[10px] text-cyan-300 font-mono">
+                        縮尺 1:50,000 / 緯度1分 = 1海里 (NM)
+                      </span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() =>
-                        setDay1ViewMode(day1ViewMode === "investigation" ? "tactical" : "investigation")
+
+                  {/* モード切替タブ ＆ アクション */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                      <button
+                        type="button"
+                        onClick={() => setDay1ViewMode("investigation")}
+                        className={`flex items-center gap-1 rounded px-2.5 py-1 text-xs font-semibold transition ${
+                          day1ViewMode === "investigation"
+                            ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                        title="プレイヤー提示用：SOS地点中心の白地図"
+                      >
+                        <EyeOff className="h-3 w-3" />
+                        白地図（プレイヤー提示用）
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setDay1ViewMode("tactical")}
+                        className={`flex items-center gap-1 rounded px-2.5 py-1 text-xs font-semibold transition ${
+                          day1ViewMode === "tactical"
+                            ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
+                            : "text-slate-400 hover:text-slate-200"
+                        }`}
+                        title="対策本部解析用：風・海流・暗礁・正解ベクトル全表示"
+                      >
+                        <Eye className="h-3 w-3" />
+                        対策本部解析図（GM用）
+                      </button>
+                    </div>
+
+                    <a
+                      href={
+                        day1ViewMode === "investigation"
+                          ? "/images/day1_nautical_chart_white.svg"
+                          : "/images/day1_nautical_chart_gm.svg"
                       }
-                      className="rounded border border-cyan-700 bg-cyan-950 px-2 py-0.5 text-[10px] font-bold text-cyan-300 hover:bg-cyan-900 transition"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
+                      title="別タブで原寸SVGを開く"
                     >
-                      {day1ViewMode === "investigation"
-                        ? "対策本部解析図を表示"
-                        : "白地図（プレイヤー用）に戻す"}
-                    </button>
+                      <ExternalLink className="h-3 w-3" /> 別タブで開く
+                    </a>
+
                     <button
+                      type="button"
                       onClick={() => setIsDay1ChartModalOpen(true)}
-                      className="flex items-center gap-1 rounded bg-cyan-700 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-cyan-600 transition"
+                      className="flex items-center gap-1 rounded bg-cyan-700 hover:bg-cyan-600 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
                     >
                       <Maximize2 className="h-3 w-3" /> 大画面で開く
                     </button>
                   </div>
                 </div>
 
-                {/* 海図プレビューカード */}
+                {/* 海図プレビューカード（実SVGレンダリング） */}
                 <div
                   onClick={() => setIsDay1ChartModalOpen(true)}
-                  className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-white aspect-[16/9] max-h-56 flex items-center justify-center p-2 shadow-inner"
+                  className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#0f172a] aspect-[16/10] max-h-80 flex items-center justify-center p-2 shadow-2xl transition hover:border-cyan-500"
+                  title="クリックして大画面で検証・作図"
                 >
-                  <div className="text-center text-slate-800">
-                    <Compass className="h-10 w-10 mx-auto text-cyan-700 mb-1 animate-spin-slow" />
-                    <p className="font-bold text-xs text-slate-900">
-                      小笠原南西海域 航海用海図 W-2704 ({day1ViewMode === "investigation" ? "白地図" : "対策本部解析図"})
-                    </p>
-                    <p className="text-[10px] text-slate-600 mt-0.5">
-                      中心: SOS発信位置 / 北東: 父島・南島 / 東・南東: 暗礁群 / ベクトル合成: 東北東へ2.5NM
-                    </p>
-                    <span className="mt-2 inline-flex items-center gap-1 rounded bg-cyan-700 px-2 py-0.5 text-[10px] font-bold text-white shadow">
-                      <Eye className="h-3 w-3" /> クリックして海図を操作・作図
+                  <Day1NauticalMap
+                    mode={day1ViewMode === "investigation" ? "player" : "gm"}
+                    className="w-full h-full object-contain transition duration-200 group-hover:scale-[1.01]"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none opacity-0 group-hover:opacity-100 transition">
+                    <span className="text-[11px] font-bold text-white bg-black/60 px-2 py-0.5 rounded backdrop-blur">
+                      📍 {day1ViewMode === "investigation" ? "【白地図】SOS発信位置・父島・南島・暗礁記号" : "【GM解析図】風圧流1.5kt ＋ 黒潮支流2.0kt ＝ 東北東2.5kt"}
+                    </span>
+                    <span className="rounded bg-cyan-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
+                      <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
                     </span>
                   </div>
                 </div>
 
                 {/* 漂流予測パズル解説 */}
-                <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
-                  <span className="font-bold text-amber-300">
-                    🧩 漂流予測の計算ロジック（プレイヤーたちが持ち寄る情報）:
-                  </span>
-                  <p>・<strong>PC1 (風)</strong>: 南西の強風15m/s ➔ 北東へ約1.5ノット押し流される</p>
-                  <p>・<strong>PC4/5 (海流・潮目)</strong>: 黒潮支流の表層流は真東へ2.0ノット（減衰なし）</p>
-                  <p>・<strong>PC6 (無線)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
-                  <p>・<strong>PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
+                <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-amber-300 flex items-center gap-1.5">
+                      <Compass className="h-3.5 w-3.5 text-amber-400" />
+                      🧩 Day 1 漂流予測の計算ロジック（プレイヤーたちが持ち寄る情報）:
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">
+                      {day1ViewMode === "investigation" ? "※白地図モード中（解答非表示）" : "※GM解析図モード中（解答表示）"}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-0.5">
+                    <p>・<strong>PC1 (風)</strong>: 南西の強風15m/s ➔ 北東へ約1.5ノット押し流される</p>
+                    <p>・<strong>PC4/5 (海流・潮目)</strong>: 黒潮支流の表層流は真東へ2.0ノット（減衰なし）</p>
+                    <p>・<strong>PC6 (無線)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
+                    <p>・<strong>PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
+                  </div>
                 </div>
               </div>
             )}
@@ -1803,58 +1854,127 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
           onClick={() => setIsDay1ChartModalOpen(false)}
         >
           <div
-            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
-              <div className="flex items-center gap-2">
-                <Navigation className="h-5 w-5 text-cyan-400" />
+            {/* モーダルヘッダー */}
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-950 border border-cyan-800 text-cyan-400">
+                  <Navigation className="h-5 w-5" />
+                </div>
                 <div>
-                  <h3 className="font-bold text-sm text-white">
-                    小笠原南西海域 航海用海図（CHART NO. W-2704）漂流予測パズル
+                  <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                    小笠原南西海域 航海用海図（CHART NO. W-2704）
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-cyan-950 border border-cyan-800 text-cyan-300">
+                      {day1ViewMode === "investigation" ? "白地図（プレイヤー提示用）" : "対策本部解析図（GM用）"}
+                    </span>
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
-                    縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM) | {day1ViewMode === "investigation" ? "白地図（プレイヤー提示用）" : "対策本部解析図（ベクトル全表示）"}
+                    縮尺 1:50,000 / 緯度1分(1&apos;) = 1海里 (NM) | 中心: 27°04.0&apos;N, 142°06.0&apos;E (SOS地点)
                   </p>
                 </div>
               </div>
+
+              {/* モード切り替えタブ ＆ アクションボタン群 */}
               <div className="flex items-center gap-2">
-                <button
-                  onClick={() =>
-                    setDay1ViewMode(day1ViewMode === "investigation" ? "tactical" : "investigation")
+                <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setDay1ViewMode("investigation")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded font-semibold transition ${
+                      day1ViewMode === "investigation"
+                        ? "bg-cyan-700 text-white shadow ring-1 ring-cyan-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    <EyeOff className="h-3 w-3" />
+                    白地図（プレイヤー用）
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setDay1ViewMode("tactical")}
+                    className={`flex items-center gap-1 px-3 py-1 rounded font-semibold transition ${
+                      day1ViewMode === "tactical"
+                        ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
+                        : "text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    <Eye className="h-3 w-3" />
+                    対策本部解析図（GM用）
+                  </button>
+                </div>
+
+                <a
+                  href={
+                    day1ViewMode === "investigation"
+                      ? "/images/day1_nautical_chart_white.svg"
+                      : "/images/day1_nautical_chart_gm.svg"
                   }
-                  className="rounded border border-cyan-700 bg-cyan-950 px-2.5 py-1 text-xs font-bold text-cyan-300 hover:bg-cyan-900 transition"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
+                  title="別タブで原寸SVGを開く"
                 >
-                  {day1ViewMode === "investigation" ? "解析図に切り替え" : "白地図に切り替え"}
-                </button>
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                </a>
+
                 <button
+                  type="button"
                   onClick={() => setIsDay1ChartModalOpen(false)}
-                  className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                  title="閉じる (Escキーでも閉じられます)"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" /> 閉じる
                 </button>
               </div>
             </div>
 
-            <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#fdfefe] p-4 text-slate-900">
-              <div className="h-full w-full flex flex-col items-center justify-center text-center">
-                <Compass className="h-16 w-16 text-cyan-700 mb-2 animate-spin-slow" />
-                <h4 className="font-bold text-base text-slate-900">
-                  {day1ViewMode === "investigation"
-                    ? "【プレイヤー提示用 白地図】SOS発信地点 ＆ 父島・南島・暗礁群"
-                    : "【対策本部解析図】北東1.5NM（風）＋ 真東2.0NM（海流）＝ 東北東2.5NMへ急行"}
-                </h4>
-                <p className="text-xs text-slate-600 max-w-xl mt-2 leading-relaxed">
-                  {day1ViewMode === "investigation"
-                    ? "救難信号発信位置を中心とし、北東に父島・南島、東側および南東側に危険な暗礁群が点在。各プレイヤーの専門情報（風・海流・潮目・船の姿勢）を合成して自力で作図計算します。"
-                    : "南西強風15m/sによる風圧流（北東へ1.5kt）と黒潮支流（真東へ2.0kt）の合成ベクトル＝東北東へ約2.5kt。東・南東暗礁群を北側にすり抜け、1時間後の遭難船を捕捉・救助成功！"}
-                </p>
-                <div className="mt-4 rounded bg-slate-100 p-3 border border-slate-300 text-left text-xs text-slate-700 space-y-1">
-                  <p>・<strong>中心地点</strong>: 救難信号発信位置（全電源喪失・漂流開始）</p>
-                  <p>・<strong>東暗礁群 / 南東浅礁群</strong>: 三角波による座礁沈没危険海域（回避必須）</p>
-                  <p>・<strong>正解救助海域</strong>: 東北東へ約2.5海里（暗礁群の手前北側）</p>
-                </div>
+            {/* モーダルメイン表示部（実SVGレンダリング） */}
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#0f172a] p-2 flex items-center justify-center min-h-[460px]">
+              <div className="w-full h-full max-h-[72vh] flex items-center justify-center">
+                <Day1NauticalMap
+                  mode={day1ViewMode === "investigation" ? "player" : "gm"}
+                  className="w-full h-full object-contain select-none"
+                />
               </div>
+            </div>
+
+            {/* モーダル下部解説 */}
+            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-3 text-xs text-slate-300 space-y-1.5">
+              {day1ViewMode === "investigation" ? (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-cyan-300 flex items-center gap-1">
+                      <Compass className="h-3.5 w-3.5" />
+                      【プレイヤー提示用 白地図】漂流予測パズル作図要領:
+                    </strong>
+                    <span className="text-[10px] text-slate-400">
+                      ※解答・ベクトルは非表示になっています
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    救難信号発信位置（海図中心：27°04.0&apos;N, 142°06.0&apos;E）を中心に、北東に父島・南島、東側（740, 350）および南東側（660, 480）に危険な暗礁群が点在しています。<br />
+                    各PCの専門知識（風向風速15m/s、表層流速2.0kt、潮目、船の姿勢）を合成し、救難艇が急行すべき漂流予測海域を自力で作図計算してください。
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-1">
+                  <div className="flex items-center justify-between">
+                    <strong className="text-amber-300 flex items-center gap-1">
+                      <Compass className="h-3.5 w-3.5" />
+                      【対策本部解析図（GM用）】漂流予測の正解とベクトル合成:
+                    </strong>
+                    <span className="text-[10px] text-emerald-400 font-bold">
+                      ⭐ 救助海域: 東北東へ約2.5海里（暗礁群の手前北側）
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    南西強風15m/sによる風圧流（北東へ約1.5kt）＋ 黒潮支流（真東へ2.0kt）のベクトル合成 ＝ <strong>【東北東へ約2.5kt】</strong>。<br />
+                    東側および南東側の危険な暗礁群を北側にすり抜け、発信から1時間後の遭難船（東北東2.5NM地点）を捕捉。暗礁手前で間一髪、船長とダイバーたちの救助に成功します！
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
