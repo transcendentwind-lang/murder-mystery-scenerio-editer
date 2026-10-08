@@ -235,11 +235,11 @@ export function getStoredProjects(): MMProject[] {
       const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
       if (initialIdx >= 0) {
         const storedInit = parsed[initialIdx];
-        if (!storedInit.updatedAt || storedInit.updatedAt < initialProject.updatedAt) {
+        if (!storedInit.updatedAt || (initialProject.updatedAt && storedInit.updatedAt < initialProject.updatedAt)) {
           parsed[initialIdx] = {
             ...storedInit,
             ...initialProject,
-            updatedAt: initialProject.updatedAt,
+            updatedAt: initialProject.updatedAt || new Date().toISOString(),
           };
           localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
         }

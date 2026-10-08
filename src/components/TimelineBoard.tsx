@@ -208,7 +208,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     setDay3SearchOutcome(isSuccess ? "success" : "failure");
     setDay3ActivePhotoTab(isSuccess ? "success" : "failure");
     setDay3IsReportUnlocked(true);
-    audioEngine.playSfx(isSuccess ? "climax-call" : "coda-tape");
+    audioEngine?.playWordSound(isSuccess ? "word-enemy" : "word-alert");
   };
 
   const handleUpdateCurrentStep = (field: keyof IncidentStep, value: any) => {
@@ -901,7 +901,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <ImageIcon className="h-4 w-4 text-cyan-400" />
                       <div>
                         <span className="font-bold text-xs text-white">
-                          【Day 3 洋上ヘリ航空偵察 写真記録】光学・赤外線カメラ所見
+                          【Day 3 洋上ヘリ航空偵察 写真記録】光学望遠カメラ所見
                         </span>
                         <span className="ml-2 text-[10px] text-cyan-300 font-mono">
                           海上保安庁 羽田航空基地 / 小笠原救難隊 捜索ヘリ撮影記録
@@ -964,7 +964,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div>
                           <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
                             <span className="font-bold text-emerald-300 text-xs">
-                              【特定成功：光学・赤外線観測調書】
+                              【特定成功：光学望遠カメラ観測調書】
                             </span>
                             <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-950 border border-emerald-700 text-emerald-300">
                               セクター B-3
@@ -975,7 +975,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             <div>高度: <strong>2,500 ft (約760m)</strong></div>
                             <div>海域: <strong>鳥島北西 約40km</strong></div>
                             <div>速度: <strong>時速約6km 北上</strong></div>
-                            <div>機材: <strong>FLIR赤外光学ポッド (WHOT)</strong></div>
+                            <div>機材: <strong>通常光学望遠カメラ</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
@@ -1620,8 +1620,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
                     {day3PhotoModal === "success"
-                      ? "TIME: 03:45:12 UTC | ALT: 2,500 FT | CAM: FLIR (WHOT) | TARGET: UNKNOWN-MASSIVE COLONY"
-                      : "TIME: 09:14:23 UTC | ALT: 1,850 FT | RANGE: 21.3 KM | STATUS: EMPTY OCEAN / TARGET DIVED"}
+                      ? "ALT: 2,500 FT | CAM: OPTICAL TELEPHOTO (NATURAL) | TARGET: UNKNOWN-MASSIVE COLONY"
+                      : "ALT: 1,850 FT | RANGE: 21.3 KM | STATUS: EMPTY OCEAN / TARGET DIVED"}
                   </p>
                 </div>
               </div>
@@ -1695,7 +1695,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 {day3PhotoModal === "success" ? (
                   <>
-                    ・高度2,500フィート、捜索ヘリFLIR赤外熱画像カメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
+                    ・高度2,500フィート、捜索ヘリ通常光学望遠カメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
                     ・単体のイカ頭部ではなく、<strong>横幅数百メートルに達する広大な生体質量（超群体）</strong>が海面下の黒い深海シャドウとして確認できる。<br />
                     ・その幅広い後背部全体から、<strong>無数に増殖した膨大な触手群</strong>が海中を長く直線的にたなびいており、ダイオウイカ多数の個体が緊密に結合した「超群体（コロニー）」の全貌を捉えた。<br />
                     ・海面には広大な横幅に伴う猛烈な白波とケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上を継続中。
