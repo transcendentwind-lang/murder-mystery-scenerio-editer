@@ -172,6 +172,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 4 アクション選択状態（東京1枠、現地2枠）
   const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
   const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+  // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
+  const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
 
   // ESCキーで開いているモーダルを閉じる
   React.useEffect(() => {
@@ -1867,6 +1869,87 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </div>
                       );
                     })}
+                  </div>
+                </div>
+
+                {/* ⑤ 【Day 4 最終フェーズ】防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達 */}
+                <div className="rounded-xl border border-amber-800/80 bg-[#16121a] p-4 shadow-lg space-y-3.5">
+                  <div className="flex items-center justify-between border-b border-amber-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <ShieldAlert className="h-4 w-4 text-amber-400" />
+                      <span className="font-bold text-xs text-white">
+                        【Day 4 最終意思決定】防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達
+                      </span>
+                    </div>
+                    <span className="rounded bg-amber-950 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-amber-800">
+                      Day 4 結末フェーズ
+                    </span>
+                  </div>
+
+                  {/* 質問1：進路予測 */}
+                  <div className="space-y-1.5">
+                    <span className="font-bold text-amber-200 text-xs flex items-center gap-1.5">
+                      🧭 【問1】この巨大生物は一体どこを目指していると考えられるか？
+                    </span>
+                    <p className="text-[10px] text-slate-400">
+                      各班の調査結果（隕石の残留磁気、火山フロント北上線、富士山麓民家への荷物）を踏まえ、対策本部としての見立てを選択してください。
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDay4DestinationDecision("tokyo")}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day4DestinationDecision === "tokyo"
+                            ? "border-amber-400 bg-amber-950/70 shadow ring-1 ring-amber-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">🗼 東京湾・首都直撃ルート</div>
+                        <p className="text-[10px] text-slate-300 mt-0.5">
+                          東京に持ち帰られた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay4DestinationDecision("fuji")}
+                        className={`rounded-lg p-2.5 text-left border transition ${
+                          day4DestinationDecision === "fuji"
+                            ? "border-amber-400 bg-amber-950/70 shadow ring-1 ring-amber-400"
+                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                        }`}
+                      >
+                        <div className="font-bold text-white text-[11px]">🗻 富士山・駿河湾直撃ルート</div>
+                        <p className="text-[10px] text-slate-300 mt-0.5">
+                          火山フロントの北上直線および富士山麓の民家へ運ばれた荷物を追っている見立て。富士山噴火と駿河トラフ破局危機。
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 質問2：生態分析報告 */}
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <span className="font-bold text-cyan-300 text-[11px] block">
+                      🔬 【問2：生物の正体・構造分析の報告】
+                    </span>
+                    <p className="text-[10px] text-slate-300 leading-relaxed">
+                      写真解析および観測結果に基づき、防衛庁へ<strong>『単一体の巨大生物ではなく、無数の深海生物や触手が絡み合い融合した【超巨大群体（コロニー）】である』</strong>という専門的見解を正式具申しました。
+                    </p>
+                  </div>
+
+                  {/* 防衛庁からの公式通達 */}
+                  <div className="rounded-lg border border-red-700/80 bg-red-950/40 p-3 space-y-1.5 text-xs">
+                    <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
+                      <ShieldAlert className="h-4 w-4 text-red-400" />
+                      🛡️ 【防衛庁・統合幕僚監部からの公式通達：「害獣駆除」名目での部隊出動決定】
+                    </div>
+                    <p className="text-[11px] text-slate-100 italic leading-relaxed">
+                      「対策本部の進路予測（{day4DestinationDecision === "tokyo" ? "東京湾首都直撃ルート" : "富士山・駿河湾直撃ルート"}）および超巨大群体の報告を受理した。内閣法制局の厳格な法理判断により、外国からの武力攻撃ではない本件に対し「防衛出動」を発令することは依然として不可とされた。しかし、国民の生命・財産に対する切迫した危機を排除するため、防衛庁は内閣の承認を取り付け、<strong>【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、自衛隊の全部隊動員を正式決定</strong>した！」
+                    </p>
+                    <div className="rounded bg-black/50 border border-red-800/60 p-2 text-[10px] text-slate-200">
+                      💥 <strong>作戦方針</strong>: 海上自衛隊の潜水艦・護衛艦部隊を展開し、八丈島〜御蔵島沖（Day 5海域）にて通常兵器（最新鋭魚雷・爆雷）による一斉射撃・駆除作戦を敢行する！<br />
+                      事態は【<strong>Day 5：通常兵器の敗北と絶望の真相</strong>】へと突入します。
+                    </div>
                   </div>
                 </div>
               </div>

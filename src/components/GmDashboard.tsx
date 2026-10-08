@@ -208,6 +208,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
   // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
   const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
+  // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
+  const [day4GmDestinationDecision, setDay4GmDestinationDecision] = useState<"tokyo" | "fuji">("fuji");
 
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
@@ -1373,6 +1375,53 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           );
                         })}
                       </div>
+                    </div>
+                  </div>
+
+                  {/* フェーズ5：防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達 */}
+                  <div className="rounded-xl border border-amber-900/70 bg-[#16121a] p-3.5 space-y-3 shadow-md">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                        <ShieldAlert className="h-4 w-4 text-amber-400" />
+                        【フェーズ5：防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達】
+                      </span>
+                      <div className="flex items-center gap-1 bg-slate-950 p-1 rounded border border-slate-800 text-[10px]">
+                        <span className="text-slate-400">見立て:</span>
+                        <button
+                          type="button"
+                          onClick={() => setDay4GmDestinationDecision("tokyo")}
+                          className={`px-2 py-0.5 rounded transition ${
+                            day4GmDestinationDecision === "tokyo"
+                              ? "bg-amber-600 text-white font-bold"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          東京直撃
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setDay4GmDestinationDecision("fuji")}
+                          className={`px-2 py-0.5 rounded transition ${
+                            day4GmDestinationDecision === "fuji"
+                              ? "bg-amber-600 text-white font-bold"
+                              : "text-slate-400 hover:text-slate-200"
+                          }`}
+                        >
+                          富士山直撃
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg border border-red-800/80 bg-red-950/30 p-3 text-[11px] text-red-200 space-y-1.5">
+                      <strong className="text-red-300 block font-bold text-xs flex items-center gap-1.5">
+                        🛡️ 【防衛庁・統合幕僚監部通達：「害獣駆除」名目での部隊動員と駆除作戦決定】
+                      </strong>
+                      <p className="italic text-slate-200 leading-relaxed">
+                        「内閣法制局の見解により、外国の武力侵略ではない本件に『防衛出動』を発令することは不可能とされた。しかし、国民への重大危機を看過できない防衛庁は内閣の合意を取り付け、<strong>【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定</strong>した！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行する！」
+                      </p>
+                      <p className="text-slate-400">
+                        💡 <strong>GM進行メモ</strong>: 政治・法制のリアリズムを演出してください。内閣法制局は『武力攻撃事態ではないため防衛出動は違法』と突っぱねますが、防衛庁は国民保護のため『害獣駆除』という法解釈のウルトラCで部隊を動かします。プレイヤーが東京・富士山のどちらを選んでも自衛隊は『害獣駆除』としてDay 5の通常兵器一斉迎撃に突入します。
+                      </p>
                     </div>
                   </div>
                 </div>
