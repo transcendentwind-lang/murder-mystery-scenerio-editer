@@ -284,6 +284,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const handlePlayAudioCue = (cue: string) => {
     if (cue === "coda-tape") {
       audioEngine?.playWordSound("word-gather", 1.0);
+    } else if (cue === "tongue-click") {
+      audioEngine?.playTongueClickSound(2400);
+    } else if (cue === "sea-tube") {
+      audioEngine?.playSeaTubeAcousticDemo();
+    } else if (cue === "sonar-broadcast") {
+      audioEngine?.playSonarBroadcastAndWhaleResponse();
     } else if (cue === "climax-call") {
       audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0);
     }
@@ -1528,18 +1534,108 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               )}
 
               {currentDay === 6 && (
-                <div className="space-y-2 text-xs leading-relaxed">
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-indigo-400">【恩師のテープ再生合図】:</span>
-                    <p className="text-slate-400 mt-1 italic">
-                      「スピーカーから、ゴボゴボという深海の水音とともに、乾いたパルス音が鳴り始めます。このクリック音は雑音ではない……クジラの言葉そのものです」
+                <div className="space-y-3.5 text-xs leading-relaxed">
+                  {/* フェーズ1：舌クリック音の秘密判明 */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-[#101026] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
+                      <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                        <span>👅 【フェーズ1：古代祝詞の「舌クリック音（吸着音）」の判明】</span>
+                      </span>
+                      <button
+                        onClick={() => handlePlayAudioCue("tongue-click")}
+                        className="flex items-center gap-1.5 rounded bg-amber-600 px-2 py-1 text-[11px] font-bold text-white hover:bg-amber-500 transition shadow"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" /> 舌クリック音
+                      </button>
+                    </div>
+                    <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
+                      「――古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。PC3とPC5が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
                     </p>
-                    <button
-                      onClick={() => handlePlayAudioCue("coda-tape")}
-                      className="mt-2 flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-indigo-500 transition"
-                    >
-                      <Volume2 className="h-3.5 w-3.5" /> テープ音声を再生
-                    </button>
+                    <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2 rounded border border-indigo-900/40 space-y-1">
+                      <strong className="text-amber-200">💡 GM解説ガイダンス（音響物理のトリック）:</strong>
+                      <p className="text-slate-300">
+                        「空気と水面の境界面では音響インピーダンスが約3,600倍も異なるため、喉の歌声・叫び声は99.9%が水面で反射され深海には届きません。しかし舌を弾く急峻なパルス音は、水中へ高圧透過する物理的特性を備えています。古代人は音響物理の法則を神事として体得していたのです。」
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ2：古代の海中筒（通海竹筒）の作法 */}
+                  <div className="rounded-xl border border-cyan-900/60 bg-[#0d1829] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-cyan-900/40 pb-1.5">
+                      <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                        <span>🎋 【フェーズ2：海中筒（通海竹筒）の作法 ＆ インピーダンス整合】</span>
+                      </span>
+                      <button
+                        onClick={() => handlePlayAudioCue("sea-tube")}
+                        className="flex items-center gap-1.5 rounded bg-cyan-600 px-2 py-1 text-[11px] font-bold text-white hover:bg-cyan-500 transition shadow"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" /> 海中筒の音響
+                      </button>
+                    </div>
+                    <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
+                      「小笠原の古老が語り継ぐ儀礼――島人たちは小舟（サバニ）から水深数メートルの海中へ『長い竹筒（海中筒）』を深く差し入れ、その筒口に口を密着させて海中へ直接祝詞を放っていた。水面の反射を完全に迂回し、水深千メートルの海溝へ祈りを直撃させる古代の音響テクノロジーです！」
+                    </p>
+                    <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2 rounded border border-cyan-900/40">
+                      <strong className="text-cyan-200">💡 GM解説ガイダンス（なぜ海中筒なのか）:</strong>
+                      <p className="text-slate-300 mt-0.5">
+                        海面直接発声では透過率わずか0.1%ですが、海中筒を用いることで透過率は85%まで跳ね上がります。深海に棲むマッコウクジラ（海神・神使）へ直接メッセージを届けるための合理的な神具でした。
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ3：マッコウクジラ言語の解読と統率メカニズム */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-[#120f26] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                        <span>🐋 【フェーズ3：マッコウクジラ言語（コーダ）と怪異統率の解明】</span>
+                      </span>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => handlePlayAudioCue("coda-tape")}
+                          className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[10px] font-semibold text-slate-200 transition"
+                        >
+                          <Volume2 className="h-3 w-3" /> テープ音
+                        </button>
+                        <button
+                          onClick={() => handlePlayAudioCue("climax-call")}
+                          className="flex items-center gap-1 rounded bg-indigo-600 hover:bg-indigo-500 px-2 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <Volume2 className="h-3 w-3" /> 構文テスト再生
+                        </button>
+                      </div>
+                    </div>
+                    <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
+                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。朝倉教授の研究ノートと録音テープ。マッコウクジラはクリック音のテンポと周波数の組み合わせ（コーダ）で会話している。そして怪異の超群体が分裂と結合を制御していたのも、この同調パルスだったのです！」
+                    </p>
+                    <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2 rounded border border-indigo-900/40 space-y-1">
+                      <strong className="text-amber-200">🎯 Day 5の防衛庁からの問いへの回答（PC5海洋生物学者）:</strong>
+                      <p className="text-slate-300">
+                        「通常兵器で倒せない怪異の統率の正体は、音響による細胞間ネットワーク同調です。そして、その音波帯域を完全に制圧・捕食できる自然界唯一の天敵こそが、マッコウクジラなのです！」
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ4：海自大出力ソナー網による新言語放流 ＆ クジラ呼応シミュレーション */}
+                  <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
+                      <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                        <Radio className="h-4 w-4 text-cyan-400" />
+                        <span>📡 【フェーズ4：海自大出力ソナー網 新言語放流 ＆ 太平洋クジラ群呼応】</span>
+                      </span>
+                      <button
+                        onClick={() => handlePlayAudioCue("sonar-broadcast")}
+                        className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-600 to-indigo-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-cyan-500 hover:to-indigo-500 transition shadow"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" /> ソナー放流＆クジラ応答
+                      </button>
+                    </div>
+                    <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
+                      「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『祝詞構文 × クジラ言語の新言語』が太平洋全域へ放流されます！ ……沈黙の十数秒後、駿河湾から鳥島沖の全ソナーに、深海から咆哮のような無数の返信クリック（共鳴コーダ）が殺到します！」
+                    </p>
+                    <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
+                      <strong>✅ Day 6 達成演出:</strong>
+                      「太平洋全域のマッコウクジラ群が新言語を受信し、駿河トラフへ向けて進路を急行反転させました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
+                    </div>
                   </div>
                 </div>
               )}

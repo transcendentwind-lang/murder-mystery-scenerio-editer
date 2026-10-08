@@ -69,15 +69,15 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
       <div className="mb-6 flex items-center justify-between border-b border-slate-800 pb-3">
         <div>
           <h2 className="text-sm font-bold tracking-wide text-white">
-            クジラ言語パズル ＆ 情報トランプ（知識分散）マトリクス
+            舌クリック音祝詞 × 深海クジラ言語パズル（新言語合成マトリクス）
           </h2>
           <p className="text-xs text-slate-400">
-            『僕には鳥の言葉がわかる』に倣う単語連結構造。6人全員が知識を持ち寄らないと解けない二重ロックを管理します。
+            古代祝詞の「人間の舌によるクリック音」と深海クジラの「コーダクリック言語」を融合。かつての海中筒に代わり海自大出力ソナー網から放流する【新しい言語】を編み出します。
           </p>
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded bg-indigo-500/20 px-2.5 py-1 text-xs font-semibold text-indigo-300">
-            登録語彙: {words.length}語 ｜ 正解文法: 3単語結合
+            登録語彙: {words.length}語 ｜ 正解文法: 3単語結合（敵＋餌＋集まれ）
           </span>
         </div>
       </div>
@@ -86,7 +86,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
         {/* 左側：語彙一覧と所持者マトリクス */}
         <div className="col-span-7 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-300">
-            【基本語彙（コーダ音韻）とPC別手がかり一覧】
+            【基本語彙（舌クリック音・コーダ音韻）とPC別手がかり一覧】
           </h3>
 
           <div className="space-y-3 overflow-y-auto pr-1">
@@ -128,18 +128,21 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
           </div>
 
           {/* 古代文法（語順） */}
-          <div className="mt-4 rounded-lg border border-slate-800 bg-slate-950 p-3.5">
+          <div className="mt-4 rounded-lg border border-slate-800 bg-slate-950 p-3.5 space-y-1.5">
             <div className="flex items-center justify-between">
               <span className="flex items-center gap-1.5 text-xs font-semibold text-amber-400">
                 <BookOpen className="h-3.5 w-3.5" />
-                古代神社の祝詞（文法規則・語順の保持者）
+                古代神社の盟約祝詞（海中筒の作法 ＆ 語順文法）
               </span>
               <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] text-amber-300">
                 PC6（神職）が所持
               </span>
             </div>
-            <p className="mt-1 text-xs text-slate-300 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               {grammar.ruleDescription}
+            </p>
+            <p className="text-[11px] text-slate-400 border-t border-slate-800/80 pt-1">
+              💡 <strong>太古の知恵</strong>: 人間の声は海面で反射しますが、舌のクリック音を「海中へ差し入れた竹筒」を通して放つことで水底へダイレクトに音波が伝達されていました。現代は海自のソナー網がその役割を果たします。
             </p>
           </div>
         </div>
@@ -148,22 +151,22 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
         <div className="col-span-5 flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           <div>
             <h3 className="mb-3 text-xs font-bold uppercase tracking-wider text-slate-300">
-              【二重ロック ＆ 全員協力シミュレータ】
+              【二重ロック ＆ 新言語合成シミュレータ】
             </h3>
 
             {/* 6人全員の依存関係チェック */}
             <div className="rounded-lg border border-slate-800 bg-slate-950 p-3 space-y-2 text-xs">
               <div className="flex items-center gap-2 text-emerald-400 font-semibold">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>6名全員参加の論理完全性を検知</span>
+                <span>6名全員の知見が結集した新言語構文</span>
               </div>
               <ul className="space-y-1.5 text-[11px] text-slate-400 pl-4 list-disc">
-                <li>PC5（生物）: 基本音韻「自分」「集まれ」の波形を提供</li>
-                <li>PC6（神職）: 語順文法（祝詞の節回し）を提供</li>
-                <li>PC3（船長）: 「餌」を示す古謡のリズムを提供</li>
-                <li>PC4（観測）: 音速補正と「敵」のノイズ周波数を同定</li>
-                <li>PC2（音響）: スペクトログラム解析とソナー網への入力</li>
-                <li>PC1（司令）: 最高機密ソナー網の軍事アクセスを承認</li>
+                <li>PC5（生物）: クジラ言語の基本音韻（クリックコーダ）と波形提供</li>
+                <li>PC6（神職）: 舌クリック祝詞の語順文法（点刻記号）と海中筒の作法</li>
+                <li>PC3（船長）: 「餌」を示す小笠原捕鯨唄の急速クリックリズム</li>
+                <li>PC4（観測）: 深海音速補正と「敵」のノイズ周波数同定</li>
+                <li>PC2（音響）: スペクトログラム解析とソナー音響コンソール操作</li>
+                <li>PC1（司令）: 海上自衛隊大出力ソナー網の軍事アクセス承認</li>
               </ul>
             </div>
 

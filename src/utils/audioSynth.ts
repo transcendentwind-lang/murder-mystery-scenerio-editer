@@ -169,6 +169,93 @@ class UnderwaterAudioEngine {
       await new Promise((r) => setTimeout(r, 400 / speedMultiplier));
     }
   }
+
+  /**
+   * 人間の舌クリック音（吸着破裂音・舌打ち音）を発振
+   * 上顎・歯茎に舌を弾いたときの鋭いインパルス音
+   */
+  public playTongueClickSound(pitch = 2400) {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    osc.type = "triangle";
+    osc.frequency.setValueAtTime(pitch, this.ctx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(160, this.ctx.currentTime + 0.025);
+
+    filter.type = "bandpass";
+    filter.frequency.setValueAtTime(pitch * 0.9, this.ctx.currentTime);
+    filter.Q.setValueAtTime(5.0, this.ctx.currentTime);
+
+    const now = this.ctx.currentTime;
+    gain.gain.setValueAtTime(0.9, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+
+    osc.connect(filter);
+    filter.connect(gain);
+    gain.connect(this.analyser);
+
+    osc.start(now);
+    osc.stop(now + 0.03);
+  }
+
+  /**
+   * 海中筒（通海竹筒）を通した音響シミュレーション
+   * 竹筒の共鳴（約450Hz）と海中透過パルス音
+   */
+  public async playSeaTubeAcousticDemo(): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return;
+
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(450, this.ctx.currentTime);
+    gain.gain.setValueAtTime(0.35, this.ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.8);
+    osc.connect(gain);
+    gain.connect(this.analyser);
+    osc.start();
+    osc.stop(this.ctx.currentTime + 0.85);
+
+    await this.playClickPattern([0, 180, 360], 2200, 1.0);
+  }
+
+  /**
+   * 海上自衛隊大出力ソナー網による新言語放流 ＆ 太平洋クジラ群呼応エコー
+   */
+  public async playSonarBroadcastAndWhaleResponse(): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return;
+
+    // 1. 海自大出力アクティブソナーのPing音 (1.8kHz チャープ)
+    const pingOsc = this.ctx.createOscillator();
+    const pingGain = this.ctx.createGain();
+    pingOsc.type = "sine";
+    pingOsc.frequency.setValueAtTime(1800, this.ctx.currentTime);
+    pingGain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+    pingGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.9);
+    pingOsc.connect(pingGain);
+    pingGain.connect(this.analyser);
+    pingOsc.start();
+    pingOsc.stop(this.ctx.currentTime + 0.95);
+
+    await new Promise((r) => setTimeout(r, 900));
+
+    // 2. 合成新言語メッセージ（敵・獲物・集まれ）の大出力パルス放流
+    await this.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.1);
+
+    await new Promise((r) => setTimeout(r, 500));
+
+    // 3. 深海・太平洋全域からのクジラ群応答コーダ（遠方エコー）
+    await this.playClickPattern([0, 120, 240, 360, 480], 1900, 0.9);
+    await new Promise((r) => setTimeout(r, 200));
+    await this.playClickPattern([0, 90, 180, 270], 2300, 1.2);
+  }
 }
 
 export const audioEngine = typeof window !== "undefined" ? new UnderwaterAudioEngine() : null;
+

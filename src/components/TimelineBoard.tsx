@@ -180,6 +180,22 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-5A");
   const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-5B"]);
 
+  // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網放流状態
+  const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
+  const [day6BroadcastStatus, setDay6BroadcastStatus] = useState<"idle" | "broadcasting" | "received">("idle");
+  const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>(["word-enemy", "word-prey", "word-gather"]);
+
+  const handleDay6Broadcast = async () => {
+    if (!audioEngine) return;
+    setDay6BroadcastStatus("broadcasting");
+    try {
+      await audioEngine.playSonarBroadcastAndWhaleResponse();
+      setDay6BroadcastStatus("received");
+    } catch {
+      setDay6BroadcastStatus("received");
+    }
+  };
+
   // ESCキーで開いているモーダルを閉じる
   React.useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -2269,56 +2285,288 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
-            {/* --- DAY 6 プレイヤー提供情報：クジラ言語パズル ＆ 音響シミュレータ --- */}
+            {/* --- DAY 6 プレイヤー提供情報：祝詞クリック音 ＆ 海中筒 ＆ クジラ新言語ソナー網 --- */}
             {selectedDay === 6 && (
-              <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-4 shadow-lg space-y-3">
-                <div className="flex items-center justify-between border-b border-indigo-900/60 pb-2">
-                  <div className="flex items-center gap-2">
-                    <Radio className="h-4 w-4 text-indigo-400" />
-                    <span className="font-bold text-xs text-white">
-                      【プレイヤー提供情報】Day 6 クジラ言語パズル ＆ 深海音響シミュレータ
-                    </span>
+              <div className="rounded-xl border border-indigo-700/80 bg-[#0d0f22] p-5 shadow-2xl space-y-4">
+                <div className="flex items-center justify-between border-b border-indigo-800/60 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <Radio className="h-5 w-5 text-indigo-400 animate-pulse" />
+                    <div>
+                      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                        【Day 6 作戦核心】古代祝詞の舌クリック音 × 海中筒 × マッコウクジラ新言語ソナー作戦
+                      </h3>
+                      <p className="text-[11px] text-indigo-300/80">
+                        海底噴火連動と巨大生物の統率メカニズムを解読し、海自大出力ソナー網から新言語を放流する
+                      </p>
+                    </div>
                   </div>
                   {onNavigateToPuzzle && (
                     <button
                       onClick={onNavigateToPuzzle}
-                      className="flex items-center gap-1 rounded bg-indigo-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-indigo-500 transition shadow"
+                      className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow-md"
                     >
-                      <ExternalLink className="h-3.5 w-3.5" /> 専用パズル画面を開く
+                      <ExternalLink className="h-4 w-4" /> 祝詞解読マトリクスへ
                     </button>
                   )}
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  恩師・朝倉教授の未発表研究ノート、神社の古文書（祝詞の語順記号）、そして録音テープの実音響データから、マッコウクジラを誘導するクリック音（コーダ）の構文を解読します。
-                </p>
-
-                <div className="grid grid-cols-3 gap-2 text-xs">
-                  <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 text-center">
-                    <span className="font-bold text-indigo-300 block">単語1：敵（怪異）</span>
-                    <span className="text-[10px] text-slate-400 font-mono">1.2kHz / 重低音均等</span>
-                  </div>
-                  <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 text-center">
-                    <span className="font-bold text-indigo-300 block">単語2：獲物（ご馳走）</span>
-                    <span className="text-[10px] text-slate-400 font-mono">3.5kHz / 高速連打</span>
-                  </div>
-                  <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 text-center">
-                    <span className="font-bold text-indigo-300 block">単語3：集まれ（号令）</span>
-                    <span className="text-[10px] text-slate-400 font-mono">2.0kHz / 加速4連打</span>
-                  </div>
-                </div>
-
-                <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800">
-                  <span className="text-xs text-slate-300">
-                    古文書の祝詞構文: <strong>「敵」＋「獲物」＋「集まれ」</strong>
-                  </span>
+                {/* 4本の柱 ナビゲーションタブ */}
+                <div className="grid grid-cols-4 gap-1.5 bg-slate-950/80 p-1.5 rounded-lg border border-indigo-900/40 text-xs">
                   <button
-                    onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
-                    className="flex items-center gap-1.5 rounded bg-indigo-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-indigo-500 transition shadow"
+                    onClick={() => setDay6ActiveTab("tongue_click")}
+                    className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded font-semibold transition ${
+                      day6ActiveTab === "tongue_click"
+                        ? "bg-indigo-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    }`}
                   >
-                    <Volume2 className="h-3.5 w-3.5" /> クジラ召喚音声をテスト再生
+                    <span>👅 1. 舌クリック音の秘密</span>
+                  </button>
+                  <button
+                    onClick={() => setDay6ActiveTab("sea_tube")}
+                    className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded font-semibold transition ${
+                      day6ActiveTab === "sea_tube"
+                        ? "bg-indigo-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    }`}
+                  >
+                    <span>🎋 2. 古代の海中筒作法</span>
+                  </button>
+                  <button
+                    onClick={() => setDay6ActiveTab("coda_grammar")}
+                    className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded font-semibold transition ${
+                      day6ActiveTab === "coda_grammar"
+                        ? "bg-indigo-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    }`}
+                  >
+                    <span>🐋 3. クジラ言語（コーダ）</span>
+                  </button>
+                  <button
+                    onClick={() => setDay6ActiveTab("sonar_network")}
+                    className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded font-semibold transition ${
+                      day6ActiveTab === "sonar_network"
+                        ? "bg-cyan-600 text-white shadow"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                    }`}
+                  >
+                    <span>📡 4. 海自ソナー網 新言語放流</span>
                   </button>
                 </div>
+
+                {/* --- タブ1: 舌クリック音（吸着破裂音）の秘密 --- */}
+                {day6ActiveTab === "tongue_click" && (
+                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1.5">
+                        <h4 className="font-bold text-amber-300 text-sm flex items-center gap-1.5">
+                          <span>👅 【古代祝詞の真実：喉の声ではなく、舌を弾く「吸着破裂音」】</span>
+                        </h4>
+                        <p className="text-slate-300 leading-relaxed">
+                          神社の古文書に残された特殊な発音記号『吸音・弾舌』の解読により、島に伝わる古代祝詞は通常の人間の声（喉声）ではなく、<strong>舌を上顎・歯茎に強く打ち鳴らす「舌クリック音（吸着音）」</strong>で構成されていたことが判明。
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => audioEngine?.playTongueClickSound(2400)}
+                        className="shrink-0 flex items-center gap-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold px-3 py-2 transition shadow"
+                      >
+                        <Volume2 className="h-4 w-4" /> 舌クリック音を試聴
+                      </button>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-3 pt-2 border-t border-slate-800">
+                      <div className="rounded bg-red-950/40 border border-red-900/60 p-3 space-y-1">
+                        <span className="font-bold text-red-300 block text-[11px]">❌ なぜ喉の声では届かないのか？</span>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          空気と海水の境界面（水面）では音響インピーダンスが約3,600倍も異なるため、<strong>喉の歌声・叫び声は99.9%が水面で跳ね返り反射</strong>され、水深数百メートルの深海には一切届きません。
+                        </p>
+                      </div>
+                      <div className="rounded bg-emerald-950/40 border border-emerald-900/60 p-3 space-y-1">
+                        <span className="font-bold text-emerald-300 block text-[11px]">⭕ 舌打ち（吸着破裂音）の物理的優位性</span>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          舌を弾く鋭い破裂音は、音響学的に立ち上がりが極めて急峻な<strong>「高圧インパルスパルス」</strong>であり、水深方向への直進性と透過特性が通常音声に比べ桁違いに優れています。
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* --- タブ2: 古代の海中筒（通海竹筒）の作法 --- */}
+                {day6ActiveTab === "sea_tube" && (
+                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="space-y-1.5">
+                        <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
+                          <span>🎋 【海中筒（通海竹筒）の作法：インピーダンス整合の古代テクノロジー】</span>
+                        </h4>
+                        <p className="text-slate-300 leading-relaxed">
+                          かつて小笠原の島人や神職は、沖合に浮かべた小舟（サバニ）から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => audioEngine?.playSeaTubeAcousticDemo()}
+                        className="shrink-0 flex items-center gap-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-3 py-2 transition shadow"
+                      >
+                        <Volume2 className="h-4 w-4" /> 海中筒の音響を試聴
+                      </button>
+                    </div>
+
+                    <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 text-[11px] space-y-2">
+                      <div className="flex items-center justify-between text-slate-300">
+                        <span className="font-semibold text-slate-200">🌊 海中筒による音響透過効率の比較：</span>
+                        <span className="text-cyan-400 font-mono text-[10px]">音響インピーダンス整合技術</span>
+                      </div>
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="w-32 shrink-0 text-slate-400">海面での直接発声:</span>
+                          <div className="flex-1 bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div className="bg-red-500 h-full w-[0.1%]"></div>
+                          </div>
+                          <span className="w-16 text-right font-mono text-red-400">0.1%透過</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="w-32 shrink-0 text-slate-400">海中筒（竹筒）使用時:</span>
+                          <div className="flex-1 bg-slate-800 rounded-full h-2 overflow-hidden">
+                            <div className="bg-emerald-400 h-full w-[85%]"></div>
+                          </div>
+                          <span className="w-16 text-right font-mono text-emerald-400 font-bold">85.0%透過</span>
+                        </div>
+                      </div>
+                      <p className="text-[10px] text-slate-400 pt-1 border-t border-slate-800/80">
+                        ※筒内の共鳴波と海水の直接カップリングにより、水深千メートルの海溝に潜むマッコウクジラへダイレクトに祈りのコーダを届けていた。
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* --- タブ3: マッコウクジラのクリック言語（コーダ） --- */}
+                {day6ActiveTab === "coda_grammar" && (
+                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-indigo-300 text-sm flex items-center gap-1.5">
+                        <span>🐋 【マッコウクジラの言語（コーダ）と統率メカニズムの解明】</span>
+                      </h4>
+                      <p className="text-slate-300 leading-relaxed">
+                        マッコウクジラは深海で発するクリック音の<strong>周波数・打数・間隔（ICI）</strong>の組み合わせによって高度な言語社会を形成しています。また、Day 5で防衛庁から問われた「怪異の群体がなぜ統率されているのか」の答えも、この<strong>同調音響パルス</strong>にありました。
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-3 gap-2">
+                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-red-400">単語1：敵（怪異）</span>
+                          <button
+                            onClick={() => audioEngine?.playWordSound("word-enemy")}
+                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                            title="音を聴く"
+                          >
+                            <Volume2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                        <span className="text-[10px] text-slate-400 block font-mono">3.1kHz / 不規則乱れ打ち</span>
+                        <p className="text-[10px] text-slate-400">異形・触手・危険な集合体を示すコーダ</p>
+                      </div>
+
+                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-emerald-400">単語2：獲物（捕食対象）</span>
+                          <button
+                            onClick={() => audioEngine?.playWordSound("word-prey")}
+                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                            title="音を聴く"
+                          >
+                            <Volume2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                        <span className="text-[10px] text-slate-400 block font-mono">3.6kHz / 超高速バースト</span>
+                        <p className="text-[10px] text-slate-400">大王イカや極上の食料を指す捕食コーダ</p>
+                      </div>
+
+                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-cyan-400">単語3：集まれ（号令）</span>
+                          <button
+                            onClick={() => audioEngine?.playWordSound("word-gather")}
+                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                            title="音を聴く"
+                          >
+                            <Volume2 className="h-3.5 w-3.5" />
+                          </button>
+                        </div>
+                        <span className="text-[10px] text-slate-400 block font-mono">2.8kHz / 加速4連打</span>
+                        <p className="text-[10px] text-slate-400">群れ全体へ集合・総攻撃を促す号令コーダ</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800">
+                      <span className="text-slate-300">
+                        祝詞多重ロック構文: <strong className="text-amber-300">「敵（怪異）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
+                      </span>
+                      <button
+                        onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
+                        className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow"
+                      >
+                        <Volume2 className="h-4 w-4" /> 構文シーケンスをテスト試聴
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {/* --- タブ4: 海自ソナー網 新言語放流 ＆ クジラ呼応シミュレーション --- */}
+                {day6ActiveTab === "sonar_network" && (
+                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
+                    <div className="space-y-1.5">
+                      <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
+                        <Radio className="h-4 w-4 text-cyan-400" />
+                        <span>📡 【海上自衛隊大出力ソナー網による『合成新言語』放流オペレーション】</span>
+                      </h4>
+                      <p className="text-slate-300 leading-relaxed">
+                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群）</strong>に置き換え、人間が再構成した『祝詞 × クジラ言語の合成新言語』を太平洋全域へメガワット級出力でパルス放流します！
+                      </p>
+                    </div>
+
+                    <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-semibold text-slate-200">
+                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[1.8kHz Ping] ➔ [敵・獲物・集まれ] ➔ [広域呼応待機]</span>
+                        </span>
+                        <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
+                          day6BroadcastStatus === "idle"
+                            ? "bg-slate-800 text-slate-400"
+                            : day6BroadcastStatus === "broadcasting"
+                            ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
+                            : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                        }`}>
+                          {day6BroadcastStatus === "idle" && "待機中"}
+                          {day6BroadcastStatus === "broadcasting" && "放流中・音響走査中..."}
+                          {day6BroadcastStatus === "received" && "太平洋全域から応答コーダ検知！"}
+                        </span>
+                      </div>
+
+                      {day6BroadcastStatus === "received" && (
+                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1 animate-fade-in">
+                          <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
+                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群からの呼応シグナルを確認！
+                          </strong>
+                          <p className="text-slate-200 leading-relaxed font-mono">
+                            「駿河湾沖、伊豆諸島、鳥島沖の全ソナー受信機に数十〜数百頭のマッコウクジラからの返信クリック（共鳴コーダ）が殺到しています！ クジラ群は怪異群体を『巨大な獲物』と認識し、駿河トラフへ向けて超高速で反転・集結を開始しました！」
+                          </p>
+                        </div>
+                      )}
+
+                      <button
+                        onClick={handleDay6Broadcast}
+                        disabled={day6BroadcastStatus === "broadcasting"}
+                        className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
+                      >
+                        <Radio className="h-4 w-4" />
+                        {day6BroadcastStatus === "idle" && "海上自衛隊ソナー網から新言語パルスを放流する（テスト送信）"}
+                        {day6BroadcastStatus === "broadcasting" && "ソナー波形放射中……深海からの応答待機中……"}
+                        {day6BroadcastStatus === "received" && "新言語パルスを再放流し、クジラ群との同調を維持する"}
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
 
