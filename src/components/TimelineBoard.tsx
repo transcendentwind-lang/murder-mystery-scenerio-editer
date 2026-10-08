@@ -29,6 +29,11 @@ import {
   Radar,
   Crosshair,
   Scroll,
+  Users,
+  Scale,
+  CheckCircle2,
+  MessageSquare,
+  Sparkles,
 } from "lucide-react";
 import { TOKYO_ACTIONS, FIELD_ACTIONS } from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
@@ -157,6 +162,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
   const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
+  // Day 3 終盤合議 ＆ 司令官意思決定状態
+  const [day3Pc5Opinion, setDay3Pc5Opinion] = useState<string>("colony_theory");
+  const [day3Pc2Decision, setDay3Pc2Decision] = useState<string>("defense_action");
+  const [day3HqFinalDecision, setDay3HqFinalDecision] = useState<string | null>(null);
 
   // ESCキーで開いているモーダルを閉じる
   React.useEffect(() => {
@@ -1088,6 +1097,371 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="rounded bg-indigo-950/60 border border-indigo-900/80 p-2 text-[10px] text-amber-200">
                     ⚠️ <strong>【PC6 プレイヤー心得（重要制約）】</strong>:
                     現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）
+                  </div>
+                </div>
+
+                {/* ⑤ 【Day 3 終盤：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定パネル】 */}
+                <div className="rounded-xl border border-amber-600/70 bg-[#15100e] p-4 space-y-4 shadow-xl">
+                  {/* ヘッダー */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-800/60 pb-2.5">
+                    <div className="flex items-center gap-2">
+                      <Scale className="h-4 w-4 text-amber-400" />
+                      <div>
+                        <span className="font-bold text-xs text-white">
+                          【Day 3 終盤合同合議 ＆ 司令官最終意思決定】
+                        </span>
+                        <span className="ml-2 text-[10px] text-amber-300 font-mono">
+                          海上保安庁の諮問（生物学鑑定 ＆ 防衛出動要否）と司令官（PC1）の決断
+                        </span>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px]">
+                      <span className="rounded bg-amber-950 px-2 py-0.5 font-bold text-amber-300 border border-amber-700">
+                        合議制（全員参加）
+                      </span>
+                      <span className="rounded bg-rose-950 px-2 py-0.5 font-bold text-rose-300 border border-rose-700">
+                        最終決定: PC1（司令官）
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 状況ナレーション */}
+                  <div className="rounded-lg bg-amber-950/30 border border-amber-800/40 p-3 text-xs text-amber-200 space-y-1">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-300">
+                      <Radio className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
+                      【海上保安庁 警備救難部からの緊急諮問】
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）を受け、現場の海上保安庁は緊迫しています。<br />
+                      「全長数百mの潜航物体……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
+                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛庁リエゾン（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>対策本部司令官（PC1）</strong>が最終意思決定を下します。
+                    </p>
+                  </div>
+
+                  {/* ステップ1：海洋生物学者（PC5）への相談 */}
+                  <div className="rounded-lg border border-teal-800/80 bg-teal-950/20 p-3.5 space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-teal-900/60 pb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Users className="h-4 w-4 text-teal-400" />
+                        <span className="font-bold text-xs text-teal-200">
+                          ① 海上保安庁 ➔ PC5（海洋生物学者）への相談: 写真の生物学的解釈
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-teal-300 font-mono bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
+                        PC5 専門領域
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 italic">
+                      「PC5准教授、この写真（海面下の巨大影と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc5Opinion("colony_theory")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc5Opinion === "colony_theory"
+                            ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">見解A: 群体性仮説</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc5Opinion === "colony_theory" ? "bg-teal-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc5Opinion === "colony_theory" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          単一の生物としてこのサイズと触手数は解剖学的に不自然。<strong>数十〜百匹以上のダイオウイカが高密度に結合した超群体（コロニー）</strong>の可能性が濃厚。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc5Opinion("mutation_theory")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc5Opinion === "mutation_theory"
+                            ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">見解B: 深海変異種仮説</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc5Opinion === "mutation_theory" ? "bg-teal-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc5Opinion === "mutation_theory" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          深海底の極限水圧・火山熱水環境で独自進化した<strong>未知の超巨大深海生物、あるいは変異体</strong>。複数の触手束を自律協調させて遊泳している。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc5Opinion("volcano_attraction")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc5Opinion === "volcano_attraction"
+                            ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">見解C: 火山熱源誘引説</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc5Opinion === "volcano_attraction" ? "bg-teal-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc5Opinion === "volcano_attraction" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          西之島から鳥島へと海底火山を一直線に刺激して北上中。<strong>火山の熱源・電磁波を感知して誘引</strong>されており、本土直下の火山帯へ向かっている。
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ステップ2：防衛庁リエゾン（PC2）への判断要請 */}
+                  <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/20 p-3.5 space-y-2.5">
+                    <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Shield className="h-4 w-4 text-indigo-400" />
+                        <span className="font-bold text-xs text-indigo-200">
+                          ② 海上保安庁 ➔ PC2（防衛庁リエゾン）への要請: 自衛隊出動の必要性判断
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-indigo-300 font-mono bg-indigo-950 px-2 py-0.5 rounded border border-indigo-800">
+                        PC2 専門領域
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 italic">
+                      「PC2リエゾン、海上保安庁法20条に基づく警察官職務執行法の範囲では、全長数百mの潜航物体に対する制圧・強制排除は不可能です。法的に自衛隊の防衛出動、あるいは治安出動・海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc2Decision("defense_action")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc2Decision === "defense_action"
+                            ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">判断A: 防衛出動（即時迎撃）</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc2Decision === "defense_action" ? "bg-indigo-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc2Decision === "defense_action" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          通常警察権での対処は不能。国家主権・国民生命への侵害と見なし、<strong>即刻『防衛出動』の閣議決定を具申</strong>。八丈島南方に潜水艦隊・護衛艦隊の迎撃ラインを展開すべき。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc2Decision("maritime_security")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc2Decision === "maritime_security"
+                            ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">判断B: 海上警備行動（段階的展開）</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc2Decision === "maritime_security" ? "bg-indigo-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc2Decision === "maritime_security" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          未知の海洋生物に対する防衛出動適用は官邸での法理調整を要する。まず<strong>自衛隊法82条『海上警備行動』を発令</strong>して哨戒機・潜水艦で追尾し、迎撃態勢を整えるべき。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay3Pc2Decision("cautious_review")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          day3Pc2Decision === "cautious_review"
+                            ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                            : "border-slate-800 bg-slate-950/70 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs">判断C: 慎重姿勢・情報隠蔽懸念</span>
+                          <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                            day3Pc2Decision === "cautious_review" ? "bg-indigo-600 text-white" : "text-slate-500"
+                          }`}>
+                            {day3Pc2Decision === "cautious_review" ? "選択中" : "選択"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300 leading-relaxed">
+                          水深400〜800mの超巨大生物に対し既存魚雷が有効か未知数。社会パニック回避のため官邸の完全隠蔽命令も予想されるため、<strong>兵器迎撃の前に実効性を精査</strong>すべき。
+                        </p>
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ステップ3：全PC参加の合議制ガイド */}
+                  <div className="rounded-lg border border-slate-700 bg-slate-900/90 p-3 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                        <MessageSquare className="h-4 w-4" />
+                        ③ 合同対策本部 全員による合議制（ディスカッション）
+                      </span>
+                      <span className="text-[10px] text-slate-400">
+                        ※合議制ですが、最終意思決定は司令官（PC1）が下します
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px]">
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-indigo-300 block">PC1: 司令官</strong>
+                        全体統括・官邸および防衛省との折衝・全責任の受託
+                      </div>
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-indigo-300 block">PC2: 防衛庁リエゾン</strong>
+                        軍事力投入の可否・交戦規定（ROE）の策定
+                      </div>
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-teal-300 block">PC3: 救難隊長</strong>
+                        島民避難・民間船の安全確保・現地海域の危険性
+                      </div>
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-teal-300 block">PC4: 観測員</strong>
+                        火山連動シミュレーションと本土到達カウントダウン
+                      </div>
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-teal-300 block">PC5: 海洋生物学者</strong>
+                        写真鑑定所見・超群体の可能性・火山熱源誘引の阻止
+                      </div>
+                      <div className="rounded bg-slate-950 p-2 border border-slate-800">
+                        <strong className="text-teal-300 block">PC6: 神職</strong>
+                        古文書の海鳴り・海に出て祝詞を唱える儀式の予兆
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* ステップ4：司令官（PC1）の最終意思決定 */}
+                  <div className="rounded-xl border border-rose-800/80 bg-rose-950/20 p-4 space-y-3">
+                    <div className="flex items-center justify-between border-b border-rose-900/60 pb-2">
+                      <div className="flex items-center gap-2">
+                        <ShieldAlert className="h-4 w-4 text-rose-400" />
+                        <div>
+                          <span className="font-bold text-xs text-white">
+                            ④ 【対策本部司令官（PC1） 最終意思決定】
+                          </span>
+                          <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                            全員の合議を受け、本部長として最終決定を下す
+                          </span>
+                        </div>
+                      </div>
+                      {day3HqFinalDecision && (
+                        <span className="flex items-center gap-1 rounded bg-emerald-950 border border-emerald-600 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                          <CheckCircle2 className="h-3 w-3" /> 決定確定済
+                        </span>
+                      )}
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      議論・相談は合議制で行われますが、<strong>最終的な作戦方針の決定は司令官（PC1）が一任</strong>されます。<br />
+                      PC5の生物学的見解（{day3Pc5Opinion === "colony_theory" ? "群体性仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}）およびPC2の防衛判断（{day3Pc2Decision === "defense_action" ? "防衛出動具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}）を踏まえ、司令官としての方針を決定してください。
+                    </p>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setDay3HqFinalDecision("defense_dispatch")}
+                        className={`rounded-lg p-3 text-left transition border ${
+                          day3HqFinalDecision === "defense_dispatch"
+                            ? "border-rose-400 bg-rose-950/80 shadow-lg ring-2 ring-rose-400"
+                            : "border-slate-800 bg-slate-950/80 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="font-bold text-white text-xs flex items-center gap-1.5">
+                            <Shield className="h-3.5 w-3.5 text-rose-400" />
+                            方針①: 防衛出動を正式要請（武力迎撃ライン展開）
+                          </span>
+                          <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${
+                            day3HqFinalDecision === "defense_dispatch"
+                              ? "bg-rose-600 text-white"
+                              : "bg-slate-800 text-slate-400"
+                          }`}>
+                            {day3HqFinalDecision === "defense_dispatch" ? "決定済み" : "この方針で決定"}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          「官邸・防衛省へ自衛隊の防衛出動を正式要請する！八丈島南方に潜水艦隊および対潜哨戒機による武力迎撃陣形を展開させ、同時に現地には島民避難準備を命じる！」
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay3HqFinalDecision("maritime_guard")}
+                        className={`rounded-lg p-3 text-left transition border ${
+                          day3HqFinalDecision === "maritime_guard"
+                            ? "border-rose-400 bg-rose-950/80 shadow-lg ring-2 ring-rose-400"
+                            : "border-slate-800 bg-slate-950/80 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1.5">
+                          <span className="font-bold text-white text-xs flex items-center gap-1.5">
+                            <Anchor className="h-3.5 w-3.5 text-cyan-400" />
+                            方針②: 海上警備行動を発令（段階的迎撃 ＆ 避難優先）
+                          </span>
+                          <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${
+                            day3HqFinalDecision === "maritime_guard"
+                              ? "bg-rose-600 text-white"
+                              : "bg-slate-800 text-slate-400"
+                          }`}>
+                            {day3HqFinalDecision === "maritime_guard" ? "決定済み" : "この方針で決定"}
+                          </span>
+                        </div>
+                        <p className="text-[11px] text-slate-300 leading-relaxed">
+                          「自衛隊へ海上警備行動を発令し、潜水艦による追尾・迎撃陣形を先行展開。防衛出動の法制調整を進めつつ、現地島民の避難誘導と火山監視の強化を優先させる！」
+                        </p>
+                      </button>
+                    </div>
+
+                    {/* 意思決定確定後のフィードバック＆Day 4への移行演出 */}
+                    {day3HqFinalDecision && (
+                      <div className="rounded-lg border border-emerald-500/80 bg-emerald-950/70 p-3.5 space-y-2 text-xs text-emerald-200 shadow-lg animate-fadeIn">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="h-4 w-4 text-emerald-400 animate-spin-slow" />
+                            <strong className="text-white text-xs">
+                              🎉【Day 3 作戦全完了 ＆ 司令官最終意思決定 確定】
+                            </strong>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setDay3HqFinalDecision(null)}
+                            className="text-[10px] text-slate-400 hover:text-slate-200 underline"
+                          >
+                            再検討する
+                          </button>
+                        </div>
+                        <p className="text-[11px] text-emerald-100 leading-relaxed">
+                          対策本部司令官（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
+                          <strong>選定された方針</strong>: {day3HqFinalDecision === "defense_dispatch" ? "自衛隊への防衛出動正式要請（八丈島南方迎撃陣形の展開）" : "海上警備行動の発令（段階的追尾迎撃と島民避難先行）"}<br />
+                          <strong>生物学的見解（PC5）</strong>: {day3Pc5Opinion === "colony_theory" ? "超群体（コロニー）仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}<br />
+                          <strong>防衛庁判断（PC2）</strong>: {day3Pc2Decision === "defense_action" ? "防衛出動即時迎撃具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}
+                        </p>
+                        <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
+                          🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
+                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（防衛出動の決定と隠蔽圧力・迎撃陣形の展開）</strong>】へと繋がります！
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>

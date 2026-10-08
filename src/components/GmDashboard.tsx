@@ -25,10 +25,11 @@ import {
   Flame,
   Maximize2,
   ExternalLink,
-  Compass,
   Radar,
   Scroll,
   ShieldAlert,
+  Scale,
+  Users,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
@@ -935,6 +936,76 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
                       ⚠️ <strong>【重要制約】</strong>:
                       PC6に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                    </div>
+                  </div>
+
+                  {/* フェーズ5：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定（Day 3 クロージング） */}
+                  <div className="rounded-lg border border-amber-800/70 bg-amber-950/25 p-3.5 space-y-3 shadow-sm">
+                    <div className="flex items-center justify-between border-b border-amber-900/60 pb-1.5">
+                      <div className="flex items-center gap-1.5">
+                        <Scale className="h-4 w-4 text-amber-400" />
+                        <span className="font-bold text-amber-300 text-xs">
+                          【フェーズ5：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定】（Day 3 クロージング）
+                        </span>
+                      </div>
+                      <span className="text-[10px] text-amber-300 font-mono bg-amber-950 px-2 py-0.5 rounded border border-amber-800">
+                        Day 3 終盤合議
+                      </span>
+                    </div>
+
+                    <div className="space-y-2 text-slate-300 text-[11px]">
+                      <div className="rounded bg-slate-950/80 p-2.5 border border-slate-800 space-y-1">
+                        <strong className="text-amber-400 block font-bold">
+                          📢 GM進行ナレーション:
+                        </strong>
+                        <p className="italic">
+                          「洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）が対策本部の大型スクリーンに映し出されます。現場の海上保安庁警備救難部は騒然となっています。『全長数百m、触手20本以上……海上保安庁の巡視船や警察比例の原則で対応できる規模を完全に超えている』。これを受け、海上保安庁警備救難部より合同対策本部へ緊急の諮問が下されます」
+                        </p>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {/* PC5への相談 */}
+                        <div className="rounded border border-teal-900/80 bg-teal-950/30 p-2.5 space-y-1">
+                          <span className="font-bold text-teal-300 text-xs flex items-center gap-1">
+                            <Users className="h-3.5 w-3.5" /> ① 海上保安庁 ➔ PC5（海洋生物学者）への相談:
+                          </span>
+                          <p className="italic text-slate-200">
+                            「PC5准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                          </p>
+                          <div className="mt-1 text-[10px] text-teal-200/90 bg-teal-950/60 rounded p-1.5 border border-teal-800/60">
+                            💡 <strong>GMメモ</strong>: PC5から「超群体（コロニー）仮説」「変異体仮説」「火山熱源誘引説」のいずれか（特に群体の疑い）を提示させます。
+                          </div>
+                        </div>
+
+                        {/* PC2への要請 */}
+                        <div className="rounded border border-indigo-900/80 bg-indigo-950/30 p-2.5 space-y-1">
+                          <span className="font-bold text-indigo-300 text-xs flex items-center gap-1">
+                            <ShieldAlert className="h-3.5 w-3.5" /> ② 海上保安庁 ➔ PC2（防衛庁リエゾン）への要請:
+                          </span>
+                          <p className="italic text-slate-200">
+                            「PC2リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+                          </p>
+                          <div className="mt-1 text-[10px] text-indigo-200/90 bg-indigo-950/60 rounded p-1.5 border border-indigo-800/60">
+                            💡 <strong>GMメモ</strong>: PC2から「防衛出動即時迎撃」「海上警備行動先行」「慎重・隠蔽懸念」の防衛判断を提示させます。
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 合議制と司令官最終意思決定 */}
+                      <div className="rounded bg-rose-950/30 border border-rose-900/50 p-2.5 space-y-1.5">
+                        <span className="font-bold text-rose-300 text-xs">
+                          ⚖️ 全員合議 ＆ 司令官（PC1）最終意思決定の進行ガイド:
+                        </span>
+                        <p>
+                          ・<strong>合議制の回し方</strong>: 全員（PC1〜PC6）で写真の生物学的脅威と防衛出動の是非について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
+                        </p>
+                        <p>
+                          ・<strong>司令官（PC1）の決断</strong>: 議論が煮詰まったところで、GMから<strong>「各員の意見が出揃いました。対策本部司令官（PC1）、本部長としてこの事態にどう対処するか、最終意思決定を下してください」</strong>と促します。
+                        </p>
+                        <p className="text-amber-200">
+                          ・<strong>Day 3 終了 ➔ Day 4 へのブリッジ</strong>: 司令官が方針（防衛出動正式要請、または海上警備行動発令）を決定した時点で<strong>「ここまでがDay 3に起こること」としてDay 3を完結</strong>させます。この決定がDay 4の「防衛出動の決定と隠蔽圧力・迎撃陣形の展開」へと直結します。
+                        </p>
+                      </div>
                     </div>
                   </div>
                 </div>
