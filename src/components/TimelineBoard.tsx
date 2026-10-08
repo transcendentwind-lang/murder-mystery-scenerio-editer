@@ -972,18 +972,18 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </div>
 
                           <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
-                            <div>高度: <strong>350 ft (約105m)</strong></div>
+                            <div>高度: <strong>1,500 ft (約450m)</strong></div>
                             <div>海域: <strong>鳥島北西 約40km</strong></div>
                             <div>速度: <strong>時速約6km 北上</strong></div>
-                            <div>機材: <strong>FLIR赤外光学ポッド</strong></div>
+                            <div>機材: <strong>光学・赤外線ポッド</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">目視確認</strong>: 巨大生物の後方からの撮影に成功。海面下に不鮮明ながら<strong>無数の巨大な触手と胴体のシルエット</strong>がはっきりと確認できる。
+                              ・<strong className="text-white">遊泳形態</strong>: 前進遊泳する巨大生物の後方からの撮影に成功。胴体と触手が<strong>流線型の紡錘形（トルペード状）</strong>に整然とまとまり、その背後へ<strong>極めて長く伸びる無数の触手</strong>が海面下に確認できる。
                             </p>
                             <p>
-                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下を泳ぎ去る巨大な質量により、幅数百メートルに及ぶ猛烈な白波と渦流が発生。
+                              ・<strong className="text-white">航跡波（ケルビン波）</strong>: 海面直下十数mを高速遊泳する巨大な質量により、V字型の巨大な白波が周囲へ押し出されている。
                             </p>
                             <p>
                               ・<strong className="text-white">生態矛盾</strong>: Day 1のダイオウイカ組織鑑定（F-1）と一致するが、全長数百mは異常。無数の個体が結合した<strong>「超群体」</strong>である疑いが濃厚。
@@ -1014,7 +1014,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                           <span className="text-[11px] font-semibold text-amber-200">
-                            ⚠️ セクター特定失敗：約20km彼方に航跡波のみ確認
+                            ⚠️ セクター特定失敗：約21km彼方に航跡波のみ確認
                           </span>
                           <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-white backdrop-blur flex items-center gap-1">
                             <Maximize2 className="h-3 w-3" /> クリックで拡大
@@ -1030,26 +1030,26 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                               【特定失敗：遠方目視観測調書】
                             </span>
                             <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950 border border-amber-700 text-amber-300">
-                              捜索空振り
+                              RANGE: 21.3 KM
                             </span>
                           </div>
 
                           <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
-                            <div>高度: <strong>1,500 ft (約450m)</strong></div>
-                            <div>距離: <strong>目標まで約20km離脱</strong></div>
+                            <div>高度: <strong>1,850 ft (約560m)</strong></div>
+                            <div>距離: <strong>目標まで 21.3 km</strong></div>
+                            <div>海域: <strong>船舶なし（完全外洋）</strong></div>
                             <div>潜航: <strong>深度800mへ急速潜航</strong></div>
-                            <div>機材: <strong>超望遠光学レンズ</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">目視状況</strong>: <strong>約20km先の海で巨大生物の起こす波</strong>が見えるが、ヘリが近づいたときにはすでに深海へと急速潜航してしまっており捉えられない。
+                              ・<strong className="text-white">超遠方目視</strong>: 船舶の全くない広大な外洋の<strong>約21km彼方（水平線手前）</strong>に、巨大生物の起こした異常な海水隆起と白波の泡立ちを観測。
                             </p>
                             <p>
-                              ・<strong className="text-white">海面の痕跡</strong>: 巨大な渦紋と白波の泡立ちのみが残留。本体の直接撮影には至らず、音響捜索の重要性を痛感させる。
+                              ・<strong className="text-white">ヘリ急行後</strong>: ヘリが現場へ到達したときには、怪物は接近を察知してすでに深海800m以深へ急速潜航してしまっており捉えられない。
                             </p>
                             <p>
-                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時はこの写真を提示し、「20km先で大波を目視したが、急行した時にはすでに潜航してしまっていた」と説明してください。
+                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時はこの写真を提示し、「20km以上先で大波を目視したが、急行した時にはすでに潜航してしまっていた」と説明してください。
                             </p>
                           </div>
                         </div>
@@ -1620,8 +1620,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
                     {day3PhotoModal === "success"
-                      ? "TIME: 14:38:21 UTC | ALT: 350 FT | SENSOR: FLIR OPTICAL POD | TARGET: SUB-SURFACE ENTITY"
-                      : "TIME: 14:35:12 UTC | ALT: 1,500 FT | SENSOR: TELEPHOTO OPTICAL | STATUS: TARGET DIVED"}
+                      ? "TIME: 14:32:01 UTC | ALT: 1,500 FT | GPS: 14°N 165°W | TARGET: SUB-SURFACE ENTITY (SPINDLE FORM)"
+                      : "TIME: 09:14:23 UTC | ALT: 1,850 FT | RANGE: 21.3 KM | STATUS: EMPTY OCEAN / TARGET DIVED"}
                   </p>
                 </div>
               </div>
@@ -1695,14 +1695,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 {day3PhotoModal === "success" ? (
                   <>
-                    ・高度350フィート、捜索ヘリより怪物の後方からの撮影に成功。<br />
-                    ・海面下十数メートルをうねる巨大な胴体と、放射状に広がる不鮮明ながら無数の触手シルエットを目視確認。<br />
+                    ・高度1,500フィート、捜索ヘリより前進遊泳する巨大生物の後方からの撮影に成功。<br />
+                    ・海面下を前進遊泳する胴体と触手が<strong>流線型の紡錘形（トルペード状）</strong>に整然とまとまり、背後へ<strong>極めて長く伸びる無数の触手</strong>が海面下に鮮明に確認できる。<br />
                     ・背後には猛烈な白波とV字型のケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上中。<br />
                     ・ダイオウイカの形態特徴を持つが、全長300〜400メートルに及ぶサイズは単体生物としては説明がつかず、「超群体」である疑いが強まる。
                   </>
                 ) : (
                   <>
-                    ・高度1,500フィートからの望遠撮影。約20km彼方の海面に怪物が起こした異常な海水隆起と白波を目視観測。<br />
+                    ・高度1,850フィート、超広角カメラによる観測。船舶が一切存在しない広大で荒涼とした外洋の<strong>約21km彼方（水平線手前）</strong>に、巨大生物の引き起こした異常な海水隆起と白波の泡立ちを捕捉。<br />
                     ・しかしヘリが急行したときには、怪物はヘリの接近を警戒してすでに深海800m以深へ急速潜航してしまっていた。<br />
                     ・直接の姿を捉えることはできなかったが、海面に残された波の規模から全長数百mの質量が実在することを裏付けている。
                   </>
