@@ -127,7 +127,7 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
     evidenceId: "ev-hachijo-resident-voice",
     badge: "八丈島島民証言",
     summary: "『南の海が煮え立つように激しく白波立ち、沖合から地響きのような唸りが届いた。群発微動が止まらない』",
-    detail: "八丈島住民の証言調書。スミス島〜青ヶ島沖の噴火に伴い、海底の異様な地響きと海水の異常な温度上昇が八丈島至近まで迫っている事実を報告。",
+    detail: "八丈島住民の証言調書。須美寿島〜青ヶ島沖の噴火に伴い、海底の異様な地響きと海水の異常な温度上昇が八丈島至近まで迫っている事実を報告。",
   },
   {
     id: "T-4B",
@@ -1121,14 +1121,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 4 && (
                 <div className="space-y-3 text-xs leading-relaxed">
-                  {/* フェーズ1：スミス島〜青ヶ島沖海底噴火 ＆ 火山活動監視図 */}
+                  {/* フェーズ1：須美寿島〜青ヶ島沖海底噴火 ＆ 火山活動監視図 */}
                   <div className="rounded-xl border border-rose-900/60 bg-slate-900 p-4 shadow-md space-y-3">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                       <div className="flex items-center gap-2">
                         <Flame className="h-4 w-4 text-rose-400" />
                         <div>
                           <span className="font-bold text-white text-xs">
-                            【Day 4 火山フロント最新状況】スミス島〜青ヶ島沖海底噴火 ＆ 火山活動監視図
+                            【Day 4 火山フロント最新状況】須美寿島〜青ヶ島沖海底噴火 ＆ 火山活動監視図
                           </span>
                           <span className="ml-2 text-[10px] text-rose-300 font-mono">
                             須美寿島〜青ヶ島沖 連動噴火 ＆ 八丈島・青ヶ島 微動観測
@@ -1171,7 +1171,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
                       <p>
-                        ・<strong>スミス島〜青ヶ島沖の噴火</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖の海底カルデラで連動爆発が発生（Day 3海底噴火）。他の島名や地形と被らないよう海図西側に明瞭にプロット。
+                        ・<strong>須美寿島〜青ヶ島沖の噴火</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖の海底カルデラで連動爆発が発生（Day 3海底噴火）。他の島名や地形と被らないよう海図西側に明瞭にプロット。
                       </p>
                       <p>
                         ・<strong>八丈島・青ヶ島の地震</strong>：噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。島民に不穏な空気が広がる。
