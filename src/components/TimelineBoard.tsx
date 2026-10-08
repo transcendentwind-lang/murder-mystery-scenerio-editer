@@ -1036,9 +1036,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                           <div className="grid grid-cols-2 gap-1.5 text-[10px] font-mono text-slate-300 mb-2">
                             <div>高度: <strong>1,850 ft (約560m)</strong></div>
-                            <div>距離: <strong>目標まで 21.3 km</strong></div>
+                            <div>距離: <strong>目標まで 約21 km</strong></div>
                             <div>海域: <strong>船舶なし（完全外洋）</strong></div>
-                            <div>潜航: <strong>深度800mへ急速潜航</strong></div>
+                            <div>機材: <strong>通常光学望遠カメラ</strong></div>
                           </div>
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
@@ -1621,7 +1621,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <p className="text-[11px] text-slate-400 font-mono">
                     {day3PhotoModal === "success"
                       ? "ALT: 2,500 FT | CAM: OPTICAL TELEPHOTO (NATURAL) | TARGET: UNKNOWN-MASSIVE COLONY"
-                      : "ALT: 1,850 FT | RANGE: 21.3 KM | STATUS: EMPTY OCEAN / TARGET DIVED"}
+                      : "ALT: 1,850 FT | CAM: OPTICAL TELEPHOTO (NATURAL) | TARGET: DIVED / EMPTY OCEAN"}
                   </p>
                 </div>
               </div>
@@ -1702,7 +1702,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </>
                 ) : (
                   <>
-                    ・高度1,850フィート、超広角カメラによる観測。船舶が一切存在しない広大で荒涼とした外洋の<strong>約21km彼方（水平線手前）</strong>に、巨大生物の引き起こした異常な海水隆起と白波の泡立ちを捕捉。<br />
+                    ・高度1,850フィート、捜索ヘリ通常光学望遠カメラによる遠方観測。船舶が一切存在しない広大で荒涼とした外洋の<strong>約21km彼方（水平線手前）</strong>に、巨大生物の引き起こした異常な海水隆起と白波の泡立ちを捕捉。<br />
                     ・しかしヘリが急行したときには、怪物はヘリの接近を警戒してすでに深海800m以深へ急速潜航してしまっていた。<br />
                     ・直接の姿を捉えることはできなかったが、海面に残された波の規模から全長数百mの質量が実在することを裏付けている。
                   </>
