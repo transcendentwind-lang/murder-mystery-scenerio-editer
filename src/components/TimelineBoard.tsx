@@ -1951,6 +1951,27 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       事態は【<strong>Day 5：通常兵器の敗北と絶望の真相</strong>】へと突入します。
                     </div>
                   </div>
+
+                  {/* プレイヤー向け基礎知識解説 */}
+                  <div className="rounded-lg border border-slate-700/80 bg-slate-900/95 p-3 text-[11px] text-slate-300 space-y-1.5 shadow-inner">
+                    <div className="flex items-center gap-1.5 font-bold text-amber-300 text-xs">
+                      <span>💡 【作戦知識の解説】なぜ「防衛出動」ではなく「害獣駆除」なのか？</span>
+                    </div>
+                    <p className="text-slate-300 leading-relaxed text-[10px]">
+                      一般常識としては「未曾有の巨大生物の危機なのだから、すぐに自衛隊を出動させればいい」と思えますが、自衛隊法には極めて厳格な法理のルールが存在します。
+                    </p>
+                    <ul className="list-disc list-inside space-y-1 pl-1 text-[10px] text-slate-300">
+                      <li>
+                        <strong className="text-white">防衛出動（自衛隊法第76条）</strong>：外国から武力攻撃を受けた際に国を守る命令。閣議決定や国会の承認が必要な上、<strong>外国の軍隊ではない「未知の生物」には法律上絶対に発令できません</strong>（内閣法制局の却下）。
+                      </li>
+                      <li>
+                        <strong className="text-white">害獣駆除・災害派遣名目</strong>：国民の生命や人命に危害を及ぼす野生生物の駆除や災害排除を目的とする枠組み。「外国の侵略」という要件に縛られず、防衛大臣の決裁などで迅速に動かすことができます。
+                      </li>
+                    </ul>
+                    <p className="text-[10px] text-amber-200/90 pt-1 border-t border-slate-800">
+                      👉 <strong>結論</strong>：「法律の壁で手遅れになるのを防ぎ、現場に最新鋭魚雷・爆雷を今すぐ届けるための現実的な行政の知恵（ウルトラC）」として、この方針が採られました。
+                    </p>
+                  </div>
                 </div>
               </div>
             )}
