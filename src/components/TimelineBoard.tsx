@@ -980,13 +980,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">広大な横幅の超群体</strong>: イカ特有の三角形頭部や側方ヒレではなく、<strong>先端が滑らかになだらかな弧を描く広大な海面下の漆黒シャドウ</strong>として記録。
+                              ・<strong className="text-white">深海に溶け込む巨大な質量</strong>: 本体の輪郭線は特定の生物の形としては定まらず、<strong>海面下に潜む広大な深海シャドウ（漆黒の巨大質量）</strong>としてぼんやりと認識されるのみ。
                             </p>
                             <p>
-                              ・<strong className="text-white">白波下のぼやけた触手群</strong>: 激しく沸き立つケルビン波（白波・航跡波）の層の<strong>真下の深海に無数の触手が沈んでおり、泡立つ海水を通してぼんやりと透けて見える</strong>深海シルエット。
+                              ・<strong className="text-white">目視される無数の触手群</strong>: ぼやけた本体の後背部から、<strong>20本を超える無数の触手・触腕だけが海中を長く直線的にたなびく姿</strong>が鮮明に確認できる。
                             </p>
                             <p>
-                              ・<strong className="text-white">航跡波との平行流動</strong>: 前進遊泳に伴うV字型の白波と、深海に沈む無数の触手群が同調して後方へ直線的に展開。
+                              ・<strong className="text-white">静穏な海面と抑制された航跡</strong>: 激しい白波はごくわずかに抑えられており、巨大な質量が音もなく深海を時速約6kmで北上している様子を捉えている。
                             </p>
                           </div>
                         </div>
@@ -1696,9 +1696,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 {day3PhotoModal === "success" ? (
                   <>
                     ・高度2,500フィート、捜索ヘリ通常光学望遠カメラより前進遊泳する巨大生物の後方からの撮影に成功。<br />
-                    ・イカ特有の三角形頭部や側方ヒレではなく、<strong>先端が滑らかになだらかな弧を描く広大な海面下の漆黒生体質量（超群体）</strong>を深海シャドウとして確認できる。<br />
-                    ・激しく泡立つケルビン波（白波・航跡波）の層の<strong>真下の深海に無数の触手群（20本以上）が沈んでおり、泡立つ海水を通してぼんやりと透けて見える</strong>深海シルエットを捉えた。<br />
-                    ・海面には広大な横幅に伴う猛烈な白波とケルビン波が渦巻いており、時速約6kmで鳥島から正確に北上を継続中。
+                    ・本体の輪郭線は海中に溶け込み特定の生物の形としては定まらないが、<strong>海面下に巨大な漆黒の質量（超群体）が潜んでいること</strong>が深海シャドウとして確認できる。<br />
+                    ・その不鮮明な本体から、<strong>無数に増殖した膨大な触手群（20本以上）だけが海中を長く直線的にたなびく姿</strong>をはっきりと捉えている。<br />
+                    ・海面の白波やケルビン波はごく控えめに抑えられており、巨大な生体質量が深海を静かに北上継続中。
                   </>
                 ) : (
                   <>
