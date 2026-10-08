@@ -267,34 +267,6 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           </g>
 
           {/* ======================================================== */}
-          {/* 【セクター寸法規格サンプル】（A-1セクター内に明示） */}
-          {/* ======================================================== */}
-          <g transform="translate(126, 154)">
-            {/* 1セクターの背景ハイライト */}
-            <rect x="0" y="0" width="120.7" height="89.3" fill="#0284c7" opacity="0.08" rx="2" />
-
-            {/* 横幅寸法矢印 (約20km) */}
-            <line x1="8" y1="22" x2="112" y2="22" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
-            <rect x="25" y="13" width="70" height="16" rx="3" fill="#0c2340" stroke="#0284c7" strokeWidth="0.8" />
-            <text x="60" y="25" fill="#e0f2fe" fontSize="9" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-              横 約20 km
-            </text>
-
-            {/* 縦高寸法矢印 (約20km) */}
-            <line x1="22" y1="32" x2="22" y2="84" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
-            <rect x="28" y="47" width="70" height="16" rx="3" fill="#0c2340" stroke="#0284c7" strokeWidth="0.8" />
-            <text x="63" y="59" fill="#e0f2fe" fontSize="9" fontWeight="bold" fontFamily="monospace" textAnchor="middle">
-              縦 約20 km
-            </text>
-
-            {/* サンプル規格バッジ */}
-            <rect x="4" y="68" width="112" height="17" rx="3" fill="#0369a1" opacity="0.9" />
-            <text x="60" y="80" fill="#ffffff" fontSize="8.5" fontWeight="bold" textAnchor="middle">
-              📐 1セクター規格: 約20km四方
-            </text>
-          </g>
-
-          {/* ======================================================== */}
           {/* 3. 火山フロント構造線（海底海嶺・海山列） */}
           {/* ======================================================== */}
           <path
@@ -559,55 +531,93 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           </g>
 
           {/* 海図凡例（LEGEND：枠外中央右・青い四角の外側） */}
-          <g transform="translate(915, 185)">
-            <rect width="245" height="265" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="14" y="22" fill="#94a3b8" fontSize="11" fontWeight="bold">【海図凡例 / LEGEND】</text>
+          <g transform="translate(915, 170)">
+            <rect width="245" height="235" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="20" fill="#94a3b8" fontSize="11" fontWeight="bold">【海図凡例 / LEGEND】</text>
 
             {/* 36作戦セクター */}
-            <rect x="16" y="38" width="12" height="12" fill="none" stroke="#0ea5e9" strokeWidth="1.2" strokeDasharray="2,2" />
-            <text x="36" y="48" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">36作戦セクター (6×6グリッド)</text>
-            <text x="36" y="60" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 約20km四方 (東西20km × 南北20km)</text>
+            <rect x="16" y="34" width="12" height="12" fill="none" stroke="#0ea5e9" strokeWidth="1.2" strokeDasharray="2,2" />
+            <text x="36" y="44" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">36作戦セクター (6×6グリッド)</text>
+            <text x="36" y="56" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 約20km四方 (東西20km × 南北20km)</text>
 
             {/* 給油巡視船 */}
-            <polygon points="16,84 28,84 30,78 24,76 18,76" fill="#0284c7" />
-            <text x="36" y="82" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
-            <text x="36" y="94" fill="#94a3b8" fontSize="8.5">画面左下 セクターF-1海域 (待機中)</text>
+            <polygon points="16,76 28,76 30,70 24,68 18,68" fill="#0284c7" />
+            <text x="36" y="74" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
+            <text x="36" y="86" fill="#94a3b8" fontSize="8.5">画面左下 セクターF-1海域 (待機中)</text>
 
             {/* カルデラ */}
-            <circle cx="22" cy="116" r="6" fill="#f43f5e" />
-            <text x="36" y="116" fill="#fda4af" fontSize="9.5" fontWeight="bold">鳥島沖海底カルデラ</text>
-            <text x="36" y="128" fill="#94a3b8" fontSize="8.5">Day 2突発的大爆発 震源地</text>
+            <circle cx="22" cy="106" r="6" fill="#f43f5e" />
+            <text x="36" y="106" fill="#fda4af" fontSize="9.5" fontWeight="bold">鳥島沖海底カルデラ</text>
+            <text x="36" y="118" fill="#94a3b8" fontSize="8.5">Day 2突発的大爆発 震源地</text>
 
             {/* 噴煙拡散域 */}
-            <ellipse cx="22" cy="150" rx="8" ry="5" fill="#dc2626" opacity="0.75" />
-            <text x="36" y="150" fill="#fca5a5" fontSize="9.5" fontWeight="bold">噴煙柱・降灰拡散域 (8,000m)</text>
-            <text x="36" y="162" fill="#94a3b8" fontSize="8.5">航空危険空域 (NOTAM)</text>
+            <ellipse cx="22" cy="138" rx="8" ry="5" fill="#dc2626" opacity="0.75" />
+            <text x="36" y="138" fill="#fca5a5" fontSize="9.5" fontWeight="bold">噴煙柱・降灰拡散域 (8,000m)</text>
+            <text x="36" y="150" fill="#94a3b8" fontSize="8.5">航空危険空域 (NOTAM)</text>
 
             {/* 火山フロント軸 */}
-            <line x1="16" y1="184" x2="28" y2="184" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-            <text x="36" y="184" fill="#cbd5e1" fontSize="9.5" fontWeight="bold">伊豆・小笠原火山フロント軸</text>
-            <text x="36" y="196" fill="#94a3b8" fontSize="8.5">海底海嶺・マグマ上昇帯</text>
+            <line x1="16" y1="170" x2="28" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
+            <text x="36" y="170" fill="#cbd5e1" fontSize="9.5" fontWeight="bold">伊豆・小笠原火山フロント軸</text>
+            <text x="36" y="182" fill="#94a3b8" fontSize="8.5">海底海嶺・マグマ上昇帯</text>
 
             {/* GM真相時のみ凡例に熱水クラッターも記載 */}
             {mode === "gm" && (
               <>
-                <circle cx="22" cy="224" r="7" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
-                <text x="36" y="222" fill="#fb923c" fontSize="9.5" fontWeight="bold">海底熱水音響障害圏 (R=20km)</text>
-                <text x="36" y="234" fill="#f97316" fontSize="8.5">セクターE-2 / カルデラ (NO RETURN)</text>
+                <circle cx="22" cy="206" r="7" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
+                <text x="36" y="204" fill="#fb923c" fontSize="9.5" fontWeight="bold">海底熱水音響障害圏 (R=20km)</text>
+                <text x="36" y="216" fill="#f97316" fontSize="8.5">セクターE-2 / カルデラ (NO RETURN)</text>
               </>
             )}
           </g>
 
-          {/* 作戦海図仕様スペック欄（枠外右下） */}
-          <g transform="translate(915, 465)">
-            <rect width="245" height="135" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="14" y="22" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
-            <text x="14" y="42" fill="#cbd5e1" fontSize="9">縮尺: 1:200,000 ｜ 漸長緯度図法</text>
-            <text x="14" y="58" fill="#cbd5e1" fontSize="9">測地系: 世界測地系 (WGS-84)</text>
-            <text x="14" y="74" fill="#cbd5e1" fontSize="9">管轄: 海上保安庁・自衛隊 統合本部</text>
-            <text x="14" y="96" fill="#38bdf8" fontSize="9.5" fontWeight="bold">作戦セクター規格:</text>
-            <text x="14" y="112" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 東西 約20km × 南北 約20km</text>
-            <text x="14" y="124" fill="#94a3b8" fontSize="8" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
+          {/* 作戦海図仕様スペック欄（枠外中央右） */}
+          <g transform="translate(915, 415)">
+            <rect width="245" height="122" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="20" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
+            <text x="14" y="38" fill="#cbd5e1" fontSize="9">縮尺: 1:200,000 ｜ 漸長緯度図法</text>
+            <text x="14" y="54" fill="#cbd5e1" fontSize="9">測地系: 世界測地系 (WGS-84)</text>
+            <text x="14" y="70" fill="#cbd5e1" fontSize="9">管轄: 海上保安庁・自衛隊 統合本部</text>
+            <text x="14" y="90" fill="#38bdf8" fontSize="9.5" fontWeight="bold">作戦セクター規格:</text>
+            <text x="14" y="104" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
+          </g>
+
+          {/* 1セクター規格サンプル図（青い枠：作戦海図仕様の直下） */}
+          <g transform="translate(915, 547)">
+            <rect width="245" height="172" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="20" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【1セクター規格サンプル図】</text>
+
+            {/* 青い四角枠のサンプルセクター（海図グリッドと同一の青枠・背景） */}
+            <g transform="translate(74, 38)">
+              {/* 青い枠のセクター四角形 */}
+              <rect
+                x="0"
+                y="0"
+                width="122"
+                height="92"
+                fill="#0284c7"
+                fillOpacity="0.14"
+                stroke="#0ea5e9"
+                strokeWidth="2"
+                rx="2"
+              />
+              <text x="8" y="16" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">SAMPLE</text>
+              <text x="61" y="52" fill="#e0f2fe" fontSize="11" fontWeight="bold" textAnchor="middle">1セクター</text>
+
+              {/* 横幅寸法線 (横 20 km) */}
+              <line x1="0" y1="-12" x2="122" y2="-12" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+              <rect x="33" y="-20" width="56" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
+              <text x="61" y="-9" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">横 20 km</text>
+
+              {/* 縦高寸法線 (縦 約20 km) */}
+              <line x1="-12" y1="0" x2="-12" y2="92" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+              <rect x="-44" y="38" width="60" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
+              <text x="-14" y="49" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">縦 約20 km</text>
+            </g>
+
+            {/* 下部説明テキスト */}
+            <text x="122" y="154" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
+              東西 約20km × 南北 約20km (全36区画)
+            </text>
           </g>
         </svg>
       </div>
