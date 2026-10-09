@@ -2814,24 +2814,116 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
-            {/* --- DAY 7 クライマックス大捕食 --- */}
+            {/* --- DAY 7 クライマックス大捕食 ＆ アンサング・ヒーローのエピローグ --- */}
             {selectedDay === 7 && (
-              <div className="rounded-xl border border-emerald-800 bg-[#071d15] p-4 shadow-lg space-y-3">
-                <div className="flex items-center gap-2 border-b border-emerald-900/60 pb-2">
-                  <Flame className="h-4 w-4 text-emerald-400" />
-                  <span className="font-bold text-xs text-white">
-                    【クライマックス】Day 7 駿河湾大捕食作戦 ＆ 全ソナー網祝詞放流
+              <div className="rounded-xl border border-emerald-700/80 bg-[#061814] p-5 shadow-2xl space-y-4">
+                <div className="flex items-center justify-between border-b border-emerald-800/60 pb-3">
+                  <div className="flex items-center gap-2.5">
+                    <Flame className="h-5 w-5 text-emerald-400 animate-pulse" />
+                    <div>
+                      <h3 className="font-bold text-sm text-white flex items-center gap-2">
+                        【Day 7 決戦】駿河湾口・魚雷飽和攻撃 ＆ マッコウクジラ深海大捕食作戦
+                      </h3>
+                      <p className="text-[11px] text-emerald-300/80">
+                        水深600〜1,000mの境界戦 ｜ 魚雷による群体粉砕アシスト × クジラ群の完全捕食消滅
+                      </p>
+                    </div>
+                  </div>
+                  <span className="text-[11px] font-mono text-emerald-300 font-bold bg-emerald-950/80 px-2.5 py-1 rounded border border-emerald-600/60">
+                    作戦海域：駿河湾口〜湾奥（水深600〜1,000m）
                   </span>
                 </div>
-                <p className="text-xs text-slate-300 leading-relaxed">
-                  太平洋全域から数千頭のマッコウクジラが駿河湾へ超集結。怪異の超群体を片っ端から噛み砕き、深海の闇へと貪り食っていく大捕食オペレーションの完遂。
-                </p>
-                <button
-                  onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
-                  className="w-full flex items-center justify-center gap-2 rounded bg-emerald-600 py-2 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
-                >
-                  <Volume2 className="h-4 w-4" /> 全海域へ祝詞メッセージを放流する（作戦決行）
-                </button>
+
+                {/* 戦況状況と水深設定 */}
+                <div className="grid grid-cols-2 gap-3 text-xs">
+                  <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-3 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-slate-200 flex items-center gap-1.5 text-[11px]">
+                        🎯 目標潜航深度：水深 600m 〜 1,000m
+                      </span>
+                      <span className="text-[10px] text-amber-400 font-mono">魚雷有効限界スレスレ</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Day 5の迎撃を警戒した怪異は、海面に浮上せず<strong>水深600〜1,000mの深海</strong>を維持して駿河トラフへ突入。通常兵器の魚雷が水圧で圧壊する限界ギリギリの領域に潜み続けます。
+                    </p>
+                  </div>
+
+                  <div className="rounded-lg bg-emerald-950/40 border border-emerald-800/60 p-3 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="font-bold text-emerald-300 flex items-center gap-1.5 text-[11px]">
+                        🐋 マッコウクジラ群：超深海からの挟撃包囲
+                      </span>
+                      <span className="text-[10px] text-emerald-400 font-mono">筋肉中酸素（ミオグロビン）</span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      筋肉に大量の酸素を蓄え、深海1,000〜2,000mに潜水できるマッコウクジラだけが、怪異の下方・退路を完全に塞ぎ、深海の闇から一斉に食らいつくことができます！
+                    </p>
+                  </div>
+                </div>
+
+                {/* 作戦展開の2重奏 */}
+                <div className="rounded-lg bg-slate-900/90 border border-emerald-900/60 p-3.5 space-y-2.5 text-xs">
+                  <span className="font-bold text-white text-xs block border-b border-slate-800 pb-1.5">
+                    ⚔️ 【自衛隊 × マッコウクジラ群：深海統合掃討オペレーションの全貌】
+                  </span>
+
+                  <div className="grid grid-cols-3 gap-2.5 text-[11px]">
+                    <div className="rounded bg-slate-950 p-2.5 border border-slate-800 space-y-1">
+                      <strong className="text-cyan-400 block font-semibold">① 海自アクティブソナー照射</strong>
+                      <p className="text-slate-300 text-[10px] leading-relaxed">
+                        大出力ソナーが怪異へPing音を照射。これがクジラ群にとって「あそこに獲物がいる！」という最高の音響標的マーカーとなる。
+                      </p>
+                    </div>
+
+                    <div className="rounded bg-slate-950 p-2.5 border border-slate-800 space-y-1">
+                      <strong className="text-amber-400 block font-semibold">② 海自潜水艦・重魚雷一斉飽和攻撃</strong>
+                      <p className="text-slate-300 text-[10px] leading-relaxed">
+                        限界深度へ撃ち込まれた重魚雷が全弾直撃！ 爆風で巨大群体をバラバラに粉砕し、クジラが捕食しやすい一口サイズへと引き裂く！
+                      </p>
+                    </div>
+
+                    <div className="rounded bg-slate-950 p-2.5 border border-slate-800 space-y-1">
+                      <strong className="text-emerald-400 block font-semibold">③ クジラ大群の深海大捕食（消滅）</strong>
+                      <p className="text-slate-300 text-[10px] leading-relaxed">
+                        再結合しようとするダイオウイカの個体を、数百頭のクジラが深海で片っ端から噛み砕き貪り喰らい尽くす。怪異は完全に胃袋へ消滅！
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* 祝詞メッセージ放流ボタン */}
+                  <button
+                    onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
+                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-2.5 text-xs font-bold text-white transition shadow-lg"
+                  >
+                    <Volume2 className="h-4 w-4" /> 全ソナー網より捕食要請祝詞を最終放流（大捕食作戦決行）
+                  </button>
+                </div>
+
+                {/* エピローグ：アンサング・ヒーロー（語られざる英雄たち） */}
+                <div className="rounded-lg bg-gradient-to-br from-slate-950 via-[#0a121e] to-slate-950 border border-indigo-700/60 p-4 space-y-2 text-xs">
+                  <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
+                    <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                      <span>🕊️ 【エピローグ：語られざる英雄たち（Unsung Heroes）】</span>
+                    </span>
+                    <span className="text-[10px] text-slate-400 font-mono">作戦終結・事後記録</span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 text-[11px] pt-1">
+                    <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
+                      <strong className="text-slate-200 block">📜 政府・自衛隊の公式発表（表の歴史）:</strong>
+                      <p className="italic text-slate-300 leading-relaxed font-mono text-[10px]">
+                        「海上自衛隊潜水艦部隊による通常兵器（最新鋭重魚雷の一斉飽和攻撃）により、水深600〜1,000mの怪異を撃退・完全殲滅に成功。軍部上層部は火力の勝利と総括し、世間は自衛隊の防衛作戦の成功に歓喜した」
+                      </p>
+                    </div>
+
+                    <div className="rounded bg-indigo-950/40 border border-indigo-800/60 p-2.5 space-y-1">
+                      <strong className="text-amber-300 block">⭐ 6人だけが知る真実（アンサング・ヒーロー）:</strong>
+                      <p className="italic text-slate-200 leading-relaxed font-mono text-[10px]">
+                        「魚雷だけでは倒せなかった。深海でクジラたちがすべてを喰らい尽くしてくれたからこそ、日本は救われたのだ。だが、6人はその手柄を主張せず、自衛隊へ譲った。自分たちだけの誇りとして胸に秘め、静かに日常へ帰っていく――」
+                      </p>
+                    </div>
+                  </div>
+                </div>
               </div>
             )}
           </div>

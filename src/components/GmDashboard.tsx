@@ -1768,18 +1768,82 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               )}
 
               {currentDay === 7 && (
-                <div className="space-y-2 text-xs leading-relaxed">
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-emerald-400">【クライマックス：大捕食のナレーション】:</span>
-                    <p className="text-slate-400 mt-1 italic">
-                      「全ソナー網から祝詞メッセージが放流されました。……沈黙ののち、太平洋全域から数千頭のマッコウクジラが駿河湾へ超集結してきます！海面を割ってクジラたちが怪異の触手を片っ端から噛み砕き、深海の闇へと貪り食っていく……作戦、成功です！」
+                <div className="space-y-3.5 text-xs leading-relaxed">
+                  {/* フェーズ1：駿河湾口突入 ＆ 水深600〜1,000mの境界戦 */}
+                  <div className="rounded-xl border border-rose-900/60 bg-[#160f1c] p-3.5 space-y-2 shadow-md">
+                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <Clock className="h-4 w-4 text-rose-400" />
+                        【フェーズ1：駿河湾口突入 ＆ 水深600〜1,000mの最終戦況】
+                      </span>
+                      <span className="text-[10px] font-mono text-rose-400 font-bold bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800/80">
+                        富士山破局噴火まで 残り数時間
+                      </span>
+                    </div>
+                    <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1">
+                      <strong className="text-rose-300 block font-bold">📢 【GMナレーション：深海境界域での最終突入】</strong>
+                      <p className="italic leading-relaxed font-mono">
+                        「怪異は海面へ浮上せず、通常兵器の魚雷が水圧で圧壊する限界スレスレ――<strong>水深600mから1,000mの超深海</strong>を維持したまま、駿河トラフ境界へ突入しました。富士山直下のマグマ網まであとわずか。もはや一刻の猶予もありません！」
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ2：自衛隊魚雷一斉飽和攻撃 ＆ ソナー照射（アシスト） */}
+                  <div className="rounded-xl border border-amber-900/60 bg-[#171210] p-3.5 space-y-2 shadow-md">
+                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5 border-b border-amber-900/40 pb-1.5">
+                      <Flame className="h-4 w-4 text-amber-400" />
+                      【フェーズ2：海自潜水艦部隊 重魚雷一斉飽和攻撃（群体粉砕アシスト）】
+                    </span>
+                    <p className="italic text-slate-200 leading-relaxed bg-black/40 p-2.5 rounded border border-amber-950 font-mono">
+                      「防衛庁のリエゾン（PC2）の座標指示に基づき、海自潜水艦部隊が限界深度へ向け最新鋭重魚雷の一斉飽和攻撃を敢行！ 大出力ソナーのPing音が深海を貫き、直後――深海の闇の中で巨大な爆炎が連鎖します！ 魚雷の爆風により、巨大群体は一時的にバラバラに粉砕・分断されました！」
                     </p>
-                    <button
-                      onClick={() => handlePlayAudioCue("climax-call")}
-                      className="mt-2 flex items-center gap-1.5 rounded bg-emerald-600 px-2.5 py-1 text-[11px] font-semibold text-white hover:bg-emerald-500 transition"
-                    >
-                      <Volume2 className="h-3.5 w-3.5" /> 捕食号令メッセージを全海域放流
-                    </button>
+                    <div className="text-[10px] text-amber-300/90 bg-amber-950/30 p-2 rounded border border-amber-900/40">
+                      💡 <strong>自衛隊の貢献</strong>: 魚雷単独では再結合を許してしまいますが、「大出力ソナーによる標的照射」と「巨大群体を一口サイズに引き裂く粉砕」という最高のアシストを果たします！
+                    </div>
+                  </div>
+
+                  {/* フェーズ3：マッコウクジラ深海大捕食（完全消滅） */}
+                  <div className="rounded-xl border border-emerald-900/70 bg-[#081b16] p-3.5 space-y-2.5 shadow-lg">
+                    <div className="flex items-center justify-between border-b border-emerald-900/40 pb-1.5">
+                      <span className="font-bold text-emerald-300 text-xs flex items-center gap-1.5">
+                        <Volume2 className="h-4 w-4 text-emerald-400" />
+                        【フェーズ3：全海域祝詞放流 ＆ マッコウクジラ深海大捕食】
+                      </span>
+                      <button
+                        onClick={() => handlePlayAudioCue("climax-call")}
+                        className="flex items-center gap-1.5 rounded bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
+                      >
+                        <Volume2 className="h-3.5 w-3.5" /> 捕食号令祝詞を最終放流
+                      </button>
+                    </div>
+                    <p className="italic text-slate-100 leading-relaxed bg-black/50 p-2.5 rounded border border-emerald-950 font-mono">
+                      「全ソナー網から新言語祝詞が太平洋全域へ放流された瞬間――水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、散り散りになったダイオウイカを片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
+                    </p>
+                    <div className="rounded bg-emerald-950/60 border border-emerald-700/80 p-2 text-[11px] text-emerald-200">
+                      <strong>🎉 【作戦成功・微動完全停止】</strong>:
+                      富士山地下のマグマ微動が急速に減衰し、完全に静寂を取り戻しました。日本壊滅・破局大噴火は完全に回避されたのです！
+                    </div>
+                  </div>
+
+                  {/* フェーズ4：エピローグ演出（語られざる英雄たち） */}
+                  <div className="rounded-xl border border-indigo-800/70 bg-[#0f1226] p-3.5 space-y-2 shadow-md">
+                    <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5 border-b border-indigo-900/40 pb-1.5">
+                      <span>🕊️ 【フェーズ4：エピローグ演出・語られざる英雄たち（Unsung Heroes）】</span>
+                    </span>
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
+                        <strong className="text-slate-200 block text-[10px]">📢 政府・自衛隊の公式発表:</strong>
+                        <p className="italic text-slate-300 leading-relaxed font-mono text-[10px]">
+                          「海上自衛隊潜水艦部隊による重魚雷の一斉飽和攻撃により、水深600〜1,000mの目標を完全撃退・殲滅成功。メディアは自衛隊の防衛作戦の成功を讃え、軍部上層部は火力の勝利と総括した」
+                        </p>
+                      </div>
+                      <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-2.5 space-y-1">
+                        <strong className="text-amber-300 block text-[10px]">⭐ 6人のアンサング・ヒーロー:</strong>
+                        <p className="italic text-slate-200 leading-relaxed font-mono text-[10px]">
+                          「『俺たちの手柄は歴史のどこにも載らないな』『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』――真実を胸に秘めた6人は、静かに日常へと帰っていく」
+                        </p>
+                      </div>
+                    </div>
                   </div>
                 </div>
               )}
