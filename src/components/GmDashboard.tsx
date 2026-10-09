@@ -1759,21 +1759,27 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【フェーズ4：海自大出力ソナー網 新言語放流 ＆ 太平洋クジラ群呼応】</span>
+                        <span>📡 【フェーズ4：海自大出力ソナー網 新言語放流 ＆ クジラたちのメッセージリレー】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("sonar-broadcast")}
                         className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-600 to-indigo-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-cyan-500 hover:to-indigo-500 transition shadow"
                       >
-                        <Volume2 className="h-3.5 w-3.5" /> ソナー放流＆クジラ応答
+                        <Volume2 className="h-3.5 w-3.5" /> ソナー放流 ＆ メッセージリレー再生
                       </button>
                     </div>
-                    <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
-                      「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が太平洋全域へ放流されます！ ……沈黙の十数秒後、駿河湾から鳥島沖の全ソナーに、深海から咆哮のような無数の返信クリック（共鳴コーダ）が殺到します！」
-                    </p>
+                    <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
+                      <p className="italic">
+                        「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が太平洋全域へ放流されます！」
+                      </p>
+                      <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
+                        「……すると海の中で奇跡が起こります。至近海域の1頭のマッコウクジラがこの音を聞き、【了解】という明瞭な2連クリック音を返信。直後、そのクジラは自らまったく同じ歌（8語のメッセージ）を高らかに歌いながら北へ遊泳を開始したのです！
+                        その歌を耳にした沖合数十キロの別のクジラが【了解】を返し、また自ら同じ歌を歌い継いでいく……。海の中は次々に響く了解音と、遠方からこだまするクジラの歌のカノン（輪唱）に包まれます。クジラたちは太平洋全域でメッセージをリレーしているのです！」
+                      </p>
+                    </div>
                     <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
-                      <strong>✅ Day 6 達成演出:</strong>
-                      「太平洋全域のマッコウクジラ群が『海の下の火山を北へ探せ』というナビゲーションを受信し、駿河トラフへ向けて進路を急行反転させました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
+                      <strong>✅ Day 6 達成演出（歌のバトン）:</strong>
+                      「クジラたちが互いに歌をリレーし合い、駿河湾・伊豆諸島・小笠原・鳥島沖から無数のマッコウクジラが駿河トラフを目指して集結を開始しました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
                     </div>
                   </div>
                 </div>

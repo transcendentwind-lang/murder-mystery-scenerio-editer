@@ -190,6 +190,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網放流状態
   const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
   const [day6BroadcastStatus, setDay6BroadcastStatus] = useState<"idle" | "broadcasting" | "received">("idle");
+  const [day6RelayStatusText, setDay6RelayStatusText] = useState<string>("");
+  const [day6RelayStage, setDay6RelayStage] = useState<number>(0);
   const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>([
     "word-human",
     "word-whale",
@@ -204,8 +206,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const handleDay6Broadcast = async () => {
     if (!audioEngine) return;
     setDay6BroadcastStatus("broadcasting");
+    setDay6RelayStage(1);
+    setDay6RelayStatusText("海自ソナー網より新言語メッセージを大出力放流中……");
     try {
-      await audioEngine.playSonarBroadcastAndWhaleResponse();
+      await audioEngine.playWhaleMessageRelayChorus((statusText, stageIndex) => {
+        setDay6RelayStatusText(statusText);
+        setDay6RelayStage(stageIndex);
+      });
       setDay6BroadcastStatus("received");
     } catch {
       setDay6BroadcastStatus("received");
@@ -2815,13 +2822,75 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </span>
                       </div>
 
+                      {/* メッセージリレー進行インジケーター */}
+                      {day6BroadcastStatus !== "idle" && (
+                        <div className="rounded-lg bg-slate-950/90 border border-indigo-700/60 p-3 space-y-2 text-[11px] animate-fade-in shadow-inner">
+                          <div className="flex items-center justify-between text-indigo-300 font-bold">
+                            <span className="flex items-center gap-1.5">
+                              <Radio className="h-3.5 w-3.5 animate-pulse text-cyan-400" />
+                              【深海ハイドロフォン観測：クジラたちのメッセージリレー（歌のバトン）】
+                            </span>
+                            <span className="font-mono text-[10px] text-cyan-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                              進行度: {day6RelayStage} / 7
+                            </span>
+                          </div>
+
+                          {/* リアルタイムステータステキスト */}
+                          <div className="rounded bg-black/60 border border-cyan-900/50 p-2.5 text-cyan-200 font-mono text-[11px] leading-relaxed">
+                            {day6RelayStatusText || "ソナー網よりパルス放流中……"}
+                          </div>
+
+                          {/* 4段階リレーステップ */}
+                          <div className="grid grid-cols-4 gap-1.5 text-[10px] pt-1">
+                            <div
+                              className={`p-1.5 rounded border text-center transition ${
+                                day6RelayStage >= 1
+                                  ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
+                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
+                              }`}
+                            >
+                              ① ソナー網放流
+                            </div>
+                            <div
+                              className={`p-1.5 rounded border text-center transition ${
+                                day6RelayStage >= 3
+                                  ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
+                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
+                              }`}
+                            >
+                              ② 第1クジラ了解
+                            </div>
+                            <div
+                              className={`p-1.5 rounded border text-center transition ${
+                                day6RelayStage >= 4
+                                  ? "bg-indigo-950/60 border-indigo-500/80 text-indigo-200 font-bold"
+                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
+                              }`}
+                            >
+                              ③ 自ら歌い北上
+                            </div>
+                            <div
+                              className={`p-1.5 rounded border text-center transition ${
+                                day6RelayStage >= 6
+                                  ? "bg-emerald-950/60 border-emerald-500/80 text-emerald-200 font-bold"
+                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
+                              }`}
+                            >
+                              ④ 太平洋全域リレー
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {day6BroadcastStatus === "received" && (
-                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1 animate-fade-in">
+                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1.5 animate-fade-in">
                           <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
-                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群からの呼応シグナルを確認！
+                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群のメッセージリレーを確認！
                           </strong>
                           <p className="text-slate-200 leading-relaxed font-mono">
-                            「駿河湾沖、伊豆諸島、鳥島沖の全ソナー受信機に数十〜数百頭のマッコウクジラからの返信クリック（共鳴コーダ）が殺到しています！ クジラ群は再浮上した怪異の超群体を『巨大なイカの獲物』と認識し、駿河トラフへ向けて超高速で反転・集結を開始しました！」
+                            「一匹のクジラがこの音を聞いたあと、<strong>了解という音を返し、まったく同じ歌を自ら歌いながら北へ遊泳開始しました</strong>。
+                            その歌に応えて遠くのクジラが次々と了解を返し、また別のクジラへと歌が継承されていきます。
+                            クジラたちは太平洋全域でメッセージをリレーし、巨大な餌（怪異）を求めて駿河トラフへ向けて超高速で集結を開始しました！」
                           </p>
                         </div>
                       )}

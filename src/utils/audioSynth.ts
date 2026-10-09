@@ -267,18 +267,113 @@ class UnderwaterAudioEngine {
   }
 
   /**
-   * 海上自衛隊大出力ソナー網による新言語放流 ＆ 太平洋クジラ群呼応エコー
+  /**
+   * 空間定位・深海音響特性付きの単一クリック音（エコー・ローパス・パン・距離感）
    */
-  public async playSonarBroadcastAndWhaleResponse(): Promise<void> {
+  public playSpatialClick(
+    frequency = 2800,
+    duration = 0.015,
+    volume = 0.8,
+    pan = 0,
+    lowpassCutoff = 4500,
+    delaySec = 0
+  ) {
     this.initContext();
     if (!this.ctx || !this.analyser) return;
 
-    // 1. 海自大出力アクティブソナーのPing音 (1.8kHz チャープ)
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    const filter = this.ctx.createBiquadFilter();
+
+    const now = this.ctx.currentTime + delaySec;
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(frequency, now);
+    osc.frequency.exponentialRampToValueAtTime(140, now + duration);
+
+    filter.type = "lowpass";
+    filter.frequency.setValueAtTime(lowpassCutoff, now);
+    filter.Q.setValueAtTime(2.0, now);
+
+    gain.gain.setValueAtTime(volume, now);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    let outputNode: AudioNode = gain;
+    if (this.ctx.createStereoPanner) {
+      const panner = this.ctx.createStereoPanner();
+      panner.pan.setValueAtTime(Math.max(-1, Math.min(1, pan)), now);
+      gain.connect(panner);
+      outputNode = panner;
+    }
+
+    osc.connect(filter);
+    filter.connect(gain);
+    outputNode.connect(this.analyser);
+
+    osc.start(now);
+    osc.stop(now + duration + 0.01);
+  }
+
+  /**
+   * 空間定位付きのクリックパターンの再生
+   */
+  public async playSpatialClickPattern(
+    pattern: number[],
+    freq = 2600,
+    volume = 0.8,
+    pan = 0,
+    lowpass = 4500,
+    speedMultiplier = 1.0
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      pattern.forEach((delayMs, index) => {
+        setTimeout(() => {
+          this.playSpatialClick(freq, 0.018, volume, pan, lowpass);
+          if (index === pattern.length - 1) {
+            setTimeout(resolve, 300 / speedMultiplier);
+          }
+        }, delayMs / speedMultiplier);
+      });
+    });
+  }
+
+  /**
+   * 海上自衛隊大出力ソナー網による新言語放流 ＆ 太平洋クジラ群呼応エコー
+   */
+  public async playSonarBroadcastAndWhaleResponse(): Promise<void> {
+    await this.playWhaleMessageRelayChorus();
+  }
+
+  /**
+   * 【至高の海中音響演出】クジラたちのメッセージリレー（歌のバトン）
+   * 1頭目が了解を返し、自ら同じ歌を歌いながら北上。
+   * その歌に応えて遠くのクジラが了解を返し、さらに遠くへリレーしていく。
+   */
+  public async playWhaleMessageRelayChorus(
+    onStatusChange?: (statusText: string, stageIndex: number) => void
+  ): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return;
+
+    const fullMessageWords = [
+      "word-human",
+      "word-whale",
+      "word-promise",
+      "word-subsea-volcano",
+      "word-go-north",
+      "word-search",
+      "word-giant-prey",
+      "word-gather",
+    ];
+
+    // --- ステージ1: 海自大出力ソナー網からのパルス放流 ---
+    onStatusChange?.("📡 海自大出力ソナー網より『8語の新言語メッセージ』を放流中……", 1);
+
+    // ソナーPing音 (1.8kHz チャープ)
     const pingOsc = this.ctx.createOscillator();
     const pingGain = this.ctx.createGain();
     pingOsc.type = "sine";
     pingOsc.frequency.setValueAtTime(1800, this.ctx.currentTime);
-    pingGain.gain.setValueAtTime(0.5, this.ctx.currentTime);
+    pingGain.gain.setValueAtTime(0.55, this.ctx.currentTime);
     pingGain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.9);
     pingOsc.connect(pingGain);
     pingGain.connect(this.analyser);
@@ -287,15 +382,76 @@ class UnderwaterAudioEngine {
 
     await new Promise((r) => setTimeout(r, 900));
 
-    // 2. 合成新言語メッセージ（敵・獲物・集まれ）の大出力パルス放流
-    await this.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.1);
+    // ソナー網からの合成メッセージ放流
+    for (const wId of fullMessageWords) {
+      await this.playWordSound(wId, 1.25);
+      await new Promise((r) => setTimeout(r, 260));
+    }
 
-    await new Promise((r) => setTimeout(r, 500));
+    onStatusChange?.("🌊 パルスが深海音響層（SOFAR）へ浸透……深海からの応答を待機中", 2);
+    await new Promise((r) => setTimeout(r, 1200));
 
-    // 3. 深海・太平洋全域からのクジラ群応答コーダ（遠方エコー）
-    await this.playClickPattern([0, 120, 240, 360, 480], 1900, 0.9);
-    await new Promise((r) => setTimeout(r, 200));
-    await this.playClickPattern([0, 90, 180, 270], 2300, 1.2);
+    // --- ステージ2: 至近（0〜10km）の第1クジラが「了解（YES）」を返信！ ---
+    onStatusChange?.("🐋 至近海域の第1クジラが【了解】（YESコーダ）を返信！", 3);
+    // 明瞭な高音2連打（2900Hz / 近距離 / パン -0.15）
+    await this.playSpatialClickPattern([0, 150], 2900, 0.9, -0.15, 6000, 1.0);
+    await new Promise((r) => setTimeout(r, 900));
+
+    // --- ステージ3: 第1クジラが自ら同じ歌を歌いながら移動開始！ ---
+    onStatusChange?.("🎶 第1クジラがメッセージを自ら歌い始め、北へ遊泳開始！", 4);
+
+    // 第1クジラの歌をバックグラウンドで開始しつつ、途中で第2クジラがリレーする重なり合いを構築
+    const singFirstWhale = async () => {
+      for (const wId of fullMessageWords) {
+        // クジラ自身の生物的な力強いクリック
+        await this.playWordSound(wId, 0.95);
+        await new Promise((r) => setTimeout(r, 380));
+      }
+    };
+
+    // 第1クジラが前半（人間・クジラ・約束・海底火山）を歌う
+    singFirstWhale();
+
+    // 歌が中盤（約2.5秒後）に達したところで、中距離のクジラが呼応！
+    await new Promise((r) => setTimeout(r, 2400));
+
+    // --- ステージ4: 中距離（約30〜50km・鳥島〜須美寿沖）の第2クジラが了解 ＆ リレー開始！ ---
+    onStatusChange?.("📡 沖合数十kmの第2クジラが【了解】を返答し、歌をリレー継承！", 5);
+    // 中距離了解音（少し高域が減衰、パン +0.45、音量0.6）
+    await this.playSpatialClickPattern([0, 160], 2700, 0.6, 0.45, 3200, 1.05);
+    await new Promise((r) => setTimeout(r, 600));
+
+    // 第2クジラがリレーして歌い始める（遠くで響く歌）
+    const singSecondWhale = async () => {
+      for (const wId of fullMessageWords.slice(3)) {
+        // 海底火山から先を歌う
+        await this.playWordSound(wId, 1.1);
+        await new Promise((r) => setTimeout(r, 320));
+      }
+    };
+    singSecondWhale();
+
+    await new Promise((r) => setTimeout(r, 1800));
+
+    // --- ステージ5: 太平洋全域（数百km）から無数の了解と合唱がこだまする！ ---
+    onStatusChange?.("🌐 太平洋全域へリレーが到達！ 無数の了解と歌が海中に響き渡る！", 6);
+
+    // 遠距離の複数の了解コーダ（左右から時間差でこだまする）
+    this.playSpatialClickPattern([0, 170], 2500, 0.4, -0.6, 2200, 1.1);
+    await new Promise((r) => setTimeout(r, 350));
+    this.playSpatialClickPattern([0, 160], 2600, 0.35, 0.7, 2000, 1.15);
+    await new Promise((r) => setTimeout(r, 450));
+    this.playSpatialClickPattern([0, 150], 2800, 0.25, -0.3, 1800, 1.2);
+    await new Promise((r) => setTimeout(r, 300));
+    this.playSpatialClickPattern([0, 140], 2900, 0.3, 0.2, 1900, 1.25);
+
+    // 遠洋での捕食・集まれコーダの群声エコー
+    await new Promise((r) => setTimeout(r, 600));
+    await this.playSpatialClickPattern([0, 60, 120, 180, 240, 300], 3200, 0.3, 0.5, 2400, 1.2);
+    await new Promise((r) => setTimeout(r, 300));
+    await this.playSpatialClickPattern([0, 180, 320, 420], 2400, 0.35, -0.5, 2200, 1.1);
+
+    onStatusChange?.("✅ メッセージリレー完了：太平洋マッコウクジラ群が歌いながら駿河湾へ集結中！", 7);
   }
 }
 
