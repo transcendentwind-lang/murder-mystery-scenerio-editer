@@ -25,7 +25,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
 
   md += `## 💡 4. コアギミック (生態系捕食 × クジラ言語パズル × メッセージリレー)\n${project.gimmickOverview}\n\n`;
 
-  md += `## 👥 5. 登場人物一覧（対策チーム 6名）\n`;
+  md += `## 👥 5. 登場人物一覧（対策チーム ${project.playerCount}名: 東京司令部2名 ＋ 小笠原現地${project.playerCount === 5 ? "3名" : "4名"}）\n`;
   project.characters.forEach((c) => {
     md += `### ${c.name} (${c.profession})\n`;
     md += `- **配置**: ${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}\n`;
@@ -72,7 +72,7 @@ export function generateSynopsisPlainText(project: MMProject): string {
   text += `■ 4. コアギミック・独自性（生態系捕食 × クジラ言語パズル × メッセージリレー）\n`;
   text += `${project.gimmickOverview}\n\n`;
 
-  text += `■ 5. 登場人物（海難救助対策チーム 6名）\n`;
+  text += `■ 5. 登場人物（海難救助対策チーム ${project.playerCount}名: 東京司令部2名 ＋ 小笠原現地${project.playerCount === 5 ? "3名" : "4名"}）\n`;
   project.characters.forEach((c) => {
     text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
     text += `  概要: ${c.handout.publicProfile}\n`;
@@ -110,7 +110,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `---\n\n`;
 
   // --- 第2章：キャラクターハンドアウト ---
-  md += `## 👥 第2章：登場人物ハンドアウト（全6名）\n\n`;
+  md += `## 👥 第2章：登場人物ハンドアウト（全${project.playerCount}名: 東京司令部2名 ＋ 小笠原現地${project.playerCount === 5 ? "3名" : "4名"}）\n\n`;
   project.characters.forEach((c) => {
     md += `### ${c.name} (${c.profession})\n`;
     md += `- **所属・配置**: ${c.location === "headquarters" ? "東京本庁・司令部" : "小笠原・現地救難隊"}\n`;
@@ -147,7 +147,11 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `#### 1. 状況とプレイヤーができること\n`;
   md += `- **発生事象**: 民間チャーター船（40t）が全電源喪失。AIS停波、衛星死角。\n`;
   md += `- **東京司令部の行動**: PC1が遭難船スペック（風圧流リーウェイ率3〜4%）を提示。PC2が衛星死角（ひまわり解像度限界・雨雲）と南西強風15m/s（約30ノット）を報告。航法計算（東へ2ktの黒潮支流 × 北東へ1.5ktの風圧流）から東北東の漂流予測地点を割り出す。\n`;
-  md += `- **現地救難隊の行動**: PC3が救難艇で急行し、暗礁手前で接舷・救助。PC4が潜水士カルテを作成。PC6が現場海域の海図と暗礁位置を照合。\n`;
+  if (project.playerCount === 5) {
+    md += `- **現地救難隊の行動**: PC3が救難艇で急行し、暗礁手前で接舷・救助。PC4が海洋気象ブイ実測データ（真東2kt）と遭難直前無線ログを提示し、暗礁手前での突入ルートを計算。PC5が潮目水温データを提示して海流の持続を証明。\n`;
+  } else {
+    md += `- **現地救難隊の行動**: PC3が救難艇で急行し、暗礁手前で接舷・救助。PC4が海洋ブイ海流データを提示。PC5が潮目水温データを提示。PC6が現場海域の海図と暗礁位置・遭難直前無線ログを照合。\n`;
+  }
   md += `- **開示される資料・証拠**: [ev-drift-map] 漂流予測計算海図、[ev-satellite-blindspot] 衛星捜索制約レポート、[ev-diver-box-photo] 救助されたダイバーと大型冷凍ボックスの写真、[ev-captain-testimony] 船長証言（『巨大な影に船底を叩かれた』）、[ev-radio-fragment] 途絶した遭難無線ログ。\n`;
   md += `- **調査結果と疑惑**: 船長『巨大生物を見た』vs ダイバー『魚の調査サンプルだ』と食い違い、ダイバーは謎の重いプラスチック冷凍ボックスを持ち去る。\n\n`;
 

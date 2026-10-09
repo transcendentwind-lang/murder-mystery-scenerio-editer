@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { MMProject } from "@/types/schema";
-import { initialProject } from "@/utils/initialProjectData";
+import { initialProject, getCharactersForPlayerCount } from "@/utils/initialProjectData";
 import {
   getStoredProjects,
   saveProjectToStorage,
@@ -92,6 +92,33 @@ export default function WorkbenchPage() {
       },
     ]);
   };
+
+  // プレイ人数切り替えハンドラー（5名 / 6名）
+  const handleTogglePlayerCount = (newCount: number) => {
+    const updatedChars = getCharactersForPlayerCount(newCount);
+    handleUpdateProject((prev) => ({
+      ...prev,
+      playerCount: newCount,
+      characters: updatedChars,
+    }));
+
+    // 切り替え時にチャットに案内メッセージを追加
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: `toggle-count-${Date.now()}`,
+        sender: "ai",
+        persona: "drama_director",
+        text: `👥 プレイ人数を【${newCount}名モード】に切り替えました！\n\n${
+          newCount === 5
+            ? "【5名モード（推奨：東京2名 ＋ 小笠原3名）】\n小笠原現地チームを3名体制（PC3:船長・ガイド、PC4:気象観測員 兼 神社社家、PC5:生物学者）に集約しました。\nPC4が近代科学データと実家（大神宮）の古文書・祝詞の型・途絶無線ログを内包しており、すべての証拠とパズルが5名で100%成立します。"
+            : "【6名モード（東京2名 ＋ 小笠原4名）】\n小笠原現地チームを4名体制（PC3:船長、PC4:純粋気象観測員、PC5:生物学者、PC6:救護チーフ・神職）に展開しました。"
+        }\n\n登場人物ハンドアウトや台本出力でも即座に反映されています。`,
+        timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      },
+    ]);
+  };
+
 
   // AIチャット初期メッセージ
   const [messages, setMessages] = useState<ChatMessage[]>([
@@ -232,6 +259,34 @@ export default function WorkbenchPage() {
             </button>
           </div>
 
+          {/* 5名 / 6名 プレイ人数切り替えトグル */}
+          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+            <button
+              onClick={() => handleTogglePlayerCount(5)}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                project.playerCount === 5
+                  ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+              }`}
+              title="小笠原3名（PC3・PC4統合・PC5）＋東京2名の推奨5名構成"
+            >
+              <Users className="h-3.5 w-3.5" />
+              5人プレイ（推奨）
+            </button>
+            <button
+              onClick={() => handleTogglePlayerCount(6)}
+              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                project.playerCount === 6
+                  ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+              }`}
+              title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名の通常6名構成"
+            >
+              <Users className="h-3.5 w-3.5" />
+              6人プレイ
+            </button>
+          </div>
+
           {/* 企画概要モーダルクイックボタン */}
           <button
             onClick={() => setIsSynopsisOpen(true)}
@@ -301,6 +356,8 @@ export default function WorkbenchPage() {
                   <CharactersEvidenceManager
                     characters={project.characters}
                     evidences={project.evidences}
+                    playerCount={project.playerCount}
+                    onTogglePlayerCount={handleTogglePlayerCount}
                     onUpdateCharacters={(newChars) =>
                       handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                     }
@@ -311,6 +368,7 @@ export default function WorkbenchPage() {
                 ) : (
                   <HandoutEditor
                     characters={project.characters}
+                    playerCount={project.playerCount}
                     onUpdateCharacters={(newChars) =>
                       handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                     }

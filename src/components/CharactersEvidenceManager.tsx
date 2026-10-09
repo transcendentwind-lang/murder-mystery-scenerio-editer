@@ -22,15 +22,19 @@ import {
 interface CharactersEvidenceManagerProps {
   characters: Character[];
   evidences: EvidenceItem[];
+  playerCount?: number;
   onUpdateCharacters: (chars: Character[]) => void;
   onUpdateEvidences: (evs: EvidenceItem[]) => void;
+  onTogglePlayerCount?: (count: number) => void;
 }
 
 export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps> = ({
   characters,
   evidences,
+  playerCount = 6,
   onUpdateCharacters,
   onUpdateEvidences,
+  onTogglePlayerCount,
 }) => {
   const [subView, setSubView] = useState<"characters" | "evidences" | "matrix">("characters");
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0]?.id || "pc-1");
@@ -39,7 +43,13 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   const [newCapDesc, setNewCapDesc] = useState("");
   const [newCapPhase, setNewCapPhase] = useState<number>(1);
 
-  const selectedChar = characters.find((c) => c.id === selectedCharId) || characters[0];
+  // 選択中IDが存在しない（5名モードでPC6が消えた場合など）に対応
+  const currentSelectedCharId = characters.some((c) => c.id === selectedCharId)
+    ? selectedCharId
+    : characters[0]?.id || "pc-1";
+
+  const selectedChar =
+    characters.find((c) => c.id === currentSelectedCharId) || characters[0];
 
   // キャラクター更新
   const handleUpdateChar = (field: keyof Character, value: any) => {
@@ -151,9 +161,37 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
           </div>
         </div>
 
-        <div className="text-xs text-slate-400">
-          登録PC: <span className="font-bold text-indigo-400">{characters.length}名</span> ｜
-          総証拠数: <span className="font-bold text-indigo-400">{evidences.length}件</span>
+        <div className="flex items-center gap-4">
+          {onTogglePlayerCount && (
+            <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 p-1">
+              <button
+                onClick={() => onTogglePlayerCount(5)}
+                className={`flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-bold transition ${
+                  playerCount === 5
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+                title="小笠原3名（PC3・PC4統合・PC5）＋東京2名"
+              >
+                5名モード（推奨）
+              </button>
+              <button
+                onClick={() => onTogglePlayerCount(6)}
+                className={`flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-bold transition ${
+                  playerCount === 6
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+                title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名"
+              >
+                6名モード
+              </button>
+            </div>
+          )}
+          <div className="text-xs text-slate-400">
+            登録PC: <span className="font-bold text-indigo-400">{characters.length}名</span> ｜
+            総証拠数: <span className="font-bold text-indigo-400">{evidences.length}件</span>
+          </div>
         </div>
       </div>
 
@@ -162,12 +200,17 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
         <div className="grid flex-1 grid-cols-12 gap-6 overflow-hidden">
           {/* 左カラム：PC一覧リスト */}
           <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              海難救助対策チーム (6名)
-            </h3>
+            <div className="mb-3 flex items-center justify-between">
+              <h3 className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                海難救助対策チーム ({characters.length}名)
+              </h3>
+              <span className="rounded bg-indigo-950/80 px-2 py-0.5 text-[10px] font-bold text-indigo-300 border border-indigo-500/30">
+                {characters.length === 5 ? "5名構成（推奨）" : "6名構成"}
+              </span>
+            </div>
             <div className="space-y-2">
               {characters.map((char) => {
-                const isSelected = char.id === selectedCharId;
+                const isSelected = char.id === currentSelectedCharId;
                 const charEvCount = evidences.filter((e) => e.ownerId === char.id).length;
                 return (
                   <button
@@ -180,7 +223,20 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                     }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="font-bold text-xs text-white">{char.name}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-bold text-xs text-white">{char.name}</span>
+                        {char.id === "pc-4" && (
+                          <span
+                            className={`rounded px-1.5 py-0.2 text-[9px] font-bold ${
+                              characters.length === 5
+                                ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                                : "bg-slate-800 text-slate-400"
+                            }`}
+                          >
+                            {characters.length === 5 ? "✨ 統合版" : "単独観測員"}
+                          </span>
+                        )}
+                      </div>
                       <span
                         className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
                           char.location === "headquarters"
@@ -206,6 +262,56 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
 
           {/* 右カラム：選択PCの詳細・イントロ・できること */}
           <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
+            {/* PC4統合版の案内バナー */}
+            {selectedChar.id === "pc-4" && characters.length === 5 && (
+              <div className="mb-4 rounded-lg border border-amber-500/40 bg-amber-950/20 p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="h-4 w-4 text-amber-400" />
+                    <span className="text-xs font-bold text-amber-200">
+                      5人プレイ用：統合キャラクター（観測員 兼 神社社家）
+                    </span>
+                  </div>
+                  {onTogglePlayerCount && (
+                    <button
+                      onClick={() => onTogglePlayerCount(6)}
+                      className="text-[11px] text-slate-400 hover:text-amber-300 underline"
+                    >
+                      6名プレイ用（純粋観測員＋PC6神職）に戻す
+                    </button>
+                  )}
+                </div>
+                <p className="mt-1.5 text-[11px] leading-relaxed text-amber-300/80">
+                  小笠原現地を3名（PC3, PC4, PC5）でプレイできるよう、PC4が「近代科学観測官」と「島の大神宮社家」を兼任しています。土蔵の古文書、祝詞の型（吸着破裂音）、途絶無線ログの3大証拠をPC4がすべて所持するため、謎解きや証拠カードの欠落は一切生じません。
+                </p>
+              </div>
+            )}
+
+            {/* PC4純粋版の案内バナー */}
+            {selectedChar.id === "pc-4" && characters.length === 6 && (
+              <div className="mb-4 rounded-lg border border-slate-700 bg-slate-900/40 p-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Users className="h-4 w-4 text-slate-400" />
+                    <span className="text-xs font-bold text-slate-300">
+                      6人プレイ用：純粋海洋・気象観測員
+                    </span>
+                  </div>
+                  {onTogglePlayerCount && (
+                    <button
+                      onClick={() => onTogglePlayerCount(5)}
+                      className="text-[11px] text-indigo-400 hover:text-indigo-300 font-bold underline"
+                    >
+                      5人プレイ用（統合版PC4）に切り替える
+                    </button>
+                  )}
+                </div>
+                <p className="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+                  科学的データ分析に特化した観測員です。神社伝承・祝詞・無線ログはPC6（救護班チーフ・神職）が担当します。
+                </p>
+              </div>
+            )}
+
             <div className="mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
                 <h3 className="text-base font-bold text-white">{selectedChar.name}</h3>

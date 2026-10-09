@@ -429,6 +429,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               <RotateCcw className="h-4 w-4" />
             </button>
           </div>
+
+          {/* プレイ人数バッジ */}
+          <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1 text-xs text-slate-300">
+            <Users className="h-3.5 w-3.5 text-indigo-400" />
+            <span className="font-bold text-white">{project.playerCount}名</span>
+            <span className="text-[10px] text-slate-400">
+              (東京2名 / 小笠原{project.playerCount === 5 ? "3名" : "4名"})
+            </span>
+          </div>
         </div>
 
         {/* テキストエクスポートボタン群 */}

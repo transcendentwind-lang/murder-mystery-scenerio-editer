@@ -6,17 +6,26 @@ import { Users, Sparkles, BookOpen, Heart, ShieldAlert, Award } from "lucide-rea
 
 interface HandoutEditorProps {
   characters: Character[];
+  playerCount?: number;
   onUpdateCharacters: (chars: Character[]) => void;
   onSendAiPrompt?: (prompt: string) => void;
 }
 
 export const HandoutEditor: React.FC<HandoutEditorProps> = ({
   characters,
+  playerCount = 6,
   onUpdateCharacters,
   onSendAiPrompt,
 }) => {
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0]?.id || "pc-1");
-  const selectedChar = characters.find((c) => c.id === selectedCharId) || characters[0];
+
+  // 選択中IDが存在しない（5名モードでPC6が消えた場合など）に対応
+  const currentSelectedCharId = characters.some((c) => c.id === selectedCharId)
+    ? selectedCharId
+    : characters[0]?.id || "pc-1";
+
+  const selectedChar =
+    characters.find((c) => c.id === currentSelectedCharId) || characters[0];
 
   const handleUpdateHandout = (field: string, value: any) => {
     const updated = characters.map((c) => {
@@ -72,7 +81,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
         {/* 左カラム：PC選択 */}
         <div className="col-span-3 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto space-y-2">
           {characters.map((c) => {
-            const isSelected = c.id === selectedCharId;
+            const isSelected = c.id === currentSelectedCharId;
             return (
               <button
                 key={c.id}
@@ -83,7 +92,20 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
                     : "border-slate-800 bg-slate-950 hover:border-slate-700"
                 }`}
               >
-                <div className="font-bold text-xs text-white">{c.name}</div>
+                <div className="flex items-center justify-between">
+                  <span className="font-bold text-xs text-white">{c.name}</span>
+                  {c.id === "pc-4" && (
+                    <span
+                      className={`rounded px-1.5 py-0.2 text-[9px] font-bold ${
+                        characters.length === 5
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+                          : "bg-slate-800 text-slate-400"
+                      }`}
+                    >
+                      {characters.length === 5 ? "✨ 統合版" : "単独版"}
+                    </span>
+                  )}
+                </div>
                 <div className="mt-1 text-[11px] text-slate-400 truncate">{c.profession}</div>
               </button>
             );
@@ -92,6 +114,16 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
 
         {/* 右カラム：HO編集 ＆ 内面ドラマスロット */}
         <div className="col-span-9 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4 text-xs">
+          {/* PC4統合版の案内バナー */}
+          {selectedChar.id === "pc-4" && characters.length === 5 && (
+            <div className="rounded-lg border border-amber-500/40 bg-amber-950/20 p-2.5 flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
+              <p className="text-[11px] text-amber-200">
+                <span className="font-bold">5人プレイ統合版ハンドアウト:</span> 科学観測の使命感に加え、島の社家としての古文書・祝詞の伝承と内面ドラマ（誇り・後ろめたさ・喪失体験）が統合されています。
+              </p>
+            </div>
+          )}
+
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div>
               <h3 className="font-bold text-sm text-white">{selectedChar.name}</h3>
