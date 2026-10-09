@@ -436,6 +436,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             <span className="font-bold text-white">{project.playerCount}名</span>
             <span className="text-[10px] text-slate-400">
               (東京2名 / 小笠原{project.playerCount === 5 ? "3名" : "4名"})
+              {project.playerCount === 6 ? " 【本編・推奨】" : " 【調整用】"}
             </span>
           </div>
         </div>
