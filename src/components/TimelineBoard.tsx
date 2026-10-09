@@ -3051,6 +3051,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       {day7BroadcastStatus === "received" && "メッセージリレー音響を再演する（クジラ群との同調）"}
                     </button>
                   </div>
+                </div>
 
                 {/* エピローグ：アンサング・ヒーロー（語られざる英雄たち） */}
                 <div className="rounded-lg bg-gradient-to-br from-slate-950 via-[#0a121e] to-slate-950 border border-indigo-700/60 p-4 space-y-2 text-xs">
