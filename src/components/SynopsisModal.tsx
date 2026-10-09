@@ -131,7 +131,7 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
                 </span>
               </div>
               <textarea
-                value={generateSynopsisText()}
+                value={generateSynopsisPlainText(project)}
                 readOnly
                 rows={20}
                 className="w-full flex-1 rounded-xl border border-slate-800 bg-slate-950 p-4 font-mono text-xs leading-relaxed text-slate-200 focus:outline-none focus:border-indigo-500 selection:bg-indigo-600 selection:text-white"
