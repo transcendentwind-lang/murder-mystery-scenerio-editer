@@ -4,6 +4,7 @@ import React, { useState, useRef } from "react";
 import { MMProject } from "@/types/schema";
 import { Copy, Check, Download, FileText, BookOpen, CheckCheck, RefreshCw } from "lucide-react";
 import { copyToClipboard, downloadTextFile } from "@/utils/copyText";
+import { generateSynopsisPlainText, generateFullScriptMarkdown } from "@/utils/scriptGenerator";
 
 interface TextExportViewProps {
   project: MMProject;
@@ -15,88 +16,10 @@ export const TextExportView: React.FC<TextExportViewProps> = ({ project }) => {
   const [selectedAll, setSelectedAll] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // 企画概要・プロット紹介テキストの生成
-  const generateSynopsisText = () => {
-    let text = `=================================================================\n`;
-    text += `【シナリオ企画概要書】\n`;
-    text += `タイトル: ${project.title}\n`;
-    text += `サブタイトル: ${project.subtitle}\n`;
-    text += `プレイ人数: ${project.playerCount}名（GM必須） ｜ 想定時間: 約${project.durationHours}時間\n`;
-    text += `=================================================================\n\n`;
-
-    text += `■ 1. 作品コンセプト・世界観\n`;
-    text += `${project.concept}\n\n`;
-
-    text += `■ 2. プレイヤー体験（Player Experience）\n`;
-    text += `${project.targetExperience}\n\n`;
-
-    text += `■ 3. プロット紹介（あらすじ・真相・解決法）\n`;
-    text += `${project.plotSummary}\n\n`;
-
-    text += `■ 4. コアギミック・独自性（生態系捕食 × クジラ言語パズル）\n`;
-    text += `${project.gimmickOverview}\n\n`;
-
-    text += `■ 5. 登場人物（海難救助対策チーム 6名）\n`;
-    project.characters.forEach((c) => {
-      text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
-      text += `  概要: ${c.handout.publicProfile}\n`;
-      text += `  初期所持品: ${c.initialItems.join("、")}\n`;
-      text += `  固有能力: ${c.capabilities.map((cap) => `[Day ${cap.targetPhase}] ${cap.name}`).join("、")}\n\n`;
-    });
-
-    text += `■ 6. 7日間のインシデント進行フロー\n`;
-    project.timeline.forEach((t) => {
-      text += `・Day ${t.dayNumber}: ${t.situationTitle} (${t.locationName} / ${t.distanceKm}km)\n`;
-      text += `  概要: ${t.incidentOverview}\n`;
-    });
-    text += `\n=================================================================\n`;
-
-    return text;
-  };
-
-  // 完全版シナリオ台本テキストの生成
-  const generateFullScriptText = () => {
-    let md = `# ${project.title}\n## ${project.subtitle}\n\n`;
-    md += `- 想定プレイ時間: ${project.durationHours}時間\n`;
-    md += `- プレイヤー人数: ${project.playerCount}名（GM必須）\n\n`;
-
-    md += `## 🌟 作品コンセプト ＆ プロット概要\n`;
-    md += `### コンセプト\n${project.concept}\n\n`;
-    md += `### プレイヤー体験\n${project.targetExperience}\n\n`;
-    md += `### プロット紹介（真相・あらすじ）\n${project.plotSummary}\n\n`;
-    md += `### コアギミック\n${project.gimmickOverview}\n\n`;
-
-    md += `## 👥 登場人物一覧（6名）\n\n`;
-    project.characters.forEach((c) => {
-      md += `### ${c.name} (${c.profession})\n`;
-      md += `**配置**: ${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}\n\n`;
-      md += `**【イントロダクション】**\n${c.introduction}\n\n`;
-      md += `**【固有能力・できること】**\n`;
-      c.capabilities.forEach((cap) => {
-        md += `- Day ${cap.targetPhase}: **${cap.name}** - ${cap.description}\n`;
-      });
-      md += `\n**【ハンドアウト本文】**\n${c.handout.handoutBody}\n\n---\n\n`;
-    });
-
-    md += `## 📅 7日間タイムライン\n\n`;
-    project.timeline.forEach((t) => {
-      md += `### Day ${t.dayNumber}: ${t.situationTitle} (${t.locationName} / ${t.distanceKm}km)\n`;
-      md += `- **発生事象**: ${t.incidentOverview}\n`;
-      md += `- **東京司令部**: ${t.hqResponse}\n`;
-      md += `- **現地救難隊**: ${t.fieldResponse}\n\n`;
-    });
-
-    md += `## 📋 証拠（エビデンス）マスター一覧\n\n`;
-    project.evidences.forEach((e) => {
-      const owner = project.characters.find((c) => c.id === e.ownerId);
-      md += `### [Day ${e.foundPhase}] ${e.title} (${owner?.name || "全員"})\n`;
-      md += `${e.description}\n\n`;
-    });
-
-    return md;
-  };
-
-  const displayText = exportMode === "synopsis" ? generateSynopsisText() : generateFullScriptText();
+  const displayText =
+    exportMode === "synopsis"
+      ? generateSynopsisPlainText(project)
+      : generateFullScriptMarkdown(project);
 
   // コピー処理
   const handleCopy = async () => {

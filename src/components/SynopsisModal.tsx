@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { MMProject } from "@/types/schema";
 import { X, Copy, Check, Download, FileText, Sparkles, BookOpen, Layers, CheckCheck } from "lucide-react";
 import { copyToClipboard, downloadTextFile } from "@/utils/copyText";
+import { generateSynopsisPlainText } from "@/utils/scriptGenerator";
 
 interface SynopsisModalProps {
   project: MMProject;
@@ -23,39 +24,8 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
 
   if (!isOpen) return null;
 
-  // 企画概要テキストの生成
-  const generateSynopsisText = () => {
-    let text = `=================================================================\n`;
-    text += `【シナリオ企画概要書】\n`;
-    text += `タイトル: ${project.title}\n`;
-    text += `サブタイトル: ${project.subtitle}\n`;
-    text += `プレイ人数: ${project.playerCount}名（GM必須） ｜ 想定時間: 約${project.durationHours}時間\n`;
-    text += `=================================================================\n\n`;
-
-    text += `■ 1. 作品コンセプト・世界観\n`;
-    text += `${project.concept}\n\n`;
-
-    text += `■ 2. プレイヤー体験（Player Experience）\n`;
-    text += `${project.targetExperience}\n\n`;
-
-    text += `■ 3. プロット紹介（あらすじ・真相・解決法）\n`;
-    text += `${project.plotSummary}\n\n`;
-
-    text += `■ 4. コアギミック・独自性（生態系捕食 × クジラ言語パズル）\n`;
-    text += `${project.gimmickOverview}\n\n`;
-
-    text += `■ 5. 登場人物（海難救助対策チーム 6名）\n`;
-    project.characters.forEach((c) => {
-      text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
-      text += `  概要: ${c.handout.publicProfile}\n`;
-    });
-    text += `\n=================================================================\n`;
-
-    return text;
-  };
-
   const handleCopy = async () => {
-    const text = generateSynopsisText();
+    const text = generateSynopsisPlainText(project);
     const success = await copyToClipboard(text);
     if (success) {
       setCopied(true);
@@ -64,7 +34,7 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
   };
 
   const handleDownload = () => {
-    const text = generateSynopsisText();
+    const text = generateSynopsisPlainText(project);
     downloadTextFile(`${project.title}_企画概要・プロット紹介.txt`, text);
   };
 

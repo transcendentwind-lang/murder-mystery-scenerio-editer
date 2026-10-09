@@ -35,6 +35,7 @@ import {
   Compass,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
+import { generateSynopsisMarkdown, generateFullScriptMarkdown } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
 import { Day1NauticalMap } from "./Day1NauticalMap";
@@ -370,74 +371,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const [copiedType, setCopiedType] = useState<"full" | "synopsis" | null>(null);
 
-  // 企画概要・プロット紹介のMarkdown生成
-  const generateSynopsisMarkdown = () => {
-    let md = `# ${project.title}\n## ${project.subtitle}\n\n`;
-    md += `- 想定プレイ時間: ${project.durationHours}時間\n`;
-    md += `- プレイヤー人数: ${project.playerCount}名（GM必須）\n\n`;
-    md += `## 🌟 1. 作品コンセプト・世界観\n${project.concept}\n\n`;
-    md += `## 🎭 2. プレイヤー体験 (Player Experience)\n${project.targetExperience}\n\n`;
-    md += `## 📜 3. プロット紹介 (あらすじ・真相・解決法)\n${project.plotSummary}\n\n`;
-    md += `## 💡 4. コアギミック (生態系捕食 × クジラ言語パズル)\n${project.gimmickOverview}\n\n`;
-    md += `## 👥 5. 登場人物（海難救助対策チーム 6名）\n`;
-    project.characters.forEach((c) => {
-      md += `- **${c.name}** (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
-      md += `  ${c.handout.publicProfile}\n`;
-    });
-    return md;
-  };
-
-  // 完全版シナリオ台本のMarkdown一括生成
-  const generateFullMarkdown = () => {
-    let md = `# ${project.title}\n## ${project.subtitle}\n\n`;
-    md += `- 想定プレイ時間: ${project.durationHours}時間\n`;
-    md += `- プレイヤー人数: ${project.playerCount}名（GM必須）\n\n`;
-
-    md += `## 🌟 作品コンセプト ＆ プロット概要\n`;
-    md += `### コンセプト\n${project.concept}\n\n`;
-    md += `### プレイヤー体験\n${project.targetExperience}\n\n`;
-    md += `### プロット紹介（真相・あらすじ）\n${project.plotSummary}\n\n`;
-    md += `### コアギミック\n${project.gimmickOverview}\n\n`;
-
-    md += `## 👥 登場人物一覧（6名）\n\n`;
-    project.characters.forEach((c) => {
-      md += `### ${c.name} (${c.profession})\n`;
-      md += `**配置**: ${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}\n\n`;
-      md += `**【イントロダクション】**\n${c.introduction}\n\n`;
-      md += `**【固有能力・できること】**\n`;
-      c.capabilities.forEach((cap) => {
-        md += `- Day ${cap.targetPhase}: **${cap.name}** - ${cap.description}\n`;
-      });
-      md += `\n**【ハンドアウト本文】**\n${c.handout.handoutBody}\n\n---\n\n`;
-    });
-
-    md += `## 📅 7日間タイムライン\n\n`;
-    project.timeline.forEach((t) => {
-      md += `### Day ${t.dayNumber}: ${t.situationTitle} (${t.locationName} / ${t.distanceKm}km)\n`;
-      md += `- **発生事象**: ${t.incidentOverview}\n`;
-      md += `- **東京司令部**: ${t.hqResponse}\n`;
-      md += `- **現地救難隊**: ${t.fieldResponse}\n\n`;
-    });
-
-    md += `## 📋 証拠（エビデンス）マスター一覧\n\n`;
-    project.evidences.forEach((e) => {
-      const owner = project.characters.find((c) => c.id === e.ownerId);
-      md += `### [Day ${e.foundPhase}] ${e.title} (${owner?.name || "全員"})\n`;
-      md += `${e.description}\n\n`;
-    });
-
-    return md;
-  };
-
   const handleCopy = (type: "full" | "synopsis") => {
-    const text = type === "full" ? generateFullMarkdown() : generateSynopsisMarkdown();
+    const text = type === "full" ? generateFullScriptMarkdown(project) : generateSynopsisMarkdown(project);
     navigator.clipboard.writeText(text);
     setCopiedType(type);
     setTimeout(() => setCopiedType(null), 2000);
   };
 
   const handleDownload = (type: "full" | "synopsis") => {
-    const text = type === "full" ? generateFullMarkdown() : generateSynopsisMarkdown();
+    const text = type === "full" ? generateFullScriptMarkdown(project) : generateSynopsisMarkdown(project);
     const filename =
       type === "full"
         ? `${project.title}_完全台本.md`
