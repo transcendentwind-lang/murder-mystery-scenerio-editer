@@ -140,6 +140,41 @@ class UnderwaterAudioEngine {
    */
   public async playWordSound(wordId: string, speedMultiplier = 1.0): Promise<void> {
     switch (wordId) {
+      // --- 祝詞の言葉（3種） ---
+      case "word-human": // 人間：舌クリック吸着音 均等2連打
+        await this.playClickPattern([0, 240], 2300, speedMultiplier);
+        break;
+      case "word-whale": // クジラ：重厚な低音長打
+        await this.playClickPattern([0, 480], 1500, speedMultiplier);
+        break;
+      case "word-promise": // 約束（盟約）：共鳴する高低交差3連打
+        await this.playClickPattern([0, 180, 360], 2600, speedMultiplier);
+        break;
+
+      // --- 地理・行動・目標の言葉 ---
+      case "word-subsea-volcano": // 海の下の火山：重低音の連続地鳴りパルス
+        await this.playClickPattern([0, 200, 400, 600], 1200, speedMultiplier);
+        break;
+      case "word-search": // 探せ（索敵）：等間隔の探査パルス
+        await this.playClickPattern([0, 250, 500], 2400, speedMultiplier);
+        break;
+      case "word-go-north": // 北に向かう：上昇テンポ・高音パルス
+        await this.playClickPattern([0, 160, 280], 2900, speedMultiplier);
+        break;
+      case "word-go-south": // 南に向かう：低音下降パルス
+        await this.playClickPattern([0, 220, 440], 1700, speedMultiplier);
+        break;
+      case "word-go-east": // 東に向かう：右上がり2点打
+        await this.playClickPattern([0, 300], 2100, speedMultiplier);
+        break;
+      case "word-go-west": // 西に向かう：右下がり2点打
+        await this.playClickPattern([0, 300], 1900, speedMultiplier);
+        break;
+      case "word-giant-prey": // 巨大な餌：超高速ロングバースト（極上の獲物）
+        await this.playClickPattern([0, 60, 120, 180, 240, 300, 360, 420], 3600, speedMultiplier);
+        break;
+
+      // --- 既存・互換パターン ---
       case "word-self": // 自分（我ら）：均等3連打
         await this.playClickPattern([0, 220, 440], 2400, speedMultiplier);
         break;

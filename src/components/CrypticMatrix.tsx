@@ -77,7 +77,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
         </div>
         <div className="flex items-center gap-2">
           <span className="rounded bg-indigo-500/20 px-2.5 py-1 text-xs font-semibold text-indigo-300">
-            登録語彙: {words.length}語 ｜ 正解文法: 3単語結合（敵＋餌＋集まれ）
+            登録語彙: {words.length}語 ｜ 正解文法: 3部構成（約束 ＋ 火山北上探査 ＋ 捕食号令）
           </span>
         </div>
       </div>
@@ -166,12 +166,12 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
                 <span>6名全員の知見が結集した新言語構文</span>
               </div>
               <ul className="space-y-1.5 text-[11px] text-slate-400 pl-4 list-disc">
-                <li>PC5（生物）: クジラ言語の基本音韻（クリックコーダ）と波形提供</li>
-                <li>PC6（神職）: 舌クリック祝詞の語順文法（点刻記号）と海中筒の作法</li>
-                <li>PC3（船長）: 「餌」を示す小笠原捕鯨唄の急速クリックリズム</li>
-                <li>PC4（観測）: 深海音速補正と「敵」のノイズ周波数同定</li>
-                <li>PC2（音響）: スペクトログラム解析とソナー音響コンソール操作</li>
-                <li>PC1（司令）: 海上自衛隊大出力ソナー網の軍事アクセス承認</li>
+                <li>PC6（神職）: 祝詞巻物の点刻記号（「人間」「クジラ」「約束」）</li>
+                <li>PC4（観測）: 連動海底火山の熱水・地鳴り音響ログ（「海の下の火山」）</li>
+                <li>PC2（音響）: 音響航法の方位コーダ（「北に向かう」などの東西南北）</li>
+                <li>PC5（生物）: 朝倉教授ノートの探索・号令コーダ（「探せ」「集まれ」）</li>
+                <li>PC3（船長）: 小笠原捕鯨唄の手拍子リズム（「巨大な餌」）</li>
+                <li>PC1（司令）: 海上自衛隊大出力ソナー網の軍事アクセス承認と全回線統合</li>
               </ul>
             </div>
 

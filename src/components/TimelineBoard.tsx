@@ -190,7 +190,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網放流状態
   const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
   const [day6BroadcastStatus, setDay6BroadcastStatus] = useState<"idle" | "broadcasting" | "received">("idle");
-  const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>(["word-enemy", "word-prey", "word-gather"]);
+  const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>([
+    "word-human",
+    "word-whale",
+    "word-promise",
+    "word-subsea-volcano",
+    "word-go-north",
+    "word-search",
+    "word-giant-prey",
+    "word-gather",
+  ]);
 
   const handleDay6Broadcast = async () => {
     if (!audioEngine) return;
@@ -2741,16 +2750,35 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
 
                       {/* 祝詞多重ロック構文テスト */}
-                      <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800 mt-2">
-                        <span className="text-slate-300 text-[11px]">
-                          合成新言語メッセージ構文: <strong className="text-amber-300">「敵（巨大イカ）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
-                        </span>
-                        <button
-                          onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
-                          className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow text-xs"
-                        >
-                          <Volume2 className="h-4 w-4" /> 新言語シーケンスをテスト試聴
-                        </button>
+                      <div className="flex flex-col gap-2 rounded bg-slate-950 p-3 border border-slate-800 mt-2">
+                        <div className="flex items-center justify-between">
+                          <span className="text-slate-300 text-[11px]">
+                            合成新言語メッセージ構文: <strong className="text-amber-300">「人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ」</strong>
+                          </span>
+                          <button
+                            onClick={() =>
+                              audioEngine?.playMessageSequence(
+                                [
+                                  "word-human",
+                                  "word-whale",
+                                  "word-promise",
+                                  "word-subsea-volcano",
+                                  "word-go-north",
+                                  "word-search",
+                                  "word-giant-prey",
+                                  "word-gather",
+                                ],
+                                1.0
+                              )
+                            }
+                            className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow text-xs shrink-0"
+                          >
+                            <Volume2 className="h-4 w-4" /> 8語シーケンスをテスト試聴
+                          </button>
+                        </div>
+                        <p className="text-[10px] text-slate-400 font-mono">
+                          構成: [人間・クジラ・約束] ➔ [海の下の火山・北に向かう・探せ] ➔ [巨大な餌・集まれ]
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -2765,14 +2793,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <span>📡 【海上自衛隊大出力ソナー網による『合成新言語』放流オペレーション】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群 SOSUS）</strong>に置き換え、人間が再構成した『祝詞 × クジラ言語の合成新言語』を太平洋全域へメガワット級出力でパルス放流します！
+                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群 SOSUS）</strong>に置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』を太平洋全域へメガワット級出力でパルス放流します！
                       </p>
                     </div>
 
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-slate-200">
-                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[1.8kHz Ping] ➔ [敵・獲物・集まれ] ➔ [広域呼応待機]</span>
+                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[約束] ➔ [海底火山・北・探せ] ➔ [巨大な餌・集まれ]</span>
                         </span>
                         <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
                           day6BroadcastStatus === "idle"
@@ -2892,10 +2920,24 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   {/* 祝詞メッセージ放流ボタン */}
                   <button
-                    onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
+                    onClick={() =>
+                      audioEngine?.playMessageSequence(
+                        [
+                          "word-human",
+                          "word-whale",
+                          "word-promise",
+                          "word-subsea-volcano",
+                          "word-go-north",
+                          "word-search",
+                          "word-giant-prey",
+                          "word-gather",
+                        ],
+                        1.0
+                      )
+                    }
                     className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-2.5 text-xs font-bold text-white transition shadow-lg"
                   >
-                    <Volume2 className="h-4 w-4" /> 全ソナー網より捕食要請祝詞を最終放流（大捕食作戦決行）
+                    <Volume2 className="h-4 w-4" /> 全ソナー網より捕食要請祝詞を最終放流（人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ）
                   </button>
                 </div>
 

@@ -352,7 +352,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
     } else if (cue === "sonar-broadcast") {
       audioEngine?.playSonarBroadcastAndWhaleResponse();
     } else if (cue === "climax-call") {
-      audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0);
+      audioEngine?.playMessageSequence(
+        [
+          "word-human",
+          "word-whale",
+          "word-promise",
+          "word-subsea-volcano",
+          "word-go-north",
+          "word-search",
+          "word-giant-prey",
+          "word-gather",
+        ],
+        1.0
+      );
     }
   };
 
@@ -1757,11 +1769,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
-                      「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『祝詞構文 × クジラ言語の新言語』が太平洋全域へ放流されます！ ……沈黙の十数秒後、駿河湾から鳥島沖の全ソナーに、深海から咆哮のような無数の返信クリック（共鳴コーダ）が殺到します！」
+                      「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が太平洋全域へ放流されます！ ……沈黙の十数秒後、駿河湾から鳥島沖の全ソナーに、深海から咆哮のような無数の返信クリック（共鳴コーダ）が殺到します！」
                     </p>
                     <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
                       <strong>✅ Day 6 達成演出:</strong>
-                      「太平洋全域のマッコウクジラ群が新言語を受信し、駿河トラフへ向けて進路を急行反転させました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
+                      「太平洋全域のマッコウクジラ群が『海の下の火山を北へ探せ』というナビゲーションを受信し、駿河トラフへ向けて進路を急行反転させました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
                     </div>
                   </div>
                 </div>
@@ -1813,11 +1825,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         onClick={() => handlePlayAudioCue("climax-call")}
                         className="flex items-center gap-1.5 rounded bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
                       >
-                        <Volume2 className="h-3.5 w-3.5" /> 捕食号令祝詞を最終放流
+                        <Volume2 className="h-3.5 w-3.5" /> 捕食号令祝詞を最終放流（人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ）
                       </button>
                     </div>
                     <p className="italic text-slate-100 leading-relaxed bg-black/50 p-2.5 rounded border border-emerald-950 font-mono">
-                      「全ソナー網から新言語祝詞が太平洋全域へ放流された瞬間――水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、散り散りになったダイオウイカを片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
+                      「全ソナー網から『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という新言語祝詞が太平洋全域へ放流された瞬間――水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、散り散りになったダイオウイカを片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
                     </p>
                     <div className="rounded bg-emerald-950/60 border border-emerald-700/80 p-2 text-[11px] text-emerald-200">
                       <strong>🎉 【作戦成功・微動完全停止】</strong>:
