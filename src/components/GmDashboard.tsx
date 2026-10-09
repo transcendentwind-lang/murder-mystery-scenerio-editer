@@ -27,6 +27,7 @@ import {
   ExternalLink,
   Radar,
   Scroll,
+  Shield,
   ShieldAlert,
   Scale,
   Users,
@@ -188,6 +189,66 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
+export const DAY5_TOKYO_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "T-5A",
+    title: "T-5A: 富士山麓民家の捜索照会（静岡県警・公安協力 ➔ 巨大隕石搬入特定）",
+    organization: "警視庁公安部 / 静岡県警",
+    evidenceId: "ev-cult-cargo",
+    badge: "富士山麓巨大隕石搬入",
+    summary: "『Day 4で判明した送付先民家への立ち入り捜査。大型冷凍ボックスの中身は深海から引き揚げられた【超巨大コア隕石】であり、富士山山麓の山林深くへ極秘搬入されていたと発覚！』",
+    detail: "静岡県警と公安の合同捜索。ダイバー達が持ち出した大型ボックスは研究所などではなく、深海の超巨大コア隕石であり、富士山麓の山林内へ極秘搬入された事実を突き止める。怪異が富士山を目指す真の動機が確定する。",
+  },
+  {
+    id: "T-5B",
+    title: "T-5B: 都内・元神主の子どもの捜索（盟約祝詞の口伝解読）",
+    organization: "警視庁捜査共助課 / 小笠原大神宮関係者",
+    evidenceId: "ev-shrine-lineage",
+    badge: "神主遺族の口伝証言",
+    summary: "『小笠原大神宮の元神主の子どもを都内で特定し接触！ 亡き父の口伝記憶から【祝詞は声で読むのではなく、口蓋を鳴らしクリック音を海中筒へ通す作法】であると判明！』",
+    detail: "数年前に東京へ出た元神主の子どもを探し出し聴取。生前の父から『祝詞は声高に日本語を読むのではなく、舌を弾いてクリック音を海中筒から放つことこそが真の祈りである』と教わっていた決定的な口伝記憶を入手する。",
+  },
+];
+
+export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "F-5A",
+    title: "F-5A: 故・朝倉教授の研究室調査（深海潜水とダイオウイカ捕食生態ノート）",
+    organization: "小笠原海洋生物研究所 朝倉研究室",
+    evidenceId: "ev-asakura-notes-bio",
+    badge: "クジラ捕食生態ノート",
+    summary: "『マッコウクジラは深海1,000〜2,000mに潜れる唯一の鯨類で、筋肉に酸素を蓄え、深海のダイオウイカ（頭足類）を主食として捕食するという生態学の基本事実を再確認！』",
+    detail: "恩師・朝倉教授の基礎研究ノートを精査。一般には知られていない『マッコウクジラだけが深海へ潜水可能であり、ダイオウイカを常食とする絶対的天敵である』という生態学的真実を確立する。",
+  },
+  {
+    id: "F-5B",
+    title: "F-5B: 朝倉教授のクジラ言語仮説ドラフト精査（クリック音の文法構造）",
+    organization: "小笠原海洋生物研究所 朝倉研究室",
+    evidenceId: "ev-asakura-notes",
+    badge: "クジラ言語文法ドラフト",
+    summary: "『マッコウクジラのクリック音（コーダ）は単なる反響定位ではなく、文法構造を持つ言語体系であるという未発表論文ドラフトを発見！』",
+    detail: "クリック間隔（ICI）と打数の組み合わせによって単語と文法を構成しているという先駆的論文ドラフト。クジラ同士が文法で会話している可能性を突き止める。",
+  },
+  {
+    id: "F-5C",
+    title: "F-5C: 島の古老・漁師への小笠原古謡（捕鯨唄）聞き取り",
+    organization: "二見港 捕鯨史料室 / 古老宅",
+    evidenceId: "ev-folk-song-rhythm",
+    badge: "小笠原捕鯨唄リズム",
+    summary: "『父島の古い漁師唄の中に、高音で急速連打される【餌（極上の獲物・捕食せよ）】の急速クリックリズムがそのまま口伝で残されていた！』",
+    detail: "島の古謡の拍子を分析。かつて島人が海へ向かって鳴らしていた『極上の獲物（捕食）』を示すクリック音リズムが、捕鯨唄の手拍子として受け継がれていた事実を特定する。",
+  },
+  {
+    id: "F-5D",
+    title: "F-5D: 神社宝物殿・古文書の深層解読（海底火山刺激と巨大イカ捕食史）",
+    organization: "小笠原大神宮 宝物殿",
+    evidenceId: "ev-ancient-shrine-scroll",
+    badge: "古文書深層解読",
+    summary: "『太古、巨大生物は隕石を集めて海底火山を目覚めさせていたこと、そして人間が祝詞を読むことでマッコウクジラを呼び集め、巨大なイカの塊りを貪り喰らわせた歴史的記録を発見！』",
+    detail: "神社の最奥の巻物を解読。巨大生物の目的が海底火山の活性化であること、そして過去の解決法がマッコウクジラによる巨大イカ塊の捕食であったという真相の決定打を突き止める。",
+  },
+];
+
 interface GmDashboardProps {
   project: MMProject;
   onNavigateToChart?: () => void;
@@ -213,7 +274,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
-  const [chartModalDay, setChartModalDay] = useState<3 | 4>(3);
+  const [chartModalDay, setChartModalDay] = useState<3 | 4 | 5>(3);
   const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
   const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
@@ -1563,6 +1624,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
+                  {/* 東京側未選択情報の完全回収ガイダンス */}
+                  <div className="rounded-xl border border-indigo-700/60 bg-[#0d1028] p-3 space-y-1.5 shadow-md">
+                    <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                      <span>🗼 【Day 6 開始時：東京班（PC1・PC2）未選択アクションの100%完全回収】</span>
+                    </span>
+                    <p className="text-[11px] text-slate-300 leading-relaxed">
+                      Day 5で選ばれなかった東京アクション（富士山麓巨大隕石搬入 または 元神主子どもの口伝）は、東京班の夜間捜査によってDay 6朝までに<strong>自動的に100%手元に揃います</strong>。
+                      GMは「東京のPC1・PC2から徹夜の捜査完了報告が入った」と宣言し、両方の情報を開示して手詰まりを防いでください。
+                    </p>
+                  </div>
+
                   {/* フェーズ1：舌クリック音の秘密判明 ＆ 祝詞の日本語自体は無意味 */}
                   <div className="rounded-xl border border-indigo-900/60 bg-[#101026] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
@@ -1587,11 +1659,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ2：古代の海中筒作法 ＆ 過去の巨大イカ捕食の伝承 */}
+                  {/* フェーズ2：古代の海中筒作法 ＆ 4段階の開示ロジック */}
                   <div className="rounded-xl border border-cyan-900/60 bg-[#0d1829] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-900/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
-                        <span>🎋 【フェーズ2：海中筒の作法 ＆ 過去の「巨大なイカの塊り」捕食の伝承】</span>
+                        <span>🎋 【フェーズ2：海中筒作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("sea-tube")}
@@ -1603,19 +1675,30 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
                       「小笠原の古文書に驚くべき歴史的記録が記されています。『太古、海より触手うごめく巨大な烏賊（イカ）の如き魔物の塊り現れしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもはその巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は平穏を取り戻せり』……！」
                     </p>
-                    <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2 rounded border border-cyan-900/40 space-y-1">
-                      <strong className="text-cyan-200">💡 GM解説ガイダンス（過去の前例と海中筒）:</strong>
-                      <p className="text-slate-300">
-                        「過去にも『巨大なイカの塊り』をマッコウクジラに捕食させた歴史があったという解答に極めて近い前例です。また島人たちは小舟（サバニ）から水深数メートルの海中へ長い竹筒（海中筒）を差し込み、水面での反射を防いで水深千メートルの海溝へ直接音波を放射（透過率85%）していました。」
+                    <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2.5 rounded border border-cyan-900/40 space-y-1.5">
+                      <strong className="text-cyan-200 font-bold block">
+                        🪜 【朝倉ノートの存在価値を最大化する4段階開示ロジック（GM演出の梯子）】
+                      </strong>
+                      <p className="text-slate-200 leading-relaxed">
+                        以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ朝倉教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
+                      </p>
+                      <ul className="list-disc list-inside space-y-0.5 pl-1 text-[10px] text-slate-300">
+                        <li><strong>① 儀礼の存在</strong>: 噴火や巨大生物出現時、神社では海へ出て水底へ祝詞を読む儀礼があった</li>
+                        <li><strong>② 祝詞の現存</strong>: 神社奥殿に祝詞が現存（ただし日本語ではなく舌打ちの記号）</li>
+                        <li><strong>③ 怪異の動機</strong>: 古文書に『巨大生物は星の石（隕石）を集め海底火山を目覚めさせようとしている』と明記</li>
+                        <li><strong>④ 太古の解決史</strong>: 古文書に『太古に祝詞でマッコウクジラを呼び、巨大なイカの塊りを捕食させた』前例がある</li>
+                      </ul>
+                      <p className="text-amber-300 text-[10px] pt-1 border-t border-cyan-900/60 font-semibold">
+                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラは統率できない。そこで必要になるのが――朝倉教授のクジラ言語ノートだ！」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ3：マッコウクジラ言語の解読と統率メカニズム */}
+                  {/* フェーズ3：朝倉教授ノート3段階開示 ＆ 5大コーダ実録 */}
                   <div className="rounded-xl border border-indigo-900/60 bg-[#120f26] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                        <span>🐋 【フェーズ3：マッコウクジラ言語（コーダ）と怪異統率の解明】</span>
+                        <span>🐋 【フェーズ3：故・朝倉教授ノート 3段階開示 ＆ 5大コーダ実録テープ】</span>
                       </span>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -1633,12 +1716,28 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。朝倉教授の研究ノートと録音テープ。マッコウクジラはクリック音のテンポと周波数の組み合わせ（コーダ）で会話している。そして怪異の超群体が分裂と結合を制御していたのも、この同調パルスだったのです！」
+                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。朝倉教授の遺品テープと研究ノート。マッコウクジラは深海で独自のクリック言語体系（コーダ）を操り、仲間同士で高度な会話を交わしていたのです！」
                     </p>
-                    <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2 rounded border border-indigo-900/40 space-y-1">
-                      <strong className="text-amber-200">🎯 Day 5の防衛庁からの問いへの回答（PC5海洋生物学者）:</strong>
-                      <p className="text-slate-300">
-                        「通常兵器で倒せない怪異の統率の正体は、音響による細胞間ネットワーク同調です。そして、その音波帯域を完全に制圧・捕食できる自然界唯一の天敵こそが、マッコウクジラなのです！」
+                    <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2.5 rounded border border-indigo-900/40 space-y-1.5">
+                      <strong className="text-amber-200 font-bold block">
+                        📚 朝倉教授ノートの3段階構成 ＆ 5大コーダ実録:
+                      </strong>
+                      <div className="grid grid-cols-3 gap-2 text-[10px]">
+                        <div className="rounded bg-slate-900 p-2 border border-slate-800">
+                          <strong className="text-cyan-300 block mb-0.5">第1段階：基礎生態事実</strong>
+                          <span>マッコウクジラだけが深海1,000〜2,000mに潜水し、ダイオウイカを主食とする。</span>
+                        </div>
+                        <div className="rounded bg-slate-900 p-2 border border-slate-800">
+                          <strong className="text-indigo-300 block mb-0.5">第2段階：クジラ言語仮説</strong>
+                          <span>クリック音列（コーダ）の周波数・打数・間隔（ICI）による文法体系モデル。</span>
+                        </div>
+                        <div className="rounded bg-slate-900 p-2 border border-slate-800">
+                          <strong className="text-amber-300 block mb-0.5">第3段階：5大コーダ実録</strong>
+                          <span>①捕食、②危機、③位置指示、④到達距離（SOFAR）、⑤YES（肯定応答）。</span>
+                        </div>
+                      </div>
+                      <p className="text-slate-300 text-[10px] pt-1 border-t border-indigo-900/60">
+                        🎯 <strong>Day 5 防衛庁の問いへの完全回答</strong>: 「通常兵器で倒せない怪異の群体統率の正体は、音響による細胞間ネットワーク同調。そしてその音波帯域を完全に制圧・捕食できる自然界唯一の天敵こそが、マッコウクジラなのです！」
                       </p>
                     </div>
                   </div>

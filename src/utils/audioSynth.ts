@@ -147,13 +147,20 @@ class UnderwaterAudioEngine {
         await this.playClickPattern([0, 280, 460, 560], 2800, speedMultiplier);
         break;
       case "word-alert": // 警戒：低音の単発長間隔
+      case "word-danger": // 危機（外敵・危険）：低音長間隔コーダ
         await this.playClickPattern([0, 600], 1600, speedMultiplier);
+        break;
+      case "word-location": // 位置指示（深度・方位）：長短交差コーダ
+        await this.playClickPattern([0, 180, 420, 560], 2500, speedMultiplier);
         break;
       case "word-enemy": // 敵（触手・異形）：不規則な乱れ打ち
         await this.playClickPattern([0, 100, 320, 410, 650], 3100, speedMultiplier);
         break;
-      case "word-prey": // 餌（極上の獲物）：高音の高速バースト
+      case "word-prey": // 餌（極上の獲物・捕食）：高音の高速バースト
         await this.playClickPattern([0, 80, 160, 240, 320, 400], 3600, speedMultiplier);
+        break;
+      case "word-yes": // YES（肯定・了解・呼応）：明瞭な高音2連打
+        await this.playClickPattern([0, 160], 2900, speedMultiplier);
         break;
       default:
         await this.playClickPattern([0, 200, 400], 2400, speedMultiplier);

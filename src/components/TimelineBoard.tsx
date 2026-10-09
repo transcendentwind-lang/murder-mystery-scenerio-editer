@@ -35,7 +35,14 @@ import {
   MessageSquare,
   Sparkles,
 } from "lucide-react";
-import { TOKYO_ACTIONS, FIELD_ACTIONS, DAY4_TOKYO_ACTIONS, DAY4_FIELD_ACTIONS } from "./GmDashboard";
+import {
+  TOKYO_ACTIONS,
+  FIELD_ACTIONS,
+  DAY4_TOKYO_ACTIONS,
+  DAY4_FIELD_ACTIONS,
+  DAY5_TOKYO_ACTIONS,
+  DAY5_FIELD_ACTIONS,
+} from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
@@ -223,6 +230,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
   const handleToggleDay4FieldAction = (id: string) => {
     setDay4FieldActions((prev) => {
+      if (prev.includes(id)) return prev.filter((i) => i !== id);
+      if (prev.length >= 2) return [prev[1], id];
+      return [...prev, id];
+    });
+  };
+
+  const handleToggleDay5FieldAction = (id: string) => {
+    setDay5FieldActions((prev) => {
       if (prev.includes(id)) return prev.filter((i) => i !== id);
       if (prev.length >= 2) return [prev[1], id];
       return [...prev, id];
@@ -2180,60 +2195,39 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-center justify-between border-b border-emerald-900/60 pb-1.5">
                       <span className="font-bold text-xs text-emerald-300 flex items-center gap-1.5">
                         <Users className="h-3.5 w-3.5 text-emerald-400" />
-                        【小笠原現地アクション（父島・研究室・古老）】 2枠選択
+                        【小笠原現地アクション（父島・研究室・古老・神社）】 4枠中2枠選択
+                      </span>
+                      <span className="text-[10px] text-emerald-300/80 font-mono">
+                        選択中: {day5FieldActions.join(", ")}
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (day5FieldActions.includes("F-5A")) {
-                            if (day5FieldActions.length > 1) {
-                              setDay5FieldActions(day5FieldActions.filter((a) => a !== "F-5A"));
-                            }
-                          } else {
-                            setDay5FieldActions([...day5FieldActions, "F-5A"]);
-                          }
-                        }}
-                        className={`rounded-lg p-2.5 text-left border transition ${
-                          day5FieldActions.includes("F-5A")
-                            ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
-                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                        }`}
-                      >
-                        <div className="font-bold text-white text-[11px]">
-                          【F-5A】故・朝倉教授の音響遺品・研究ノートの再精査
-                        </div>
-                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          朝倉教授の研究室遺品から未発表の音響ノートを発掘。マッコウクジラのクリック音（コーダ）が単なる鳴き声ではなく「文法構造を持つ言語（自分、集まれ等の単語連結）」であるという周波数データを解明する。
-                        </p>
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() => {
-                          if (day5FieldActions.includes("F-5B")) {
-                            if (day5FieldActions.length > 1) {
-                              setDay5FieldActions(day5FieldActions.filter((a) => a !== "F-5B"));
-                            }
-                          } else {
-                            setDay5FieldActions([...day5FieldActions, "F-5B"]);
-                          }
-                        }}
-                        className={`rounded-lg p-2.5 text-left border transition ${
-                          day5FieldActions.includes("F-5B")
-                            ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
-                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                        }`}
-                      >
-                        <div className="font-bold text-white text-[11px]">
-                          【F-5B】島の古老・漁師への小笠原古謡（捕鯨唄）聞き取り
-                        </div>
-                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          父島の古い漁師唄の拍子の中に、高音で急速に連打される『餌（獲物・ご馳走）』のリズムがそのまま口伝で残されていた事実を発見。太古の祝詞と音響の融合への重大ピースが揃う。
-                        </p>
-                      </button>
+                      {DAY5_FIELD_ACTIONS.map((action) => {
+                        const isSelected = day5FieldActions.includes(action.id);
+                        return (
+                          <button
+                            key={action.id}
+                            type="button"
+                            onClick={() => handleToggleDay5FieldAction(action.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-white text-[11px]">{action.title}</span>
+                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-semibold">
+                                {action.badge}
+                              </span>
+                            </div>
+                            <p className="text-[10px] text-slate-300 leading-relaxed">
+                              {action.summary}
+                            </p>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </div>
@@ -2345,6 +2339,71 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
+                {/* --- Day 6 東京班（PC1・PC2）完全連携：Day 5 未選択重要情報の自動回収パネル --- */}
+                <div className="rounded-lg bg-indigo-950/40 border border-indigo-700/60 p-3.5 text-xs space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold text-indigo-200 flex items-center gap-1.5 text-xs">
+                      <span className="text-base">🗼</span>
+                      【東京対策本部（PC1・PC2）夜間捜査完了：Day 5 未調査情報の100%完全回収】
+                    </span>
+                    <span className="text-[10px] bg-emerald-950/80 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-600/60 flex items-center gap-1">
+                      <CheckCircle2 className="h-3 w-3" /> Day 6 朝までに2大情報が100%出揃いました
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（PC1警視庁公安部 ＆ PC2防衛庁リエゾン）が夜を徹して調査・照会を完遂！
+                    Day 6開始時点で<strong>「富士山山麓への巨大隕石搬入特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
+                  </p>
+
+                  <div className="grid grid-cols-2 gap-3 text-[11px]">
+                    {/* T-5A: 巨大コア隕石の山林搬入 */}
+                    <div className={`rounded-lg border p-3 space-y-1.5 transition ${
+                      day5TokyoAction === "T-5A"
+                        ? "bg-slate-900/90 border-emerald-700/80"
+                        : "bg-indigo-950/60 border-cyan-500/80 shadow-md"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-100 flex items-center gap-1">
+                          ⛰️ 富士山山麓・巨大隕石搬入追跡
+                        </span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          day5TokyoAction === "T-5A"
+                            ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                            : "bg-cyan-950 text-cyan-300 border border-cyan-700"
+                        }`}>
+                          {day5TokyoAction === "T-5A" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
+                        </span>
+                      </div>
+                      <p className="text-slate-300 text-[10px] leading-relaxed">
+                        大型冷凍ボックスは富士山山麓の民家を経由し樹海深くへ搬入。中身は深海から持ち出された<strong>「超巨大コア隕石」</strong>。怪異が富士山を目指す真の動機（持ち出された隕石の回収・接近）が確定！
+                      </p>
+                    </div>
+
+                    {/* T-5B: 元神主の子どもの口伝 */}
+                    <div className={`rounded-lg border p-3 space-y-1.5 transition ${
+                      day5TokyoAction === "T-5B"
+                        ? "bg-slate-900/90 border-emerald-700/80"
+                        : "bg-indigo-950/60 border-cyan-500/80 shadow-md"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-100 flex items-center gap-1">
+                          ⛩️ 元神主の子どもの口伝証言録
+                        </span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
+                          day5TokyoAction === "T-5B"
+                            ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
+                            : "bg-cyan-950 text-cyan-300 border border-cyan-700"
+                        }`}>
+                          {day5TokyoAction === "T-5B" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
+                        </span>
+                      </div>
+                      <p className="text-slate-300 text-[10px] leading-relaxed">
+                        都内で発見された元神主の子どもへの聴取完了。『父は<strong>祝詞は日本語を声高に読むのではなく、舌を弾いてクリック音を鳴らし、海中筒へ通すことこそが真の祈りだ</strong>と語っていた』と判明！
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
                 {/* 4本の柱 ナビゲーションタブ */}
                 <div className="grid grid-cols-4 gap-1.5 bg-slate-950/80 p-1.5 rounded-lg border border-indigo-900/40 text-xs">
                   <button
@@ -2375,7 +2434,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>🐋 3. クジラ言語（コーダ）</span>
+                    <span>🐋 3. 朝倉ノート＆クジラ言語</span>
                   </button>
                   <button
                     onClick={() => setDay6ActiveTab("sonar_network")}
@@ -2439,16 +2498,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ2: 古代の海中筒作法 ＆ 過去の巨大イカ捕食の伝承 --- */}
+                {/* --- タブ2: 古代の海中筒作法 ＆ 4段階の証拠開示ロジック --- */}
                 {day6ActiveTab === "sea_tube" && (
-                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
+                  <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1.5">
                         <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
-                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 太古の巨大イカ捕食の伝承】</span>
+                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed">
-                          かつて小笠原の島人や神職は、沖合に浮かべた小舟（サバニ）から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
+                          かつて小笠原の神職は、沖合の小舟から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
                         </p>
                       </div>
                       <button
@@ -2459,22 +2518,69 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </button>
                     </div>
 
-                    {/* 太古の歴史的解答：巨大なイカの塊りをクジラに捕食させた記録 */}
-                    <div className="rounded-lg bg-indigo-950/50 border border-indigo-800/80 p-3 space-y-1.5 text-[11px]">
-                      <strong className="text-indigo-200 block font-bold text-xs flex items-center gap-1.5">
-                        📜 【神社の古文書に残る前例：『巨大な烏賊（イカ）の塊り』を捕食させた歴史】
-                      </strong>
-                      <p className="italic text-slate-200 leading-relaxed font-mono">
-                        『太古、海より触手うごめく巨大な烏賊（イカ）の如き魔物の塊り現れ海を黒く染めしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもは海面を割って現れ、その巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は再び平穏を取り戻せり』
+                    {/* 4段階の開示ロジック（証拠の梯子） */}
+                    <div className="rounded-lg bg-slate-900/90 border border-cyan-800/80 p-3.5 space-y-2.5">
+                      <div className="flex items-center justify-between border-b border-cyan-900/60 pb-1.5">
+                        <strong className="text-cyan-200 font-bold text-xs flex items-center gap-1.5">
+                          🪜 【朝倉ノートの真価を引き出す4段階の証拠ロジック（開示順序）】
+                        </strong>
+                        <span className="text-[10px] text-cyan-400 font-mono">論理的必然性の連鎖</span>
+                      </div>
+                      <p className="text-[11px] text-slate-300 leading-relaxed">
+                        「なぜ今、朝倉教授のクジラ音響ノートが必要なのか？」は、以下の4つの証拠が順番に揃って初めてプレイヤー全員に完全に腑に落ちます：
                       </p>
-                      <p className="text-amber-300 font-semibold pt-1 border-t border-indigo-900/60">
-                        💡 <strong>解答の直感</strong>: あの怪異の正体は、深海の軟体動物（ダイオウイカ）が同調した「巨大なイカの塊り」であり、マッコウクジラにとって極上の好物であるという真実を完璧に裏付ける前例です！
-                      </p>
+
+                      <div className="grid grid-cols-2 gap-2 text-[11px]">
+                        <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
+                          <span className="font-bold text-amber-300 flex items-center gap-1">
+                            ① 儀礼の存在
+                          </span>
+                          <p className="text-slate-300 text-[10px] leading-relaxed">
+                            噴火や巨大生物が現れた際、神社では沖へ出て海に向かって祝詞を読む儀礼が太古から行われていた。
+                          </p>
+                        </div>
+
+                        <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
+                          <span className="font-bold text-amber-300 flex items-center gap-1">
+                            ② 祝詞の現存
+                          </span>
+                          <p className="text-slate-300 text-[10px] leading-relaxed">
+                            神社奥殿に祝詞の記録が現存する。しかし日本語の言霊ではなく、点刻記号（舌を弾くクリック音）の作法だった。
+                          </p>
+                        </div>
+
+                        <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
+                          <span className="font-bold text-amber-300 flex items-center gap-1">
+                            ③ 怪異の動機（古文書）
+                          </span>
+                          <p className="text-slate-300 text-[10px] leading-relaxed">
+                            古文書に『巨大生物は天より落ちた星の石（隕石）を集め、海底火山を目覚めさせている』と記録されていた。
+                          </p>
+                        </div>
+
+                        <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
+                          <span className="font-bold text-emerald-300 flex items-center gap-1">
+                            ④ 太古の歴史的解決前例
+                          </span>
+                          <p className="text-slate-300 text-[10px] leading-relaxed">
+                            古文書に『人間が祝詞を読むことでマッコウクジラを呼び集め、巨大なイカの塊りを捕食させた』と記録されていた。
+                          </p>
+                        </div>
+                      </div>
+
+                      <div className="rounded bg-indigo-950/70 border border-indigo-700/80 p-2.5 text-[11px] text-indigo-200">
+                        <strong className="text-amber-300">💡 4つの証拠から導かれる必然的結論:</strong>
+                        <p className="mt-0.5 leading-relaxed text-slate-200">
+                          「相手は通常兵器で倒せない巨大なイカの塊りだ。太古の先人はマッコウクジラを呼び集めて食べさせて解決した。
+                          ならば我々もマッコウクジラに呼びかけねばならない――だが、太古の祝詞だけでは現代の広大な太平洋全域のクジラを統率できない。
+                          <strong>クジラ自身が話す言語（コーダ）の文法と音響記録</strong>が必要だ！」 ➔ <strong>【タブ3：朝倉教授ノート】へ！</strong>
+                        </p>
+                      </div>
                     </div>
 
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 text-[11px] space-y-2">
                       <div className="flex items-center justify-between text-slate-300">
-                        <span className="font-semibold text-slate-200">🌊 海中筒による音響透過効率の比較：</span>
+                        <span className="font-semibold text-slate-200">🌊 海中筒による音響透過効率：</span>
                         <span className="text-cyan-400 font-mono text-[10px]">音響インピーダンス整合技術</span>
                       </div>
                       <div className="space-y-1.5">
@@ -2494,81 +2600,158 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </div>
                       </div>
                       <p className="text-[10px] text-slate-400 pt-1 border-t border-slate-800/80">
-                        ※筒内の共鳴波と海水の直接カップリングにより、水深千メートルの海溝に潜むマッコウクジラへダイレクトに祈りのコーダを届けていた。
+                        ※現代では竹筒に代わり、海上自衛隊の超大出力低周波アクティブソナー網が「新時代の海中筒」となります。
                       </p>
                     </div>
                   </div>
                 )}
 
-                {/* --- タブ3: マッコウクジラのクリック言語（コーダ） --- */}
+                {/* --- タブ3: 朝倉教授ノート 3段階開示 ＆ クジラ言語（5大コーダ実録） --- */}
                 {day6ActiveTab === "coda_grammar" && (
-                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
-                    <div className="space-y-1.5">
+                  <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
+                    <div className="space-y-1">
                       <h4 className="font-bold text-indigo-300 text-sm flex items-center gap-1.5">
-                        <span>🐋 【マッコウクジラの言語（コーダ）と統率メカニズムの解明】</span>
+                        <span>🐋 【故・朝倉教授の研究ノート：3段階の真実 ＆ クジラ言語（5大コーダ）】</span>
                       </h4>
-                      <p className="text-slate-300 leading-relaxed">
-                        マッコウクジラは深海で発するクリック音の<strong>周波数・打数・間隔（ICI）</strong>の組み合わせによって高度な言語社会を形成しています。また、Day 5で防衛庁から問われた「怪異の群体がなぜ統率されているのか」の答えも、この<strong>同調音響パルス</strong>にありました。
+                      <p className="text-slate-300 leading-relaxed text-[11px]">
+                        海洋生物学者・朝倉教授が遺した研究資料は、一般人の常識を覆す基礎生態から、世界初のクジラ言語文法、そして実音響調査テープへと3段階で深まります。
                       </p>
                     </div>
 
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-red-400">単語1：敵（怪異・巨大イカ塊）</span>
-                          <button
-                            onClick={() => audioEngine?.playWordSound("word-enemy")}
-                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
-                            title="音を聴く"
-                          >
-                            <Volume2 className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-                        <span className="text-[10px] text-slate-400 block font-mono">3.1kHz / 不規則乱れ打ち</span>
-                        <p className="text-[10px] text-slate-400">巨大なイカの超群体を示すコーダ</p>
+                    {/* 第1段階：生態学的常識の補強 */}
+                    <div className="rounded-lg bg-slate-900/90 border border-slate-800 p-3 space-y-1.5">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-cyan-300 text-xs flex items-center gap-1">
+                          📖 第1段階：【生態学的常識の補強】マッコウクジラの潜水と深海捕食生態
+                        </span>
+                        <span className="text-[10px] text-slate-400">Day 3〜4事前開示 / 未選択でも常時確認可能</span>
                       </div>
-
-                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-emerald-400">単語2：獲物（捕食対象・ご馳走）</span>
-                          <button
-                            onClick={() => audioEngine?.playWordSound("word-prey")}
-                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
-                            title="音を聴く"
-                          >
-                            <Volume2 className="h-3.5 w-3.5" />
-                          </button>
+                      <div className="grid grid-cols-3 gap-2 text-[10px] text-slate-300 pt-1">
+                        <div className="rounded bg-slate-950 p-2 border border-slate-800/80">
+                          <strong className="text-cyan-200 block mb-0.5">① 深海1,000〜2,000mへの潜水</strong>
+                          <span>大型鯨類の中で唯一、日光の届かない超深海・漸深層へ数十分間潜水可能。</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 block font-mono">3.6kHz / 超高速バースト</span>
-                        <p className="text-[10px] text-slate-400">極上のイカを指す捕食コーダ</p>
-                      </div>
-
-                      <div className="rounded border border-indigo-900/60 bg-slate-950 p-2.5 space-y-1.5">
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-cyan-400">単語3：集まれ（号令）</span>
-                          <button
-                            onClick={() => audioEngine?.playWordSound("word-gather")}
-                            className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
-                            title="音を聴く"
-                          >
-                            <Volume2 className="h-3.5 w-3.5" />
-                          </button>
+                        <div className="rounded bg-slate-950 p-2 border border-slate-800/80">
+                          <strong className="text-cyan-200 block mb-0.5">② 筋肉中の超高濃度酸素</strong>
+                          <span>筋肉にミオグロビンを極限まで蓄え、深海の超高水圧・無酸素環境で活動。</span>
                         </div>
-                        <span className="text-[10px] text-slate-400 block font-mono">2.8kHz / 加速4連打</span>
-                        <p className="text-[10px] text-slate-400">群れ全体へ集合・総攻撃を促す号令コーダ</p>
+                        <div className="rounded bg-slate-950 p-2 border border-slate-800/80">
+                          <strong className="text-amber-200 block mb-0.5">③ ダイオウイカが主食！</strong>
+                          <span>深海でダイオウイカ等の大型頭足類を捕食。胃から巨大な嘴が多数発見される。</span>
+                        </div>
                       </div>
+                      <p className="text-[10px] text-slate-400 pt-1 border-t border-slate-800">
+                        ※一般プレイヤー向け補足：クジラがイカを食べることは決して突飛な設定ではなく、海洋生物学における確固たる自然の摂理です。
+                      </p>
                     </div>
 
-                    <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800">
-                      <span className="text-slate-300">
-                        祝詞多重ロック構文: <strong className="text-amber-300">「敵（巨大イカ塊）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
+                    {/* 第2段階：クジラ言語仮説 */}
+                    <div className="rounded-lg bg-slate-900/90 border border-indigo-900/60 p-3 space-y-1">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1">
+                        🔬 第2段階：【クジラ言語仮説】クリック音の文法構造モデル
                       </span>
-                      <button
-                        onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
-                        className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow"
-                      >
-                        <Volume2 className="h-4 w-4" /> 構文シーケンスをテスト試聴
-                      </button>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">
+                        マッコウクジラが発するクリック音列（コーダ）は単なる障害物探査（エコーロケーション）ではなく、<strong>周波数・打数・間隔（ICI）</strong>の組み合わせによる文法構造を持った言語社会であるという仮説。人間の舌クリック音（吸着破裂音）と波形が酷似していることを証明。
+                      </p>
+                    </div>
+
+                    {/* 第3段階：朝倉教授の海洋音響実録テープ ＆ 5大コーダ */}
+                    <div className="rounded-lg bg-indigo-950/40 border border-indigo-700/80 p-3.5 space-y-2.5">
+                      <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
+                        <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
+                          📼 第3段階：【実音響調査記録】朝倉教授の5大コーダ実録テープ ＆ 行動対応ログ
+                        </span>
+                        <span className="text-[10px] text-amber-400 font-mono">小笠原海溝 実録データ</span>
+                      </div>
+
+                      <div className="grid grid-cols-5 gap-2">
+                        {/* 1. 捕食コーダ */}
+                        <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 space-y-1 text-center">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-emerald-400 text-[11px]">1. 捕食（獲物）</span>
+                            <button
+                              onClick={() => audioEngine?.playWordSound("word-prey")}
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                              title="音を聴く"
+                            >
+                              <Volume2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[9px] text-slate-400 block font-mono">3.6kHz / 高速バースト</span>
+                          <p className="text-[9px] text-slate-400 leading-tight">仲間でイカを捕食する時の興奮音</p>
+                        </div>
+
+                        {/* 2. 危機コーダ */}
+                        <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 space-y-1 text-center">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-red-400 text-[11px]">2. 危機（外敵）</span>
+                            <button
+                              onClick={() => audioEngine?.playWordSound("word-danger")}
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                              title="音を聴く"
+                            >
+                              <Volume2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[9px] text-slate-400 block font-mono">1.6kHz / 低音長間隔</span>
+                          <p className="text-[9px] text-slate-400 leading-tight">危機・異変を仲間に警告する音</p>
+                        </div>
+
+                        {/* 3. 位置指示コーダ */}
+                        <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 space-y-1 text-center">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-cyan-400 text-[11px]">3. 位置指示</span>
+                            <button
+                              onClick={() => audioEngine?.playWordSound("word-location")}
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                              title="音を聴く"
+                            >
+                              <Volume2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[9px] text-slate-400 block font-mono">2.5kHz / 長短交差</span>
+                          <p className="text-[9px] text-slate-400 leading-tight">餌や危険の深度・方位を伝達</p>
+                        </div>
+
+                        {/* 4. 到達距離データ */}
+                        <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 space-y-1 text-center">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-amber-300 text-[11px]">4. 到達距離</span>
+                            <span className="text-[9px] text-amber-400 font-mono">SOFAR</span>
+                          </div>
+                          <span className="text-[9px] text-slate-400 block font-mono">水深1,000m 音響層</span>
+                          <p className="text-[9px] text-slate-400 leading-tight">深海層で数百km彼方まで届く</p>
+                        </div>
+
+                        {/* 5. YESコーダ */}
+                        <div className="rounded border border-indigo-900/60 bg-slate-950 p-2 space-y-1 text-center">
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-purple-300 text-[11px]">5. YES（了解）</span>
+                            <button
+                              onClick={() => audioEngine?.playWordSound("word-yes")}
+                              className="p-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-200"
+                              title="音を聴く"
+                            >
+                              <Volume2 className="h-3.5 w-3.5" />
+                            </button>
+                          </div>
+                          <span className="text-[9px] text-slate-400 block font-mono">2.9kHz / 高音2連打</span>
+                          <p className="text-[9px] text-slate-400 leading-tight">仲間からの肯定・呼応シグナル</p>
+                        </div>
+                      </div>
+
+                      {/* 祝詞多重ロック構文テスト */}
+                      <div className="flex items-center justify-between rounded bg-slate-950 p-2.5 border border-slate-800 mt-2">
+                        <span className="text-slate-300 text-[11px]">
+                          合成新言語メッセージ構文: <strong className="text-amber-300">「敵（巨大イカ）」＋「獲物（捕食）」＋「集まれ（号令）」</strong>
+                        </span>
+                        <button
+                          onClick={() => audioEngine?.playMessageSequence(["word-enemy", "word-prey", "word-gather"], 1.0)}
+                          className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow text-xs"
+                        >
+                          <Volume2 className="h-4 w-4" /> 新言語シーケンスをテスト試聴
+                        </button>
+                      </div>
                     </div>
                   </div>
                 )}
