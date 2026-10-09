@@ -1754,32 +1754,31 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：海自大出力ソナー網による新言語放流 ＆ クジラ呼応シミュレーション */}
+                  {/* フェーズ4：合成新言語祝詞の完成 ＆ 翌朝（Day 7）決戦への装填スタンバイ */}
                   <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【フェーズ4：海自大出力ソナー網 新言語放流 ＆ クジラたちのメッセージリレー】</span>
+                        <span>📡 【フェーズ4：合成新言語祝詞の完成 ＆ 翌朝（Day 7）決戦への装填スタンバイ】</span>
                       </span>
                       <button
-                        onClick={() => handlePlayAudioCue("sonar-broadcast")}
+                        onClick={() => handlePlayAudioCue("climax-call")}
                         className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-600 to-indigo-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-cyan-500 hover:to-indigo-500 transition shadow"
                       >
-                        <Volume2 className="h-3.5 w-3.5" /> ソナー放流 ＆ メッセージリレー再生
+                        <Volume2 className="h-3.5 w-3.5" /> 8語メッセージ信号を試聴
                       </button>
                     </div>
                     <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
                       <p className="italic">
-                        「防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）をオンラインに接続！ 古代の海中筒を現代のメガワット級超音波ソナーに置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が太平洋全域へ放流されます！」
+                        「プレイヤー全員の知見が結集し、『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が完成！ 防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）へ信号パケットを装填し、発信系統の同期テストを完了しました」
                       </p>
                       <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
-                        「……すると海の中で奇跡が起こります。至近海域の1頭のマッコウクジラがこの音を聞き、【了解】という明瞭な2連クリック音を返信。直後、そのクジラは自らまったく同じ歌（8語のメッセージ）を高らかに歌いながら北へ遊泳を開始したのです！
-                        その歌を耳にした沖合数十キロの別のクジラが【了解】を返し、また自ら同じ歌を歌い継いでいく……。海の中は次々に響く了解音と、遠方からこだまするクジラの歌のカノン（輪唱）に包まれます。クジラたちは太平洋全域でメッセージをリレーしているのです！」
+                        「実際の海中へのメガワット級大出力放流は、明日・Day 7の駿河湾最終決戦にて、怪異の突入および魚雷攻撃に合わせて実行されます！ 6人は固い決意を胸に、運命の決戦の朝を迎えます――」
                       </p>
                     </div>
                     <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
-                      <strong>✅ Day 6 達成演出（歌のバトン）:</strong>
-                      「クジラたちが互いに歌をリレーし合い、駿河湾・伊豆諸島・小笠原・鳥島沖から無数のマッコウクジラが駿河トラフを目指して集結を開始しました！ いよいよ明日・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
+                      <strong>✅ Day 6 達成演出:</strong>
+                      「合成新言語祝詞の完成と海自ソナー網への装填完了！ 明朝・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
                     </div>
                   </div>
                 </div>
@@ -1820,22 +1819,43 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：マッコウクジラ深海大捕食（完全消滅） */}
-                  <div className="rounded-xl border border-emerald-900/70 bg-[#081b16] p-3.5 space-y-2.5 shadow-lg">
-                    <div className="flex items-center justify-between border-b border-emerald-900/40 pb-1.5">
-                      <span className="font-bold text-emerald-300 text-xs flex items-center gap-1.5">
-                        <Volume2 className="h-4 w-4 text-emerald-400" />
-                        【フェーズ3：全海域祝詞放流 ＆ マッコウクジラ深海大捕食】
+                  {/* フェーズ3：全海域大出力ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン） */}
+                  <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
+                      <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                        <Radio className="h-4 w-4 text-cyan-400 animate-pulse" />
+                        <span>📡 【フェーズ3：海自大出力ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン）】</span>
                       </span>
                       <button
-                        onClick={() => handlePlayAudioCue("climax-call")}
-                        className="flex items-center gap-1.5 rounded bg-emerald-600 hover:bg-emerald-500 px-2.5 py-1 text-[11px] font-bold text-white transition shadow"
+                        onClick={() => handlePlayAudioCue("sonar-broadcast")}
+                        className="flex items-center gap-1.5 rounded bg-gradient-to-r from-emerald-600 via-cyan-600 to-indigo-600 px-3 py-1.5 text-[11px] font-bold text-white hover:from-emerald-500 hover:via-cyan-500 hover:to-indigo-500 transition shadow-lg"
                       >
-                        <Volume2 className="h-3.5 w-3.5" /> 捕食号令祝詞を最終放流（人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ）
+                        <Volume2 className="h-3.5 w-3.5" /> 大出力ソナー放流 ＆ メッセージリレー再生
                       </button>
                     </div>
+                    <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
+                      <p className="italic">
+                        「防衛庁のリエゾン（PC2）の号令とともに、海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の新言語祝詞が太平洋全域へメガワット級大出力で放流されます！」
+                      </p>
+                      <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
+                        「……すると海の中で奇跡が起こります。至近海域の1頭のマッコウクジラがこの音を聞き、【了解】という明瞭な2連クリック音を返信。直後、そのクジラは自らまったく同じ歌（8語のメッセージ）を高らかに歌いながら北へ遊泳を開始したのです！
+                        その歌を耳にした沖合数十キロの別のクジラが【了解】を返し、また自ら同じ歌を歌い継いでいく……。海の中は次々に響く了解音と、遠方からこだまするクジラの歌のカノン（輪唱）に包まれます。クジラたちは太平洋全域でメッセージをリレーしているのです！」
+                      </p>
+                    </div>
+                    <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
+                      <strong>✅ クジラ群の大集結:</strong>
+                      「駿河湾沖、伊豆諸島、鳥島沖から無数のマッコウクジラ群が歌をリレーし合い、駿河トラフ水深1,000mの決戦海域へ向けて超高速で集結を開始しました！」
+                    </div>
+                  </div>
+
+                  {/* フェーズ4：マッコウクジラ深海大捕食（完全消滅 ＆ 微動停止） */}
+                  <div className="rounded-xl border border-emerald-900/70 bg-[#081b16] p-3.5 space-y-2.5 shadow-lg">
+                    <span className="font-bold text-emerald-300 text-xs flex items-center gap-1.5 border-b border-emerald-900/40 pb-1.5">
+                      <Volume2 className="h-4 w-4 text-emerald-400" />
+                      【フェーズ4：マッコウクジラ深海大捕食（完全消滅 ＆ 微動停止）】
+                    </span>
                     <p className="italic text-slate-100 leading-relaxed bg-black/50 p-2.5 rounded border border-emerald-950 font-mono">
-                      「全ソナー網から『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という新言語祝詞が太平洋全域へ放流された瞬間――水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、散り散りになったダイオウイカを片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
+                      「リレーされた歌に導かれ、水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、魚雷で一口サイズに粉砕された怪異を片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
                     </p>
                     <div className="rounded bg-emerald-950/60 border border-emerald-700/80 p-2 text-[11px] text-emerald-200">
                       <strong>🎉 【作戦成功・微動完全停止】</strong>:
@@ -1843,10 +1863,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：エピローグ演出（語られざる英雄たち） */}
+                  {/* フェーズ5：エピローグ演出（語られざる英雄たち） */}
                   <div className="rounded-xl border border-indigo-800/70 bg-[#0f1226] p-3.5 space-y-2 shadow-md">
                     <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5 border-b border-indigo-900/40 pb-1.5">
-                      <span>🕊️ 【フェーズ4：エピローグ演出・語られざる英雄たち（Unsung Heroes）】</span>
+                      <span>🕊️ 【フェーズ5：エピローグ演出・語られざる英雄たち（Unsung Heroes）】</span>
                     </span>
                     <div className="grid grid-cols-2 gap-2 text-[11px]">
                       <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">

@@ -187,11 +187,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-5A");
   const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-5B"]);
 
-  // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網放流状態
+  // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網装填準備状態
   const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
-  const [day6BroadcastStatus, setDay6BroadcastStatus] = useState<"idle" | "broadcasting" | "received">("idle");
-  const [day6RelayStatusText, setDay6RelayStatusText] = useState<string>("");
-  const [day6RelayStage, setDay6RelayStage] = useState<number>(0);
+  const [day6ReadyStatus, setDay6ReadyStatus] = useState<"idle" | "testing" | "ready">("idle");
   const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>([
     "word-human",
     "word-whale",
@@ -203,19 +201,35 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     "word-gather",
   ]);
 
-  const handleDay6Broadcast = async () => {
+  const handleDay6TestPlay = async () => {
     if (!audioEngine) return;
-    setDay6BroadcastStatus("broadcasting");
-    setDay6RelayStage(1);
-    setDay6RelayStatusText("海自ソナー網より新言語メッセージを大出力放流中……");
+    setDay6ReadyStatus("testing");
+    try {
+      await audioEngine.playMessageSequence(day6SelectedWords, 1.0);
+      setDay6ReadyStatus("ready");
+    } catch {
+      setDay6ReadyStatus("ready");
+    }
+  };
+
+  // Day 7 決戦：海自ソナー網大出力放流 ＆ クジラたちのメッセージリレー状態
+  const [day7BroadcastStatus, setDay7BroadcastStatus] = useState<"idle" | "broadcasting" | "received">("idle");
+  const [day7RelayStatusText, setDay7RelayStatusText] = useState<string>("");
+  const [day7RelayStage, setDay7RelayStage] = useState<number>(0);
+
+  const handleDay7Broadcast = async () => {
+    if (!audioEngine) return;
+    setDay7BroadcastStatus("broadcasting");
+    setDay7RelayStage(1);
+    setDay7RelayStatusText("海自ソナー網より新言語メッセージを大出力放流中……");
     try {
       await audioEngine.playWhaleMessageRelayChorus((statusText, stageIndex) => {
-        setDay6RelayStatusText(statusText);
-        setDay6RelayStage(stageIndex);
+        setDay7RelayStatusText(statusText);
+        setDay7RelayStage(stageIndex);
       });
-      setDay6BroadcastStatus("received");
+      setDay7BroadcastStatus("received");
     } catch {
-      setDay6BroadcastStatus("received");
+      setDay7BroadcastStatus("received");
     }
   };
 
@@ -2460,7 +2474,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>📡 4. 海自ソナー網 新言語放流</span>
+                    <span>📡 4. 海自ソナー網 送信準備完了</span>
                   </button>
                 </div>
 
@@ -2791,119 +2805,58 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ4: 海自ソナー網 新言語放流 ＆ クジラ呼応シミュレーション --- */}
+                {/* --- タブ4: 海自ソナー網 送信準備完了（翌朝・Day 7 決戦スタンバイ） --- */}
                 {day6ActiveTab === "sonar_network" && (
                   <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【海上自衛隊大出力ソナー網による『合成新言語』放流オペレーション】</span>
+                        <span>📡 【海上自衛隊ソナー網への新言語メッセージ装填 ＆ 翌朝作戦スタンバイ】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群 SOSUS）</strong>に置き換え、人間が再構成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』を太平洋全域へメガワット級出力でパルス放流します！
+                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊大出力アクティブソナー網（護衛艦・潜水艦・伊豆小笠原海底固定ソナー群 SOSUS）</strong>に接続。プレイヤー全員の知見が結集して完成した『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』の音響パケットを装填し、発信系統の最終テストを実施します。
                       </p>
                     </div>
 
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="font-semibold text-slate-200">
-                          🌐 ソナー網送信パケット: <span className="font-mono text-cyan-300">[約束] ➔ [海底火山・北・探せ] ➔ [巨大な餌・集まれ]</span>
+                          🌐 ソナー網装填パケット: <span className="font-mono text-cyan-300">[約束] ➔ [海底火山・北・探せ] ➔ [巨大な餌・集まれ]</span>
                         </span>
                         <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
-                          day6BroadcastStatus === "idle"
+                          day6ReadyStatus === "idle"
                             ? "bg-slate-800 text-slate-400"
-                            : day6BroadcastStatus === "broadcasting"
+                            : day6ReadyStatus === "testing"
                             ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
                             : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
                         }`}>
-                          {day6BroadcastStatus === "idle" && "待機中"}
-                          {day6BroadcastStatus === "broadcasting" && "放流中・音響走査中..."}
-                          {day6BroadcastStatus === "received" && "太平洋全域から応答コーダ検知！"}
+                          {day6ReadyStatus === "idle" && "装填待機中"}
+                          {day6ReadyStatus === "testing" && "信号伝送テスト中..."}
+                          {day6ReadyStatus === "ready" && "装填完了・Day 7 作戦待機！"}
                         </span>
                       </div>
 
-                      {/* メッセージリレー進行インジケーター */}
-                      {day6BroadcastStatus !== "idle" && (
-                        <div className="rounded-lg bg-slate-950/90 border border-indigo-700/60 p-3 space-y-2 text-[11px] animate-fade-in shadow-inner">
-                          <div className="flex items-center justify-between text-indigo-300 font-bold">
-                            <span className="flex items-center gap-1.5">
-                              <Radio className="h-3.5 w-3.5 animate-pulse text-cyan-400" />
-                              【深海ハイドロフォン観測：クジラたちのメッセージリレー（歌のバトン）】
-                            </span>
-                            <span className="font-mono text-[10px] text-cyan-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
-                              進行度: {day6RelayStage} / 7
-                            </span>
-                          </div>
-
-                          {/* リアルタイムステータステキスト */}
-                          <div className="rounded bg-black/60 border border-cyan-900/50 p-2.5 text-cyan-200 font-mono text-[11px] leading-relaxed">
-                            {day6RelayStatusText || "ソナー網よりパルス放流中……"}
-                          </div>
-
-                          {/* 4段階リレーステップ */}
-                          <div className="grid grid-cols-4 gap-1.5 text-[10px] pt-1">
-                            <div
-                              className={`p-1.5 rounded border text-center transition ${
-                                day6RelayStage >= 1
-                                  ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
-                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
-                              }`}
-                            >
-                              ① ソナー網放流
-                            </div>
-                            <div
-                              className={`p-1.5 rounded border text-center transition ${
-                                day6RelayStage >= 3
-                                  ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
-                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
-                              }`}
-                            >
-                              ② 第1クジラ了解
-                            </div>
-                            <div
-                              className={`p-1.5 rounded border text-center transition ${
-                                day6RelayStage >= 4
-                                  ? "bg-indigo-950/60 border-indigo-500/80 text-indigo-200 font-bold"
-                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
-                              }`}
-                            >
-                              ③ 自ら歌い北上
-                            </div>
-                            <div
-                              className={`p-1.5 rounded border text-center transition ${
-                                day6RelayStage >= 6
-                                  ? "bg-emerald-950/60 border-emerald-500/80 text-emerald-200 font-bold"
-                                  : "bg-slate-900/40 border-slate-800 text-slate-500"
-                              }`}
-                            >
-                              ④ 太平洋全域リレー
-                            </div>
-                          </div>
+                      {/* 装填状況と翌朝決戦への案内 */}
+                      <div className="rounded bg-black/40 border border-slate-800 p-3 space-y-2 text-[11px]">
+                        <div className="flex items-center gap-2 text-cyan-300 font-bold">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                          <span>8語シーケンス信号の全周波数整合性を確認</span>
                         </div>
-                      )}
-
-                      {day6BroadcastStatus === "received" && (
-                        <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1.5 animate-fade-in">
-                          <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
-                            <CheckCircle2 className="h-4 w-4" /> 太平洋マッコウクジラ群のメッセージリレーを確認！
-                          </strong>
-                          <p className="text-slate-200 leading-relaxed font-mono">
-                            「一匹のクジラがこの音を聞いたあと、<strong>了解という音を返し、まったく同じ歌を自ら歌いながら北へ遊泳開始しました</strong>。
-                            その歌に応えて遠くのクジラが次々と了解を返し、また別のクジラへと歌が継承されていきます。
-                            クジラたちは太平洋全域でメッセージをリレーし、巨大な餌（怪異）を求めて駿河トラフへ向けて超高速で集結を開始しました！」
-                          </p>
-                        </div>
-                      )}
+                        <p className="text-slate-300 leading-relaxed font-mono text-[10px]">
+                          「海自全潜水艦およびSOSUS網の送信機に新言語パルスが完全に同期されました。
+                          実際の海中へのメガワット級大出力放流は、<strong>明日・Day 7の駿河湾最終決戦</strong>にて、怪異突入および魚雷攻撃のタイミングに合わせて実行されます！」
+                        </p>
+                      </div>
 
                       <button
-                        onClick={handleDay6Broadcast}
-                        disabled={day6BroadcastStatus === "broadcasting"}
+                        onClick={handleDay6TestPlay}
+                        disabled={day6ReadyStatus === "testing"}
                         className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
                       >
-                        <Radio className="h-4 w-4" />
-                        {day6BroadcastStatus === "idle" && "海上自衛隊ソナー網から新言語パルスを放流する（テスト送信）"}
-                        {day6BroadcastStatus === "broadcasting" && "ソナー波形放射中……深海からの応答待機中……"}
-                        {day6BroadcastStatus === "received" && "新言語パルスを再放流し、クジラ群との同調を維持する"}
+                        <Volume2 className="h-4 w-4" />
+                        {day6ReadyStatus === "idle" && "海自ソナー網への装填信号をテスト試聴する"}
+                        {day6ReadyStatus === "testing" && "信号テスト再生中……"}
+                        {day6ReadyStatus === "ready" && "装填信号を再テスト試聴（Day 7決戦スタンバイ完了）"}
                       </button>
                     </div>
                   </div>
@@ -2987,28 +2940,117 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  {/* 祝詞メッセージ放流ボタン */}
-                  <button
-                    onClick={() =>
-                      audioEngine?.playMessageSequence(
-                        [
-                          "word-human",
-                          "word-whale",
-                          "word-promise",
-                          "word-subsea-volcano",
-                          "word-go-north",
-                          "word-search",
-                          "word-giant-prey",
-                          "word-gather",
-                        ],
-                        1.0
-                      )
-                    }
-                    className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 py-2.5 text-xs font-bold text-white transition shadow-lg"
-                  >
-                    <Volume2 className="h-4 w-4" /> 全ソナー網より捕食要請祝詞を最終放流（人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ）
-                  </button>
-                </div>
+                  {/* --- Day 7 クライマックス音響：海自ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン） --- */}
+                  <div className="rounded-lg bg-slate-950/90 border border-cyan-800/80 p-3.5 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Radio className="h-4 w-4 text-cyan-400 animate-pulse" />
+                        <span className="font-bold text-cyan-300 text-xs">
+                          📡 【全海域ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン）】
+                        </span>
+                      </div>
+                      <span className={`text-[10px] px-2 py-0.5 rounded font-bold font-mono ${
+                        day7BroadcastStatus === "idle"
+                          ? "bg-slate-800 text-slate-400"
+                          : day7BroadcastStatus === "broadcasting"
+                          ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse"
+                          : "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                      }`}>
+                        {day7BroadcastStatus === "idle" && "放流準備完了・待機中"}
+                        {day7BroadcastStatus === "broadcasting" && `放流中・リレー進行中 (${day7RelayStage}/7)`}
+                        {day7BroadcastStatus === "received" && "太平洋全域リレー完了・大捕食突入！"}
+                      </span>
+                    </div>
+
+                    <p className="text-[11px] text-slate-300 leading-relaxed font-mono">
+                      海自全ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』を大出力放流。
+                      一頭のクジラが「了解」を返し、自ら同じ歌を歌いながら北上。その歌に応えて遠くの仲間たちが次々に了解と歌をリレーし、太平洋全域から駿河トラフへ大集結します！
+                    </p>
+
+                    {/* メッセージリレー進行インジケーター */}
+                    {day7BroadcastStatus !== "idle" && (
+                      <div className="rounded-lg bg-slate-950/90 border border-indigo-700/60 p-3 space-y-2 text-[11px] animate-fade-in shadow-inner">
+                        <div className="flex items-center justify-between text-indigo-300 font-bold">
+                          <span className="flex items-center gap-1.5">
+                            <Radio className="h-3.5 w-3.5 animate-pulse text-cyan-400" />
+                            【深海ハイドロフォン観測：クジラたちのメッセージリレー（歌のバトン）】
+                          </span>
+                          <span className="font-mono text-[10px] text-cyan-400 bg-slate-900 px-2 py-0.5 rounded border border-slate-800">
+                            進行度: {day7RelayStage} / 7
+                          </span>
+                        </div>
+
+                        {/* リアルタイムステータステキスト */}
+                        <div className="rounded bg-black/60 border border-cyan-900/50 p-2.5 text-cyan-200 font-mono text-[11px] leading-relaxed">
+                          {day7RelayStatusText || "ソナー網よりパルス放流中……"}
+                        </div>
+
+                        {/* 4段階リレーステップ */}
+                        <div className="grid grid-cols-4 gap-1.5 text-[10px] pt-1">
+                          <div
+                            className={`p-1.5 rounded border text-center transition ${
+                              day7RelayStage >= 1
+                                ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
+                                : "bg-slate-900/40 border-slate-800 text-slate-500"
+                            }`}
+                          >
+                            ① ソナー網放流
+                          </div>
+                          <div
+                            className={`p-1.5 rounded border text-center transition ${
+                              day7RelayStage >= 3
+                                ? "bg-cyan-950/60 border-cyan-500/80 text-cyan-200 font-bold"
+                                : "bg-slate-900/40 border-slate-800 text-slate-500"
+                            }`}
+                          >
+                            ② 第1クジラ了解
+                          </div>
+                          <div
+                            className={`p-1.5 rounded border text-center transition ${
+                              day7RelayStage >= 4
+                                ? "bg-indigo-950/60 border-indigo-500/80 text-indigo-200 font-bold"
+                                : "bg-slate-900/40 border-slate-800 text-slate-500"
+                            }`}
+                          >
+                            ③ 自ら歌い北上
+                          </div>
+                          <div
+                            className={`p-1.5 rounded border text-center transition ${
+                              day7RelayStage >= 6
+                                ? "bg-emerald-950/60 border-emerald-500/80 text-emerald-200 font-bold"
+                                : "bg-slate-900/40 border-slate-800 text-slate-500"
+                            }`}
+                          >
+                            ④ 太平洋全域リレー
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {day7BroadcastStatus === "received" && (
+                      <div className="rounded bg-emerald-950/60 border border-emerald-600/80 p-3 text-[11px] text-emerald-200 space-y-1.5 animate-fade-in">
+                        <strong className="block text-emerald-300 font-bold text-xs flex items-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4" /> 太平洋全域のメッセージリレー完了・大集結を確認！
+                        </strong>
+                        <p className="text-slate-200 leading-relaxed font-mono">
+                          「一匹のクジラが【了解】を返して自ら歌いながら北上し、その歌に呼応して太平洋全域の仲間たちがメッセージをリレー！
+                          駿河湾沖、伊豆諸島、鳥島沖から無数のマッコウクジラ群が駿河トラフ水深1,000mの戦域へ超高速で突入しました！
+                          魚雷で粉砕された怪異を片っ端から噛み砕き、貪り喰らい尽くしていきます！」
+                        </p>
+                      </div>
+                    )}
+
+                    <button
+                      onClick={handleDay7Broadcast}
+                      disabled={day7BroadcastStatus === "broadcasting"}
+                      className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-emerald-600 via-cyan-600 to-indigo-600 hover:from-emerald-500 hover:via-cyan-500 hover:to-indigo-500 disabled:opacity-50 py-3 text-xs font-bold text-white transition shadow-lg"
+                    >
+                      <Volume2 className="h-4 w-4" />
+                      {day7BroadcastStatus === "idle" && "【作戦発動】大出力ソナー放流 ＆ クジラたちのメッセージリレー（歌のバトン）を開始"}
+                      {day7BroadcastStatus === "broadcasting" && "メッセージ放流 ＆ 太平洋全域リレー進行中……"}
+                      {day7BroadcastStatus === "received" && "メッセージリレー音響を再演する（クジラ群との同調）"}
+                    </button>
+                  </div>
 
                 {/* エピローグ：アンサング・ヒーロー（語られざる英雄たち） */}
                 <div className="rounded-lg bg-gradient-to-br from-slate-950 via-[#0a121e] to-slate-950 border border-indigo-700/60 p-4 space-y-2 text-xs">
