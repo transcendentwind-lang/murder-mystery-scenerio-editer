@@ -1711,10 +1711,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ・<strong>須美寿島〜青ヶ島沖の噴火地点</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖（31°40&apos;N, 139°50&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 須美寿〜青ヶ島沖海底噴火」として他の地名に被らずプロット。
                     </p>
                     <p>
-                      ・<strong>青ヶ島・八丈島の地震観測 ＆ 富士山到達危機</strong>：連動噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
+                      ・<strong>青ヶ島・八丈島の地震観測 ＆ 特別な振動による火山刺激と富士山到達危機</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
                     </p>
                     <p>
-                      ・<strong>司令官（PC1）が持ち帰った隕石片と怪物の北上動機</strong>：1ヶ月前に全員が目撃した流星雨の際、司令官（PC1）だけが海岸で拾って東京へ持ち帰っていた『小さな隕石のかけら』や、海底から引き揚げられた隕石を生物が追って北上しているのではないかという重大仮説を検討するフェーズです。500km以上離れた距離から小片が直接何かを誘引することは物理的に困難である一方、特異な結晶構造や微弱な残留磁気を持つ同一天体由来の破片であり、海底環境の変化や引き揚げられた約30kgの海底隕石が何らかの形で生物を引き寄せているのではないかという疑惑・可能性を、東京・小笠原双方の『隕石調査』を通じて議論します。
+                      ・<strong>生物が北上できる2つの理由（地磁気 ＋ 隕石が放つ特殊な物質）と複数隕石の投棄・神社盗難</strong>：巨大生物は①<strong>地磁気</strong>と、②<strong>隕石が放つ特殊な物質</strong>の2つを感知して隕石を追うように北上しています。さらに、もともと<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が組織的に盗み出され、『西之島・青ヶ島沖・八丈島付近・三宅島付近』の海に次々と落とされていた（道標にされた）</strong>上に、小笠原周辺で回収された約30kgの隕石が富士山麓へ運ばれたという壮大な誘導トリックを東京・小笠原双方の調査を通じて議論します。
                     </p>
                   </div>
                 </div>
@@ -1959,7 +1959,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       🧭 【問1】この巨大生物は一体どこを目指していると考えられるか？
                     </span>
                     <p className="text-[10px] text-slate-400">
-                      各班の調査結果（隕石の残留磁気、火山フロント北上線、富士山麓民家への荷物）を踏まえ、対策本部としての見立てを選択してください。
+                      各班の調査結果（地磁気＋隕石の特殊物質、西之島・青ヶ島・八丈島・三宅島への複数隕石投棄、富士山麓民家への約30kgの荷物）を踏まえ、対策本部としての見立てを選択してください。
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <button
@@ -1988,7 +1988,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗻 富士山・駿河湾直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          火山フロントの北上直線および謎のダイバーグループが富士山麓の民家へ運んだ約30kgの荷物を追っている見立て。富士山噴火と駿河トラフ破局危機。
+                          小笠原・八丈島・三宅島の神社から盗まれ各海域に落とされた複数隕石の道標と、謎のダイバーグループが富士山麓の民家へ運んだ約30kgの隕石を追っている見立て。富士山噴火と駿河トラフ破局危機。
                         </p>
                       </button>
                     </div>
@@ -2197,7 +2197,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           【T-5A】富士山麓民家の捜索照会（静岡県警・公安協力）
                         </div>
                         <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、謎のダイバーグループが運んだ大型冷凍ボックスの中身は、海から引き揚げて箱に収めた<strong>「重さ約30kgの海底隕石（隕石としては十分に大きな塊）」</strong>であったと発覚。すでに富士山麓の山林深くへ極秘搬入された後であり、捜索は時間切れとなる。
+                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、謎のダイバーグループが運んだ大型冷凍ボックスの中身は、小笠原の海から引き揚げて箱に収めた<strong>「重さ約30kgの海底隕石」</strong>であったと発覚。さらに現場の海図と記録から、彼らが<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石を組織的に盗み出し、「西之島・青ヶ島沖・八丈島付近・三宅島付近」の海に次々と落として巨大生物を北上させる道標にしていた</strong>こと、そして約30kgの隕石はすでに富士山麓の山林深くへ搬入された後であることが判明する。
                         </p>
                       </button>
 
@@ -2298,10 +2298,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </p>
                       <ul className="list-disc list-inside space-y-1 pl-1 text-amber-200 font-semibold">
                         <li>奴らは一体どうやって、無数の個体を『一つの個体』として統率（情報伝達・再結合）しているのか？</li>
-                        <li>そして、物体は富士山を含む噴火を一体どうやって制御（連動）しているのか？</li>
+                        <li>そして、物体はどうやって海底火山や富士山を刺激し、なぜ一直線に北上できているのか？</li>
                       </ul>
-                      <p className="text-[10px] text-slate-400 pt-1 border-t border-red-800/60">
-                        ※物体の北上により富士山地下の微動は激化中。駿河トラフ到達・破局噴火まで<strong>【残り48時間】</strong>。生物学的な統率メカニズムの解明が急務となる！
+                      <p className="text-[10px] text-slate-300 pt-1 border-t border-red-800/60">
+                        💡 <strong>解明される真相</strong>: ①巨大生物は<strong>海底付近で海底地震を起こすような特別な振動</strong>を発生させ、それが海底火山を次々と刺激している。②生物が北上できる理由は<strong>「地磁気」と「隕石が放つ特殊な物質」</strong>の2つであり、小笠原・八丈島・三宅島の神社から組織的に盗まれた複数の隕石が<strong>西之島・青ヶ島沖・八丈島付近・三宅島付近の海に落とされていた</strong>ため、その道標を辿って富士山麓（約30kgの海底隕石）へ迫っている！ 駿河トラフ到達・破局噴火まで<strong>【残り48時間】</strong>。個体の統率メカニズム（音響・クジラ言語）の解明が急務となる！
                       </p>
                     </div>
                   </div>
@@ -2382,11 +2382,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（PC1警視庁公安部 ＆ PC2防衛庁リエゾン）が夜を徹して調査・照会を完遂！
-                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への約30kg海底隕石の搬入特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
+                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への約30kg海底隕石の搬入 ＆ 神社から盗まれた複数隕石の海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 text-[11px]">
-                    {/* T-5A: 約30kgの海底隕石の山林搬入 */}
+                    {/* T-5A: 約30kgの海底隕石の山林搬入 & 複数隕石の海域投棄 */}
                     <div className={`rounded-lg border p-3 space-y-1.5 transition ${
                       day5TokyoAction === "T-5A"
                         ? "bg-slate-900/90 border-emerald-700/80"
@@ -2394,7 +2394,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     }`}>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-100 flex items-center gap-1">
-                          ⛰️ 富士山麓・約30kgの海底隕石搬入追跡
+                          ⛰️ 富士山麓・約30kg隕石搬入 ＆ 複数隕石の海域投棄
                         </span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                           day5TokyoAction === "T-5A"
@@ -2405,7 +2405,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </span>
                       </div>
                       <p className="text-slate-300 text-[10px] leading-relaxed">
-                        謎のダイバーグループが運んだ大型冷凍ボックスは、富士山麓の民家を経由し樹海深くへ搬入。中身は彼らが深海から引き揚げて箱に入れた<strong>「重さ約30kgの海底隕石（隕石としては十分に大きな塊）」</strong>。怪異が富士山を目指す真の動機（持ち出された海底隕石の追跡・接近）が確定！
+                        謎のダイバーグループが運んだ大型冷凍ボックスの中身は、深海から引き揚げて箱に入れた<strong>「重さ約30kgの海底隕石」</strong>であり、富士山麓の樹海深くへ搬入。さらに彼らは<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石を組織的に盗み出し、「西之島・青ヶ島沖・八丈島付近・三宅島付近」の海に次々と落としていた</strong>ことが判明！ 巨大生物が「地磁気」と「隕石が放つ特殊な物質」を感知して北上し富士山を目指す真の動機が完全確定！
                       </p>
                     </div>
 
@@ -2581,10 +2581,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                         <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
                           <span className="font-bold text-amber-300 flex items-center gap-1">
-                            ③ 怪異の動機（古文書）
+                            ③ 怪異の動機と火山刺激（古文書）
                           </span>
                           <p className="text-slate-300 text-[10px] leading-relaxed">
-                            古文書に『巨大生物は天より落ちた星の石（隕石）を集め、海底火山を目覚めさせている』と記録されていた。
+                            古文書に『巨大生物は地磁気と星の石（隕石）が放つ特殊な物質を追って集め、海底付近で特別な振動を起こして海底火山を目覚めさせる』と記録されていた。
                           </p>
                         </div>
 
