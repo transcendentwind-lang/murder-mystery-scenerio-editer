@@ -341,7 +341,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               <div>
                 <label className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-300">
                   <Package className="h-3.5 w-3.5 text-indigo-400" />
-                  初期所持品（拾った小さな隕石・通信端末など）
+                  初期所持品（通信端末・観測データ・遺品など）
                 </label>
                 <div className="flex flex-wrap gap-2 pt-1">
                   {selectedChar.initialItems.map((item, idx) => (

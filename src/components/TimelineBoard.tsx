@@ -1714,7 +1714,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ・<strong>青ヶ島・八丈島の地震観測 ＆ 富士山到達危機</strong>：連動噴火に伴い、青ヶ島・八丈島で震度1〜2の火山性群発微動が連続観測。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
                     </p>
                     <p>
-                      ・<strong>持ち帰られた隕石片と怪物の北上動機</strong>：東京側へ持ち帰られた『隕石のかけら』を生物が追って北上しているのではないかという重大仮説を検討するフェーズです。500km以上離れた距離から直接何かを誘引することは物理的に困難である一方、特異な結晶構造や残留磁気を持つ同一天体由来の破片であり、海底環境の変化や特異な痕跡が何らかの形で生物を引き寄せているのではないかという疑惑・可能性を、東京・小笠原双方の『隕石調査』を通じて議論します。
+                      ・<strong>司令官（PC1）が持ち帰った隕石片と怪物の北上動機</strong>：1ヶ月前に全員が目撃した流星雨の際、司令官（PC1）だけが海岸で拾って東京へ持ち帰っていた『小さな隕石のかけら』や、海底から引き揚げられた隕石を生物が追って北上しているのではないかという重大仮説を検討するフェーズです。500km以上離れた距離から小片が直接何かを誘引することは物理的に困難である一方、特異な結晶構造や微弱な残留磁気を持つ同一天体由来の破片であり、海底環境の変化や引き揚げられた約30kgの海底隕石が何らかの形で生物を引き寄せているのではないかという疑惑・可能性を、東京・小笠原双方の『隕石調査』を通じて議論します。
                     </p>
                   </div>
                 </div>
@@ -1973,7 +1973,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗼 東京湾・首都直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          東京に持ち帰られた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
+                          司令官（PC1）が唯一東京へ持ち帰っていた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
                         </p>
                       </button>
 
@@ -1988,7 +1988,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗻 富士山・駿河湾直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          火山フロントの北上直線および富士山麓の民家へ運ばれた荷物を追っている見立て。富士山噴火と駿河トラフ破局危機。
+                          火山フロントの北上直線および謎のダイバーグループが富士山麓の民家へ運んだ約30kgの荷物を追っている見立て。富士山噴火と駿河トラフ破局危機。
                         </p>
                       </button>
                     </div>
@@ -2197,7 +2197,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           【T-5A】富士山麓民家の捜索照会（静岡県警・公安協力）
                         </div>
                         <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、大型冷凍ボックスの中身は深海から引き揚げられた<strong>「超巨大コア隕石」</strong>であったと発覚。しかし広大な富士山麓の山林深くへ極秘搬入された後であり、捜索は時間切れとなる。
+                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、謎のダイバーグループが運んだ大型冷凍ボックスの中身は、海から引き揚げて箱に収めた<strong>「重さ約30kgの海底隕石（隕石としては十分に大きな塊）」</strong>であったと発覚。すでに富士山麓の山林深くへ極秘搬入された後であり、捜索は時間切れとなる。
                         </p>
                       </button>
 
@@ -2382,11 +2382,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（PC1警視庁公安部 ＆ PC2防衛庁リエゾン）が夜を徹して調査・照会を完遂！
-                    Day 6開始時点で<strong>「富士山山麓への巨大隕石搬入特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
+                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への約30kg海底隕石の搬入特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 text-[11px]">
-                    {/* T-5A: 巨大コア隕石の山林搬入 */}
+                    {/* T-5A: 約30kgの海底隕石の山林搬入 */}
                     <div className={`rounded-lg border p-3 space-y-1.5 transition ${
                       day5TokyoAction === "T-5A"
                         ? "bg-slate-900/90 border-emerald-700/80"
@@ -2394,7 +2394,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     }`}>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-100 flex items-center gap-1">
-                          ⛰️ 富士山山麓・巨大隕石搬入追跡
+                          ⛰️ 富士山麓・約30kgの海底隕石搬入追跡
                         </span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
                           day5TokyoAction === "T-5A"
@@ -2405,7 +2405,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </span>
                       </div>
                       <p className="text-slate-300 text-[10px] leading-relaxed">
-                        大型冷凍ボックスは富士山山麓の民家を経由し樹海深くへ搬入。中身は深海から持ち出された<strong>「超巨大コア隕石」</strong>。怪異が富士山を目指す真の動機（持ち出された隕石の回収・接近）が確定！
+                        謎のダイバーグループが運んだ大型冷凍ボックスは、富士山麓の民家を経由し樹海深くへ搬入。中身は彼らが深海から引き揚げて箱に入れた<strong>「重さ約30kgの海底隕石（隕石としては十分に大きな塊）」</strong>。怪異が富士山を目指す真の動機（持ち出された海底隕石の追跡・接近）が確定！
                       </p>
                     </div>
 
