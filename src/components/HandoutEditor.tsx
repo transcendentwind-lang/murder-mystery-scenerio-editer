@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { Character } from "@/types/schema";
-import { Users, Sparkles, BookOpen, Heart, ShieldAlert, Award } from "lucide-react";
+import { Users, Sparkles, BookOpen, Heart, ShieldAlert, Award, Printer } from "lucide-react";
+import { printDocumentText } from "@/utils/scriptGenerator";
 
 interface HandoutEditorProps {
   characters: Character[];
@@ -64,6 +65,38 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
     }
   };
 
+  const buildCharMarkdown = (c: Character) => {
+    let md = `## ${c.name} (${c.profession})\n`;
+    md += `- **配置**: ${c.location === "headquarters" ? "東京本庁・司令部" : "小笠原・現地救難隊"}\n`;
+    md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n`;
+    md += `- **秘匿目標**: ${c.handout?.secretObjective || ""}\n\n`;
+    md += `### 【初期所持品】\n`;
+    (c.initialItems || []).forEach((item) => {
+      md += `- ${item}\n`;
+    });
+    md += `\n### 【固有能力・できること】\n`;
+    (c.capabilities || []).forEach((cap) => {
+      md += `- **Day ${cap.targetPhase}: ${cap.name}** — ${cap.description}\n`;
+    });
+    md += `\n### 【イントロダクション】\n${c.introduction || ""}\n\n`;
+    md += `### 【ハンドアウト本文】\n${c.handout?.handoutBody || ""}\n\n---\n\n`;
+    return md;
+  };
+
+  const handlePrintSelectedChar = () => {
+    if (!selectedChar) return;
+    const md = `# キャラクターハンドアウト：${selectedChar.name}\n\n` + buildCharMarkdown(selectedChar);
+    printDocumentText(`${selectedChar.name}_ハンドアウト`, md);
+  };
+
+  const handlePrintAllChars = () => {
+    let md = `# キャラクターハンドアウト全集（${characters.length}名編成）\n\n`;
+    characters.forEach((c) => {
+      md += buildCharMarkdown(c);
+    });
+    printDocumentText(`キャラクターハンドアウト全集_${characters.length}名版`, md);
+  };
+
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
       <div className="mb-6 flex items-center justify-between border-b border-slate-800 pb-3">
@@ -74,6 +107,24 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
           <p className="text-xs text-slate-400">
             キャラクターの内面ドラマ（誇り・後ろめたさ・喪失体験）とセリフ調をAIと共に練り上げます。
           </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handlePrintSelectedChar}
+            className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
+            title="選択中のキャラクターのハンドアウトのみをA4白背景で印刷"
+          >
+            <Printer className="h-3.5 w-3.5 text-emerald-400" />
+            このPCのHOを印刷
+          </button>
+          <button
+            onClick={handlePrintAllChars}
+            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
+            title="全キャラクターのハンドアウトを一括でA4白背景印刷"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            🖨️ 全員分のHOを一括印刷
+          </button>
         </div>
       </div>
 

@@ -2,9 +2,9 @@
 
 import React, { useState } from "react";
 import { MMProject } from "@/types/schema";
-import { X, Copy, Check, Download, FileText, Sparkles, BookOpen, Layers, CheckCheck } from "lucide-react";
+import { X, Copy, Check, Download, FileText, Sparkles, BookOpen, Layers, CheckCheck, Printer } from "lucide-react";
 import { copyToClipboard, downloadTextFile } from "@/utils/copyText";
-import { generateSynopsisPlainText } from "@/utils/scriptGenerator";
+import { generateSynopsisPlainText, generateSynopsisMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 
 interface SynopsisModalProps {
   project: MMProject;
@@ -36,6 +36,11 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
   const handleDownload = () => {
     const text = generateSynopsisPlainText(project);
     downloadTextFile(`${project.title}_企画概要・プロット紹介.txt`, text);
+  };
+
+  const handlePrint = () => {
+    const md = generateSynopsisMarkdown(project);
+    printDocumentText(`${project.title} - 企画概要・プロット紹介`, md);
   };
 
 
@@ -92,11 +97,20 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
             </div>
 
             <button
+              onClick={handlePrint}
+              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
+              title="A4白背景で印刷・PDF保存"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              🖨️ 印刷する
+            </button>
+
+            <button
               onClick={handleCopy}
               className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow"
             >
               {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
-              {copied ? "コピー完了！" : "テキストをコピー"}
+              {copied ? "コピー完了！" : "コピー"}
             </button>
 
             <button

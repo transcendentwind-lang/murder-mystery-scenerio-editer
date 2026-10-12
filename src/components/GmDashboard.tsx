@@ -33,9 +33,10 @@ import {
   Users,
   EyeOff,
   Compass,
+  Printer,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
-import { generateSynopsisMarkdown, generateFullScriptMarkdown } from "@/utils/scriptGenerator";
+import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
 import { Day1NauticalMap } from "./Day1NauticalMap";
@@ -484,6 +485,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               title="完全台本をMarkdownファイル(.md)保存"
             >
               <Download className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => printDocumentText(`${project.title} - 完全シナリオ台本`, generateFullScriptMarkdown(project))}
+              className="flex items-center gap-1 rounded bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
+              title="完全台本をA4白背景で印刷・PDF保存"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              🖨️ 印刷
             </button>
           </div>
         </div>
