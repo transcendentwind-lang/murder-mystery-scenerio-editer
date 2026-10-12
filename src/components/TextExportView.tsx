@@ -2,7 +2,7 @@
 
 import React, { useState, useRef } from "react";
 import { MMProject } from "@/types/schema";
-import { Copy, Check, Download, FileText, BookOpen, CheckCheck, Users, Printer } from "lucide-react";
+import { Copy, Check, Download, FileText, BookOpen, CheckCheck, Users, Printer, Palette } from "lucide-react";
 import { copyToClipboard, downloadTextFile } from "@/utils/copyText";
 import {
   generateSynopsisPlainText,
@@ -13,9 +13,13 @@ import {
 
 interface TextExportViewProps {
   project: MMProject;
+  onNavigateToDesignStudio?: () => void;
 }
 
-export const TextExportView: React.FC<TextExportViewProps> = ({ project }) => {
+export const TextExportView: React.FC<TextExportViewProps> = ({
+  project,
+  onNavigateToDesignStudio,
+}) => {
   const [exportMode, setExportMode] = useState<"synopsis" | "handouts" | "full">("full");
   const [copied, setCopied] = useState(false);
   const [selectedAll, setSelectedAll] = useState(false);
@@ -85,6 +89,15 @@ export const TextExportView: React.FC<TextExportViewProps> = ({ project }) => {
 
         {/* モード切り替え ＆ アクションボタン */}
         <div className="flex flex-wrap items-center gap-2.5">
+          {onNavigateToDesignStudio && (
+            <button
+              onClick={onNavigateToDesignStudio}
+              className="flex items-center gap-1.5 rounded-lg border border-pink-500/50 bg-pink-950/50 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/70 hover:text-white transition shadow"
+            >
+              <Palette className="h-3.5 w-3.5 text-pink-400" />
+              🎨 デザイン資料作成・編集画面へ
+            </button>
+          )}
           {/* 出力モード切り替え */}
           <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-900 p-1">
             <button

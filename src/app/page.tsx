@@ -15,6 +15,7 @@ import { HandoutEditor } from "@/components/HandoutEditor";
 import { CrypticMatrix } from "@/components/CrypticMatrix";
 import { GmDashboard } from "@/components/GmDashboard";
 import { TextExportView } from "@/components/TextExportView";
+import { DocumentDesignStudio } from "@/components/DocumentDesignStudio";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
 import { SynopsisModal } from "@/components/SynopsisModal";
 import { ProjectManagerModal } from "@/components/ProjectManagerModal";
@@ -27,12 +28,14 @@ import {
   Grid,
   FolderKanban,
   ChevronDown,
+  Palette,
 } from "lucide-react";
 
 type ActiveTab =
   | "timeline"
   | "characters_handouts"
   | "gm_dashboard"
+  | "design_studio"
   | "export_synopsis";
 
 export default function WorkbenchPage() {
@@ -235,27 +238,41 @@ export default function WorkbenchPage() {
             {/* ③ GM進行ダッシュボード */}
             <button
               onClick={() => setActiveTab("gm_dashboard")}
-              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition ${
                 activeTab === "gm_dashboard"
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
             >
               <Radio className="h-4 w-4 text-amber-400" />
-              ③ GM進行ダッシュボード
+              ③ GM進行
             </button>
 
-            {/* ④ 企画書・プロット紹介 ＆ テキスト出力 */}
+            {/* ④ 配布・進行デザイン資料スタジオ（HO・証拠・地図写真・GM資料） */}
+            <button
+              onClick={() => setActiveTab("design_studio")}
+              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                activeTab === "design_studio"
+                  ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
+                  : "text-slate-300 hover:text-white hover:bg-slate-900"
+              }`}
+              title="個人HO・証拠資料・全体提示の地図や写真・GM進行資料をデザイン枠付きで直接編集・保存・印刷します"
+            >
+              <Palette className="h-4 w-4 text-pink-400" />
+              ④ デザイン資料作成・編集
+            </button>
+
+            {/* ⑤ 企画書・プロット紹介 ＆ テキスト出力 */}
             <button
               onClick={() => setActiveTab("export_synopsis")}
-              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+              className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-bold transition ${
                 activeTab === "export_synopsis"
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
             >
               <FileText className="h-4 w-4 text-indigo-400" />
-              ④ 企画書・プロット ＆ 台本出力
+              ⑤ 企画書・一括台本
             </button>
           </div>
 
@@ -326,28 +343,38 @@ export default function WorkbenchPage() {
           {activeTab === "characters_handouts" && (
             <div className="flex h-full flex-col overflow-hidden">
               {/* サブタブ切替バー */}
-              <div className="flex items-center gap-2 border-b border-slate-800 bg-slate-900/80 px-6 py-2.5 backdrop-blur">
+              <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/80 px-6 py-2.5 backdrop-blur">
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setCharacterSubTab("profiles")}
+                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                      characterSubTab === "profiles"
+                        ? "bg-indigo-600 text-white shadow"
+                        : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Users className="h-3.5 w-3.5" />
+                    登場人物プロフィール ＆ 証拠マスター一覧
+                  </button>
+                  <button
+                    onClick={() => setCharacterSubTab("handouts")}
+                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
+                      characterSubTab === "handouts"
+                        ? "bg-indigo-600 text-white shadow"
+                        : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <BookOpen className="h-3.5 w-3.5" />
+                    AI共創型ハンドアウト（HO）エディタ
+                  </button>
+                </div>
+
                 <button
-                  onClick={() => setCharacterSubTab("profiles")}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                    characterSubTab === "profiles"
-                      ? "bg-indigo-600 text-white shadow"
-                      : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
-                  }`}
+                  onClick={() => setActiveTab("design_studio")}
+                  className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition"
                 >
-                  <Users className="h-3.5 w-3.5" />
-                  登場人物プロフィール ＆ 証拠マスター一覧
-                </button>
-                <button
-                  onClick={() => setCharacterSubTab("handouts")}
-                  className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                    characterSubTab === "handouts"
-                      ? "bg-indigo-600 text-white shadow"
-                      : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
-                  }`}
-                >
-                  <BookOpen className="h-3.5 w-3.5" />
-                  AI共創型ハンドアウト（HO）エディタ
+                  <Palette className="h-3.5 w-3.5 text-pink-400" />
+                  🎨 デザイン資料画面で開く（枠・スタンプ付き編集＆印刷）
                 </button>
               </div>
 
@@ -387,9 +414,21 @@ export default function WorkbenchPage() {
             />
           )}
 
-          {/* ④ 企画書・プロット紹介 ＆ 台本出力 */}
+          {/* ④ 配布・進行デザイン資料スタジオ */}
+          {activeTab === "design_studio" && (
+            <DocumentDesignStudio
+              project={project}
+              onUpdateProject={handleUpdateProject}
+              onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
+            />
+          )}
+
+          {/* ⑤ 企画書・プロット紹介 ＆ 台本出力 */}
           {activeTab === "export_synopsis" && (
-            <TextExportView project={project} />
+            <TextExportView
+              project={project}
+              onNavigateToDesignStudio={() => setActiveTab("design_studio")}
+            />
           )}
         </main>
       </div>

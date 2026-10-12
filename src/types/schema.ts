@@ -102,6 +102,55 @@ export interface CandidateLockStatus {
   rebuttalNote: string;
 }
 
+export type DocumentThemeId =
+  | 'classified_dossier'
+  | 'official_report'
+  | 'ancient_scroll'
+  | 'digital_telemetry'
+  | 'medical_forensic'
+  | 'field_expedition'
+  | 'modern_sleek'
+  | 'gm_tactical_binder'
+  | 'gm_script_book';
+
+export type DocumentAccentColor = 'indigo' | 'crimson' | 'emerald' | 'amber' | 'cyan' | 'slate';
+export type DocumentPaperStyle = 'clean_white' | 'warm_parchment' | 'dossier_cream' | 'blueprint_grid';
+export type DocumentBorderStyle = 'double_official' | 'classic_ornament' | 'tech_corner' | 'hazard_stripe' | 'minimal_line';
+
+export interface DocumentDesignOverride {
+  themeId: DocumentThemeId;
+  accentColor: DocumentAccentColor;
+  paperStyle: DocumentPaperStyle;
+  borderStyle: DocumentBorderStyle;
+  fontFamily: 'serif' | 'sans' | 'mono';
+  stampText: string;           // 例: "極秘 / TOP SECRET", "取扱注意", "社務古記録", "緊急電文"
+  organizationHeader: string;  // 例: "統合危機管理対策本部", "現地調査班"
+  documentCode: string;        // 例: "DOC-01-A", "HO-PC1"
+  footerNote: string;          // フッター署名・管理注記
+  customPromptUsed?: string;   // AI生成時のプロンプト履歴
+}
+
+export interface VisualBoardItem {
+  id: string;
+  title: string;
+  subtitle: string;
+  boardType: 'route_map' | 'day1_map' | 'aerial_photo' | 'sector_grid' | 'seismic_chart' | 'cryptic_sheet' | 'custom_image';
+  dayNumber: number;
+  captionTitle: string;
+  captionBody: string;
+  annotations: string[];
+  imageUrl?: string;
+  showGmSecrets?: boolean;
+}
+
+export interface GmProgressionNote {
+  dayNumber: number;
+  targetMinutes: number;
+  readAloudScript: string;
+  gmCheckpoints: string[];
+  bgmCue: string;
+}
+
 export interface MMProject {
   id?: string;
   createdAt?: string;
@@ -111,7 +160,7 @@ export interface MMProject {
   concept: string;             // 作品コンセプト・世界観
   targetExperience: string;    // プレイヤーが味わう体験
   plotSummary: string;         // プロット紹介（あらすじ・真相・解決法）
-  gimmickOverview: string;     // コアギミック（クジラ言語・生態系捕食）の紹介
+  gimmickOverview: string;     // コアギミックの紹介
   playerCount: number;
   durationHours: number;
   hasGm: boolean;
@@ -123,5 +172,9 @@ export interface MMProject {
   matrixLinks: InterpretationLink[];
   lockCriteria: LockCriterion[];
   candidateStatuses: CandidateLockStatus[];
+  documentDesigns?: Record<string, DocumentDesignOverride>;
+  visualBoards?: VisualBoardItem[];
+  gmNotes?: Record<number, GmProgressionNote>;
 }
+
 
