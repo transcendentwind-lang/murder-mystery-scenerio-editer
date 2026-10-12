@@ -21,7 +21,6 @@ export interface CharacterCapability {
 
 export interface HandoutContent {
   publicProfile: string;     // 全員に開示される表向きのプロフィール
-  secretObjective: string;   // 個別勝利条件・真の目的
   internalDrama: CharacterInternalDrama; // 内面ドラマ
   backgroundTimeline: string; // 事件当日の個人タイムライン
   handoutBody: string;       // HO本文テキスト

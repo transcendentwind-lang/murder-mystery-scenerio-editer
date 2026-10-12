@@ -104,8 +104,7 @@ export function generateSynopsisPlainText(project: MMProject): string {
 function formatCharacterHandoutMarkdown(c: Character): string {
   let md = `### ${c.name} (${c.profession})\n`;
   md += `- **所属・配置**: ${c.location === "headquarters" ? "東京本庁・司令部" : "小笠原・現地救難隊"}\n`;
-  md += `- **公開プロフィール**: ${c.handout?.publicProfile || "なし"}\n`;
-  md += `- **秘匿動機・目的**: ${c.handout?.secretObjective || "なし"}\n\n`;
+  md += `- **公開プロフィール**: ${c.handout?.publicProfile || "なし"}\n\n`;
 
   md += `#### 【キャラクター内面ドラマ】\n`;
   md += `- **誇り (Pride)**: ${c.handout?.internalDrama?.pride || "なし"}\n`;

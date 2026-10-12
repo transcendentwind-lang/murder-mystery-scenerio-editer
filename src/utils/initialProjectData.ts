@@ -8,7 +8,7 @@ import { MMProject } from "@/types/schema";
 export const initialProject: MMProject = {
   id: "project-deep-sea",
   createdAt: "2026-10-01T00:00:00.000Z",
-  updatedAt: "2026-10-12T10:05:00.000Z",
+  updatedAt: "2026-10-13T01:25:00.000Z",
   title: "深海からの呼び声",
   subtitle: "合同海難対策本部、7日間の記録",
   concept:
@@ -67,7 +67,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "東京司令部の総指揮官。冷静沈着で公的機関の連携を統制する。",
-        secretObjective: "国民のパニックを防ぎつつ、現場の命を最優先に事態を完全終息させる。",
         internalDrama: {
           pride: "国家と市民の安全を守る危機管理の最高責任者としての誇り",
           guilt: "政府上層部から下された『事実の完全隠蔽命令』を現場に課すことへの激しい葛藤",
@@ -122,7 +121,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "通信・音響データの分析責任者。あらゆる計器の異常を数値化する。",
-        secretObjective: "深海の巨大物体の物理的実態を暴き、音響による唯一の対抗策を成功させる。",
         internalDrama: {
           pride: "音響データは嘘をつかないという技術者としての絶対的自負",
           guilt: "防衛省の最高機密ソナー網に裏口アクセスを持っていることへの罪悪感",
@@ -168,7 +166,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "現地の海を誰よりも熟知する海の男。現場の救助活動を一手に担う。",
-        secretObjective: "島民と海に出た仲間を誰一人死なせず、全員を生きて本土へ帰す。",
         internalDrama: {
           pride: "どんな荒波からも人命を救い出してきた現場の海の男としての誇り",
           guilt: "Day 1で救助時、怪しいダイバーたちと大型冷凍ボックスの島外離脱を止められなかった悔恨",
@@ -224,7 +221,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "科学的データと数値を冷静に分析する観測員。感情に流されない判断を下す。",
-        secretObjective: "正確なデータを提示し続け、破局噴火の発生時刻までに回避策を実行させる。",
         internalDrama: {
           pride: "正確な気象・地質予報で人命を守る科学者としての矜持",
           guilt: "最悪のカウントダウンを告げることで仲間を絶望に突き落とす苦悩",
@@ -279,7 +275,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "深海生物のスペシャリスト。学会の異端児とされた恩師の研究を継ぐ。",
-        secretObjective: "恩師のクジラ言語仮説の正しさを証明し、怪異を生物学的捕食で鎮める。",
         internalDrama: {
           pride: "真の海洋生態系を理解しているという研究者としてのプライド",
           guilt: "生前の恩師を世間の冷笑から庇い切れなかった後悔",
@@ -334,7 +329,6 @@ export const initialProject: MMProject = {
       ],
       handout: {
         publicProfile: "温和で献身的な救護担当。島の伝統や神事にも詳しい。",
-        secretObjective: "島の信仰と祖先の知恵を信じ、現代科学と手を取り合って災厄を鎮める。",
         internalDrama: {
           pride: "何百年も島を守り祈り続けてきた社家としての責任感",
           guilt: "怪異の出現を単なる自然現象や錯覚として見過ごしかけた自責",
@@ -906,7 +900,6 @@ export const pc4For6Players = {
   ],
   handout: {
     publicProfile: "科学的データと数値を冷静に分析する観測員。感情に流されない判断を下す。",
-    secretObjective: "正確なデータを提示し続け、破局噴火の発生時刻までに回避策を実行させる。",
     internalDrama: {
       pride: "正確な気象・地質予報で人命を守る科学者としての矜持",
       guilt: "最悪のカウントダウンを告げることで仲間を絶望に突き落とす苦悩",
@@ -965,7 +958,6 @@ export const pc6Character = {
   ],
   handout: {
     publicProfile: "温和で献身的な救護担当。島の伝統や神事にも詳しい。",
-    secretObjective: "島の信仰と祖先の知恵を信じ、現代科学と手を取り合って災厄を鎮める。",
     internalDrama: {
       pride: "何百年も島を守り祈り続けてきた社家としての責任感",
       guilt: "怪異の出現を単なる自然現象や錯覚として見過ごしかけた自責",
@@ -1028,7 +1020,6 @@ export const pc4For5Players = {
   ],
   handout: {
     publicProfile: "海洋・気象観測の専門員。島最古の旧家出身でもあり、伝統や神事にも通じている。",
-    secretObjective: "近代科学のデータと祖先の知恵（古文書）の両方を駆使し、未曾有の破局噴火から島と日本を救う。",
     internalDrama: {
       pride: "近代科学の観測技術と祖先の伝承という、新旧ふたつの知識体系を持つことへの誇り",
       guilt: "神職を継がずに科学者の道を選び、実家の伝承をどこかで迷信扱いしていたことへの後ろめたさ",

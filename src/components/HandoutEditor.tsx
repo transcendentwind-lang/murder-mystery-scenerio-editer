@@ -68,8 +68,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
   const buildCharMarkdown = (c: Character) => {
     let md = `## ${c.name} (${c.profession})\n`;
     md += `- **配置**: ${c.location === "headquarters" ? "東京本庁・司令部" : "小笠原・現地救難隊"}\n`;
-    md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n`;
-    md += `- **秘匿目標**: ${c.handout?.secretObjective || ""}\n\n`;
+    md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n\n`;
     md += `### 【初期所持品】\n`;
     (c.initialItems || []).forEach((item) => {
       md += `- ${item}\n`;
@@ -182,30 +181,17 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
             </div>
           </div>
 
-          {/* 表向きのプロフィール ＆ 秘匿目標 */}
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="font-semibold text-slate-300 mb-1 block">
-                表向きのプロフィール（全体公開）
-              </label>
-              <textarea
-                value={selectedChar.handout.publicProfile}
-                onChange={(e) => handleUpdateHandout("publicProfile", e.target.value)}
-                rows={2}
-                className="w-full rounded border border-slate-800 bg-slate-950 p-2 text-slate-200 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
-            <div>
-              <label className="font-semibold text-amber-400 mb-1 block">
-                秘匿目標・個別の勝利条件
-              </label>
-              <textarea
-                value={selectedChar.handout.secretObjective}
-                onChange={(e) => handleUpdateHandout("secretObjective", e.target.value)}
-                rows={2}
-                className="w-full rounded border border-slate-800 bg-slate-950 p-2 text-slate-200 focus:outline-none focus:border-indigo-500"
-              />
-            </div>
+          {/* 表向きのプロフィール */}
+          <div>
+            <label className="font-semibold text-slate-300 mb-1 block">
+              表向きのプロフィール（全体公開）
+            </label>
+            <textarea
+              value={selectedChar.handout.publicProfile}
+              onChange={(e) => handleUpdateHandout("publicProfile", e.target.value)}
+              rows={2}
+              className="w-full rounded border border-slate-800 bg-slate-950 p-2 text-slate-200 focus:outline-none focus:border-indigo-500"
+            />
           </div>
 
           {/* 内面ドラマスロット（誇り・後ろめたさ・喪失体験） */}

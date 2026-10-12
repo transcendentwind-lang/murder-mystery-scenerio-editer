@@ -43,14 +43,13 @@ export function createEmptyProject(params?: {
       initialItems: [`PC${pcNum}の所持品・私物`],
       handout: {
         publicProfile: `全員に公開されるPC${pcNum}の表向きの経歴・立ち位置。`,
-        secretObjective: `PC${pcNum}の個別勝利条件（秘密の目的・隠匿事項）。`,
         internalDrama: {
           pride: `専門職・人間としての誇り・譲れない信条。`,
           guilt: `後ろめたさ・過去の過失・他者に隠している過ち。`,
           loss: `過去の喪失体験・トラウマ・後悔。`,
         },
         backgroundTimeline: `事件発生前〜当日にかけての個人の行動記録。`,
-        handoutBody: `【背景と動機】\nここにPC${pcNum}の詳細なハンドアウト本文を執筆します。\n\n【あなたの知っている情報】\n事件に関する個人的な目撃や専門的見解。\n\n【勝利条件】\n1. 事件の真相を解明する（または隠蔽する）\n2. 秘密の目的を達成する`,
+        handoutBody: `【背景と動機】\nここにPC${pcNum}の詳細なハンドアウト本文を執筆します。\n\n【あなたの知っている情報】\n事件に関する個人的な目撃や専門的見解。`,
         gmActionGuide: `フェーズ進行時の個別密談・特殊アクションに関する指示書。`,
       },
     };

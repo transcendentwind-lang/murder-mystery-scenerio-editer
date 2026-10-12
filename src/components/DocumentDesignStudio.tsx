@@ -75,7 +75,7 @@ const THEME_PRESETS: Record<
   classified_dossier: {
     name: "極秘人物ファイル・指令書",
     badge: "個人HO推奨",
-    description: "濃紺ヘッダー帯・IDバッジ・秘匿ミッション枠を備えた個人配布用ブリーフィングシート",
+    description: "濃紺ヘッダー帯・IDバッジを備えた個人配布用ブリーフィングシート",
     defaultAccent: "indigo",
     defaultPaper: "dossier_cream",
     defaultBorder: "double_official",
@@ -1799,61 +1799,31 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 </div>
 
-                {/* 公開プロフィール ＆ 秘匿ミッション（2カラムまたは上下カード） */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  {/* 公開プロフィール枠 */}
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/70`}>
-                    <div
-                      className={`mb-2 inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-bold ${accent.badgeBg} ${accent.badgeText}`}
-                    >
-                      <Users className="h-3.5 w-3.5" />
-                      【公開プロフィール（全員に開示される情報）】
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={4}
-                        value={activeChar.handout.publicProfile}
-                        onChange={(e) =>
-                          handleUpdateActiveChar((c) => ({
-                            ...c,
-                            handout: { ...c.handout, publicProfile: e.target.value },
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white/80 p-2 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                      />
-                    ) : (
-                      <p className="whitespace-pre-wrap text-xs leading-relaxed">
-                        {activeChar.handout.publicProfile}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* 秘匿ミッション・真の目的枠 */}
+                {/* 公開プロフィール枠 */}
+                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/70`}>
                   <div
-                    className={`rounded-md border-2 p-4 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
+                    className={`mb-2 inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-bold ${accent.badgeBg} ${accent.badgeText}`}
                   >
-                    <div className="mb-2 inline-flex items-center gap-1.5 rounded bg-red-800 px-2.5 py-0.5 text-xs font-bold text-white">
-                      <Lock className="h-3.5 w-3.5" />
-                      【秘匿目標・あなただけの使命（他言無用）】
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={4}
-                        value={activeChar.handout.secretObjective}
-                        onChange={(e) =>
-                          handleUpdateActiveChar((c) => ({
-                            ...c,
-                            handout: { ...c.handout, secretObjective: e.target.value },
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-red-400 bg-white/90 p-2 text-xs font-semibold leading-relaxed text-slate-900 focus:border-red-600 focus:outline-none"
-                      />
-                    ) : (
-                      <p className="whitespace-pre-wrap text-xs font-semibold leading-relaxed">
-                        {activeChar.handout.secretObjective}
-                      </p>
-                    )}
+                    <Users className="h-3.5 w-3.5" />
+                    【公開プロフィール（全員に開示される情報）】
                   </div>
+                  {isDirectEditMode ? (
+                    <textarea
+                      rows={3}
+                      value={activeChar.handout.publicProfile}
+                      onChange={(e) =>
+                        handleUpdateActiveChar((c) => ({
+                          ...c,
+                          handout: { ...c.handout, publicProfile: e.target.value },
+                        }))
+                      }
+                      className="w-full rounded border border-dashed border-slate-400 bg-white/80 p-2 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
+                    />
+                  ) : (
+                    <p className="whitespace-pre-wrap text-xs leading-relaxed">
+                      {activeChar.handout.publicProfile}
+                    </p>
+                  )}
                 </div>
 
                 {/* キャラクター内面ドラマ（誇り・後ろめたさ・喪失体験） */}
