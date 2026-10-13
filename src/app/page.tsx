@@ -270,61 +270,17 @@ export default function WorkbenchPage() {
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
+              title="企画概要（コンセプト・プロット・ギミック）の閲覧・編集と一括台本出力"
             >
               <FileText className="h-4 w-4 text-indigo-400" />
               ⑤ 企画書・一括台本
             </button>
           </div>
-
-          {/* 6名（本編・推奨） / 5名（調整用） プレイ人数切り替えトグル */}
-          <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
-            <button
-              onClick={() => handleTogglePlayerCount(6)}
-              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                project.playerCount === 6
-                  ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-              }`}
-              title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名の本来の完全版構成（作者推奨）"
-            >
-              <Users className="h-3.5 w-3.5" />
-              6人プレイ（本編・推奨）
-            </button>
-            <button
-              onClick={() => handleTogglePlayerCount(5)}
-              className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                project.playerCount === 5
-                  ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-              }`}
-              title="小笠原3名（PC3・PC4統合・PC5）＋東京2名の人数調整用構成"
-            >
-              <Users className="h-3.5 w-3.5" />
-              5人プレイ（調整用）
-            </button>
-          </div>
-
-          {/* 企画概要モーダルクイックボタン */}
-          <button
-            onClick={() => setIsSynopsisOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-indigo-500/40 bg-indigo-950/60 px-3 py-1.5 text-xs font-bold text-indigo-200 hover:bg-indigo-900/80 hover:text-white transition shadow"
-            title="タイトル、コンセプト、プロット紹介をクイック確認"
-          >
-            <BookOpen className="h-3.5 w-3.5 text-indigo-400" />
-            企画概要
-          </button>
         </div>
       </header>
 
-      {/* メインレイアウト：左ペイン（AI Chat）＋ 右ペイン（作業画面） */}
+      {/* メインレイアウト：作業画面（全幅表示） */}
       <div className="flex flex-1 overflow-hidden">
-        <AiChatPanel
-          messages={messages}
-          onSendMessage={handleSendMessage}
-          externalPrompt={externalPrompt}
-          onClearExternalPrompt={() => setExternalPrompt("")}
-        />
-
         <main className="flex-1 overflow-hidden bg-slate-950">
           {/* ① 7日間タイムライン（各Dayに海図・空撮・アクション・証拠を完全配置） */}
           {activeTab === "timeline" && (
@@ -342,8 +298,8 @@ export default function WorkbenchPage() {
           {/* ② キャラクター ＆ ハンドアウト管理 */}
           {activeTab === "characters_handouts" && (
             <div className="flex h-full flex-col overflow-hidden">
-              {/* サブタブ切替バー */}
-              <div className="flex items-center justify-between border-b border-slate-800 bg-slate-900/80 px-6 py-2.5 backdrop-blur">
+              {/* サブタブ切替バー ＆ 6人プレイ／5人プレイ切替 */}
+              <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/80 px-6 py-2.5 backdrop-blur">
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setCharacterSubTab("profiles")}
@@ -365,17 +321,47 @@ export default function WorkbenchPage() {
                     }`}
                   >
                     <BookOpen className="h-3.5 w-3.5" />
-                    AI共創型ハンドアウト（HO）エディタ
+                    個人ハンドアウト（HO）エディタ
                   </button>
                 </div>
 
-                <button
-                  onClick={() => setActiveTab("design_studio")}
-                  className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition"
-                >
-                  <Palette className="h-3.5 w-3.5 text-pink-400" />
-                  🎨 デザイン資料画面で開く（枠・スタンプ付き編集＆印刷）
-                </button>
+                <div className="flex items-center gap-3">
+                  {/* 6名（本編・推奨） / 5名（調整用） プレイ人数切り替えトグル */}
+                  <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                    <button
+                      onClick={() => handleTogglePlayerCount(6)}
+                      className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                        project.playerCount === 6
+                          ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                      }`}
+                      title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名の本来の完全版構成（作者推奨）"
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      6人プレイ（本編・推奨）
+                    </button>
+                    <button
+                      onClick={() => handleTogglePlayerCount(5)}
+                      className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                        project.playerCount === 5
+                          ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                      }`}
+                      title="小笠原3名（PC3・PC4統合・PC5）＋東京2名の人数調整用構成"
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      5人プレイ（調整用）
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => setActiveTab("design_studio")}
+                    className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition"
+                  >
+                    <Palette className="h-3.5 w-3.5 text-pink-400" />
+                    🎨 デザイン資料画面で開く（枠・スタンプ付き編集＆印刷）
+                  </button>
+                </div>
               </div>
 
               <div className="flex-1 overflow-hidden">
@@ -428,6 +414,7 @@ export default function WorkbenchPage() {
             <TextExportView
               project={project}
               onNavigateToDesignStudio={() => setActiveTab("design_studio")}
+              onUpdateProject={handleUpdateProject}
             />
           )}
         </main>
@@ -441,14 +428,6 @@ export default function WorkbenchPage() {
         projects={projects}
         onSelectProject={handleSelectProject}
         onProjectsChange={setProjects}
-      />
-
-      {/* 企画概要・プロット紹介モーダル */}
-      <SynopsisModal
-        project={project}
-        isOpen={isSynopsisOpen}
-        onClose={() => setIsSynopsisOpen(false)}
-        onUpdateProject={handleUpdateProject}
       />
 
       {/* クジラ言語パズルモーダル（Day 6から直接呼び出し可能） */}

@@ -298,25 +298,9 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
 
               {/* 6. 自己紹介 */}
               <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="font-semibold text-indigo-300 block">
-                    ⑥ 自己紹介（導入時に共有する言葉・自身の立場）
-                  </label>
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      onClick={() => handleAiRefine("プロの物書きとして、もっと感情が揺さぶられる心理描写を加えて")}
-                      className="rounded border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] text-slate-300 hover:text-white hover:bg-slate-800 transition"
-                    >
-                      ✨ 心理描写を強化
-                    </button>
-                    <button
-                      onClick={() => handleAiRefine("このキャラクターの職業にふさわしいリアルな専門用語と口調に調整して")}
-                      className="rounded border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] text-slate-300 hover:text-white hover:bg-slate-800 transition"
-                    >
-                      ✨ 口調・専門性を調整
-                    </button>
-                  </div>
-                </div>
+                <label className="font-semibold text-indigo-300 mb-1.5 block">
+                  ⑥ 自己紹介（導入時に共有する言葉・自身の立場）
+                </label>
                 <textarea
                   value={selectedChar.handout.handoutBody}
                   onChange={(e) => handleUpdateHandout("handoutBody", e.target.value)}
