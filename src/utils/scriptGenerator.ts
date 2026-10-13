@@ -108,7 +108,6 @@ function formatCharacterHandoutMarkdown(c: Character): string {
 
   md += `#### 【キャラクター内面ドラマ】\n`;
   md += `- **誇り (Pride)**: ${c.handout?.internalDrama?.pride || "なし"}\n`;
-  md += `- **後ろめたさ (Guilt)**: ${c.handout?.internalDrama?.guilt || "なし"}\n`;
   md += `- **喪失体験 (Loss)**: ${c.handout?.internalDrama?.loss || "なし"}\n\n`;
 
   md += `#### 【初期所持品】\n`;

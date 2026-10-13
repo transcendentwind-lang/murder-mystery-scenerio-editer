@@ -1826,14 +1826,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   )}
                 </div>
 
-                {/* キャラクター内面ドラマ（誇り・後ろめたさ・喪失体験） */}
+                {/* キャラクター内面ドラマ（誇り・喪失体験） */}
                 <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/60`}>
                   <h3
                     className={`mb-3 border-b pb-1.5 text-xs font-bold uppercase tracking-wider ${accent.sectionTitleText} ${accent.borderSub}`}
                   >
                     ■ あなたの内面・行動指針（ロールプレイの核）
                   </h3>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
                     <div className="rounded border border-slate-300/80 bg-white/80 p-3">
                       <div className="mb-1 text-[11px] font-bold text-indigo-900">
                         ✦ 誇り・自負 (Pride)
@@ -1859,35 +1859,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       ) : (
                         <p className="whitespace-pre-wrap text-xs leading-relaxed">
                           {activeChar.handout.internalDrama.pride}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="rounded border border-slate-300/80 bg-white/80 p-3">
-                      <div className="mb-1 text-[11px] font-bold text-rose-900">
-                        ✦ 後ろめたさ・秘密 (Guilt)
-                      </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={3}
-                          value={activeChar.handout.internalDrama.guilt}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              handout: {
-                                ...c.handout,
-                                internalDrama: {
-                                  ...c.handout.internalDrama,
-                                  guilt: e.target.value,
-                                },
-                              },
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                        />
-                      ) : (
-                        <p className="whitespace-pre-wrap text-xs leading-relaxed">
-                          {activeChar.handout.internalDrama.guilt}
                         </p>
                       )}
                     </div>

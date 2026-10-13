@@ -32,7 +32,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
     const updated = characters.map((c) => {
       if (c.id === selectedCharId) {
         if (field.startsWith("internalDrama.")) {
-          const dramaKey = field.split(".")[1] as "pride" | "guilt" | "loss";
+          const dramaKey = field.split(".")[1] as "pride" | "loss";
           return {
             ...c,
             handout: {
@@ -104,7 +104,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
             ハンドアウト（HO）共創エディタ
           </h2>
           <p className="text-xs text-slate-400">
-            キャラクターの内面ドラマ（誇り・後ろめたさ・喪失体験）とセリフ調をAIと共に練り上げます。
+            キャラクターの内面ドラマ（誇り・喪失体験）とセリフ調をAIと共に練り上げます。
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -169,7 +169,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
             <div className="rounded-lg border border-amber-500/40 bg-amber-950/20 p-2.5 flex items-center gap-2">
               <Sparkles className="h-4 w-4 text-amber-400 shrink-0" />
               <p className="text-[11px] text-amber-200">
-                <span className="font-bold">5人プレイ統合版ハンドアウト:</span> 科学観測の使命感に加え、島の社家としての古文書・祝詞の伝承と内面ドラマ（誇り・後ろめたさ・喪失体験）が統合されています。
+                <span className="font-bold">5人プレイ統合版ハンドアウト:</span> 科学観測の使命感に加え、島の社家としての古文書・祝詞の伝承と内面ドラマ（誇り・喪失体験）が統合されています。
               </p>
             </div>
           )}
@@ -194,14 +194,14 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
             />
           </div>
 
-          {/* 内面ドラマスロット（誇り・後ろめたさ・喪失体験） */}
+          {/* 内面ドラマスロット（誇り・喪失体験） */}
           <div className="rounded-lg border border-slate-800 bg-slate-950 p-3 space-y-2.5">
             <h4 className="font-bold text-slate-300 text-xs uppercase tracking-wider flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
               キャラクター内面ドラマスロット (共感と動機の源泉)
             </h4>
 
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="flex items-center gap-1 text-[11px] font-semibold text-blue-400 mb-1">
                   <Award className="h-3 w-3" /> 誇り・矜持 (Pride)
@@ -209,18 +209,6 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
                 <textarea
                   value={selectedChar.handout.internalDrama.pride}
                   onChange={(e) => handleUpdateHandout("internalDrama.pride", e.target.value)}
-                  rows={2}
-                  className="w-full rounded border border-slate-800 bg-slate-900 p-2 text-slate-300 focus:outline-none"
-                />
-              </div>
-
-              <div>
-                <label className="flex items-center gap-1 text-[11px] font-semibold text-amber-400 mb-1">
-                  <ShieldAlert className="h-3 w-3" /> 後ろめたさ (Guilt)
-                </label>
-                <textarea
-                  value={selectedChar.handout.internalDrama.guilt}
-                  onChange={(e) => handleUpdateHandout("internalDrama.guilt", e.target.value)}
                   rows={2}
                   className="w-full rounded border border-slate-800 bg-slate-900 p-2 text-slate-300 focus:outline-none"
                 />

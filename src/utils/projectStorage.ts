@@ -45,7 +45,6 @@ export function createEmptyProject(params?: {
         publicProfile: `全員に公開されるPC${pcNum}の表向きの経歴・立ち位置。`,
         internalDrama: {
           pride: `専門職・人間としての誇り・譲れない信条。`,
-          guilt: `後ろめたさ・過去の過失・他者に隠している過ち。`,
           loss: `過去の喪失体験・トラウマ・後悔。`,
         },
         backgroundTimeline: `事件発生前〜当日にかけての個人の行動記録。`,

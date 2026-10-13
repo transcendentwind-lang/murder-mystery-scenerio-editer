@@ -7,7 +7,6 @@ export type RoleType = 'suspect' | 'investigator' | 'neutral' | 'special';
 
 export interface CharacterInternalDrama {
   pride: string;       // 専門職としての誇り・自負
-  guilt: string;       // 後ろめたさ・過去の過失・秘密
   loss: string;        // 喪失体験・トラウマ・後悔
 }
 
