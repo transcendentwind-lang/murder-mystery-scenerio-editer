@@ -468,7 +468,7 @@ function getDesignForKey(
 
   let defaultTheme: DocumentThemeId = "official_report";
   if (category === "handouts") {
-    defaultTheme = "classified_dossier";
+    defaultTheme = "modern_sleek";
   } else if (category === "evidences") {
     if (evidenceCategory === "data" || evidenceCategory === "audio") {
       defaultTheme = "digital_telemetry";
@@ -656,6 +656,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   onSendAiPrompt,
 }) => {
   const [category, setCategory] = useState<StudioCategory>("handouts");
+  const [handoutViewMode, setHandoutViewMode] = useState<"sheet" | "cards">("sheet");
   const [selectedCharId, setSelectedCharId] = useState<string>(project.characters[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     project.evidences[0]?.id || ""
@@ -666,8 +667,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
   // 画面内テキスト直接編集モード vs 純粋プレビューモード
   const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(true);
-  // 個人HOでのGM用ガイド表示切替（プレイヤー配布時はOFF推奨）
-  const [showGmGuideInHo, setShowGmGuideInHo] = useState<boolean>(false);
 
   // Gemini デザイン生成プロンプト入力
   const [aiDesignPrompt, setAiDesignPrompt] = useState<string>("");
@@ -1171,209 +1170,242 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
         </div>
       </div>
 
-      {/* 2. Gemini AI フレームワーク生成・デザイン着せ替えバー */}
-      <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex flex-1 items-center gap-2 min-w-[320px]">
-            <div className="flex items-center gap-1.5 rounded-lg bg-indigo-600/20 border border-indigo-500/40 px-2.5 py-1 text-xs font-bold text-indigo-300 shrink-0">
-              <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
-              Gemini デザイン枠生成
-            </div>
-            <input
-              type="text"
-              value={aiDesignPrompt}
-              onChange={(e) => setAiDesignPrompt(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleApplyAiDesign();
-              }}
-              placeholder="どんな雰囲気の資料にしたいですか？（例：『防衛省の極秘調査報告書風』『神社の古い和紙の伝承記録風』『緊急の通信傍受ログ風』）"
-              className="flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
-            />
-            <button
-              onClick={() => handleApplyAiDesign()}
-              className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shrink-0 shadow"
-            >
-              ✨ デザイン枠を適用
-            </button>
-          </div>
-
-          {/* ワンクリック・デザイン着せ替えチップ */}
-          <div className="flex flex-wrap items-center gap-1.5">
-            <span className="text-[11px] text-slate-400 mr-1">枠テーマ切替:</span>
-            {(
-              [
-                ["classified_dossier", "📁 極秘指令書"],
-                ["official_report", "🏛️ 公文書・報告書"],
-                ["ancient_scroll", "📜 古文書・手記"],
-                ["digital_telemetry", "📡 通信・観測データ"],
-                ["medical_forensic", "🔬 鑑定・カルテ"],
-                ["gm_tactical_binder", "📋 GM進行表"],
-              ] as [DocumentThemeId, string][]
-            ).map(([tId, label]) => (
+      {/* 2. サブバー：個人ハンドアウト時は「本紙 vs 別配付カード切替」、それ以外は「Gemini AI デザイン着せ替えバー」 */}
+      {category === "handouts" ? (
+        <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <span className="text-xs font-bold text-slate-300">表示・印刷対象：</span>
+            <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
               <button
-                key={tId}
-                onClick={() => handleSelectThemePreset(tId)}
-                className={`rounded-md px-2.5 py-1 text-[11px] font-bold transition ${
-                  currentDesign.themeId === tId
-                    ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
-                    : "border border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700 hover:text-white"
+                onClick={() => setHandoutViewMode("sheet")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  handoutViewMode === "sheet"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                {label}
+                📄 個人ハンドアウト本紙（6つの構成要素）
               </button>
-            ))}
-
-            <button
-              onClick={() => setIsDesignCustomizerOpen(!isDesignCustomizerOpen)}
-              className={`ml-1 flex items-center gap-1 rounded-md border px-2.5 py-1 text-[11px] font-bold transition ${
-                isDesignCustomizerOpen
-                  ? "border-amber-500/60 bg-amber-950/60 text-amber-200"
-                  : "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
-              }`}
-            >
-              <Palette className="h-3 w-3 text-amber-400" />
-              細かい枠・色・スタンプ調整
-            </button>
+              <button
+                onClick={() => setHandoutViewMode("cards")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  handoutViewMode === "cards"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                🃏 別配付カード（初期所持品・携行アイテム ／ 固有能力・専門スキル）
+              </button>
+            </div>
           </div>
+          <span className="text-[11px] text-slate-400">
+            ※個人ハンドアウトは特別なテーマ装飾を省き、読みやすい標準構成にまとめています
+          </span>
         </div>
-
-        {/* AIデザイン適用フィードバック */}
-        {aiDesignFeedback && (
-          <div className="mt-2 flex items-center justify-between rounded-lg border border-indigo-500/30 bg-indigo-950/40 px-3 py-1.5 text-xs text-indigo-200">
-            <span>✨ {aiDesignFeedback}</span>
-            <button
-              onClick={() => setAiDesignFeedback("")}
-              className="text-slate-400 hover:text-white ml-4"
-            >
-              ✕
-            </button>
-          </div>
-        )}
-
-        {/* 詳細デザイン枠カスタマイザー（開閉式） */}
-        {isDesignCustomizerOpen && (
-          <div className="mt-3 grid grid-cols-1 gap-3 rounded-xl border border-slate-800 bg-slate-950/90 p-3 md:grid-cols-5">
-            {/* 色調 */}
-            <div>
-              <label className="mb-1 block text-[11px] font-bold text-slate-400">
-                🎨 アクセント色調
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {(
-                  [
-                    ["indigo", "濃紺", "bg-indigo-700"],
-                    ["crimson", "機密赤", "bg-rose-700"],
-                    ["amber", "古文書琥珀", "bg-amber-700"],
-                    ["cyan", "通信シアン", "bg-cyan-700"],
-                    ["emerald", "鑑定緑", "bg-emerald-700"],
-                    ["slate", "モノトーン", "bg-slate-700"],
-                  ] as [DocumentAccentColor, string, string][]
-                ).map(([colorKey, label, dotClass]) => (
-                  <button
-                    key={colorKey}
-                    onClick={() => handleUpdateDesign({ accentColor: colorKey })}
-                    className={`flex items-center gap-1 rounded px-2 py-1 text-[11px] font-semibold border transition ${
-                      currentDesign.accentColor === colorKey
-                        ? "border-white bg-slate-800 text-white"
-                        : "border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <span className={`h-2.5 w-2.5 rounded-full ${dotClass}`} />
-                    {label}
-                  </button>
-                ))}
+      ) : (
+        <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex flex-1 items-center gap-2 min-w-[320px]">
+              <div className="flex items-center gap-1.5 rounded-lg bg-indigo-600/20 border border-indigo-500/40 px-2.5 py-1 text-xs font-bold text-indigo-300 shrink-0">
+                <Sparkles className="h-3.5 w-3.5 text-indigo-400" />
+                Gemini デザイン枠生成
               </div>
-            </div>
-
-            {/* 用紙の質感 */}
-            <div>
-              <label className="mb-1 block text-[11px] font-bold text-slate-400">
-                📄 用紙・背景テクスチャ
-              </label>
-              <select
-                value={currentDesign.paperStyle}
-                onChange={(e) =>
-                  handleUpdateDesign({ paperStyle: e.target.value as DocumentPaperStyle })
-                }
-                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
-              >
-                <option value="clean_white">クリアホワイト（標準A4紙）</option>
-                <option value="dossier_cream">機密ファイル・クリーム紙</option>
-                <option value="warm_parchment">古文書・和紙羊皮紙トーン</option>
-                <option value="blueprint_grid">科学解析・方眼レポート紙</option>
-              </select>
-            </div>
-
-            {/* 飾り枠・ボーダー */}
-            <div>
-              <label className="mb-1 block text-[11px] font-bold text-slate-400">
-                🖼️ 外枠（フレーム）装飾
-              </label>
-              <select
-                value={currentDesign.borderStyle}
-                onChange={(e) =>
-                  handleUpdateDesign({ borderStyle: e.target.value as DocumentBorderStyle })
-                }
-                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
-              >
-                <option value="double_official">公文書二重枠（公式・重厚）</option>
-                <option value="classic_ornament">古典飾り罫（伝承・手記）</option>
-                <option value="tech_corner">テクニカル枠（通信・科学）</option>
-                <option value="hazard_stripe">緊急ハザード帯（現場報告）</option>
-                <option value="minimal_line">ミニマル細線（モダン）</option>
-              </select>
-            </div>
-
-            {/* 書体（フォント） */}
-            <div>
-              <label className="mb-1 block text-[11px] font-bold text-slate-400">
-                🔤 本文・見出し書体
-              </label>
-              <div className="flex gap-1.5">
-                {(
-                  [
-                    ["sans", "ゴシック体"],
-                    ["serif", "明朝体"],
-                    ["mono", "等幅通信体"],
-                  ] as ["sans" | "serif" | "mono", string][]
-                ).map(([fKey, fLabel]) => (
-                  <button
-                    key={fKey}
-                    onClick={() => handleUpdateDesign({ fontFamily: fKey })}
-                    className={`flex-1 rounded-lg border px-2 py-1.5 text-xs font-bold transition ${
-                      currentDesign.fontFamily === fKey
-                        ? "border-indigo-500 bg-indigo-600 text-white"
-                        : "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
-                    }`}
-                  >
-                    {fLabel}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* スタンプ印字 */}
-            <div>
-              <label className="mb-1 block text-[11px] font-bold text-slate-400">
-                💮 スタンプ印字文言
-              </label>
               <input
                 type="text"
-                value={currentDesign.stampText}
-                onChange={(e) => handleUpdateDesign({ stampText: e.target.value })}
-                placeholder="例: 極秘 / TOP SECRET"
-                className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
+                value={aiDesignPrompt}
+                onChange={(e) => setAiDesignPrompt(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") handleApplyAiDesign();
+                }}
+                placeholder="どんな雰囲気の資料にしたいですか？（例：『防衛省の極秘調査報告書風』『神社の古い和紙の伝承記録風』『緊急の通信傍受ログ風』）"
+                className="flex-1 rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 text-xs text-slate-100 placeholder-slate-500 focus:border-indigo-500 focus:outline-none"
               />
+              <button
+                onClick={() => handleApplyAiDesign()}
+                className="rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shrink-0 shadow"
+              >
+                ✨ デザイン枠を適用
+              </button>
+            </div>
+
+            {/* ワンクリック・デザイン着せ替えチップ */}
+            <div className="flex flex-wrap items-center gap-1.5">
+              <span className="text-[11px] text-slate-400 mr-1">枠テーマ切替:</span>
+              {(
+                [
+                  ["classified_dossier", "📁 極秘指令書"],
+                  ["official_report", "🏛️ 公文書・報告書"],
+                  ["ancient_scroll", "📜 古文書・手記"],
+                  ["digital_telemetry", "📡 通信・観測データ"],
+                  ["medical_forensic", "🔬 鑑定・カルテ"],
+                  ["gm_tactical_binder", "📋 GM進行表"],
+                ] as [DocumentThemeId, string][]
+              ).map(([tId, label]) => (
+                <button
+                  key={tId}
+                  onClick={() => handleSelectThemePreset(tId)}
+                  className={`rounded-md px-2.5 py-1 text-[11px] font-bold transition ${
+                    currentDesign.themeId === tId
+                      ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400"
+                      : "border border-slate-800 bg-slate-950 text-slate-300 hover:border-slate-700 hover:text-white"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setIsDesignCustomizerOpen(!isDesignCustomizerOpen)}
+                className={`ml-1 flex items-center gap-1 rounded-md border px-2.5 py-1 text-[11px] font-bold transition ${
+                  isDesignCustomizerOpen
+                    ? "border-amber-500/60 bg-amber-950/60 text-amber-200"
+                    : "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
+                }`}
+              >
+                <Palette className="h-3 w-3 text-amber-400" />
+                細かい枠・色・スタンプ調整
+              </button>
             </div>
           </div>
-        )}
-      </div>
+
+          {/* AIデザイン適用フィードバック */}
+          {aiDesignFeedback && (
+            <div className="mt-2 flex items-center justify-between rounded-lg border border-indigo-500/30 bg-indigo-950/40 px-3 py-1.5 text-xs text-indigo-200">
+              <span>✨ {aiDesignFeedback}</span>
+              <button
+                onClick={() => setAiDesignFeedback("")}
+                className="text-slate-400 hover:text-white ml-4"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
+          {/* 詳細デザイン枠カスタマイザー（開閉式） */}
+          {isDesignCustomizerOpen && (
+            <div className="mt-3 grid grid-cols-1 gap-3 rounded-xl border border-slate-800 bg-slate-950/90 p-3 md:grid-cols-5">
+              {/* 色調 */}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-slate-400">
+                  🎨 アクセント色調
+                </label>
+                <div className="flex flex-wrap gap-1.5">
+                  {(
+                    [
+                      ["indigo", "濃紺", "bg-indigo-700"],
+                      ["crimson", "機密赤", "bg-rose-700"],
+                      ["amber", "古文書琥珀", "bg-amber-700"],
+                      ["cyan", "通信シアン", "bg-cyan-700"],
+                      ["emerald", "鑑定緑", "bg-emerald-700"],
+                      ["slate", "モノトーン", "bg-slate-700"],
+                    ] as [DocumentAccentColor, string, string][]
+                  ).map(([colorKey, label, dotClass]) => (
+                    <button
+                      key={colorKey}
+                      onClick={() => handleUpdateDesign({ accentColor: colorKey })}
+                      className={`flex items-center gap-1 rounded px-2 py-1 text-[11px] font-semibold border transition ${
+                        currentDesign.accentColor === colorKey
+                          ? "border-white bg-slate-800 text-white"
+                          : "border-slate-800 bg-slate-900 text-slate-400 hover:text-white"
+                      }`}
+                    >
+                      <span className={`h-2.5 w-2.5 rounded-full ${dotClass}`} />
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* 用紙の質感 */}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-slate-400">
+                  📄 用紙・背景テクスチャ
+                </label>
+                <select
+                  value={currentDesign.paperStyle}
+                  onChange={(e) =>
+                    handleUpdateDesign({ paperStyle: e.target.value as DocumentPaperStyle })
+                  }
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
+                >
+                  <option value="clean_white">クリアホワイト（標準A4紙）</option>
+                  <option value="dossier_cream">機密ファイル・クリーム紙</option>
+                  <option value="warm_parchment">古文書・和紙羊皮紙トーン</option>
+                  <option value="blueprint_grid">科学解析・方眼レポート紙</option>
+                </select>
+              </div>
+
+              {/* 飾り枠・ボーダー */}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-slate-400">
+                  🖼️ 外枠（フレーム）装飾
+                </label>
+                <select
+                  value={currentDesign.borderStyle}
+                  onChange={(e) =>
+                    handleUpdateDesign({ borderStyle: e.target.value as DocumentBorderStyle })
+                  }
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
+                >
+                  <option value="double_official">公文書二重枠（公式・重厚）</option>
+                  <option value="classic_ornament">古典飾り罫（伝承・手記）</option>
+                  <option value="tech_corner">テクニカル枠（通信・科学）</option>
+                  <option value="hazard_stripe">緊急ハザード帯（現場報告）</option>
+                  <option value="minimal_line">ミニマル細線（モダン）</option>
+                </select>
+              </div>
+
+              {/* 書体（フォント） */}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-slate-400">
+                  🔤 本文・見出し書体
+                </label>
+                <div className="flex gap-1.5">
+                  {(
+                    [
+                      ["sans", "ゴシック体"],
+                      ["serif", "明朝体"],
+                      ["mono", "等幅通信体"],
+                    ] as ["sans" | "serif" | "mono", string][]
+                  ).map(([fKey, fLabel]) => (
+                    <button
+                      key={fKey}
+                      onClick={() => handleUpdateDesign({ fontFamily: fKey })}
+                      className={`flex-1 rounded-lg border px-2 py-1.5 text-xs font-bold transition ${
+                        currentDesign.fontFamily === fKey
+                          ? "border-indigo-500 bg-indigo-600 text-white"
+                          : "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
+                      }`}
+                    >
+                      {fLabel}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* スタンプ印字 */}
+              <div>
+                <label className="mb-1 block text-[11px] font-bold text-slate-400">
+                  💮 スタンプ印字文言
+                </label>
+                <input
+                  type="text"
+                  value={currentDesign.stampText}
+                  onChange={(e) => handleUpdateDesign({ stampText: e.target.value })}
+                  placeholder="例: 極秘 / TOP SECRET"
+                  className="w-full rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-100"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* 3. メイン作業エリア：左サイドバー（資料リスト選択）＋ 右メインキャンバス（デザイン内直接編集シート） */}
       <div className="grid flex-1 grid-cols-12 overflow-hidden">
         {/* 左サイドバー：カテゴリー内の資料一覧 */}
         <div className="col-span-3 flex flex-col border-r border-slate-800 bg-slate-900/50 p-4 overflow-y-auto">
-          {/* ① 個人ハンドアウト選択リスト */}
+          {/* ① 個人ハンドアウト ＆ 別配付カード選択リスト */}
           {category === "handouts" && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
@@ -1382,23 +1414,35 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </h3>
               </div>
 
-              {/* プレイヤー配布用 / GMガイド表示トグル */}
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5">
-                <label className="flex items-center justify-between cursor-pointer text-xs">
-                  <span className="font-semibold text-slate-300">
-                    GM用誘導メモ枠をシート下部に含める
-                  </span>
-                  <input
-                    type="checkbox"
-                    checked={showGmGuideInHo}
-                    onChange={(e) => setShowGmGuideInHo(e.target.checked)}
-                    className="h-4 w-4 rounded border-slate-700 bg-slate-900 text-indigo-600"
-                  />
-                </label>
-                <p className="mt-1 text-[10px] text-slate-500">
-                  ※プレイヤーに配る際はOFF（非表示）のまま印刷してください
-                </p>
+              {/* 本紙（6項目） vs 別配付カード（所持品・能力）切替 */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  onClick={() => setHandoutViewMode("sheet")}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-bold transition ${
+                    handoutViewMode === "sheet"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📄 ハンドアウト本紙
+                </button>
+                <button
+                  onClick={() => setHandoutViewMode("cards")}
+                  className={`rounded-md px-2 py-1.5 text-[11px] font-bold transition ${
+                    handoutViewMode === "cards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🃏 所持品・能力カード
+                </button>
               </div>
+
+              <p className="text-[10px] text-slate-400 leading-relaxed">
+                {handoutViewMode === "sheet"
+                  ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
+                  : "ハンドアウト本紙とは別に各プレイヤーへ配る「初期所持品」「固有能力」のカードシートです。"}
+              </p>
 
               <div className="space-y-2">
                 {project.characters.map((c, idx) => {
@@ -1416,14 +1460,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-mono font-bold text-indigo-400">
                           PC-{idx + 1} /{" "}
-                          {c.location === "headquarters" ? "司令部・後方" : "現地・フィールド"}
+                          {c.location === "headquarters" ? "東京本庁・対策本部" : "小笠原・現地救難隊"}
                         </span>
                         <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">
-                          {
-                            THEME_PRESETS[
-                              getDesignForKey(project, `ho-${c.id}`, "handouts").themeId
-                            ]?.badge
-                          }
+                          所持品{(c.initialItems || []).length}・能力{(c.capabilities || []).length}
                         </span>
                       </div>
                       <div className="mt-1 font-bold text-sm text-white">{c.name}</div>
@@ -1646,282 +1686,388 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
              ==================================================================== */}
           <div
             ref={printableSheetRef}
-            className={`mx-auto max-w-4xl rounded-sm p-8 md:p-12 transition-all ${paper.className} ${fontClass} ${getBorderFrameClasses()} relative`}
+            className={`mx-auto max-w-4xl rounded-sm p-8 md:p-12 transition-all ${
+              category === "handouts"
+                ? "bg-white text-slate-900 border border-slate-300 shadow-lg font-sans"
+                : `${paper.className} ${fontClass} ${getBorderFrameClasses()}`
+            } relative`}
           >
             {/* ----------------------------------------------------------------
-                共通ドキュメントヘッダー（発令機関・文書番号・斜めスタンプ）
+                共通ドキュメントヘッダー（証拠資料・全体提示・GM資料のみ表示。個人ハンドアウトは特別なテーマ不要のため非表示）
                ---------------------------------------------------------------- */}
-            <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div className="flex-1">
-                  {/* 発令機関ヘッダー（直接編集可能） */}
-                  <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-80">
-                    <Building2 className="h-3.5 w-3.5 shrink-0" />
+            {category !== "handouts" && (
+              <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
+                <div className="flex flex-wrap items-start justify-between gap-4">
+                  <div className="flex-1">
+                    {/* 発令機関ヘッダー（直接編集可能） */}
+                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-80">
+                      <Building2 className="h-3.5 w-3.5 shrink-0" />
+                      {isDirectEditMode ? (
+                        <input
+                          type="text"
+                          value={currentDesign.organizationHeader}
+                          onChange={(e) =>
+                            handleUpdateDesign({ organizationHeader: e.target.value })
+                          }
+                          className="w-full max-w-md border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 text-xs font-bold tracking-widest focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
+                          title="クリックして発令機関・ヘッダー名を直接編集"
+                        />
+                      ) : (
+                        <span>{currentDesign.organizationHeader}</span>
+                      )}
+                    </div>
+
+                    {/* 文書コード・シナリオ名 */}
+                    <div className="mt-1 flex items-center gap-3 text-[11px] font-mono opacity-70">
+                      <span>FILE:</span>
+                      {isDirectEditMode ? (
+                        <input
+                          type="text"
+                          value={currentDesign.documentCode}
+                          onChange={(e) => handleUpdateDesign({ documentCode: e.target.value })}
+                          className="w-40 border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 font-mono text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
+                          title="文書管理番号を直接編集"
+                        />
+                      ) : (
+                        <span>{currentDesign.documentCode}</span>
+                      )}
+                      <span>｜</span>
+                      <span>PROJECT: {project.title}</span>
+                    </div>
+                  </div>
+
+                  {/* 斜めスタンプ枠（直接編集可能） */}
+                  <div
+                    className={`rotate-[-4deg] border-2 px-3 py-1 text-center font-extrabold tracking-widest uppercase shadow-sm ${accent.stampBorder} ${accent.stampText}`}
+                  >
                     {isDirectEditMode ? (
                       <input
                         type="text"
-                        value={currentDesign.organizationHeader}
-                        onChange={(e) =>
-                          handleUpdateDesign({ organizationHeader: e.target.value })
-                        }
-                        className="w-full max-w-md border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 text-xs font-bold tracking-widest focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                        title="クリックして発令機関・ヘッダー名を直接編集"
+                        value={currentDesign.stampText}
+                        onChange={(e) => handleUpdateDesign({ stampText: e.target.value })}
+                        className="w-44 bg-transparent text-center text-xs font-extrabold uppercase tracking-widest focus:bg-white/50 focus:outline-none"
+                        title="スタンプの文言を直接編集"
                       />
                     ) : (
-                      <span>{currentDesign.organizationHeader}</span>
+                      <span className="text-xs">{currentDesign.stampText}</span>
                     )}
-                  </div>
-
-                  {/* 文書コード・シナリオ名 */}
-                  <div className="mt-1 flex items-center gap-3 text-[11px] font-mono opacity-70">
-                    <span>FILE:</span>
-                    {isDirectEditMode ? (
-                      <input
-                        type="text"
-                        value={currentDesign.documentCode}
-                        onChange={(e) => handleUpdateDesign({ documentCode: e.target.value })}
-                        className="w-40 border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 font-mono text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                        title="文書管理番号を直接編集"
-                      />
-                    ) : (
-                      <span>{currentDesign.documentCode}</span>
-                    )}
-                    <span>｜</span>
-                    <span>PROJECT: {project.title}</span>
                   </div>
                 </div>
 
-                {/* 斜めスタンプ枠（直接編集可能） */}
-                <div
-                  className={`rotate-[-4deg] border-2 px-3 py-1 text-center font-extrabold tracking-widest uppercase shadow-sm ${accent.stampBorder} ${accent.stampText}`}
-                >
-                  {isDirectEditMode ? (
-                    <input
-                      type="text"
-                      value={currentDesign.stampText}
-                      onChange={(e) => handleUpdateDesign({ stampText: e.target.value })}
-                      className="w-44 bg-transparent text-center text-xs font-extrabold uppercase tracking-widest focus:bg-white/50 focus:outline-none"
-                      title="スタンプの文言を直接編集"
-                    />
-                  ) : (
-                    <span className="text-xs">{currentDesign.stampText}</span>
-                  )}
-                </div>
+                {/* 公文書テーマの場合の3連承認印欄 */}
+                {currentDesign.themeId === "official_report" && (
+                  <div className="mt-3 flex justify-end">
+                    <div className="grid grid-cols-3 border border-slate-400 text-center text-[10px]">
+                      <div className="border-r border-slate-400 px-3 py-1">
+                        <div className="border-b border-slate-300 pb-0.5 font-bold">最高責任者</div>
+                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
+                          承認済
+                        </div>
+                      </div>
+                      <div className="border-r border-slate-400 px-3 py-1">
+                        <div className="border-b border-slate-300 pb-0.5 font-bold">情報分析官</div>
+                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
+                          検印
+                        </div>
+                      </div>
+                      <div className="px-3 py-1">
+                        <div className="border-b border-slate-300 pb-0.5 font-bold">記録担当</div>
+                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
+                          登録
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-
-              {/* 公文書テーマの場合の3連承認印欄 */}
-              {currentDesign.themeId === "official_report" && (
-                <div className="mt-3 flex justify-end">
-                  <div className="grid grid-cols-3 border border-slate-400 text-center text-[10px]">
-                    <div className="border-r border-slate-400 px-3 py-1">
-                      <div className="border-b border-slate-300 pb-0.5 font-bold">最高責任者</div>
-                      <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                        承認済
-                      </div>
-                    </div>
-                    <div className="border-r border-slate-400 px-3 py-1">
-                      <div className="border-b border-slate-300 pb-0.5 font-bold">情報分析官</div>
-                      <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                        検印
-                      </div>
-                    </div>
-                    <div className="px-3 py-1">
-                      <div className="border-b border-slate-300 pb-0.5 font-bold">記録担当</div>
-                      <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                        登録
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            )}
 
             {/* ================================================================
-                ① 個人向けハンドアウト（PC配布資料）のデザイン＆直接編集ビュー
+                ① 個人向けハンドアウト（6項目シンプル本紙 ＆ 別配付カード）
                ================================================================ */}
             {category === "handouts" && activeChar && (
               <div className="space-y-6">
-                {/* キャラクタータイトル帯 */}
-                <div className={`rounded-md p-5 ${accent.headerBg} ${accent.headerText} shadow`}>
-                  <div className="flex flex-wrap items-center justify-between gap-2">
-                    <span className="rounded bg-white/15 px-2.5 py-0.5 text-xs font-mono font-bold tracking-wider">
-                      PLAYER HANDOUT / 個人別極秘ブリーフィング資料
-                    </span>
-                    <span className="text-xs opacity-85">
-                      初期配置：
-                      {activeChar.location === "headquarters"
-                        ? "🏢 司令部・後方拠点"
-                        : "⚓ 現地・フィールド拠点"}
-                    </span>
-                  </div>
-
-                  {/* キャラクター名 ＆ 肩書（直接編集可能） */}
-                  <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-2">
-                    <div>
-                      <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                        氏名 / キャラクター名
+                {handoutViewMode === "sheet" ? (
+                  /* ------------------------------------------------------------
+                     📄 個人ハンドアウト本紙（特別なテーマ装飾なし・6つの構成要素のみ）
+                     ------------------------------------------------------------ */
+                  <div className="space-y-5">
+                    {/* シンプルなシート見出し */}
+                    <div className="border-b-2 border-slate-800 pb-3 flex items-baseline justify-between">
+                      <span className="text-xs font-bold tracking-widest text-slate-500">
+                        {project.title} ― 個人ハンドアウト
                       </span>
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={activeChar.name}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
-                          }
-                          className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-xl font-bold text-white focus:border-white focus:bg-white/20 focus:outline-none"
-                        />
-                      ) : (
-                        <h1 className="text-2xl font-bold">{activeChar.name}</h1>
-                      )}
+                      <span className="text-xs text-slate-500">
+                        配置拠点：
+                        {activeChar.location === "headquarters"
+                          ? "東京本庁・対策本部"
+                          : "小笠原・現地救難隊"}
+                      </span>
                     </div>
-                    <div>
-                      <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                        所属・職業・肩書
-                      </span>
+
+                    {/* 1. 役割 ＆ 2. 所属・肩書・職業 */}
+                    <div className="grid grid-cols-1 gap-4 rounded-md border border-slate-300 bg-slate-50/70 p-4 md:grid-cols-2">
+                      <div>
+                        <div className="mb-1 text-xs font-bold text-slate-600">
+                          ■ 役割
+                        </div>
+                        {isDirectEditMode ? (
+                          <input
+                            type="text"
+                            value={activeChar.name}
+                            onChange={(e) =>
+                              handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
+                            }
+                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-lg font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
+                          />
+                        ) : (
+                          <div className="text-lg font-bold text-slate-900">{activeChar.name}</div>
+                        )}
+                      </div>
+
+                      <div>
+                        <div className="mb-1 text-xs font-bold text-slate-600">
+                          ■ 所属・肩書・職業
+                        </div>
+                        {isDirectEditMode ? (
+                          <input
+                            type="text"
+                            value={activeChar.profession}
+                            onChange={(e) =>
+                              handleUpdateActiveChar((c) => ({
+                                ...c,
+                                profession: e.target.value,
+                              }))
+                            }
+                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
+                          />
+                        ) : (
+                          <div className="text-sm font-semibold text-slate-900 mt-1">
+                            {activeChar.profession}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 3. 全員に公開できるプロフィール */}
+                    <div className="rounded-md border border-slate-300 bg-white p-4">
+                      <h3 className="mb-2 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
+                        ■ 全員に公開できるプロフィール
+                      </h3>
                       {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={activeChar.profession}
+                        <textarea
+                          rows={2}
+                          value={activeChar.handout.publicProfile}
                           onChange={(e) =>
                             handleUpdateActiveChar((c) => ({
                               ...c,
-                              profession: e.target.value,
+                              handout: { ...c.handout, publicProfile: e.target.value },
                             }))
                           }
-                          className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-base font-semibold text-white focus:border-white focus:bg-white/20 focus:outline-none"
+                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
                         />
                       ) : (
-                        <div className="mt-1 text-base font-semibold opacity-95">
-                          {activeChar.profession}
+                        <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                          {activeChar.handout.publicProfile}
+                        </p>
+                      )}
+                    </div>
+
+                    {/* 4. あなたの内面（公開されないもの）・行動指針 */}
+                    <div className="rounded-md border border-slate-300 bg-white p-4">
+                      <h3 className="mb-3 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
+                        ■ あなたの内面（公開されないもの）・行動指針
+                      </h3>
+                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+                        <div className="rounded border border-slate-200 bg-slate-50/70 p-3">
+                          <div className="mb-1 text-[11px] font-bold text-slate-700">
+                            ・誇り・信条・行動指針
+                          </div>
+                          {isDirectEditMode ? (
+                            <textarea
+                              rows={3}
+                              value={activeChar.handout.internalDrama.pride}
+                              onChange={(e) =>
+                                handleUpdateActiveChar((c) => ({
+                                  ...c,
+                                  handout: {
+                                    ...c.handout,
+                                    internalDrama: {
+                                      ...c.handout.internalDrama,
+                                      pride: e.target.value,
+                                    },
+                                  },
+                                }))
+                              }
+                              className="w-full rounded border border-dashed border-slate-300 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                            />
+                          ) : (
+                            <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                              {activeChar.handout.internalDrama.pride}
+                            </p>
+                          )}
+                        </div>
+
+                        <div className="rounded border border-slate-200 bg-slate-50/70 p-3">
+                          <div className="mb-1 text-[11px] font-bold text-slate-700">
+                            ・過去の喪失・悔恨
+                          </div>
+                          {isDirectEditMode ? (
+                            <textarea
+                              rows={3}
+                              value={activeChar.handout.internalDrama.loss}
+                              onChange={(e) =>
+                                handleUpdateActiveChar((c) => ({
+                                  ...c,
+                                  handout: {
+                                    ...c.handout,
+                                    internalDrama: {
+                                      ...c.handout.internalDrama,
+                                      loss: e.target.value,
+                                    },
+                                  },
+                                }))
+                              }
+                              className="w-full rounded border border-dashed border-slate-300 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                            />
+                          ) : (
+                            <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                              {activeChar.handout.internalDrama.loss}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* 5. あなたの記憶 */}
+                    <div className="rounded-md border border-slate-300 bg-white p-4">
+                      <h3 className="mb-2 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
+                        ■ あなたの記憶
+                      </h3>
+                      {isDirectEditMode ? (
+                        <textarea
+                          rows={5}
+                          value={activeChar.introduction}
+                          onChange={(e) =>
+                            handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
+                          }
+                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                        />
+                      ) : (
+                        <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                          {activeChar.introduction}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 6. 自己紹介 */}
+                    <div className="rounded-md border border-slate-300 bg-white p-4">
+                      <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1.5">
+                        <h3 className="text-xs font-bold text-slate-800">
+                          ■ 自己紹介
+                        </h3>
+                        {onSendAiPrompt && (
+                          <button
+                            onClick={() =>
+                              onSendAiPrompt(
+                                `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout.handoutBody}`
+                              )
+                            }
+                            className="no-print flex items-center gap-1 rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
+                          >
+                            <Sparkles className="h-3 w-3" />
+                            AIチャットで推敲する
+                          </button>
+                        )}
+                      </div>
+                      {isDirectEditMode ? (
+                        <textarea
+                          rows={6}
+                          value={activeChar.handout.handoutBody}
+                          onChange={(e) =>
+                            handleUpdateActiveChar((c) => ({
+                              ...c,
+                              handout: { ...c.handout, handoutBody: e.target.value },
+                            }))
+                          }
+                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                        />
+                      ) : (
+                        <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                          {activeChar.handout.handoutBody}
                         </div>
                       )}
                     </div>
                   </div>
-                </div>
-
-                {/* 公開プロフィール枠 */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/70`}>
-                  <div
-                    className={`mb-2 inline-flex items-center gap-1.5 rounded px-2 py-0.5 text-xs font-bold ${accent.badgeBg} ${accent.badgeText}`}
-                  >
-                    <Users className="h-3.5 w-3.5" />
-                    【公開プロフィール（全員に開示される情報）】
-                  </div>
-                  {isDirectEditMode ? (
-                    <textarea
-                      rows={3}
-                      value={activeChar.handout.publicProfile}
-                      onChange={(e) =>
-                        handleUpdateActiveChar((c) => ({
-                          ...c,
-                          handout: { ...c.handout, publicProfile: e.target.value },
-                        }))
-                      }
-                      className="w-full rounded border border-dashed border-slate-400 bg-white/80 p-2 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                    />
-                  ) : (
-                    <p className="whitespace-pre-wrap text-xs leading-relaxed">
-                      {activeChar.handout.publicProfile}
-                    </p>
-                  )}
-                </div>
-
-                {/* キャラクター内面ドラマ（誇り・喪失体験） */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/60`}>
-                  <h3
-                    className={`mb-3 border-b pb-1.5 text-xs font-bold uppercase tracking-wider ${accent.sectionTitleText} ${accent.borderSub}`}
-                  >
-                    ■ あなたの内面・行動指針（ロールプレイの核）
-                  </h3>
-                  <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                    <div className="rounded border border-slate-300/80 bg-white/80 p-3">
-                      <div className="mb-1 text-[11px] font-bold text-indigo-900">
-                        ✦ 誇り・自負 (Pride)
+                ) : (
+                  /* ------------------------------------------------------------
+                     🃏 別配付カードシート（初期所持品・携行アイテム ＆ 固有能力・専門スキル）
+                     ------------------------------------------------------------ */
+                  <div className="space-y-6">
+                    <div className="border-b-2 border-slate-800 pb-3 flex items-baseline justify-between">
+                      <div>
+                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                          {project.title} ― 個人別配付カードシート（切り取り配布用）
+                        </span>
+                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                          {activeChar.name}（{activeChar.profession}）配布カード一覧
+                        </h2>
                       </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={3}
-                          value={activeChar.handout.internalDrama.pride}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              handout: {
-                                ...c.handout,
-                                internalDrama: {
-                                  ...c.handout.internalDrama,
-                                  pride: e.target.value,
-                                },
-                              },
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                        />
-                      ) : (
-                        <p className="whitespace-pre-wrap text-xs leading-relaxed">
-                          {activeChar.handout.internalDrama.pride}
-                        </p>
-                      )}
-                    </div>
-
-                    <div className="rounded border border-slate-300/80 bg-white/80 p-3">
-                      <div className="mb-1 text-[11px] font-bold text-amber-900">
-                        ✦ 喪失体験・過去 (Loss)
-                      </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={3}
-                          value={activeChar.handout.internalDrama.loss}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              handout: {
-                                ...c.handout,
-                                internalDrama: {
-                                  ...c.handout.internalDrama,
-                                  loss: e.target.value,
-                                },
-                              },
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                        />
-                      ) : (
-                        <p className="whitespace-pre-wrap text-xs leading-relaxed">
-                          {activeChar.handout.internalDrama.loss}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                {/* 初期所持品 ＆ 固有能力（2カラムボックス） */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-12">
-                  {/* 初期所持品 */}
-                  <div className={`md:col-span-5 rounded-md border p-4 ${accent.borderSub} bg-white/70`}>
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className={`text-xs font-bold ${accent.sectionTitleText}`}>
-                        ■ 初期所持品・携行アイテム
+                      <span className="text-xs text-slate-500">
+                        ※点線に沿って切り取り、ハンドアウト本紙とは別に配布してください
                       </span>
-                      {isDirectEditMode && (
-                        <button
-                          onClick={() =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              initialItems: [...(c.initialItems || []), "新規所持品アイテム"],
-                            }))
-                          }
-                          className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
-                        >
-                          ＋ 追加
-                        </button>
-                      )}
                     </div>
-                    <ul className="space-y-1.5">
-                      {(activeChar.initialItems || []).map((item, iIdx) => (
-                        <li key={iIdx} className="flex items-center gap-1.5 text-xs">
-                          <span className="font-bold">・</span>
-                          {isDirectEditMode ? (
-                            <>
+
+                    {/* 初期所持品・携行アイテムカード一覧 */}
+                    <div className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold text-slate-800">
+                          ■ 初期所持品・携行アイテムカード（{(activeChar.initialItems || []).length}枚）
+                        </h3>
+                        {isDirectEditMode && (
+                          <button
+                            onClick={() =>
+                              handleUpdateActiveChar((c) => ({
+                                ...c,
+                                initialItems: [...(c.initialItems || []), "新規所持品アイテム"],
+                              }))
+                            }
+                            className="no-print rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
+                          >
+                            ＋ 所持品カードを追加
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {(activeChar.initialItems || []).map((item, iIdx) => (
+                          <div
+                            key={iIdx}
+                            className="rounded-md border-2 border-dashed border-slate-400 bg-white p-4 shadow-sm"
+                          >
+                            <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1 text-[10px] font-bold text-slate-500">
+                              <span>【初期所持品・携行アイテム】 {activeChar.name}</span>
+                              <div className="flex items-center gap-2">
+                                <span className="font-mono">ITEM-{iIdx + 1}</span>
+                                {isDirectEditMode && (
+                                  <button
+                                    onClick={() =>
+                                      handleUpdateActiveChar((c) => ({
+                                        ...c,
+                                        initialItems: c.initialItems.filter(
+                                          (_, idx) => idx !== iIdx
+                                        ),
+                                      }))
+                                    }
+                                    className="no-print text-slate-400 hover:text-red-600"
+                                    title="この所持品カードを削除"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
+                                )}
+                              </div>
+                            </div>
+                            {isDirectEditMode ? (
                               <input
                                 type="text"
                                 value={item}
@@ -1933,261 +2079,139 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                     initialItems: nextItems,
                                   }));
                                 }}
-                                className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-900 focus:border-indigo-600 focus:outline-none"
+                                className="w-full rounded border border-dashed border-slate-300 bg-slate-50 px-2.5 py-1.5 text-sm font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
                               />
-                              <button
-                                onClick={() =>
-                                  handleUpdateActiveChar((c) => ({
-                                    ...c,
-                                    initialItems: c.initialItems.filter((_, idx) => idx !== iIdx),
-                                  }))
-                                }
-                                className="no-print text-slate-400 hover:text-red-600"
-                                title="この所持品を削除"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
-                            </>
-                          ) : (
-                            <span>{item}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* 固有能力・できること */}
-                  <div className={`md:col-span-7 rounded-md border p-4 ${accent.borderSub} bg-white/70`}>
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className={`text-xs font-bold ${accent.sectionTitleText}`}>
-                        ■ 固有能力・専門スキル（各フェーズで実行可能な権限）
-                      </span>
-                      {isDirectEditMode && (
-                        <button
-                          onClick={() =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              capabilities: [
-                                ...(c.capabilities || []),
-                                {
-                                  id: `cap-${Date.now()}`,
-                                  name: "新規専門スキル",
-                                  description: "スキルの効果・調査内容を記載",
-                                  targetPhase: 1,
-                                },
-                              ],
-                            }))
-                          }
-                          className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
-                        >
-                          ＋ 能力追加
-                        </button>
-                      )}
+                            ) : (
+                              <div className="text-sm font-bold text-slate-900 py-1">{item}</div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                    <div className="space-y-2">
-                      {(activeChar.capabilities || []).map((cap, cIdx) => (
-                        <div
-                          key={cap.id || cIdx}
-                          className="rounded border border-slate-300/80 bg-white/90 p-2 text-xs"
-                        >
-                          {isDirectEditMode ? (
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-2">
-                                <span className="text-[10px] font-bold text-slate-600">Day</span>
-                                <input
-                                  type="number"
-                                  min={1}
-                                  max={7}
-                                  value={cap.targetPhase}
+
+                    {/* 固有能力・専門スキルカード一覧 */}
+                    <div className="space-y-3 pt-2">
+                      <div className="flex items-center justify-between">
+                        <h3 className="text-xs font-bold text-slate-800">
+                          ■ 固有能力・専門スキルカード（{(activeChar.capabilities || []).length}枚）
+                        </h3>
+                        {isDirectEditMode && (
+                          <button
+                            onClick={() =>
+                              handleUpdateActiveChar((c) => ({
+                                ...c,
+                                capabilities: [
+                                  ...(c.capabilities || []),
+                                  {
+                                    id: `cap-${Date.now()}`,
+                                    name: "新規専門スキル",
+                                    description: "スキルの効果・調査内容を記載",
+                                    targetPhase: 1,
+                                  },
+                                ],
+                              }))
+                            }
+                            className="no-print rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
+                          >
+                            ＋ スキルカードを追加
+                          </button>
+                        )}
+                      </div>
+
+                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                        {(activeChar.capabilities || []).map((cap, cIdx) => (
+                          <div
+                            key={cap.id || cIdx}
+                            className="rounded-md border-2 border-dashed border-slate-400 bg-white p-4 shadow-sm"
+                          >
+                            <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1 text-[10px] font-bold text-slate-500">
+                              <span>【固有能力・専門スキル】 {activeChar.name}</span>
+                              <span className="font-mono">SKILL-{cIdx + 1}</span>
+                            </div>
+
+                            {isDirectEditMode ? (
+                              <div className="space-y-2">
+                                <div className="flex items-center gap-2">
+                                  <span className="text-[11px] font-bold text-slate-700">
+                                    使用可能: Day
+                                  </span>
+                                  <input
+                                    type="number"
+                                    min={1}
+                                    max={7}
+                                    value={cap.targetPhase}
+                                    onChange={(e) => {
+                                      const nextCaps = [...activeChar.capabilities];
+                                      nextCaps[cIdx] = {
+                                        ...cap,
+                                        targetPhase: parseInt(e.target.value, 10) || 1,
+                                      };
+                                      handleUpdateActiveChar((c) => ({
+                                        ...c,
+                                        capabilities: nextCaps,
+                                      }));
+                                    }}
+                                    className="w-14 rounded border border-slate-300 bg-white px-2 py-0.5 text-xs font-bold text-slate-900"
+                                  />
+                                  <input
+                                    type="text"
+                                    value={cap.name}
+                                    onChange={(e) => {
+                                      const nextCaps = [...activeChar.capabilities];
+                                      nextCaps[cIdx] = { ...cap, name: e.target.value };
+                                      handleUpdateActiveChar((c) => ({
+                                        ...c,
+                                        capabilities: nextCaps,
+                                      }));
+                                    }}
+                                    className="flex-1 rounded border border-dashed border-slate-300 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-900"
+                                  />
+                                  <button
+                                    onClick={() =>
+                                      handleUpdateActiveChar((c) => ({
+                                        ...c,
+                                        capabilities: c.capabilities.filter(
+                                          (_, idx) => idx !== cIdx
+                                        ),
+                                      }))
+                                    }
+                                    className="no-print text-slate-400 hover:text-red-600"
+                                    title="このスキルカードを削除"
+                                  >
+                                    <Trash2 className="h-3.5 w-3.5" />
+                                  </button>
+                                </div>
+                                <textarea
+                                  rows={3}
+                                  value={cap.description}
                                   onChange={(e) => {
                                     const nextCaps = [...activeChar.capabilities];
-                                    nextCaps[cIdx] = {
-                                      ...cap,
-                                      targetPhase: parseInt(e.target.value, 10) || 1,
-                                    };
+                                    nextCaps[cIdx] = { ...cap, description: e.target.value };
                                     handleUpdateActiveChar((c) => ({
                                       ...c,
                                       capabilities: nextCaps,
                                     }));
                                   }}
-                                  className="w-12 rounded border border-slate-300 bg-white px-1.5 py-0.5 text-xs font-bold text-slate-900"
+                                  className="w-full rounded border border-dashed border-slate-300 bg-slate-50 p-2 text-xs leading-relaxed text-slate-800"
                                 />
-                                <input
-                                  type="text"
-                                  value={cap.name}
-                                  onChange={(e) => {
-                                    const nextCaps = [...activeChar.capabilities];
-                                    nextCaps[cIdx] = { ...cap, name: e.target.value };
-                                    handleUpdateActiveChar((c) => ({
-                                      ...c,
-                                      capabilities: nextCaps,
-                                    }));
-                                  }}
-                                  className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 font-bold text-slate-900"
-                                />
-                                <button
-                                  onClick={() =>
-                                    handleUpdateActiveChar((c) => ({
-                                      ...c,
-                                      capabilities: c.capabilities.filter(
-                                        (_, idx) => idx !== cIdx
-                                      ),
-                                    }))
-                                  }
-                                  className="no-print text-slate-400 hover:text-red-600"
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </button>
                               </div>
-                              <textarea
-                                rows={2}
-                                value={cap.description}
-                                onChange={(e) => {
-                                  const nextCaps = [...activeChar.capabilities];
-                                  nextCaps[cIdx] = { ...cap, description: e.target.value };
-                                  handleUpdateActiveChar((c) => ({
-                                    ...c,
-                                    capabilities: nextCaps,
-                                  }));
-                                }}
-                                className="w-full rounded border border-dashed border-slate-300 bg-white p-1 text-xs text-slate-800"
-                              />
-                            </div>
-                          ) : (
-                            <div>
-                              <div className="font-bold">
-                                <span
-                                  className={`mr-1.5 inline-block rounded px-1.5 py-0.5 text-[10px] ${accent.badgeBg} ${accent.badgeText}`}
-                                >
-                                  Day {cap.targetPhase}
-                                </span>
-                                {cap.name}
+                            ) : (
+                              <div>
+                                <div className="font-bold text-sm text-slate-900">
+                                  <span className="mr-1.5 inline-block rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-800">
+                                    Day {cap.targetPhase}
+                                  </span>
+                                  {cap.name}
+                                </div>
+                                <div className="mt-1.5 text-xs text-slate-700 leading-relaxed">
+                                  {cap.description}
+                                </div>
                               </div>
-                              <div className="mt-0.5 text-slate-700 leading-relaxed">
-                                {cap.description}
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                {/* イントロダクション（導入情景描写） */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/75`}>
-                  <div
-                    className={`mb-2 rounded px-2.5 py-1 text-xs font-bold ${accent.sectionTitleBg} ${accent.sectionTitleText}`}
-                  >
-                    ■ イントロダクション（導入ストーリー）
-                  </div>
-                  {isDirectEditMode ? (
-                    <textarea
-                      rows={5}
-                      value={activeChar.introduction}
-                      onChange={(e) =>
-                        handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
-                      }
-                      className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-xs leading-relaxed">
-                      {activeChar.introduction}
-                    </div>
-                  )}
-                </div>
-
-                {/* 事前タイムライン・経緯 */}
-                {(activeChar.handout.backgroundTimeline || isDirectEditMode) && (
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/75`}>
-                    <div
-                      className={`mb-2 rounded px-2.5 py-1 text-xs font-bold ${accent.sectionTitleBg} ${accent.sectionTitleText}`}
-                    >
-                      ■ 事前タイムライン・これまでの経緯
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={5}
-                        value={activeChar.handout.backgroundTimeline || ""}
-                        onChange={(e) =>
-                          handleUpdateActiveChar((c) => ({
-                            ...c,
-                            handout: { ...c.handout, backgroundTimeline: e.target.value },
-                          }))
-                        }
-                        placeholder="事件発生前〜直前の個人タイムラインや行動履歴を入力してください"
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                      />
-                    ) : (
-                      <div className="whitespace-pre-wrap text-xs leading-relaxed">
-                        {activeChar.handout.backgroundTimeline}
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    )}
-                  </div>
-                )}
-
-                {/* ハンドアウト本文（詳細記憶・専門知識・個別情報） */}
-                <div className={`rounded-md border-2 p-5 ${accent.borderMain} bg-white/90`}>
-                  <div className="mb-3 flex items-center justify-between border-b border-slate-300 pb-2">
-                    <span className={`text-sm font-extrabold ${accent.sectionTitleText}`}>
-                      ■ ハンドアウト詳細本文（あなたの記憶と固有知識）
-                    </span>
-                    {onSendAiPrompt && (
-                      <button
-                        onClick={() =>
-                          onSendAiPrompt(
-                            `【${activeChar.name}のハンドアウト推敲依頼】\n現在のデザイン枠（${THEME_PRESETS[currentDesign.themeId].name}）にふさわしい文体で、以下のハンドアウト本文をより臨場感あふれる文章にブラッシュアップしてください：\n\n${activeChar.handout.handoutBody}`
-                          )
-                        }
-                        className="no-print flex items-center gap-1 rounded bg-indigo-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-indigo-500"
-                      >
-                        <Sparkles className="h-3 w-3" />
-                        左のAIチャットで文体を推敲する
-                      </button>
-                    )}
-                  </div>
-                  {isDirectEditMode ? (
-                    <textarea
-                      rows={16}
-                      value={activeChar.handout.handoutBody}
-                      onChange={(e) =>
-                        handleUpdateActiveChar((c) => ({
-                          ...c,
-                          handout: { ...c.handout, handoutBody: e.target.value },
-                        }))
-                      }
-                      className="w-full rounded border border-dashed border-slate-400 bg-white p-3 text-xs leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-xs leading-relaxed">
-                      {activeChar.handout.handoutBody}
                     </div>
-                  )}
-                </div>
-
-                {/* GM管理用ガイド枠（オプションON時のみ表示） */}
-                {showGmGuideInHo && (
-                  <div className="rounded-md border-2 border-dashed border-rose-500 bg-rose-50/90 p-4">
-                    <div className="mb-2 text-xs font-bold text-rose-900">
-                      🔒 【GM専用進行・個別誘導ガイド】（※プレイヤー配布時は左メニューのチェックを外して非表示にできます）
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={4}
-                        value={activeChar.handout.gmActionGuide || ""}
-                        onChange={(e) =>
-                          handleUpdateActiveChar((c) => ({
-                            ...c,
-                            handout: { ...c.handout, gmActionGuide: e.target.value },
-                          }))
-                        }
-                        className="w-full rounded border border-rose-300 bg-white p-2 text-xs leading-relaxed text-slate-900"
-                      />
-                    ) : (
-                      <div className="whitespace-pre-wrap text-xs leading-relaxed text-rose-950">
-                        {activeChar.handout.gmActionGuide || "特記事項なし"}
-                      </div>
-                    )}
                   </div>
                 )}
               </div>

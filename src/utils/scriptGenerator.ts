@@ -99,57 +99,89 @@ export function generateSynopsisPlainText(project: MMProject): string {
 }
 
 /**
- * キャラクターハンドアウト単体セクション生成ヘルパー
+ * キャラクターハンドアウト本紙（6つの構成要素のみ）単体セクション生成ヘルパー
  */
-function formatCharacterHandoutMarkdown(c: Character): string {
-  let md = `### ${c.name} (${c.profession})\n`;
-  md += `- **所属・配置**: ${c.location === "headquarters" ? "東京本庁・司令部" : "小笠原・現地救難隊"}\n`;
-  md += `- **公開プロフィール**: ${c.handout?.publicProfile || "なし"}\n\n`;
+export function formatCharacterHandoutMarkdown(c: Character): string {
+  const locationLabel =
+    c.location === "headquarters" ? "東京本庁・対策本部" : "小笠原・現地救難隊";
+  const memoryText = [c.introduction, c.handout?.backgroundTimeline]
+    .filter(Boolean)
+    .join("\n\n");
 
-  md += `#### 【キャラクター内面ドラマ】\n`;
-  md += `- **誇り (Pride)**: ${c.handout?.internalDrama?.pride || "なし"}\n`;
-  md += `- **喪失体験 (Loss)**: ${c.handout?.internalDrama?.loss || "なし"}\n\n`;
+  let md = `### ${c.name}\n`;
+  md += `- **役割**: ${c.name}\n`;
+  md += `- **所属・肩書・職業**: ${locationLabel} ／ ${c.profession}\n`;
+  md += `- **全員に公開できるプロフィール**: ${c.handout?.publicProfile || "なし"}\n\n`;
 
-  md += `#### 【初期所持品】\n`;
-  (c.initialItems || []).forEach((item) => {
-    md += `- ${item}\n`;
-  });
-  md += `\n`;
+  md += `#### 【あなたの内面（公開されないもの）・行動指針】\n`;
+  md += `- **誇り・信条**: ${c.handout?.internalDrama?.pride || "なし"}\n`;
+  md += `- **過去の喪失・悔恨**: ${c.handout?.internalDrama?.loss || "なし"}\n\n`;
 
-  md += `#### 【固有能力・できること】\n`;
-  (c.capabilities || []).forEach((cap) => {
-    md += `- **Day ${cap.targetPhase}: ${cap.name}**\n  ${cap.description}\n`;
-  });
-  md += `\n`;
-
-  if (c.handout?.backgroundTimeline) {
-    md += `#### 【事前タイムライン・経緯】\n${c.handout.backgroundTimeline}\n\n`;
-  }
-
-  md += `#### 【イントロダクション】\n${c.introduction || ""}\n\n`;
-  md += `#### 【ハンドアウト本文】\n${c.handout?.handoutBody || ""}\n\n`;
-
-  if (c.handout?.gmActionGuide) {
-    md += `#### 【GM進行・個別誘導ガイド】\n${c.handout.gmActionGuide}\n\n`;
-  }
+  md += `#### 【あなたの記憶】\n${memoryText || "なし"}\n\n`;
+  md += `#### 【自己紹介】\n${c.handout?.handoutBody || "なし"}\n\n`;
 
   md += `---\n\n`;
   return md;
 }
 
 /**
- * キャラクターハンドアウト一覧のみ Markdown 生成
+ * 別配付カード（初期所持品・携行アイテム ＆ 固有能力・専門スキル）単体セクション生成ヘルパー
+ */
+export function formatCharacterCardsMarkdown(c: Character): string {
+  let md = `### 🃏 ${c.name}（${c.profession}）配布カード\n\n`;
+
+  md += `#### 【初期所持品・携行アイテムカード】\n`;
+  (c.initialItems || []).forEach((item, idx) => {
+    md += `- **[所持品カード ${idx + 1}]** ${item}\n`;
+  });
+  md += `\n`;
+
+  md += `#### 【固有能力・専門スキルカード】\n`;
+  (c.capabilities || []).forEach((cap, idx) => {
+    md += `- **[スキルカード ${idx + 1} / Day ${cap.targetPhase}] ${cap.name}**\n  ${cap.description}\n`;
+  });
+  md += `\n---\n\n`;
+  return md;
+}
+
+/**
+ * キャラクターハンドアウト一覧（本紙 ＋ 別配付カード）Markdown 生成
  */
 export function generateHandoutsOnlyMarkdown(project: MMProject): string {
   const chars = project?.characters || [];
   const playerCount = project?.playerCount || chars.length || 6;
 
-  let md = `# ${project?.title || "無題のシナリオ"} ― キャラクターハンドアウト全集\n`;
-  md += `- **編成モード**: ${playerCount}名プレイ版（東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
+  let md = `# ${project?.title || "無題のシナリオ"} ― 個人ハンドアウト全集\n`;
+  md += `- **編成モード**: ${playerCount}名プレイ版（東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
+  md += `- **構成**: 役割 ／ 所属・肩書・職業 ／ 全員に公開できるプロフィール ／ あなたの内面（公開されないもの）・行動指針 ／ あなたの記憶 ／ 自己紹介\n\n`;
   md += `---\n\n`;
 
   chars.forEach((c) => {
     md += formatCharacterHandoutMarkdown(c);
+  });
+
+  md += `# 🃏 別配付カード一覧（初期所持品・携行アイテム ／ 固有能力・専門スキル）\n\n`;
+  md += `※以下の初期所持品および固有能力は、ハンドアウト本紙とは別のカードとして各プレイヤーに配布します。\n\n---\n\n`;
+  chars.forEach((c) => {
+    md += formatCharacterCardsMarkdown(c);
+  });
+
+  return md;
+}
+
+/**
+ * 別配付カード（初期所持品・固有能力）のみ Markdown 生成
+ */
+export function generateCharacterCardsOnlyMarkdown(project: MMProject): string {
+  const chars = project?.characters || [];
+  const playerCount = project?.playerCount || chars.length || 6;
+
+  let md = `# ${project?.title || "無題のシナリオ"} ― 別配付カード全集（${playerCount}名編成）\n`;
+  md += `- **内容**: 各プレイヤーにハンドアウト本紙とは別で配布する「初期所持品・携行アイテムカード」および「固有能力・専門スキルカード」\n\n`;
+  md += `---\n\n`;
+
+  chars.forEach((c) => {
+    md += formatCharacterCardsMarkdown(c);
   });
 
   return md;
@@ -179,10 +211,16 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `### 1-4. コアギミック (生態系捕食 × クジラ言語パズル × メッセージリレー)\n${project?.gimmickOverview || ""}\n\n`;
   md += `---\n\n`;
 
-  // --- 第2章：キャラクターハンドアウト ---
-  md += `## 👥 第2章：登場人物ハンドアウト（全${playerCount}名: 東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
+  // --- 第2章：キャラクターハンドアウト（本紙・6項目） ---
+  md += `## 👥 第2章：個人ハンドアウト本紙（全${playerCount}名: 東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
   chars.forEach((c) => {
     md += formatCharacterHandoutMarkdown(c);
+  });
+
+  // --- 第2章別冊：別配付カード（初期所持品・固有能力） ---
+  md += `## 🃏 第2章別冊：別配付カード一覧（初期所持品・携行アイテム ＆ 固有能力・専門スキル）\n\n`;
+  chars.forEach((c) => {
+    md += formatCharacterCardsMarkdown(c);
   });
 
   // --- 第3章：7日間タイムライン完全進行台本 ---
