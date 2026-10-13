@@ -1460,7 +1460,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-mono font-bold text-indigo-400">
                           PC-{idx + 1} /{" "}
-                          {c.location === "headquarters" ? "東京本庁・対策本部" : "小笠原・現地救難隊"}
+                          {c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
                         </span>
                         <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">
                           所持品{(c.initialItems || []).length}・能力{(c.capabilities || []).length}
@@ -1800,7 +1800,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       <span className="text-xs text-slate-500">
                         配置拠点：
                         {activeChar.location === "headquarters"
-                          ? "東京本庁・対策本部"
+                          ? "海上保安庁東京本部"
                           : "小笠原・現地救難隊"}
                       </span>
                     </div>
@@ -1830,8 +1830,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           ■ 所属・肩書・職業
                         </div>
                         {isDirectEditMode ? (
-                          <input
-                            type="text"
+                          <textarea
+                            rows={2}
                             value={activeChar.profession}
                             onChange={(e) =>
                               handleUpdateActiveChar((c) => ({
@@ -1839,10 +1839,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 profession: e.target.value,
                               }))
                             }
-                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
+                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-xs font-semibold leading-snug text-slate-900 focus:border-slate-800 focus:outline-none resize-none"
                           />
                         ) : (
-                          <div className="text-sm font-semibold text-slate-900 mt-1">
+                          <div className="whitespace-pre-wrap break-words text-xs font-semibold leading-snug text-slate-900 mt-1">
                             {activeChar.profession}
                           </div>
                         )}

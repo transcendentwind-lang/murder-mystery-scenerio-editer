@@ -198,7 +198,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
               </button>
             </div>
             <span className="text-[11px] text-slate-400">
-              配置：{selectedChar.location === "headquarters" ? "🏢 東京本庁・対策本部" : "⚓ 小笠原・現地救難隊"}
+              配置：{selectedChar.location === "headquarters" ? "🏢 海上保安庁東京本部" : "⚓ 小笠原・現地救難隊"}
             </span>
           </div>
 
@@ -223,13 +223,13 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
                   <label className="font-semibold text-slate-300 mb-1 block">
                     ② 所属・肩書・職業
                   </label>
-                  <input
-                    type="text"
+                  <textarea
+                    rows={2}
                     value={selectedChar.profession}
                     onChange={(e) =>
                       handleUpdateCharField((c) => ({ ...c, profession: e.target.value }))
                     }
-                    className="w-full rounded border border-slate-800 bg-slate-950 p-2 text-slate-100 focus:outline-none focus:border-indigo-500"
+                    className="w-full rounded border border-slate-800 bg-slate-950 p-2 text-xs leading-snug text-slate-100 focus:outline-none focus:border-indigo-500 resize-none"
                   />
                 </div>
               </div>

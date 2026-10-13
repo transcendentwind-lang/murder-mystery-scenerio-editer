@@ -413,7 +413,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-lg border border-blue-900/40 bg-blue-950/20 p-3">
                 <label className="mb-1 flex items-center gap-1.5 font-bold text-blue-300">
                   <Shield className="h-3.5 w-3.5" />
-                  東京司令部の動き (PC1, PC2)
+                  海上保安庁東京本部の動き (PC1, PC2)
                 </label>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
                   {currentStep.hqResponse}
@@ -605,7 +605,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 <div className="space-y-3">
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（1つ選択）:
+                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（1つ選択）:
                     </span>
                     <div className="grid grid-cols-3 gap-2">
                       {TOKYO_ACTIONS.map((a) => (
@@ -1242,10 +1242,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <Scale className="h-4 w-4 text-amber-400" />
                       <div>
                         <span className="font-bold text-xs text-white">
-                          【Day 3 終盤合同合議 ＆ 司令官最終意思決定】
+                          【Day 3 終盤合同合議 ＆ 危機管理官最終意思決定】
                         </span>
                         <span className="ml-2 text-[10px] text-amber-300 font-mono">
-                          海上保安庁の諮問（生物学鑑定 ＆ 防衛出動要否）と司令官（PC1）の決断
+                          海上保安庁の諮問（生物学鑑定 ＆ 防衛出動要否）と危機管理官（PC1）の決断
                         </span>
                       </div>
                     </div>
@@ -1254,7 +1254,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         合議制（全員参加）
                       </span>
                       <span className="rounded bg-rose-950 px-2 py-0.5 font-bold text-rose-300 border border-rose-700">
-                        最終決定: PC1（司令官）
+                        最終決定: PC1（危機管理官）
                       </span>
                     </div>
                   </div>
@@ -1268,7 +1268,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <p className="text-[11px] text-slate-300 leading-relaxed">
                       洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）を受け、現場の海上保安庁は緊迫しています。<br />
                       「全長数百mの潜航物体……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
-                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛庁リエゾン（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>対策本部司令官（PC1）</strong>が最終意思決定を下します。
+                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛庁リエゾン（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>海上保安庁東京本部の危機管理官（PC1）</strong>が最終意思決定を下します。
                     </p>
                   </div>
 
@@ -1452,13 +1452,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         ③ 合同対策本部 全員による合議制（ディスカッション）
                       </span>
                       <span className="text-[10px] text-slate-400">
-                        ※合議制ですが、最終意思決定は司令官（PC1）が下します
+                        ※合議制ですが、最終意思決定は危機管理官（PC1）が下します
                       </span>
                     </div>
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px]">
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-indigo-300 block">PC1: 司令官</strong>
+                        <strong className="text-indigo-300 block">PC1: 危機管理官</strong>
                         全体統括・官邸および防衛省との折衝・全責任の受託
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
@@ -1484,17 +1484,17 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  {/* ステップ4：司令官（PC1）の最終意思決定 */}
+                  {/* ステップ4：危機管理官（PC1）の最終意思決定 */}
                   <div className="rounded-xl border border-rose-800/80 bg-rose-950/20 p-4 space-y-3">
                     <div className="flex items-center justify-between border-b border-rose-900/60 pb-2">
                       <div className="flex items-center gap-2">
                         <ShieldAlert className="h-4 w-4 text-rose-400" />
                         <div>
                           <span className="font-bold text-xs text-white">
-                            ④ 【対策本部司令官（PC1） 最終意思決定】
+                            ④ 【海上保安庁東京本部の危機管理官（PC1） 最終意思決定】
                           </span>
                           <span className="ml-2 text-[10px] text-rose-300 font-mono">
-                            全員の合議を受け、本部長として最終決定を下す
+                            全員の合議を受け、指揮官として最終決定を下す
                           </span>
                         </div>
                       </div>
@@ -1506,8 +1506,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
 
                     <p className="text-[11px] text-slate-300 leading-relaxed">
-                      議論・相談は合議制で行われますが、<strong>最終的な作戦方針の決定は司令官（PC1）が一任</strong>されます。<br />
-                      PC5の生物学的見解（{day3Pc5Opinion === "colony_theory" ? "群体性仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}）およびPC2の防衛判断（{day3Pc2Decision === "defense_action" ? "防衛出動具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}）を踏まえ、司令官としての方針を決定してください。
+                      議論・相談は合議制で行われますが、<strong>最終的な作戦方針の決定は危機管理官（PC1）が一任</strong>されます。<br />
+                      PC5の生物学的見解（{day3Pc5Opinion === "colony_theory" ? "群体性仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}）およびPC2の防衛判断（{day3Pc2Decision === "defense_action" ? "防衛出動具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}）を踏まえ、危機管理官としての方針を決定してください。
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
@@ -1573,7 +1573,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <div className="flex items-center gap-2">
                             <Sparkles className="h-4 w-4 text-emerald-400 animate-spin-slow" />
                             <strong className="text-white text-xs">
-                              🎉【Day 3 作戦全完了 ＆ 司令官最終意思決定 確定】
+                              🎉【Day 3 作戦全完了 ＆ 危機管理官最終意思決定 確定】
                             </strong>
                           </div>
                           <button
@@ -1585,7 +1585,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </button>
                         </div>
                         <p className="text-[11px] text-emerald-100 leading-relaxed">
-                          対策本部司令官（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
+                          海上保安庁東京本部の危機管理官（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
                           <strong>選定された方針</strong>: {day3HqFinalDecision === "defense_dispatch" ? "自衛隊への防衛出動正式要請（八丈島南方迎撃陣形の展開）" : "海上警備行動の発令（段階的追尾迎撃と島民避難先行）"}<br />
                           <strong>生物学的見解（PC5）</strong>: {day3Pc5Opinion === "colony_theory" ? "超群体（コロニー）仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}<br />
                           <strong>防衛庁判断（PC2）</strong>: {day3Pc2Decision === "defense_action" ? "防衛出動即時迎撃具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}
@@ -1645,7 +1645,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Radio className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-white block font-bold text-[11px]">
-                        📡 東京司令部（PC1, PC2）：八丈島前線情報の緊急収集
+                        📡 海上保安庁東京本部（PC1, PC2）：八丈島前線情報の緊急収集
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
                         八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
@@ -1796,7 +1796,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-cyan-400" />
                       <span className="font-bold text-xs text-white">
-                        【Day 4 合議制アクション】東京司令部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
+                        【Day 4 合議制アクション】海上保安庁東京本部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px]">
@@ -1809,10 +1809,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  {/* 東京司令部アクション */}
+                  {/* 海上保安庁東京本部アクション */}
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 東京司令部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
+                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
                     </span>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {DAY4_TOKYO_ACTIONS.map((a) => {
@@ -1973,7 +1973,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗼 東京湾・首都直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          司令官（PC1）が唯一東京へ持ち帰っていた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
+                          危機管理官（PC1）が唯一東京へ持ち帰っていた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
                         </p>
                       </button>
 

@@ -244,7 +244,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                             : "bg-emerald-500/20 text-emerald-300"
                         }`}
                       >
-                        {char.location === "headquarters" ? "東京司令部" : "小笠原現地"}
+                        {char.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現地"}
                       </span>
                     </div>
                     <span className="mt-1 text-[11px] text-slate-400 line-clamp-1">
@@ -318,7 +318,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                 <p className="text-xs text-slate-400">{selectedChar.profession}</p>
               </div>
               <span className="rounded bg-slate-800 px-2 py-1 text-xs text-slate-300">
-                配置: {selectedChar.location === "headquarters" ? "東京本庁" : "小笠原現場"}
+                配置: {selectedChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現場"}
               </span>
             </div>
 

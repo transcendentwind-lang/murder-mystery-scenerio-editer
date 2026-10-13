@@ -29,10 +29,10 @@ export function generateSynopsisMarkdown(project: MMProject): string {
 
   md += `## 💡 4. コアギミック (生態系捕食 × クジラ言語パズル × メッセージリレー)\n${project?.gimmickOverview || ""}\n\n`;
 
-  md += `## 👥 5. 登場人物一覧（対策チーム ${playerCount}名: 東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
+  md += `## 👥 5. 登場人物一覧（対策チーム ${playerCount}名: 海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
   chars.forEach((c) => {
     md += `### ${c.name} (${c.profession})\n`;
-    md += `- **配置**: ${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}\n`;
+    md += `- **配置**: ${c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現場"}\n`;
     md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n`;
     md += `- **初期所持品**: ${(c.initialItems || []).join("、")}\n`;
     md += `- **固有能力**:\n`;
@@ -46,7 +46,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
   timeline.forEach((t) => {
     md += `### Day ${t.dayNumber}: ${t.situationTitle} (${t.locationName} / ${t.distanceKm}km)\n`;
     md += `- **事象**: ${t.incidentOverview}\n`;
-    md += `- **東京司令部**: ${t.hqResponse}\n`;
+    md += `- **海上保安庁東京本部**: ${t.hqResponse}\n`;
     md += `- **現地救難隊**: ${t.fieldResponse}\n\n`;
   });
 
@@ -80,9 +80,9 @@ export function generateSynopsisPlainText(project: MMProject): string {
   text += `■ 4. コアギミック・独自性（生態系捕食 × クジラ言語パズル × メッセージリレー）\n`;
   text += `${project?.gimmickOverview || ""}\n\n`;
 
-  text += `■ 5. 登場人物（海難救助対策チーム ${playerCount}名: 東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
+  text += `■ 5. 登場人物（海難救助対策チーム ${playerCount}名: 海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
   chars.forEach((c) => {
-    text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "東京司令部" : "小笠原現場"}]\n`;
+    text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現場"}]\n`;
     text += `  概要: ${c.handout?.publicProfile || ""}\n`;
     text += `  初期所持品: ${(c.initialItems || []).join("、")}\n`;
     text += `  固有能力: ${(c.capabilities || []).map((cap) => `[Day ${cap.targetPhase}] ${cap.name}`).join("、")}\n\n`;
@@ -102,19 +102,17 @@ export function generateSynopsisPlainText(project: MMProject): string {
  * キャラクターハンドアウト本紙（6つの構成要素のみ）単体セクション生成ヘルパー
  */
 export function formatCharacterHandoutMarkdown(c: Character): string {
-  const locationLabel =
-    c.location === "headquarters" ? "東京本庁・対策本部" : "小笠原・現地救難隊";
   const memoryText = [c.introduction, c.handout?.backgroundTimeline]
     .filter(Boolean)
     .join("\n\n");
 
   let md = `### ${c.name}\n`;
   md += `- **役割**: ${c.name}\n`;
-  md += `- **所属・肩書・職業**: ${locationLabel} ／ ${c.profession}\n`;
+  md += `- **所属・肩書・職業**: ${c.profession}\n`;
   md += `- **全員に公開できるプロフィール**: ${c.handout?.publicProfile || "なし"}\n\n`;
 
   md += `#### 【あなたの内面（公開されないもの）・行動指針】\n`;
-  md += `- **誇り・信条**: ${c.handout?.internalDrama?.pride || "なし"}\n`;
+  md += `- **誇り・信条・行動指針**: ${c.handout?.internalDrama?.pride || "なし"}\n`;
   md += `- **過去の喪失・悔恨**: ${c.handout?.internalDrama?.loss || "なし"}\n\n`;
 
   md += `#### 【あなたの記憶】\n${memoryText || "なし"}\n\n`;
@@ -152,7 +150,7 @@ export function generateHandoutsOnlyMarkdown(project: MMProject): string {
   const playerCount = project?.playerCount || chars.length || 6;
 
   let md = `# ${project?.title || "無題のシナリオ"} ― 個人ハンドアウト全集\n`;
-  md += `- **編成モード**: ${playerCount}名プレイ版（東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
+  md += `- **編成モード**: ${playerCount}名プレイ版（海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
   md += `- **構成**: 役割 ／ 所属・肩書・職業 ／ 全員に公開できるプロフィール ／ あなたの内面（公開されないもの）・行動指針 ／ あなたの記憶 ／ 自己紹介\n\n`;
   md += `---\n\n`;
 
@@ -212,7 +210,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `---\n\n`;
 
   // --- 第2章：キャラクターハンドアウト（本紙・6項目） ---
-  md += `## 👥 第2章：個人ハンドアウト本紙（全${playerCount}名: 東京司令部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
+  md += `## 👥 第2章：個人ハンドアウト本紙（全${playerCount}名: 海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
   chars.forEach((c) => {
     md += formatCharacterHandoutMarkdown(c);
   });
@@ -230,7 +228,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `### 【Day 1】父島南西沖 (0 km) - 荒海からのメーデー・漂流予測と遭難船救助\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
   md += `- **発生事象**: 民間チャーター船（40t）が全電源喪失。AIS停波、衛星死角。\n`;
-  md += `- **東京司令部の行動**: PC1が遭難船スペック（風圧流リーウェイ率3〜4%）を提示。PC2が衛星死角（ひまわり解像度限界・雨雲）と南西強風15m/s（約30ノット）を報告。航法計算（東へ2ktの黒潮支流 × 北東へ1.5ktの風圧流）から東北東の漂流予測地点を割り出す。\n`;
+  md += `- **海上保安庁東京本部の行動**: PC1が遭難船スペック（風圧流リーウェイ率3〜4%）を提示。PC2が衛星死角（ひまわり解像度限界・雨雲）と南西強風15m/s（約30ノット）を報告。航法計算（東へ2ktの黒潮支流 × 北東へ1.5ktの風圧流）から東北東の漂流予測地点を割り出す。\n`;
   if (playerCount === 5) {
     md += `- **現地救難隊の行動**: PC3が救難艇で急行し、暗礁手前で接舷・救助。PC4が海洋気象ブイ実測データ（真東2kt）と遭難直前無線ログを提示し、暗礁手前での突入ルートを計算。PC5が潮目水温データを提示して海流の持続を証明。\n`;
   } else {
@@ -243,7 +241,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `### 【Day 2】西之島沖 (約180 km) - 異変の顕在化・西之島噴火と深海シグネチャー\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
   md += `- **発生事象**: 西之島周辺の海底火山が突発的大噴火。水深800m以深を日速約150km（時速約6km / 3.3ノット）で北上する超巨大影を捕捉。\n`;
-  md += `- **東京司令部のアクション（3択中1枠合議選択）**:\n`;
+  md += `- **海上保安庁東京本部のアクション（3択中1枠合議選択）**:\n`;
   (TOKYO_ACTIONS || []).forEach((act) => {
     md += `  - **[${act.id}] ${act.title}** (${act.organization})\n    - 要約: ${act.summary}\n    - 詳細: ${act.detail}\n`;
   });
@@ -261,7 +259,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `  - ソノブイ投下（セクターA〜C、深度1〜3）により、セクターB-3で目標の生体反射音を捕捉。\n`;
   md += `  - ヘリによる航空写真撮影（または波形スキャン）を実行。\n`;
   md += `  - 海洋生物学者（PC5）に写真鑑定を相談し、防衛庁リエゾン（PC2）に防衛出動の要否を諮問。\n`;
-  md += `  - 対策本部全員による合議を経て、司令官（PC1）が防衛出動・迎撃方針を最終決定。\n`;
+  md += `  - 対策本部全員による合議を経て、海上保安庁東京本部の危機管理官（PC1）が防衛出動・迎撃方針を最終決定。\n`;
   md += `- **調査結果**: 海面直下の巨大な影は単一生物ではなく、無数の触手や個体が絡み合った【超巨大群体（コロニー）】である外形構造を把握。アクティブソナー照射に対して一時潜航・回避行動をとる。\n\n`;
 
   // Day 4
@@ -276,7 +274,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   (DAY4_FIELD_ACTIONS || []).forEach((act) => {
     md += `  - **[${act.id}] ${act.title}** (${act.organization})\n    - 要約: ${act.summary}\n    - 詳細: ${act.detail}\n`;
   });
-  md += `- **調査結果**: 1ヶ月前の流星雨で司令官（PC1）だけが拾い東京へ持ち帰っていた小さな隕石片から未知の特殊な物質の微量放出と微弱な磁性を検出し、巨大生物は「地磁気」と「隕石が放つ特殊な物質」の2つを感知して北上している可能性が浮上。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が組織的に盗まれており、それらが『西之島・青ヶ島沖・八丈島付近・三宅島付近』の海に次々と落とされていた上、小笠原の海から引き揚げられた約30kgの海底隕石が謎のダイバーグループによって【静岡県・富士山麓の民家】宛てに運ばれていたことが判明！ 小笠原大神宮古文書から、太古に怪異を鎮めた『盟約の祝詞』が存在し、船で海に出て長い筒（海中筒）を海中に差し入れて唱える作法であることが判明。ただし内容は秘伝で元神主は死去、子ども達は東京に出ている。\n`;
+  md += `- **調査結果**: 1ヶ月前の流星雨で海上保安庁東京本部の危機管理官（PC1）だけが拾い東京へ持ち帰っていた小さな隕石片から未知の特殊な物質の微量放出と微弱な磁性を検出し、巨大生物は「地磁気」と「隕石が放つ特殊な物質」の2つを感知して北上している可能性が浮上。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が組織的に盗まれており、それらが『西之島・青ヶ島沖・八丈島付近・三宅島付近』の海に次々と落とされていた上、小笠原の海から引き揚げられた約30kgの海底隕石が謎のダイバーグループによって【静岡県・富士山麓の民家】宛てに運ばれていたことが判明！ 小笠原大神宮古文書から、太古に怪異を鎮めた『盟約の祝詞』が存在し、船で海に出て長い筒（海中筒）を海中に差し入れて唱える作法であることが判明。ただし内容は秘伝で元神主は死去、子ども達は東京に出ている。\n`;
   md += `- **防衛庁の通達**: 内閣法制局の壁（外国の武力攻撃ではないため防衛出動不可）を突破し、『害獣駆除名目』での海上自衛隊部隊の緊急動員が決定される。\n\n`;
 
   // Day 5

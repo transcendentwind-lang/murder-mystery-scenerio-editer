@@ -64,7 +64,7 @@ export const THEATER_TIMELINE_POINTS = [
     distance: "約600 km",
     depth: "約4,000m",
     status: "有人島接近・避難葛藤",
-    summary: "伊豆諸島有人島（青ヶ島・八丈島）への接近。東京司令部と現地救難隊の間で情報隠蔽と避難の対立激化。",
+    summary: "伊豆諸島有人島（青ヶ島・八丈島）への接近。海上保安庁東京本部と現地救難隊の間で情報隠蔽と避難の対立激化。",
     coords: "32°27'N, 139°46'E",
     tag: "Day 4 予測",
     color: "indigo",

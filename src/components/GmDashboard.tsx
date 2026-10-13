@@ -125,12 +125,12 @@ export const FIELD_ACTIONS: Day2ActionOption[] = [
 export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
   {
     id: "T-4A",
-    title: "T-4A: 隕石について調べる（司令官持ち帰り隕石片の地磁気共鳴・特殊物質分析）",
+    title: "T-4A: 隕石について調べる（危機管理官持ち帰り隕石片の地磁気共鳴・特殊物質分析）",
     organization: "科学警察研究所 / 防衛装備庁 先端技術研究所",
     evidenceId: "ev-tokyo-meteorite-analysis",
     badge: "隕石片・地磁気＆特殊物質",
-    summary: "『司令官（PC1）が持ち帰った小さな隕石片から、地磁気と共鳴する特性に加え、海水に触れると深海生物を強く引き寄せる【特殊な物質】を検出！ 巨大生物は「①地磁気」と「②隕石が放つ特殊な物質」を追って北上していると判明！』",
-    detail: "1ヶ月前の流星雨の際、司令官（PC1）だけが小笠原の海岸で拾い東京へ持ち帰っていた小さな隕石片の精密分析。この隕石は①強い磁気特性（地磁気との共鳴）を持つこと、そして②海水に触れると深海生物の感覚器を強烈に引き寄せる「特殊な物質」を放出することが判明。巨大生物が隕石を追うように北上できる理由が【①地磁気】と【②この隕石が放つ特殊な物質】の2つであることが科学的に裏付けられる。",
+    summary: "『危機管理官（PC1）が持ち帰った小さな隕石片から、地磁気と共鳴する特性に加え、海水に触れると深海生物を強く引き寄せる【特殊な物質】を検出！ 巨大生物は「①地磁気」と「②隕石が放つ特殊な物質」を追って北上していると判明！』",
+    detail: "1ヶ月前の流星雨の際、海上保安庁東京本部の危機管理官（PC1）だけが小笠原の海岸で拾い東京へ持ち帰っていた小さな隕石片の精密分析。この隕石は①強い磁気特性（地磁気との共鳴）を持つこと、そして②海水に触れると深海生物の感覚器を強烈に引き寄せる「特殊な物質」を放出することが判明。巨大生物が隕石を追うように北上できる理由が【①地磁気】と【②この隕石が放つ特殊な物質】の2つであることが科学的に裏付けられる。",
   },
   {
     id: "T-4B",
@@ -545,7 +545,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
                     <span className="font-bold text-indigo-300">【フェーズ1：緊急招集 ＆ 自己紹介】</span>
                     <p className="text-slate-300 mt-1 italic">
-                      「小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源喪失。AISも停波し、救難信号を発信した直後に通信途絶しました。これより東京司令部と小笠原現地の合同海難救助チームを開設します。まずは各員、氏名・所属・現場で担える役割について自己紹介を行ってください」
+                      「小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源喪失。AISも停波し、救難信号を発信した直後に通信途絶しました。これより海上保安庁東京本部と小笠原現地の合同海難救助チームを開設します。まずは各員、氏名・所属・現場で担える役割について自己紹介を行ってください」
                     </p>
                   </div>
 
@@ -647,7 +647,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </p>
                     </div>
                     <p className="text-slate-300 mt-2.5 italic">
-                      「東京司令部・小笠原救難隊の各員へ上層部より緊急通達。西之島沖での海底火山突発噴火に伴い、周辺船舶の避難誘導および火山活動の厳重監視を行う必要がある。よって上層部の決定に基づき、当合同海難対策チームは当面の間【即応体制を維持】せよ」
+                      「海上保安庁東京本部・小笠原救難隊の各員へ上層部より緊急通達。西之島沖での海底火山突発噴火に伴い、周辺船舶の避難誘導および火山活動の厳重監視を行う必要がある。よって上層部の決定に基づき、当合同海難対策チームは当面の間【即応体制を維持】せよ」
                     </p>
                     <div className="mt-2 text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
                       💡 <strong>GMメモ</strong>: Day 1で招集された急造チームの解散が撤回され、このチームが当面維持される必然性を全員に提示します。
@@ -660,7 +660,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       【フェーズ2：情報収集・合議制アクションの提示】
                     </span>
                     <p className="text-slate-300 mt-1 italic">
-                      「西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで入っています。しかし混乱の極みにある現場では、すべての調査に手を回す余裕はありません。我々に許された調査枠は――【東京司令部で1枠】、【小笠原現地で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議して決定してください」
+                      「西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで入っています。しかし混乱の極みにある現場では、すべての調査に手を回す余裕はありません。我々に許された調査枠は――【海上保安庁東京本部で1枠】、【小笠原現地で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議して決定してください」
                     </p>
                   </div>
 
@@ -683,12 +683,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
-                    {/* 東京司令部側（1択） */}
+                    {/* 海上保安庁東京本部側（1択） */}
                     <div>
                       <div className="flex items-center gap-1.5 mb-2">
                         <Building2 className="h-3.5 w-3.5 text-indigo-400" />
                         <span className="font-bold text-indigo-300 text-[11px]">
-                          東京司令部アクション（全3枠中 1つ選択）
+                          海上保安庁東京本部アクション（全3枠中 1つ選択）
                         </span>
                       </div>
                       <div className="grid grid-cols-1 gap-2">
@@ -1157,19 +1157,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       </div>
 
-                      {/* 合議制と司令官最終意思決定 */}
+                      {/* 合議制と危機管理官最終意思決定 */}
                       <div className="rounded bg-rose-950/30 border border-rose-900/50 p-2.5 space-y-1.5">
                         <span className="font-bold text-rose-300 text-xs">
-                          ⚖️ 全員合議 ＆ 司令官（PC1）最終意思決定の進行ガイド:
+                          ⚖️ 全員合議 ＆ 危機管理官（PC1）最終意思決定の進行ガイド:
                         </span>
                         <p>
                           ・<strong>合議制の回し方</strong>: 全員（PC1〜PC6）で写真の生物学的脅威と防衛出動の是非について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
                         </p>
                         <p>
-                          ・<strong>司令官（PC1）の決断</strong>: 議論が煮詰まったところで、GMから<strong>「各員の意見が出揃いました。対策本部司令官（PC1）、本部長としてこの事態にどう対処するか、最終意思決定を下してください」</strong>と促します。
+                          ・<strong>危機管理官（PC1）の決断</strong>: 議論が煮詰まったところで、GMから<strong>「各員の意見が出揃いました。海上保安庁東京本部の危機管理官（PC1）、指揮官としてこの事態にどう対処するか、最終意思決定を下してください」</strong>と促します。
                         </p>
                         <p className="text-amber-200">
-                          ・<strong>Day 3 終了 ➔ Day 4 へのブリッジ</strong>: 司令官が方針（防衛出動正式要請、または海上警備行動発令）を決定した時点で<strong>「ここまでがDay 3に起こること」としてDay 3を完結</strong>させます。この決定がDay 4の「防衛出動の決定と隠蔽圧力・迎撃陣形の展開」へと直結します。
+                          ・<strong>Day 3 終了 ➔ Day 4 へのブリッジ</strong>: 危機管理官が方針（防衛出動正式要請、または海上警備行動発令）を決定した時点で<strong>「ここまでがDay 3に起こること」としてDay 3を完結</strong>させます。この決定がDay 4の「防衛出動の決定と隠蔽圧力・迎撃陣形の展開」へと直結します。
                         </p>
                       </div>
                     </div>
@@ -1303,7 +1303,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           </p>
                         </div>
                         <p className="text-slate-400">
-                          💡 <strong>GM進行メモ</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員が大きく変わる</strong>ことをプレイヤーに示唆してください。
+                          💡 <strong>GM進行メモ</strong>: 危機管理官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（危機管理官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員が大きく変わる</strong>ことをプレイヤーに示唆してください。
                         </p>
                       </div>
                     ) : (
@@ -1336,7 +1336,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/20 p-3 text-[11px] space-y-1">
                       <span className="font-bold text-indigo-300 block text-xs flex items-center gap-1.5">
-                        <Radio className="h-3.5 w-3.5" /> 📡 東京組（PC1, PC2）：八丈島前線情報の緊急収集
+                        <Radio className="h-3.5 w-3.5" /> 📡 海上保安庁東京本部（PC1, PC2）：八丈島前線情報の緊急収集
                       </span>
                       <p className="text-slate-300">
                         八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
@@ -1361,10 +1361,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
-                    {/* 東京司令部アクション */}
+                    {/* 海上保安庁東京本部アクション */}
                     <div>
                       <span className="font-bold text-indigo-300 text-[11px] block mb-1">
-                        🏢 東京司令部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
+                        🏢 海上保安庁東京本部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
                       </span>
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         {DAY4_TOKYO_ACTIONS.map((a) => (
