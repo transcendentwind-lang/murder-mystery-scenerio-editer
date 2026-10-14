@@ -183,7 +183,7 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-4D",
     title: "F-4D: 撮影した画像の分析（Day 3洋上ソナー写真の深層デジタル画像解析）",
-    organization: "小笠原海洋生物研究所 / 小笠原救難隊",
+    organization: "海洋科学大学 小笠原研究所 / 小笠原救難隊",
     evidenceId: "ev-photo-deep-analysis",
     badge: "写真画像深層解析",
     summary: "『Day 3で撮影した写真の深層解析。海中の巨大な影は単一の巨大生物ではなく、無数の深海生物や触手が絡み合い融合した【超巨大群体（コロニー）】であることが判明！』",
@@ -216,7 +216,7 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-5A",
     title: "F-5A: 故・朝倉教授の研究室調査（深海潜水とダイオウイカ捕食生態ノート）",
-    organization: "小笠原海洋生物研究所 朝倉研究室",
+    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
     evidenceId: "ev-asakura-notes-bio",
     badge: "クジラ捕食生態ノート",
     summary: "『マッコウクジラは深海1,000〜2,000mに潜れる唯一の鯨類で、筋肉に酸素を蓄え、深海のダイオウイカ（頭足類）を主食として捕食するという生態学の基本事実を再確認！』",
@@ -225,7 +225,7 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-5B",
     title: "F-5B: 朝倉教授のクジラ言語仮説ドラフト精査（クリック音の文法構造）",
-    organization: "小笠原海洋生物研究所 朝倉研究室",
+    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
     evidenceId: "ev-asakura-notes",
     badge: "クジラ言語文法ドラフト",
     summary: "『マッコウクジラのクリック音（コーダ）は単なる反響定位ではなく、文法構造を持つ言語体系であるという未発表論文ドラフトを発見！』",
