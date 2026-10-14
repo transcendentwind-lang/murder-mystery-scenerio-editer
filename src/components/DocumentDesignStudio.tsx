@@ -32,6 +32,7 @@ import {
   Palette,
   Stamp,
   Building2,
+  Anchor,
   Hash,
   Type,
   Layers,
@@ -424,36 +425,54 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     DEFAULT_GM_NARRATIONS[dayNumber] ||
     `【Day ${dayNumber} 導入読み上げ】\n状況をプレイヤー全員に提示し、各班のアクション選択および情報共有を開始してください。`;
 
+  const timeline = project.timeline || [];
+  const step = timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
+
+  const defaultCheckpoints = [
+    `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
+      dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
+    }分）をタイマーセットする`,
+    `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
+    `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
+  ];
+
+  const defaultBgm =
+    dayNumber <= 2
+      ? "静かな緊迫感・環境音（深海・無線ノイズ）"
+      : dayNumber <= 5
+      ? "捜査・解析フェーズBGM（中テンポ・サスペンス）"
+      : "クライマックス・決断BGM（高揚感のあるオーケストラ）";
+
   if (project.gmNotes && project.gmNotes[dayNumber]) {
     const existing = project.gmNotes[dayNumber];
-    const step = project.timeline.find((t) => t.dayNumber === dayNumber);
-    // タイムラインの要約文がそのまま入っている古い初期データの場合は、演出ナレーションに自動アップグレード
-    if (!existing.readAloudScript || existing.readAloudScript === step?.incidentOverview) {
-      return {
-        ...existing,
-        readAloudScript: defaultNarration,
-      };
-    }
-    return existing;
+    const script =
+      !existing.readAloudScript || existing.readAloudScript === step?.incidentOverview
+        ? defaultNarration
+        : existing.readAloudScript;
+
+    const checkpoints =
+      Array.isArray(existing.gmCheckpoints) && existing.gmCheckpoints.length > 0
+        ? existing.gmCheckpoints
+        : defaultCheckpoints;
+
+    return {
+      ...existing,
+      dayNumber,
+      readAloudScript: script,
+      gmCheckpoints: checkpoints,
+      bgmCue: existing.bgmCue || defaultBgm,
+      targetMinutes:
+        existing.targetMinutes ||
+        (dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25),
+    };
   }
-  const step = project.timeline.find((t) => t.dayNumber === dayNumber) || project.timeline[0];
+
   return {
     dayNumber,
     targetMinutes: dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25,
     readAloudScript: defaultNarration,
-    gmCheckpoints: [
-      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
-        dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
-      }分）をタイマーセットする`,
-      `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
-      `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
-    ],
-    bgmCue:
-      dayNumber <= 2
-        ? "静かな緊迫感・環境音（深海・無線ノイズ）"
-        : dayNumber <= 5
-        ? "捜査・解析フェーズBGM（中テンポ・サスペンス）"
-        : "クライマックス・決断BGM（高揚感のあるオーケストラ）",
+    gmCheckpoints: defaultCheckpoints,
+    bgmCue: defaultBgm,
   };
 }
 
@@ -666,9 +685,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 }) => {
   const [category, setCategory] = useState<StudioCategory>("handouts");
   const [handoutViewMode, setHandoutViewMode] = useState<"sheet" | "cards">("sheet");
-  const [selectedCharId, setSelectedCharId] = useState<string>(project.characters[0]?.id || "pc-1");
+  const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
-    project.evidences[0]?.id || ""
+    (project.evidences || [])[0]?.id || ""
   );
   const [evidenceDayFilter, setEvidenceDayFilter] = useState<number | "all">("all");
   const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
@@ -695,24 +714,27 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const visualBoards = getDefaultVisualBoards(project);
 
   // 現在選択されているアイテムの特定
+  const charactersList = project.characters || [];
   const activeChar =
-    project.characters.find((c) => c.id === selectedCharId) || project.characters[0];
+    charactersList.find((c) => c.id === selectedCharId) || charactersList[0];
 
+  const allEvidences = project.evidences || [];
   const filteredEvidences =
     evidenceDayFilter === "all"
-      ? project.evidences
-      : project.evidences.filter((e) => e.foundPhase === evidenceDayFilter);
+      ? allEvidences
+      : allEvidences.filter((e) => e.foundPhase === evidenceDayFilter);
 
   const activeEvidence =
-    project.evidences.find((e) => e.id === selectedEvidenceId) ||
+    allEvidences.find((e) => e.id === selectedEvidenceId) ||
     filteredEvidences[0] ||
-    project.evidences[0];
+    allEvidences[0];
 
   const activeVisual =
     visualBoards.find((v) => v.id === selectedVisualId) || visualBoards[0];
 
+  const timelineList = project.timeline || [];
   const activeTimelineStep =
-    project.timeline.find((t) => t.dayNumber === selectedGmDay) || project.timeline[0];
+    timelineList.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
 
   const activeGmNote = getGmNoteForDay(project, selectedGmDay);
 
@@ -1191,7 +1213,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <Users className="h-4 w-4 text-emerald-400" />
             ① 個人向けハンドアウト
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              {project.characters.length}名
+              {(project.characters || []).length}名
             </span>
           </button>
 
@@ -1206,7 +1228,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <FileText className="h-4 w-4 text-amber-400" />
             ② 証拠資料（文書・カード）
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              {project.evidences.length}件
+              {(project.evidences || []).length}件
             </span>
           </button>
 
@@ -1632,7 +1654,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  全て({project.evidences.length})
+                  全て({(project.evidences || []).length})
                 </button>
                 {[1, 2, 3, 4, 5, 6, 7].map((d) => (
                   <button
@@ -2973,7 +2995,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               type="text"
                               value={chk}
                               onChange={(e) => {
-                                const next = [...activeGmNote.gmCheckpoints];
+                                const next = [...(activeGmNote.gmCheckpoints || [])];
                                 next[idx] = e.target.value;
                                 handleUpdateActiveGmNote((n) => ({
                                   ...n,
@@ -2986,7 +3008,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               onClick={() =>
                                 handleUpdateActiveGmNote((n) => ({
                                   ...n,
-                                  gmCheckpoints: n.gmCheckpoints.filter((_, i) => i !== idx),
+                                  gmCheckpoints: (n.gmCheckpoints || []).filter((_, i) => i !== idx),
                                 }))
                               }
                               className="no-print text-slate-400 hover:text-red-600"
@@ -3008,7 +3030,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     <span>
                       📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
                       {
-                        project.evidences.filter(
+                        (project.evidences || []).filter(
                           (e) => e.foundPhase === activeTimelineStep.dayNumber
                         ).length
                       }
@@ -3019,7 +3041,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {project.evidences
+                    {(project.evidences || [])
                       .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
                       .map((ev) => (
                         <div
@@ -3030,7 +3052,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           <span>{ev.title}</span>
                         </div>
                       ))}
-                    {project.evidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
+                    {(project.evidences || []).filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
                       <span className="text-xs text-slate-500 italic">このフェーズで開示される証拠はありません</span>
                     )}
                   </div>
