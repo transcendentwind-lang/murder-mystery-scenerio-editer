@@ -76,10 +76,28 @@ export const initialVisualBoards: VisualBoardItem[] = [
   {
     id: "vis-day5-eruption",
     title: "【Day 5】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
-    subtitle: "CHART NO. V-2024 / 破局噴火まで残り48時間・富士山連動危機",
+    subtitle: "CHART NO. V-2024 / 破局噴火まで残り48時間・伊豆大島微動観測",
     boardType: "day5_eruption",
     dayNumber: 5,
     imageUrl: "/images/eruption_monitoring_chart_day5.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day6-eruption",
+    title: "【Day 6】伊豆大島 M5.1 震度4地震 ＆ 富士山地下微動観測図",
+    subtitle: "CHART NO. V-2024 / 震源深さ12km・伊豆大島近海群発・破局噴火前夜",
+    boardType: "day6_eruption",
+    dayNumber: 6,
+    imageUrl: "/images/eruption_monitoring_chart_day6.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day7-eruption",
+    title: "【Day 7】富士山 爆発的破局噴火 ＆ 東京到達 巨大火山灰監視図",
+    subtitle: "CHART NO. V-2024 / 噴煙高度18,000m成層圏到達・首都圏降灰警戒レベル5",
+    boardType: "day7_eruption",
+    dayNumber: 7,
+    imageUrl: "/images/eruption_monitoring_chart_day7.svg",
     orientation: "landscape_rotated",
   },
   {
@@ -96,7 +114,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
 export const initialProject: MMProject = {
   id: "project-deep-sea",
   createdAt: "2026-10-01T00:00:00.000Z",
-  updatedAt: "2026-10-14T17:25:00.000Z",
+  updatedAt: "2026-10-14T17:58:00.000Z",
   visualBoards: initialVisualBoards,
   title: "深海からの呼び声",
   subtitle: "合同海難対策本部、7日間の記録",

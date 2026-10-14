@@ -142,6 +142,8 @@ export interface VisualBoardItem {
     | 'day3_eruption'
     | 'day4_eruption'
     | 'day5_eruption'
+    | 'day6_eruption'
+    | 'day7_eruption'
     | 'day1_map'
     | 'sector_grid'
     | 'seismic_chart'

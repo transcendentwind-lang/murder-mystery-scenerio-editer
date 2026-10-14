@@ -325,7 +325,7 @@ function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
   if (
     project.visualBoards &&
     project.visualBoards.length > 0 &&
-    project.visualBoards.some((v) => v.id.startsWith("vis-day"))
+    project.visualBoards.some((v) => v.id === "vis-day7-eruption")
   ) {
     return project.visualBoards;
   }
@@ -1628,7 +1628,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             ? "🎯 索敵作戦図"
                             : vb.boardType === "sonar_photo"
                             ? "📷 索敵撮影写真"
-                            : vb.boardType === "eruption_chart" || vb.boardType === "seismic_chart"
+                            : vb.boardType.includes("eruption") || vb.boardType === "seismic_chart"
                             ? "🌋 噴火観測図"
                             : vb.boardType === "theater_map" || vb.boardType === "route_map"
                             ? "🗺️ 広域作戦海図"
