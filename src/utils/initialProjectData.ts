@@ -100,15 +100,6 @@ export const initialVisualBoards: VisualBoardItem[] = [
     imageUrl: "/images/eruption_monitoring_chart_day7.svg",
     orientation: "landscape_rotated",
   },
-  {
-    id: "vis-route-map",
-    title: "【全域】伊豆・小笠原諸島 広域作戦海図（7日間全ルート）",
-    subtitle: "小笠原諸島〜伊豆諸島〜駿河湾・富士山 7日間全作戦シアター",
-    boardType: "route_map",
-    dayNumber: 7,
-    imageUrl: "/images/theater_map_wide.jpg",
-    orientation: "landscape_rotated",
-  },
 ];
 
 export const initialProject: MMProject = {

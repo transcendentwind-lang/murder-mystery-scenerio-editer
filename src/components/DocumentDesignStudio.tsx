@@ -320,30 +320,127 @@ const PAPER_STYLES: Record<DocumentPaperStyle, { name: string; className: string
   },
 };
 
-// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅）
+// GM演出用ナレーション ＆ NPCセリフ台本（各Day初期値）
+const DEFAULT_GM_NARRATIONS: Record<number, string> = {
+  1: `【フェーズ1：緊急招集 ＆ 自己紹介】
+「小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源喪失。AISも停波し、救難信号を発信した直後に通信途絶しました。これより海上保安庁東京本部と小笠原現地の合同海難救助チームを開設します。まずは各員、氏名・所属・現場で担える役割について自己紹介を行ってください」
+
+【フェーズ2：状況提示 ＆ 漂流捜索開始】
+「救難信号発信から既に20分が経過。救難艇が現場海域へ到達するまでさらに40分――合計1時間、船は漂流し続けます。全体に【漂流海図】を開示します。どこへ救難艇を急行させるべきか、6名で協力して結論を出してください」
+
+【フェーズ4：救助成功ナレーション】
+「救難艇が東北東の漂流予測海域へ全速力で到達。東側や南東側の暗礁群を北側にすり抜け、激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功しました！」
+
+【NPC 船長（救助直後）】:
+「あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかった。船はスクリューが何かに巻き付かれたように故障して、計器類も壊れてしまったんだ。とにかく助かってよかった。ダイバーたちはこの1ヶ月前ぐらいから頻繁に潜水を繰り返していて、だいぶ慣れた様子だった。あのあとすぐに帰ると言っていたよ。ちょっと神社にお参りしてくるようにするよ」
+
+【NPC ダイバー（大型冷凍ボックスを抱えて）】:
+「船長は大袈裟ですね。ただの大型クジラですよ。私たちはこの近辺での魚の生態調査をしており、珍しい魚を採集していただけです。漂流事故で大変でしたが、これで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。……この冷凍ボックス、本土行きの定期便に急ぎ乗せていただけますか？」`,
+
+  2: `【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
+「海上保安庁東京本部・小笠原救難隊の各員へ上層部より緊急通達。西之島沖での海底火山突発噴火に伴い、周辺船舶の避難誘導および火山活動の厳重監視を行う必要がある。よって上層部の決定に基づき、当合同海難対策チームは当面の間【即応体制を維持】せよ」
+
+【フェーズ2：情報収集・合議制アクションの提示】
+「西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで入っています。しかし混乱の極みにある現場では、すべての調査に手を回す余裕はありません。我々に許された調査枠は――【海上保安庁東京本部で1枠】、【小笠原現地で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議して決定してください」
+
+【GM演出上の最重要注意（ネタバレ防止メモ）】
+※このDay 2の段階では、「ダイオウイカの超群体である」という正体は絶対に明かさないでください。プレイヤーたちには「ダイオウイカの触手のはずなのに、なぜ数百mもの超巨大な影なのか？」「海底火山を噴火させながら北上しているものは一体何なのか？」という強烈なサイズ矛盾とサスペンスを抱かせ、議論を深めてもらいます。`,
+
+  3: `【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
+「小笠原基地より大型捜索ヘリを緊急発進。洋上に展開する巡視船PLH-31『あきつしま』での洋上給油を中継して現場海域へ投入する。任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して三辺測量で距離を割り出し、その姿を捉えよ！』」
+
+【フェーズ5：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定（Day 3 クロージング）】
+「洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）が対策本部の大型スクリーンに映し出されます。現場の海上保安庁警備救難部は騒然となっています。『全長数百m、触手20本以上……海上保安庁の巡視船や警察比例の原則で対応できる規模を完全に超えている』。これを受け、海上保安庁警備救難部より合同対策本部へ緊急の諮問が下されます」
+
+① 海上保安庁 ➔ PC5（海洋生物学者）への相談:
+「PC5准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+
+② 海上保安庁 ➔ PC2（防衛庁リエゾン）への要請:
+「PC2リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+
+【危機管理官（PC1）の決断とDay 4へのブリッジ】
+「各員の意見が出揃いました。海上保安庁東京本部の危機管理官（PC1）、指揮官としてこの事態にどう対処するか、最終意思決定を下してください」`,
+
+  4: `【フェーズ1：Day 4 火山フロント最新状況】
+「鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖の海底カルデラで連動爆発が発生。さらに八丈島・青ヶ島では火山性軽度地震（震度1〜2）が観測されています。巨大生物が海底付近で起こす『海底地震のような特別な振動』が海底火山のマグマ溜まりを刺激している証拠です。このまま北上すれば数日後に【富士山直下】へ到達し、破局的大噴火を招く危機が迫っています」
+
+【フェーズ2：政府・防衛省の反応通達（GM読み上げ台本）】
+「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
+「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と捉えている。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
+
+【フェーズ5：防衛庁・統合幕僚監部通達（害獣駆除方針決定）】
+「内閣法制局の見解により、外国の武力侵略ではない本件に『防衛出動』を発令することは不可能とされた。しかし、国民への重大危機を看過できない防衛庁は内閣の合意を取り付け、【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定した！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行する！」`,
+
+  5: `【フェーズ1：GMナレーション（メディアの富士山連動大噴火報道）】
+「伊豆諸島を北上する連続海底噴火と群発地震。気象庁は富士山地下深部において火山性微動を公式確認しました。テレビ各局は『伊豆・小笠原火山弧の連動刺激により、富士山破局的大噴火の危険性が極めて高い』と速報を連呼し、日本中がパニックに包まれています」
+
+【フェーズ2：防衛庁通達セリフ（軍事機密指定による情報遮断）】
+「――対策本部および小笠原現地チームの協力に感謝する。しかし、これより自衛隊が実施する『害獣駆除名目での実弾迎撃作戦』は【最高軍事機密】に移行する。現場の交戦状況についての情報提供はここを以て遮断する。諸君は自衛隊の作戦干渉を解かれ、独自の調査任務へと戻られたし」
+
+【フェーズ3：防衛庁よりPC2への緊急無線（GM読み上げ台本）】
+「――PC2、防衛庁作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ PC2、直ちにあの生物の写真解析を行った海洋生物学者（PC5）の意見を確認してくれ！ あいつらは一体どうやって一つの個体として統率されているのか？ なぜ富士山を目指すのか？！」`,
+
+  6: `【状況推移演出：一時的沈静化から終盤の再浮上・微動復活へ】
+「（昼）自衛隊の猛攻により、物体は水深1,200mへ深く潜航。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化します。司令部には『もしや退けたのか？』と安堵の空気が流れますが……」
+「（夕〜夜）――警報！深海ソナーが駿河トラフ境界へ向けて超高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如以前を超える大振幅で復活！ 敵は死んでおらず、最終突入を開始したのです！」
+
+【フェーズ1：祝詞の「舌クリック音」判明 ＆ 日本語自体は無意味】
+「古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。PC3とPC5が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
+「太古、海より触手うごめく巨大な烏賊の如き魔物の塊り現れしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもはその巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は平穏を取り戻せり……！」
+
+【フェーズ4：合成新言語祝詞の完成 ＆ 翌朝（Day 7）決戦への装填スタンバイ】
+「プレイヤー全員の知見が結集し、『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が完成！ 防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）へ信号パケットを装填し、発信系統の同期テストを完了しました。実際の海中への放流は明日・Day 7の駿河湾最終決戦にて実行されます！」`,
+
+  7: `【フェーズ1：深海境界域での最終突入（GMナレーション）】
+「怪異は海面へ浮上せず、通常兵器の魚雷が水圧で圧壊する限界スレスレ――水深600mから1,000mの超深海を維持したまま、駿河トラフ境界へ突入しました。富士山直下のマグマ網まであとわずか。もはや一刻の猶予もありません！」
+
+【フェーズ2：海自潜水艦部隊 重魚雷一斉飽和攻撃（群体粉砕アシスト）】
+「防衛庁のリエゾン（PC2）の座標指示に基づき、海自潜水艦部隊が限界深度へ向け最新鋭重魚雷の一斉飽和攻撃を敢行！ 大出力ソナーのPing音が深海を貫き、直後――深海の闇の中で巨大な爆炎が連鎖します！ 魚雷の爆風により、巨大群体は一時的にバラバラに粉砕・分断されました！」
+
+【フェーズ3：海自大出力ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン）】
+「海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の新言語祝詞が太平洋全域へメガワット級大出力で放流されます！ 至近海域の1頭のマッコウクジラが【了解】を返し、自ら同じ歌を歌いながら北へ遊泳を開始。その歌を聞いた沖合の別のクジラが歌い継ぎ、海の中はクジラの歌の輪唱に包まれます！」
+
+【フェーズ4：マッコウクジラ深海大捕食（完全消滅 ＆ 微動停止）】
+「リレーされた歌に導かれ、水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入！ 筋肉に酸素を蓄えた深海の王たちが、魚雷で一口サイズに粉砕された怪異を片っ端から噛み砕き、貪り喰らい尽くしていく！ 怪異はクジラたちの胃袋へと完全に消滅し、富士山地下のマグマ微動が急速に減衰して完全な静寂を取り戻しました！」
+
+【フェーズ5：エピローグ演出・語られざる英雄たち（Unsung Heroes）】
+「『俺たちの手柄は歴史のどこにも載らないな』『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』――真実を胸に秘めた6人は、静かに日常へと帰っていく」`,
+};
+
+// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外）
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
-  if (
+  const base =
     project.visualBoards &&
     project.visualBoards.length > 0 &&
     project.visualBoards.some((v) => v.id === "vis-day7-eruption")
-  ) {
-    return project.visualBoards;
-  }
-  return initialVisualBoards;
+      ? project.visualBoards
+      : initialVisualBoards;
+  return base.filter((v) => v.id !== "vis-route-map");
 }
 
 // デフォルトのGM進行ノートを取得するヘルパー
 function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNote {
+  const defaultNarration =
+    DEFAULT_GM_NARRATIONS[dayNumber] ||
+    `【Day ${dayNumber} 導入読み上げ】\n状況をプレイヤー全員に提示し、各班のアクション選択および情報共有を開始してください。`;
+
   if (project.gmNotes && project.gmNotes[dayNumber]) {
-    return project.gmNotes[dayNumber];
+    const existing = project.gmNotes[dayNumber];
+    const step = project.timeline.find((t) => t.dayNumber === dayNumber);
+    // タイムラインの要約文がそのまま入っている古い初期データの場合は、演出ナレーションに自動アップグレード
+    if (!existing.readAloudScript || existing.readAloudScript === step?.incidentOverview) {
+      return {
+        ...existing,
+        readAloudScript: defaultNarration,
+      };
+    }
+    return existing;
   }
   const step = project.timeline.find((t) => t.dayNumber === dayNumber) || project.timeline[0];
   return {
     dayNumber,
     targetMinutes: dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25,
-    readAloudScript:
-      step?.incidentOverview ||
-      `【Day ${dayNumber} 導入読み上げ】\n状況をプレイヤー全員に提示し、各班のアクション選択および情報共有を開始してください。`,
+    readAloudScript: defaultNarration,
     gmCheckpoints: [
       `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
         dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
@@ -2723,33 +2820,33 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   )}
                 </div>
 
-                {/* 📢 導入読み上げ・発生事象ボックス（GMが声に出して読む枠） */}
+                {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（GMが声に出して読む枠） */}
                 <div
                   className={`rounded-md border-2 p-5 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
                 >
                   <div className="mb-2 flex items-center justify-between">
                     <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white">
-                      📢 【GM読み上げ・状況アナウンス（発生事象）】
+                      📢 【GM演出用ナレーション ＆ NPCセリフ台本】
                     </span>
                     <span className="text-[11px] text-slate-600">
-                      ※タイムラインの発生事象データと自動連動しています
+                      ※GM進行コンソールの演出用台本と連動（直接編集・印刷対応）
                     </span>
                   </div>
                   {isDirectEditMode ? (
                     <textarea
-                      rows={5}
-                      value={activeTimelineStep.incidentOverview}
+                      rows={10}
+                      value={activeGmNote.readAloudScript}
                       onChange={(e) =>
-                        handleUpdateActiveTimelineStep((s) => ({
-                          ...s,
-                          incidentOverview: e.target.value,
+                        handleUpdateActiveGmNote((n) => ({
+                          ...n,
+                          readAloudScript: e.target.value,
                         }))
                       }
-                      className="w-full rounded border border-dashed border-indigo-400 bg-white p-3 text-xs font-semibold leading-relaxed text-slate-900"
+                      className="w-full rounded border border-dashed border-indigo-400 bg-white p-3 text-xs font-semibold leading-relaxed text-slate-900 font-mono"
                     />
                   ) : (
-                    <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed">
-                      {activeTimelineStep.incidentOverview}
+                    <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono">
+                      {activeGmNote.readAloudScript}
                     </div>
                   )}
                 </div>
@@ -2896,52 +2993,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           </div>
                         </div>
                       ))}
-                  </div>
-                </div>
-
-                {/* 🎭 各PCへの個別誘導・GM進行ガイド一覧 */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
-                  <div className="mb-2 text-xs font-bold text-slate-900">
-                    🎭 プレイヤー別 GM個別誘導メモ（直接編集・HO連動）
-                  </div>
-                  <div className="grid grid-cols-1 gap-2.5 md:grid-cols-2">
-                    {project.characters.map((c) => (
-                      <div
-                        key={c.id}
-                        className="rounded border border-slate-300 bg-white p-2.5 text-xs"
-                      >
-                        <div className="mb-1 font-bold text-indigo-950">
-                          {c.name}（{c.profession}）
-                        </div>
-                        {isDirectEditMode ? (
-                          <textarea
-                            rows={2}
-                            value={c.handout.gmActionGuide || ""}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              onUpdateProject((prev) => ({
-                                ...prev,
-                                characters: prev.characters.map((ch) =>
-                                  ch.id === c.id
-                                    ? {
-                                        ...ch,
-                                        handout: { ...ch.handout, gmActionGuide: val },
-                                      }
-                                    : ch
-                                ),
-                              }));
-                              triggerSaveFeedback();
-                            }}
-                            placeholder="このPCに対するGMからの声かけ・誘導指針を記入"
-                            className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-[11px] text-slate-900"
-                          />
-                        ) : (
-                          <div className="whitespace-pre-wrap text-[11px] text-slate-700">
-                            {c.handout.gmActionGuide || "特記事項なし"}
-                          </div>
-                        )}
-                      </div>
-                    ))}
                   </div>
                 </div>
               </div>
