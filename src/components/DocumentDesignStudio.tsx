@@ -162,7 +162,7 @@ const THEME_PRESETS: Record<
     defaultBorder: "tech_corner",
     defaultFont: "sans",
     defaultStamp: "GM MASTER ONLY",
-    defaultHeader: "GAME MASTER TACTICAL CONTROL",
+    defaultHeader: "GM用進行シート",
   },
   gm_script_book: {
     name: "GM朗読・演出台本スタイル",
@@ -465,7 +465,14 @@ function getDesignForKey(
   evidenceCategory?: EvidenceItem["category"]
 ): DocumentDesignOverride {
   if (project.documentDesigns && project.documentDesigns[docKey]) {
-    return project.documentDesigns[docKey];
+    const existing = project.documentDesigns[docKey];
+    if (category === "gm_guides" && existing.organizationHeader === "GAME MASTER TACTICAL CONTROL") {
+      return {
+        ...existing,
+        organizationHeader: "GM用進行シート",
+      };
+    }
+    return existing;
   }
 
   let defaultTheme: DocumentThemeId = "official_report";
@@ -1771,7 +1778,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           Day {step.dayNumber}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">
-                          {step.locationName} ({step.distanceKm}km)
+                          {step.locationName}
                         </span>
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">
@@ -2712,39 +2719,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                ================================================================ */}
             {category === "gm_guides" && activeTimelineStep && (
               <div className="space-y-6">
-                {/* GM進行ヘッダー帯 */}
-                <div className={`rounded-md p-5 ${accent.headerBg} ${accent.headerText} shadow`}>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="rounded bg-rose-500/30 border border-rose-400/40 px-2.5 py-0.5 font-mono font-bold text-rose-100">
-                      GAME MASTER PROGRESSION SHEET // Day {activeTimelineStep.dayNumber} 進行台本
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <span className="flex items-center gap-1">
-                        <Clock className="h-3.5 w-3.5 text-amber-300" />
-                        目標進行時間:
-                        {isDirectEditMode ? (
-                          <input
-                            type="number"
-                            value={activeGmNote.targetMinutes}
-                            onChange={(e) =>
-                              handleUpdateActiveGmNote((n) => ({
-                                ...n,
-                                targetMinutes: parseInt(e.target.value, 10) || 20,
-                              }))
-                            }
-                            className="w-14 rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-center font-mono text-xs font-bold text-white"
-                          />
-                        ) : (
-                          <strong>{activeGmNote.targetMinutes}</strong>
-                        )}
-                        分
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* フェーズタイトル・地点・距離（直接編集可能） */}
-                  <div className="mt-3 grid grid-cols-1 gap-2 md:grid-cols-12">
-                    <div className="md:col-span-8">
+                {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
+                <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
+                  <div className="flex flex-wrap items-end justify-between gap-4">
+                    {/* Day X 状況タイトル */}
+                    <div className="flex-1 min-w-[260px]">
                       <span className="block text-[10px] uppercase tracking-wider opacity-75">
                         Day {activeTimelineStep.dayNumber} 状況タイトル
                       </span>
@@ -2758,18 +2737,20 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               situationTitle: e.target.value,
                             }))
                           }
-                          className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-lg font-bold text-white"
+                          className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-lg font-bold text-white focus:bg-white/20 focus:outline-none"
                         />
                       ) : (
-                        <h1 className="text-lg font-bold">{activeTimelineStep.situationTitle}</h1>
+                        <h1 className="mt-0.5 text-lg font-bold leading-tight">{activeTimelineStep.situationTitle}</h1>
                       )}
                     </div>
-                    <div className="md:col-span-4">
-                      <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                        観測地点 / 累積距離(km)
-                      </span>
-                      {isDirectEditMode ? (
-                        <div className="mt-0.5 flex items-center gap-1.5">
+
+                    {/* 観測地点 ＆ 目標進行時間（同じ列に横並び・累積距離枠は削除） */}
+                    <div className="flex items-center gap-4 text-xs shrink-0">
+                      <div>
+                        <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                          観測地点
+                        </span>
+                        {isDirectEditMode ? (
                           <input
                             type="text"
                             value={activeTimelineStep.locationName}
@@ -2779,25 +2760,39 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 locationName: e.target.value,
                               }))
                             }
-                            className="w-full rounded border border-white/30 bg-white/10 px-2 py-1 text-sm font-semibold text-white"
+                            className="mt-0.5 w-36 rounded border border-white/30 bg-white/10 px-2 py-1 text-sm font-semibold text-white focus:bg-white/20 focus:outline-none"
                           />
-                          <input
-                            type="number"
-                            value={activeTimelineStep.distanceKm}
-                            onChange={(e) =>
-                              handleUpdateActiveTimelineStep((s) => ({
-                                ...s,
-                                distanceKm: parseInt(e.target.value, 10) || 0,
-                              }))
-                            }
-                            className="w-20 rounded border border-white/30 bg-white/10 px-2 py-1 text-right font-mono text-sm text-white"
-                          />
+                        ) : (
+                          <div className="mt-1 text-sm font-semibold">
+                            {activeTimelineStep.locationName}
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="border-l border-white/25 pl-4">
+                        <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                          目標進行時間
+                        </span>
+                        <div className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
+                          <Clock className="h-3.5 w-3.5 text-amber-300" />
+                          {isDirectEditMode ? (
+                            <input
+                              type="number"
+                              value={activeGmNote.targetMinutes}
+                              onChange={(e) =>
+                                handleUpdateActiveGmNote((n) => ({
+                                  ...n,
+                                  targetMinutes: parseInt(e.target.value, 10) || 20,
+                                }))
+                              }
+                              className="w-14 rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-center font-mono text-xs font-bold text-white focus:bg-white/20 focus:outline-none"
+                            />
+                          ) : (
+                            <strong>{activeGmNote.targetMinutes}</strong>
+                          )}
+                          <span>分</span>
                         </div>
-                      ) : (
-                        <div className="mt-1 text-sm font-semibold">
-                          {activeTimelineStep.locationName} ({activeTimelineStep.distanceKm}km)
-                        </div>
-                      )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -2820,21 +2815,21 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   )}
                 </div>
 
-                {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（GMが声に出して読む枠） */}
+                {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（スクロールなしで全行展開・印刷完全対応） */}
                 <div
                   className={`rounded-md border-2 p-5 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
                 >
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white">
+                  <div className="mb-2.5 flex items-center justify-between">
+                    <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
                       📢 【GM演出用ナレーション ＆ NPCセリフ台本】
                     </span>
                     <span className="text-[11px] text-slate-600">
-                      ※GM進行コンソールの演出用台本と連動（直接編集・印刷対応）
+                      ※GM進行コンソールの演出用台本と連動（全行表示・直接編集・印刷対応）
                     </span>
                   </div>
                   {isDirectEditMode ? (
                     <textarea
-                      rows={10}
+                      rows={Math.max(14, (activeGmNote.readAloudScript || "").split("\n").length + 2)}
                       value={activeGmNote.readAloudScript}
                       onChange={(e) =>
                         handleUpdateActiveGmNote((n) => ({
@@ -2842,10 +2837,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           readAloudScript: e.target.value,
                         }))
                       }
-                      className="w-full rounded border border-dashed border-indigo-400 bg-white p-3 text-xs font-semibold leading-relaxed text-slate-900 font-mono"
+                      className="w-full rounded border border-dashed border-indigo-400 bg-white p-3.5 text-xs font-semibold leading-relaxed text-slate-900 font-mono shadow-inner focus:outline-none focus:border-indigo-600"
                     />
                   ) : (
-                    <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono">
+                    <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 select-text">
                       {activeGmNote.readAloudScript}
                     </div>
                   )}
@@ -2963,36 +2958,37 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 </div>
 
-                {/* 📂 このフェーズで開示される証拠一覧（早見表） */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
-                  <div className="mb-2 text-xs font-bold text-slate-900">
-                    📂 Day {activeTimelineStep.dayNumber} で開示される証拠資料（
-                    {
-                      project.evidences.filter(
-                        (e) => e.foundPhase === activeTimelineStep.dayNumber
-                      ).length
-                    }
-                    件）
+                {/* 📂 このフェーズで開示される証拠資料（タイトルのみコンパクト圧縮表示） */}
+                <div className={`rounded-md border p-3.5 ${accent.borderSub} bg-white/85 shadow-sm`}>
+                  <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-900">
+                    <span>
+                      📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
+                      {
+                        project.evidences.filter(
+                          (e) => e.foundPhase === activeTimelineStep.dayNumber
+                        ).length
+                      }
+                      件）
+                    </span>
+                    <span className="text-[10px] text-slate-500 font-normal">
+                      ※タイトルのみ一覧
+                    </span>
                   </div>
-                  <div className="space-y-2">
+                  <div className="flex flex-wrap gap-2">
                     {project.evidences
                       .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
                       .map((ev) => (
                         <div
                           key={ev.id}
-                          className="rounded border border-slate-300 bg-white p-2.5 text-xs"
+                          className="flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm hover:border-slate-400"
                         >
-                          <div className="flex items-center justify-between font-bold text-slate-900">
-                            <span>📄 {ev.title}</span>
-                            <span className="text-[10px] font-normal text-slate-500">
-                              条件: {ev.acquisitionCondition || "フェーズ開始時"}
-                            </span>
-                          </div>
-                          <div className="mt-1 text-[11px] text-slate-700 line-clamp-2">
-                            {ev.description}
-                          </div>
+                          <span className="text-indigo-600 font-mono text-xs">📄</span>
+                          <span>{ev.title}</span>
                         </div>
                       ))}
+                    {project.evidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
+                      <span className="text-xs text-slate-500 italic">このフェーズで開示される証拠はありません</span>
+                    )}
                   </div>
                 </div>
               </div>
