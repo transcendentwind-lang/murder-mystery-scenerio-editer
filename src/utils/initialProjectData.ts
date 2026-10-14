@@ -35,6 +35,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
     dayNumber: 2,
     imageUrl: "/images/aerial_recon_wide.jpg",
     orientation: "landscape_rotated",
+    hasWhiteMargin: true,
   },
   {
     id: "vis-day3-tactical",

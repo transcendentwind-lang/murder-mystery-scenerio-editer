@@ -155,6 +155,7 @@ export interface VisualBoardItem {
   imageUrl?: string;
   showGmSecrets?: boolean;
   orientation?: 'portrait' | 'landscape_rotated';
+  hasWhiteMargin?: boolean;
 }
 
 export interface GmProgressionNote {

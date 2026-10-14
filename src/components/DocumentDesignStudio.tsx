@@ -843,6 +843,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     if (category === "visuals" && activeVisual?.imageUrl) {
       const imgUrl = activeVisual.imageUrl;
       const isRotated = visualOrientation === "landscape_rotated";
+      const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
 
       const printWin = document.createElement("iframe");
       printWin.style.position = "fixed";
@@ -890,7 +891,21 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     }
     ${
       isRotated
-        ? `
+        ? isWithMargin
+          ? `
+    /* 横長画像を90度回転＋適度な白い余白（88%縮小でA4用紙に美しいマージンを形成） */
+    .print-img {
+      position: absolute;
+      width: 88vh;
+      height: 88vw;
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+      transform: rotate(90deg);
+      transform-origin: center center;
+    }
+    `
+          : `
     /* 横長画像を90度回転させてA4縦用紙（210mm × 297mm）めいっぱいに最大化 */
     .print-img {
       position: absolute;
@@ -901,6 +916,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       object-fit: contain;
       transform: rotate(90deg);
       transform-origin: center center;
+    }
+    `
+        : isWithMargin
+        ? `
+    .print-img {
+      width: 88vw;
+      height: 88vh;
+      object-fit: contain;
     }
     `
         : `
@@ -2415,137 +2438,178 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {/* ================================================================
                 ③ 全体提示される地図や写真（ビジュアル提示ボード）のA4印刷最大化ビュー
                ================================================================ */}
-            {category === "visuals" && activeVisual && (
-              <div className="space-y-4">
-                {/* 画面専用操作バー（印刷時は除外: no-print） */}
-                <div className="no-print rounded-xl border border-slate-800 bg-slate-950 p-4 shadow-lg">
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-                    <div className="space-y-0.5">
-                      <div className="flex items-center gap-2">
-                        <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-xs font-bold text-cyan-300">
-                          {activeVisual.dayNumber === 0 ? "全域" : `Day ${activeVisual.dayNumber}`}
-                        </span>
-                        <h2 className="text-base font-bold text-white">{activeVisual.title}</h2>
-                      </div>
-                      <p className="text-xs text-slate-400">{activeVisual.subtitle}</p>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-2">
-                      {/* 印刷向き切り替え（A4縦最大化 vs 通常向き） */}
-                      <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
-                        <button
-                          type="button"
-                          onClick={() => setVisualOrientation("landscape_rotated")}
-                          className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
-                            visualOrientation === "landscape_rotated"
-                              ? "bg-indigo-600 text-white shadow"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                          title="横長画像を90度回転し、A4縦用紙の長辺・短辺めいっぱいに余白最小で印刷します"
-                        >
-                          <RotateCw className="h-3.5 w-3.5" />
-                          A4縦最大化（90°回転）
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setVisualOrientation("portrait")}
-                          className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
-                            visualOrientation === "portrait"
-                              ? "bg-indigo-600 text-white shadow"
-                              : "text-slate-400 hover:text-white"
-                          }`}
-                          title="画像を回転させず、そのままA4用紙の中央に配置して印刷します"
-                        >
-                          <Compass className="h-3.5 w-3.5" />
-                          通常向き（回転なし）
-                        </button>
+            {category === "visuals" && activeVisual && (() => {
+              const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
+              return (
+                <div className="space-y-4">
+                  {/* 画面専用操作バー（印刷時は除外: no-print） */}
+                  <div className="no-print rounded-xl border border-slate-800 bg-slate-950 p-4 shadow-lg">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <div className="flex items-center gap-2">
+                          <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-xs font-bold text-cyan-300">
+                            {activeVisual.dayNumber === 0 ? "全域" : `Day ${activeVisual.dayNumber}`}
+                          </span>
+                          <h2 className="text-base font-bold text-white">{activeVisual.title}</h2>
+                        </div>
+                        <p className="text-xs text-slate-400">{activeVisual.subtitle}</p>
                       </div>
 
-                      {/* A4印刷ボタン */}
-                      <button
-                        type="button"
-                        onClick={handlePrintDesignedSheet}
-                        className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-white shadow transition hover:shadow-emerald-500/25"
-                      >
-                        <Printer className="h-4 w-4" />
-                        この図・写真をA4印刷
-                      </button>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {/* 印刷向き切り替え（A4縦最大化 vs 通常向き） */}
+                        <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
+                          <button
+                            type="button"
+                            onClick={() => setVisualOrientation("landscape_rotated")}
+                            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
+                              visualOrientation === "landscape_rotated"
+                                ? "bg-indigo-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                            title="横長画像を90度回転し、A4縦用紙の長辺・短辺めいっぱいに配置します"
+                          >
+                            <RotateCw className="h-3.5 w-3.5" />
+                            A4縦最大化（90°回転）
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setVisualOrientation("portrait")}
+                            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
+                              visualOrientation === "portrait"
+                                ? "bg-indigo-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                            title="画像を回転させず、そのままA4用紙の中央に配置して印刷します"
+                          >
+                            <Compass className="h-3.5 w-3.5" />
+                            通常向き（回転なし）
+                          </button>
+                        </div>
 
-                      {/* 原寸表示 / 新規タブで開く */}
-                      {activeVisual.imageUrl && (
-                        <a
-                          href={activeVisual.imageUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition"
-                          title="新しいタブで画像原寸ファイルを開きます"
+                        {/* 白い余白切り替えトグル（写真資料の縮小・余白設定） */}
+                        <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateActiveVisual((v) => ({ ...v, hasWhiteMargin: true }))}
+                            className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 font-bold transition ${
+                              isWithMargin
+                                ? "bg-amber-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                            title="用紙の周囲に白い余白を作り、写真を少し縮小して中央に配置します"
+                          >
+                            🖼️ 白い余白あり
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleUpdateActiveVisual((v) => ({ ...v, hasWhiteMargin: false }))}
+                            className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 font-bold transition ${
+                              !isWithMargin
+                                ? "bg-amber-600 text-white shadow"
+                                : "text-slate-400 hover:text-white"
+                            }`}
+                            title="用紙の端めいっぱいに画像を配置します"
+                          >
+                            全面最大（余白なし）
+                          </button>
+                        </div>
+
+                        {/* A4印刷ボタン */}
+                        <button
+                          type="button"
+                          onClick={handlePrintDesignedSheet}
+                          className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-white shadow transition hover:shadow-emerald-500/25"
                         >
-                          <Maximize2 className="h-3.5 w-3.5" />
-                          原寸表示
-                        </a>
-                      )}
+                          <Printer className="h-4 w-4" />
+                          この図・写真をA4印刷
+                        </button>
 
-                      {/* 画像差し替えボタン（手持ち画像用） */}
-                      <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => fileInputRef.current?.click()}
-                        className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white"
-                        title="手持ちの画像を読み込んで差し替えます"
-                      >
-                        <Upload className="h-3.5 w-3.5" />
-                        差し替え
-                      </button>
+                        {/* 原寸表示 / 新規タブで開く */}
+                        {activeVisual.imageUrl && (
+                          <a
+                            href={activeVisual.imageUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+                            title="新しいタブで画像原寸ファイルを開きます"
+                          >
+                            <Maximize2 className="h-3.5 w-3.5" />
+                            原寸表示
+                          </a>
+                        )}
+
+                        {/* 画像差し替えボタン（手持ち画像用） */}
+                        <input
+                          ref={fileInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fileInputRef.current?.click()}
+                          className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white"
+                          title="手持ちの画像を読み込んで差し替えます"
+                        >
+                          <Upload className="h-3.5 w-3.5" />
+                          差し替え
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                {/* A4プレビューキャンバス（デザイン枠や余計な文字を完全排除し、画像のみをA4比率で最大表示） */}
-                <div className="flex justify-center py-2">
-                  <div className="relative w-full max-w-[700px] aspect-[210/297] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center border border-slate-300">
-                    {activeVisual.imageUrl ? (
-                      visualOrientation === "landscape_rotated" ? (
-                        /* 横長画像を90度回転させてA4縦（210mm × 297mm）めいっぱいに最大化プレビュー */
-                        <div
-                          className="absolute flex items-center justify-center overflow-hidden"
-                          style={{
-                            width: "calc(100% * 297 / 210)",
-                            height: "100%",
-                            transform: "rotate(90deg)",
-                            transformOrigin: "center center",
-                          }}
-                        >
-                          <img
-                            src={activeVisual.imageUrl}
-                            alt={activeVisual.title}
-                            className="max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none"
-                          />
-                        </div>
+                  {/* A4プレビューキャンバス（デザイン枠や余計な文字を完全排除し、画像のみをA4比率で最大表示） */}
+                  <div className="flex justify-center py-2">
+                    <div className="relative w-full max-w-[700px] aspect-[210/297] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center border border-slate-300">
+                      {activeVisual.imageUrl ? (
+                        visualOrientation === "landscape_rotated" ? (
+                          /* 横長画像を90度回転させてA4縦（210mm × 297mm）にプレビュー（余白あり時は88%に縮小） */
+                          <div
+                            className="absolute flex items-center justify-center overflow-hidden"
+                            style={{
+                              width: isWithMargin ? "calc(88% * 297 / 210)" : "calc(100% * 297 / 210)",
+                              height: isWithMargin ? "88%" : "100%",
+                              transform: "rotate(90deg)",
+                              transformOrigin: "center center",
+                            }}
+                          >
+                            <img
+                              src={activeVisual.imageUrl}
+                              alt={activeVisual.title}
+                              className={`max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none ${
+                                isWithMargin ? "shadow-md" : ""
+                              }`}
+                            />
+                          </div>
+                        ) : (
+                          /* 通常向き（回転なし）プレビュー（余白あり時は88%に縮小） */
+                          <div
+                            className={`w-full h-full flex items-center justify-center ${
+                              isWithMargin ? "p-8" : "p-2"
+                            }`}
+                          >
+                            <img
+                              src={activeVisual.imageUrl}
+                              alt={activeVisual.title}
+                              className={`${
+                                isWithMargin
+                                  ? "max-w-[88%] max-h-[88%] shadow-md"
+                                  : "max-w-full max-h-full"
+                              } w-auto h-auto object-contain select-none pointer-events-none`}
+                            />
+                          </div>
+                        )
                       ) : (
-                        /* 通常向き（回転なし）プレビュー */
-                        <div className="w-full h-full p-2 flex items-center justify-center">
-                          <img
-                            src={activeVisual.imageUrl}
-                            alt={activeVisual.title}
-                            className="max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none"
-                          />
+                        <div className="text-center p-8 text-slate-400 text-sm">
+                          画像が設定されていません
                         </div>
-                      )
-                    ) : (
-                      <div className="text-center p-8 text-slate-400 text-sm">
-                        画像が設定されていません
-                      </div>
-                    )}
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-            )}
+              );
+            })()}
             {/* ================================================================
                 ④ GM用の進行資料（フェーズ別進行表・読み上げ・誘導）のデザイン＆直接編集ビュー
                ================================================================ */}
