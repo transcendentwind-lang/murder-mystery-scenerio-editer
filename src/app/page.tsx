@@ -11,7 +11,6 @@ import {
 } from "@/utils/projectStorage";
 import { TimelineBoard } from "@/components/TimelineBoard";
 import { CharactersEvidenceManager } from "@/components/CharactersEvidenceManager";
-import { HandoutEditor } from "@/components/HandoutEditor";
 import { CrypticMatrix } from "@/components/CrypticMatrix";
 import { GmDashboard } from "@/components/GmDashboard";
 import { TextExportView } from "@/components/TextExportView";
@@ -24,7 +23,6 @@ import {
   Users,
   Radio,
   FileText,
-  BookOpen,
   Grid,
   FolderKanban,
   ChevronDown,
@@ -42,7 +40,6 @@ export default function WorkbenchPage() {
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
   const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
-  const [characterSubTab, setCharacterSubTab] = useState<"profiles" | "handouts">("profiles");
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState<boolean>(false);
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
@@ -222,7 +219,7 @@ export default function WorkbenchPage() {
               ① タイムライン ＆ 海図
             </button>
 
-            {/* ② キャラクター ＆ ハンドアウト */}
+            {/* ② 登場人物 ＆ 証拠マスター */}
             <button
               onClick={() => setActiveTab("characters_handouts")}
               className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
@@ -230,9 +227,10 @@ export default function WorkbenchPage() {
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
+              title="登場人物のプロフィール・所持品・固有能力と証拠マスターの管理"
             >
               <Users className="h-4 w-4 text-emerald-400" />
-              ② キャラクター ＆ ハンドアウト
+              ② 登場人物 ＆ 証拠マスター
             </button>
 
             {/* ③ GM進行ダッシュボード */}
@@ -295,34 +293,16 @@ export default function WorkbenchPage() {
             />
           )}
 
-          {/* ② キャラクター ＆ ハンドアウト管理 */}
+          {/* ② 登場人物 ＆ 証拠マスター管理 */}
           {activeTab === "characters_handouts" && (
             <div className="flex h-full flex-col overflow-hidden">
-              {/* サブタブ切替バー ＆ 6人プレイ／5人プレイ切替 */}
+              {/* バー：人数切替 ＆ デザイン資料画面への直接導線 */}
               <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/80 px-6 py-2.5 backdrop-blur">
                 <div className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCharacterSubTab("profiles")}
-                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                      characterSubTab === "profiles"
-                        ? "bg-indigo-600 text-white shadow"
-                        : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <Users className="h-3.5 w-3.5" />
+                  <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs font-bold text-slate-200">
+                    <Users className="h-4 w-4 text-emerald-400" />
                     登場人物プロフィール ＆ 証拠マスター一覧
-                  </button>
-                  <button
-                    onClick={() => setCharacterSubTab("handouts")}
-                    className={`flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition ${
-                      characterSubTab === "handouts"
-                        ? "bg-indigo-600 text-white shadow"
-                        : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-white"
-                    }`}
-                  >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    個人ハンドアウト（HO）エディタ
-                  </button>
+                  </div>
                 </div>
 
                 <div className="flex items-center gap-3">
@@ -354,40 +334,31 @@ export default function WorkbenchPage() {
                     </button>
                   </div>
 
+                  {/* デザイン資料画面（HO・証拠シートの装飾・執筆・印刷）へのダイレクト遷移 */}
                   <button
                     onClick={() => setActiveTab("design_studio")}
-                    className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition"
+                    className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition shadow-sm"
+                    title="個人ハンドアウトや配布カード、証拠シートの執筆・装飾・印刷はデザイン資料画面で行います"
                   >
                     <Palette className="h-3.5 w-3.5 text-pink-400" />
-                    🎨 デザイン資料画面で開く（枠・スタンプ付き編集＆印刷）
+                    🎨 個人ハンドアウト・資料の編集はこちら（デザイン資料画面へ）
                   </button>
                 </div>
               </div>
 
               <div className="flex-1 overflow-hidden">
-                {characterSubTab === "profiles" ? (
-                  <CharactersEvidenceManager
-                    characters={project.characters}
-                    evidences={project.evidences}
-                    playerCount={project.playerCount}
-                    onTogglePlayerCount={handleTogglePlayerCount}
-                    onUpdateCharacters={(newChars) =>
-                      handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
-                    }
-                    onUpdateEvidences={(newEvs) =>
-                      handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
-                    }
-                  />
-                ) : (
-                  <HandoutEditor
-                    characters={project.characters}
-                    playerCount={project.playerCount}
-                    onUpdateCharacters={(newChars) =>
-                      handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
-                    }
-                    onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
-                  />
-                )}
+                <CharactersEvidenceManager
+                  characters={project.characters}
+                  evidences={project.evidences}
+                  playerCount={project.playerCount}
+                  onTogglePlayerCount={handleTogglePlayerCount}
+                  onUpdateCharacters={(newChars) =>
+                    handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
+                  }
+                  onUpdateEvidences={(newEvs) =>
+                    handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
+                  }
+                />
               </div>
             </div>
           )}
