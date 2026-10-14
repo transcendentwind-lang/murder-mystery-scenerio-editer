@@ -1,5 +1,11 @@
 import { MMProject, Character, IncidentStep, EvidenceItem, LockCriterion, CandidateLockStatus } from "@/types/schema";
-import { initialProject } from "./initialProjectData";
+import {
+  initialProject,
+  pc4For5Players,
+  pc4For6Players,
+  pc6Character,
+  getCharactersForPlayerCount,
+} from "./initialProjectData";
 
 const STORAGE_KEY_PROJECTS = "mm_workbench_projects_v1";
 const STORAGE_KEY_ACTIVE_ID = "mm_workbench_active_project_id_v1";
@@ -229,18 +235,69 @@ export function getStoredProjects(): MMProject[] {
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      // プリセット初期プロジェクトがコード側で更新されている場合は最新化して保存
+      // プリセット初期プロジェクト（project-deep-sea）のハンドアウト・設定を最新コードと確実に同期
       const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
       if (initialIdx >= 0) {
         const storedInit = parsed[initialIdx];
-        if (!storedInit.updatedAt || (initialProject.updatedAt && storedInit.updatedAt < initialProject.updatedAt)) {
-          parsed[initialIdx] = {
-            ...storedInit,
-            ...initialProject,
-            updatedAt: initialProject.updatedAt || new Date().toISOString(),
-          };
-          localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
+        const is5Players = storedInit.playerCount === 5;
+        const masterCharacters = getCharactersForPlayerCount(is5Players ? 5 : 6);
+        const masterCharMap = new Map<string, Character>(
+          masterCharacters.map((c) => [c.id, c as Character])
+        );
+
+        // 既存の characters に含まれる各PCのプロフィール・記憶・内面・自己紹介を最新マスターと強制同期
+        const updatedCharacters = (storedInit.characters || []).map((sc: Character) => {
+          const master = masterCharMap.get(sc.id);
+          if (master) {
+            return {
+              ...sc,
+              name: master.name,
+              profession: master.profession,
+              introduction: master.introduction,
+              initialItems: master.initialItems,
+              capabilities: master.capabilities,
+              handout: {
+                ...sc.handout,
+                publicProfile: master.handout.publicProfile,
+                internalDrama: {
+                  ...master.handout.internalDrama,
+                },
+                handoutBody: master.handout.handoutBody,
+                backgroundTimeline: master.handout.backgroundTimeline ?? sc.handout.backgroundTimeline,
+                gmActionGuide: master.handout.gmActionGuide ?? sc.handout.gmActionGuide,
+              },
+            };
+          }
+          return sc;
+        });
+
+        // 6名モードで PC6 が未登録ならマスターから追加
+        if (!is5Players && !updatedCharacters.some((c: Character) => c.id === "pc-6")) {
+          const pc6 = masterCharMap.get("pc-6");
+          if (pc6) {
+            updatedCharacters.push(pc6);
+          }
         }
+
+        // 5名モードで万一 PC6 が残っていたら除外
+        const filteredCharacters = is5Players
+          ? updatedCharacters.filter((c: Character) => c.id !== "pc-6")
+          : updatedCharacters;
+
+        parsed[initialIdx] = {
+          ...storedInit,
+          title: initialProject.title,
+          subtitle: initialProject.subtitle,
+          concept: initialProject.concept,
+          targetExperience: initialProject.targetExperience,
+          plotSummary: initialProject.plotSummary,
+          gimmickOverview: initialProject.gimmickOverview,
+          characters: filteredCharacters,
+          evidences: initialProject.evidences,
+          timeline: initialProject.timeline,
+          updatedAt: initialProject.updatedAt || new Date().toISOString(),
+        };
+        localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
       }
       return parsed;
     }
