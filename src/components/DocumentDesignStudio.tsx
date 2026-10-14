@@ -15,6 +15,7 @@ import {
   GmProgressionNote,
   EvidenceVisibility,
 } from "@/types/schema";
+import { initialVisualBoards } from "@/utils/initialProjectData";
 import {
   Sparkles,
   Printer,
@@ -47,6 +48,9 @@ import {
   Volume2,
   BookOpen,
   RotateCcw,
+  RotateCw,
+  ExternalLink,
+  Maximize2,
 } from "lucide-react";
 
 interface DocumentDesignStudioProps {
@@ -316,115 +320,16 @@ const PAPER_STYLES: Record<DocumentPaperStyle, { name: string; className: string
   },
 };
 
-// デフォルトの全体提示ビジュアル資料一覧を生成するヘルパー
+// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅）
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
-  if (project.visualBoards && project.visualBoards.length > 0) {
+  if (
+    project.visualBoards &&
+    project.visualBoards.length > 0 &&
+    project.visualBoards.some((v) => v.id.startsWith("vis-day"))
+  ) {
     return project.visualBoards;
   }
-  const step1 = project.timeline?.[0];
-  const step2 = project.timeline?.[1];
-  const step3 = project.timeline?.[2];
-  const step5 = project.timeline?.[4];
-  const step6 = project.timeline?.[5];
-
-  return [
-    {
-      id: "vis-route-map",
-      title: `${project.title} ― 広域進行ルート・距離観測マップ`,
-      subtitle: "全フェーズの移動軌跡と観測ポイント一覧",
-      boardType: "route_map",
-      dayNumber: 1,
-      captionTitle: "【広域状況ブリーフィング】",
-      captionBody:
-        "本図は事象発生地点から最終防衛ラインに至る広域位置関係と、各フェーズにおける観測地点・累積移動距離を示した全体共有マップである。各班は現在位置と到達予測時間を常に照合すること。",
-      annotations: [
-        "各フェーズの進行に伴い、観測地点が北上・移動していく軌跡を示す",
-        "司令部と現地班の情報共有により、次フェーズの到達予測地点を特定可能",
-        "地図上の各ポイント名・距離・状況メモは直接クリックして書き換え可能です",
-      ],
-      showGmSecrets: false,
-    },
-    {
-      id: "vis-day1-map",
-      title: step1 ? `Phase 1 現場見取り図：${step1.locationName}` : "Phase 1 初期現場周辺マップ",
-      subtitle: step1 ? step1.situationTitle : "初期事象発生ポイントと周辺配置図",
-      boardType: "day1_map",
-      dayNumber: 1,
-      captionTitle: "【初期現場状況・配置記録】",
-      captionBody:
-        step1?.incidentOverview ||
-        "初期事象が発生した現場周辺の戦術見取り図。気象・通信の乱れおよび現場到着時の初期配置を示す。",
-      annotations: [
-        `現場対応: ${step1?.fieldResponse || "初期状況の確認と安全確保"}`,
-        `後方対応: ${step1?.hqResponse || "広域モニタリングと通信回線の確保"}`,
-      ],
-      showGmSecrets: false,
-    },
-    {
-      id: "vis-aerial-photo",
-      title: step2 ? `緊急偵察撮影記録：${step2.locationName}` : "緊急航空偵察・撮影記録フレーム",
-      subtitle: "高高度偵察機による現場撮影および画像解析レポート",
-      boardType: "aerial_photo",
-      dayNumber: 2,
-      captionTitle: "【画像解析班・初期所見】",
-      captionBody:
-        "現場上空より撮影された視覚記録。異常な航跡波および巨大な影の輪郭が確認される。各専門家は自身の知見と照合し、対象物の特性を分析されたい。",
-      annotations: [
-        "撮影高度: 1,500ft / 光学・赤外線デュアルセンサー記録",
-        "海面直下に通常船舶とは異なる巨大なシルエットと特有の波紋を検出",
-        "※任意の画像ファイルをアップロードしてこの写真枠に差し替えることも可能です",
-      ],
-      showGmSecrets: false,
-    },
-    {
-      id: "vis-sector-grid",
-      title: step3 ? `広域索敵座標グリッド（36セクター）：${step3.locationName}` : "広域索敵用 6×6 座標グリッドマップ",
-      subtitle: "A-1 〜 F-6 セクター別探知・捜索ワークシート",
-      boardType: "sector_grid",
-      dayNumber: 3,
-      captionTitle: "【索敵・探知ルールと座標マップ】",
-      captionBody:
-        "対象エリアを36のセクター（A-1〜F-6）に分割した戦術索敵図。プレイヤーは手番ごとに調査したい座標を指定し、観測結果から対象物の現在位置を特定する。",
-      annotations: [
-        "直下探知：対象が存在するセクターを直接指定した場合、即座に捕捉成功",
-        "隣接反応：対象の上下左右・斜め隣接セクターを指定した場合、至近反応を検知",
-        "探知妨害：環境ノイズ源の周囲では信号が散乱し探知不能となる場合がある",
-      ],
-      showGmSecrets: false,
-    },
-    {
-      id: "vis-seismic-chart",
-      title: step5 ? `広域観測波形・連動リスク予測図：${step5.locationName}` : "広域観測波形・リスク推移チャート",
-      subtitle: "移動震源と地殻・環境影響の相関グラフ",
-      boardType: "seismic_chart",
-      dayNumber: 5,
-      captionTitle: "【観測データ統合解析チャート】",
-      captionBody:
-        step5?.incidentOverview ||
-        "各観測点における異常振動波形と、進行ルート上の連鎖リスクを示した解析図。放置した場合の最終到達ラインへの影響予測を含む。",
-      annotations: [
-        "通常の自然現象とは異なる周期的なパルス波形を検出",
-        "移動ルート上の特定ポイントを通過するごとに影響指数が段階的に上昇",
-      ],
-      showGmSecrets: false,
-    },
-    {
-      id: "vis-cryptic-sheet",
-      title: step6 ? `信号・暗号パターン解読ワークシート` : "信号・暗号パターン解読シート",
-      subtitle: "観測された記号配列と意味の照合記録表",
-      boardType: "cryptic_sheet",
-      dayNumber: 6,
-      captionTitle: "【解読ワークシート（全体共有資料）】",
-      captionBody:
-        project.crypticGrammar?.ruleDescription ||
-        "各プレイヤーが保有する手がかりを持ち寄り、記号の意味と正しい並び順（文法規則）を特定するための全体共有シート。",
-      annotations: [
-        "各記号の音響・波形パターンと、各自の専門文献・記録を照合すること",
-        "「プレイヤー配布用（空欄ワークシート）」と「GM確認用（正解入り）」を切り替え可能",
-      ],
-      showGmSecrets: false,
-    },
-  ];
+  return initialVisualBoards;
 }
 
 // デフォルトのGM進行ノートを取得するヘルパー
@@ -662,7 +567,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     project.evidences[0]?.id || ""
   );
   const [evidenceDayFilter, setEvidenceDayFilter] = useState<number | "all">("all");
-  const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-route-map");
+  const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
+  const [visualOrientation, setVisualOrientation] = useState<"portrait" | "landscape_rotated">("landscape_rotated");
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
 
   // 画面内テキスト直接編集モード vs 純粋プレビューモード
@@ -933,6 +839,100 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
   // デザインされたシートをそのままA4/PDF印刷する関数
   const handlePrintDesignedSheet = () => {
+    // 全体提示の地図・写真カテゴリの場合は、A4用紙（余白0mm・画像のみ最大化・90度回転配置）で印刷
+    if (category === "visuals" && activeVisual?.imageUrl) {
+      const imgUrl = activeVisual.imageUrl;
+      const isRotated = visualOrientation === "landscape_rotated";
+
+      const printWin = document.createElement("iframe");
+      printWin.style.position = "fixed";
+      printWin.style.right = "0";
+      printWin.style.bottom = "0";
+      printWin.style.width = "0";
+      printWin.style.height = "0";
+      printWin.style.border = "0";
+      document.body.appendChild(printWin);
+
+      const doc = printWin.contentWindow?.document;
+      if (doc) {
+        doc.open();
+        doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${activeVisual.title}</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .print-wrapper {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    ${
+      isRotated
+        ? `
+    /* 横長画像を90度回転させてA4縦用紙（210mm × 297mm）めいっぱいに最大化 */
+    .print-img {
+      position: absolute;
+      width: 100vh;
+      height: 100vw;
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+      transform: rotate(90deg);
+      transform-origin: center center;
+    }
+    `
+        : `
+    .print-img {
+      width: 100vw;
+      height: 100vh;
+      object-fit: contain;
+    }
+    `
+    }
+  </style>
+</head>
+<body>
+  <div class="print-wrapper">
+    <img src="${imgUrl}" class="print-img" alt="${activeVisual.title}" />
+  </div>
+</body>
+</html>`);
+        doc.close();
+        setTimeout(() => {
+          printWin.contentWindow?.focus();
+          printWin.contentWindow?.print();
+          setTimeout(() => {
+            if (document.body.contains(printWin)) {
+              document.body.removeChild(printWin);
+            }
+          }, 3000);
+        }, 800);
+      }
+      return;
+    }
+
     if (!printableSheetRef.current) return;
 
     // 一時的に直接編集モードの補助ボタン等を非表示にしたHTMLを取得するため、クローンを作成してinput/textareaをテキスト化
@@ -1592,22 +1592,24 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     >
                       <div className="flex items-center justify-between">
                         <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
-                          Phase / Day {vb.dayNumber}
+                          {vb.dayNumber === 0 ? "全域" : `Day ${vb.dayNumber}`}
                         </span>
                         <span className="text-[10px] text-slate-400">
-                          {vb.boardType === "route_map"
-                            ? "🗺️ 広域ルート図"
-                            : vb.boardType === "day1_map"
-                            ? "🧭 現場見取り図"
+                          {vb.boardType === "nautical_chart_white"
+                            ? "🧭 白海図（PL用）"
+                            : vb.boardType === "nautical_chart_gm"
+                            ? "🎯 GM解析海図"
                             : vb.boardType === "aerial_photo"
-                            ? "📷 空撮・現場写真"
-                            : vb.boardType === "sector_grid"
-                            ? "🎯 座標索敵マップ"
-                            : vb.boardType === "seismic_chart"
-                            ? "📈 観測波形図"
-                            : vb.boardType === "cryptic_sheet"
-                            ? "🔐 解読シート"
-                            : "🖼️ カスタム図판"}
+                            ? "📷 航空偵察写真"
+                            : vb.boardType === "tactical_chart" || vb.boardType === "sector_grid"
+                            ? "🎯 索敵作戦図"
+                            : vb.boardType === "sonar_photo"
+                            ? "📷 索敵撮影写真"
+                            : vb.boardType === "eruption_chart" || vb.boardType === "seismic_chart"
+                            ? "🌋 噴火観測図"
+                            : vb.boardType === "theater_map" || vb.boardType === "route_map"
+                            ? "🗺️ 広域作戦海図"
+                            : "🖼️ 図版・写真"}
                         </span>
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">{vb.title}</div>
@@ -1686,16 +1688,18 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
              ==================================================================== */}
           <div
             ref={printableSheetRef}
-            className={`mx-auto max-w-4xl rounded-sm p-8 md:p-12 transition-all ${
-              category === "handouts"
-                ? "bg-white text-slate-900 border border-slate-300 shadow-lg font-sans"
-                : `${paper.className} ${fontClass} ${getBorderFrameClasses()}`
-            } relative`}
+            className={`mx-auto max-w-4xl transition-all relative ${
+              category === "visuals"
+                ? "bg-transparent p-0 border-0 shadow-none"
+                : category === "handouts"
+                ? "bg-white text-slate-900 border border-slate-300 shadow-lg font-sans rounded-sm p-8 md:p-12"
+                : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12`
+            }`}
           >
             {/* ----------------------------------------------------------------
-                共通ドキュメントヘッダー（証拠資料・全体提示・GM資料のみ表示。個人ハンドアウトは特別なテーマ不要のため非表示）
+                共通ドキュメントヘッダー（証拠資料・GM資料のみ表示。個人ハンドアウトおよび全体提示の地図・写真は枠不要のため非表示）
                ---------------------------------------------------------------- */}
-            {category !== "handouts" && (
+            {category !== "handouts" && category !== "visuals" && (
               <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex-1">
@@ -2409,48 +2413,79 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             )}
 
             {/* ================================================================
-                ③ 全体提示される地図や写真（ビジュアル提示ボード）のデザイン＆直接編集ビュー
+                ③ 全体提示される地図や写真（ビジュアル提示ボード）のA4印刷最大化ビュー
                ================================================================ */}
             {category === "visuals" && activeVisual && (
-              <div className="space-y-6">
-                {/* ビジュアルボードタイトル帯 */}
-                <div className={`rounded-md p-5 ${accent.headerBg} ${accent.headerText} shadow`}>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <span className="rounded bg-white/20 px-2.5 py-0.5 font-mono font-bold">
-                      VISUAL PRESENTATION BOARD / 全体提示マップ・視覚資料
-                    </span>
-                    <div className="flex items-center gap-2">
-                      {/* 索敵マップや解読シートでの「プレイヤー配布用 vs GM正解表示」切替ボタン */}
-                      {(activeVisual.boardType === "sector_grid" ||
-                        activeVisual.boardType === "cryptic_sheet") && (
+              <div className="space-y-4">
+                {/* 画面専用操作バー（印刷時は除外: no-print） */}
+                <div className="no-print rounded-xl border border-slate-800 bg-slate-950 p-4 shadow-lg">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="space-y-0.5">
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-xs font-bold text-cyan-300">
+                          {activeVisual.dayNumber === 0 ? "全域" : `Day ${activeVisual.dayNumber}`}
+                        </span>
+                        <h2 className="text-base font-bold text-white">{activeVisual.title}</h2>
+                      </div>
+                      <p className="text-xs text-slate-400">{activeVisual.subtitle}</p>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* 印刷向き切り替え（A4縦最大化 vs 通常向き） */}
+                      <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
                         <button
-                          onClick={() =>
-                            handleUpdateActiveVisual((v) => ({
-                              ...v,
-                              showGmSecrets: !v.showGmSecrets,
-                            }))
-                          }
-                          className={`no-print flex items-center gap-1 rounded px-2.5 py-1 text-xs font-bold transition ${
-                            activeVisual.showGmSecrets
-                              ? "bg-rose-600 text-white"
-                              : "bg-emerald-600 text-white"
+                          type="button"
+                          onClick={() => setVisualOrientation("landscape_rotated")}
+                          className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
+                            visualOrientation === "landscape_rotated"
+                              ? "bg-indigo-600 text-white shadow"
+                              : "text-slate-400 hover:text-white"
                           }`}
+                          title="横長画像を90度回転し、A4縦用紙の長辺・短辺めいっぱいに余白最小で印刷します"
                         >
-                          {activeVisual.showGmSecrets ? (
-                            <>
-                              <Lock className="h-3.5 w-3.5" />
-                              🔒 GM確認用（正解・秘匿表示中）
-                            </>
-                          ) : (
-                            <>
-                              <Unlock className="h-3.5 w-3.5" />
-                              👥 プレイヤー配布用（正解非表示）
-                            </>
-                          )}
+                          <RotateCw className="h-3.5 w-3.5" />
+                          A4縦最大化（90°回転）
                         </button>
+                        <button
+                          type="button"
+                          onClick={() => setVisualOrientation("portrait")}
+                          className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
+                            visualOrientation === "portrait"
+                              ? "bg-indigo-600 text-white shadow"
+                              : "text-slate-400 hover:text-white"
+                          }`}
+                          title="画像を回転させず、そのままA4用紙の中央に配置して印刷します"
+                        >
+                          <Compass className="h-3.5 w-3.5" />
+                          通常向き（回転なし）
+                        </button>
+                      </div>
+
+                      {/* A4印刷ボタン */}
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-white shadow transition hover:shadow-emerald-500/25"
+                      >
+                        <Printer className="h-4 w-4" />
+                        この図・写真をA4印刷
+                      </button>
+
+                      {/* 原寸表示 / 新規タブで開く */}
+                      {activeVisual.imageUrl && (
+                        <a
+                          href={activeVisual.imageUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition"
+                          title="新しいタブで画像原寸ファイルを開きます"
+                        >
+                          <Maximize2 className="h-3.5 w-3.5" />
+                          原寸表示
+                        </a>
                       )}
 
-                      {/* カスタム画像アップロードボタン（すべてのビジュアル資料で利用可能） */}
+                      {/* 画像差し替えボタン（手持ち画像用） */}
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -2459,467 +2494,58 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="hidden"
                       />
                       <button
+                        type="button"
                         onClick={() => fileInputRef.current?.click()}
-                        className="no-print flex items-center gap-1 rounded bg-white/20 px-2.5 py-1 text-xs font-bold text-white hover:bg-white/30"
-                        title="手持ちの地図画像やイラスト・写真を読み込んで配置します"
+                        className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white"
+                        title="手持ちの画像を読み込んで差し替えます"
                       >
                         <Upload className="h-3.5 w-3.5" />
-                        画像を差し替え/追加
+                        差し替え
                       </button>
-                      {activeVisual.imageUrl && (
-                        <button
-                          onClick={() =>
-                            handleUpdateActiveVisual((v) => ({ ...v, imageUrl: undefined }))
-                          }
-                          className="no-print rounded bg-rose-600/80 px-2 py-1 text-[10px] font-bold text-white hover:bg-rose-500"
-                        >
-                          画像をクリア
-                        </button>
-                      )}
                     </div>
                   </div>
+                </div>
 
-                  {/* タイトル・サブタイトル（直接編集可能） */}
-                  <div className="mt-3 space-y-1.5">
-                    {isDirectEditMode ? (
-                      <>
-                        <input
-                          type="text"
-                          value={activeVisual.title}
-                          onChange={(e) =>
-                            handleUpdateActiveVisual((v) => ({ ...v, title: e.target.value }))
-                          }
-                          className="w-full rounded border border-white/30 bg-white/10 px-3 py-1 text-xl font-bold text-white focus:border-white focus:outline-none"
-                        />
-                        <input
-                          type="text"
-                          value={activeVisual.subtitle}
-                          onChange={(e) =>
-                            handleUpdateActiveVisual((v) => ({ ...v, subtitle: e.target.value }))
-                          }
-                          className="w-full rounded border border-white/30 bg-white/10 px-3 py-1 text-xs text-white/90 focus:border-white focus:outline-none"
-                        />
-                      </>
+                {/* A4プレビューキャンバス（デザイン枠や余計な文字を完全排除し、画像のみをA4比率で最大表示） */}
+                <div className="flex justify-center py-2">
+                  <div className="relative w-full max-w-[700px] aspect-[210/297] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center border border-slate-300">
+                    {activeVisual.imageUrl ? (
+                      visualOrientation === "landscape_rotated" ? (
+                        /* 横長画像を90度回転させてA4縦（210mm × 297mm）めいっぱいに最大化プレビュー */
+                        <div
+                          className="absolute flex items-center justify-center overflow-hidden"
+                          style={{
+                            width: "calc(100% * 297 / 210)",
+                            height: "100%",
+                            transform: "rotate(90deg)",
+                            transformOrigin: "center center",
+                          }}
+                        >
+                          <img
+                            src={activeVisual.imageUrl}
+                            alt={activeVisual.title}
+                            className="max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none"
+                          />
+                        </div>
+                      ) : (
+                        /* 通常向き（回転なし）プレビュー */
+                        <div className="w-full h-full p-2 flex items-center justify-center">
+                          <img
+                            src={activeVisual.imageUrl}
+                            alt={activeVisual.title}
+                            className="max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none"
+                          />
+                        </div>
+                      )
                     ) : (
-                      <>
-                        <h1 className="text-xl font-bold">{activeVisual.title}</h1>
-                        <p className="text-xs opacity-90">{activeVisual.subtitle}</p>
-                      </>
+                      <div className="text-center p-8 text-slate-400 text-sm">
+                        画像が設定されていません
+                      </div>
                     )}
-                  </div>
-                </div>
-
-                {/* 図版・マップ・写真のビジュアルフレーム描画領域 */}
-                <div className="rounded-lg border-2 border-slate-800 bg-slate-950 p-5 text-slate-100 shadow-inner">
-                  {/* カスタム画像がアップロードされている場合は最優先で額装表示 */}
-                  {activeVisual.imageUrl && (
-                    <div className="mb-5 overflow-hidden rounded border border-slate-700 bg-black p-2 text-center">
-                      <img
-                        src={activeVisual.imageUrl}
-                        alt={activeVisual.title}
-                        className="mx-auto max-h-[420px] w-auto object-contain"
-                      />
-                    </div>
-                  )}
-
-                  {/* (A) 広域進行ルートマップ (route_map) */}
-                  {activeVisual.boardType === "route_map" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-xs font-mono text-cyan-400">
-                        <span className="flex items-center gap-1.5">
-                          <Compass className="h-4 w-4" />
-                          WIDE-AREA TACTICAL ROUTE CHART // 7-PHASE PROGRESSION
-                        </span>
-                        <span>SCALE: 1/5,000,000</span>
-                      </div>
-
-                      {/* 各フェーズの位置関係・距離・名称を直接編集できるルートマップ図解 */}
-                      <div className="relative space-y-2.5 pl-4 before:absolute before:bottom-4 before:left-7 before:top-4 before:w-0.5 before:bg-cyan-500/50">
-                        {project.timeline.map((step) => (
-                          <div
-                            key={step.dayNumber}
-                            className="relative flex items-start gap-4 rounded-lg border border-slate-800 bg-slate-900/90 p-3"
-                          >
-                            <div className="z-10 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border-2 border-cyan-400 bg-slate-950 font-mono text-xs font-bold text-cyan-300">
-                              D{step.dayNumber}
-                            </div>
-                            <div className="flex-1 grid grid-cols-1 gap-2 md:grid-cols-12">
-                              <div className="md:col-span-4">
-                                <span className="block text-[10px] font-mono text-cyan-400">
-                                  観測地点 / 累積距離
-                                </span>
-                                {isDirectEditMode ? (
-                                  <div className="mt-0.5 flex items-center gap-1">
-                                    <input
-                                      type="text"
-                                      value={step.locationName}
-                                      onChange={(e) => {
-                                        const val = e.target.value;
-                                        onUpdateProject((prev) => ({
-                                          ...prev,
-                                          timeline: prev.timeline.map((t) =>
-                                            t.dayNumber === step.dayNumber
-                                              ? { ...t, locationName: val }
-                                              : t
-                                          ),
-                                        }));
-                                        triggerSaveFeedback();
-                                      }}
-                                      className="w-full rounded border border-slate-700 bg-slate-950 px-2 py-0.5 text-xs font-bold text-white"
-                                    />
-                                    <input
-                                      type="number"
-                                      value={step.distanceKm}
-                                      onChange={(e) => {
-                                        const val = parseInt(e.target.value, 10) || 0;
-                                        onUpdateProject((prev) => ({
-                                          ...prev,
-                                          timeline: prev.timeline.map((t) =>
-                                            t.dayNumber === step.dayNumber
-                                              ? { ...t, distanceKm: val }
-                                              : t
-                                          ),
-                                        }));
-                                        triggerSaveFeedback();
-                                      }}
-                                      className="w-16 rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 text-right font-mono text-xs text-cyan-300"
-                                    />
-                                    <span className="text-[10px] text-slate-400">km</span>
-                                  </div>
-                                ) : (
-                                  <div className="text-xs font-bold text-white">
-                                    {step.locationName}{" "}
-                                    <span className="font-mono text-cyan-400">
-                                      ({step.distanceKm}km)
-                                    </span>
-                                  </div>
-                                )}
-                              </div>
-                              <div className="md:col-span-8">
-                                <span className="block text-[10px] font-mono text-slate-400">
-                                  フェーズ状況見出し
-                                </span>
-                                {isDirectEditMode ? (
-                                  <input
-                                    type="text"
-                                    value={step.situationTitle}
-                                    onChange={(e) => {
-                                      const val = e.target.value;
-                                      onUpdateProject((prev) => ({
-                                        ...prev,
-                                        timeline: prev.timeline.map((t) =>
-                                          t.dayNumber === step.dayNumber
-                                            ? { ...t, situationTitle: val }
-                                            : t
-                                        ),
-                                      }));
-                                      triggerSaveFeedback();
-                                    }}
-                                    className="mt-0.5 w-full rounded border border-slate-700 bg-slate-950 px-2 py-0.5 text-xs text-slate-200"
-                                  />
-                                ) : (
-                                  <div className="text-xs text-slate-200">
-                                    {step.situationTitle}
-                                  </div>
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* (B) 初期現場見取り図 (day1_map) */}
-                  {activeVisual.boardType === "day1_map" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 text-xs font-mono text-emerald-400">
-                        <span>INCIDENT SITE TACTICAL DIAGRAM // PHASE 1</span>
-                        <span>GRID REF: 27-05-N / 142-11-E</span>
-                      </div>
-                      <div className="relative flex h-64 items-center justify-center overflow-hidden rounded-lg border border-emerald-500/30 bg-[radial-gradient(#064e3b_1px,transparent_1px)] [background-size:16px_16px]">
-                        {/* 同心円レーダーリング */}
-                        <div className="absolute h-52 w-52 rounded-full border border-emerald-500/30" />
-                        <div className="absolute h-36 w-36 rounded-full border border-emerald-500/40" />
-                        <div className="absolute h-20 w-20 rounded-full border border-dashed border-amber-400/60" />
-                        <div className="z-10 flex flex-col items-center">
-                          <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white shadow">
-                            ⚠️ 初期事象発生ポイント
-                          </span>
-                          <span className="mt-1 text-xs font-bold text-emerald-200">
-                            {project.timeline[0]?.locationName || "現場海域"}
-                          </span>
-                        </div>
-                        <div className="absolute bottom-3 left-4 rounded border border-slate-700 bg-slate-900/90 px-2.5 py-1 text-[10px] text-slate-300">
-                          ⚓ 現地対応班：現場急行・痕跡採取ポイント
-                        </div>
-                        <div className="absolute right-4 top-3 rounded border border-slate-700 bg-slate-900/90 px-2.5 py-1 text-[10px] text-slate-300">
-                          🏢 司令部：広域通信・衛星モニタリング圏内
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* (C) 空撮・現場写真フレーム (aerial_photo) */}
-                  {activeVisual.boardType === "aerial_photo" && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 font-mono text-xs text-amber-400">
-                        <span className="flex items-center gap-1.5">
-                          <Crosshair className="h-4 w-4" />
-                          RECONNAISSANCE OPTICAL / IR CAMERA FRAME
-                        </span>
-                        <span>ALT: 1500ft // SHUTTER: 1/2000s // ISO 800</span>
-                      </div>
-                      {!activeVisual.imageUrl && (
-                        <div className="relative flex h-64 flex-col items-center justify-center overflow-hidden rounded border border-slate-700 bg-gradient-to-b from-slate-900 via-cyan-950 to-slate-950 p-6">
-                          {/* ファインダー十字とシルエット図解 */}
-                          <div className="pointer-events-none absolute inset-4 border border-dashed border-white/20" />
-                          <div className="h-16 w-72 rounded-full bg-black/75 blur-sm ring-4 ring-cyan-400/20" />
-                          <div className="mt-3 rounded bg-black/70 px-3 py-1 font-mono text-xs text-cyan-300">
-                            [推定全長 300〜400m 巨大シルエット ＆ 特有の航跡波パターン]
-                          </div>
-                          <div className="mt-2 text-[11px] text-slate-400">
-                            ※右上の「画像を差し替え/追加」ボタンから任意の写真をこのフレームに配置できます
-                          </div>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* (D) 6×6 広域索敵グリッドマップ (sector_grid) */}
-                  {activeVisual.boardType === "sector_grid" && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 font-mono text-xs text-cyan-400">
-                        <span>36-SECTOR TACTICAL SONAR GRID (A-1 〜 F-6)</span>
-                        <span>
-                          {activeVisual.showGmSecrets
-                            ? "🔒 GM正解レイヤー表示中"
-                            : "👥 プレイヤー配布用（白地図モード）"}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-6 gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-3">
-                        {["A", "B", "C", "D", "E", "F"].map((row) =>
-                          [1, 2, 3, 4, 5, 6].map((col) => {
-                            const secId = `${row}-${col}`;
-                            const isTarget = activeVisual.showGmSecrets && secId === "B-3";
-                            const isHazard =
-                              activeVisual.showGmSecrets && (secId === "D-2" || secId === "E-2");
-                            return (
-                              <div
-                                key={secId}
-                                className={`flex h-12 flex-col items-center justify-center rounded border font-mono text-xs font-bold ${
-                                  isTarget
-                                    ? "border-rose-500 bg-rose-950/90 text-rose-200"
-                                    : isHazard
-                                    ? "border-amber-500 bg-amber-950/80 text-amber-200"
-                                    : "border-slate-800 bg-slate-900/70 text-slate-300"
-                                }`}
-                              >
-                                <span>{secId}</span>
-                                {isTarget && (
-                                  <span className="text-[9px] text-rose-300">🎯目標位置</span>
-                                )}
-                                {isHazard && (
-                                  <span className="text-[9px] text-amber-300">⚠️探知障害</span>
-                                )}
-                              </div>
-                            );
-                          })
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* (E) 観測波形・リスク推移チャート (seismic_chart) */}
-                  {activeVisual.boardType === "seismic_chart" && (
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 font-mono text-xs text-rose-400">
-                        <span className="flex items-center gap-1.5">
-                          <Activity className="h-4 w-4" />
-                          SEISMIC & VOLCANIC CHAIN REACTION MONITOR
-                        </span>
-                        <span>ALERT LEVEL: CRITICAL</span>
-                      </div>
-                      <div className="grid grid-cols-7 gap-2 pt-2">
-                        {project.timeline.map((step, idx) => {
-                          const heightPct = Math.min(100, 20 + idx * 13);
-                          return (
-                            <div
-                              key={step.dayNumber}
-                              className="flex flex-col items-center rounded border border-slate-800 bg-slate-900 p-2"
-                            >
-                              <div className="text-[10px] font-mono text-slate-400">
-                                Day {step.dayNumber}
-                              </div>
-                              <div className="my-2 flex h-24 w-full items-end justify-center rounded bg-slate-950 p-1">
-                                <div
-                                  style={{ height: `${heightPct}%` }}
-                                  className={`w-full rounded-t ${
-                                    idx >= 5
-                                      ? "bg-rose-600"
-                                      : idx >= 3
-                                      ? "bg-amber-500"
-                                      : "bg-cyan-500"
-                                  }`}
-                                />
-                              </div>
-                              <div className="text-center text-[10px] font-bold text-white truncate w-full">
-                                {step.locationName}
-                              </div>
-                              <div className="text-[9px] font-mono text-slate-400">
-                                {step.distanceKm}km
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* (F) 暗号・信号解読ワークシート (cryptic_sheet) */}
-                  {activeVisual.boardType === "cryptic_sheet" && (
-                    <div className="space-y-4">
-                      <div className="flex items-center justify-between border-b border-slate-800 pb-2 font-mono text-xs text-indigo-300">
-                        <span>SIGNAL DECODING WORKSHEET // 暗号・音響パルス照合表</span>
-                        <span>
-                          {activeVisual.showGmSecrets
-                            ? "🔒 GM確認用（意味・正解表示中）"
-                            : "👥 プレイヤー配布用（記入ワークシート）"}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-                        {(project.crypticWords || []).map((w, wIdx) => (
-                          <div
-                            key={w.id || wIdx}
-                            className="flex items-center justify-between rounded border border-slate-800 bg-slate-900 px-3 py-2 text-xs"
-                          >
-                            <div>
-                              <div className="font-mono text-sm font-bold text-amber-300">
-                                {w.symbol}
-                              </div>
-                              <div className="text-[10px] text-slate-400">{w.soundPattern}</div>
-                            </div>
-                            <div className="text-right">
-                              {activeVisual.showGmSecrets ? (
-                                <span className="rounded bg-indigo-900/80 px-2.5 py-1 font-bold text-indigo-200">
-                                  意味：{w.meaning}
-                                </span>
-                              ) : (
-                                <span className="inline-block w-28 border-b border-dashed border-slate-500 py-1 text-center text-[10px] text-slate-500">
-                                  （意味を記入）
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-
-                {/* 図版キャプション・解説テキスト枠（直接編集可能） */}
-                <div className={`rounded-md border-2 p-5 ${accent.borderMain} bg-white/90`}>
-                  {isDirectEditMode ? (
-                    <div className="space-y-2">
-                      <input
-                        type="text"
-                        value={activeVisual.captionTitle}
-                        onChange={(e) =>
-                          handleUpdateActiveVisual((v) => ({
-                            ...v,
-                            captionTitle: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1 text-sm font-extrabold text-slate-900"
-                      />
-                      <textarea
-                        rows={4}
-                        value={activeVisual.captionBody}
-                        onChange={(e) =>
-                          handleUpdateActiveVisual((v) => ({
-                            ...v,
-                            captionBody: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <h3 className={`text-sm font-extrabold ${accent.sectionTitleText}`}>
-                        {activeVisual.captionTitle}
-                      </h3>
-                      <p className="mt-1.5 whitespace-pre-wrap text-xs leading-relaxed">
-                        {activeVisual.captionBody}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* 注釈・ポイントリスト（直接追加・編集・削除可能） */}
-                  <div className="mt-4 border-t border-slate-300 pt-3">
-                    <div className="mb-2 flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-700">
-                        📌 図版内の注目ポイント・注釈ラベル
-                      </span>
-                      {isDirectEditMode && (
-                        <button
-                          onClick={() =>
-                            handleUpdateActiveVisual((v) => ({
-                              ...v,
-                              annotations: [
-                                ...(v.annotations || []),
-                                "新規注釈ラベル：クリックして内容を編集してください",
-                              ],
-                            }))
-                          }
-                          className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
-                        >
-                          ＋ 注釈を追加
-                        </button>
-                      )}
-                    </div>
-                    <ul className="space-y-1.5">
-                      {(activeVisual.annotations || []).map((ann, aIdx) => (
-                        <li key={aIdx} className="flex items-center gap-2 text-xs">
-                          <span className="font-bold text-indigo-700">●</span>
-                          {isDirectEditMode ? (
-                            <>
-                              <input
-                                type="text"
-                                value={ann}
-                                onChange={(e) => {
-                                  const next = [...activeVisual.annotations];
-                                  next[aIdx] = e.target.value;
-                                  handleUpdateActiveVisual((v) => ({
-                                    ...v,
-                                    annotations: next,
-                                  }));
-                                }}
-                                className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-1 text-xs text-slate-900"
-                              />
-                              <button
-                                onClick={() =>
-                                  handleUpdateActiveVisual((v) => ({
-                                    ...v,
-                                    annotations: v.annotations.filter((_, idx) => idx !== aIdx),
-                                  }))
-                                }
-                                className="no-print text-slate-400 hover:text-red-600"
-                              >
-                                <Trash2 className="h-3.5 w-3.5" />
-                              </button>
-                            </>
-                          ) : (
-                            <span>{ann}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
                   </div>
                 </div>
               </div>
             )}
-
             {/* ================================================================
                 ④ GM用の進行資料（フェーズ別進行表・読み上げ・誘導）のデザイン＆直接編集ビュー
                ================================================================ */}
@@ -3258,28 +2884,30 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             )}
 
             {/* ----------------------------------------------------------------
-                共通ドキュメントフッター（管理署名・ページ表記）
+                共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
                ---------------------------------------------------------------- */}
-            <div
-              className={`mt-8 flex flex-wrap items-center justify-between border-t pt-3 text-[11px] opacity-75 ${accent.borderSub}`}
-            >
-              <div className="flex-1">
-                {isDirectEditMode ? (
-                  <input
-                    type="text"
-                    value={currentDesign.footerNote}
-                    onChange={(e) => handleUpdateDesign({ footerNote: e.target.value })}
-                    className="w-full max-w-md border-b border-dashed border-slate-400 bg-transparent px-1 py-0.5 text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                    title="フッターのクレジット・管理注記を直接編集"
-                  />
-                ) : (
-                  <span>{currentDesign.footerNote}</span>
-                )}
+            {category !== "visuals" && (
+              <div
+                className={`mt-8 flex flex-wrap items-center justify-between border-t pt-3 text-[11px] opacity-75 ${accent.borderSub}`}
+              >
+                <div className="flex-1">
+                  {isDirectEditMode ? (
+                    <input
+                      type="text"
+                      value={currentDesign.footerNote}
+                      onChange={(e) => handleUpdateDesign({ footerNote: e.target.value })}
+                      className="w-full max-w-md border-b border-dashed border-slate-400 bg-transparent px-1 py-0.5 text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
+                      title="フッターのクレジット・管理注記を直接編集"
+                    />
+                  ) : (
+                    <span>{currentDesign.footerNote}</span>
+                  )}
+                </div>
+                <div className="font-mono">
+                  {currentDesign.documentCode} // UNAUTHORIZED REPRODUCTION PROHIBITED
+                </div>
               </div>
-              <div className="font-mono">
-                {currentDesign.documentCode} // UNAUTHORIZED REPRODUCTION PROHIBITED
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>

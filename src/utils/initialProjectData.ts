@@ -3,12 +3,100 @@
  * 汎用的なインシデント対策・非対称情報型ミステリー構造
  */
 
-import { MMProject } from "@/types/schema";
+import { MMProject, VisualBoardItem } from "@/types/schema";
+
+/**
+ * 全体提示される地図・写真（印刷専用・タイムライン各Day網羅）
+ */
+export const initialVisualBoards: VisualBoardItem[] = [
+  {
+    id: "vis-day1-white",
+    title: "【Day 1】小笠原南西海域 航海用海図（白地図・プレイヤー提示用）",
+    subtitle: "CHART NO. W-2704 / SOS発信位置・父島・南島・暗礁記号",
+    boardType: "day1_map_white",
+    dayNumber: 1,
+    imageUrl: "/images/day1_nautical_chart_white.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day1-gm",
+    title: "【Day 1】小笠原南西海域 航海用海図（GM解析図・解答ベクトル入り）",
+    subtitle: "風圧流1.5kt ＋ 黒潮支流2.0kt ＝ 東北東2.5kt 合成漂流予測",
+    boardType: "day1_map_gm",
+    dayNumber: 1,
+    imageUrl: "/images/day1_nautical_chart_gm.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day2-aerial",
+    title: "【Day 2】羽田航空基地 MA722 緊急航空偵察写真",
+    subtitle: "西之島北西海域・水深10〜20m熱水回避浮上時の巨大影",
+    boardType: "aerial_photo",
+    dayNumber: 2,
+    imageUrl: "/images/aerial_recon_wide.jpg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day3-tactical",
+    title: "【Day 3】鳥島沖 洋上ソナー索敵作戦図（36セクター索敵盤）",
+    subtitle: "CHART NO. W-3100 / A-1〜F-6 セクター別音響索敵ワークシート",
+    boardType: "day3_tactical",
+    dayNumber: 3,
+    imageUrl: "/images/day3_sonar_tactical_chart.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day3-photo",
+    title: "【Day 3】洋上ソナー索敵撮影写真（深海浮上時の巨大影）",
+    subtitle: "直下ソナー探知成功に伴い海面直下へ浮上した巨大群体の光学撮影記録",
+    boardType: "day3_photo",
+    dayNumber: 3,
+    imageUrl: "/images/day3_sonar_success_photo.jpg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day3-eruption",
+    title: "【Day 3】伊豆・小笠原火山弧 全域火山活動監視図",
+    subtitle: "CHART NO. V-2024 / 西之島〜鳥島沖海底カルデラ噴火フロント",
+    boardType: "day3_eruption",
+    dayNumber: 3,
+    imageUrl: "/images/eruption_monitoring_chart.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day4-eruption",
+    title: "【Day 4】須美寿島〜青ヶ島沖 連動大噴火 ＆ 地震観測図",
+    subtitle: "CHART NO. V-2024 / 噴火ドミノ北上・八丈島群発微動",
+    boardType: "day4_eruption",
+    dayNumber: 4,
+    imageUrl: "/images/eruption_monitoring_chart_day4.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day5-eruption",
+    title: "【Day 5】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
+    subtitle: "CHART NO. V-2024 / 破局噴火まで残り48時間・富士山連動危機",
+    boardType: "day5_eruption",
+    dayNumber: 5,
+    imageUrl: "/images/eruption_monitoring_chart_day5.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-route-map",
+    title: "【全域】伊豆・小笠原諸島 広域作戦海図（7日間全ルート）",
+    subtitle: "小笠原諸島〜伊豆諸島〜駿河湾・富士山 7日間全作戦シアター",
+    boardType: "route_map",
+    dayNumber: 7,
+    imageUrl: "/images/theater_map_wide.jpg",
+    orientation: "landscape_rotated",
+  },
+];
 
 export const initialProject: MMProject = {
   id: "project-deep-sea",
   createdAt: "2026-10-01T00:00:00.000Z",
-  updatedAt: "2026-10-14T14:10:00.000Z",
+  updatedAt: "2026-10-14T17:25:00.000Z",
+  visualBoards: initialVisualBoards,
   title: "深海からの呼び声",
   subtitle: "合同海難対策本部、7日間の記録",
   concept:

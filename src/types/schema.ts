@@ -132,13 +132,29 @@ export interface VisualBoardItem {
   id: string;
   title: string;
   subtitle: string;
-  boardType: 'route_map' | 'day1_map' | 'aerial_photo' | 'sector_grid' | 'seismic_chart' | 'cryptic_sheet' | 'custom_image';
+  boardType:
+    | 'route_map'
+    | 'day1_map_white'
+    | 'day1_map_gm'
+    | 'aerial_photo'
+    | 'day3_tactical'
+    | 'day3_photo'
+    | 'day3_eruption'
+    | 'day4_eruption'
+    | 'day5_eruption'
+    | 'day1_map'
+    | 'sector_grid'
+    | 'seismic_chart'
+    | 'cryptic_sheet'
+    | 'custom_image'
+    | string;
   dayNumber: number;
-  captionTitle: string;
-  captionBody: string;
-  annotations: string[];
+  captionTitle?: string;
+  captionBody?: string;
+  annotations?: string[];
   imageUrl?: string;
   showGmSecrets?: boolean;
+  orientation?: 'portrait' | 'landscape_rotated';
 }
 
 export interface GmProgressionNote {

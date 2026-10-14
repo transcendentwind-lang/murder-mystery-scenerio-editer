@@ -1,6 +1,7 @@
 import { MMProject, Character, IncidentStep, EvidenceItem, LockCriterion, CandidateLockStatus } from "@/types/schema";
 import {
   initialProject,
+  initialVisualBoards,
   pc4For5Players,
   pc4For6Players,
   pc6Character,
@@ -295,6 +296,7 @@ export function getStoredProjects(): MMProject[] {
           characters: filteredCharacters,
           evidences: initialProject.evidences,
           timeline: initialProject.timeline,
+          visualBoards: initialVisualBoards,
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
         localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
