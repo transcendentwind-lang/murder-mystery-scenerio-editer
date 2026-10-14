@@ -535,23 +535,28 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
             {/* GM演出用NPCセリフ・ナレーションスクリプト */}
             <div className="space-y-3">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                <AlertTriangle className="h-3.5 w-3.5" />
-                GM 演出用ナレーション ＆ NPCセリフスクリプト
-              </h4>
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+                  <Radio className="h-3.5 w-3.5 text-cyan-400" />
+                  🎙️ GM演出用ナレーション（合同対策本部 首席オペレーター）
+                </h4>
+                <span className="rounded bg-cyan-950 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-300 border border-cyan-800">
+                  CHIEF OPERATOR
+                </span>
+              </div>
 
               {currentDay === 1 && (
                 <div className="space-y-3 text-xs leading-relaxed">
                   <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
-                    <span className="font-bold text-indigo-300">【フェーズ1：緊急招集 ＆ 自己紹介】</span>
+                    <span className="font-bold text-indigo-300">【フェーズ1：緊急回線接続 ＆ 各員自己紹介】</span>
                     <p className="text-slate-300 mt-1 italic">
-                      「小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源喪失。AISも停波し、救難信号を発信した直後に通信途絶しました。これより海上保安庁東京本部と小笠原現地の合同海難救助チームを開設します。まずは各員、氏名・所属・現場で担える役割について自己紹介を行ってください」
+                      （🎙️ 首席オペレーター）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源を喪失、AISも停波し、救難信号を発信した直後に通信が途絶いたしました。これより合同海難救助チームを開設します。各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
                     </p>
                   </div>
 
                   <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3 space-y-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-bold text-amber-300">【フェーズ2：状況提示 ＆ なぜ衛星が使えないか】</span>
+                      <span className="font-bold text-amber-300">【フェーズ2：遭難海図展開 ＆ 漂流捜索方針の決定】</span>
                       <div className="flex items-center gap-1.5 text-xs">
                         <button
                           type="button"
@@ -585,7 +590,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="text-slate-300 italic">
-                      「救難信号発信から既に20分が経過。救難艇が現場海域へ到達するまでさらに40分――合計1時間、船は漂流し続けます。全体に【漂流海図】を開示します。どこへ救難艇を急行させるべきか、6名で協力して結論を出してください」
+                      （🎙️ 首席オペレーター）:「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。危機管理官（PC1）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
                     </p>
                     <div className="mt-2 rounded bg-slate-900/90 p-2 text-[11px] text-slate-300 border border-slate-800">
                       <span className="font-bold text-cyan-400">PC2からの開示情報（衛星不可の理由）:</span>
@@ -607,9 +612,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   </div>
 
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-slate-300">【フェーズ4：救助成功ナレーション】</span>
+                    <span className="font-bold text-slate-300">【フェーズ4：救助成功アナウンス】</span>
                     <p className="text-slate-400 mt-1 italic">
-                      「救難艇が東北東の漂流予測海域へ全速力で到達。東側や南東側の暗礁群を北側にすり抜け、激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功しました！」
+                      （🎙️ 首席オペレーター）:「――現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
                     </p>
                   </div>
 
