@@ -1134,6 +1134,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       padding: 0;
       background: #ffffff;
     }
+    .page-break-before {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
   </style>
 </head>
 <body>
@@ -2719,8 +2723,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                ================================================================ */}
             {category === "gm_guides" && activeTimelineStep && (
               <div className="space-y-6">
-                {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
-                <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
+                {/* ============================================================
+                    【1ページ目】：GM演出・読み上げ台本シート
+                   ============================================================ */}
+                <div className="space-y-5">
+                  {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
+                  <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
                   <div className="flex flex-wrap items-end justify-between gap-4">
                     {/* Day X 状況タイトル */}
                     <div className="flex-1 min-w-[260px]">
@@ -2846,15 +2854,47 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   )}
                 </div>
 
-                {/* 🏢 司令部対応 vs ⚓ 現地救難隊対応（2カラム進行ガイド） */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/80`}>
-                    <div className="mb-2 text-xs font-bold text-indigo-950">
-                      🏢 司令部・後方拠点の動きと誘導ポイント
+                  {/* 1ページ目の末尾フッター（画面プレビュー・印刷用） */}
+                  <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[10px] text-slate-500 font-mono">
+                    <span>Day {activeTimelineStep.dayNumber} GM進行台本 [Page 1/2]</span>
+                    <span>次ページ ➔ 司令部・現地対応 ＆ 進行管理</span>
+                  </div>
+                </div>
+
+                {/* ============================================================
+                    【改ページ区切り（画面プレビュー境界 ＆ A4印刷自動改ページ）】
+                   ============================================================ */}
+                <div className="page-break-before my-8 border-t-2 border-dashed border-indigo-400 pt-5 relative">
+                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full border border-indigo-300 bg-indigo-50 px-3.5 py-0.5 text-[11px] font-bold text-indigo-900 shadow-sm flex items-center gap-1.5 no-print">
+                    <span>📄 【2ページ目】 司令部・現地対応 ＆ 進行管理シート</span>
+                  </div>
+                </div>
+
+                {/* ============================================================
+                    【2ページ目】：司令部・現地対応 ＆ 進行管理シート
+                   ============================================================ */}
+                <div className="space-y-5">
+                  {/* 2ページ目ヘッダー帯 */}
+                  <div className={`rounded-md px-4 py-2.5 ${accent.headerBg} ${accent.headerText} flex items-center justify-between text-xs shadow-sm`}>
+                    <div className="flex items-center gap-2">
+                      <span className="font-bold">Day {activeTimelineStep.dayNumber} {activeTimelineStep.situationTitle}</span>
+                      <span className="opacity-75">｜ 司令部・現地対応方針 ＆ 進行管理</span>
+                    </div>
+                    <span className="text-[10px] opacity-75 font-mono">[Page 2/2]</span>
+                  </div>
+
+                  {/* 🏢 司令部対応（上段・全幅2段配置・スクロールなし全文表示） */}
+                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/90 shadow-sm`}>
+                    <div className="mb-2 flex items-center justify-between border-b border-indigo-100 pb-1.5">
+                      <div className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                        <Building2 className="h-4 w-4 text-indigo-700" />
+                        🏢 司令部・後方拠点の動きと誘導ポイント
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-normal">※全幅表示</span>
                     </div>
                     {isDirectEditMode ? (
                       <textarea
-                        rows={4}
+                        rows={Math.max(5, (activeTimelineStep.hqResponse || "").split("\n").length + 2)}
                         value={activeTimelineStep.hqResponse}
                         onChange={(e) =>
                           handleUpdateActiveTimelineStep((s) => ({
@@ -2862,22 +2902,27 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             hqResponse: e.target.value,
                           }))
                         }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900"
+                        className="w-full rounded border border-dashed border-slate-400 bg-white p-3 text-xs leading-relaxed text-slate-900 focus:outline-none focus:border-indigo-600 font-sans"
                       />
                     ) : (
-                      <p className="whitespace-pre-wrap text-xs leading-relaxed">
+                      <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
                         {activeTimelineStep.hqResponse}
                       </p>
                     )}
                   </div>
 
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/80`}>
-                    <div className="mb-2 text-xs font-bold text-emerald-950">
-                      ⚓ 現地・フィールド班の動きと誘導ポイント
+                  {/* ⚓ 現地救難隊対応（下段・全幅2段配置・スクロールなし全文表示） */}
+                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/90 shadow-sm`}>
+                    <div className="mb-2 flex items-center justify-between border-b border-emerald-100 pb-1.5">
+                      <div className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
+                        <Anchor className="h-4 w-4 text-emerald-700" />
+                        ⚓ 現地・フィールド班の動きと誘導ポイント
+                      </div>
+                      <span className="text-[10px] text-slate-500 font-normal">※全幅表示</span>
                     </div>
                     {isDirectEditMode ? (
                       <textarea
-                        rows={4}
+                        rows={Math.max(5, (activeTimelineStep.fieldResponse || "").split("\n").length + 2)}
                         value={activeTimelineStep.fieldResponse}
                         onChange={(e) =>
                           handleUpdateActiveTimelineStep((s) => ({
@@ -2885,15 +2930,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             fieldResponse: e.target.value,
                           }))
                         }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900"
+                        className="w-full rounded border border-dashed border-slate-400 bg-white p-3 text-xs leading-relaxed text-slate-900 focus:outline-none focus:border-emerald-600 font-sans"
                       />
                     ) : (
-                      <p className="whitespace-pre-wrap text-xs leading-relaxed">
+                      <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
                         {activeTimelineStep.fieldResponse}
                       </p>
                     )}
                   </div>
-                </div>
 
                 {/* ✅ GM進行チェックポイント（直接追加・編集可能） */}
                 <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
@@ -2992,7 +3036,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 </div>
               </div>
-            )}
+            </div>
+          )}
 
             {/* ----------------------------------------------------------------
                 共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
