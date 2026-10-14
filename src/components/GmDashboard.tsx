@@ -1583,15 +1583,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     <div className="grid grid-cols-2 gap-2.5 text-[11px]">
                       <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
-                        <strong className="text-cyan-300 block">昼の演出（一時的沈静化）:</strong>
+                        <strong className="text-cyan-300 block">昼の演出（一時的沈静化と迎撃完了見込み）:</strong>
                         <p className="italic text-slate-300 leading-relaxed font-mono">
-                          「自衛隊の猛攻により、物体は水深1,200mへ深く潜航。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化します。司令部には『もしや退けたのか？』と安堵の空気が流れますが……」
+                          「海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
                         </p>
                       </div>
                       <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 space-y-1">
-                        <strong className="text-rose-300 block">夕〜夜の演出（急激な再浮上と微動復活！）:</strong>
+                        <strong className="text-rose-300 block">夕〜夜の演出（急激な再浮上と微動継続！）:</strong>
                         <p className="italic text-rose-100 leading-relaxed font-mono">
-                          「――警報！深海ソナーが駿河トラフ境界へ向けて超高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如以前を超える大振幅で復活！ 敵は死んでおらず、最終突入を開始したのです！」
+                          「――警報！海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動は継続！巨大生物はまだ生存している可能性が高く、同時に火山活動に直接影響を及ぼしていると考えられます」
                         </p>
                       </div>
                     </div>

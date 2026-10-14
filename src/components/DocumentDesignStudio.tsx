@@ -381,9 +381,10 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 【フェーズ3：防衛庁よりPC2への緊急無線（GM読み上げ台本）】
 「――PC2、防衛庁作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ PC2、直ちにあの生物の写真解析を行った海洋生物学者（PC5）の意見を確認してくれ！ あいつらは一体どうやって一つの個体として統率されているのか？ なぜ富士山を目指すのか？！」`,
 
-  6: `【状況推移演出：一時的沈静化から終盤の再浮上・微動復活へ】
-「（昼）自衛隊の猛攻により、物体は水深1,200mへ深く潜航。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化します。司令部には『もしや退けたのか？』と安堵の空気が流れますが……」
-「（夕〜夜）――警報！深海ソナーが駿河トラフ境界へ向けて超高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如以前を超える大振幅で復活！ 敵は死んでおらず、最終突入を開始したのです！」
+  6: `【状況推移演出：一時的沈静化から終盤の再浮上・微動継続へ】
+「（昼）海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
+
+「（夕〜夜）――警報！海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動は継続！巨大生物はまだ生存している可能性が高く、同時に火山活動に直接影響を及ぼしていると考えられます」
 
 【フェーズ1：祝詞の「舌クリック音」判明 ＆ 日本語自体は無意味】
 「古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。PC3とPC5が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
@@ -445,10 +446,12 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
 
   if (project.gmNotes && project.gmNotes[dayNumber]) {
     const existing = project.gmNotes[dayNumber];
-    const script =
-      !existing.readAloudScript || existing.readAloudScript === step?.incidentOverview
-        ? defaultNarration
-        : existing.readAloudScript;
+    const isOldDefaultScript =
+      !existing.readAloudScript ||
+      existing.readAloudScript === step?.incidentOverview ||
+      (dayNumber === 6 && existing.readAloudScript.includes("水深1,200mへ深く潜航"));
+
+    const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
     const checkpoints =
       Array.isArray(existing.gmCheckpoints) && existing.gmCheckpoints.length > 0
