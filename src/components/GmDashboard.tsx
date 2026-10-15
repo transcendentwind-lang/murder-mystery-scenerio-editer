@@ -642,15 +642,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 2 && (
                 <div className="space-y-4 text-xs leading-relaxed">
-                  {/* フェーズ1：緊急通達＆チーム維持命令 */}
-                  <div className="rounded-lg border border-red-900/60 bg-red-950/25 p-3.5 shadow-sm">
+                  {/* フェーズ1：状況通達 ＆ 緊急チーム維持命令（フェーズ2と統合） */}
+                  <div className="rounded-lg border border-red-900/60 bg-red-950/25 p-3.5 shadow-sm space-y-3">
                     <div className="flex items-center gap-2">
                       <span className="inline-block h-2 w-2 rounded-full bg-red-400 animate-ping" />
                       <span className="font-bold text-red-300">
                         【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
                       </span>
                     </div>
-                    <div className="mt-2 rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
+                    <div className="rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
                       <p className="font-semibold text-white">
                         🚨 緊急速報：西之島周辺海底火山が突発的大規模噴火
                       </p>
@@ -658,22 +658,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         西之島周辺の海底火山が突発的に大噴火。噴煙高度は上空数千メートルに到達。周辺海域に航行警報および緊急退避命令が発令。
                       </p>
                     </div>
-                    <p className="text-slate-300 mt-2.5 italic">
-                      （🎙️ 首席オペレーター 長津）:「――気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です」
-                    </p>
-                    <div className="mt-2 text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
-                      💡 <strong>GMメモ</strong>: Day 1で招集された急造チームの解散が撤回され、このチームが当面維持される必然性を全員に提示します。
+                    <div className="rounded bg-slate-950/90 border border-slate-800 p-3 space-y-2">
+                      <p className="text-slate-200 text-xs italic leading-relaxed">
+                        （🎙️ 首席オペレーター 長津）:「長津です。皆様、お疲れ様です。気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。現場海域の船舶の避難は完了していますが、新しい指示がでています。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に手を回す余裕はありませんので、各自の専門知識を持ち寄りどの調査を優先して実行すべきか合議をお願いいたします」
+                      </p>
+                      <div className="pt-2 border-t border-slate-800/80 text-[11px] text-cyan-300/95 leading-relaxed font-medium">
+                        🗣️ <strong>GMからの案内</strong>: 「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報の調査をすることはできませんので十分検討の上で判断をお願いします」
+                      </div>
                     </div>
-                  </div>
-
-                  {/* フェーズ2：合議制アクションの提示 */}
-                  <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/20 p-3.5">
-                    <span className="font-bold text-indigo-300">
-                      【フェーズ2：情報収集・合議制アクションの提示】
-                    </span>
-                    <p className="text-slate-300 mt-1 italic">
-                      （🎙️ 首席オペレーター 長津）:「――西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで寄せられています。しかし混乱する現場において、すべての調査に手を回す余裕はありません。許された調査枠は――【海上保安庁東京本部（朝潮・貝浜）で1枠】、【小笠原現地（坂凪・太刀魚・浪寄・初瀬）で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議をお願いいたします」
-                    </p>
+                    <div className="text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
+                      💡 <strong>GMメモ</strong>: Day 1で招集された急造チームの解散が撤回され、このチームが当面維持される必然性を提示し、直ちに下記の合議制アクション（東京1枠／現地2枠）の選択へと案内します。
+                    </div>
                   </div>
 
                   {/* インタラクティブ操作：合議制アクション選択コンソール */}
