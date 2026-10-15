@@ -39,9 +39,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   const [subView, setSubView] = useState<"characters" | "evidences" | "matrix">("characters");
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0]?.id || "pc-1");
   const [evidenceFilterChar, setEvidenceFilterChar] = useState<string>("all");
-  const [newCapName, setNewCapName] = useState("");
-  const [newCapDesc, setNewCapDesc] = useState("");
-  const [newCapPhase, setNewCapPhase] = useState<number>(1);
+  const [evidenceFilterDay, setEvidenceFilterDay] = useState<string>("all");
 
   // 選択中IDが存在しない（5名モードでPC6が消えた場合など）に対応
   const currentSelectedCharId = characters.some((c) => c.id === selectedCharId)
@@ -55,35 +53,6 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   const handleUpdateChar = (field: keyof Character, value: any) => {
     const updated = characters.map((c) =>
       c.id === selectedCharId ? { ...c, [field]: value } : c
-    );
-    onUpdateCharacters(updated);
-  };
-
-  // 能力追加
-  const handleAddCapability = () => {
-    if (!newCapName.trim()) return;
-    const newCap: CharacterCapability = {
-      id: `cap-${Date.now()}`,
-      name: newCapName.trim(),
-      description: newCapDesc.trim(),
-      targetPhase: newCapPhase,
-    };
-    const updated = characters.map((c) =>
-      c.id === selectedCharId
-        ? { ...c, capabilities: [...c.capabilities, newCap] }
-        : c
-    );
-    onUpdateCharacters(updated);
-    setNewCapName("");
-    setNewCapDesc("");
-  };
-
-  // 能力削除
-  const handleDeleteCapability = (capId: string) => {
-    const updated = characters.map((c) =>
-      c.id === selectedCharId
-        ? { ...c, capabilities: c.capabilities.filter((cap) => cap.id !== capId) }
-        : c
     );
     onUpdateCharacters(updated);
   };
@@ -114,10 +83,11 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
     onUpdateEvidences(evidences.filter((e) => e.id !== evId));
   };
 
-  const filteredEvidences =
-    evidenceFilterChar === "all"
-      ? evidences
-      : evidences.filter((e) => e.ownerId === evidenceFilterChar);
+  const filteredEvidences = evidences.filter((e) => {
+    const matchChar = evidenceFilterChar === "all" || e.ownerId === evidenceFilterChar;
+    const matchDay = evidenceFilterDay === "all" || e.foundPhase === Number(evidenceFilterDay);
+    return matchChar && matchDay;
+  });
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
@@ -134,7 +104,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               }`}
             >
               <Users className="h-3.5 w-3.5" />
-              キャラクター設定 ＆ できること
+              キャラクター設定
             </button>
             <button
               onClick={() => setSubView("evidences")}
@@ -355,85 +325,6 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                 </div>
               </div>
 
-              {/* できること（固有アクション・権限） */}
-              <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <label className="flex items-center gap-1.5 text-xs font-semibold text-emerald-400">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    できること（固有能力・行使できる権限一覧）
-                  </label>
-                  <span className="text-[10px] text-slate-500">
-                    計 {selectedChar.capabilities.length} 件
-                  </span>
-                </div>
-
-                <div className="space-y-2.5">
-                  {selectedChar.capabilities.map((cap) => (
-                    <div
-                      key={cap.id}
-                      className="flex items-start justify-between rounded-lg border border-slate-800 bg-slate-950 p-3"
-                    >
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <span className="font-bold text-xs text-white">{cap.name}</span>
-                          <span className="rounded bg-indigo-900/40 px-1.5 py-0.5 text-[10px] text-indigo-300">
-                            Day {cap.targetPhase}
-                          </span>
-                        </div>
-                        <p className="mt-1 text-[11px] text-slate-400 leading-relaxed">
-                          {cap.description}
-                        </p>
-                      </div>
-                      <button
-                        onClick={() => handleDeleteCapability(cap.id)}
-                        className="text-slate-600 hover:text-red-400 transition ml-2 p-1"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                {/* 新規能力追加フォーム */}
-                <div className="mt-3 rounded-lg border border-dashed border-slate-800 bg-slate-950/40 p-3">
-                  <h4 className="mb-2 text-[11px] font-semibold text-slate-400">
-                    ＋ 新しい能力・アクションを追加
-                  </h4>
-                  <div className="grid grid-cols-12 gap-2">
-                    <input
-                      type="text"
-                      placeholder="能力・アクション名 (例: 大出力ソナー網接続)"
-                      value={newCapName}
-                      onChange={(e) => setNewCapName(e.target.value)}
-                      className="col-span-8 rounded border border-slate-800 bg-slate-900 px-2.5 py-1.5 text-xs text-slate-200 focus:outline-none"
-                    />
-                    <select
-                      value={newCapPhase}
-                      onChange={(e) => setNewCapPhase(Number(e.target.value))}
-                      className="col-span-4 rounded border border-slate-800 bg-slate-900 px-2 py-1.5 text-xs text-slate-200 focus:outline-none"
-                    >
-                      {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                        <option key={d} value={d}>
-                          Day {d} 実行可能
-                        </option>
-                      ))}
-                    </select>
-                    <textarea
-                      placeholder="アクションの内容、効果、何ができるかを記述..."
-                      value={newCapDesc}
-                      onChange={(e) => setNewCapDesc(e.target.value)}
-                      rows={2}
-                      className="col-span-12 rounded border border-slate-800 bg-slate-900 p-2 text-xs text-slate-200 focus:outline-none"
-                    />
-                  </div>
-                  <button
-                    onClick={handleAddCapability}
-                    className="mt-2 flex items-center gap-1 rounded bg-indigo-600 px-3 py-1 text-xs font-semibold text-white hover:bg-indigo-500 transition"
-                  >
-                    <Plus className="h-3 w-3" /> 能力を追加
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
         </div>
@@ -443,20 +334,51 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
       {subView === "evidences" && (
         <div className="flex flex-1 flex-col overflow-hidden">
           <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <span className="text-xs text-slate-400">絞り込み:</span>
-              <select
-                value={evidenceFilterChar}
-                onChange={(e) => setEvidenceFilterChar(e.target.value)}
-                className="rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs text-slate-200 focus:outline-none"
-              >
-                <option value="all">全員の証拠を表示 ({evidences.length})</option>
-                {characters.map((c) => (
-                  <option key={c.id} value={c.id}>
-                    {c.name}
-                  </option>
-                ))}
-              </select>
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-xs text-slate-400 font-medium">絞り込み:</span>
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] text-slate-500">所持者:</span>
+                <select
+                  value={evidenceFilterChar}
+                  onChange={(e) => setEvidenceFilterChar(e.target.value)}
+                  className="rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none"
+                >
+                  <option value="all">全員 ({evidences.length})</option>
+                  {characters.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="flex items-center gap-1.5">
+                <span className="text-[11px] text-slate-500">日付:</span>
+                <select
+                  value={evidenceFilterDay}
+                  onChange={(e) => setEvidenceFilterDay(e.target.value)}
+                  className="rounded border border-slate-800 bg-slate-900 px-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none"
+                >
+                  <option value="all">全日程 (Day 1〜7)</option>
+                  {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+                    <option key={d} value={String(d)}>
+                      Day {d}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {(evidenceFilterChar !== "all" || evidenceFilterDay !== "all") && (
+                <button
+                  onClick={() => {
+                    setEvidenceFilterChar("all");
+                    setEvidenceFilterDay("all");
+                  }}
+                  className="text-[11px] text-indigo-400 hover:text-indigo-300 underline ml-1"
+                >
+                  条件クリア ({filteredEvidences.length}件該当)
+                </button>
+              )}
             </div>
 
             <button

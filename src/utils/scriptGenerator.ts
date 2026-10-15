@@ -234,7 +234,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   } else {
     md += `- **現地救難隊の行動**: 坂凪（PC3）が救難艇で急行し、暗礁手前で接舷・救助。太刀魚（PC4）が海洋ブイ海流データを提示。浪寄（PC5）が潮目水温データを提示。初瀬（PC6）が現場海域の海図と暗礁位置・遭難直前無線ログを照合。\n`;
   }
-  md += `- **開示される資料・証拠**: [ev-drift-map] 漂流予測計算海図、[ev-satellite-blindspot] 衛星捜索制約レポート、[ev-diver-box-photo] 救助された謎のダイバーグループと大型冷凍ボックスの写真、[ev-captain-testimony] 船長証言（『巨大な影に船底を叩かれた』）、[ev-radio-fragment] 途絶した遭難無線ログ。\n`;
+  md += `- **開示される資料・証拠**: [ev-vessel-leeway-data] 遭難船スペック＆風圧流データ、[ev-satellite-blindspot] 衛星捜索制約レポート、[ev-reef-chart] 暗礁海図、[ev-ocean-buoy-current] 海洋気象ブイ流速データ、[ev-temperature-front] 潮目水温解析図、[ev-radio-fragment] 遭難無線ログ、[ev-diver-box-photo] 冷凍ボックスの写真、[ev-captain-testimony] 船長証言記録。\n`;
   md += `- **調査結果と疑惑**: 船長『巨大生物を見た』vs 謎のダイバーグループ『魚の調査サンプルだ』と食い違い、ダイバーたちは海から引き揚げて箱に入れた約30kgほどのずっしり重いプラスチック冷凍ボックスを持ち去る。\n\n`;
 
   // Day 2

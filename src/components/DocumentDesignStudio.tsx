@@ -1173,8 +1173,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @page {
-      size: A4 portrait;
-      margin: 10mm;
+      size: ${category === "evidences" ? "B5 portrait" : "A4 portrait"};
+      margin: ${category === "evidences" ? "12mm" : "10mm"};
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -1871,18 +1871,20 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
              ==================================================================== */}
           <div
             ref={printableSheetRef}
-            className={`mx-auto max-w-4xl transition-all relative ${
+            className={`mx-auto transition-all relative ${
               category === "visuals"
-                ? "bg-transparent p-0 border-0 shadow-none"
+                ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
                 : category === "handouts"
-                ? "bg-white text-slate-900 border border-slate-300 shadow-lg font-sans rounded-sm p-8 md:p-12"
-                : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12`
+                ? "max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-lg font-sans rounded-sm p-8 md:p-12"
+                : category === "evidences"
+                ? "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
+                : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12 max-w-4xl`
             }`}
           >
             {/* ----------------------------------------------------------------
-                共通ドキュメントヘッダー（証拠資料・GM資料のみ表示。個人ハンドアウトおよび全体提示の地図・写真は枠不要のため非表示）
+                共通ドキュメントヘッダー（GM資料のみ表示。個人ハンドアウト・全体提示の地図/写真・証拠カードは枠不要のため非表示）
                ---------------------------------------------------------------- */}
-            {category !== "handouts" && category !== "visuals" && (
+            {category !== "handouts" && category !== "visuals" && category !== "evidences" && (
               <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex-1">
@@ -2407,117 +2409,147 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {/* ================================================================
                 ② 証拠資料（テキスト中心の調査記録・文書）のデザイン＆直接編集ビュー
                ================================================================ */}
-            {category === "evidences" && activeEvidence && (
-              <div className="space-y-6">
-                {/* 証拠タイトル＆メタ情報ボックス */}
-                <div className={`rounded-md p-5 ${accent.headerBg} ${accent.headerText} shadow`}>
-                  <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded bg-white/20 px-2.5 py-0.5 font-mono font-bold">
-                        EVIDENCE DOCUMENT / 証拠資料レコード
+            {category === "evidences" && activeEvidence && (() => {
+              const ownerChar = project.characters.find((c) => c.id === activeEvidence.ownerId);
+              const ownerName =
+                activeEvidence.ownerId === "all" || !activeEvidence.ownerId
+                  ? "全体公開 / 現場資料"
+                  : ownerChar
+                  ? `${ownerChar.name}（${ownerChar.profession || "所持"}）`
+                  : activeEvidence.ownerId;
+
+              return (
+                <div className="space-y-4">
+                  {/* B5カード ヘッダー＆メタ情報 */}
+                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs">
+                      {/* Day & 種別 */}
+                      <div className="flex items-center gap-2">
+                        <span className="rounded bg-slate-800 px-2.5 py-1 font-mono font-bold text-white shadow-sm">
+                          証拠資料カード
+                        </span>
+                        {isDirectEditMode ? (
+                          <select
+                            value={activeEvidence.foundPhase}
+                            onChange={(e) =>
+                              handleUpdateActiveEvidence((ev) => ({
+                                ...ev,
+                                foundPhase: parseInt(e.target.value, 10) || 1,
+                              }))
+                            }
+                            className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-800"
+                          >
+                            {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+                              <option key={d} value={d}>
+                                開示: Day {d}
+                              </option>
+                            ))}
+                          </select>
+                        ) : (
+                          <span className="rounded bg-slate-200 px-2 py-0.5 font-bold text-slate-700">
+                            開示フェーズ: Day {activeEvidence.foundPhase}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 所持者 & 公開区分 */}
+                      <div className="flex flex-wrap items-center gap-2 text-xs">
+                        {isDirectEditMode ? (
+                          <>
+                            <select
+                              value={activeEvidence.ownerId || "all"}
+                              onChange={(e) =>
+                                handleUpdateActiveEvidence((ev) => ({
+                                  ...ev,
+                                  ownerId: e.target.value,
+                                }))
+                              }
+                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
+                            >
+                              <option value="all">🌐 全体公開 / 現場</option>
+                              {project.characters.map((c) => (
+                                <option key={c.id} value={c.id}>
+                                  👤 {c.name}
+                                </option>
+                              ))}
+                            </select>
+                            <select
+                              value={activeEvidence.category}
+                              onChange={(e) =>
+                                handleUpdateActiveEvidence((ev) => ({
+                                  ...ev,
+                                  category: e.target.value as EvidenceItem["category"],
+                                }))
+                              }
+                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
+                            >
+                              <option value="document">📄 文書・記録</option>
+                              <option value="data">📊 観測・データ</option>
+                              <option value="sample">🔬 検体・物証</option>
+                              <option value="testimony">🗣️ 証言・調書</option>
+                              <option value="audio">📻 音声・ログ</option>
+                            </select>
+                            <select
+                              value={activeEvidence.visibility}
+                              onChange={(e) =>
+                                handleUpdateActiveEvidence((ev) => ({
+                                  ...ev,
+                                  visibility: e.target.value as EvidenceVisibility,
+                                }))
+                              }
+                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
+                            >
+                              <option value="public">全体公開</option>
+                              <option value="shareable">共有可能</option>
+                              <option value="private">個別秘匿</option>
+                            </select>
+                          </>
+                        ) : (
+                          <>
+                            <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
+                              所持: {ownerName}
+                            </span>
+                            <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
+                              {activeEvidence.visibility === "public"
+                                ? "🌐 全体公開"
+                                : activeEvidence.visibility === "shareable"
+                                ? "🤝 共有可能"
+                                : "🔒 個別秘匿"}
+                            </span>
+                          </>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* 件名 / タイトル */}
+                    <div className="mt-3">
+                      <span className="block text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                        資料件名
                       </span>
                       {isDirectEditMode ? (
-                        <select
-                          value={activeEvidence.foundPhase}
+                        <input
+                          type="text"
+                          value={activeEvidence.title}
                           onChange={(e) =>
                             handleUpdateActiveEvidence((ev) => ({
                               ...ev,
-                              foundPhase: parseInt(e.target.value, 10) || 1,
+                              title: e.target.value,
                             }))
                           }
-                          className="rounded border border-white/30 bg-slate-900 px-2 py-0.5 text-xs font-bold text-white"
-                        >
-                          {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                            <option key={d} value={d}>
-                              開示フェーズ: Day {d}
-                            </option>
-                          ))}
-                        </select>
+                          className="mt-1 w-full rounded border border-slate-300 bg-white px-3 py-1.5 text-base font-bold text-slate-900 focus:border-slate-600 focus:outline-none"
+                        />
                       ) : (
-                        <span className="rounded bg-amber-500/30 px-2 py-0.5 font-bold">
-                          開示: Day {activeEvidence.foundPhase}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* 公開区分・種別 */}
-                    <div className="flex items-center gap-2">
-                      {isDirectEditMode ? (
-                        <>
-                          <select
-                            value={activeEvidence.category}
-                            onChange={(e) =>
-                              handleUpdateActiveEvidence((ev) => ({
-                                ...ev,
-                                category: e.target.value as EvidenceItem["category"],
-                              }))
-                            }
-                            className="rounded border border-white/30 bg-slate-900 px-2 py-0.5 text-xs text-white"
-                          >
-                            <option value="document">📄 文書・記録</option>
-                            <option value="data">📊 観測・解析データ</option>
-                            <option value="sample">🔬 検体・物証鑑定</option>
-                            <option value="testimony">🗣️ 証言・聴取調書</option>
-                            <option value="audio">📻 音声・通信ログ</option>
-                          </select>
-                          <select
-                            value={activeEvidence.visibility}
-                            onChange={(e) =>
-                              handleUpdateActiveEvidence((ev) => ({
-                                ...ev,
-                                visibility: e.target.value as EvidenceVisibility,
-                              }))
-                            }
-                            className="rounded border border-white/30 bg-slate-900 px-2 py-0.5 text-xs text-white"
-                          >
-                            <option value="public">🌐 全体公開情報</option>
-                            <option value="shareable">🤝 共有可能情報</option>
-                            <option value="private">🔒 個別秘匿情報</option>
-                          </select>
-                        </>
-                      ) : (
-                        <span className="text-xs opacity-90">
-                          区分:{" "}
-                          {activeEvidence.visibility === "public"
-                            ? "全体公開証拠"
-                            : activeEvidence.visibility === "shareable"
-                            ? "譲渡・共有可能証拠"
-                            : "個別秘匿証拠"}
-                        </span>
+                        <h1 className="mt-1 text-lg font-bold text-slate-900">
+                          {activeEvidence.title}
+                        </h1>
                       )}
                     </div>
                   </div>
 
-                  {/* 証拠タイトル（直接編集可能） */}
-                  <div className="mt-3">
-                    <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                      資料件名 / EVIDENCE TITLE
-                    </span>
-                    {isDirectEditMode ? (
-                      <input
-                        type="text"
-                        value={activeEvidence.title}
-                        onChange={(e) =>
-                          handleUpdateActiveEvidence((ev) => ({
-                            ...ev,
-                            title: e.target.value,
-                          }))
-                        }
-                        className="mt-1 w-full rounded border border-white/30 bg-white/10 px-3 py-1.5 text-xl font-bold text-white focus:border-white focus:bg-white/20 focus:outline-none"
-                      />
-                    ) : (
-                      <h1 className="mt-1 text-xl font-bold">{activeEvidence.title}</h1>
-                    )}
-                  </div>
-                </div>
-
-                {/* 入手条件・関連アクション枠 */}
-                <div
-                  className={`flex flex-wrap items-center justify-between gap-2 rounded-md border px-4 py-3 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
-                >
-                  <div className="flex-1">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-600">
-                      ■ 入手経路・開示トリガー条件（ACQUISITION CONDITION）
+                  {/* 入手条件・開示トリガー */}
+                  <div className="rounded-md border border-slate-200 bg-slate-50/70 px-3.5 py-2 text-xs">
+                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      入手経路・開示トリガー
                     </span>
                     {isDirectEditMode ? (
                       <input
@@ -2529,71 +2561,57 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             acquisitionCondition: e.target.value,
                           }))
                         }
-                        placeholder="例：Day 2 アクション調査 T-1 の実行により開示"
-                        className="mt-0.5 w-full rounded border border-dashed border-slate-400 bg-white/90 px-2.5 py-1 text-xs font-semibold text-slate-900"
+                        placeholder="例：Day 1 初期開示 / 調査により開示"
+                        className="mt-0.5 w-full rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
                       />
                     ) : (
-                      <div className="mt-0.5 text-xs font-semibold">
-                        {activeEvidence.acquisitionCondition || "フェーズ進行に伴い開示"}
+                      <div className="mt-0.5 font-medium text-slate-700">
+                        {activeEvidence.acquisitionCondition || "フェーズ進行または調査により開示"}
                       </div>
                     )}
                   </div>
-                </div>
 
-                {/* テーマ別の装飾インジケーター（通信データや鑑定カルテの場合） */}
-                {currentDesign.themeId === "digital_telemetry" && (
-                  <div className="rounded border border-cyan-500/50 bg-cyan-950/90 p-3 font-mono text-[11px] text-cyan-200">
-                    <div className="flex items-center justify-between border-b border-cyan-800 pb-1">
-                      <span>SIGNAL TELEMETRY STREAM // VERIFIED</span>
-                      <span>FREQ: 15-40Hz // DEPTH: 800m</span>
-                    </div>
-                    <div className="mt-2 flex items-center gap-1 text-cyan-400">
-                      <span>▂▃▅▇█▇▅▃▂▁▂▄▆█▆▄▂▁▂▃▅▇█▇▅▃▂</span>
-                      <span className="ml-2 text-[10px] text-cyan-300">
-                        [ACOUSTIC / SEISMIC WAVEFORM RECORDED]
+                  {/* 本文エリア（B5カードの適正サイズ） */}
+                  <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+                    <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-2">
+                      <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                        ■ 記録・本文内容
                       </span>
+                      {isDirectEditMode && (
+                        <span className="text-[10px] text-slate-400">
+                          ※直接編集可能
+                        </span>
+                      )}
                     </div>
+                    {isDirectEditMode ? (
+                      <textarea
+                        rows={10}
+                        value={activeEvidence.description}
+                        onChange={(e) =>
+                          handleUpdateActiveEvidence((ev) => ({
+                            ...ev,
+                            description: e.target.value,
+                          }))
+                        }
+                        className="w-full rounded border border-dashed border-slate-300 bg-slate-50/50 p-3 text-sm leading-relaxed text-slate-900 focus:border-slate-500 focus:bg-white focus:outline-none"
+                      />
+                    ) : (
+                      <div className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
+                        {activeEvidence.description}
+                      </div>
+                    )}
                   </div>
-                )}
 
-                {/* 証拠本文（メインテキスト・直接編集可能） */}
-                <div className={`rounded-md border-2 p-6 ${accent.borderMain} bg-white/90 shadow-inner`}>
-                  <div className="mb-3 flex items-center justify-between border-b border-slate-300 pb-2">
-                    <span className={`text-sm font-extrabold ${accent.sectionTitleText}`}>
-                      ■ 調査報告・記録本文（RECORD BODY）
-                    </span>
-                    <span className="text-[11px] text-slate-500">
-                      ※枠内をクリックして直接テキストを修正・追記できます
-                    </span>
-                  </div>
-                  {isDirectEditMode ? (
-                    <textarea
-                      rows={14}
-                      value={activeEvidence.description}
-                      onChange={(e) =>
-                        handleUpdateActiveEvidence((ev) => ({
-                          ...ev,
-                          description: e.target.value,
-                        }))
-                      }
-                      className="w-full rounded border border-dashed border-slate-400 bg-white p-3.5 text-sm leading-relaxed text-slate-900 focus:border-indigo-600 focus:outline-none"
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                      {activeEvidence.description}
+                  {/* プレイヤー記入用メモ欄 */}
+                  <div className="rounded-md border border-dashed border-slate-300 bg-slate-50/50 p-3">
+                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      ✏️ プレイヤー考察・メモ欄
                     </div>
-                  )}
-                </div>
-
-                {/* プレイヤー記入用メモ欄（配布資料としての実用枠） */}
-                <div className="rounded-md border border-dashed border-slate-400 bg-white/50 p-4">
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                    ✏️ 調査班・プレイヤー考察メモ欄（ANALYSIS & NOTES）
+                    <div className="mt-1 h-12 border-b border-dotted border-slate-300" />
                   </div>
-                  <div className="mt-2 h-16 border-b border-dotted border-slate-300" />
                 </div>
-              </div>
-            )}
+              );
+            })()}
 
             {/* ================================================================
                 ③ 全体提示される地図や写真（ビジュアル提示ボード）のA4印刷最大化ビュー
