@@ -592,17 +592,18 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <p className="text-slate-300 italic">
                       （🎙️ 首席オペレーター）:「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。危機管理官（PC1）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
                     </p>
-                    <div className="mt-2 rounded bg-slate-900/90 p-2 text-[11px] text-slate-300 border border-slate-800">
-                      <span className="font-bold text-cyan-400">PC2からの開示情報（衛星不可の理由）:</span>
-                      <p className="mt-0.5">
+                  </div>
+
+                  <div className="rounded border border-emerald-900/60 bg-emerald-950/20 p-3 space-y-2.5">
+                    <span className="font-bold text-emerald-300">【フェーズ3：漂流予測パズル・情報共有（合議・推理枠）】</span>
+                    <div className="rounded bg-slate-900/90 p-2.5 text-[11px] text-slate-300 border border-slate-800">
+                      <span className="font-bold text-cyan-400">🛡️ PC2からの開示情報（なぜ衛星が使えないのか）:</span>
+                      <p className="mt-0.5 leading-relaxed">
                         「気象衛星ひまわりは解像度不足で40tの小型船を捕捉不可。低軌道偵察衛星は軌道通過まで4時間＋現場の雨雲で光学視界ゼロ。全電源喪失でAISも途絶。衛星画像頼みの捜索は不可能です！現場の海流と風から計算するしかありません！」
                       </p>
                     </div>
-                  </div>
-
-                  <div className="rounded border border-emerald-900/60 bg-emerald-950/20 p-3">
-                    <span className="font-bold text-emerald-300">【フェーズ3：漂流予測パズル（GM用正解メモ）】</span>
-                    <div className="mt-1 space-y-1 text-[11px] text-slate-300">
+                    <div className="space-y-1 text-[11px] text-slate-300">
+                      <p className="font-bold text-slate-200">🔍 各員の開示情報と漂流ベクトル（GM用正解メモ）:</p>
                       <p>・<strong className="text-white">PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
                       <p>・<strong className="text-white">PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
                       <p>・<strong className="text-white">PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
@@ -618,16 +619,22 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </p>
                   </div>
 
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
+                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
                     <span className="font-bold text-amber-400">【NPC 船長（救助直後）】:</span>
-                    <p className="text-slate-300 mt-1">
-                      「あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかった。船はスクリューが何かに巻き付かれたように故障して、計器類も壊れてしまったんだ。とにかく助かってよかった。ダイバーたちはこの1ヶ月前ぐらいから頻繁にだいぶを繰り返していて、だいぶ慣れた様子だった。あのあとすぐに帰ると言っていたよ。ちょっと神社にお参りしてくるようにするよ」
+                    <p className="text-slate-400 text-[11px] italic">
+                      民間チャーター船「パパズドルフィン」の船長は、荒波で不安定な足場でもしっかりとした足取りで巡視船へと乗り込んできた。
+                    </p>
+                    <p className="text-slate-200 mt-1 leading-relaxed">
+                      「お世話をかけますが、船は二見港まで曳航いただけますか。お客さんが怪我なくてよかった。船はスクリューが何かに巻き付かれたように故障して、計器類も電源が使えなくてお手上げになっちゃった。全電源喪失なんて初めてで焦りましたよ。今日乗せたダイバーたちはこの1ヶ月前ぐらいから頻繁にダイビングを繰り返していて、手慣れた様子だった。船の下に何かいるような感じだったけど、クジラとは思えなかったね。クジラなら潮吹きのブローや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかったんでね。海は怖いねぇ、あとで神社にお参りしてくるようにするよ」
                     </p>
                   </div>
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-blue-400">【NPC ダイバー（不気味な冷静さ・大型冷凍ボックスを抱えて）】:</span>
-                    <p className="text-slate-400 mt-1">
-                      「船長は大袈裟ですね。ただの大型クジラですよ。私たちはこの近辺での魚の生態調査をしており、珍しい魚を採集していただけです。漂流事故で大変でしたが、これで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。……この冷凍ボックス、本土行きの定期便に急ぎ乗せていただけますか？」
+                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+                    <span className="font-bold text-blue-400">【NPC ダイバー2名（救助直後）】:</span>
+                    <p className="text-slate-400 text-[11px] italic">
+                      ダイバー達はほっとした顔を浮かべながら、酸素ボンベを含むダイビング装備は船に乗せたままと船長に断りを入れ、大型のクーラーボックスを抱えて巡視船に乗り込んできた。
+                    </p>
+                    <p className="text-slate-200 mt-1 leading-relaxed">
+                      「助かりました。まさか漂流するとは思ってなくて。船の下に何かいたみたいですね、漂流が始まってから潜ってはいないので、はっきりとは言えないですけど、ただの大型クジラですよ。私たちですか、この近辺での魚の生態調査をしてまして、珍しい魚を標本採集していたんです。帰れるのか心肺でしたが、これで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。この便を逃すとしばらく戻れないですからね、もう帰れないかと思って冷や汗をかいていました」
                     </p>
                   </div>
                 </div>
