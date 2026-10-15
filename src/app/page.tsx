@@ -351,12 +351,20 @@ export default function WorkbenchPage() {
                   characters={project.characters}
                   evidences={project.evidences}
                   playerCount={project.playerCount}
+                  crypticWords={project.crypticWords}
+                  crypticGrammar={project.crypticGrammar}
                   onTogglePlayerCount={handleTogglePlayerCount}
                   onUpdateCharacters={(newChars) =>
                     handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                   }
                   onUpdateEvidences={(newEvs) =>
                     handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
+                  }
+                  onUpdateWords={(newWords) =>
+                    handleUpdateProject((prev) => ({ ...prev, crypticWords: newWords }))
+                  }
+                  onUpdateGrammar={(newGrammar) =>
+                    handleUpdateProject((prev) => ({ ...prev, crypticGrammar: newGrammar }))
                   }
                 />
               </div>

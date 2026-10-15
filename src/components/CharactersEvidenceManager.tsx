@@ -1,7 +1,14 @@
 "use client";
 
 import React, { useState } from "react";
-import { Character, EvidenceItem, CharacterCapability, EvidenceVisibility } from "@/types/schema";
+import {
+  Character,
+  EvidenceItem,
+  CharacterCapability,
+  EvidenceVisibility,
+  CrypticWord,
+  CrypticGrammar,
+} from "@/types/schema";
 import {
   Users,
   FileText,
@@ -17,14 +24,20 @@ import {
   Sparkles,
   ChevronRight,
   Package,
+  Volume2,
 } from "lucide-react";
+import { CrypticMatrix } from "@/components/CrypticMatrix";
 
 interface CharactersEvidenceManagerProps {
   characters: Character[];
   evidences: EvidenceItem[];
   playerCount?: number;
+  crypticWords?: CrypticWord[];
+  crypticGrammar?: CrypticGrammar;
   onUpdateCharacters: (chars: Character[]) => void;
   onUpdateEvidences: (evs: EvidenceItem[]) => void;
+  onUpdateWords?: (words: CrypticWord[]) => void;
+  onUpdateGrammar?: (grammar: CrypticGrammar) => void;
   onTogglePlayerCount?: (count: number) => void;
 }
 
@@ -32,11 +45,20 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   characters,
   evidences,
   playerCount = 6,
+  crypticWords = [],
+  crypticGrammar = {
+    ruleDescription: "",
+    correctSequence: [],
+    combinedMessage: "",
+    holderCharId: "",
+  },
   onUpdateCharacters,
   onUpdateEvidences,
+  onUpdateWords,
+  onUpdateGrammar,
   onTogglePlayerCount,
 }) => {
-  const [subView, setSubView] = useState<"characters" | "evidences" | "matrix">("characters");
+  const [subView, setSubView] = useState<"characters" | "evidences" | "matrix" | "audio_puzzle">("characters");
   const [selectedCharId, setSelectedCharId] = useState<string>(characters[0]?.id || "pc-1");
   const [evidenceFilterChar, setEvidenceFilterChar] = useState<string>("all");
   const [evidenceFilterDay, setEvidenceFilterDay] = useState<string>("all");
@@ -127,6 +149,18 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
             >
               <Grid className="h-3.5 w-3.5" />
               証拠配分マトリクス (PC × Day)
+            </button>
+            <button
+              onClick={() => setSubView("audio_puzzle")}
+              className={`flex items-center gap-2 rounded-md px-3 py-1.5 text-xs font-medium transition ${
+                subView === "audio_puzzle"
+                  ? "bg-indigo-600 text-white shadow"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+              title="クジラのクリック音・祝詞の舌クリック音の試聴と8語新言語合成シミュレータ"
+            >
+              <Volume2 className="h-3.5 w-3.5 text-cyan-400" />
+              音響・祝詞スタジオ（コーダ＆祝詞解析）
             </button>
           </div>
         </div>
@@ -533,6 +567,19 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               </tbody>
             </table>
           </div>
+        </div>
+      )}
+
+      {/* ④ 音響・祝詞解析スタジオ */}
+      {subView === "audio_puzzle" && (
+        <div className="flex-1 overflow-hidden -mx-6 -mb-6">
+          <CrypticMatrix
+            words={crypticWords}
+            grammar={crypticGrammar}
+            characters={characters}
+            onUpdateWords={onUpdateWords || (() => {})}
+            onUpdateGrammar={onUpdateGrammar || (() => {})}
+          />
         </div>
       )}
     </div>
