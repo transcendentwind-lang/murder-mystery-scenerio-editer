@@ -607,7 +607,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <p>・<strong className="text-white">朝潮 / PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
                       <p>・<strong className="text-white">太刀魚 / PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
                       <p>・<strong className="text-white">浪寄 / PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
-                      <p>・<strong className="text-white">初瀬 / PC6 (無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
+                      <p>・<strong className="text-white">初瀬 / PC6 (無線・5名時は太刀魚)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
                       <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
                     </div>
                   </div>
@@ -615,7 +615,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-slate-300">【フェーズ4：救助成功アナウンス】</span>
                     <p className="text-slate-400 mt-1 italic">
-                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
+                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6／5名時は太刀魚）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
                     </p>
                   </div>
 
@@ -1106,14 +1106,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-3 space-y-1.5">
                     <div className="flex items-center gap-1.5 font-bold text-indigo-300 text-xs">
                       <Scroll className="h-4 w-4 text-indigo-400" />
-                      【フェーズ4：初瀬 / PC6（救護・神職血統）個別ハンドアウト GMガイド】
+                      【フェーズ4：初瀬 / PC6（救護・神職血統／5名時は太刀魚）個別ハンドアウト GMガイド】
                     </div>
                     <blockquote className="border-l-2 border-indigo-500 pl-3 py-0.5 text-slate-300 text-[11px] italic">
                       「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
                     </blockquote>
                     <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
                       ⚠️ <strong>【重要制約】</strong>:
-                      初瀬（PC6）に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                      初瀬（PC6／5名時は太刀魚PC4）に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
                     </div>
                   </div>
 

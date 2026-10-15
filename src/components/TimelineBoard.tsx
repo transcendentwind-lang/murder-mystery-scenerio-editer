@@ -413,7 +413,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-lg border border-blue-900/40 bg-blue-950/20 p-3">
                 <label className="mb-1 flex items-center gap-1.5 font-bold text-blue-300">
                   <Shield className="h-3.5 w-3.5" />
-                  海上保安庁東京本部の動き (PC1, PC2)
+                  海上保安庁東京本部の動き (朝潮・貝浜 / PC1, PC2)
                 </label>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
                   {currentStep.hqResponse}
@@ -423,7 +423,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-lg border border-emerald-900/40 bg-emerald-950/20 p-3">
                 <label className="mb-1 flex items-center gap-1.5 font-bold text-emerald-300">
                   <Radio className="h-3.5 w-3.5" />
-                  現地救難隊の動き (PC3〜PC6)
+                  現地救難隊の動き (坂凪・太刀魚・浪寄・初瀬 / 5名時は坂凪・太刀魚・浪寄)
                 </label>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
                   {currentStep.fieldResponse}
@@ -538,10 +538,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-0.5">
-                    <p>・<strong>PC1 (風)</strong>: 南西の強風15m/s ➔ 北東へ約1.5ノット押し流される</p>
-                    <p>・<strong>PC4/5 (海流・潮目)</strong>: 黒潮支流の表層流は真東へ2.0ノット（減衰なし）</p>
-                    <p>・<strong>PC6 (無線)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
-                    <p>・<strong>PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
+                    <p>・<strong>朝潮 / PC1 (風)</strong>: 南西の強風15m/s ➔ 北東へ約1.5ノット押し流される</p>
+                    <p>・<strong>太刀魚 / PC4・浪寄 / PC5 (海流・潮目)</strong>: 黒潮支流の表層流は真東へ2.0ノット（減衰なし）</p>
+                    <p>・<strong>初瀬 / PC6 (無線・5名時は太刀魚)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
+                    <p>・<strong>坂凪 / PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
                   </div>
                 </div>
               </div>
@@ -1209,13 +1209,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ④ PC6 専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
+                {/* ④ 初瀬（PC6／5名時は太刀魚PC4）専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
                 <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-3.5 space-y-2">
                   <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                     <div className="flex items-center gap-1.5">
                       <Scroll className="h-4 w-4 text-indigo-400" />
                       <span className="font-bold text-xs text-white">
-                        【PC6（神職）専用 個別ハンドアウト】社家に伝わる海鳴りの言い伝え
+                        【初瀬（PC6／5名時は太刀魚PC4）専用 個別ハンドアウト】社家に伝わる海鳴りの言い伝え
                       </span>
                     </div>
                     <button
@@ -1229,8 +1229,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
                   </p>
                   <div className="rounded bg-indigo-950/60 border border-indigo-900/80 p-2 text-[10px] text-amber-200">
-                    ⚠️ <strong>【PC6 プレイヤー心得（重要制約）】</strong>:
-                    現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）
+                    ⚠️ <strong>【初瀬（PC6／5名時は太刀魚PC4）プレイヤー心得（重要制約）】</strong>:
+                    現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）※5名プレイ時はPC4太刀魚がこの役割を兼任します。
                   </div>
                 </div>
 
@@ -1245,7 +1245,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           【Day 3 終盤合同合議 ＆ 危機管理官最終意思決定】
                         </span>
                         <span className="ml-2 text-[10px] text-amber-300 font-mono">
-                          海上保安庁の諮問（生物学鑑定 ＆ 防衛出動要否）と危機管理官（PC1）の決断
+                          海上保安庁の諮問（生物学鑑定 ＆ 防衛出動要否）と危機管理官 朝潮（PC1）の決断
                         </span>
                       </div>
                     </div>
@@ -1254,7 +1254,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         合議制（全員参加）
                       </span>
                       <span className="rounded bg-rose-950 px-2 py-0.5 font-bold text-rose-300 border border-rose-700">
-                        最終決定: PC1（危機管理官）
+                        最終決定: 朝潮（PC1: 危機管理官）
                       </span>
                     </div>
                   </div>
@@ -1268,25 +1268,25 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <p className="text-[11px] text-slate-300 leading-relaxed">
                       洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）を受け、現場の海上保安庁は緊迫しています。<br />
                       「全長数百mの潜航物体……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
-                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛庁リエゾン（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>海上保安庁東京本部の危機管理官（PC1）</strong>が最終意思決定を下します。
+                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者 浪寄（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛省リエゾン 貝浜（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>海上保安庁東京本部の危機管理官 朝潮（PC1）</strong>が最終意思決定を下します。
                     </p>
                   </div>
 
-                  {/* ステップ1：海洋生物学者（PC5）への相談 */}
+                  {/* ステップ1：海洋生物学者 浪寄（PC5）への相談 */}
                   <div className="rounded-lg border border-teal-800/80 bg-teal-950/20 p-3.5 space-y-2.5">
                     <div className="flex items-center justify-between border-b border-teal-900/60 pb-1.5">
                       <div className="flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-teal-400" />
                         <span className="font-bold text-xs text-teal-200">
-                          ① 海上保安庁 ➔ PC5（海洋生物学者）への相談: 写真の生物学的解釈
+                          ① 海上保安庁 ➔ 浪寄（PC5: 海洋生物学者）への相談: 写真の生物学的解釈
                         </span>
                       </div>
                       <span className="text-[10px] text-teal-300 font-mono bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
-                        PC5 専門領域
+                        浪寄（PC5）専門領域
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-300 italic">
-                      「PC5准教授、この写真（海面下の巨大影と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                      「浪寄准教授、この写真（海面下の巨大影と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -1358,21 +1358,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  {/* ステップ2：防衛庁リエゾン（PC2）への判断要請 */}
+                  {/* ステップ2：防衛省リエゾン 貝浜（PC2）への判断要請 */}
                   <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/20 p-3.5 space-y-2.5">
                     <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                       <div className="flex items-center gap-1.5">
                         <Shield className="h-4 w-4 text-indigo-400" />
                         <span className="font-bold text-xs text-indigo-200">
-                          ② 海上保安庁 ➔ PC2（防衛庁リエゾン）への要請: 自衛隊出動の必要性判断
+                          ② 海上保安庁 ➔ 貝浜（PC2: 防衛省リエゾン）への要請: 自衛隊出動の必要性判断
                         </span>
                       </div>
                       <span className="text-[10px] text-indigo-300 font-mono bg-indigo-950 px-2 py-0.5 rounded border border-indigo-800">
-                        PC2 専門領域
+                        貝浜（PC2）専門領域
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-300 italic">
-                      「PC2リエゾン、海上保安庁法20条に基づく警察官職務執行法の範囲では、全長数百mの潜航物体に対する制圧・強制排除は不可能です。法的に自衛隊の防衛出動、あるいは治安出動・海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+                      「貝浜リエゾン、海上保安庁法20条に基づく警察官職務執行法の範囲では、全長数百mの潜航物体に対する制圧・強制排除は不可能です。法的に自衛隊の防衛出動、あるいは治安出動・海上警備行動を要請すべきか、防衛庁としての判断を求めます」
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -1458,28 +1458,28 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     <div className="grid grid-cols-2 md:grid-cols-3 gap-2 text-[10px]">
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-indigo-300 block">PC1: 危機管理官</strong>
+                        <strong className="text-indigo-300 block">朝潮（PC1: 危機管理官）</strong>
                         全体統括・官邸および防衛省との折衝・全責任の受託
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-indigo-300 block">PC2: 防衛庁リエゾン</strong>
+                        <strong className="text-indigo-300 block">貝浜（PC2: 防衛庁リエゾン）</strong>
                         軍事力投入の可否・交戦規定（ROE）の策定
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-teal-300 block">PC3: 救難隊長</strong>
+                        <strong className="text-teal-300 block">坂凪（PC3: 救難隊長）</strong>
                         島民避難・民間船の安全確保・現地海域の危険性
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-teal-300 block">PC4: 観測員</strong>
-                        火山連動シミュレーションと本土到達カウントダウン
+                        <strong className="text-teal-300 block">太刀魚（PC4: 観測員）</strong>
+                        火山連動シミュレーションと本土到達カウントダウン（※5名時は初瀬の神職伝承も統合）
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-teal-300 block">PC5: 海洋生物学者</strong>
+                        <strong className="text-teal-300 block">浪寄（PC5: 海洋生物学者）</strong>
                         写真鑑定所見・超群体の可能性・火山熱源誘引の阻止
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-teal-300 block">PC6: 神職</strong>
-                        古文書の海鳴り・海に出て祝詞を唱える儀式の予兆
+                        <strong className="text-teal-300 block">初瀬（PC6: 救護担当・神職）</strong>
+                        古文書の海鳴り・海に出て祝詞を唱える儀式の予兆（※5名時は太刀魚が兼任）
                       </div>
                     </div>
                   </div>
@@ -1491,7 +1491,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <ShieldAlert className="h-4 w-4 text-rose-400" />
                         <div>
                           <span className="font-bold text-xs text-white">
-                            ④ 【海上保安庁東京本部の危機管理官（PC1） 最終意思決定】
+                            ④ 【海上保安庁東京本部の危機管理官 朝潮（PC1） 最終意思決定】
                           </span>
                           <span className="ml-2 text-[10px] text-rose-300 font-mono">
                             全員の合議を受け、指揮官として最終決定を下す
@@ -1506,8 +1506,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
 
                     <p className="text-[11px] text-slate-300 leading-relaxed">
-                      議論・相談は合議制で行われますが、<strong>最終的な作戦方針の決定は危機管理官（PC1）が一任</strong>されます。<br />
-                      PC5の生物学的見解（{day3Pc5Opinion === "colony_theory" ? "群体性仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}）およびPC2の防衛判断（{day3Pc2Decision === "defense_action" ? "防衛出動具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}）を踏まえ、危機管理官としての方針を決定してください。
+                      議論・相談は合議制で行われますが、<strong>最終的な作戦方針の決定は危機管理官 朝潮（PC1）が一任</strong>されます。<br />
+                      浪寄（PC5）の生物学的見解（{day3Pc5Opinion === "colony_theory" ? "群体性仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}）および貝浜（PC2）の防衛判断（{day3Pc2Decision === "defense_action" ? "防衛出動具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}）を踏まえ、危機管理官としての方針を決定してください。
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
@@ -1585,10 +1585,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           </button>
                         </div>
                         <p className="text-[11px] text-emerald-100 leading-relaxed">
-                          海上保安庁東京本部の危機管理官（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
+                          海上保安庁東京本部の危機管理官 朝潮（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
                           <strong>選定された方針</strong>: {day3HqFinalDecision === "defense_dispatch" ? "自衛隊への防衛出動正式要請（八丈島南方迎撃陣形の展開）" : "海上警備行動の発令（段階的追尾迎撃と島民避難先行）"}<br />
-                          <strong>生物学的見解（PC5）</strong>: {day3Pc5Opinion === "colony_theory" ? "超群体（コロニー）仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}<br />
-                          <strong>防衛庁判断（PC2）</strong>: {day3Pc2Decision === "defense_action" ? "防衛出動即時迎撃具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}
+                          <strong>生物学的見解 浪寄（PC5）</strong>: {day3Pc5Opinion === "colony_theory" ? "超群体（コロニー）仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}<br />
+                          <strong>防衛省判断 貝浜（PC2）</strong>: {day3Pc2Decision === "defense_action" ? "防衛出動即時迎撃具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}
                         </p>
                         <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
                           🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
@@ -1633,7 +1633,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Anchor className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-white block font-bold text-[11px]">
-                        ⚓ 小笠原現地組（PC3〜PC6）：洋上展開終了・父島本島へ帰還
+                        ⚓ 小笠原現地組（坂凪・太刀魚・浪寄・初瀬／5名時は坂凪・太刀魚・浪寄）：洋上展開終了・父島本島へ帰還
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
                         長距離ヘリ捜索および巡視船給油ミッションを完遂し、父島二見港へ帰還。島民避難の受け入れと、島に残された記録の調査体制へ移行。
@@ -1645,7 +1645,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Radio className="h-4 w-4 text-indigo-400 shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-white block font-bold text-[11px]">
-                        📡 海上保安庁東京本部（PC1, PC2）：八丈島前線情報の緊急収集
+                        📡 海上保安庁東京本部（朝潮・貝浜）：八丈島前線情報の緊急収集
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
                         八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
@@ -1764,7 +1764,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </p>
                       <div className="rounded bg-rose-900/40 border border-amber-700/60 p-2.5 text-[11px] text-amber-100 space-y-1">
                         <strong className="text-amber-300 block font-bold flex items-center gap-1">
-                          🛡️ 防衛庁・防衛省リエゾン（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
+                          🛡️ 防衛省リエゾン 貝浜（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
                         </strong>
                         <p className="italic text-slate-200 leading-relaxed">
                           「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と認識している。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
@@ -1973,7 +1973,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗼 東京湾・首都直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          危機管理官（PC1）が唯一東京へ持ち帰っていた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
+                          危機管理官 朝潮（PC1）が唯一東京へ持ち帰っていた隕石片の痕跡を追尾している見立て。首都圏中枢への甚大な被害が懸念される。
                         </p>
                       </button>
 
@@ -2268,7 +2268,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
                       <span className="font-bold text-sm text-white">
-                        【Day 5 結末：緊急入電】防衛庁より魚雷直撃報告 ＆ PC2経由での緊急意見照会
+                        【Day 5 結末：緊急入電】防衛庁より魚雷直撃報告 ＆ 貝浜（PC2）経由での緊急意見照会
                       </span>
                     </div>
                     <span className="rounded bg-red-950 px-2.5 py-0.5 text-[10px] font-bold text-red-300 border border-red-800 animate-pulse">
@@ -2278,10 +2278,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   <div className="rounded-lg bg-black/70 border border-red-800 p-3.5 space-y-2.5 text-xs text-red-100">
                     <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
-                      <span>📡 【八丈島〜御蔵島沖 作戦海域より防衛庁リエゾン（PC2）への緊急入電】</span>
+                      <span>📡 【八丈島〜御蔵島沖 作戦海域より防衛庁リエゾン 貝浜（PC2）への緊急入電】</span>
                     </div>
                     <p className="italic leading-relaxed text-[11px] text-slate-100">
-                      「――PC2、聞こえるか！ 防衛庁作戦本部だ……！
+                      「――貝浜リエゾン、聞こえるか！ 防衛庁作戦本部だ……！
                       潜水艦部隊により、八丈島〜御蔵島沖にて魚雷群の一斉射撃を敢行した……直撃、命中した！
                       しかし……爆砕されたはずの巨大黒影は、無数の触手とダイオウイカが絡み合う超巨大群体であり、まるで泥のように瞬時に再結合した……！
                       軍部上層部は<strong>『命中している以上、さらに大量の魚雷を集中投入（飽和攻撃）すれば破砕できるはずだ』</strong>と主張している。
@@ -2290,10 +2290,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     <div className="rounded-lg bg-red-950/70 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-1.5">
                       <strong className="text-red-300 block font-bold text-xs">
-                        🔬 【防衛庁より海洋生物学者（PC5）への至急確認事項】
+                        🔬 【防衛庁より海洋生物学者 浪寄（PC5）への至急確認事項】
                       </strong>
                       <p className="leading-relaxed text-slate-200">
-                        「PC2、直ちにあの生物のソナー写真を直接解析した<strong>海洋生物学者（PC5）</strong>の所見を確認してくれ！
+                        「貝浜、直ちにあの生物のソナー写真を直接解析した<strong>海洋生物学者 浪寄（PC5）</strong>の所見を確認してくれ！
                         もし通常兵器の集中攻撃で倒せないのだとすれば――
                       </p>
                       <ul className="list-disc list-inside space-y-1 pl-1 text-amber-200 font-semibold">
@@ -2374,14 +2374,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="flex items-center justify-between">
                     <span className="font-bold text-indigo-200 flex items-center gap-1.5 text-xs">
                       <span className="text-base">🗼</span>
-                      【東京対策本部（PC1・PC2）夜間捜査完了：Day 5 未調査情報の100%完全回収】
+                      【東京対策本部（朝潮・貝浜）夜間捜査完了：Day 5 未調査情報の100%完全回収】
                     </span>
                     <span className="text-[10px] bg-emerald-950/80 text-emerald-300 font-bold px-2 py-0.5 rounded border border-emerald-600/60 flex items-center gap-1">
                       <CheckCircle2 className="h-3 w-3" /> Day 6 朝までに2大情報が100%出揃いました
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（PC1警視庁公安部 ＆ PC2防衛庁リエゾン）が夜を徹して調査・照会を完遂！
+                    Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（朝潮PC1危機管理官 ＆ 貝浜PC2防衛省リエゾン）が夜を徹して調査・照会を完遂！
                     Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への約30kg海底隕石の搬入 ＆ 神社から盗まれた複数隕石の海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
                   </p>
 
@@ -3487,10 +3487,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white">
-                    【PC6（神職）専用 個別ハンドアウト】
+                    【初瀬（PC6／5名時は太刀魚PC4）専用 個別ハンドアウト】
                   </h3>
                   <p className="text-[11px] text-indigo-300 font-medium">
-                    小笠原・大神神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録
+                    小笠原・大神神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録（※5名プレイ時はPC4太刀魚が兼任）
                   </p>
                 </div>
               </div>
@@ -3532,7 +3532,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-xl bg-amber-950/40 border border-amber-600/60 p-4 space-y-2 text-amber-200 shadow">
                 <div className="flex items-center gap-2 font-bold text-amber-300 text-xs">
                   <AlertTriangle className="h-4 w-4 text-amber-400" />
-                  【PC6 プレイヤーの心得と重要制約】
+                  【初瀬（PC6／5名時は太刀魚PC4）プレイヤーの心得と重要制約】
                 </div>
                 <div className="text-[11px] leading-relaxed space-y-1.5 text-slate-300">
                   <p>
