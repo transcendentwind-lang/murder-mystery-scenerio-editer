@@ -297,6 +297,8 @@ export function getStoredProjects(): MMProject[] {
           evidences: initialProject.evidences,
           timeline: initialProject.timeline,
           visualBoards: initialVisualBoards,
+          crypticWords: initialProject.crypticWords,
+          crypticGrammar: initialProject.crypticGrammar,
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
         localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));

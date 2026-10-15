@@ -136,6 +136,26 @@ class UnderwaterAudioEngine {
   }
 
   /**
+   * 音程（周波数）が変化するメロディック・クリック音パターンの再生
+   * @param notes 各クリックの遅延ミリ秒と周波数、持続時間、音量の配列
+   */
+  public playMelodicPattern(
+    notes: { delayMs: number; freq: number; duration?: number; volume?: number }[],
+    speedMultiplier = 1.0
+  ): Promise<void> {
+    return new Promise((resolve) => {
+      notes.forEach((note, index) => {
+        setTimeout(() => {
+          this.playSingleClick(note.freq, note.duration || 0.018, note.volume || 0.85);
+          if (index === notes.length - 1) {
+            setTimeout(resolve, 350 / speedMultiplier);
+          }
+        }, note.delayMs / speedMultiplier);
+      });
+    });
+  }
+
+  /**
    * シナリオ中の単語パターンを再生
    */
   public async playWordSound(wordId: string, speedMultiplier = 1.0): Promise<void> {
@@ -164,11 +184,24 @@ class UnderwaterAudioEngine {
       case "word-go-south": // 南に向かう：低音下降パルス
         await this.playClickPattern([0, 220, 440], 1700, speedMultiplier);
         break;
-      case "word-go-east": // 東に向かう：右上がり2点打
-        await this.playClickPattern([0, 300], 2100, speedMultiplier);
+      case "word-go-east": // 東に向かう：鋭い急上昇2点打（ツ・ピィッ！ / 1,800Hz ➔ 3,200Hz）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 1800, duration: 0.02, volume: 0.8 },
+            { delayMs: 240, freq: 3200, duration: 0.015, volume: 0.9 },
+          ],
+          speedMultiplier
+        );
         break;
-      case "word-go-west": // 西に向かう：右下がり2点打
-        await this.playClickPattern([0, 300], 1900, speedMultiplier);
+      case "word-go-west": // 西に向かう：階段状下降3点打（ピ・ポ・ポン / 3,200Hz ➔ 2,300Hz ➔ 1,500Hz）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 3200, duration: 0.015, volume: 0.85 },
+            { delayMs: 190, freq: 2300, duration: 0.018, volume: 0.8 },
+            { delayMs: 380, freq: 1500, duration: 0.025, volume: 0.85 },
+          ],
+          speedMultiplier
+        );
         break;
       case "word-giant-prey": // 巨大な餌：超高速ロングバースト（極上の獲物）
         await this.playClickPattern([0, 60, 120, 180, 240, 300, 360, 420], 3600, speedMultiplier);
@@ -181,7 +214,15 @@ class UnderwaterAudioEngine {
       case "word-gather": // 集まれ：加速する4連打
         await this.playClickPattern([0, 280, 460, 560], 2800, speedMultiplier);
         break;
-      case "word-alert": // 警戒：低音の単発長間隔
+      case "word-alert": // 警戒せよ（危機・回避）：重低音の長く重い警告パルス（ドォン……ドォン……）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 1300, duration: 0.035, volume: 0.95 },
+            { delayMs: 550, freq: 1200, duration: 0.04, volume: 0.9 },
+          ],
+          speedMultiplier
+        );
+        break;
       case "word-danger": // 危機（外敵・危険）：低音長間隔コーダ
         await this.playClickPattern([0, 600], 1600, speedMultiplier);
         break;
