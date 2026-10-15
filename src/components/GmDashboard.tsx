@@ -538,10 +538,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
                 <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
                   <Radio className="h-3.5 w-3.5 text-cyan-400" />
-                  🎙️ GM演出用ナレーション（合同対策本部 首席オペレーター）
+                  🎙️ GM演出用ナレーション（合同対策本部 首席オペレーター 長津）
                 </h4>
                 <span className="rounded bg-cyan-950 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-300 border border-cyan-800">
-                  CHIEF OPERATOR
+                  CHIEF OPERATOR NAGATSU
                 </span>
               </div>
 
@@ -550,7 +550,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
                     <span className="font-bold text-indigo-300">【フェーズ1：緊急回線接続 ＆ 各員自己紹介】</span>
                     <p className="text-slate-300 mt-1 italic">
-                      （🎙️ 首席オペレーター）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源を喪失、AISも停波し、救難信号を発信した直後に通信が途絶いたしました。これより合同海難救助チームを開設します。各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
+                      （🎙️ 首席オペレーター 長津）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源を喪失、AISも停波し、救難信号を発信した直後に通信が途絶いたしました。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
                     </p>
                   </div>
 
@@ -590,32 +590,32 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="text-slate-300 italic">
-                      （🎙️ 首席オペレーター）:「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。危機管理官（PC1）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
+                      （🎙️ 首席オペレーター 長津）:「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
                     </p>
                   </div>
 
                   <div className="rounded border border-emerald-900/60 bg-emerald-950/20 p-3 space-y-2.5">
                     <span className="font-bold text-emerald-300">【フェーズ3：漂流予測パズル・情報共有（合議・推理枠）】</span>
                     <div className="rounded bg-slate-900/90 p-2.5 text-[11px] text-slate-300 border border-slate-800">
-                      <span className="font-bold text-cyan-400">🛡️ PC2からの開示情報（なぜ衛星が使えないのか）:</span>
+                      <span className="font-bold text-cyan-400">🛡️ 貝浜（PC2: 防衛省リエゾン）からの開示情報（なぜ衛星が使えないのか）:</span>
                       <p className="mt-0.5 leading-relaxed">
                         「気象衛星ひまわりは解像度不足で40tの小型船を捕捉不可。低軌道偵察衛星は軌道通過まで4時間＋現場の雨雲で光学視界ゼロ。全電源喪失でAISも途絶。衛星画像頼みの捜索は不可能です！現場の海流と風から計算するしかありません！」
                       </p>
                     </div>
                     <div className="space-y-1 text-[11px] text-slate-300">
                       <p className="font-bold text-slate-200">🔍 各員の開示情報と漂流ベクトル（GM用正解メモ）:</p>
-                      <p>・<strong className="text-white">PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
-                      <p>・<strong className="text-white">PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
-                      <p>・<strong className="text-white">PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
-                      <p>・<strong className="text-white">PC6 (無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
-                      <p>・<strong className="text-white">PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
+                      <p>・<strong className="text-white">朝潮 / PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
+                      <p>・<strong className="text-white">太刀魚 / PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
+                      <p>・<strong className="text-white">浪寄 / PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
+                      <p>・<strong className="text-white">初瀬 / PC6 (無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
+                      <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
                     </div>
                   </div>
 
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-slate-300">【フェーズ4：救助成功アナウンス】</span>
                     <p className="text-slate-400 mt-1 italic">
-                      （🎙️ 首席オペレーター）:「――現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
+                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
                     </p>
                   </div>
 
@@ -659,7 +659,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </p>
                     </div>
                     <p className="text-slate-300 mt-2.5 italic">
-                      「海上保安庁東京本部・小笠原救難隊の各員へ上層部より緊急通達。西之島沖での海底火山突発噴火に伴い、周辺船舶の避難誘導および火山活動の厳重監視を行う必要がある。よって上層部の決定に基づき、当合同海難対策チームは当面の間【即応体制を維持】せよ」
+                      （🎙️ 首席オペレーター 長津）:「――気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です」
                     </p>
                     <div className="mt-2 text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
                       💡 <strong>GMメモ</strong>: Day 1で招集された急造チームの解散が撤回され、このチームが当面維持される必然性を全員に提示します。
@@ -672,7 +672,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       【フェーズ2：情報収集・合議制アクションの提示】
                     </span>
                     <p className="text-slate-300 mt-1 italic">
-                      「西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで入っています。しかし混乱の極みにある現場では、すべての調査に手を回す余裕はありません。我々に許された調査枠は――【海上保安庁東京本部で1枠】、【小笠原現地で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議して決定してください」
+                      （🎙️ 首席オペレーター 長津）:「――西之島周辺海域から『海底の巨大な黒い影』『異常な地殻振動』の目撃情報が相次いで寄せられています。しかし混乱する現場において、すべての調査に手を回す余裕はありません。許された調査枠は――【海上保安庁東京本部（朝潮・貝浜）で1枠】、【小笠原現地（坂凪・太刀魚・浪寄・初瀬）で2枠】のみです。各自の専門知識を持ち寄り、どのアクションを実行すべきか合議をお願いいたします」
                     </p>
                   </div>
 
@@ -943,7 +943,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </p>
                     </div>
                     <p className="text-slate-300 mt-2.5 italic">
-                      「小笠原基地より大型捜索ヘリを緊急発進。洋上に展開する巡視船PLH-31『あきつしま』での洋上給油を中継して現場海域へ投入する。任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して三辺測量で距離を割り出し、その姿を捉えよ！』」
+                      （🎙️ 首席オペレーター 長津）:「――小笠原航空基地より大型捜索ヘリが緊急発進いたしました。洋上に展開する巡視船PLH-31『あきつしま』での洋上給油を中継し、鳥島沖の噴火海域へ投入されます。各員への任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して三辺測量で距離を割り出し、その姿を捉えよ！』」
                     </p>
                   </div>
 
@@ -1102,18 +1102,18 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：PC6 個別ハンドアウト（神職の儀式）GMガイド */}
+                  {/* フェーズ4：初瀬 / PC6（救護・神職血統）個別ハンドアウト GMガイド */}
                   <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-3 space-y-1.5">
                     <div className="flex items-center gap-1.5 font-bold text-indigo-300 text-xs">
                       <Scroll className="h-4 w-4 text-indigo-400" />
-                      【フェーズ4：PC6（神職）個別ハンドアウト GMガイド】
+                      【フェーズ4：初瀬 / PC6（救護・神職血統）個別ハンドアウト GMガイド】
                     </div>
                     <blockquote className="border-l-2 border-indigo-500 pl-3 py-0.5 text-slate-300 text-[11px] italic">
                       「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
                     </blockquote>
                     <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
                       ⚠️ <strong>【重要制約】</strong>:
-                      PC6に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                      初瀬（PC6）に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
                     </div>
                   </div>
 
@@ -1136,8 +1136,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <strong className="text-amber-400 block font-bold">
                           📢 GM進行ナレーション:
                         </strong>
-                        <p className="italic">
-                          「洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）が対策本部の大型スクリーンに映し出されます。現場の海上保安庁警備救難部は騒然となっています。『全長数百m、触手20本以上……海上保安庁の巡視船や警察比例の原則で対応できる規模を完全に超えている』。これを受け、海上保安庁警備救難部より合同対策本部へ緊急の諮問が下されます」
+                        <p className="italic text-slate-200">
+                          （🎙️ 首席オペレーター 長津）:「――洋上捜索ヘリより至急電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております」
                         </p>
                       </div>
 
@@ -1145,26 +1145,26 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         {/* PC5への相談 */}
                         <div className="rounded border border-teal-900/80 bg-teal-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-teal-300 text-xs flex items-center gap-1">
-                            <Users className="h-3.5 w-3.5" /> ① 海上保安庁 ➔ PC5（海洋生物学者）への相談:
+                            <Users className="h-3.5 w-3.5" /> ① 海上保安庁 ➔ 浪寄准教授（PC5: 海洋生物学者）への相談:
                           </span>
                           <p className="italic text-slate-200">
-                            「PC5准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                            「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
                           </p>
                           <div className="mt-1 text-[10px] text-teal-200/90 bg-teal-950/60 rounded p-1.5 border border-teal-800/60">
-                            💡 <strong>GMメモ</strong>: PC5から「超群体（コロニー）仮説」「変異体仮説」「火山熱源誘引説」のいずれか（特に群体の疑い）を提示させます。
+                            💡 <strong>GMメモ</strong>: 浪寄准教授（PC5）から「超群体（コロニー）仮説」「変異体仮説」「火山熱源誘引説」のいずれか（特に群体の疑い）を提示させます。
                           </div>
                         </div>
 
                         {/* PC2への要請 */}
                         <div className="rounded border border-indigo-900/80 bg-indigo-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-indigo-300 text-xs flex items-center gap-1">
-                            <ShieldAlert className="h-3.5 w-3.5" /> ② 海上保安庁 ➔ PC2（防衛庁リエゾン）への要請:
+                            <ShieldAlert className="h-3.5 w-3.5" /> ② 海上保安庁 ➔ 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
                           </span>
                           <p className="italic text-slate-200">
-                            「PC2リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+                            「貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
                           </p>
                           <div className="mt-1 text-[10px] text-indigo-200/90 bg-indigo-950/60 rounded p-1.5 border border-indigo-800/60">
-                            💡 <strong>GMメモ</strong>: PC2から「防衛出動即時迎撃」「海上警備行動先行」「慎重・隠蔽懸念」の防衛判断を提示させます。
+                            💡 <strong>GMメモ</strong>: 貝浜リエゾン（PC2）から「防衛出動即時迎撃」「海上警備行動先行」「慎重・隠蔽懸念」の防衛判断を提示させます。
                           </div>
                         </div>
                       </div>
@@ -1172,16 +1172,16 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       {/* 合議制と危機管理官最終意思決定 */}
                       <div className="rounded bg-rose-950/30 border border-rose-900/50 p-2.5 space-y-1.5">
                         <span className="font-bold text-rose-300 text-xs">
-                          ⚖️ 全員合議 ＆ 危機管理官（PC1）最終意思決定の進行ガイド:
+                          ⚖️ 全員合議 ＆ 朝潮危機管理官（PC1）最終意思決定の進行ガイド:
                         </span>
                         <p>
-                          ・<strong>合議制の回し方</strong>: 全員（PC1〜PC6）で写真の生物学的脅威と防衛出動の是非について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
+                          ・<strong>合議制の回し方</strong>: 全員（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）で写真の生物学的脅威と防衛出動の是非について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
                         </p>
                         <p>
-                          ・<strong>危機管理官（PC1）の決断</strong>: 議論が煮詰まったところで、GMから<strong>「各員の意見が出揃いました。海上保安庁東京本部の危機管理官（PC1）、指揮官としてこの事態にどう対処するか、最終意思決定を下してください」</strong>と促します。
+                          ・<strong>危機管理官の決断</strong>: 議論が煮詰まったところで、GM（長津）から<strong>「各員の意見が出揃いました。朝潮危機管理官（PC1）、指揮官としてこの事態にどう対処するか、最終意思決定をお願いいたします」</strong>と促します。
                         </p>
                         <p className="text-amber-200">
-                          ・<strong>Day 3 終了 ➔ Day 4 へのブリッジ</strong>: 危機管理官が方針（防衛出動正式要請、または海上警備行動発令）を決定した時点で<strong>「ここまでがDay 3に起こること」としてDay 3を完結</strong>させます。この決定がDay 4の「防衛出動の決定と隠蔽圧力・迎撃陣形の展開」へと直結します。
+                          ・<strong>Day 3 終了 ➔ Day 4 へのブリッジ</strong>: 朝潮危機管理官が方針（防衛出動正式要請、または海上警備行動発令）を決定した時点で<strong>「ここまでがDay 3に起こること」としてDay 3を完結</strong>させます。この決定がDay 4の「防衛出動の決定と隠蔽圧力・迎撃陣形の展開」へと直結します。
                         </p>
                       </div>
                     </div>
@@ -1303,19 +1303,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                             🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣不作為）】
                           </strong>
                           <p className="italic text-slate-200 mt-1 leading-relaxed">
-                            「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
+                            （🎙️ 首席オペレーター 長津）:「――官邸危機管理センターおよび内閣総理大臣より通達が入電しました。読み上げます。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。自衛隊の防衛出動要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
                           </p>
                         </div>
                         <div className="rounded border border-amber-800/60 bg-amber-950/30 p-2 text-amber-200">
                           <strong className="text-amber-300 block font-bold text-[11px] flex items-center gap-1">
-                            🛡️ 防衛庁・防衛省リエゾン（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
+                            🛡️ 防衛省・防衛省リエゾン 貝浜（PC2）への緊急打診：『この生物はどこへ向かっている見立てなのか？』
                           </strong>
                           <p className="italic text-slate-200 mt-0.5 leading-relaxed">
-                            「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と捉えている。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
+                            「内閣は因果関係不明を理由に出動を保留したが、防衛省としては深刻な脅威と捉えている。貝浜リエゾン（PC2）、朝潮危機管理官（PC1）、内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
                           </p>
                         </div>
                         <p className="text-slate-400">
-                          💡 <strong>GM進行メモ</strong>: 危機管理官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（危機管理官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員が大きく変わる</strong>ことをプレイヤーに示唆してください。
+                          💡 <strong>GM進行メモ</strong>: 朝潮危機管理官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛省から『どこへ向かっているのか』の意見聴取が行われます。対策本部（朝潮・貝浜・太刀魚・浪寄ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛省側が内閣を再説得できるかどうかの説得力・今後の部隊動員が大きく変わる</strong>ことをプレイヤーに示唆してください。
                         </p>
                       </div>
                     ) : (
@@ -1325,11 +1325,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                             🛡️ 【防衛省・統合幕僚監部からの照会：生物の進路に関する緊急意見聴取】
                           </strong>
                           <p className="italic text-slate-200 mt-1 leading-relaxed">
-                            「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。【この生物は一体どこへ向かっている見立てなのか？】進路および最終到達予測地点に関する対策本部の推定意見を至急提出されたし』」
+                            （🎙️ 首席オペレーター 長津）:「――防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。【この生物は一体どこへ向かっている見立てなのか？】進路および最終到達予測地点に関する対策本部の推定意見を至急提出されたし』」
                           </p>
                         </div>
                         <p className="text-slate-400">
-                          💡 <strong>GM進行メモ</strong>: 防衛出動を求めなかった場合も、防衛庁から生物の進路と目的についての意見を強く求められます。どのような進路予測を回答するかによって、今後の防衛庁の警戒レベルや協力関係、内閣への働きかけが変わることを示唆してください。
+                          💡 <strong>GM進行メモ</strong>: 防衛出動を求めなかった場合も、防衛省から生物の進路と目的についての意見を強く求められます。どのような進路予測を回答するかによって、今後の防衛省の警戒レベルや協力関係、内閣への働きかけが変わることを示唆してください。
                         </p>
                       </div>
                     )}
@@ -1339,7 +1339,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">
                     <div className="rounded-lg border border-teal-900/60 bg-teal-950/20 p-3 text-[11px] space-y-1">
                       <span className="font-bold text-teal-300 block text-xs flex items-center gap-1.5">
-                        <Anchor className="h-3.5 w-3.5" /> ⚓ 小笠原現地組（PC3〜PC6）：父島本島へ帰還
+                        <Anchor className="h-3.5 w-3.5" /> ⚓ 小笠原現地組（坂凪・太刀魚・浪寄・初瀬）：父島本島へ帰還
                       </span>
                       <p className="text-slate-300">
                         洋上展開（巡視船あきつしま洋上補給・長距離ヘリ索敵）を完遂した現地部隊は、父島・二見港の本拠地へ無事帰還。島民避難の受け入れ体制を整えつつ、小笠原に残る謎の解明に着手。
@@ -1348,7 +1348,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/20 p-3 text-[11px] space-y-1">
                       <span className="font-bold text-indigo-300 block text-xs flex items-center gap-1.5">
-                        <Radio className="h-3.5 w-3.5" /> 📡 海上保安庁東京本部（PC1, PC2）：八丈島前線情報の緊急収集
+                        <Radio className="h-3.5 w-3.5" /> 📡 海上保安庁東京本部（朝潮・貝浜）：八丈島前線情報の緊急収集
                       </span>
                       <p className="text-slate-300">
                         八丈島総合開発センターおよび近海漁協との通信ホットラインを確立。火山性微動に怯える島民の肉声や、八丈島沖で操業する漁船の魚探（アクティブソナー）が捉えた海中物体の最新情報の照会・分析に着手。
@@ -1466,13 +1466,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     <div className="rounded-lg border border-red-800/80 bg-red-950/30 p-3 text-[11px] text-red-200 space-y-1.5">
                       <strong className="text-red-300 block font-bold text-xs flex items-center gap-1.5">
-                        🛡️ 【防衛庁・統合幕僚監部通達：「害獣駆除」名目での部隊動員と駆除作戦決定】
+                        🛡️ 【防衛省・統合幕僚監部通達：「害獣駆除」名目での部隊動員と駆除作戦決定】
                       </strong>
                       <p className="italic text-slate-200 leading-relaxed">
-                        「内閣法制局の見解により、外国の武力侵略ではない本件に『防衛出動』を発令することは不可能とされた。しかし、国民への重大危機を看過できない防衛庁は内閣の合意を取り付け、<strong>【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定</strong>した！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行する！」
+                        （🎙️ 首席オペレーター 長津）:「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、<strong>【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定</strong>いたしました！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」
                       </p>
                       <p className="text-slate-400">
-                        💡 <strong>GM進行メモ・解説ガイダンス</strong>: 一般のプレイヤーは「なぜ自衛隊をすぐ出動できないのか」「害獣駆除とは何か」を知らないのが自然です。内閣法制局は『武力攻撃事態ではないため防衛出動は法律上不可』と突っぱねる一方、防衛庁は国民保護のため『害獣駆除（災害排除）』という法解釈のウルトラCで大臣決裁・緊急出動させた、という背景を噛み砕いて説明してあげてください。プレイヤーが東京・富士山のどちらを選んでも自衛隊は『害獣駆除』としてDay 5の通常兵器一斉迎撃に突入します。
+                        💡 <strong>GM進行メモ・解説ガイダンス</strong>: 一般のプレイヤーは「なぜ自衛隊をすぐ出動できないのか」「害獣駆除とは何か」を知らないのが自然です。内閣法制局は『武力攻撃事態ではないため防衛出動は法律上不可』と突っぱねる一方、防衛省は国民保護のため『害獣駆除（災害排除）』という法解釈のウルトラCで大臣決裁・緊急出動させた、という背景を噛み砕いて説明してあげてください。プレイヤーが東京・富士山のどちらを選んでも自衛隊は『害獣駆除』としてDay 5の通常兵器一斉迎撃に突入します。
                       </p>
                     </div>
                   </div>
@@ -1531,21 +1531,21 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded-lg bg-black/50 border border-rose-900/50 p-2.5 text-[11px] text-rose-100 space-y-1">
                       <strong className="text-rose-300 block font-bold">📢 【GMナレーション：メディアの富士山連動大噴火報道】</strong>
                       <p className="italic text-slate-200 leading-relaxed">
-                        「伊豆諸島を北上する連続海底噴火と群発地震。気象庁は富士山地下深部において火山性微動を公式確認しました。テレビ各局は『伊豆・小笠原火山弧の連動刺激により、富士山破局的大噴火の危険性が極めて高い』と速報を連呼し、日本中がパニックに包まれています」
+                        （🎙️ 首席オペレーター 長津）:「――各局ニュース速報が入電。メディア各社が一斉に伊豆諸島の連続海底噴火と群発地震を報じ始めました。気象庁は富士山地下深部において火山性微動を公式確認。『伊豆・小笠原火山弧の連動刺激により、富士山破局的大噴火の危険性が極めて高い』と速報が連呼され、列島中がパニックに包まれております」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ2：防衛庁からの「機密指定」通達とプレイヤー独自行動 */}
+                  {/* フェーズ2：防衛省からの「機密指定」通達とプレイヤー独自行動 */}
                   <div className="rounded-xl border border-blue-900/60 bg-[#0d1527] p-3.5 space-y-2.5 shadow-md">
                     <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
                       <Shield className="h-4 w-4 text-blue-400" />
-                      【フェーズ2：防衛庁通達「軍事機密指定」による情報遮断 ＆ 自由行動】
+                      【フェーズ2：防衛省通達「軍事機密指定」による情報遮断 ＆ 自由行動】
                     </span>
                     <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-2.5 text-[11px] text-blue-200 space-y-1.5">
-                      <strong className="text-blue-300 block font-bold">🛡️ 【防衛庁通達セリフ（GM読み上げ用）】</strong>
+                      <strong className="text-blue-300 block font-bold">🛡️ 【防衛省通達セリフ（GM読み上げ用）】</strong>
                       <p className="italic text-slate-200 leading-relaxed">
-                        「――対策本部および小笠原現地チームの協力に感謝する。しかし、これより自衛隊が実施する『害獣駆除名目での実弾迎撃作戦』は【最高軍事機密】に移行する。現場の交戦状況についての情報提供はここを以て遮断する。諸君は自衛隊の作戦干渉を解かれ、独自の調査任務へと戻られたし」
+                        （🎙️ 首席オペレーター 長津）:「――防衛省より緊急回線で入電。『これより自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行する。交戦状況に関する情報提供はここを以て遮断する。対策本部は作戦干渉を解かれ、独自の調査任務に戻られたし』との通達です」
                       </p>
                       <p className="text-slate-400 text-[10px] pt-1 border-t border-blue-900/50">
                         💡 <strong>GM進行のコツ</strong>: 自衛隊が部隊を展開してくれたことで、プレイヤーは自衛隊を信じて一息つきつつ、「自分たちにしかできない調査（富士山麓の荷物の真相、神主の子どもの捜索、音響遺品等）」に自由に動ける時間となります。
@@ -1553,19 +1553,22 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：Day 5 結末（防衛庁からPC2への緊急打診：魚雷集中攻撃の是非とPC5への諮問） */}
+                  {/* フェーズ3：Day 5 結末（防衛省から貝浜への緊急打診：魚雷集中攻撃の是非と浪寄への諮問） */}
                   <div className="rounded-xl border border-red-800 bg-[#1e0d14] p-3.5 space-y-2.5 shadow-lg">
                     <span className="font-bold text-red-400 text-xs flex items-center gap-1.5 border-b border-red-900/50 pb-1.5">
                       <ShieldAlert className="h-4 w-4 text-red-400 animate-pulse" />
-                      【フェーズ3（Day 5 結末）：防衛庁からの緊急入電「魚雷直撃・PC5への統率＆火山刺激メカニズム照会」】
+                      【フェーズ3（Day 5 結末）：防衛省からの緊急入電「魚雷直撃・浪寄准教授への統率＆火山刺激メカニズム照会」】
                     </span>
                     <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-2">
-                      <strong className="text-red-300 block font-bold">💥 【防衛庁よりPC2への無線（GM読み上げ用台本）】</strong>
+                      <strong className="text-red-300 block font-bold">💥 【防衛省より貝浜（PC2）への無線（GM読み上げ用台本）】</strong>
+                      <p className="italic text-slate-300 text-[10px]">
+                        （🎙️ 首席オペレーター 長津）:「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
+                      </p>
                       <p className="italic text-slate-100 leading-relaxed font-mono">
-                        「――PC2、防衛庁作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ PC2、直ちにあの生物の写真解析を行った海洋生物学者（PC5）の意見を確認してくれ！」
+                        【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ 貝浜、直ちにあの生物の写真解析を行った浪寄准教授（PC5）の意見を確認してくれ！」
                       </p>
                       <div className="rounded bg-red-950/70 border border-red-800/80 p-2 text-[10px] text-amber-200 space-y-1">
-                        <strong>🎯 GM聞き出しポイント（PC2 ➔ PC5へ確認させる問い）:</strong>
+                        <strong>🎯 GM聞き出しポイント（貝浜 / PC2 ➔ 浪寄 / PC5へ確認させる問い）:</strong>
                         <ul className="list-disc list-inside space-y-0.5 pl-1 text-slate-200">
                           <li>「通常兵器で倒せないなら、あいつらは一体どうやって一つの個体として統率（情報伝達）されているのか？」</li>
                           <li>「そして、どうやって海底火山や富士山を刺激し、なぜ一直線に北上できているのか？」</li>
@@ -1597,13 +1600,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
                         <strong className="text-cyan-300 block">昼の演出（一時的沈静化と迎撃完了見込み）:</strong>
                         <p className="italic text-slate-300 leading-relaxed font-mono">
-                          「海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
+                          （🎙️ 首席オペレーター 長津）:「（昼）――各員へ報告。海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
                         </p>
                       </div>
                       <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 space-y-1">
                         <strong className="text-rose-300 block">夕〜夜の演出（急激な再浮上と微動継続！）:</strong>
                         <p className="italic text-rose-100 leading-relaxed font-mono">
-                          「――警報！海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動は継続！巨大生物はまだ生存している可能性が高く、同時に火山活動に直接影響を及ぼしていると考えられます」
+                          （🎙️ 首席オペレーター 長津）:「（夕〜夜）――警報！海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動は継続！巨大生物はまだ生存している可能性が高く、同時に火山活動に直接影響を及ぼしていると考えられます」
                         </p>
                       </div>
                     </div>
@@ -1612,11 +1615,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   {/* 東京側未選択情報の完全回収ガイダンス */}
                   <div className="rounded-xl border border-indigo-700/60 bg-[#0d1028] p-3 space-y-1.5 shadow-md">
                     <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                      <span>🗼 【Day 6 開始時：東京班（PC1・PC2）未選択アクションの100%完全回収】</span>
+                      <span>🗼 【Day 6 開始時：東京班（朝潮・貝浜）未選択アクションの100%完全回収】</span>
                     </span>
                     <p className="text-[11px] text-slate-300 leading-relaxed">
                       Day 5で選ばれなかった東京アクション（謎のダイバーグループによる富士山麓への約30kg海底隕石搬入＆小笠原・八丈島・三宅島の神社から盗まれた複数隕石の海域投棄の特定、または元神主子どもの口伝）は、東京班の夜間捜査によってDay 6朝までに<strong>自動的に100%手元に揃います</strong>。
-                      GMは「東京のPC1・PC2から徹夜の捜査完了報告が入った」と宣言し、両方の情報を開示して手詰まりを防いでください。
+                      GMは「東京の朝潮・貝浜から徹夜の捜査完了報告が入った」と宣言し、両方の情報を開示して手詰まりを防いでください。
                     </p>
                   </div>
 
@@ -1634,7 +1637,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「――古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。PC3とPC5が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
+                      「――古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。坂凪（PC3）と浪寄（PC5）が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
                     </p>
                     <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2 text-[11px] text-amber-200 space-y-1">
                       <strong>⚠️ GM進行ヒント（プレイヤーが「祝詞を読めばいいのか？」と誤解した時の誘導）:</strong>
@@ -1743,10 +1746,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                     <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
                       <p className="italic">
-                        「プレイヤー全員の知見が結集し、『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が完成！ 防衛庁のリエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）へ信号パケットを装填し、発信系統の同期テストを完了しました」
+                        「朝潮危機管理官をはじめ、プレイヤー全員の知見が結集し、『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が完成！ 貝浜リエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）へ信号パケットを装填し、発信系統の同期テストを完了しました」
                       </p>
                       <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
-                        「実際の海中へのメガワット級大出力放流は、明日・Day 7の駿河湾最終決戦にて、怪異の突入および魚雷攻撃に合わせて実行されます！ 6人は固い決意を胸に、運命の決戦の朝を迎えます――」
+                        「実際の海中へのメガワット級大出力放流は、明日・Day 7の駿河湾最終決戦にて、怪異の突入および魚雷攻撃に合わせて実行されます！ 6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）は固い決意を胸に、運命の決戦の朝を迎えます――」
                       </p>
                     </div>
                     <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
@@ -1773,7 +1776,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1">
                       <strong className="text-rose-300 block font-bold">📢 【GMナレーション：深海境界域での最終突入】</strong>
                       <p className="italic leading-relaxed font-mono">
-                        「怪異は海面へ浮上せず、通常兵器の魚雷が水圧で圧壊する限界スレスレ――<strong>水深600mから1,000mの超深海</strong>を維持したまま、駿河トラフ境界へ突入しました。富士山直下のマグマ網まであとわずか。もはや一刻の猶予もありません！」
+                        （🎙️ 首席オペレーター 長津）:「怪異は海面へ浮上せず、通常兵器の魚雷が水圧で圧壊する限界スレスレ――<strong>水深600mから1,000mの超深海</strong>を維持したまま、駿河トラフ境界へ突入しました。富士山直下のマグマ網まであとわずか。もはや一刻の猶予もありません！」
                       </p>
                     </div>
                   </div>
@@ -1785,7 +1788,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       【フェーズ2：海自潜水艦部隊 重魚雷一斉飽和攻撃（群体粉砕アシスト）】
                     </span>
                     <p className="italic text-slate-200 leading-relaxed bg-black/40 p-2.5 rounded border border-amber-950 font-mono">
-                      「防衛庁のリエゾン（PC2）の座標指示に基づき、海自潜水艦部隊が限界深度へ向け最新鋭重魚雷の一斉飽和攻撃を敢行！ 大出力ソナーのPing音が深海を貫き、直後――深海の闇の中で巨大な爆炎が連鎖します！ 魚雷の爆風により、巨大群体は一時的にバラバラに粉砕・分断されました！」
+                      「貝浜リエゾン（PC2）の座標指示に基づき、海自潜水艦部隊が限界深度へ向け最新鋭重魚雷の一斉飽和攻撃を敢行！ 大出力ソナーのPing音が深海を貫き、直後――深海の闇の中で巨大な爆炎が連鎖します！ 魚雷の爆風により、巨大群体は一時的にバラバラに粉砕・分断されました！」
                     </p>
                     <div className="text-[10px] text-amber-300/90 bg-amber-950/30 p-2 rounded border border-amber-900/40">
                       💡 <strong>自衛隊の貢献</strong>: 魚雷単独では再結合を許してしまいますが、「大出力ソナーによる標的照射」と「巨大群体を一口サイズに引き裂く粉砕」という最高のアシストを果たします！
@@ -1808,7 +1811,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                     <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
                       <p className="italic">
-                        「防衛庁のリエゾン（PC2）の号令とともに、海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の新言語祝詞が太平洋全域へメガワット級大出力で放流されます！」
+                        「貝浜リエゾン（PC2）の号令とともに、海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の新言語祝詞が太平洋全域へメガワット級大出力で放流されます！」
                       </p>
                       <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
                         「……すると海の中で奇跡が起こります。至近海域の1頭のマッコウクジラがこの音を聞き、【了解】という明瞭な2連クリック音を返信。直後、そのクジラは自らまったく同じ歌（8語のメッセージ）を高らかに歌いながら北へ遊泳を開始したのです！
@@ -1851,7 +1854,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-2.5 space-y-1">
                         <strong className="text-amber-300 block text-[10px]">⭐ 6人のアンサング・ヒーロー:</strong>
                         <p className="italic text-slate-200 leading-relaxed font-mono text-[10px]">
-                          「『俺たちの手柄は歴史のどこにも載らないな』『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』――真実を胸に秘めた6人は、静かに日常へと帰っていく」
+                          「『俺たちの手柄は歴史のどこにも載らないな』『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』――真実を胸に秘めた6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）は、静かに日常へと帰っていく」
                         </p>
                       </div>
                     </div>
