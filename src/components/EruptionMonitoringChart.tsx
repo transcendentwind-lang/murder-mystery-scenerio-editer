@@ -436,7 +436,6 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       {/* 須美寿島 */}
       <ellipse cx="581.2" cy="379.9" rx="3" ry="3" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
       <text x="589.2" y="382.9" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">須美寿島</text>
-      <text x="589.2" y="394.9" fill="#94a3b8" fontSize="9" textAnchor="start">スミス島</text>
 
       {/* ======================================================== */}
       {/* 🌟 Day 4 新規追加：須美寿島〜青ヶ島沖 海底噴火 (Day 3マーク) */}
