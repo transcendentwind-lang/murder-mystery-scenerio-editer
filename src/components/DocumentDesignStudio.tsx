@@ -62,6 +62,38 @@ interface DocumentDesignStudioProps {
 
 type StudioCategory = "handouts" | "evidences" | "visuals" | "gm_guides";
 
+/**
+ * 日本語の段落文章整形ヘルパー
+ * カギカッコ（「や『）以外で始まる段落の先頭に全角スペース（　）を付与して字下げする
+ */
+const formatJapaneseParagraphs = (text: string): string => {
+  if (!text) return "";
+  return text
+    .split("\n")
+    .map((line) => {
+      const trimmed = line.trim();
+      if (!trimmed) return "";
+      // カギカッコや特殊記号で始まる段落は字下げしない
+      if (
+        trimmed.startsWith("「") ||
+        trimmed.startsWith("『") ||
+        trimmed.startsWith("（") ||
+        trimmed.startsWith("【") ||
+        trimmed.startsWith("・") ||
+        trimmed.startsWith("-") ||
+        trimmed.startsWith("―")
+      ) {
+        return trimmed;
+      }
+      // すでに全角スペースで始まっている場合はそのまま
+      if (line.startsWith("　")) {
+        return line;
+      }
+      return `　${trimmed}`;
+    })
+    .join("\n");
+};
+
 // テーマ定義マスター
 const THEME_PRESETS: Record<
   DocumentThemeId,
@@ -1994,9 +2026,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </span>
                     </div>
 
-                    {/* 1. 所属・氏名 */}
+                    {/* 1. 所属・氏名（近づけて名前を大きく強調） */}
                     <div className="rounded-md border border-slate-300 bg-slate-50/70 p-4">
-                      <div className="mb-1 text-xs font-bold text-slate-600">
+                      <div className="mb-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
                         ■ 所属・氏名
                       </div>
                       {isDirectEditMode ? (
@@ -2011,9 +2043,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 profession: e.target.value,
                               }))
                             }
-                            className="flex-1 min-w-[200px] rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
+                            className="w-72 max-w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
                           />
-                          <span className="text-slate-400 font-bold">／</span>
                           <input
                             type="text"
                             value={activeChar.name}
@@ -2021,12 +2052,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             onChange={(e) =>
                               handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
                             }
-                            className="w-48 rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-base font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
+                            className="w-48 max-w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1 text-xl font-black text-slate-950 focus:border-slate-800 focus:outline-none"
                           />
                         </div>
                       ) : (
-                        <div className="text-base font-bold text-slate-900 py-0.5">
-                          {activeChar.profession}　{activeChar.name}
+                        <div className="flex flex-wrap items-baseline gap-2.5 py-0.5">
+                          <span className="text-sm font-semibold text-slate-700">
+                            {activeChar.profession}
+                          </span>
+                          <span className="text-2xl font-black text-slate-950 tracking-wide">
+                            {activeChar.name}
+                          </span>
                         </div>
                       )}
                     </div>
@@ -2085,7 +2121,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                              {activeChar.handout.internalDrama.pride}
+                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.pride)}
                             </p>
                           )}
                         </div>
@@ -2114,7 +2150,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                              {activeChar.handout.internalDrama.loss}
+                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.loss)}
                             </p>
                           )}
                         </div>
@@ -2137,7 +2173,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         />
                       ) : (
                         <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                          {activeChar.introduction}
+                          {formatJapaneseParagraphs(activeChar.introduction)}
                         </div>
                       )}
                     </div>
@@ -2176,7 +2212,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         />
                       ) : (
                         <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                          {activeChar.handout.handoutBody}
+                          {formatJapaneseParagraphs(activeChar.handout.handoutBody)}
                         </div>
                       )}
                     </div>
