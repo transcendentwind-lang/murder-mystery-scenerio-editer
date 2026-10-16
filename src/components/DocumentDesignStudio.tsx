@@ -2481,7 +2481,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         )}
                       </div>
 
-                      {/* 所持者 & 公開区分 */}
+                      {/* 所持者 & カテゴリ */}
                       <div className="flex flex-wrap items-center gap-2 text-xs">
                         {isDirectEditMode ? (
                           <>
@@ -2518,34 +2518,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               <option value="testimony">🗣️ 証言・調書</option>
                               <option value="audio">📻 音声・ログ</option>
                             </select>
-                            <select
-                              value={activeEvidence.visibility}
-                              onChange={(e) =>
-                                handleUpdateActiveEvidence((ev) => ({
-                                  ...ev,
-                                  visibility: e.target.value as EvidenceVisibility,
-                                }))
-                              }
-                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
-                            >
-                              <option value="public">全体公開</option>
-                              <option value="shareable">共有可能</option>
-                              <option value="private">個別秘匿</option>
-                            </select>
                           </>
                         ) : (
-                          <>
-                            <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
-                              所持: {ownerName}
-                            </span>
-                            <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
-                              {activeEvidence.visibility === "public"
-                                ? "🌐 全体公開"
-                                : activeEvidence.visibility === "shareable"
-                                ? "🤝 共有可能"
-                                : "🔒 個別秘匿"}
-                            </span>
-                          </>
+                          <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
+                            所持: {ownerName}
+                          </span>
                         )}
                       </div>
                     </div>
@@ -2573,31 +2550,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         </h1>
                       )}
                     </div>
-                  </div>
-
-                  {/* 入手条件・開示トリガー */}
-                  <div className="rounded-md border border-slate-200 bg-slate-50/70 px-3.5 py-2 text-xs">
-                    <span className="block text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      入手経路・開示トリガー
-                    </span>
-                    {isDirectEditMode ? (
-                      <input
-                        type="text"
-                        value={activeEvidence.acquisitionCondition || ""}
-                        onChange={(e) =>
-                          handleUpdateActiveEvidence((ev) => ({
-                            ...ev,
-                            acquisitionCondition: e.target.value,
-                          }))
-                        }
-                        placeholder="例：Day 1 初期開示 / 調査により開示"
-                        className="mt-0.5 w-full rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
-                      />
-                    ) : (
-                      <div className="mt-0.5 font-medium text-slate-700">
-                        {activeEvidence.acquisitionCondition || "フェーズ進行または調査により開示"}
-                      </div>
-                    )}
                   </div>
 
                   {/* 本文エリア（B5カードの適正サイズ） */}
@@ -2629,14 +2581,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         {activeEvidence.description}
                       </div>
                     )}
-                  </div>
-
-                  {/* プレイヤー記入用メモ欄 */}
-                  <div className="rounded-md border border-dashed border-slate-300 bg-slate-50/50 p-3">
-                    <div className="text-[10px] font-bold uppercase tracking-wider text-slate-500">
-                      ✏️ プレイヤー考察・メモ欄
-                    </div>
-                    <div className="mt-1 h-12 border-b border-dotted border-slate-300" />
                   </div>
                 </div>
               );
