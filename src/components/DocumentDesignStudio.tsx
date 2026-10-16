@@ -1994,48 +1994,41 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </span>
                     </div>
 
-                    {/* 1. 役割 ＆ 2. 所属・肩書・職業 */}
-                    <div className="grid grid-cols-1 gap-4 rounded-md border border-slate-300 bg-slate-50/70 p-4 md:grid-cols-2">
-                      <div>
-                        <div className="mb-1 text-xs font-bold text-slate-600">
-                          ■ 役割
-                        </div>
-                        {isDirectEditMode ? (
+                    {/* 1. 所属・氏名 */}
+                    <div className="rounded-md border border-slate-300 bg-slate-50/70 p-4">
+                      <div className="mb-1 text-xs font-bold text-slate-600">
+                        ■ 所属・氏名
+                      </div>
+                      {isDirectEditMode ? (
+                        <div className="flex flex-wrap items-center gap-2">
                           <input
                             type="text"
-                            value={activeChar.name}
-                            onChange={(e) =>
-                              handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
-                            }
-                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-lg font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
-                          />
-                        ) : (
-                          <div className="text-lg font-bold text-slate-900">{activeChar.name}</div>
-                        )}
-                      </div>
-
-                      <div>
-                        <div className="mb-1 text-xs font-bold text-slate-600">
-                          ■ 所属・肩書・職業
-                        </div>
-                        {isDirectEditMode ? (
-                          <textarea
-                            rows={2}
                             value={activeChar.profession}
+                            placeholder="所属・肩書・職業"
                             onChange={(e) =>
                               handleUpdateActiveChar((c) => ({
                                 ...c,
                                 profession: e.target.value,
                               }))
                             }
-                            className="w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-xs font-semibold leading-snug text-slate-900 focus:border-slate-800 focus:outline-none resize-none"
+                            className="flex-1 min-w-[200px] rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
                           />
-                        ) : (
-                          <div className="whitespace-pre-wrap break-words text-xs font-semibold leading-snug text-slate-900 mt-1">
-                            {activeChar.profession}
-                          </div>
-                        )}
-                      </div>
+                          <span className="text-slate-400 font-bold">／</span>
+                          <input
+                            type="text"
+                            value={activeChar.name}
+                            placeholder="氏名"
+                            onChange={(e) =>
+                              handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
+                            }
+                            className="w-48 rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-base font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
+                          />
+                        </div>
+                      ) : (
+                        <div className="text-base font-bold text-slate-900 py-0.5">
+                          {activeChar.profession}　{activeChar.name}
+                        </div>
+                      )}
                     </div>
 
                     {/* 3. 全員に公開できるプロフィール */}

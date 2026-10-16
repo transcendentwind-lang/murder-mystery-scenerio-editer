@@ -106,9 +106,8 @@ export function formatCharacterHandoutMarkdown(c: Character): string {
     .filter(Boolean)
     .join("\n\n");
 
-  let md = `### ${c.name}\n`;
-  md += `- **役割**: ${c.name}\n`;
-  md += `- **所属・肩書・職業**: ${c.profession}\n`;
+  let md = `### ${c.profession}　${c.name}\n`;
+  md += `- **所属・氏名**: ${c.profession}　${c.name}\n`;
   md += `- **全員に公開できるプロフィール**: ${c.handout?.publicProfile || "なし"}\n\n`;
 
   md += `#### 【あなたの内面（公開されないもの）・行動指針】\n`;
@@ -151,7 +150,7 @@ export function generateHandoutsOnlyMarkdown(project: MMProject): string {
 
   let md = `# ${project?.title || "無題のシナリオ"} ― 個人ハンドアウト全集\n`;
   md += `- **編成モード**: ${playerCount}名プレイ版（海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
-  md += `- **構成**: 役割 ／ 所属・肩書・職業 ／ 全員に公開できるプロフィール ／ あなたの内面（公開されないもの）・行動指針 ／ あなたの記憶 ／ 自己紹介\n\n`;
+  md += `- **構成**: 所属・氏名 ／ 全員に公開できるプロフィール ／ あなたの内面（公開されないもの）・行動指針 ／ あなたの記憶 ／ 自己紹介\n\n`;
   md += `---\n\n`;
 
   chars.forEach((c) => {
