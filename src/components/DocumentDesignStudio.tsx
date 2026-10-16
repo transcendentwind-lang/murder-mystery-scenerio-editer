@@ -1206,7 +1206,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   <style>
     @page {
       size: ${category === "evidences" ? "B5 portrait" : "A4 portrait"};
-      margin: ${category === "evidences" ? "12mm" : "10mm"};
+      margin: ${category === "evidences" ? "12mm" : "8mm"};
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -1217,6 +1217,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       margin: 0;
       padding: 0;
       background: #ffffff;
+      font-size: 11px;
+      line-height: 1.45;
     }
     .page-break-before {
       page-break-before: always !important;
@@ -1907,7 +1909,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               category === "visuals"
                 ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
                 : category === "handouts"
-                ? "max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-lg font-sans rounded-sm p-8 md:p-12"
+                ? "max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-lg font-sans rounded-sm p-6 md:p-8 print:p-0 print:border-0 print:shadow-none"
                 : category === "evidences"
                 ? "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
                 : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12 max-w-4xl`
@@ -2012,9 +2014,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   /* ------------------------------------------------------------
                      📄 個人ハンドアウト本紙（特別なテーマ装飾なし・6つの構成要素のみ）
                      ------------------------------------------------------------ */
-                  <div className="space-y-5">
+                  <div className="space-y-3.5 print:space-y-2.5">
                     {/* シンプルなシート見出し */}
-                    <div className="border-b-2 border-slate-800 pb-3 flex items-baseline justify-between">
+                    <div className="border-b-2 border-slate-800 pb-2 flex items-baseline justify-between">
                       <span className="text-xs font-bold tracking-widest text-slate-500">
                         {project.title} ― 個人ハンドアウト
                       </span>
@@ -2026,195 +2028,204 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </span>
                     </div>
 
-                    {/* 1. 所属・氏名（近づけて名前を大きく強調） */}
-                    <div className="rounded-md border border-slate-300 bg-slate-50/70 p-4">
-                      <div className="mb-1 text-[11px] font-bold uppercase tracking-wider text-slate-500">
-                        ■ 所属・氏名
+                    {/* 上段（全幅）：所属・氏名 ＆ 全員に公開できるプロフィール */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3 print:grid-cols-12 print:gap-2.5">
+                      {/* 1. 所属・氏名 */}
+                      <div className="md:col-span-5 print:col-span-5 rounded-md border border-slate-300 bg-slate-50/70 p-3 flex flex-col justify-center">
+                        <div className="mb-0.5 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                          ■ 所属・氏名
+                        </div>
+                        {isDirectEditMode ? (
+                          <div className="space-y-1.5">
+                            <input
+                              type="text"
+                              value={activeChar.profession}
+                              placeholder="所属・肩書・職業"
+                              onChange={(e) =>
+                                handleUpdateActiveChar((c) => ({
+                                  ...c,
+                                  profession: e.target.value,
+                                }))
+                              }
+                              className="w-full rounded border border-dashed border-slate-400 bg-white px-2 py-1 text-xs font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
+                            />
+                            <input
+                              type="text"
+                              value={activeChar.name}
+                              placeholder="氏名"
+                              onChange={(e) =>
+                                handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
+                              }
+                              className="w-full rounded border border-dashed border-slate-400 bg-white px-2 py-0.5 text-lg font-black text-slate-950 focus:border-slate-800 focus:outline-none"
+                            />
+                          </div>
+                        ) : (
+                          <div className="py-0.5">
+                            <div className="text-xs font-semibold text-slate-700">
+                              {activeChar.profession}
+                            </div>
+                            <div className="text-xl font-black text-slate-950 tracking-wide mt-0.5">
+                              {activeChar.name}
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      {isDirectEditMode ? (
-                        <div className="flex flex-wrap items-center gap-2">
-                          <input
-                            type="text"
-                            value={activeChar.profession}
-                            placeholder="所属・肩書・職業"
+
+                      {/* 2. 全員に公開できるプロフィール */}
+                      <div className="md:col-span-7 print:col-span-7 rounded-md border border-slate-300 bg-white p-3">
+                        <h3 className="mb-1 border-b border-slate-200 pb-1 text-[11px] font-bold text-slate-800">
+                          ■ 全員に公開できるプロフィール
+                        </h3>
+                        {isDirectEditMode ? (
+                          <textarea
+                            rows={3}
+                            value={activeChar.handout.publicProfile}
                             onChange={(e) =>
                               handleUpdateActiveChar((c) => ({
                                 ...c,
-                                profession: e.target.value,
+                                handout: { ...c.handout, publicProfile: e.target.value },
                               }))
                             }
-                            className="w-72 max-w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1.5 text-sm font-semibold text-slate-900 focus:border-slate-800 focus:outline-none"
+                            className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
                           />
-                          <input
-                            type="text"
-                            value={activeChar.name}
-                            placeholder="氏名"
-                            onChange={(e) =>
-                              handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
-                            }
-                            className="w-48 max-w-full rounded border border-dashed border-slate-400 bg-white px-2.5 py-1 text-xl font-black text-slate-950 focus:border-slate-800 focus:outline-none"
-                          />
-                        </div>
-                      ) : (
-                        <div className="flex flex-wrap items-baseline gap-2.5 py-0.5">
-                          <span className="text-sm font-semibold text-slate-700">
-                            {activeChar.profession}
-                          </span>
-                          <span className="text-2xl font-black text-slate-950 tracking-wide">
-                            {activeChar.name}
-                          </span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 3. 全員に公開できるプロフィール */}
-                    <div className="rounded-md border border-slate-300 bg-white p-4">
-                      <h3 className="mb-2 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
-                        ■ 全員に公開できるプロフィール
-                      </h3>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={2}
-                          value={activeChar.handout.publicProfile}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              handout: { ...c.handout, publicProfile: e.target.value },
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                        />
-                      ) : (
-                        <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                          {activeChar.handout.publicProfile}
-                        </p>
-                      )}
-                    </div>
-
-                    {/* 4. あなたの内面（公開されないもの）・行動指針 */}
-                    <div className="rounded-md border border-slate-300 bg-white p-4">
-                      <h3 className="mb-3 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
-                        ■ あなたの内面（公開されないもの）・行動指針
-                      </h3>
-                      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-                        <div className="rounded border border-slate-200 bg-slate-50/70 p-3">
-                          <div className="mb-1 text-[11px] font-bold text-slate-700">
-                            ・誇り・信条・行動指針
-                          </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout.internalDrama.pride}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...c.handout.internalDrama,
-                                      pride: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-300 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.pride)}
-                            </p>
-                          )}
-                        </div>
-
-                        <div className="rounded border border-slate-200 bg-slate-50/70 p-3">
-                          <div className="mb-1 text-[11px] font-bold text-slate-700">
-                            ・過去の喪失・悔恨
-                          </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout.internalDrama.loss}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...c.handout.internalDrama,
-                                      loss: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-300 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.loss)}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* 5. あなたの記憶 */}
-                    <div className="rounded-md border border-slate-300 bg-white p-4">
-                      <h3 className="mb-2 border-b border-slate-200 pb-1.5 text-xs font-bold text-slate-800">
-                        ■ あなたの記憶
-                      </h3>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={5}
-                          value={activeChar.introduction}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                        />
-                      ) : (
-                        <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                          {formatJapaneseParagraphs(activeChar.introduction)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 6. 自己紹介 */}
-                    <div className="rounded-md border border-slate-300 bg-white p-4">
-                      <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1.5">
-                        <h3 className="text-xs font-bold text-slate-800">
-                          ■ 自己紹介
-                        </h3>
-                        {onSendAiPrompt && (
-                          <button
-                            onClick={() =>
-                              onSendAiPrompt(
-                                `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout.handoutBody}`
-                              )
-                            }
-                            className="no-print flex items-center gap-1 rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
-                          >
-                            <Sparkles className="h-3 w-3" />
-                            AIチャットで推敲する
-                          </button>
+                        ) : (
+                          <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                            {activeChar.handout.publicProfile}
+                          </p>
                         )}
                       </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={6}
-                          value={activeChar.handout.handoutBody}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({
-                              ...c,
-                              handout: { ...c.handout, handoutBody: e.target.value },
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                        />
-                      ) : (
-                        <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                          {formatJapaneseParagraphs(activeChar.handout.handoutBody)}
+                    </div>
+
+                    {/* 中段（左右2段組レイアウト）：左40%（内面＋自己紹介） / 右60%（あなたの記憶） */}
+                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 print:grid-cols-12 print:gap-2.5">
+                      {/* 左側エリア：あなたの内面 ＆ 自己紹介 */}
+                      <div className="md:col-span-5 print:col-span-5 space-y-3 print:space-y-2.5">
+                        {/* あなたの内面（公開されないもの）・行動指針 */}
+                        <div className="rounded-md border border-slate-300 bg-white p-3">
+                          <h3 className="mb-2 border-b border-slate-200 pb-1 text-[11px] font-bold text-slate-800">
+                            ■ あなたの内面（非公開）・行動指針
+                          </h3>
+                          <div className="space-y-2">
+                            <div className="rounded border border-slate-200 bg-slate-50/70 p-2.5">
+                              <div className="mb-1 text-[10px] font-bold text-slate-700">
+                                ・誇り・信条・行動指針
+                              </div>
+                              {isDirectEditMode ? (
+                                <textarea
+                                  rows={3}
+                                  value={activeChar.handout.internalDrama.pride}
+                                  onChange={(e) =>
+                                    handleUpdateActiveChar((c) => ({
+                                      ...c,
+                                      handout: {
+                                        ...c.handout,
+                                        internalDrama: {
+                                          ...c.handout.internalDrama,
+                                          pride: e.target.value,
+                                        },
+                                      },
+                                    }))
+                                  }
+                                  className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                                />
+                              ) : (
+                                <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                                  {formatJapaneseParagraphs(activeChar.handout.internalDrama.pride)}
+                                </p>
+                              )}
+                            </div>
+
+                            <div className="rounded border border-slate-200 bg-slate-50/70 p-2.5">
+                              <div className="mb-1 text-[10px] font-bold text-slate-700">
+                                ・過去の喪失・悔恨
+                              </div>
+                              {isDirectEditMode ? (
+                                <textarea
+                                  rows={3}
+                                  value={activeChar.handout.internalDrama.loss}
+                                  onChange={(e) =>
+                                    handleUpdateActiveChar((c) => ({
+                                      ...c,
+                                      handout: {
+                                        ...c.handout,
+                                        internalDrama: {
+                                          ...c.handout.internalDrama,
+                                          loss: e.target.value,
+                                        },
+                                      },
+                                    }))
+                                  }
+                                  className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                                />
+                              ) : (
+                                <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                                  {formatJapaneseParagraphs(activeChar.handout.internalDrama.loss)}
+                                </p>
+                              )}
+                            </div>
+                          </div>
                         </div>
-                      )}
+
+                        {/* 自己紹介（ロールプレイ台詞） */}
+                        <div className="rounded-md border border-slate-300 bg-white p-3">
+                          <div className="mb-1.5 flex items-center justify-between border-b border-slate-200 pb-1">
+                            <h3 className="text-[11px] font-bold text-slate-800">
+                              ■ 自己紹介
+                            </h3>
+                            {onSendAiPrompt && (
+                              <button
+                                onClick={() =>
+                                  onSendAiPrompt(
+                                    `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout.handoutBody}`
+                                  )
+                                }
+                                className="no-print flex items-center gap-1 rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
+                              >
+                                <Sparkles className="h-3 w-3" />
+                                推敲
+                              </button>
+                            )}
+                          </div>
+                          {isDirectEditMode ? (
+                            <textarea
+                              rows={5}
+                              value={activeChar.handout.handoutBody}
+                              onChange={(e) =>
+                                handleUpdateActiveChar((c) => ({
+                                  ...c,
+                                  handout: { ...c.handout, handoutBody: e.target.value },
+                                }))
+                              }
+                              className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                            />
+                          ) : (
+                            <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
+                              {formatJapaneseParagraphs(activeChar.handout.handoutBody)}
+                            </div>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 右側エリア：あなたの記憶（縦にゆったり読めるスペース） */}
+                      <div className="md:col-span-7 print:col-span-7 rounded-md border border-slate-300 bg-white p-3.5 flex flex-col">
+                        <h3 className="mb-2 border-b border-slate-200 pb-1 text-[11px] font-bold text-slate-800">
+                          ■ あなたの記憶（当日の状況・背景情報）
+                        </h3>
+                        {isDirectEditMode ? (
+                          <textarea
+                            rows={15}
+                            value={activeChar.introduction}
+                            onChange={(e) =>
+                              handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
+                            }
+                            className="w-full flex-1 rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
+                          />
+                        ) : (
+                          <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800 flex-1">
+                            {formatJapaneseParagraphs(activeChar.introduction)}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ) : (
