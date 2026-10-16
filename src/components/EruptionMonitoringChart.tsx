@@ -438,10 +438,16 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <text x="589.2" y="382.9" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">須美寿島</text>
 
       {/* ======================================================== */}
-      {/* 🌟 Day 4 新規追加：須美寿島〜青ヶ島沖 海底噴火 (Day 3マーク) */}
+      {/* 🌟 明神礁（海底カルデラ・海底火山） */}
       {/* ======================================================== */}
-      {isDay4OrLater && (
-        <g transform="translate(555.0, 345.0)">
+      {!isDay4OrLater ? (
+        <g transform="translate(568.0, 348.0)">
+          <circle cx="0" cy="0" r="3.5" fill="#1e293b" stroke="#eab308" strokeWidth="1.2" strokeDasharray="2 1" />
+          <text x="8" y="3" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">明神礁</text>
+          <text x="8" y="14" fill="#eab308" fontSize="8" textAnchor="start">(海底カルデラ・未噴火)</text>
+        </g>
+      ) : (
+        <g transform="translate(568.0, 348.0)">
           {/* 噴火パルスエフェクト */}
           <circle r="22" fill="#ef4444" opacity="0.35" filter="url(#glow-red)" />
           <circle r="12" fill="#dc2626" opacity="0.65" />
@@ -456,10 +462,10 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
 
           {/* 地名ラベル（噴火点直下） */}
           <text x="0" y="24" fill="#ffffff" fontSize="10" fontWeight="bold" textAnchor="middle">
-            須美寿島〜青ヶ島沖
+            明神礁（海底火山）
           </text>
           <text x="0" y="35" fill="#cbd5e1" fontSize="8" fontFamily="monospace" textAnchor="middle">
-            31°40&apos;N, 139°50&apos;E
+            31°55&apos;N, 140°01&apos;E
           </text>
 
           {/* 引き出し線（西側・左側の広大な外洋へ伸ばし、他の島名と絶対被らない） */}
@@ -477,10 +483,10 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
               filter="url(#glow-red)"
             />
             <text x="102" y="16" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-              🔴 Day 3 須美寿〜青ヶ島沖海底噴火
+              🔴 Day 3 明神礁 連動大噴火
             </text>
             <text x="102" y="29" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
-              海底カルデラ連動噴火（Day 4朝 観測）
+              海底カルデラ突発噴火（Day 4朝 観測）
             </text>
           </g>
         </g>
@@ -623,9 +629,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
           : isDay6OrLater
           ? "観測記録：御蔵島沖噴火(D4) ｜ 富士山地下微動(D5) ｜ 伊豆大島M5.1震度4(D6)"
           : isDay5OrLater
-          ? "噴火記録：西之島(D1) ｜ 鳥島沖(D2) ｜ 須美寿沖(D3) ｜ 御蔵島沖(D4)"
+          ? "噴火記録：西之島(D1) ｜ 鳥島沖(D2) ｜ 明神礁(D3) ｜ 御蔵島沖(D4)"
           : isDay4OrLater
-          ? "噴火記録：西之島(Day 1) ｜ 鳥島沖(Day 2) ｜ 須美寿〜青ヶ島沖(Day 3)"
+          ? "噴火記録：西之島(Day 1) ｜ 鳥島沖(Day 2) ｜ 明神礁(Day 3)"
           : "噴火観測記録：西之島(Day 1) ｜ 鳥島沖(Day 2)"}
       </text>
 
@@ -637,11 +643,11 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444" />
         <text x="32" y="36" fill="#fca5a5" fontSize="10" fontWeight="bold">
           {isDay7
-            ? "噴火地点（富士山・御蔵島沖・須美寿・鳥島・西之島）"
+            ? "噴火地点（富士山・御蔵島沖・明神礁・鳥島・西之島）"
             : isDay5OrLater
-            ? "噴火地点（西之島 / 鳥島沖 / 須美寿沖 / 御蔵島沖）"
+            ? "噴火地点（西之島 / 鳥島沖 / 明神礁 / 御蔵島沖）"
             : isDay4OrLater
-            ? "噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 須美寿〜青ヶ島沖）"
+            ? "噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 明神礁）"
             : "噴火確認地点（Day 1 西之島 / Day 2 鳥島）"}
         </text>
         {/* 凡例2 */}

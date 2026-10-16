@@ -60,7 +60,7 @@ export const THEATER_TIMELINE_POINTS = [
   },
   {
     day: 4,
-    name: "須美寿島 〜 青ヶ島沖",
+    name: "明神礁（海底火山）",
     distance: "約600 km",
     depth: "約4,000m",
     status: "有人島接近・避難葛藤",

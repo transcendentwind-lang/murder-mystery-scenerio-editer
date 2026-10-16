@@ -1186,17 +1186,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 4 && (
                 <div className="space-y-3 text-xs leading-relaxed">
-                  {/* フェーズ1：須美寿島〜青ヶ島沖海底噴火 ＆ 火山活動監視図 */}
+                  {/* フェーズ1：明神礁海底噴火 ＆ 火山活動監視図 */}
                   <div className="rounded-xl border border-rose-900/60 bg-slate-900 p-4 shadow-md space-y-3">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                       <div className="flex items-center gap-2">
                         <Flame className="h-4 w-4 text-rose-400" />
                         <div>
                           <span className="font-bold text-white text-xs">
-                            【Day 4 火山フロント最新状況】須美寿島〜青ヶ島沖海底噴火 ＆ 火山活動監視図
+                            【Day 4 火山フロント最新状況】明神礁海底噴火 ＆ 火山活動監視図
                           </span>
                           <span className="ml-2 text-[10px] text-rose-300 font-mono">
-                            須美寿島〜青ヶ島沖 連動噴火 ＆ 八丈島・青ヶ島 微動観測
+                            明神礁 連動大噴火 ＆ 八丈島・青ヶ島 微動観測
                           </span>
                         </div>
                       </div>
@@ -1232,7 +1232,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <EruptionMonitoringChart day={4} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
                       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                         <span className="text-[11px] font-semibold text-slate-200">
-                          🔴 Day 3 須美寿〜青ヶ島沖海底噴火 ｜ ⚡ 青ヶ島・八丈島 火山性軽度地震（震度1〜2）
+                          🔴 Day 3 明神礁 連動大噴火 ｜ ⚡ 青ヶ島・八丈島 火山性軽度地震（震度1〜2）
                         </span>
                         <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
                           クリックで拡大
@@ -1246,7 +1246,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <span className="font-mono text-cyan-400">移動速度: 時速約6km（日速約150km）</span>
                       </div>
                       <p>
-                        ・<strong>須美寿島〜青ヶ島沖の噴火</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖の海底カルデラで連動爆発が発生（Day 3海底噴火）。他の島名や地形と被らないよう海図西側に明瞭にプロット。
+                        ・<strong>明神礁の海底噴火</strong>：鳥島沖を通過した物体が北上を続け、明神礁の海底カルデラで連動爆発が発生（Day 3海底噴火）。他の島名や地形と被らないよう海図西側に明瞭にプロット。
                       </p>
                       <p>
                         ・<strong>八丈島・青ヶ島の地震 ＆ 特別な振動による火山刺激と富士山到達危機</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。このまま北上すれば【富士山直下】に到達し、破局的大噴火を引き起こす危険性を指摘・警戒する重要な推理ポイントです。
@@ -2034,7 +2034,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 <div>
                   <h3 className="font-bold text-sm text-white">
                     {chartModalDay === 4
-                      ? "海上保安庁 火山活動監視状況図（Day 4：須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測）"
+                      ? "海上保安庁 火山活動監視状況図（Day 4：明神礁海底噴火 ＆ 地震観測）"
                       : "海上保安庁 火山活動監視状況図（伊豆・小笠原海嶺 全域）"}
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
@@ -2077,7 +2077,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <span className="font-mono text-rose-400 font-bold">駿河トラフ到達まで残り48時間</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    ・<strong>御蔵島沖の噴火（Day 4海底噴火）</strong>：須美寿島沖を通過した物体が北上し、御蔵島沖海底カルデラで連動爆発。<br />
+                    ・<strong>御蔵島沖の噴火（Day 4海底噴火）</strong>：明神礁沖を通過した物体が北上し、御蔵島沖海底カルデラで連動爆発。<br />
                     ・<strong>八丈島への地震波及</strong>：御蔵島沖噴火を震源とするM4.0・震度3の地震を八丈島で観測。<br />
                     ・<strong>富士山直下・深部火山性微動観測</strong>：富士山地下のマグマ網が連動刺激され、深部低周波微動が観測開始。破局噴火までのカウントダウン宣告。
                   </p>
@@ -2089,7 +2089,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <span className="font-mono text-cyan-400">連動速度: 時速約6km 北上</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    ・<strong>須美寿島〜青ヶ島沖の噴火（Day 3海底噴火）</strong>：鳥島沖を通過した深海物体が北上を継続し、須美寿島〜青ヶ島沖の海底カルデラで第3の連動大爆発が発生。他島名と重ならない海図西側に明瞭に記録。<br />
+                    ・<strong>明神礁の海底噴火（Day 3海底噴火）</strong>：鳥島沖を通過した深海物体が北上を継続し、明神礁の海底カルデラで第3の連動大爆発が発生。他島名と重ならない海図西側に明瞭に記録。<br />
                     ・<strong>青ヶ島・八丈島の火山性地震</strong>：海底噴火に伴い、両島にて有感を含む火山性群発微動（震度1〜2）が観測。島民に不穏な空気が広がる。<br />
                     ・<strong>小笠原救難隊</strong>：現地捜索組は母船とともに父島本島（二見港）へ無事帰還・集結。
                   </p>

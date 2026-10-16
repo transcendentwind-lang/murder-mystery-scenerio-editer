@@ -147,6 +147,11 @@
   <ellipse cx="559.2" cy="351.2" rx="2" ry="2" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
   <text x="566.2" y="354.2" fill="#94a3b8" font-size="10" font-weight="normal" text-anchor="start">ベヨネース列岩</text>
 
+  <!-- 明神礁（海底カルデラ） -->
+  <circle cx="568.0" cy="348.0" r="3.5" fill="#1e293b" stroke="#eab308" stroke-width="1.2" stroke-dasharray="2 1"/>
+  <text x="576.0" y="347.0" fill="#94a3b8" font-size="10" font-weight="normal" text-anchor="start">明神礁</text>
+  <text x="576.0" y="358.0" fill="#eab308" font-size="8" text-anchor="start">(海底カルデラ・未噴火)</text>
+
   <!-- 須美寿島 -->
   <ellipse cx="581.2" cy="379.9" rx="3" ry="3" fill="#1e293b" stroke="#64748b" stroke-width="1.2"/>
   <text x="589.2" y="382.9" fill="#94a3b8" font-size="10" font-weight="normal" text-anchor="start">須美寿島</text>

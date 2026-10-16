@@ -1592,7 +1592,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </p>
                         <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
                           🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
-                          事態は【<strong>Day 4：須美寿島〜青ヶ島沖（須美寿島沖海底噴火・内閣不作為と防衛庁意見聴取・八丈島前線情報収集と現地4大真相調査）</strong>】へと繋がります！
+                          事態は【<strong>Day 4：明神礁（明神礁海底噴火・内閣不作為と防衛庁意見聴取・八丈島前線情報収集と現地4大真相調査）</strong>】へと繋がります！
                         </div>
                       </div>
                     )}
@@ -1601,7 +1601,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
-            {/* --- DAY 4 プレイヤー提供情報：須美寿島沖海底噴火 ＆ 合議制アクション --- */}
+            {/* --- DAY 4 プレイヤー提供情報：明神礁海底噴火 ＆ 合議制アクション --- */}
             {selectedDay === 4 && (
               <div className="rounded-xl border border-red-800 bg-[#140810] p-4 shadow-lg space-y-4">
                 {/* ヘッダー */}
@@ -1610,10 +1610,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Flame className="h-4 w-4 text-rose-400" />
                     <div>
                       <span className="font-bold text-xs text-white">
-                        【Day 4 緊急事態】須美寿島〜青ヶ島沖海底噴火 ＆ 政府・現地真相調査作戦
+                        【Day 4 緊急事態】明神礁海底噴火 ＆ 政府・現地真相調査作戦
                       </span>
                       <span className="ml-2 text-[10px] text-rose-300 font-mono">
-                        須美寿〜青ヶ島沖 連動大爆発 ｜ 八丈島・青ヶ島 群発微動 ｜ 父島帰還
+                        明神礁 連動大爆発 ｜ 八丈島・青ヶ島 群発微動 ｜ 父島帰還
                       </span>
                     </div>
                   </div>
@@ -1661,7 +1661,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <Flame className="h-4 w-4 text-rose-400" />
                       <div>
                         <span className="font-bold text-xs text-white">
-                          【火山活動監視図 WGS84】須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測（Day 4更新版）
+                          【火山活動監視図 WGS84】明神礁海底噴火 ＆ 地震観測（Day 4更新版）
                         </span>
                         <span className="ml-2 text-[10px] text-rose-300 font-mono">
                           CHART NO. V-2024 / 噴火ドミノ北上
@@ -1698,7 +1698,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none opacity-0 group-hover:opacity-100 transition">
                       <span className="text-[11px] font-bold text-white bg-black/60 px-2 py-0.5 rounded backdrop-blur">
-                        🔴 【Day 3 噴火】須美寿〜青ヶ島沖海底カルデラ連動噴火 ｜ ⚡ 八丈島・青ヶ島 地震観測
+                        🔴 【Day 3 噴火】明神礁 連動大噴火 ｜ ⚡ 八丈島・青ヶ島 地震観測
                       </span>
                       <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
                         <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
@@ -1708,7 +1708,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
                     <p>
-                      ・<strong>須美寿島〜青ヶ島沖の噴火地点</strong>：鳥島沖を通過した物体が北上を続け、須美寿島〜青ヶ島沖（31°40&apos;N, 139°50&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 須美寿〜青ヶ島沖海底噴火」として他の地名に被らずプロット。
+                      ・<strong>明神礁の海底噴火地点</strong>：鳥島沖を通過した物体が北上を続け、明神礁（31°55&apos;N, 140°01&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 明神礁 連動大噴火」として他の地名に被らずプロット。
                     </p>
                     <p>
                       ・<strong>青ヶ島・八丈島の地震観測 ＆ 特別な振動による火山刺激と富士山到達危機</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
@@ -2101,7 +2101,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 海図要綱解説 */}
                   <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
                     <p>
-                      ・<strong>御蔵島沖の海底噴火（第4の噴火）</strong>：須美寿島沖を通過した物体が北上し、御蔵島沖（33°45&apos;N, 139°30&apos;E）の海底カルデラで連動爆発が発生。
+                      ・<strong>御蔵島沖の海底噴火（第4の噴火）</strong>：明神礁沖を通過した物体が北上し、御蔵島沖（33°45&apos;N, 139°30&apos;E）の海底カルデラで連動爆発が発生。
                     </p>
                     <p>
                       ・<strong>八丈島への地震波及（M4.0・震度3）</strong>：御蔵島沖の海底噴火を震源とするマグニチュード4クラスの地震が発生し、八丈島全域で震度3の強い揺れを観測。
@@ -3714,7 +3714,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                    海上保安庁 火山活動監視状況図（Day 4：須美寿島〜青ヶ島沖海底噴火 ＆ 地震観測）
+                    海上保安庁 火山活動監視状況図（Day 4：明神礁海底噴火 ＆ 地震観測）
                   </h3>
                   <p className="text-[11px] text-slate-400 font-mono">
                     JAPAN COAST GUARD VOLCANIC MONITORING CHART (CHART NO. V-2024 / WGS84)
@@ -3750,7 +3750,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300 flex items-center justify-between">
               <div>
                 <span className="font-bold text-rose-300">【Day 4 観測要綱】</span>
-                須美寿島〜青ヶ島沖の海底カルデラ噴火（Day 3マーク）および青ヶ島・八丈島での火山性微動（震度1〜2）を網羅。他の島名や地形と被らないよう海図西側に配置。
+                明神礁の海底カルデラ噴火（Day 3マーク）および青ヶ島・八丈島での火山性微動（震度1〜2）を網羅。他の島名や地形と被らないよう海図西側に配置。
               </div>
               <span className="font-mono text-cyan-400">連動速度: 時速約6km 北上</span>
             </div>
