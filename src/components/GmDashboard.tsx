@@ -122,10 +122,13 @@ export const FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
-export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
+// ==========================================
+// Day 3 合議制アクション（旧Day 4から前倒し新設）
+// ==========================================
+export const DAY3_TOKYO_ACTIONS: Day2ActionOption[] = [
   {
-    id: "T-4A",
-    title: "T-4A: 隕石について調べる（危機管理官持ち帰り隕石片の地磁気共鳴・特殊物質分析）",
+    id: "T-3A",
+    title: "T-3A: 隕石について調べる（危機管理官持ち帰り隕石片の地磁気共鳴・特殊物質分析）",
     organization: "科学警察研究所 / 防衛装備庁 先端技術研究所",
     evidenceId: "ev-tokyo-meteorite-analysis",
     badge: "隕石片・地磁気＆特殊物質",
@@ -133,8 +136,8 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
     detail: "1ヶ月前の流星雨の際、海上保安庁東京本部の危機管理官（PC1）だけが小笠原の海岸で拾い東京へ持ち帰っていた小さな隕石片の精密分析。この隕石は①強い磁気特性（地磁気との共鳴）を持つこと、そして②海水に触れると深海生物の感覚器を強烈に引き寄せる「特殊な物質」を放出することが判明。巨大生物が隕石を追うように北上できる理由が【①地磁気】と【②この隕石が放つ特殊な物質】の2つであることが科学的に裏付けられる。",
   },
   {
-    id: "T-4B",
-    title: "T-4B: 八丈島の火山性微動について調べる（地震波形解析・富士山到達リスク）",
+    id: "T-3B",
+    title: "T-3B: 八丈島の火山性微動について調べる（地震波形解析・富士山到達リスク）",
     organization: "気象庁 地震火山部 / 東京大学地震研究所",
     evidenceId: "ev-hachijo-tremor-analysis",
     badge: "八丈島微動解析",
@@ -142,8 +145,8 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
     detail: "八丈島・青ヶ島の地震計データの深層解析。巨大生物が海底付近で海底地震を起こすような特別な振動を発生させ、深度10kmのマグマ溜まりを刺激している動かぬ証拠。このまま北上すれば伊豆諸島を通過して富士火山帯・富士山直下に直結し、壊滅的な破局噴火を誘発する絶対的危機を突き止める。",
   },
   {
-    id: "T-4C",
-    title: "T-4C: 八丈島の島民からの情報を調べる（神社の奉納隕石盗難 ＆ 海域投棄目撃・魚探記録）",
+    id: "T-3C",
+    title: "T-3C: 八丈島の島民からの情報を調べる（神社の奉納隕石盗難 ＆ 海域投棄目撃・魚探記録）",
     organization: "八丈島総合開発センター / 底土港漁協 / 島嶼警察署",
     evidenceId: "ev-hachijo-resident-and-sonar",
     badge: "神社の隕石盗難＆海域投棄",
@@ -152,10 +155,10 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
-export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
+export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
   {
-    id: "F-4A",
-    title: "F-4A: 隕石について調べる（小笠原観測所 落下隕石記録・特殊物質と地磁気分析）",
+    id: "F-3A",
+    title: "F-3A: 隕石について調べる（小笠原観測所 落下隕石記録・特殊物質と地磁気分析）",
     organization: "気象庁 小笠原気象観測所 地質研究室",
     evidenceId: "ev-ogasawara-meteorite-analysis",
     badge: "落下隕石・特殊物質分析",
@@ -163,8 +166,8 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "小笠原気象観測所の地質分析。もともと小笠原・八丈島・三宅島には同種の隕石が降っていた記録があり、海水中で深海生物を引き寄せる「特殊な物質」を放つこと、また地磁気と共鳴する性質を持つことが判明。さらに1ヶ月前の流星雨では、父島南西沖の海底に約30kg程度のまとまった隕石塊（海から引き揚げて箱に入れられるサイズだが隕石としては十分に大きな塊）が沈んでいた計算結果が導き出される。",
   },
   {
-    id: "F-4B",
-    title: "F-4B: 神社での調査（小笠原大神宮 奉納隕石の組織的盗難発覚 ＆ 盟約祝詞の古文書調査）",
+    id: "F-3B",
+    title: "F-3B: 神社での調査（小笠原大神宮 奉納隕石の組織的盗難発覚 ＆ 盟約祝詞の古文書調査）",
     organization: "小笠原大神宮 宝物殿",
     evidenceId: "ev-shrine-curse-stone",
     badge: "奉納隕石盗難＆盟約祝詞",
@@ -172,8 +175,8 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "小笠原大神宮の調査により、もともと島に降って神社に保管・奉納されていた隕石が何者かに盗み出されていたことが発覚（八丈島・三宅島の神社でも奉納隕石が組織的に盗まれていた）。さらに宝物殿の古文書から、太古に怪異を鎮めた『盟約の祝詞』が存在し、船で海へ漕ぎ出して海中に長い筒を差し入れて読み上げる作法であると判明。ただし文面を知る元神主の子ども達は【東京に出てしまっている】ため東京側との協力が不可欠となる。",
   },
   {
-    id: "F-4C",
-    title: "F-4C: 謎のダイバーグループについての調査（二見港貨物伝票 ＆ 各海域への隕石投棄ルート追跡）",
+    id: "F-3C",
+    title: "F-3C: 謎のダイバーグループについての調査（二見港貨物伝票 ＆ 各海域への隕石投棄ルート追跡）",
     organization: "小笠原海運 二見港貨物取扱所 / 海上保安部航跡班",
     evidenceId: "ev-diver-shipping-waybill",
     badge: "ダイバー貨物＆海域投棄",
@@ -181,8 +184,8 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "港の貨物台帳と不審船の航跡を執念で追跡。謎のダイバーグループが海から引き揚げた約30kgの隕石（大型冷凍ボックス）は『静岡県・富士山麓の民家』宛てに発送されていた。同時に、小笠原・八丈島・三宅島の神社から組織的に盗まれた複数の隕石が、西之島・青ヶ島沖・八丈島付近・三宅島付近の海へ点々と落とされ、巨大生物を北へ誘導する「道標」にされていた疑惑が浮上する。",
   },
   {
-    id: "F-4D",
-    title: "F-4D: 撮影した画像の分析（Day 3洋上ソナー写真の深層デジタル画像解析）",
+    id: "F-3D",
+    title: "F-3D: 撮影した画像の分析（Day 3洋上ソナー写真の深層デジタル画像解析）",
     organization: "海洋科学大学 小笠原研究所 / 小笠原救難隊",
     evidenceId: "ev-photo-deep-analysis",
     badge: "写真画像深層解析",
@@ -191,10 +194,14 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
-export const DAY5_TOKYO_ACTIONS: Day2ActionOption[] = [
+// ==========================================
+// Day 4 合議制アクション（旧Day 5から前倒し新設）
+// ※Day 3で未選択の項目も繰り越し調査可能
+// ==========================================
+export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
   {
-    id: "T-5A",
-    title: "T-5A: 富士山麓民家の捜索照会（神社の組織的隕石盗難・海域投棄ルートと約30kg隕石搬入の特定）",
+    id: "T-4A",
+    title: "T-4A: 富士山麓民家の捜索照会（神社の組織的隕石盗難・海域投棄ルートと約30kg隕石搬入の特定）",
     organization: "警視庁公安部 / 静岡県警",
     evidenceId: "ev-cult-cargo",
     badge: "盗難隕石投棄＆富士山麓搬入",
@@ -202,8 +209,8 @@ export const DAY5_TOKYO_ACTIONS: Day2ActionOption[] = [
     detail: "静岡県警と警視庁の合同捜査。もともと小笠原・八丈島・三宅島の神社に保管・奉納されていた隕石が組織的に盗み出され、西之島・青ヶ島沖・八丈島付近・三宅島付近の海に順番に落とされていた。そして謎のダイバーグループが小笠原の海から引き揚げて箱に入れた約30kgの海底隕石が、富士山麓の民家を経由して山林深くへ搬入されていた。巨大生物が「①地磁気」と「②各海域に落とされた隕石が放つ特殊な物質」を辿って富士山へ北上していたすべてのカラクリが確定する。",
   },
   {
-    id: "T-5B",
-    title: "T-5B: 都内・元神主の子どもの捜索（盟約祝詞の口伝解読）",
+    id: "T-4B",
+    title: "T-4B: 都内・元神主の子どもの捜索（盟約祝詞の口伝解読）",
     organization: "警視庁捜査共助課 / 小笠原大神宮関係者",
     evidenceId: "ev-shrine-lineage",
     badge: "神主遺族の口伝証言",
@@ -212,10 +219,10 @@ export const DAY5_TOKYO_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
-export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
+export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   {
-    id: "F-5A",
-    title: "F-5A: 故・朝倉教授の研究室調査（学術起源ノート ＆ 小笠原口伝記録）",
+    id: "F-4A",
+    title: "F-4A: 故・朝倉教授の研究室調査（学術起源ノート ＆ 小笠原口伝記録）",
     organization: "海洋科学大学 小笠原研究所 朝倉研究室",
     evidenceId: "ev-asakura-notes-origin",
     badge: "学術起源＆盟約口伝ノート",
@@ -223,8 +230,8 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて交わされた人と鯨の約束を記した未発表ノートを回収する。",
   },
   {
-    id: "F-5B",
-    title: "F-5B: 朝倉教授のコーダ構文規則論文ドラフト精査（多語連鎖と音響実録）",
+    id: "F-4B",
+    title: "F-4B: 朝倉教授のコーダ構文規則論文ドラフト精査（多語連鎖と音響実録）",
     organization: "海洋科学大学 小笠原研究所 朝倉研究室",
     evidenceId: "ev-asakura-notes-syntax",
     badge: "コーダ構文規則ドラフト",
@@ -232,8 +239,8 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "クリック間隔（ICI）と連鎖規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。",
   },
   {
-    id: "F-5C",
-    title: "F-5C: 島の古老・漁師への小笠原古謡（捕鯨唄）聞き取り",
+    id: "F-4C",
+    title: "F-4C: 島の古老・漁師への小笠原古謡（捕鯨唄）聞き取り",
     organization: "二見港 捕鯨史料室 / 古老宅",
     evidenceId: "ev-folk-song-rhythm",
     badge: "小笠原捕鯨唄リズム",
@@ -241,8 +248,8 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "島の古謡の拍子を分析。かつて島人が海へ向かって鳴らしていた『極上の獲物（捕食）』を示すクリック音リズムが、捕鯨唄の手拍子として受け継がれていた事実を特定する。",
   },
   {
-    id: "F-5D",
-    title: "F-5D: 神社宝物殿・古文書の深層解読（特別な振動による海底火山刺激と巨大イカ捕食史）",
+    id: "F-4D",
+    title: "F-4D: 神社宝物殿・古文書の深層解読（特別な振動による海底火山刺激と巨大イカ捕食史）",
     organization: "小笠原大神宮 宝物殿",
     evidenceId: "ev-ancient-shrine-scroll",
     badge: "古文書深層解読",
@@ -250,6 +257,10 @@ export const DAY5_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "神社の最奥の巻物を解読。巨大生物が海底付近で特別な振動を起こして海底火山を刺激する特性を持つこと、そして過去の解決法がマッコウクジラによる巨大イカ塊の捕食であったという真相の決定打を突き止める。",
   },
 ];
+
+// 後方互換性エイリアス
+export const DAY5_TOKYO_ACTIONS = DAY4_TOKYO_ACTIONS;
+export const DAY5_FIELD_ACTIONS = DAY4_FIELD_ACTIONS;
 
 interface GmDashboardProps {
   project: MMProject;
@@ -266,9 +277,18 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [selectedTokyoAction, setSelectedTokyoAction] = useState<string>("T-3");
   const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
 
-  // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
+  // Day 3 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
+  const [selectedDay3TokyoAction, setSelectedDay3TokyoAction] = useState<string>("T-3A");
+  const [selectedDay3FieldActions, setSelectedDay3FieldActions] = useState<string[]>(["F-3A", "F-3B"]);
+
+  // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠 / Day 3繰り越し含む）
   const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4A");
   const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+
+  // Day 5 総力調査アクションの選択状態（東京: 1枠, 現地: 2枠 / 未選択プールから選択）
+  const [selectedDay5TokyoAction, setSelectedDay5TokyoAction] = useState<string>("T-3B");
+  const [selectedDay5FieldActions, setSelectedDay5FieldActions] = useState<string[]>(["F-3C", "F-4C"]);
+
   // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
   const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
@@ -301,7 +321,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         return prev.filter((item) => item !== id);
       } else {
         if (prev.length >= 2) {
-          // すでに2つ選択されている場合は古い方を押し出す
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleToggleDay3FieldAction = (id: string) => {
+    setSelectedDay3FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
           return [prev[1], id];
         }
         return [...prev, id];
@@ -321,6 +353,47 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
       }
     });
   };
+
+  const handleToggleDay5FieldAction = (id: string) => {
+    setSelectedDay5FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  // 全アクション・繰り越しプールの計算
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS];
+  const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
+
+  const day3TokyoChosen = selectedDay3TokyoAction ? [selectedDay3TokyoAction] : [];
+  const day3FieldChosen = selectedDay3FieldActions;
+
+  // Day 4で選べる候補（DAY4新規 ＋ Day 3で未選択のDAY3アクション）
+  const day4AvailableTokyoActions = [
+    ...DAY4_TOKYO_ACTIONS,
+    ...DAY3_TOKYO_ACTIONS.filter((a) => !day3TokyoChosen.includes(a.id)),
+  ];
+  const day4AvailableFieldActions = [
+    ...DAY4_FIELD_ACTIONS,
+    ...DAY3_FIELD_ACTIONS.filter((a) => !day3FieldChosen.includes(a.id)),
+  ];
+
+  const day4TokyoChosen = selectedDay4TokyoAction ? [selectedDay4TokyoAction] : [];
+  const day4FieldChosen = selectedDay4FieldActions;
+
+  // Day 5で選べる候補（Day 3〜4で未選択の全アクション）
+  const pastChosenTokyo = [...day3TokyoChosen, ...day4TokyoChosen];
+  const pastChosenField = [...day3FieldChosen, ...day4FieldChosen];
+
+  const day5AvailableTokyoActions = ALL_TOKYO_ACTIONS.filter((a) => !pastChosenTokyo.includes(a.id));
+  const day5AvailableFieldActions = ALL_FIELD_ACTIONS.filter((a) => !pastChosenField.includes(a.id));
 
   // タイマー
   useEffect(() => {
@@ -1112,13 +1185,96 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ5：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定（Day 3 クロージング） */}
+                  {/* フェーズ5：Day 3 合議制アクション操作パネル（東京1枠 ＋ 現地2枠） */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                        <Users className="h-4 w-4 text-indigo-400" />
+                        【フェーズ5：Day 3 合議制アクション（東京1枠 ＋ 現地2枠）】
+                      </span>
+                      <div className="flex items-center gap-2 text-[10px]">
+                        <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                          東京: 1枠
+                        </span>
+                        <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                          現地: {selectedDay3FieldActions.length}/2枠
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-slate-400">
+                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です。
+                    </p>
+
+                    {/* 海上保安庁東京本部アクション */}
+                    <div>
+                      <span className="font-bold text-indigo-300 text-[11px] block mb-1">
+                        🏢 海上保安庁東京本部アクション（3枠中1枠選択：隕石片分析 ｜ 八丈島火山性微動 ｜ 神社隕石盗難・海域投棄）:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        {DAY3_TOKYO_ACTIONS.map((a) => (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => setSelectedDay3TokyoAction(a.id)}
+                            className={`rounded-lg p-2 text-left border transition ${
+                              selectedDay3TokyoAction === a.id
+                                ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <span className={`text-[9px] px-1 rounded ${selectedDay3TokyoAction === a.id ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                {selectedDay3TokyoAction === a.id ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 小笠原現地アクション */}
+                    <div>
+                      <span className="font-bold text-teal-300 text-[11px] block mb-1">
+                        🏝️ 小笠原現地アクション（4枠中2枠選択：隕石分析 ｜ 神社宝物殿 ｜ ダイバー貨物伝票 ｜ 写真画像深層解析）:
+                      </span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {DAY3_FIELD_ACTIONS.map((a) => {
+                          const isSelected = selectedDay3FieldActions.includes(a.id);
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => handleToggleDay3FieldAction(a.id)}
+                              className={`rounded-lg p-2 text-left border transition ${
+                                isSelected
+                                  ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white" : "text-slate-500"}`}>
+                                  {isSelected ? "選択中" : "未選択"}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* フェーズ6：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定（Day 3 クロージング） */}
                   <div className="rounded-lg border border-amber-800/70 bg-amber-950/25 p-3.5 space-y-3 shadow-sm">
                     <div className="flex items-center justify-between border-b border-amber-900/60 pb-1.5">
                       <div className="flex items-center gap-1.5">
                         <Scale className="h-4 w-4 text-amber-400" />
                         <span className="font-bold text-amber-300 text-xs">
-                          【フェーズ5：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定】（Day 3 クロージング）
+                          【フェーズ6：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定】（Day 3 クロージング）
                         </span>
                       </div>
                       <span className="text-[10px] text-amber-300 font-mono bg-amber-950 px-2 py-0.5 rounded border border-amber-800">
@@ -1351,12 +1507,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：Day 4 合議制アクション操作パネル */}
-                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3">
+                  {/* フェーズ4：Day 4 合議制アクション操作パネル（繰り越し蓄積対応） */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-indigo-400" />
-                        【フェーズ4：Day 4 合議制アクション（東京1枠 ＋ 現地2枠）】
+                        【フェーズ4：Day 4 合議制アクション（東京1枠 ＋ 現地2枠 / Day 3繰り越し対応）】
                       </span>
                       <div className="flex items-center gap-2 text-[10px]">
                         <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
@@ -1368,37 +1524,70 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
+                    <p className="text-[11px] text-slate-400">
+                      💡 <strong>繰り越し蓄積システム</strong>: Day 4の新設項目に加え、Day 3で未選択だった項目も選択可能です。ここで選ばれなかった項目も消滅せず、Day 5で総力調査できます。
+                    </p>
+
                     {/* 海上保安庁東京本部アクション */}
                     <div>
-                      <span className="font-bold text-indigo-300 text-[11px] block mb-1">
-                        🏢 海上保安庁東京本部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        {DAY4_TOKYO_ACTIONS.map((a) => (
-                          <button
-                            key={a.id}
-                            type="button"
-                            onClick={() => setSelectedDay4TokyoAction(a.id)}
-                            className={`rounded-lg p-2 text-left border transition ${
-                              selectedDay4TokyoAction === a.id
-                                ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
-                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                            }`}
-                          >
-                            <div className="font-bold text-white text-[11px]">{a.id} {a.badge}</div>
-                            <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
-                          </button>
-                        ))}
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-indigo-300 text-[11px]">
+                          🏢 海上保安庁東京本部アクション（候補{day4AvailableTokyoActions.length}枠中1枠選択）:
+                        </span>
+                        {selectedDay3TokyoAction && (
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            ✅ Day 3調査済: {selectedDay3TokyoAction}
+                          </span>
+                        )}
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                        {day4AvailableTokyoActions.map((a) => {
+                          const isFromDay3 = DAY3_TOKYO_ACTIONS.some((d3) => d3.id === a.id);
+                          const isSelected = selectedDay4TokyoAction === a.id;
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => setSelectedDay4TokyoAction(a.id)}
+                              className={`rounded-lg p-2 text-left border transition ${
+                                isSelected
+                                  ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"}`}>
+                                    {isFromDay3 ? "Day 3繰越" : "Day 4新設"}
+                                  </span>
+                                </div>
+                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                  {isSelected ? "選択中" : "未選択"}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                            </button>
+                          );
+                        })}
                       </div>
                     </div>
 
                     {/* 小笠原現地アクション */}
                     <div>
-                      <span className="font-bold text-teal-300 text-[11px] block mb-1">
-                        🏝️ 小笠原現地アクション（4枠中2枠選択：隕石調査 ｜ 神社調査 ｜ ダイバー追跡 ｜ 写真画像解析）:
-                      </span>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-teal-300 text-[11px]">
+                          🏝️ 小笠原現地アクション（候補{day4AvailableFieldActions.length}枠中2枠選択）:
+                        </span>
+                        {selectedDay3FieldActions.length > 0 && (
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            ✅ Day 3調査済: {selectedDay3FieldActions.join(", ")}
+                          </span>
+                        )}
+                      </div>
                       <div className="grid grid-cols-2 gap-2">
-                        {DAY4_FIELD_ACTIONS.map((a) => {
+                        {day4AvailableFieldActions.map((a) => {
+                          const isFromDay3 = DAY3_FIELD_ACTIONS.some((d3) => d3.id === a.id);
                           const isSelected = selectedDay4FieldActions.includes(a.id);
                           return (
                             <button
@@ -1412,8 +1601,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                               }`}
                             >
                               <div className="flex items-center justify-between">
-                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white" : "text-slate-500"}`}>
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"}`}>
+                                    {isFromDay3 ? "Day 3繰越" : "Day 4新設"}
+                                  </span>
+                                </div>
+                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white font-bold" : "text-slate-500"}`}>
                                   {isSelected ? "選択中" : "未選択"}
                                 </span>
                               </div>
@@ -1545,6 +1739,130 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <p className="text-slate-400 text-[10px] pt-1 border-t border-blue-900/50">
                         💡 <strong>GM進行のコツ</strong>: 自衛隊が部隊を展開してくれたことで、プレイヤーは自衛隊を信じて一息つきつつ、「自分たちにしかできない調査（富士山麓の荷物の真相、神主の子どもの捜索、音響遺品等）」に自由に動ける時間となります。
                       </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ2.5：Day 5 総力調査アクション操作パネル（未選択プール全開放） */}
+                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                        <Users className="h-4 w-4 text-indigo-400" />
+                        【フェーズ2.5：Day 5 総力調査アクション（東京1枠 ＋ 現地2枠 / 未選択プール全開放）】
+                      </span>
+                      <div className="flex items-center gap-2 text-[10px]">
+                        <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                          東京: 1枠
+                        </span>
+                        <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                          現地: {selectedDay5FieldActions.length}/2枠
+                        </span>
+                      </div>
+                    </div>
+
+                    <p className="text-[11px] text-slate-400">
+                      💡 <strong>総ざらい総力調査</strong>: 自衛隊迎撃の間、プレイヤー陣営は残された未確認情報の総力調査を実施します。Day 3・Day 4で未調査の全プールから、東京1枠・現地2枠を選択して開示してください（残りはDay 6冒頭で完全回収されます）。
+                    </p>
+
+                    {/* 海上保安庁東京本部アクション */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-indigo-300 text-[11px]">
+                          🏢 海上保安庁東京本部アクション（未調査{day5AvailableTokyoActions.length}枠中1枠選択）:
+                        </span>
+                        {pastChosenTokyo.length > 0 && (
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            ✅ 過去調査済: {pastChosenTokyo.join(", ")}
+                          </span>
+                        )}
+                      </div>
+                      {day5AvailableTokyoActions.length === 0 ? (
+                        <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
+                          東京側の未調査項目はすべて調査完了しています。
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
+                          {day5AvailableTokyoActions.map((a) => {
+                            const isSelected = selectedDay5TokyoAction === a.id;
+                            const isFromDay3 = DAY3_TOKYO_ACTIONS.some((d3) => d3.id === a.id);
+                            return (
+                              <button
+                                key={a.id}
+                                type="button"
+                                onClick={() => setSelectedDay5TokyoAction(a.id)}
+                                className={`rounded-lg p-2 text-left border transition ${
+                                  isSelected
+                                    ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
+                                    : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                                }`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                    <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"}`}>
+                                      {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
+                                    </span>
+                                  </div>
+                                  <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                    {isSelected ? "選択中" : "未選択"}
+                                  </span>
+                                </div>
+                                <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 小笠原現地アクション */}
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="font-bold text-teal-300 text-[11px]">
+                          🏝️ 小笠原現地アクション（未調査{day5AvailableFieldActions.length}枠中2枠選択）:
+                        </span>
+                        {pastChosenField.length > 0 && (
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            ✅ 過去調査済: {pastChosenField.join(", ")}
+                          </span>
+                        )}
+                      </div>
+                      {day5AvailableFieldActions.length === 0 ? (
+                        <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
+                          現地側の未調査項目はすべて調査完了しています。
+                        </div>
+                      ) : (
+                        <div className="grid grid-cols-2 gap-2">
+                          {day5AvailableFieldActions.map((a) => {
+                            const isSelected = selectedDay5FieldActions.includes(a.id);
+                            const isFromDay3 = DAY3_FIELD_ACTIONS.some((d3) => d3.id === a.id);
+                            return (
+                              <button
+                                key={a.id}
+                                type="button"
+                                onClick={() => handleToggleDay5FieldAction(a.id)}
+                                className={`rounded-lg p-2 text-left border transition ${
+                                  isSelected
+                                    ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                                    : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                                }`}
+                              >
+                                <div className="flex items-center justify-between">
+                                  <div className="flex items-center gap-1.5 flex-wrap">
+                                    <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                    <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"}`}>
+                                      {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
+                                    </span>
+                                  </div>
+                                  <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white font-bold" : "text-slate-500"}`}>
+                                    {isSelected ? "選択中" : "未選択"}
+                                  </span>
+                                </div>
+                                <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
                     </div>
                   </div>
 
@@ -1866,7 +2184,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Day {currentDay} 配布・開示証拠チェック
             </h4>
-            {(currentDay === 2 || currentDay === 4) && (
+            {[2, 3, 4, 5].includes(currentDay) && (
               <span className="text-[10px] text-indigo-400 font-semibold">
                 合議選択連動中
               </span>
@@ -1874,14 +2192,47 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           </div>
 
           <div className="space-y-2.5">
-            {project.evidences
-              .filter((e) => e.foundPhase === currentDay)
-              .map((ev) => {
+            {(() => {
+              // Dayごとに表示する証拠を計算
+              let displayedEvidences = project.evidences.filter((e) => e.foundPhase === currentDay);
+
+              if (currentDay === 4) {
+                // Day 4で選択されたアクション（Day 3繰り越し含む）の証拠を追加
+                const day4ChosenActionIds = [selectedDay4TokyoAction, ...selectedDay4FieldActions];
+                const day4ChosenEvIds = ALL_ACTION_DEFS
+                  .filter((a) => day4ChosenActionIds.includes(a.id))
+                  .map((a) => a.evidenceId);
+                const extraEvidences = project.evidences.filter(
+                  (e) => day4ChosenEvIds.includes(e.id) && !displayedEvidences.some((de) => de.id === e.id)
+                );
+                displayedEvidences = [...displayedEvidences, ...extraEvidences];
+              } else if (currentDay === 5) {
+                // Day 5で選択された総力調査アクションの証拠を追加
+                const day5ChosenActionIds = [selectedDay5TokyoAction, ...selectedDay5FieldActions];
+                const day5ChosenEvIds = ALL_ACTION_DEFS
+                  .filter((a) => day5ChosenActionIds.includes(a.id))
+                  .map((a) => a.evidenceId);
+                const extraEvidences = project.evidences.filter(
+                  (e) => day5ChosenEvIds.includes(e.id) && !displayedEvidences.some((de) => de.id === e.id)
+                );
+                displayedEvidences = [...displayedEvidences, ...extraEvidences];
+              }
+
+              if (displayedEvidences.length === 0) {
+                return (
+                  <div className="rounded border border-dashed border-slate-800 p-4 text-center text-xs text-slate-500">
+                    このDayに新たに配る直接カードはありません
+                  </div>
+                );
+              }
+
+              return displayedEvidences.map((ev) => {
                 const owner = project.characters.find((c) => c.id === ev.ownerId);
 
-                // Day 2 / Day 4 の場合のアクション連動チェック
+                // アクション連動チェック
                 let isActionSelected = false;
                 let linkedActionName = "";
+
                 if (currentDay === 2) {
                   const tokyoMatch = TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
                   const fieldMatch = FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
@@ -1892,9 +2243,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     linkedActionName = fieldMatch.id;
                     isActionSelected = selectedFieldActions.includes(fieldMatch.id);
                   }
+                } else if (currentDay === 3) {
+                  const tokyoMatch = DAY3_TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const fieldMatch = DAY3_FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  if (tokyoMatch) {
+                    linkedActionName = tokyoMatch.id;
+                    isActionSelected = selectedDay3TokyoAction === tokyoMatch.id;
+                  } else if (fieldMatch) {
+                    linkedActionName = fieldMatch.id;
+                    isActionSelected = selectedDay3FieldActions.includes(fieldMatch.id);
+                  }
                 } else if (currentDay === 4) {
-                  const tokyoMatch = DAY4_TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
-                  const fieldMatch = DAY4_FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const tokyoMatch = ALL_TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const fieldMatch = ALL_FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
                   if (tokyoMatch) {
                     linkedActionName = tokyoMatch.id;
                     isActionSelected = selectedDay4TokyoAction === tokyoMatch.id;
@@ -1902,9 +2263,20 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     linkedActionName = fieldMatch.id;
                     isActionSelected = selectedDay4FieldActions.includes(fieldMatch.id);
                   }
+                } else if (currentDay === 5) {
+                  const tokyoMatch = ALL_TOKYO_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  const fieldMatch = ALL_FIELD_ACTIONS.find((a) => a.evidenceId === ev.id);
+                  if (tokyoMatch) {
+                    linkedActionName = tokyoMatch.id;
+                    isActionSelected = selectedDay5TokyoAction === tokyoMatch.id;
+                  } else if (fieldMatch) {
+                    linkedActionName = fieldMatch.id;
+                    isActionSelected = selectedDay5FieldActions.includes(fieldMatch.id);
+                  }
                 }
 
-                const isLinkedAndActive = (currentDay === 2 || currentDay === 4) && isActionSelected;
+                const isLinkedDay = [2, 3, 4, 5].includes(currentDay);
+                const isLinkedAndActive = isLinkedDay && isActionSelected;
 
                 return (
                   <div
@@ -1917,7 +2289,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   >
                     <div className="flex items-center justify-between mb-1">
                       <div className="flex items-center gap-1.5 flex-wrap">
-                        {(currentDay === 2 || currentDay === 4) && linkedActionName && (
+                        {isLinkedDay && linkedActionName && (
                           <span
                             className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
                               isActionSelected
@@ -1953,7 +2325,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     )}
                   </div>
                 );
-              })}
+              });
+            })()}
 
             {project.evidences.filter((e) => e.foundPhase === currentDay).length === 0 && (
               <div className="rounded border border-dashed border-slate-800 p-4 text-center text-xs text-slate-500">
