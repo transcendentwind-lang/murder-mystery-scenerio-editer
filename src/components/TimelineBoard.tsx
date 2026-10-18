@@ -38,6 +38,8 @@ import {
 import {
   TOKYO_ACTIONS,
   FIELD_ACTIONS,
+  DAY3_TOKYO_ACTIONS,
+  DAY3_FIELD_ACTIONS,
   DAY4_TOKYO_ACTIONS,
   DAY4_FIELD_ACTIONS,
   DAY5_TOKYO_ACTIONS,
@@ -172,20 +174,91 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
   const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
+  // Day 3 アクション選択状態（東京1枠、現地2枠）
+  const [day3TokyoAction, setDay3TokyoAction] = useState<string>("T-3A");
+  const [day3FieldActions, setDay3FieldActions] = useState<string[]>(["F-3A", "F-3B"]);
+
   // Day 3 終盤合議 ＆ 司令官意思決定状態
   const [day3Pc5Opinion, setDay3Pc5Opinion] = useState<string>("colony_theory");
   const [day3Pc2Decision, setDay3Pc2Decision] = useState<string>("defense_action");
   const [day3HqFinalDecision, setDay3HqFinalDecision] = useState<string | null>(null);
 
-  // Day 4 アクション選択状態（東京1枠、現地2枠）
+  // Day 4 アクション選択状態（東京1枠、現地2枠 / Day 3繰り越し含む）
   const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
   const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
   const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
 
-  // Day 5 アクション選択状態（東京1枠、現地2枠）
-  const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-5A");
-  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-5B"]);
+  // Day 5 アクション選択状態（東京1枠、現地2枠 / 未選択プールから選択）
+  const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-3B");
+  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-3C", "F-4C"]);
+
+  const handleToggleDay3FieldAction = (id: string) => {
+    setDay3FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleToggleDay4FieldAction = (id: string) => {
+    setDay4FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  const handleToggleDay5FieldAction = (id: string) => {
+    setDay5FieldActions((prev) => {
+      if (prev.includes(id)) {
+        return prev.filter((item) => item !== id);
+      } else {
+        if (prev.length >= 2) {
+          return [prev[1], id];
+        }
+        return [...prev, id];
+      }
+    });
+  };
+
+  // 全アクション・繰り越しプールの計算
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS];
+  const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
+
+  const day3TokyoChosen = day3TokyoAction ? [day3TokyoAction] : [];
+  const day3FieldChosen = day3FieldActions;
+
+  // Day 4で選べる候補（DAY4新規 ＋ Day 3で未選択のDAY3アクション）
+  const day4AvailableTokyoActions = [
+    ...DAY4_TOKYO_ACTIONS,
+    ...DAY3_TOKYO_ACTIONS.filter((a) => !day3TokyoChosen.includes(a.id)),
+  ];
+  const day4AvailableFieldActions = [
+    ...DAY4_FIELD_ACTIONS,
+    ...DAY3_FIELD_ACTIONS.filter((a) => !day3FieldChosen.includes(a.id)),
+  ];
+
+  const day4TokyoChosen = day4TokyoAction ? [day4TokyoAction] : [];
+  const day4FieldChosen = day4FieldActions;
+
+  // Day 5で選べる候補（Day 3〜4で未選択の全アクション）
+  const pastChosenTokyo = [...day3TokyoChosen, ...day4TokyoChosen];
+  const pastChosenField = [...day3FieldChosen, ...day4FieldChosen];
+
+  const day5AvailableTokyoActions = ALL_TOKYO_ACTIONS.filter((a) => !pastChosenTokyo.includes(a.id));
+  const day5AvailableFieldActions = ALL_FIELD_ACTIONS.filter((a) => !pastChosenField.includes(a.id));
 
   // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網装填準備状態
   const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
@@ -258,21 +331,6 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     });
   };
 
-  const handleToggleDay4FieldAction = (id: string) => {
-    setDay4FieldActions((prev) => {
-      if (prev.includes(id)) return prev.filter((i) => i !== id);
-      if (prev.length >= 2) return [prev[1], id];
-      return [...prev, id];
-    });
-  };
-
-  const handleToggleDay5FieldAction = (id: string) => {
-    setDay5FieldActions((prev) => {
-      if (prev.includes(id)) return prev.filter((i) => i !== id);
-      if (prev.length >= 2) return [prev[1], id];
-      return [...prev, id];
-    });
-  };
 
   const handleToggleDay3SonarDrop = (sectorId: string) => {
     setDay3DroppedPoints((prev) => {
@@ -1234,7 +1292,160 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ⑤ 【Day 3 終盤：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定パネル】 */}
+                {/* ⑤ 【Day 3 合議制アクション操作パネル】海上保安庁東京本部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠） */}
+                <div className="rounded-xl border border-indigo-900/60 bg-[#0c1024] p-4 shadow-md space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-cyan-400" />
+                      <span className="font-bold text-xs text-white">
+                        【Day 3 合議制アクション】海上保安庁東京本部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px]">
+                      <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                        東京: 1枠
+                      </span>
+                      <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                        現地: {day3FieldActions.length}/2枠
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-slate-300 leading-relaxed">
+                    💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です。洋上索敵で得られた写真の深層解析や、これまでに集まった手がかりを東京・小笠原で分担して調査してください。
+                  </p>
+
+                  {/* 海上保安庁東京本部アクション */}
+                  <div>
+                    <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
+                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択：隕石片分析 ｜ 八丈島火山性微動 ｜ 神社隕石盗難・海域投棄）:
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      {DAY3_TOKYO_ACTIONS.map((a) => {
+                        const isSelected = day3TokyoAction === a.id;
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => setDay3TokyoAction(a.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-indigo-400 bg-indigo-950/80 shadow ring-1 ring-indigo-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                {isSelected ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  {/* 小笠原現地アクション */}
+                  <div>
+                    <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
+                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：隕石分析 ｜ 神社宝物殿 ｜ ダイバー貨物伝票 ｜ 写真画像深層解析）:
+                    </span>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                      {DAY3_FIELD_ACTIONS.map((a) => {
+                        const isSelected = day3FieldActions.includes(a.id);
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => handleToggleDay3FieldAction(a.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-teal-400 bg-teal-950/80 shadow ring-1 ring-teal-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                                isSelected ? "bg-teal-600 text-white" : "text-slate-500"
+                              }`}>
+                                {isSelected ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
+
+                {/* ⑥ 【Day 3 選択アクション 調査結果・機密レポート】 */}
+                <div className="rounded-xl border border-slate-700 bg-slate-950/90 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                      <FileText className="h-4 w-4" />
+                      【Day 3 選択アクション 調査結果・機密レポート】
+                    </span>
+                    <span className="text-[10px] text-slate-400">
+                      合議で選定した情報（東京1件 ＋ 現地2件）の詳細調書
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* 東京側レポート */}
+                    {(() => {
+                      const tokyoActionObj = DAY3_TOKYO_ACTIONS.find((a) => a.id === day3TokyoAction);
+                      if (!tokyoActionObj) return null;
+                      return (
+                        <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
+                            <span className="font-bold text-indigo-300 text-[11px]">
+                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
+                              {tokyoActionObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {tokyoActionObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {tokyoActionObj.detail}
+                          </p>
+                        </div>
+                      );
+                    })()}
+
+                    {/* 現地側レポート（2件） */}
+                    {day3FieldActions.map((fId) => {
+                      const fObj = DAY3_FIELD_ACTIONS.find((a) => a.id === fId);
+                      if (!fObj) return null;
+                      return (
+                        <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
+                            <span className="font-bold text-teal-300 text-[11px]">
+                              🏝️ {fObj.id} {fObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
+                              {fObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {fObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {fObj.detail}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* ⑦ 【Day 3 終盤：写真鑑定相談・防衛判断 ＆ 合議制司令官最終意思決定パネル】 */}
                 <div className="rounded-xl border border-amber-600/70 bg-[#15100e] p-4 space-y-4 shadow-xl">
                   {/* ヘッダー */}
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-800/60 pb-2.5">
@@ -1790,13 +2001,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ③ Day 4 合議制アクション操作パネル（東京1枠 ＋ 小笠原現地2枠） */}
+                {/* ③ Day 4 合議制アクション操作パネル（東京1枠 ＋ 小笠原現地2枠 / Day 3繰り越し蓄積対応） */}
                 <div className="rounded-xl border border-indigo-900/60 bg-[#0c1024] p-4 shadow-md space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-900/60 pb-2">
                     <div className="flex items-center gap-2">
                       <Users className="h-4 w-4 text-cyan-400" />
                       <span className="font-bold text-xs text-white">
-                        【Day 4 合議制アクション】海上保安庁東京本部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
+                        【Day 4 合議制アクション】海上保安庁東京本部調査 ＆ 小笠原現地調査（東京1枠 ＋ 現地2枠 / Day 3繰り越し蓄積対応）
                       </span>
                     </div>
                     <div className="flex items-center gap-2 text-[10px]">
@@ -1809,13 +2020,25 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
+                  <p className="text-[11px] text-slate-400">
+                    💡 <strong>繰り越し蓄積システム</strong>: Day 4の新設項目に加え、Day 3で未選択だった項目も選択可能です。ここで選ばれなかった項目も消滅せず、Day 5で総力調査できます。
+                  </p>
+
                   {/* 海上保安庁東京本部アクション */}
                   <div>
-                    <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択：隕石調査 ｜ 八丈島火山性微動 ｜ 八丈島島民・魚探情報）:
-                    </span>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1">
+                        <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（候補{day4AvailableTokyoActions.length}枠中1枠選択）:
+                      </span>
+                      {day3TokyoChosen.length > 0 && (
+                        <span className="text-[10px] text-emerald-400 font-mono">
+                          ✅ Day 3調査済: {day3TokyoChosen.join(", ")}
+                        </span>
+                      )}
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
-                      {DAY4_TOKYO_ACTIONS.map((a) => {
+                      {day4AvailableTokyoActions.map((a) => {
+                        const isFromDay3 = DAY3_TOKYO_ACTIONS.some((d3) => d3.id === a.id);
                         const isSelected = day4TokyoAction === a.id;
                         return (
                           <button
@@ -1829,8 +2052,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white" : "text-slate-500"}`}>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className={`text-[9px] px-1 rounded font-semibold ${
+                                  isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"
+                                }`}>
+                                  {isFromDay3 ? "Day 3繰越" : "Day 4新設"}
+                                </span>
+                              </div>
+                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
@@ -1843,11 +2073,19 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   {/* 小笠原現地アクション */}
                   <div>
-                    <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：隕石調査 ｜ 神社調査 ｜ ダイバー追跡 ｜ 写真画像解析）:
-                    </span>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1">
+                        <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（候補{day4AvailableFieldActions.length}枠中2枠選択）:
+                      </span>
+                      {day3FieldChosen.length > 0 && (
+                        <span className="text-[10px] text-emerald-400 font-mono">
+                          ✅ Day 3調査済: {day3FieldChosen.join(", ")}
+                        </span>
+                      )}
+                    </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {DAY4_FIELD_ACTIONS.map((a) => {
+                      {day4AvailableFieldActions.map((a) => {
+                        const isFromDay3 = DAY3_FIELD_ACTIONS.some((d3) => d3.id === a.id);
                         const isSelected = day4FieldActions.includes(a.id);
                         return (
                           <button
@@ -1861,7 +2099,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             }`}
                           >
                             <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
+                                  isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"
+                                }`}>
+                                  {isFromDay3 ? "Day 3繰越" : "Day 4新設"}
+                                </span>
+                              </div>
                               <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
                                 isSelected ? "bg-teal-600 text-white" : "text-slate-500"
                               }`}>
@@ -1891,7 +2136,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                     {/* 東京側レポート */}
                     {(() => {
-                      const tokyoActionObj = DAY4_TOKYO_ACTIONS.find((a) => a.id === day4TokyoAction);
+                      const tokyoActionObj = ALL_TOKYO_ACTIONS.find((a) => a.id === day4TokyoAction);
                       if (!tokyoActionObj) return null;
                       return (
                         <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
@@ -1915,7 +2160,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     {/* 現地側レポート（2件） */}
                     {day4FieldActions.map((fId) => {
-                      const fObj = DAY4_FIELD_ACTIONS.find((a) => a.id === fId);
+                      const fObj = ALL_FIELD_ACTIONS.find((a) => a.id === fId);
                       if (!fObj) return null;
                       return (
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
@@ -2162,103 +2407,198 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ④ 【Day 5 独自調査アクション】東京・小笠原クロス調査 */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between">
+                {/* ④ 【Day 5 総力調査アクション】自衛隊の作戦中に真相を解明せよ（東京1枠 ＋ 現地2枠 / 未選択プール全開放） */}
+                <div className="rounded-xl border border-indigo-900/60 bg-[#0c1024] p-4 shadow-md space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Users className="h-4 w-4 text-cyan-400" />
+                      <span className="font-bold text-xs text-white">
+                        【Day 5 総力調査アクション】自衛隊の作戦中に真相を解明せよ（東京1枠 ＋ 現地2枠 / 未選択プール全開放）
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2 text-[10px]">
+                      <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
+                        東京: 1枠
+                      </span>
+                      <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
+                        現地: {day5FieldActions.length}/2枠
+                      </span>
+                    </div>
+                  </div>
+
+                  <p className="text-[11px] text-slate-400">
+                    💡 <strong>総ざらい総力調査</strong>: 自衛隊迎撃の間、プレイヤー陣営は残された未確認情報の総力調査を実施します。Day 3・Day 4で未調査の全プールから、東京1枠・現地2枠を選択して解禁してください（残りはDay 6冒頭で完全回収されます）。
+                  </p>
+
+                  {/* 海上保安庁東京本部アクション */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1">
+                        <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（未調査{day5AvailableTokyoActions.length}枠中1枠選択）:
+                      </span>
+                      {pastChosenTokyo.length > 0 && (
+                        <span className="text-[10px] text-emerald-400 font-mono">
+                          ✅ 過去調査済: {pastChosenTokyo.join(", ")}
+                        </span>
+                      )}
+                    </div>
+                    {day5AvailableTokyoActions.length === 0 ? (
+                      <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
+                        東京側の未調査項目はすべて調査完了しています。
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                        {day5AvailableTokyoActions.map((a) => {
+                          const isSelected = day5TokyoAction === a.id;
+                          const isFromDay3 = DAY3_TOKYO_ACTIONS.some((d3) => d3.id === a.id);
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => setDay5TokyoAction(a.id)}
+                              className={`rounded-lg p-2.5 text-left border transition ${
+                                isSelected
+                                  ? "border-indigo-400 bg-indigo-950/80 shadow ring-1 ring-indigo-400"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className={`text-[9px] px-1 rounded font-semibold ${
+                                    isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"
+                                  }`}>
+                                    {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
+                                  </span>
+                                </div>
+                                <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                  {isSelected ? "選択中" : "未選択"}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 小笠原現地アクション */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1.5">
+                      <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1">
+                        <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（未調査{day5AvailableFieldActions.length}枠中2枠選択）:
+                      </span>
+                      {pastChosenField.length > 0 && (
+                        <span className="text-[10px] text-emerald-400 font-mono">
+                          ✅ 過去調査済: {pastChosenField.join(", ")}
+                        </span>
+                      )}
+                    </div>
+                    {day5AvailableFieldActions.length === 0 ? (
+                      <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
+                        現地側の未調査項目はすべて調査完了しています。
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                        {day5AvailableFieldActions.map((a) => {
+                          const isSelected = day5FieldActions.includes(a.id);
+                          const isFromDay3 = DAY3_FIELD_ACTIONS.some((d3) => d3.id === a.id);
+                          return (
+                            <button
+                              key={a.id}
+                              type="button"
+                              onClick={() => handleToggleDay5FieldAction(a.id)}
+                              className={`rounded-lg p-2.5 text-left border transition ${
+                                isSelected
+                                  ? "border-teal-400 bg-teal-950/80 shadow ring-1 ring-teal-400"
+                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                              }`}
+                            >
+                              <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-1.5 flex-wrap">
+                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
+                                    isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"
+                                  }`}>
+                                    {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
+                                  </span>
+                                </div>
+                                <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                                  isSelected ? "bg-teal-600 text-white" : "text-slate-500"
+                                }`}>
+                                  {isSelected ? "選択中" : "未選択"}
+                                </span>
+                              </div>
+                              <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* 調査結果レポート（解禁情報詳細） */}
+                <div className="rounded-xl border border-slate-700 bg-slate-950/90 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                     <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
-                      <CheckCircle2 className="h-4 w-4 text-amber-400" />
-                      【Day 5 独自調査アクション】自衛隊の作戦中に真相を解明せよ（東京1枠 / 現地2枠）
+                      <FileText className="h-4 w-4" />
+                      【Day 5 選択アクション 調査結果・機密レポート】
                     </span>
-                    <span className="text-[10px] text-slate-400 font-mono">
-                      東京組・現地組で手分けして調査を実行
+                    <span className="text-[10px] text-slate-400">
+                      総力調査で選定した情報（東京1件 ＋ 現地2件）の詳細調書
                     </span>
                   </div>
 
-                  {/* 東京側アクション（1枠選択） */}
-                  <div className="rounded-xl border border-sky-900/70 bg-[#0e1628] p-3.5 space-y-2.5">
-                    <div className="flex items-center justify-between border-b border-sky-900/60 pb-1.5">
-                      <span className="font-bold text-xs text-sky-300 flex items-center gap-1.5">
-                        <Users className="h-3.5 w-3.5 text-sky-400" />
-                        【東京側アクション（対策本部・公安・警察ルート）】 1枠選択
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      <button
-                        type="button"
-                        onClick={() => setDay5TokyoAction("T-5A")}
-                        className={`rounded-lg p-2.5 text-left border transition ${
-                          day5TokyoAction === "T-5A"
-                            ? "border-sky-400 bg-sky-950/80 shadow ring-1 ring-sky-400"
-                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                        }`}
-                      >
-                        <div className="font-bold text-white text-[11px]">
-                          【T-5A】富士山麓民家の捜索照会（静岡県警・公安協力）
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* 東京側レポート */}
+                    {(() => {
+                      const tokyoActionObj = ALL_TOKYO_ACTIONS.find((a) => a.id === day5TokyoAction);
+                      if (!tokyoActionObj) return null;
+                      return (
+                        <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
+                            <span className="font-bold text-indigo-300 text-[11px]">
+                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
+                              {tokyoActionObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {tokyoActionObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {tokyoActionObj.detail}
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          Day 4で判明した送付先民家への立ち入り捜査。すでに民家はもぬけの殻であり、謎のダイバーグループが運んだ大型冷凍ボックスの中身は、小笠原の海から引き揚げて箱に収めた<strong>「重さ約30kgの海底隕石」</strong>であったと発覚。さらに現場の海図と記録から、彼らが<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石を組織的に盗み出し、「西之島・青ヶ島沖・八丈島付近・三宅島付近」の海に次々と落として巨大生物を北上させる道標にしていた</strong>こと、そして約30kgの隕石はすでに富士山麓の山林深くへ搬入された後であることが判明する。
-                        </p>
-                      </button>
+                      );
+                    })()}
 
-                      <button
-                        type="button"
-                        onClick={() => setDay5TokyoAction("T-5B")}
-                        className={`rounded-lg p-2.5 text-left border transition ${
-                          day5TokyoAction === "T-5B"
-                            ? "border-sky-400 bg-sky-950/80 shadow ring-1 ring-sky-400"
-                            : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                        }`}
-                      >
-                        <div className="font-bold text-white text-[11px]">
-                          【T-5B】都内・元神主の子どもの捜索（盟約祝詞の解読）
+                    {/* 現地側レポート（2件） */}
+                    {day5FieldActions.map((fId) => {
+                      const fObj = ALL_FIELD_ACTIONS.find((a) => a.id === fId);
+                      if (!fObj) return null;
+                      return (
+                        <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
+                            <span className="font-bold text-teal-300 text-[11px]">
+                              🏝️ {fObj.id} {fObj.badge}
+                            </span>
+                            <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
+                              {fObj.organization}
+                            </span>
+                          </div>
+                          <p className="font-semibold text-white text-[11px]">
+                            {fObj.summary}
+                          </p>
+                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                            {fObj.detail}
+                          </p>
                         </div>
-                        <p className="text-[10px] text-slate-300 mt-1 leading-relaxed">
-                          小笠原大神宮の元神主の子どもを都内で特定し接触。亡き父が遺した言葉の中に「海へ向かって唱える祝詞の作法」や「神社の宝物殿に眠る古文書の点刻記号」に関する決定的な口伝記憶が存在することが裏付けられる。
-                        </p>
-                      </button>
-                    </div>
-                  </div>
-
-                  {/* 現地側アクション（2枠選択） */}
-                  <div className="rounded-xl border border-emerald-900/70 bg-[#0d1e18] p-3.5 space-y-2.5">
-                    <div className="flex items-center justify-between border-b border-emerald-900/60 pb-1.5">
-                      <span className="font-bold text-xs text-emerald-300 flex items-center gap-1.5">
-                        <Users className="h-3.5 w-3.5 text-emerald-400" />
-                        【小笠原現地アクション（父島・研究室・古老・神社）】 4枠中2枠選択
-                      </span>
-                      <span className="text-[10px] text-emerald-300/80 font-mono">
-                        選択中: {day5FieldActions.join(", ")}
-                      </span>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                      {DAY5_FIELD_ACTIONS.map((action) => {
-                        const isSelected = day5FieldActions.includes(action.id);
-                        return (
-                          <button
-                            key={action.id}
-                            type="button"
-                            onClick={() => handleToggleDay5FieldAction(action.id)}
-                            className={`rounded-lg p-2.5 text-left border transition ${
-                              isSelected
-                                ? "border-emerald-400 bg-emerald-950/80 shadow ring-1 ring-emerald-400"
-                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                            }`}
-                          >
-                            <div className="flex items-center justify-between mb-1">
-                              <span className="font-bold text-white text-[11px]">{action.title}</span>
-                              <span className="text-[9px] px-1.5 py-0.5 rounded bg-emerald-900/60 text-emerald-300 font-semibold">
-                                {action.badge}
-                              </span>
-                            </div>
-                            <p className="text-[10px] text-slate-300 leading-relaxed">
-                              {action.summary}
-                            </p>
-                          </button>
-                        );
-                      })}
-                    </div>
+                      );
+                    })}
                   </div>
                 </div>
 
