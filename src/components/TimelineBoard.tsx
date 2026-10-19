@@ -44,6 +44,7 @@ import {
   DAY4_FIELD_ACTIONS,
   DAY5_TOKYO_ACTIONS,
   DAY5_FIELD_ACTIONS,
+  DAY5_NEW_FIELD_ACTIONS,
 } from "./GmDashboard";
 import { THEATER_TIMELINE_POINTS } from "./NauticalChartView";
 import { audioEngine } from "@/utils/audioSynth";
@@ -186,13 +187,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
   // Day 4 アクション選択状態（東京1枠、現地2枠 / Day 3繰り越し含む）
   const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
-  const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+  const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
   const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
 
   // Day 5 アクション選択状態（東京1枠、現地2枠 / 未選択プールから選択）
   const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-3B");
-  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-3C", "F-4C"]);
+  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
 
   const handleToggleDay3FieldAction = (id: string) => {
     setDay3FieldActions((prev) => {
@@ -235,7 +236,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
   // 全アクション・繰り越しプールの計算
   const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
-  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS];
+  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 
   const day3TokyoChosen = day3TokyoAction ? [day3TokyoAction] : [];

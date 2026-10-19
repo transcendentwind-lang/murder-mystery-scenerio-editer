@@ -236,15 +236,6 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
     detail: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて交わされた人と鯨の約束を記した未発表ノートを回収する。",
   },
   {
-    id: "F-4B",
-    title: "F-4B: クジラの鳴音（コーダ）に関する論文草稿の調査",
-    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
-    evidenceId: "ev-asakura-notes-syntax",
-    badge: "コーダ構文規則ドラフト",
-    summary: "クリック間隔（ICI）と連鎖規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは「はい」のみ単独で機能し、他は2語以上、最大10語の連続で長文を構成するという動物言語学の先駆的構文規則と実録音響を発見）",
-    detail: "クリック間隔（ICI）と連鎖規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは「はい」のみ単独で機能し、他は2語以上、最大10語の連続で長文を構成するという動物言語学の先駆的構文規則と実録音響を発見）",
-  },
-  {
     id: "F-4D",
     title: "F-4D: 小笠原社記（抄）の調査",
     organization: "小笠原神社 倉庫",
@@ -257,9 +248,21 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
+export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "F-5A",
+    title: "F-5A: クジラの鳴音（コーダ）に関する論文草稿の調査",
+    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
+    evidenceId: "ev-asakura-notes-syntax",
+    badge: "コーダ構文規則ドラフト",
+    summary: "クリック間隔（ICI）と連鎖規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは「はい」のみ単独で機能し、他は2語以上、最大10語の連続で長文を構成するという動物言語学の先駆的構文規則と実録音響を発見）",
+    detail: "クリック間隔（ICI）と連鎖規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは「はい」のみ単独で機能し、他は2語以上、最大10語の連続で長文を構成するという動物言語学の先駆的構文規則と実録音響を発見）",
+  },
+];
+
 // 後方互換性エイリアス
 export const DAY5_TOKYO_ACTIONS = DAY4_TOKYO_ACTIONS;
-export const DAY5_FIELD_ACTIONS = DAY4_FIELD_ACTIONS;
+export const DAY5_FIELD_ACTIONS = [...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
 
 interface GmDashboardProps {
   project: MMProject;
@@ -282,11 +285,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠 / Day 3繰り越し含む）
   const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4A");
-  const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4B"]);
+  const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
 
   // Day 5 総力調査アクションの選択状態（東京: 1枠, 現地: 2枠 / 未選択プールから選択）
   const [selectedDay5TokyoAction, setSelectedDay5TokyoAction] = useState<string>("T-3B");
-  const [selectedDay5FieldActions, setSelectedDay5FieldActions] = useState<string[]>(["F-3C", "F-4C"]);
+  const [selectedDay5FieldActions, setSelectedDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
 
   // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
   const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
