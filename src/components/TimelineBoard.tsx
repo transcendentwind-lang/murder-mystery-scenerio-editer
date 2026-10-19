@@ -4334,23 +4334,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
 
             {/* モーダル画像表示部 */}
-            <div className="mt-3 flex-1 overflow-auto rounded-xl border border-amber-900/40 bg-[#0d0a07] flex items-center justify-center min-h-[380px] p-3">
+            <div className="mt-3 flex-1 overflow-auto rounded-xl border border-amber-900/40 bg-[#0d0a07] flex items-center justify-center min-h-[460px] p-3">
               <img
                 src="/images/day4_shrine_chronicle.svg"
                 alt="小笠原社記（抄）"
-                className="w-full h-auto max-h-[58vh] object-contain rounded shadow-lg"
+                className="w-full h-auto max-h-[74vh] object-contain rounded shadow-lg"
               />
-            </div>
-
-            {/* モーダル下部：現代語訳・翻刻解説 */}
-            <div className="mt-3 rounded-lg bg-[#221a14]/90 border border-amber-900/60 p-3 text-xs text-amber-200/90 space-y-1">
-              <div className="font-bold text-amber-300 flex items-center justify-between">
-                <span>【史料翻刻ならびに解題（小笠原村史編纂班）】</span>
-                <span className="text-[10px] text-amber-400/80 font-normal">江戸中期（1727年）の噴火と巨影の沈静化記録</span>
-              </div>
-              <p className="text-[11px] leading-relaxed text-amber-100/80">
-                「南の沖合より重き海鳴り昼夜止まず、水底に墨の如き長き巨影這い廻る。巨影の過ぎ行くに従いて海底激しく震動し海は赤土の如く濁り礫（軽石）浮かぶ。社家古記に『海に大いなる影現れ火の山騒ぐ時は竹の海中筒を海原へ差し入れ盟約の祈りを捧ぐべし』とあり、沖合にて水底へ祈礼を奏上せしところ海鳴りも煙も収まり海面静まり返りたり」
-              </p>
             </div>
           </div>
         </div>
