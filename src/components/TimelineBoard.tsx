@@ -1999,7 +1999,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ・<strong>青ヶ島・八丈島の地震観測 ＆ 特別な振動による火山刺激（推理の焦点）</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。日速約150kmで北上するこの物体がこの先どこへ向かい、何を引き起こすのか、プレイヤー側が海図とデータから推理・警戒すべき重要推理ポイントです。
                     </p>
                     <p>
-                      ・<strong>生物が北上できる2つの理由（地磁気 ＋ 隕石が放つ特殊な物質）と複数隕石の投棄・神社盗難</strong>：巨大生物は①<strong>地磁気</strong>と、②<strong>隕石が放つ特殊な物質</strong>の2つを感知して隕石を追うように北上しています。さらに、もともと<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が組織的に盗み出され、『西之島・青ヶ島沖・八丈島付近・三宅島付近』の海に次々と落とされていた（道標にされた）</strong>上に、小笠原周辺で回収された約30kgの隕石が富士山麓へ運ばれたという壮大な誘導トリックを東京・小笠原双方の調査を通じて議論します。
+                      ・<strong>生物が北上できる2つの理由（地磁気 ＋ 隕石が放つ特殊な物質）と複数隕石の投棄・神社盗難</strong>：巨大生物は①<strong>地磁気</strong>と、②<strong>隕石が放つ特殊な物質</strong>の2つを感知して隕石を追うように北上している可能性。さらに、もともと<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっていた事実と、ダイバー達による各海域への投棄疑惑</strong>、そして小笠原で引き揚げられたクーラーボックス（荷物）が富士山麓の民家を経由して山麓の方へ運ばれたという足取りを東京・小笠原双方の捜査を通じて議論します。
                     </p>
                   </div>
                 </div>
@@ -2327,7 +2327,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       🧭 【問1】この巨大生物は一体どこを目指していると考えられるか？
                     </span>
                     <p className="text-[10px] text-slate-400">
-                      各班の調査結果（地磁気＋隕石の特殊物質、西之島・青ヶ島・八丈島・三宅島への複数隕石投棄、富士山麓民家への約30kgの荷物）を踏まえ、対策本部としての見立てを選択してください。
+                      各班の調査結果（地磁気＋隕石の特殊物質、青ヶ島・八丈島・三宅島への複数隕石投棄、富士山麓民家への荷物搬入）を踏まえ、対策本部としての見立てを選択してください。
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       <button
@@ -2356,7 +2356,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       >
                         <div className="font-bold text-white text-[11px]">🗻 富士山・駿河湾直撃ルート</div>
                         <p className="text-[10px] text-slate-300 mt-0.5">
-                          小笠原・八丈島・三宅島の神社から盗まれ各海域に落とされた複数隕石の道標と、謎のダイバーグループが富士山麓の民家へ運んだ約30kgの隕石を追っている見立て。富士山噴火と駿河トラフ破局危機。
+                          小笠原・八丈島・三宅島の神社から盗まれ各海域に落とされた複数隕石の道標と、謎のダイバーグループが富士山麓の民家へ運んだ荷物を追っている見立て。富士山噴火と駿河トラフ破局危機。
                         </p>
                       </button>
                     </div>
@@ -2813,7 +2813,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <li>そして、物体はどうやって海底火山や富士山を刺激し、なぜ一直線に北上できているのか？</li>
                       </ul>
                       <p className="text-[10px] text-slate-300 pt-1 border-t border-red-800/60">
-                        💡 <strong>解明される真相</strong>: ①巨大生物は<strong>海底付近で海底地震を起こすような特別な振動</strong>を発生させ、それが海底火山を次々と刺激している。②生物が北上できる理由は<strong>「地磁気」と「隕石が放つ特殊な物質」</strong>の2つであり、小笠原・八丈島・三宅島の神社から組織的に盗まれた複数の隕石が<strong>西之島・青ヶ島沖・八丈島付近・三宅島付近の海に落とされていた</strong>ため、その道標を辿って富士山麓（約30kgの海底隕石）へ迫っている！ 駿河トラフ到達・破局噴火まで<strong>【残り48時間】</strong>。個体の統率メカニズム（音響・クジラ言語）の解明が急務となる！
+                        💡 <strong>解明される真相</strong>: ①巨大生物は<strong>海底付近で海底地震を起こすような特別な振動</strong>を発生させ、それが海底火山を次々と刺激している。②生物が北上できる理由は<strong>「地磁気」と「隕石が放つ特殊な物質」</strong>の2つであり、小笠原・八丈島・三宅島の神社から組織的に盗まれた複数の隕石が<strong>青ヶ島沖・八丈島付近・三宅島付近の海に落とされていた</strong>ため、その痕跡を辿って富士山麓へ迫っている！ 駿河トラフ到達・破局噴火まで<strong>【残り48時間】</strong>。個体の統率メカニズム（音響・クジラ言語）の解明が急務となる！
                       </p>
                     </div>
                   </div>
@@ -2894,30 +2894,30 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（朝潮PC1危機管理官 ＆ 貝浜PC2防衛省リエゾン）が夜を徹して調査・照会を完遂！
-                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への約30kg海底隕石の搬入 ＆ 神社から盗まれた複数隕石の海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
+                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への荷物搬入 ＆ 神社から盗まれた複数隕石の海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 text-[11px]">
-                    {/* T-5A: 約30kgの海底隕石の山林搬入 & 複数隕石の海域投棄 */}
+                    {/* 富士山麓・発送先民家への荷物搬入 & 複数隕石の海域投棄 */}
                     <div className={`rounded-lg border p-3 space-y-1.5 transition ${
-                      day5TokyoAction === "T-5A"
+                      day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A"
                         ? "bg-slate-900/90 border-emerald-700/80"
                         : "bg-indigo-950/60 border-cyan-500/80 shadow-md"
                     }`}>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-100 flex items-center gap-1">
-                          ⛰️ 富士山麓・約30kg隕石搬入 ＆ 複数隕石の海域投棄
+                          ⛰️ 富士山麓・発送先民家への荷物搬入 ＆ 複数隕石の海域投棄
                         </span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                          day5TokyoAction === "T-5A"
+                          day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A"
                             ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
                             : "bg-cyan-950 text-cyan-300 border border-cyan-700"
                         }`}>
-                          {day5TokyoAction === "T-5A" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
+                          {day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
                         </span>
                       </div>
                       <p className="text-slate-300 text-[10px] leading-relaxed">
-                        謎のダイバーグループが運んだ大型冷凍ボックスの中身は、深海から引き揚げて箱に入れた<strong>「重さ約30kgの海底隕石」</strong>であり、富士山麓の樹海深くへ搬入。さらに彼らは<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石を組織的に盗み出し、「西之島・青ヶ島沖・八丈島付近・三宅島付近」の海に次々と落としていた</strong>ことが判明！ 巨大生物が「地磁気」と「隕石が放つ特殊な物質」を感知して北上し富士山を目指す真の動機が完全確定！
+                        謎のダイバーグループが運んだクーラーボックスは、富士山麓の民家を経由して車で山麓の方へ運ばれていた。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっており、レジャーボートを使ったダイバー達によって「青ヶ島沖・八丈島付近・三宅島付近」の海に落とされていた可能性が判明！ 巨大生物が「地磁気」と「隕石が放つ特殊な物質」を感知して北上し富士山を目指す真の動機が浮き彫りになる！
                       </p>
                     </div>
 
