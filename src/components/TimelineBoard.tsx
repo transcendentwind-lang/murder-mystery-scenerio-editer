@@ -2341,7 +2341,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
+                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -2905,7 +2905,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
+                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -3606,7 +3606,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-semibold text-slate-200">
-                          🌐 潜水艦SOFAR層 放流パケット: <span className="font-mono text-cyan-300">「人・勇魚・契り、集ひ来、大獲物ぞ、喰らへ」</span>
+                          🌐 潜水艦SOFAR層 放流パケット: <span className="font-mono text-cyan-300">「人・勇魚・契り、探せ、大獲物ぞ、集ひ来」</span>
                         </span>
                         <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
                           day6ReadyStatus === "idle"

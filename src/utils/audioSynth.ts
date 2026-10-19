@@ -309,8 +309,8 @@ class UnderwaterAudioEngine {
 
   /**
    * 元神主の子ども【吉備津】の口伝クリック音サンプル
-   * 「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
-   * （人・勇魚・契り、集ひ来、大獲物ぞ、喰らへ）
+   * 「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
+   * （人・勇魚・契り、探せ、大獲物ぞ、集ひ来）
    */
   public async playKibitsuOralClickDemo(): Promise<void> {
     this.initContext();
@@ -359,24 +359,7 @@ class UnderwaterAudioEngine {
     this.playTongueClickSound(2600);
     await sleep(420);
 
-    // 拍4: （カ・カ・カカッ！）「つ・ど・ひ・こ！」
-    this.playTongueClickSound(2300);
-    await sleep(140);
-    this.playTongueClickSound(2400);
-    await sleep(140);
-    this.playTongueClickSound(2600);
-    await sleep(90);
-    this.playTongueClickSound(2800);
-    await sleep(400);
-
-    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」（超高速バーストクリック）
-    for (let i = 0; i < 6; i++) {
-      this.playTongueClickSound(3000 + i * 80);
-      await sleep(55);
-    }
-    await sleep(420);
-
-    // 拍6: （タン・タン・タン）「く・ら・へ」
+    // 拍4: （タン・タン・タン）「さ・が・せ」（等間隔の探査パルス）
     for (let i = 0; i < 3; i++) {
       this.playTongueClickSound(2200);
       if (this.ctx) {
@@ -393,6 +376,24 @@ class UnderwaterAudioEngine {
       }
       await sleep(240);
     }
+    await sleep(200);
+
+    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」（超高速バーストクリック）
+    for (let i = 0; i < 6; i++) {
+      this.playTongueClickSound(3000 + i * 80);
+      await sleep(55);
+    }
+    await sleep(420);
+
+    // 拍6: （カ・カ・カカッ！）「つ・ど・ひ・こ！」（加速する4連打）
+    this.playTongueClickSound(2300);
+    await sleep(140);
+    this.playTongueClickSound(2400);
+    await sleep(140);
+    this.playTongueClickSound(2600);
+    await sleep(90);
+    this.playTongueClickSound(2800);
+    await sleep(300);
   }
 
   /**
