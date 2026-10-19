@@ -308,6 +308,93 @@ class UnderwaterAudioEngine {
   }
 
   /**
+   * 元神主の子ども【吉備津】の口伝クリック音サンプル
+   * 「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
+   * （ひっとっくじらっやくそく、あっつっまれっ、ごちそうだっ、さがせっ）
+   */
+  public async playKibitsuOralClickDemo(): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return;
+
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+    // 拍1: （カッ・カッ）「ひっ・とっ」
+    this.playTongueClickSound(2500);
+    await sleep(180);
+    this.playTongueClickSound(2400);
+    await sleep(350);
+
+    // 拍2: （ド・ドーン）「くじ・らっ」
+    if (this.ctx) {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(320, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.35);
+      gain.gain.setValueAtTime(0.45, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.38);
+      osc.connect(gain);
+      gain.connect(this.analyser);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.4);
+    }
+    await sleep(450);
+
+    // 拍3: （チ・トン・チ）「やく・そ・く」
+    this.playTongueClickSound(2800);
+    await sleep(160);
+    if (this.ctx) {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(420, this.ctx.currentTime);
+      gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.18);
+      osc.connect(gain);
+      gain.connect(this.analyser);
+      osc.start();
+      osc.stop(this.ctx.currentTime + 0.2);
+    }
+    await sleep(180);
+    this.playTongueClickSound(2600);
+    await sleep(420);
+
+    // 拍4: （カ・カ・カカッ！）「あっ・つっ・まれっ！」
+    this.playTongueClickSound(2300);
+    await sleep(140);
+    this.playTongueClickSound(2400);
+    await sleep(140);
+    this.playTongueClickSound(2600);
+    await sleep(90);
+    this.playTongueClickSound(2800);
+    await sleep(400);
+
+    // 拍5: （チチチチチチッ！）「ごちそうだっ！」（超高速バーストクリック）
+    for (let i = 0; i < 6; i++) {
+      this.playTongueClickSound(3000 + i * 80);
+      await sleep(55);
+    }
+    await sleep(420);
+
+    // 拍6: （タン・タン・タン）「さ・が・せっ」
+    for (let i = 0; i < 3; i++) {
+      this.playTongueClickSound(2200);
+      if (this.ctx) {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(360, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
+        osc.connect(gain);
+        gain.connect(this.analyser);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.28);
+      }
+      await sleep(240);
+    }
+  }
+
   /**
    * 空間定位・深海音響特性付きの単一クリック音（エコー・ローパス・パン・距離感）
    */

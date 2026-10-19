@@ -2227,6 +2227,26 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <p className="text-[11px] text-slate-200 leading-relaxed">
                             {tokyoActionObj.detail}
                           </p>
+                          {(tokyoActionObj.hasAudio || tokyoActionObj.id === "T-4B") && (
+                            <div className="mt-2 rounded border border-amber-800/70 bg-amber-950/40 p-2 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
+                                  <Volume2 className="h-3 w-3" />
+                                  音響証拠：吉備津の口伝クリック音
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => audioEngine?.playKibitsuOralClickDemo()}
+                                  className="flex items-center gap-1 rounded bg-amber-600 hover:bg-amber-500 px-2 py-0.5 text-[9px] font-bold text-white transition shadow"
+                                >
+                                  <Volume2 className="h-2.5 w-2.5" /> サンプル再生
+                                </button>
+                              </div>
+                              <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
+                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
+                              </p>
+                            </div>
+                          )}
                         </div>
                       );
                     })()}
@@ -2674,6 +2694,26 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <p className="text-[11px] text-slate-200 leading-relaxed">
                             {tokyoActionObj.detail}
                           </p>
+                          {(tokyoActionObj.hasAudio || tokyoActionObj.id === "T-4B") && (
+                            <div className="mt-2 rounded border border-amber-800/70 bg-amber-950/40 p-2 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
+                                  <Volume2 className="h-3 w-3" />
+                                  音響証拠：吉備津の口伝クリック音
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => audioEngine?.playKibitsuOralClickDemo()}
+                                  className="flex items-center gap-1 rounded bg-amber-600 hover:bg-amber-500 px-2 py-0.5 text-[9px] font-bold text-white transition shadow"
+                                >
+                                  <Volume2 className="h-2.5 w-2.5" /> サンプル再生
+                                </button>
+                              </div>
+                              <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
+                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（カ・カ・カカッ！）（チチチチチチッ！）（タン・タン・タン）」
+                              </p>
+                            </div>
+                          )}
                         </div>
                       );
                     })()}
@@ -3606,6 +3646,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       className="mt-2 flex items-center gap-1 text-[10px] font-semibold text-amber-300 hover:text-amber-200 transition"
                     >
                       <FileText className="h-3 w-3" /> 『小笠原社記（抄）』原本をモーダルで確認
+                    </button>
+                  )}
+                  {ev.id === "ev-shrine-lineage" && (
+                    <button
+                      onClick={() => audioEngine?.playKibitsuOralClickDemo()}
+                      className="mt-2 flex items-center gap-1 rounded bg-amber-600/90 hover:bg-amber-500 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                    >
+                      <Volume2 className="h-3 w-3" /> 吉備津の口伝クリック音サンプルを試聴
                     </button>
                   )}
                 </div>
