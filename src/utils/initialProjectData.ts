@@ -329,10 +329,9 @@ export const initialProject: MMProject = {
         },
         {
           id: "cap-4-2",
-          name: "破局噴火タイムリミット算出",
-          description: "本土直下のマグマ溜まりへの到達時間（残り48時間）を確定させる。",
+          name: "駿河湾残距離・巡航速度の精密同定",
+          description: "気象庁・自衛隊の最新レーダー・ソナー観測から、駿河湾直下までの残距離（240km）と物体の深海巡航速度（時速5km）を精密同定し、対策チームに計算データを提供する。",
           targetPhase: 5,
-          unlockedEvidenceIds: ["ev-eruption-countdown"],
         },
         {
           id: "cap-4-3",
@@ -722,15 +721,6 @@ export const initialProject: MMProject = {
       acquisitionCondition: "Day 4以降: 東京側アクション【T-4B】等で調査可能（翌日以降も繰り越し調査可能）",
     },
     {
-      id: "ev-eruption-countdown",
-      title: "破局噴火タイムリミット算出グラフ",
-      description: "物体が駿河トラフ直下のマグマ溜まりに到達し、海底付近での特別な振動によって富士山の破局噴火を誘発するまでの猶予時間はあと48時間。",
-      ownerId: "pc-4",
-      foundPhase: 5,
-      visibility: "public",
-      category: "data",
-    },
-    {
       id: "ev-asakura-notes-origin",
       title: "朝倉教授の研究日誌",
       description: "「1981年、アリゾナ州立大学の研究室にて。恩師であるロバート・S・ディーツ名誉教授のもとで大洋底拡大説（プレートテクトニクス理論）を検証していく日々の中で、私は奇妙な現象に突き当たった。小笠原周辺の海底火山で突発的な微動や噴火が発生する直前、海中のマッコウクジラたちが一斉に特異な警戒行動を起こすのだ。さらに驚くべきことに、その行動が数百キロ彼方の群れにも伝播しているようだ。水中聴音網（SOFAR）では、火山の爆発音の後に、クジラが発するクリック音が複数回観測できる。深海において、火山とクジラは音で繋がっている――ディーツ名誉教授はそれを検証したいと私と研究を進めている中で亡くなってしまった」",
@@ -898,7 +888,6 @@ export const initialProject: MMProject = {
       hqResponse: "メディア各社の富士山噴火パニック報道への対応および富士山地下深部微動の監視。東京側総力調査アクション（未選択プールから1枠選択）の実行。終盤に防衛省より貝浜（PC2）経由で浪寄（PC5）への緊急諮問を受電。",
       fieldResponse: "太刀魚観測員による八丈島地震観測と御蔵島沖噴火の監視。小笠原側総力調査アクション（新規1枠【F-5A コーダ構文規則草稿】＋未選択プールから2枠選択）の実行。終盤に通常兵器敗北の報を受け、全知見を結集してクジラ言語・祝詞の統合準備へ突入。",
       revealedEvidenceIds: [
-        "ev-eruption-countdown",
         "ev-asakura-notes-syntax",
       ],
     },
@@ -1093,10 +1082,9 @@ export const pc4For6Players = {
     },
     {
       id: "cap-4-2",
-      name: "破局噴火タイムリミット算出",
-      description: "本土直下のマグマ溜まりへの到達時間（残り48時間）を確定させる。",
+      name: "駿河湾残距離・巡航速度の精密同定",
+      description: "気象庁・自衛隊の最新レーダー・ソナー観測から、駿河湾直下までの残距離（240km）と物体の深海巡航速度（時速5km）を精密同定し、対策チームに計算データを提供する。",
       targetPhase: 5,
-      unlockedEvidenceIds: ["ev-eruption-countdown"],
     },
     {
       id: "cap-4-3",
@@ -1213,10 +1201,9 @@ export const pc4For5Players = {
     },
     {
       id: "cap-4-2",
-      name: "破局噴火タイムリミット算出",
-      description: "本土直下のマグマ溜まりへの到達時間（残り48時間）を確定させる。",
+      name: "駿河湾残距離・巡航速度の精密同定",
+      description: "気象庁・自衛隊の最新レーダー・ソナー観測から、駿河湾直下までの残距離（240km）と物体の深海巡航速度（時速5km）を精密同定し、対策チームに計算データを提供する。",
       targetPhase: 5,
-      unlockedEvidenceIds: ["ev-eruption-countdown"],
     },
     {
       id: "cap-4-3",

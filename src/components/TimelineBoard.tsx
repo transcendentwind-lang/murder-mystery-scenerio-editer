@@ -184,6 +184,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3Pc5Opinion, setDay3Pc5Opinion] = useState<string>("colony_theory");
   const [day3Pc2Decision, setDay3Pc2Decision] = useState<string>("defense_action");
   const [day3HqFinalDecision, setDay3HqFinalDecision] = useState<string | null>(null);
+  // Day 3 巨大生物の公式呼称（ワタツミ / クスルフ / 自由入力）
+  const [creatureCodename, setCreatureCodename] = useState<string>("ワタツミ");
 
   // Day 4 アクション選択状態（東京1枠、現地2枠 / Day 3繰り越し含む）
   const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
@@ -194,6 +196,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 5 アクション選択状態（東京1枠、現地2枠 / 未選択プールから選択）
   const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-3B");
   const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
+  // Day 5 富士山噴火猶予時間の手計算パズル状態
+  const [day5CalcInput, setDay5CalcInput] = useState<string>("");
+  const [day5CalcResult, setDay5CalcResult] = useState<"none" | "correct" | "incorrect">("none");
+
+  // Day 6 作戦命名（オペレーション名）
+  const [operationName, setOperationName] = useState<string>("オペレーション・ワタツミ");
 
   const handleToggleDay3FieldAction = (id: string) => {
     setDay3FieldActions((prev) => {
@@ -1759,6 +1767,93 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
+                  {/* ステップ3.5：防衛庁・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定 */}
+                  <div className="rounded-xl border border-amber-800/80 bg-amber-950/25 p-4 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-900/60 pb-2">
+                      <div className="flex items-center gap-2">
+                        <Radio className="h-4 w-4 text-amber-400" />
+                        <div>
+                          <span className="font-bold text-xs text-white">
+                            ③.5 【防衛庁・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定】
+                          </span>
+                          <span className="ml-2 text-[10px] text-amber-300 font-mono">
+                            公式対処記録・部隊動員計画用の呼称を命名
+                          </span>
+                        </div>
+                      </div>
+                      <span className="rounded bg-black/60 px-2.5 py-0.5 text-[11px] font-bold text-emerald-300 font-mono border border-emerald-700/60">
+                        確定呼称: 【{creatureCodename || "ワタツミ"}】
+                      </span>
+                    </div>
+
+                    <div className="rounded-lg bg-black/50 border border-amber-900/50 p-2.5 text-[11px] text-slate-200">
+                      <p className="italic leading-relaxed font-mono">
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する<strong>【ワタツミ】</strong>、もしくは海洋古伝承の異形神に由来する<strong>【クスルフ】</strong>の2案が有力候補として提示されています。どちらを公式コードネームとして採択しますか？（※もちろん、チーム独自の命名でも構いません）」
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 pt-1">
+                      <button
+                        type="button"
+                        onClick={() => setCreatureCodename("ワタツミ")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          creatureCodename === "ワタツミ"
+                            ? "border-amber-400 bg-amber-950/80 shadow ring-1 ring-amber-400"
+                            : "border-slate-800 bg-slate-950/80 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs flex items-center gap-1.5">
+                            🌊 案①: ワタツミ（海神）
+                          </span>
+                          <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${
+                            creatureCodename === "ワタツミ" ? "bg-amber-600 text-white" : "text-slate-500"
+                          }`}>
+                            {creatureCodename === "ワタツミ" ? "選択中" : "選択する"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300">
+                          日本神話の古き海の主。荒ぶる海洋の神性を畏敬し、国家の守護と調伏を祈念する呼称。
+                        </p>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setCreatureCodename("クスルフ")}
+                        className={`rounded-lg p-2.5 text-left transition border ${
+                          creatureCodename === "クスルフ"
+                            ? "border-amber-400 bg-amber-950/80 shadow ring-1 ring-amber-400"
+                            : "border-slate-800 bg-slate-950/80 hover:bg-slate-900"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-1">
+                          <span className="font-bold text-white text-xs flex items-center gap-1.5">
+                            🦑 案②: クスルフ（異形神）
+                          </span>
+                          <span className={`text-[9px] px-2 py-0.5 rounded font-bold ${
+                            creatureCodename === "クスルフ" ? "bg-amber-600 text-white" : "text-slate-500"
+                          }`}>
+                            {creatureCodename === "クスルフ" ? "選択中" : "選択する"}
+                          </span>
+                        </div>
+                        <p className="text-[10px] text-slate-300">
+                          小笠原・南洋の古層伝承に語られる深海の怪物。無数の触手と超自然的な脅威を象徴する呼称。
+                        </p>
+                      </button>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px] border-t border-slate-800/80">
+                      <span className="text-slate-400 font-bold">独自の名称を入力する場合:</span>
+                      <input
+                        type="text"
+                        value={creatureCodename}
+                        onChange={(e) => setCreatureCodename(e.target.value)}
+                        placeholder="自由入力（例: ワタツミ / クスルフ / アヤカシ等）"
+                        className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-amber-300 w-56 font-bold focus:border-amber-400 outline-none"
+                      />
+                    </div>
+                  </div>
+
                   {/* ステップ4：危機管理官（PC1）の最終意思決定 */}
                   <div className="rounded-xl border border-rose-800/80 bg-rose-950/20 p-4 space-y-3">
                     <div className="flex items-center justify-between border-b border-rose-900/60 pb-2">
@@ -1862,6 +1957,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <p className="text-[11px] text-emerald-100 leading-relaxed">
                           海上保安庁東京本部の危機管理官 朝潮（PC1）の英断に基づき、官邸および防衛省統合幕僚監部へ緊急打電が行われました。<br />
                           <strong>選定された方針</strong>: {day3HqFinalDecision === "defense_dispatch" ? "自衛隊への防衛出動正式要請（八丈島南方迎撃陣形の展開）" : "海上警備行動の発令（段階的追尾迎撃と島民避難先行）"}<br />
+                          <strong>未確認巨大生物の公式呼称</strong>: 【{creatureCodename || "ワタツミ"}】<br />
                           <strong>生物学的見解 浪寄（PC5）</strong>: {day3Pc5Opinion === "colony_theory" ? "超群体（コロニー）仮説" : day3Pc5Opinion === "mutation_theory" ? "深海変異種仮説" : "火山熱源誘引説"}<br />
                           <strong>防衛省判断 貝浜（PC2）</strong>: {day3Pc2Decision === "defense_action" ? "防衛出動即時迎撃具申" : day3Pc2Decision === "maritime_security" ? "海上警備行動先行" : "慎重姿勢"}
                         </p>
@@ -2476,12 +2572,109 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ・<strong>八丈島への地震波及（M4.0・震度3）</strong>：御蔵島沖の海底噴火を震源とするマグニチュード4クラスの地震が発生し、八丈島全域で震度3の強い揺れを観測。
                     </p>
                     <p>
-                      ・<strong>富士山直下・深部での火山性微動観測</strong>：最も恐れていた【富士山地下深部からの火山性微動】の発生を気象庁火山監視課が正式確認。物体の北上によって地下マグマ網が連動刺激されており、駿河トラフ到達・富士山破局噴火までの猶予時間は<strong>【残り48時間】</strong>と算出されました。
+                      ・<strong>富士山直下・深部での火山性微動観測</strong>：最も恐れていた【富士山地下深部からの火山性微動】の発生を気象庁火山監視課が正式確認。物体の北上によって地下マグマ網が連動刺激されており、防衛庁および火山噴火予知連絡会より、駿河湾奥到達・破局噴火に至るまでの猶予時間の至急計算指令が下されました。
                     </p>
                   </div>
                 </div>
 
-                {/* ② 【全国緊急特報】メディア各社による「富士山連動大噴火」推論・パニック報道 */}
+                {/* ② 【防衛庁・火山噴火予知連絡会からの緊急指令】富士山噴火の猶予時間を計算せよ！ */}
+                <div className="rounded-xl border border-rose-800/80 bg-[#1e0f18] p-4 shadow-lg space-y-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/60 pb-2">
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-rose-400 animate-pulse" />
+                      <div>
+                        <span className="font-bold text-xs text-white">
+                          【防衛庁・火山噴火予知連絡会からの緊急指令】富士山噴火猶予時間の計算
+                        </span>
+                        <span className="ml-2 text-[10px] text-rose-300 font-mono">
+                          距離と速度から到達猶予時間を割り出せ
+                        </span>
+                      </div>
+                    </div>
+                    {day5CalcResult === "correct" && (
+                      <span className="flex items-center gap-1 rounded bg-emerald-950 border border-emerald-600 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300">
+                        <CheckCircle2 className="h-3 w-3" /> 猶予時間「48時間」確定
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="rounded-lg bg-black/60 border border-rose-900/60 p-3 text-xs text-slate-200 space-y-1.5">
+                    <strong className="text-rose-300 block font-bold flex items-center gap-1.5">
+                      <Radio className="h-3.5 w-3.5 text-rose-400" /> 長津オペレーター緊急通信（防衛庁・予知連からの電文）:
+                    </strong>
+                    <p className="italic leading-relaxed font-mono text-rose-100">
+                      （🎙️ 首席オペレーター 長津）:「――防衛庁および火山噴火予知連絡会より至急指令が入電いたしました！『駿河湾奥・富士山地下マグマ溜まり直下までの残距離は<strong>【約240km】</strong>。巨大生物の現在の深海巡航速度は<strong>【時速5km】</strong>。もしこのまま直進した場合、富士山噴火の危機に至るまであとどのぐらいの猶予があるのか、おおよその時間を直ちに計算して報告せよ！』とのことです！ みなさん、至急計算をお願いします！」
+                    </p>
+                  </div>
+
+                  {/* 観測データと手計算フォーム */}
+                  <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-3 space-y-2.5">
+                    <div className="grid grid-cols-2 gap-2 text-[11px]">
+                      <div className="rounded bg-slate-900 p-2 border border-slate-800">
+                        <span className="text-slate-400 block text-[10px]">📍 駿河湾直下までの残距離:</span>
+                        <strong className="text-cyan-300 text-sm font-mono">240 km</strong>
+                      </div>
+                      <div className="rounded bg-slate-900 p-2 border border-slate-800">
+                        <span className="text-slate-400 block text-[10px]">⚡ 深海巡航速度:</span>
+                        <strong className="text-amber-300 text-sm font-mono">時速 5 km (5 km/h)</strong>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                      <span className="text-slate-300 font-bold">到達猶予時間の計算結果:</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-slate-400 font-mono text-sm">240 ÷ 5 ＝</span>
+                        <input
+                          type="number"
+                          value={day5CalcInput}
+                          onChange={(e) => {
+                            setDay5CalcInput(e.target.value);
+                            setDay5CalcResult("none");
+                          }}
+                          placeholder="？"
+                          className="w-16 bg-slate-900 border border-slate-700 rounded px-2 py-1 text-center font-mono font-bold text-white focus:border-rose-400 outline-none"
+                        />
+                        <span className="text-slate-300">時間</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const val = parseInt(day5CalcInput.trim(), 10);
+                            if (val === 48) {
+                              setDay5CalcResult("correct");
+                            } else {
+                              setDay5CalcResult("incorrect");
+                            }
+                          }}
+                          className="ml-2 rounded bg-rose-700 hover:bg-rose-600 px-3 py-1 font-bold text-white text-xs transition shadow"
+                        >
+                          計算・報告する
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 正解・不正解表示 */}
+                    {day5CalcResult === "correct" && (
+                      <div className="rounded border border-emerald-500/80 bg-emerald-950/70 p-2.5 text-[11px] text-emerald-200 space-y-1 animate-fadeIn">
+                        <strong className="text-emerald-300 font-bold flex items-center gap-1">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                          計算完了・報告承認！ 到達猶予時間【48時間】
+                        </strong>
+                        <p className="leading-relaxed">
+                          240 km ÷ 5 km/h ＝ <strong>48時間</strong>（ちょうど丸2日）！<br />
+                          「……あと48時間！？ つまり明後日、<strong>Day 7の未明には駿河湾奥へ突入し、富士山の破局噴火が誘発されてしまう</strong>ということです！ 一刻の猶予もありません！」
+                        </p>
+                      </div>
+                    )}
+
+                    {day5CalcResult === "incorrect" && (
+                      <div className="rounded border border-amber-600/60 bg-amber-950/50 p-2 text-[11px] text-amber-200">
+                        ⚠️ 計算が合致しません。残距離 <strong>240 km</strong> を 巡航速度 <strong>時速 5 km</strong> で割って計算してください（240 ÷ 5）。
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* ③ 【全国緊急特報】メディア各社による「富士山連動大噴火」推論・パニック報道 */}
                 <div className="rounded-xl border border-red-900/80 bg-[#1a0f12] p-4 shadow-lg space-y-2.5">
                   <div className="flex items-center justify-between border-b border-red-900/60 pb-2">
                     <div className="flex items-center gap-2">
@@ -3371,6 +3564,48 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         {day6ReadyStatus === "testing" && "信号テスト再生中……"}
                         {day6ReadyStatus === "ready" && "装填信号を再テスト試聴（Day 7決戦スタンバイ完了）"}
                       </button>
+
+                      {/* 長津からの作戦命名提案パネル */}
+                      <div className="rounded-lg border border-cyan-800/80 bg-[#091b22] p-3.5 space-y-2.5 mt-3">
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-cyan-900/60 pb-1.5">
+                          <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                            <Sparkles className="h-4 w-4 text-cyan-400" />
+                            【長津オペレーターからの提案：合同対策チーム作戦名の命名】
+                          </span>
+                          <span className="rounded bg-black/60 px-2 py-0.5 text-[10px] text-emerald-300 font-mono border border-emerald-700/60">
+                            決定作戦名: 【{operationName || "未命名作戦"}】
+                          </span>
+                        </div>
+                        <div className="rounded bg-black/40 border border-cyan-950 p-2.5 text-[11px] text-slate-200">
+                          <p className="italic leading-relaxed font-mono text-cyan-100">
+                            （🎙️ 首席オペレーター 長津）:「――長津より作戦提案です。古文書の祝詞と恩師の音響研究、そして海上自衛隊の全ソナー網を結集するこの前代未聞の迎撃作戦に……当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 明朝の決戦、全員が心を一つにして立ち向かうための名前です！」
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
+                          <span className="text-slate-300 font-bold">作戦名を入力:</span>
+                          <input
+                            type="text"
+                            value={operationName}
+                            onChange={(e) => setOperationName(e.target.value)}
+                            placeholder="例: オペレーション・ワタツミ / 大捕食作戦"
+                            className="bg-slate-900 border border-slate-700 rounded px-2.5 py-1 text-xs text-cyan-300 w-60 font-bold focus:border-cyan-400 outline-none"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setOperationName("オペレーション・ワタツミ")}
+                            className="text-[10px] rounded bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1"
+                          >
+                            案①: オペレーション・ワタツミ
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setOperationName("オペレーション・オホエモノ")}
+                            className="text-[10px] rounded bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1"
+                          >
+                            案②: オペレーション・オホエモノ
+                          </button>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 )}
@@ -3385,10 +3620,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Flame className="h-5 w-5 text-emerald-400 animate-pulse" />
                     <div>
                       <h3 className="font-bold text-sm text-white flex items-center gap-2">
-                        【Day 7 決戦】駿河湾口・魚雷飽和攻撃 ＆ マッコウクジラ深海大捕食作戦
+                        🚀 【{operationName || "合同迎撃作戦"} 発動】駿河湾口・深海大捕食決戦
                       </h3>
                       <p className="text-[11px] text-emerald-300/80">
-                        水深600〜1,000mの境界戦 ｜ 魚雷による群体粉砕アシスト × クジラ群の完全捕食消滅
+                        迎撃標的：未確認巨大生物【{creatureCodename || "ワタツミ"}】 ｜ 水深600〜1,000mの境界戦 ｜ 魚雷群体粉砕 × クジラ群捕食消滅
                       </p>
                     </div>
                   </div>

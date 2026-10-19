@@ -34,6 +34,7 @@ import {
   EyeOff,
   Compass,
   Printer,
+  Sparkles,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
@@ -290,6 +291,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   // Day 5 総力調査アクションの選択状態（東京: 1枠, 現地: 2枠 / 未選択プールから選択）
   const [selectedDay5TokyoAction, setSelectedDay5TokyoAction] = useState<string>("T-3B");
   const [selectedDay5FieldActions, setSelectedDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
+
+  // Day 3 巨大生物の呼称コードネーム（ワタツミ / クスルフ / 自由入力）
+  const [creatureCodename, setCreatureCodename] = useState<string>("ワタツミ");
+  // Day 6 作戦命名（オペレーション名）
+  const [operationName, setOperationName] = useState<string>("オペレーション・ワタツミ");
 
   // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
   const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
@@ -1318,13 +1324,62 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       </div>
 
+                      {/* ③ 防衛庁・官邸からの呼称選定諮問 */}
+                      <div className="rounded border border-amber-800/80 bg-amber-950/40 p-2.5 space-y-1.5">
+                        <div className="flex flex-wrap items-center justify-between gap-1">
+                          <span className="font-bold text-amber-300 text-xs flex items-center gap-1">
+                            <Radio className="h-3.5 w-3.5 text-amber-400" /> ③ 防衛庁・官邸 ➔ 合同対策チームへの諮問：未確認巨大生物の呼称（コードネーム）決定:
+                          </span>
+                          <div className="flex items-center gap-1 text-[10px]">
+                            <button
+                              type="button"
+                              onClick={() => setCreatureCodename("ワタツミ")}
+                              className={`px-2 py-0.5 rounded transition ${
+                                creatureCodename === "ワタツミ"
+                                  ? "bg-amber-600 text-white font-bold"
+                                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              }`}
+                            >
+                              ワタツミ
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => setCreatureCodename("クスルフ")}
+                              className={`px-2 py-0.5 rounded transition ${
+                                creatureCodename === "クスルフ"
+                                  ? "bg-amber-600 text-white font-bold"
+                                  : "bg-slate-800 text-slate-300 hover:bg-slate-700"
+                              }`}
+                            >
+                              クスルフ
+                            </button>
+                          </div>
+                        </div>
+                        <p className="italic text-slate-200 text-[11px] leading-relaxed">
+                          （🎙️ 首席オペレーター 長津）:「防衛庁および内閣官房より至急諮問です！『今後の公式対処記録および部隊動員にあたり、この未確認巨大生物の呼称（コードネーム）を当対策チームで決めてほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として挙がっていますが、当チームとしてどちらを公式コードネームとして答申しますか？（※もちろん、チーム独自の命名でも構いません）」
+                        </p>
+                        <div className="flex items-center gap-2 pt-0.5">
+                          <span className="text-[10px] text-slate-400">呼称決定入力:</span>
+                          <input
+                            type="text"
+                            value={creatureCodename}
+                            onChange={(e) => setCreatureCodename(e.target.value)}
+                            placeholder="ワタツミ / クスルフ / 自由入力"
+                            className="bg-slate-950 border border-slate-700 rounded px-2 py-0.5 text-xs text-amber-300 w-44 font-bold focus:border-amber-400 outline-none"
+                          />
+                          <span className="text-[10px] text-emerald-400 font-mono">
+                            確定呼称: 【{creatureCodename || "未決定"}】
+                          </span>
+                        </div>
+                      </div>
+
                       {/* 合議制と危機管理官最終意思決定 */}
                       <div className="rounded bg-rose-950/30 border border-rose-900/50 p-2.5 space-y-1.5">
                         <span className="font-bold text-rose-300 text-xs">
                           ⚖️ 全員合議 ＆ 朝潮危機管理官（PC1）最終意思決定の進行ガイド:
                         </span>
                         <p>
-                          ・<strong>合議制の回し方</strong>: 全員（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）で写真の生物学的脅威と防衛出動の是非について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
+                          ・<strong>合議制の回し方</strong>: 全員（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）で写真の生物学的脅威と防衛出動の是非、そして巨大生物の公式呼称（ワタツミ vs クスルフ）について5〜10分程度自由に意見を交わさせます（島民避難、火山の残り時間、兵器の有効性など）。
                         </p>
                         <p>
                           ・<strong>危機管理官の決断</strong>: 議論が煮詰まったところで、GM（長津）から<strong>「各員の意見が出揃いました。朝潮危機管理官（PC1）、指揮官としてこの事態にどう対処するか、最終意思決定をお願いいたします」</strong>と促します。
@@ -1734,6 +1789,34 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
+                  {/* フェーズ1.5：防衛庁・火山噴火予知連絡会からの緊急指令「富士山噴火猶予時間の計算」 */}
+                  <div className="rounded-xl border border-rose-800/80 bg-[#1f1018] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <Clock className="h-4 w-4 text-rose-400 animate-pulse" />
+                        【フェーズ1.5：防衛庁・火山噴火予知連絡会からの緊急指令「富士山噴火猶予時間の計算」】
+                      </span>
+                      <span className="text-[10px] text-rose-300 font-mono bg-rose-950 px-2 py-0.5 rounded border border-rose-800">
+                        タイムリミット手計算パズル
+                      </span>
+                    </div>
+                    <div className="rounded-lg bg-black/60 border border-rose-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
+                      <strong className="text-rose-300 block font-bold">
+                        📢 【長津の至急指令アナウンス（GM読み上げ用）】:
+                      </strong>
+                      <p className="italic leading-relaxed font-mono text-slate-100">
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁および火山噴火予知連絡会より至急指令が入電！『駿河湾奥・富士山地下マグマ溜まり直下までの残距離は【約240km】。巨大生物の現在の深海巡航速度は【時速5km】。もしこのまま直進した場合、富士山噴火の危機に至るまであとどのぐらいの猶予があるのか、おおよその時間を直ちに計算して報告せよ！』とのことです！ 各員、至急計算をお願いします！」
+                      </p>
+                    </div>
+                    <div className="rounded bg-rose-950/40 border border-rose-800/60 p-2 text-[11px] text-rose-200 space-y-1">
+                      💡 <strong>GM進行メモ・手計算パズルの回し方</strong>:
+                      <p className="text-slate-300 leading-relaxed">
+                        ・<strong>計算式</strong>: 残距離 240km ÷ 巡航速度 時速5km ＝ <strong>【48時間】（残り丸2日 ➔ Day 7未明に到達！）</strong><br />
+                        ・<strong>演出の狙い</strong>: 答えをそのまま証拠資料（グラフ）で配るのではなく、プレイヤー自身に割り算を計算させることで、「えっ……あと48時間しかない！？ Day 7の未明に到達してしまうぞ！」と自分たちの手で絶望的なタイムリミットを突き止めさせます（※証拠資料「破局噴火タイムリミット算出グラフ」は提示しません）。
+                      </p>
+                    </div>
+                  </div>
+
                   {/* フェーズ2：防衛省からの「機密指定」通達とプレイヤー独自行動 */}
                   <div className="rounded-xl border border-blue-900/60 bg-[#0d1527] p-3.5 space-y-2.5 shadow-md">
                     <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
@@ -2079,11 +2162,64 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       「合成新言語祝詞の完成と海自ソナー網への装填完了！ 明朝・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
                     </div>
                   </div>
+
+                  {/* フェーズ4.5：長津からの作戦命名提案 ＆ 合同チーム作戦名の決定 */}
+                  <div className="rounded-xl border border-cyan-700/80 bg-[#081a20] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
+                      <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
+                        <Sparkles className="h-4 w-4 text-cyan-400" />
+                        【フェーズ4.5：長津からの作戦命名提案 ＆ 合同チーム作戦名の決定】
+                      </span>
+                      <span className="text-[10px] text-cyan-300 font-mono bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
+                        作戦命名イベント
+                      </span>
+                    </div>
+                    <div className="rounded-lg bg-black/60 border border-cyan-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
+                      <strong className="text-cyan-300 block font-bold">
+                        📢 【長津の作戦命名提案セリフ（GM読み上げ用）】:
+                      </strong>
+                      <p className="italic leading-relaxed font-mono text-cyan-100">
+                        （🎙️ 首席オペレーター 長津）:「――長津より提案があります。古文書の祝詞と恩師の音響研究、そして海上自衛隊の全ソナー網を結集するこの前代未聞の迎撃作戦に……当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 明朝の決戦、全員が心を一つにして立ち向かうための名前です！」
+                      </p>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
+                      <span className="text-slate-300 font-bold">作戦名入力:</span>
+                      <input
+                        type="text"
+                        value={operationName}
+                        onChange={(e) => setOperationName(e.target.value)}
+                        placeholder="例: オペレーション・ワタツミ / 大捕食作戦"
+                        className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-cyan-300 w-64 font-bold focus:border-cyan-400 outline-none"
+                      />
+                      <span className="text-[10px] text-emerald-400 font-mono">
+                        発動予定: 【{operationName || "未命名作戦"}】
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-slate-400">
+                      💡 <strong>GMメモ</strong>: プレイヤー全員で「オペレーション・〇〇」や自由な作戦名を相談して決めてください。Day 7の決戦画面に「オペレーション：〇〇 発動！」として反映されます。
+                    </p>
+                  </div>
                 </div>
               )}
 
               {currentDay === 7 && (
                 <div className="space-y-3.5 text-xs leading-relaxed">
+                  {/* 作戦発動ヘッダーバナー */}
+                  <div className="rounded-xl border border-cyan-500/80 bg-gradient-to-r from-[#07242c] via-[#093539] to-[#07242c] p-3 text-cyan-200 shadow-lg flex flex-wrap items-center justify-between gap-2">
+                    <div className="flex items-center gap-2">
+                      <Sparkles className="h-4 w-4 text-cyan-300 animate-spin-slow" />
+                      <span className="font-bold text-white text-xs">
+                        🚀 【{operationName || "合同迎撃作戦"} 発動】
+                      </span>
+                      <span className="rounded bg-black/50 px-2 py-0.5 text-[10px] text-amber-300 font-mono border border-amber-900/60">
+                        迎撃標的: 【{creatureCodename || "ワタツミ"}】
+                      </span>
+                    </div>
+                    <span className="text-[10px] text-cyan-300 font-mono">
+                      海自全ソナー網 × マッコウクジラ深海大捕食
+                    </span>
+                  </div>
+
                   {/* フェーズ1：駿河湾口突入 ＆ 水深600〜1,000mの境界戦 */}
                   <div className="rounded-xl border border-rose-900/60 bg-[#160f1c] p-3.5 space-y-2 shadow-md">
                     <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
