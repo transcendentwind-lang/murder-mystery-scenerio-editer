@@ -156,6 +156,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [isDay1ChartModalOpen, setIsDay1ChartModalOpen] = useState(false);
   const [isDay4MapModalOpen, setIsDay4MapModalOpen] = useState(false);
   const [isDay5MapModalOpen, setIsDay5MapModalOpen] = useState(false);
+  const [isShrineChronicleModalOpen, setIsShrineChronicleModalOpen] = useState(false);
 
   // Day 1 漂流海図の表示モード（白地図 vs 対策本部解析図）
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
@@ -315,6 +316,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         setIsDay1ChartModalOpen(false);
         setIsDay4MapModalOpen(false);
         setIsDay5MapModalOpen(false);
+        setIsShrineChronicleModalOpen(false);
         setDay3IsPC6ModalOpen(false);
         setDay3PhotoModal(null);
       }
@@ -2222,6 +2224,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     {day4FieldActions.map((fId) => {
                       const fObj = ALL_FIELD_ACTIONS.find((a) => a.id === fId);
                       if (!fObj) return null;
+                      const hasDoc = fObj.hasDocument || fObj.id === "F-4D";
                       return (
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
@@ -2235,6 +2238,38 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <p className="text-[11px] text-slate-200 leading-relaxed">
                             {fObj.detail}
                           </p>
+                          {hasDoc && (
+                            <div className="mt-2 rounded border border-amber-800/70 bg-amber-950/40 p-2 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
+                                  <FileText className="h-3 w-3" />
+                                  添付史料：『小笠原社記（抄）』原本
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setIsShrineChronicleModalOpen(true)}
+                                  className="flex items-center gap-1 rounded bg-amber-700 hover:bg-amber-600 px-1.5 py-0.5 text-[9px] font-bold text-white transition shadow"
+                                >
+                                  <Maximize2 className="h-2.5 w-2.5" /> 全文拡大
+                                </button>
+                              </div>
+                              <div
+                                onClick={() => setIsShrineChronicleModalOpen(true)}
+                                className="group relative cursor-pointer overflow-hidden rounded border border-amber-900/60 bg-[#1c1813] aspect-[16/9] flex items-center justify-center shadow"
+                              >
+                                <img
+                                  src="/images/day4_shrine_chronicle.svg"
+                                  alt="小笠原社記（抄）原本"
+                                  className="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-1.5">
+                                  <span className="text-[9px] text-amber-200">
+                                    享保十二年 丁未水無月 社記（黒き巨影と海底震動・海中筒祈礼の記録）
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -2636,6 +2671,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     {day5FieldActions.map((fId) => {
                       const fObj = ALL_FIELD_ACTIONS.find((a) => a.id === fId);
                       if (!fObj) return null;
+                      const hasDoc = fObj.hasDocument || fObj.id === "F-4D";
                       return (
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
@@ -2649,6 +2685,38 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <p className="text-[11px] text-slate-200 leading-relaxed">
                             {fObj.detail}
                           </p>
+                          {hasDoc && (
+                            <div className="mt-2 rounded border border-amber-800/70 bg-amber-950/40 p-2 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
+                                  <FileText className="h-3 w-3" />
+                                  添付史料：『小笠原社記（抄）』原本
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setIsShrineChronicleModalOpen(true)}
+                                  className="flex items-center gap-1 rounded bg-amber-700 hover:bg-amber-600 px-1.5 py-0.5 text-[9px] font-bold text-white transition shadow"
+                                >
+                                  <Maximize2 className="h-2.5 w-2.5" /> 全文拡大
+                                </button>
+                              </div>
+                              <div
+                                onClick={() => setIsShrineChronicleModalOpen(true)}
+                                className="group relative cursor-pointer overflow-hidden rounded border border-amber-900/60 bg-[#1c1813] aspect-[16/9] flex items-center justify-center shadow"
+                              >
+                                <img
+                                  src="/images/day4_shrine_chronicle.svg"
+                                  alt="小笠原社記（抄）原本"
+                                  className="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex items-end p-1.5">
+                                  <span className="text-[9px] text-amber-200">
+                                    享保十二年 丁未水無月 社記（黒き巨影と海底震動・海中筒祈礼の記録）
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
                       );
                     })}
@@ -3521,6 +3589,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <ImageIcon className="h-3 w-3" /> 空撮写真をモーダルで確認
                     </button>
                   )}
+                  {ev.id === "ev-ancient-shrine-scroll" && (
+                    <button
+                      onClick={() => setIsShrineChronicleModalOpen(true)}
+                      className="mt-2 flex items-center gap-1 text-[10px] font-semibold text-amber-300 hover:text-amber-200 transition"
+                    >
+                      <FileText className="h-3 w-3" /> 『小笠原社記（抄）』原本をモーダルで確認
+                    </button>
+                  )}
                 </div>
               ))
             )}
@@ -4208,6 +4284,73 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 御蔵島沖海底カルデラ噴火、八丈島でのM4.0・震度3地震波及、および富士山地下深部での火山性微動観測を反映。
               </div>
               <span className="font-mono text-rose-400 font-bold">駿河トラフ到達・破局噴火まで残り48時間</span>
+            </div>
+          </div>
+        </div>
+      )}
+      {/* Day 4 古文書『小笠原社記（抄）』大画面モーダル */}
+      {isShrineChronicleModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-4 sm:p-6"
+          onClick={() => setIsShrineChronicleModalOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-amber-900/60 bg-[#16120e] p-5 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* モーダルヘッダー */}
+            <div className="flex items-center justify-between pb-3 border-b border-amber-900/50">
+              <div className="flex items-center gap-2.5">
+                <FileText className="h-5 w-5 text-amber-400" />
+                <div>
+                  <h3 className="font-bold text-sm text-amber-100 flex items-center gap-2">
+                    小笠原社記（抄） 享保十二年 水無月記録
+                    <span className="text-[10px] font-normal text-amber-400/90 border border-amber-700/60 bg-amber-950/60 px-1.5 py-0.5 rounded">
+                      小笠原神社 社蔵原本
+                    </span>
+                  </h3>
+                  <p className="text-[11px] text-amber-300/70">
+                    史料分類: 近世古文書（和紙毛筆・縦書き墨書・小笠原神社蔵書之印 捺印）
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/images/day4_shrine_chronicle.svg"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1 rounded bg-amber-950 hover:bg-amber-900 px-2.5 py-1 text-xs text-amber-200 transition border border-amber-800/70"
+                >
+                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで原寸開く
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsShrineChronicleModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-amber-950 hover:bg-amber-900 px-2.5 py-1 text-xs font-semibold text-amber-300 hover:text-white transition border border-amber-800/70"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            {/* モーダル画像表示部 */}
+            <div className="mt-3 flex-1 overflow-auto rounded-xl border border-amber-900/40 bg-[#0d0a07] flex items-center justify-center min-h-[380px] p-3">
+              <img
+                src="/images/day4_shrine_chronicle.svg"
+                alt="小笠原社記（抄）"
+                className="w-full h-auto max-h-[58vh] object-contain rounded shadow-lg"
+              />
+            </div>
+
+            {/* モーダル下部：現代語訳・翻刻解説 */}
+            <div className="mt-3 rounded-lg bg-[#221a14]/90 border border-amber-900/60 p-3 text-xs text-amber-200/90 space-y-1">
+              <div className="font-bold text-amber-300 flex items-center justify-between">
+                <span>【史料翻刻ならびに解題（小笠原村史編纂班）】</span>
+                <span className="text-[10px] text-amber-400/80 font-normal">江戸中期（1727年）の噴火と巨影の沈静化記録</span>
+              </div>
+              <p className="text-[11px] leading-relaxed text-amber-100/80">
+                「南の沖合より重き海鳴り昼夜止まず、水底に墨の如き長き巨影這い廻る。巨影の過ぎ行くに従いて海底激しく震動し海は赤土の如く濁り礫（軽石）浮かぶ。社家古記に『海に大いなる影現れ火の山騒ぐ時は竹の海中筒を海原へ差し入れ盟約の祈りを捧ぐべし』とあり、沖合にて水底へ祈礼を奏上せしところ海鳴りも煙も収まり海面静まり返りたり」
+              </p>
             </div>
           </div>
         </div>

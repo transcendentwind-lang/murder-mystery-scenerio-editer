@@ -1,0 +1,166 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 990" width="1400" height="990">
+  <defs>
+    <!-- 和紙の経年変色グラデーション -->
+    <radialGradient id="washi-vignette" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#faf5ec"/>
+      <stop offset="60%" stop-color="#f3ead8"/>
+      <stop offset="85%" stop-color="#ebdcc2"/>
+      <stop offset="100%" stop-color="#dec9a7"/>
+    </radialGradient>
+
+    <!-- 和紙の繊維・質感テクスチャ -->
+    <filter id="washi-fiber" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
+      <feColorMatrix type="matrix" values="0.3 0 0 0 0.94   0 0.3 0 0 0.88   0 0 0.3 0 0.78  0 0 0 0.07 0" in="noise" result="tintedNoise"/>
+      <feComposite operator="in" in2="SourceGraphic"/>
+    </filter>
+
+    <!-- 朱印の滲み・かすれフィルター -->
+    <filter id="seal-stamp" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="turbulence" baseFrequency="0.12" numOctaves="3" result="roughNoise"/>
+      <feDisplacementMap in="SourceGraphic" in2="roughNoise" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+
+  <!-- 和紙背景 -->
+  <rect width="1400" height="990" fill="url(#washi-vignette)"/>
+  <rect width="1400" height="990" fill="#cbb793" opacity="0.12" filter="url(#washi-fiber)"/>
+
+  <!-- 古書の縁の汚れ・シミ・焼け（四隅） -->
+  <path d="M0,0 Q200,40 400,0 L0,0 Z" fill="#bfa57c" opacity="0.25"/>
+  <path d="M1400,0 Q1200,50 1000,0 L1400,0 Z" fill="#b89c72" opacity="0.22"/>
+  <path d="M0,990 Q180,940 380,990 L0,990 Z" fill="#b3956a" opacity="0.3"/>
+  <path d="M1400,990 Q1220,950 1050,990 L1400,990 Z" fill="#ba9e74" opacity="0.28"/>
+
+  <!-- 伝統的な版木・罫紙の枠線（子母枠・双辺） -->
+  <!-- 外太枠 -->
+  <rect x="55" y="55" width="1290" height="880" fill="none" stroke="#3d332a" stroke-width="4.5" stroke-linejoin="round" opacity="0.88"/>
+  <!-- 内細枠 -->
+  <rect x="66" y="66" width="1268" height="858" fill="none" stroke="#524539" stroke-width="1.8" stroke-linejoin="round" opacity="0.82"/>
+
+  <!-- 四隅の雲形・枠飾り（江戸時代の古版本装飾） -->
+  <g stroke="#524539" stroke-width="1.2" fill="none" opacity="0.65">
+    <path d="M 76 96 L 96 96 L 96 76" />
+    <path d="M 1324 96 L 1304 96 L 1304 76" />
+    <path d="M 76 914 L 96 914 L 96 934" />
+    <path d="M 1324 914 L 1304 914 L 1304 934" />
+  </g>
+
+  <!-- 縦罫線（薄い墨色のガイドライン：右から左へ55pxピッチ） -->
+  <g stroke="#c7b69b" stroke-width="0.8" opacity="0.55">
+    <line x1="1265" y1="76" x2="1265" y2="914"/>
+    <line x1="1205" y1="76" x2="1205" y2="914"/>
+    <line x1="1145" y1="76" x2="1145" y2="914"/>
+    <line x1="1065" y1="76" x2="1065" y2="914"/>
+    <line x1="985" y1="76" x2="985" y2="914"/>
+    <line x1="930" y1="76" x2="930" y2="914"/>
+    <line x1="875" y1="76" x2="875" y2="914"/>
+    <line x1="795" y1="76" x2="795" y2="914"/>
+    <line x1="740" y1="76" x2="740" y2="914"/>
+    <line x1="660" y1="76" x2="660" y2="914"/>
+    <line x1="605" y1="76" x2="605" y2="914"/>
+    <line x1="550" y1="76" x2="550" y2="914"/>
+    <line x1="495" y1="76" x2="495" y2="914"/>
+    <line x1="415" y1="76" x2="415" y2="914"/>
+    <line x1="360" y1="76" x2="360" y2="914"/>
+    <line x1="305" y1="76" x2="305" y2="914"/>
+  </g>
+
+  <!-- ==============================================================
+       本文（右から左へ、縦書きレイアウト）
+       フォントは伝統的な毛筆・明朝体スタックを指定
+       ============================================================== -->
+  <g style="font-family: 'Yu Mincho', 'Hiragino Mincho ProN', 'Source Han Serif', 'MS Mincho', serif; writing-mode: vertical-rl; text-orientation: upright;" fill="#201a14">
+
+    <!-- 表題：小笠原社記（抄） -->
+    <text x="1235" y="125" font-size="38" font-weight="900" letter-spacing="0.22em" fill="#17120e">
+      小笠原社記（抄）
+    </text>
+
+    <!-- 副題：小笠原神社社蔵 -->
+    <text x="1175" y="165" font-size="20" font-weight="bold" letter-spacing="0.16em" fill="#3a3026">
+      小笠原神社社蔵
+    </text>
+
+    <!-- 年号・日付：享保十二年 丁未（ひのとひつじ）水無月 -->
+    <text x="1105" y="145" font-size="23" font-weight="bold" letter-spacing="0.12em" fill="#2b231c">
+      享保十二年　丁未（ひのとひつじ）水無月
+    </text>
+
+    <!-- 第一条：海鳴りと巨影の出現 -->
+    <text x="1025" y="145" font-size="22" letter-spacing="0.08em">
+      一、南の沖合深くより、地霊の唸るが如き重き海鳴り昼夜止まず。
+    </text>
+    <text x="965" y="180" font-size="22" letter-spacing="0.08em">
+      海面には波風なきに大いなるうねり立ち、島人は水底に墨の如き長き巨影、
+    </text>
+    <text x="905" y="180" font-size="22" letter-spacing="0.08em">
+      這い廻るを見る。
+    </text>
+
+    <!-- 第二条：大地震動と赤土の濁り、無数の礫（軽石）浮上 -->
+    <text x="825" y="145" font-size="22" letter-spacing="0.08em">
+      一、かの巨影の過ぎ行くに従いて、海底の大地激しく震動し、
+    </text>
+    <text x="765" y="180" font-size="22" letter-spacing="0.08em">
+      三日と置かずして海は赤土の如く濁りて、無数の礫が水面に浮かぶをみる。
+    </text>
+
+    <!-- 第三条：古記の盟約儀式「沖へ舟を漕ぎ出し、海中へ長き筒を差し入れ…」 -->
+    <text x="685" y="145" font-size="22" letter-spacing="0.08em">
+      一、島人等、大いなる災厄の到来と恐れおののく。
+    </text>
+    <text x="630" y="180" font-size="22" letter-spacing="0.08em">
+      社家に伝わる古記を紐解くに、
+    </text>
+    <text x="575" y="180" font-size="22" letter-spacing="0.08em">
+      「海に大いなる影現れ火の山騒ぐ時は、沖へ舟を漕ぎ出し、
+    </text>
+    <text x="520" y="180" font-size="22" letter-spacing="0.08em">
+      海中へ長き筒を差し入れ、盟約の祈りを捧ぐべし」とあり。
+    </text>
+
+    <!-- 第四条：海中筒による祈礼奏上と沈静化 -->
+    <text x="440" y="145" font-size="22" letter-spacing="0.08em">
+      一、神主ならびに島中の漕ぎ手、小舟にて沖合へと漕ぎ出で、
+    </text>
+    <text x="385" y="180" font-size="22" letter-spacing="0.08em">
+      竹の海中筒を海原へ差し入れ、水底へ祈礼を奏上せり。
+    </text>
+    <text x="330" y="180" font-size="22" letter-spacing="0.08em">
+      祈り果てて後、海鳴りも火の山の煙も漸く収まり、海面は鏡の如く静まり返りたり。
+    </text>
+  </g>
+
+  <!-- ==============================================================
+       落款印（朱印）：小笠原神社 蔵書之印
+       伝統的な角印・篆書体風（左下に堂々と捺印）
+       ============================================================== -->
+  <g transform="translate(145, 680)" filter="url(#seal-stamp)">
+    <!-- 印影外枠（二重枠・朱色） -->
+    <rect x="0" y="0" width="125" height="125" fill="#ba331c" rx="4" opacity="0.9"/>
+    <rect x="5" y="5" width="115" height="115" fill="none" stroke="#faf0e6" stroke-width="3" rx="2" opacity="0.95"/>
+    <rect x="10" y="10" width="105" height="105" fill="#ba331c" rx="1"/>
+
+    <!-- 印文字（白文：小笠原神社蔵書之印 3列×3字風） -->
+    <g fill="#faf0e6" style="font-family: 'Yu Mincho', 'Hiragino Mincho ProN', 'Source Han Serif', serif; font-weight: 900;" opacity="0.95">
+      <!-- 右列：小笠原 -->
+      <text x="86" y="38" font-size="26" text-anchor="middle">小</text>
+      <text x="86" y="68" font-size="24" text-anchor="middle">笠</text>
+      <text x="86" y="98" font-size="24" text-anchor="middle">原</text>
+      <!-- 中列：神社蔵 -->
+      <text x="60" y="38" font-size="24" text-anchor="middle">神</text>
+      <text x="60" y="68" font-size="24" text-anchor="middle">社</text>
+      <text x="60" y="98" font-size="24" text-anchor="middle">蔵</text>
+      <!-- 左列：書之印 -->
+      <text x="34" y="38" font-size="24" text-anchor="middle">書</text>
+      <text x="34" y="68" font-size="24" text-anchor="middle">之</text>
+      <text x="34" y="98" font-size="26" text-anchor="middle">印</text>
+    </g>
+  </g>
+
+  <!-- 現代の史料編纂整理票（下部余白：古文書が公的機関で保管・整理されているリアリティ） -->
+  <g style="font-family: 'Courier New', monospace; font-size: 11px;" fill="#6e6050" opacity="0.8">
+    <text x="75" y="924">【史料番号】小笠原島誌 古記録群 函号十七 『享保十二年海異記（抜粋写）』 所蔵: 東京都小笠原支庁保管 / 小笠原神社社蔵</text>
+  </g>
+</svg>

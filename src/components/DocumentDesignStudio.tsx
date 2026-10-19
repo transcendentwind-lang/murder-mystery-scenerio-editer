@@ -1824,6 +1824,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             ? "📷 索敵撮影写真"
                             : vb.boardType.includes("eruption") || vb.boardType === "seismic_chart"
                             ? "🌋 噴火観測図"
+                            : vb.boardType === "day4_shrine_chronicle"
+                            ? "📜 古文書・手記"
                             : vb.boardType === "theater_map" || vb.boardType === "route_map"
                             ? "🗺️ 広域作戦海図"
                             : "🖼️ 図版・写真"}
