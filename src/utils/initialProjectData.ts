@@ -87,7 +87,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
   {
     id: "vis-day4-shrine-chronicle",
     title: "【Day 4】小笠原社記（抄）",
-    subtitle: "小笠原神社社蔵 / 享保十二年水無月 海底噴火と海鳴り・海中筒祈礼の古文書原本",
+    subtitle: "小笠原神社社蔵 / 享保十二年水無月 海底噴火と海鳴り・海中筒祈礼と鯨来襲の古文書原本",
     boardType: "day4_shrine_chronicle",
     dayNumber: 4,
     imageUrl: "/images/day4_shrine_chronicle.svg",
@@ -742,7 +742,7 @@ export const initialProject: MMProject = {
     {
       id: "ev-ancient-shrine-scroll",
       title: "小笠原社記（抄）",
-      description: "小笠原神社に保管されていた古い年代記（過去の異変記録）の精査。倉庫から盗難された『盟約の祝詞』の本文そのものは記載されていないものの、江戸時代中期の記録に、過去の海底噴火と海鳴りに関する記述が確認された。",
+      description: "小笠原神社に保管されていた古い年代記（過去の異変記録）の精査。倉庫から盗難された『盟約の祝詞』の本文そのものは記載されていないものの、江戸時代中期の記録に、過去の海底噴火と海鳴り、そして海中筒から祈りを響かせると太古の契りに応ずるが如く数多の鯨（勇魚）が集まり来たりて深海へ突入し、事態が沈静化した記録が確認された。",
       ownerId: "pc-6",
       foundPhase: 4,
       visibility: "shareable",
