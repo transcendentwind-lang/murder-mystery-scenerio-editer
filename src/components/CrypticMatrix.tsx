@@ -166,7 +166,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-amber-400 mb-1">Day 4: 祝詞と海中筒</span>
-              <p className="text-slate-300">大神宮古文書から『盟約の祝詞』と『竹の海中筒』を発見。しかし祝詞の文面は秘伝口伝。</p>
+              <p className="text-slate-300">小笠原神社の記録から『盟約の祝詞』と『竹の海中筒』を発見。しかし祝詞の文面は秘伝口伝。</p>
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-amber-400 mb-1">Day 5: コーダ言語の解明</span>

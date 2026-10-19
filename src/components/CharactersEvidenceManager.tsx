@@ -311,7 +311,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                   )}
                 </div>
                 <p className="mt-1.5 text-[11px] leading-relaxed text-amber-300/80">
-                  急な欠員時や5名で遊ぶ場合の調整モードです。PC4が近代科学観測官と島の大神宮社家を兼任し、土蔵の古文書・祝詞・無線ログをすべて所持することで、パズルや証拠の欠落なく遊べます。
+                  急な欠員時や5名で遊ぶ場合の調整モードです。PC4が近代科学観測官と島の神社社家を兼任し、土蔵の古文書・祝詞・無線ログをすべて所持することで、パズルや証拠の欠落なく遊べます。
                 </p>
               </div>
             )}

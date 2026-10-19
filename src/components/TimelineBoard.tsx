@@ -78,9 +78,9 @@ export function evaluateSectorSonar(sectorId: string): SectorSonarResult {
       sectorId,
       status: "direct_hit",
       title: "🎯【直下探知・潜航目標捕捉！】",
-      summary: "深度400mに巨大生体エコーを捕捉！ 目標が音波に反応して海面十数mへ浮上開始！",
+      summary: "深度400mに巨大生体エコーを捕捉！ 目標が熱水を避けるため海面十数mへ急浮上！",
       details:
-        "水深400mより全長300〜400mの超巨大な生体シグネチャーを直下探知。アクティブソナーの強力なピン音に刺激されたのか、物体は急速に海面（水深10〜20m）へ浮上を開始した。ヘリ急行により目視および写真撮影が可能！",
+        "水深400mより巨大な生体シグネチャーを直下探知。鳥島沖の海底噴火に伴う高温の熱水（熱水プルーム）を回避するためか、物体は一時的に海面近く（水深10〜20m）へ急浮上している。ヘリ急行により目視および写真撮影が可能！",
     };
   }
 
@@ -1129,7 +1129,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             🎉【セクター特定 成功！】（セクター B-3 水深400m）
                           </strong>
                           <p className="mt-0.5 text-[11px] text-emerald-300">
-                            ソナー音波を捉えられた怪物が海面近く（水深10〜20m）へ急速浮上！ 急行した捜索ヘリが上空後方から目視確認し、巨大な触手と胴体の写真撮影に成功しました！
+                            海底噴火の熱水を避けるため海面近く（水深10〜20m）へ一時的に急浮上した巨大生物を、急行した捜索ヘリが上空後方から目視確認！ 巨大な触手と胴体の写真撮影に成功しました！
                           </p>
                           <span className="text-[10px] text-slate-300 mt-1 inline-block">
                             👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された高解像度写真と観測所見を確認できます。
@@ -1381,7 +1381,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 海上保安庁東京本部アクション */}
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択：隕石片分析 ｜ 八丈島火山性微動 ｜ 神社隕石盗難・海域投棄）:
+                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択）:
                     </span>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
                       {DAY3_TOKYO_ACTIONS.map((a) => {
@@ -1397,13 +1397,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-white text-[11px]">{a.id}</span>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                                isSelected ? "bg-indigo-600 text-white" : "text-slate-500"
+                              }`}>
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
-                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-indigo-400">{a.organization}</div>
                           </button>
                         );
                       })}
@@ -1413,7 +1416,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* 小笠原現地アクション */}
                   <div>
                     <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択：隕石分析 ｜ 神社宝物殿 ｜ ダイバー貨物伝票 ｜ 写真画像深層解析）:
+                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択）:
                     </span>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {DAY3_FIELD_ACTIONS.map((a) => {
@@ -1429,15 +1432,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-white text-[11px]">{a.id}</span>
                               <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
                                 isSelected ? "bg-teal-600 text-white" : "text-slate-500"
                               }`}>
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
-                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-teal-400">{a.organization}</div>
                           </button>
                         );
                       })}
@@ -1466,16 +1470,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
                             <span className="font-bold text-indigo-300 text-[11px]">
-                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                              🏢 {tokyoActionObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
                               {tokyoActionObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {tokyoActionObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {tokyoActionObj.detail}
                           </p>
                         </div>
@@ -1490,16 +1491,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
                             <span className="font-bold text-teal-300 text-[11px]">
-                              🏝️ {fObj.id} {fObj.badge}
+                              🏝️ {fObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
                               {fObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {fObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {fObj.detail}
                           </p>
                         </div>
@@ -2114,9 +2112,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className="font-bold text-white text-[11px]">{a.id}</span>
                                 <span className={`text-[9px] px-1 rounded font-semibold ${
                                   isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"
                                 }`}>
@@ -2127,7 +2125,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
-                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-indigo-400">{a.organization}</div>
                           </button>
                         );
                       })}
@@ -2161,9 +2160,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
+                            <div className="flex items-center justify-between mb-1">
                               <div className="flex items-center gap-1.5 flex-wrap">
-                                <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                <span className="font-bold text-white text-[11px]">{a.id}</span>
                                 <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
                                   isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"
                                 }`}>
@@ -2176,7 +2175,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
-                            <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-teal-400">{a.organization}</div>
                           </button>
                         );
                       })}
@@ -2205,16 +2205,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
                             <span className="font-bold text-indigo-300 text-[11px]">
-                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                              🏢 {tokyoActionObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
                               {tokyoActionObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {tokyoActionObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {tokyoActionObj.detail}
                           </p>
                         </div>
@@ -2229,16 +2226,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
                             <span className="font-bold text-teal-300 text-[11px]">
-                              🏝️ {fObj.id} {fObj.badge}
+                              🏝️ {fObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
                               {fObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {fObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {fObj.detail}
                           </p>
                         </div>
@@ -2525,9 +2519,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                   : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                               }`}
                             >
-                              <div className="flex items-center justify-between">
+                              <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className="font-bold text-white text-[11px]">{a.id}</span>
                                   <span className={`text-[9px] px-1 rounded font-semibold ${
                                     isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"
                                   }`}>
@@ -2538,7 +2532,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                   {isSelected ? "選択中" : "未選択"}
                                 </span>
                               </div>
-                              <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                              <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                              <div className="mt-1 text-[9px] font-mono text-indigo-400">{a.organization}</div>
                             </button>
                           );
                         })}
@@ -2578,9 +2573,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                   : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                               }`}
                             >
-                              <div className="flex items-center justify-between">
+                              <div className="flex items-center justify-between mb-1">
                                 <div className="flex items-center gap-1.5 flex-wrap">
-                                  <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
+                                  <span className="font-bold text-white text-[11px]">{a.id}</span>
                                   <span className={`text-[9px] px-1.5 py-0.2 rounded font-semibold ${
                                     isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"
                                   }`}>
@@ -2593,7 +2588,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                   {isSelected ? "選択中" : "未選択"}
                                 </span>
                               </div>
-                              <div className="text-[10px] text-slate-300 line-clamp-2 mt-1">{a.summary}</div>
+                              <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                              <div className="mt-1 text-[9px] font-mono text-teal-400">{a.organization}</div>
                             </button>
                           );
                         })}
@@ -2623,16 +2619,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
                             <span className="font-bold text-indigo-300 text-[11px]">
-                              🏢 {tokyoActionObj.id} {tokyoActionObj.badge}
+                              🏢 {tokyoActionObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
                               {tokyoActionObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {tokyoActionObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {tokyoActionObj.detail}
                           </p>
                         </div>
@@ -2647,16 +2640,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
                           <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
                             <span className="font-bold text-teal-300 text-[11px]">
-                              🏝️ {fObj.id} {fObj.badge}
+                              🏝️ {fObj.title}
                             </span>
                             <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
                               {fObj.organization}
                             </span>
                           </div>
-                          <p className="font-semibold text-white text-[11px]">
-                            {fObj.summary}
-                          </p>
-                          <p className="text-[10px] text-slate-300 leading-relaxed">
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
                             {fObj.detail}
                           </p>
                         </div>
@@ -3893,7 +3883,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     【初瀬（PC6／5名時は太刀魚PC4）専用 個別ハンドアウト】
                   </h3>
                   <p className="text-[11px] text-indigo-300 font-medium">
-                    小笠原・大神神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録（※5名プレイ時はPC4太刀魚が兼任）
+                    小笠原神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録（※5名プレイ時はPC4太刀魚が兼任）
                   </p>
                 </div>
               </div>
