@@ -1980,12 +1980,23 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
+                  {/* 📢 【長津オペレーターからの状況報告】 */}
+                  <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-1.5">
+                    <strong className="text-amber-300 block font-bold text-xs flex items-center gap-1.5">
+                      <Radio className="h-4 w-4 text-amber-400" />
+                      📢 【海上保安庁東京本部 状況アナウンス】
+                    </strong>
+                    <p className="text-slate-200 text-xs italic leading-relaxed font-mono">
+                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告です。未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が、火山性微動を断続的に探知しています。防衛庁のパッシブソナーによる潜航物体の位置と、この火山性微動の発生源は完全に一致しており、物体は【日速約150km】のペースで正確に北上を続けています」
+                    </p>
+                  </div>
+
                   <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 text-[11px] text-slate-300 space-y-1.5">
                     <p>
                       ・<strong>明神礁の海底噴火地点</strong>：鳥島沖を通過した物体が北上を続け、明神礁（31°55&apos;N, 140°01&apos;E）の海底カルデラで連動大爆発を誘発。海図西側の開けた海域に引き出し線で「🔴 Day 3 明神礁 連動大噴火」として他の地名に被らずプロット。
                     </p>
                     <p>
-                      ・<strong>青ヶ島・八丈島の地震観測 ＆ 特別な振動による火山刺激と富士山到達危機</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。日速約150kmで北上するこの火山フロントは、伊豆諸島を通過して【富士山直下】へ到達し、破局的大噴火を引き起こす壊滅的危機をプレイヤー側が指摘・警戒すべき重要推理ポイントです。
+                      ・<strong>青ヶ島・八丈島の地震観測 ＆ 特別な振動による火山刺激（推理の焦点）</strong>：巨大生物が海底付近で<strong>『海底地震を起こすような特別な振動』</strong>を発生させ、それが海底火山を次々と刺激・噴火させているメカニズムが浮上。日速約150kmで北上するこの物体がこの先どこへ向かい、何を引き起こすのか、プレイヤー側が海図とデータから推理・警戒すべき重要推理ポイントです。
                     </p>
                     <p>
                       ・<strong>生物が北上できる2つの理由（地磁気 ＋ 隕石が放つ特殊な物質）と複数隕石の投棄・神社盗難</strong>：巨大生物は①<strong>地磁気</strong>と、②<strong>隕石が放つ特殊な物質</strong>の2つを感知して隕石を追うように北上しています。さらに、もともと<strong>小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が組織的に盗み出され、『西之島・青ヶ島沖・八丈島付近・三宅島付近』の海に次々と落とされていた（道標にされた）</strong>上に、小笠原周辺で回収された約30kgの隕石が富士山麓へ運ばれたという壮大な誘導トリックを東京・小笠原双方の調査を通じて議論します。
@@ -2011,7 +2022,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             : "text-slate-400 hover:text-slate-200"
                         }`}
                       >
-                        防衛出動要請
+                        防衛出動要請（自衛隊攻撃依頼）
                       </button>
                       <button
                         type="button"
@@ -2022,7 +2033,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             : "text-slate-400 hover:text-slate-200"
                         }`}
                       >
-                        要請なし
+                        要請なし（依頼見送り）
                       </button>
                     </div>
                   </div>
@@ -2031,31 +2042,31 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg border border-rose-800/80 bg-rose-950/40 p-3 text-xs text-rose-200 space-y-2">
                       <div className="flex items-center gap-2 font-bold text-rose-300 text-xs">
                         <ShieldAlert className="h-4 w-4 text-rose-400" />
-                        🏛️ 【内閣・官邸からの返答：自衛隊防衛出動は見送り（内閣の不作為）】
+                        🏛️ 【自衛隊に攻撃（防衛出動）を依頼した場合：内閣見送り通達 ＆ 防衛省からの再説得打診】
                       </div>
-                      <p className="text-[11px] text-slate-200 italic leading-relaxed">
-                        「内閣総理大臣および官邸危機管理センターより通達。『鳥島〜青ヶ島沖の海底噴火と、海保の報告する未確認潜航物体との因果関係が科学的に立証されていない。防衛出動の要件（武力攻撃事態等）には該当せず、現段階での自衛隊部隊出動は見送る。当面は海上保安庁が情報収集および警戒にあたれ』」
+                      <p className="text-[11px] text-slate-200 italic leading-relaxed font-mono">
+                        （🎙️ 首席オペレーター 長津）:「――昨日、朝潮危機管理官より上申された防衛出動要請について、官邸危機管理センターおよび内閣総理大臣より公式通達が入電しました。『海底噴火と未確認潜航物体との因果関係が科学的に立証されておらず、外国からの武力攻撃事態にも該当しないため、現段階での自衛隊部隊の出動は見送る。海上保安庁は引き続き警戒および情報収集にあたれ』……内閣による防衛出動は見送りと決定されました。しかし、防衛庁・海上幕僚監部からは『内閣を再説得するためにも、この生物が一体どこへ向かい、何を引き起こす見立てなのか、対策本部の専門的予測を至急提出してほしい』との緊急打診が入っております」
                       </p>
                       <div className="rounded bg-rose-900/40 border border-amber-700/60 p-2.5 text-[11px] text-amber-100 space-y-1">
                         <strong className="text-amber-300 block font-bold flex items-center gap-1">
-                          🛡️ 防衛省リエゾン 貝浜（PC2）からの緊急打診：『この生物はどこへ向かっている見立てなのか？』
+                          🛡️ 防衛省リエゾン 貝浜（PC2）への追加通達
                         </strong>
-                        <p className="italic text-slate-200 leading-relaxed">
-                          「内閣は因果関係不明を理由に出動を保留したが、防衛庁としては深刻な脅威と認識している。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
+                        <p className="italic text-slate-200 leading-relaxed font-mono">
+                          「内閣は因果関係不明を理由に出動を保留したが、防衛省としては深刻な脅威と認識している。内閣を説得し再上申を通すには、より確固たる論拠が必要だ。【この生物は一体どこへ向かっている見立てなのか？】対策本部の進路予測・分析を至急提示してほしい」
                         </p>
                       </div>
                       <p className="text-[10px] text-amber-200/90 font-medium">
-                        💡 <strong>戦略的示唆</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠（火山連動の北上軸・駿河湾や富士山直撃など）の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員への働きかけが大きく左右されます</strong>。
+                        💡 <strong>戦略的示唆</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員への働きかけが大きく左右されます</strong>。
                       </p>
                     </div>
                   ) : (
                     <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/40 p-3 text-xs text-indigo-200 space-y-2">
                       <div className="flex items-center gap-2 font-bold text-indigo-300 text-xs">
                         <Radio className="h-4 w-4 text-indigo-400" />
-                        🛡️ 【防衛省・統合幕僚監部からの緊急照会：生物の北上進路に関する意見聴取】
+                        🛡️ 【自衛隊に攻撃を依頼しなかった場合：防衛省・統合幕僚監部からの緊急照会】
                       </div>
-                      <p className="text-[11px] text-slate-200 italic leading-relaxed">
-                        「防衛省運用企画局および海上幕僚監部より合同対策本部へ緊急照会。『対策本部が防衛出動を要請しなかった判断は了解した。しかし自衛隊としても伊豆諸島の連続噴火と潜航物体に重大な関心を持っている。【この生物は一体どこへ向かっている見立てなのか？】進路および最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』」
+                      <p className="text-[11px] text-slate-200 italic leading-relaxed font-mono">
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁運用企画局および海上幕僚監部より、合同対策本部へ緊急照会が入電いたしました。『対策本部が防衛出動の要請を見送った判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体を国家安全保障上の重大な懸念と捉えている。この生物は一体どこへ向かっている見立てなのか？ 最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』との照会です」
                       </p>
                       <p className="text-[10px] text-indigo-200/90 font-medium">
                         💡 <strong>戦略的示唆</strong>: 防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。回答内容によって今後の防衛庁の警戒態勢や協力関係、内閣への働きかけが変わることが示唆されます。
