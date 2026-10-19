@@ -605,14 +605,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
             )}
 
-            {/* --- DAY 2 プレイヤー提供情報：空撮写真 ＆ 合議制アクション --- */}
+            {/* --- DAY 2 プレイヤー提供情報：合議制アクション ＆ 調査結果レポート --- */}
             {selectedDay === 2 && (
               <div className="rounded-xl border border-indigo-800 bg-[#0c1024] p-4 shadow-lg space-y-4">
                 <div className="flex items-center justify-between border-b border-indigo-900/60 pb-2">
                   <div className="flex items-center gap-2">
                     <Search className="h-4 w-4 text-cyan-400" />
                     <span className="font-bold text-xs text-white">
-                      【プレイヤー提供情報】Day 2 合議制アクション ＆ 航空捜索報告
+                      【Day 2 合議制アクション】海上保安庁東京本部調査（3枠中1枠） ＆ 小笠原現地調査（4枠中2枠）
                     </span>
                   </div>
                   <div className="flex items-center gap-2 text-[10px]">
@@ -625,88 +625,68 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* 空撮写真プレビュー（T-3が選ばれている場合） */}
-                {day2TokyoAction === "T-3" && (
-                  <div className="rounded-lg border border-amber-900/60 bg-slate-950 p-3 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                        <ImageIcon className="h-4 w-4" />
-                        海上保安庁 羽田航空基地 MA722撮影 緊急偵察写真（熱水回避浮上時）
-                      </span>
-                      <button
-                        onClick={() => setIsPhotoModalOpen(true)}
-                        className="flex items-center gap-1 rounded bg-indigo-600 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-indigo-500 transition shadow"
-                      >
-                        <Maximize2 className="h-3 w-3" /> 全画面拡大
-                      </button>
-                    </div>
-
-                    <div
-                      onClick={() => setIsPhotoModalOpen(true)}
-                      className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-black aspect-video max-h-52 flex items-center justify-center shadow"
-                    >
-                      <img
-                        src="/images/aerial_recon_wide.jpg"
-                        alt="西之島北西海域 空撮写真"
-                        className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-2.5">
-                        <span className="text-[11px] text-slate-200">
-                          西之島の噴煙下、海面直下（水深10〜20m）に生じたケルビン波と巨大な影（数分後、深海800mへ急速潜航）
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* 合議制アクション操作パネル */}
+                {/* 合議制アクション操作パネル（選択前はタイトルのみ表示） */}
                 <div className="space-y-3">
                   <div>
                     <span className="font-bold text-indigo-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（1つ選択）:
+                      <Building2 className="h-3.5 w-3.5" /> 海上保安庁東京本部アクション（3枠中1枠選択）:
                     </span>
-                    <div className="grid grid-cols-3 gap-2">
-                      {TOKYO_ACTIONS.map((a) => (
-                        <button
-                          key={a.id}
-                          onClick={() => setDay2TokyoAction(a.id)}
-                          className={`rounded-lg p-2 text-left border transition ${
-                            day2TokyoAction === a.id
-                              ? "border-indigo-500 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
-                              : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                          }`}
-                        >
-                          <div className="font-bold text-white text-[11px]">{a.id} {a.badge}</div>
-                          <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
-                        </button>
-                      ))}
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      {TOKYO_ACTIONS.map((a) => {
+                        const isSelected = day2TokyoAction === a.id;
+                        return (
+                          <button
+                            key={a.id}
+                            type="button"
+                            onClick={() => setDay2TokyoAction(a.id)}
+                            className={`rounded-lg p-2.5 text-left border transition ${
+                              isSelected
+                                ? "border-indigo-400 bg-indigo-950/80 shadow ring-1 ring-indigo-400"
+                                : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-white text-[11px]">{a.id}</span>
+                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
+                                {isSelected ? "選択中" : "未選択"}
+                              </span>
+                            </div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-indigo-400">{a.organization}</div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
 
                   <div>
                     <span className="font-bold text-teal-300 text-[11px] flex items-center gap-1 mb-1.5">
-                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（2つ選択）:
+                      <Anchor className="h-3.5 w-3.5" /> 小笠原現地アクション（4枠中2枠選択）:
                     </span>
-                    <div className="grid grid-cols-2 gap-2">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                       {FIELD_ACTIONS.map((a) => {
                         const isSelected = day2FieldActions.includes(a.id);
                         return (
                           <button
                             key={a.id}
+                            type="button"
                             onClick={() => handleToggleDay2FieldAction(a.id)}
-                            className={`rounded-lg p-2 text-left border transition ${
+                            className={`rounded-lg p-2.5 text-left border transition ${
                               isSelected
-                                ? "border-teal-500 bg-teal-950/70 shadow ring-1 ring-teal-400"
+                                ? "border-teal-400 bg-teal-950/80 shadow ring-1 ring-teal-400"
                                 : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
                             }`}
                           >
-                            <div className="flex items-center justify-between">
-                              <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                              <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white" : "text-slate-500"}`}>
+                            <div className="flex items-center justify-between mb-1">
+                              <span className="font-bold text-white text-[11px]">{a.id}</span>
+                              <span className={`text-[9px] px-1.5 py-0.2 rounded font-bold ${
+                                isSelected ? "bg-teal-600 text-white" : "text-slate-500"
+                              }`}>
                                 {isSelected ? "選択中" : "未選択"}
                               </span>
                             </div>
-                            <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
+                            <div className="text-[11px] font-semibold text-slate-200">{a.title}</div>
+                            <div className="mt-1 text-[9px] font-mono text-teal-400">{a.organization}</div>
                           </button>
                         );
                       })}
@@ -714,12 +694,95 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* サスペンス・サイズ矛盾の結論 */}
-                <div className="rounded-lg bg-red-950/30 border border-red-900/40 p-2.5 text-[11px] text-red-200">
-                  <span className="font-bold text-amber-300">⚠️ Day 2 プレイヤーに考えてもらうサイズ矛盾:</span>
-                  <p className="mt-0.5 text-slate-300">
-                    F-1の鑑定でスクリューの付着物は深海600mの「ダイオウイカ」と特定された。しかし観測された影は「全長300〜400メートル」。通常のダイオウイカ（十数m）とは大きさが桁違い！群体である真相は伏せ、なぜ数百mもあるのかを議論させます。
-                  </p>
+                {/* 選択されたアクションの調査結果レポート（解禁情報詳細） */}
+                <div className="rounded-xl border border-slate-700 bg-slate-950/90 p-4 space-y-3">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                      <FileText className="h-4 w-4" />
+                      【Day 2 選択アクション 調査結果・機密レポート】
+                    </span>
+                    <span className="text-[10px] text-slate-400">
+                      合議で選定した情報（東京1件 ＋ 現地2件）の詳細調書
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                    {/* 東京側レポート */}
+                    {(() => {
+                      const tokyoActionObj = TOKYO_ACTIONS.find((a) => a.id === day2TokyoAction);
+                      if (!tokyoActionObj) return null;
+                      return (
+                        <div className="rounded-lg border border-indigo-800/80 bg-indigo-950/30 p-3 space-y-2 text-xs">
+                          <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1">
+                            <span className="font-bold text-indigo-300 text-[11px]">
+                              🏢 {tokyoActionObj.title}
+                            </span>
+                            <span className="text-[9px] font-mono text-indigo-400 bg-indigo-950 px-1 rounded">
+                              {tokyoActionObj.organization}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
+                            {tokyoActionObj.detail}
+                          </p>
+
+                          {/* T-3 空撮写真 */}
+                          {tokyoActionObj.hasPhoto && (
+                            <div className="mt-2 rounded border border-amber-900/60 bg-black/60 p-2 space-y-1.5">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
+                                  <ImageIcon className="h-3 w-3" />
+                                  海上保安庁 MA722撮影 広角空撮写真（熱水回避浮上時）
+                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => setIsPhotoModalOpen(true)}
+                                  className="flex items-center gap-1 rounded bg-indigo-600 px-1.5 py-0.5 text-[9px] font-bold text-white hover:bg-indigo-500 transition shadow"
+                                >
+                                  <Maximize2 className="h-2.5 w-2.5" /> 拡大
+                                </button>
+                              </div>
+                              <div
+                                onClick={() => setIsPhotoModalOpen(true)}
+                                className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-black aspect-video max-h-40 flex items-center justify-center shadow"
+                              >
+                                <img
+                                  src="/images/aerial_recon_wide.jpg"
+                                  alt="西之島北西海域 空撮写真"
+                                  className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-1.5">
+                                  <span className="text-[9px] text-slate-200">
+                                    海面直下に生じたケルビン波と巨大な影（数分後、深海800mへ急速潜航）
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+
+                    {/* 現地側レポート（2件） */}
+                    {day2FieldActions.map((fId) => {
+                      const fObj = FIELD_ACTIONS.find((a) => a.id === fId);
+                      if (!fObj) return null;
+                      return (
+                        <div key={fObj.id} className="rounded-lg border border-teal-800/80 bg-teal-950/30 p-3 space-y-1.5 text-xs">
+                          <div className="flex items-center justify-between border-b border-teal-900/60 pb-1">
+                            <span className="font-bold text-teal-300 text-[11px]">
+                              🏝️ {fObj.title}
+                            </span>
+                            <span className="text-[9px] font-mono text-teal-400 bg-teal-950 px-1 rounded">
+                              {fObj.organization}
+                            </span>
+                          </div>
+                          <p className="text-[11px] text-slate-200 leading-relaxed">
+                            {fObj.detail}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
               </div>
             )}
