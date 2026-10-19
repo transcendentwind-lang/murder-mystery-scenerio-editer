@@ -235,7 +235,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   } else {
     md += `- **現地救難隊の行動**: 太刀魚（PC4）が海洋気象ブイ流速データ（真東へ2.0kt）と現場強風（南西から約30kt）を提示してPC1と連動計算（30kt × 5% ＝ 北東へ1.5kt）。浪寄（PC5）が潮目水温データを提示して海流持続を証明。初瀬（PC6）が遭難直前無線ログを共有。坂凪（PC3）が暗礁海図と照合し、真東の暗礁群を避けて東北東の漂流予測海域へ救難艇で急行・接舷救助。\n`;
   }
-  md += `- **開示される資料・証拠**: [ev-vessel-leeway-data] 遭難船スペック＆風圧流データ、[ev-satellite-blindspot] 気象・軌道衛星 状況報告書＆ベクトル合成法、[ev-reef-chart] 小笠原南西海域・暗礁海図、[ev-ocean-buoy-current] 海洋気象ブイ表層流速データ＆現場風向風速、[ev-temperature-front] 潮目水温解析図、[ev-radio-fragment] 遭難無線ログ、[ev-diver-box-photo] 冷凍ボックスの写真、[ev-captain-testimony] 船長証言記録。\n`;
+  md += `- **開示される資料・証拠**: [ev-vessel-leeway-data] 遭難船スペック ＆ 風圧流データ、[ev-satellite-blindspot] 衛星状況報告書、[ev-reef-chart] 暗礁海図、[ev-ocean-buoy-current] 海洋ブイデータ、[ev-temperature-front] 潮目・水温解析図、[ev-radio-fragment] 遭難無線ログ、[ev-diver-box-photo] 大型冷凍ボックス、[ev-captain-testimony] 船長の証言。\n`;
   md += `- **調査結果と疑惑**: 船長『巨大生物を見た』vs 謎のダイバーグループ『魚の調査サンプルだ』と食い違い、ダイバーたちは海から引き揚げて箱に入れた約30kgほどのずっしり重いプラスチック冷凍ボックスを持ち去る。\n\n`;
 
   // Day 2

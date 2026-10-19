@@ -285,6 +285,11 @@ export function getStoredProjects(): MMProject[] {
           ? updatedCharacters.filter((c: Character) => c.id !== "pc-6")
           : updatedCharacters;
 
+        // マスター証拠のマップ（最新の簡易タイトルと説明文）
+        const masterEvidenceMap = new Map<string, EvidenceItem>(
+          (initialProject.evidences || []).map((e) => [e.id, e])
+        );
+
         parsed[initialIdx] = {
           ...storedInit,
           title: initialProject.title,
@@ -301,6 +306,35 @@ export function getStoredProjects(): MMProject[] {
           crypticGrammar: initialProject.crypticGrammar,
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
+
+        // 全プロジェクトを走査し、不要な証拠（古謡・スペクトログラム）の完全除外およびタイトルの最新同期を実施
+        parsed.forEach((proj: MMProject) => {
+          if (proj.evidences && Array.isArray(proj.evidences)) {
+            proj.evidences = proj.evidences
+              .filter(
+                (e) =>
+                  e.id !== "ev-coda-spectrogram" &&
+                  e.id !== "ev-folk-song-rhythm" &&
+                  !e.title.includes("古謡") &&
+                  !e.title.includes("スペクトログラム") &&
+                  !e.title.includes("スペクロログラム")
+              )
+              .map((e) => {
+                const master = masterEvidenceMap.get(e.id);
+                return master ? { ...e, title: master.title, description: master.description } : e;
+              });
+          }
+          if (proj.timeline && Array.isArray(proj.timeline)) {
+            proj.timeline.forEach((step) => {
+              if (step.revealedEvidenceIds) {
+                step.revealedEvidenceIds = step.revealedEvidenceIds.filter(
+                  (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
+                );
+              }
+            });
+          }
+        });
+
         localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
       }
       return parsed;
@@ -320,8 +354,34 @@ export function saveProjectToStorage(project: MMProject): void {
 
   try {
     const projects = getStoredProjects();
-    const updatedProject = {
+    const masterEvidenceMap = new Map<string, EvidenceItem>(
+      (initialProject.evidences || []).map((e) => [e.id, e])
+    );
+    const sanitizedEvidences = (project.evidences || [])
+      .filter(
+        (e) =>
+          e.id !== "ev-coda-spectrogram" &&
+          e.id !== "ev-folk-song-rhythm" &&
+          !e.title.includes("古謡") &&
+          !e.title.includes("スペクトログラム") &&
+          !e.title.includes("スペクロログラム")
+      )
+      .map((e) => {
+        const master = masterEvidenceMap.get(e.id);
+        return master ? { ...e, title: master.title, description: master.description } : e;
+      });
+
+    const sanitizedTimeline = (project.timeline || []).map((step) => ({
+      ...step,
+      revealedEvidenceIds: (step.revealedEvidenceIds || []).filter(
+        (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
+      ),
+    }));
+
+    const updatedProject: MMProject = {
       ...project,
+      evidences: sanitizedEvidences,
+      timeline: sanitizedTimeline,
       updatedAt: new Date().toISOString(),
     };
     const index = projects.findIndex((p) => p.id === project.id);

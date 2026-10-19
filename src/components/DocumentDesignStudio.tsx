@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
   MMProject,
   Character,
@@ -15,7 +15,7 @@ import {
   GmProgressionNote,
   EvidenceVisibility,
 } from "@/types/schema";
-import { initialVisualBoards } from "@/utils/initialProjectData";
+import { initialVisualBoards, initialProject } from "@/utils/initialProjectData";
 import {
   Sparkles,
   Printer,
@@ -801,7 +801,30 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const activeChar =
     charactersList.find((c) => c.id === selectedCharId) || charactersList[0];
 
-  const allEvidences = project.evidences || [];
+  // マスター証拠のマップ（最新の簡易タイトルと説明文）
+  const masterEvidenceMap = useMemo(() => {
+    const map: Record<string, EvidenceItem> = {};
+    (initialProject.evidences || []).forEach((e) => {
+      map[e.id] = e;
+    });
+    return map;
+  }, []);
+
+  const allEvidences = useMemo(() => {
+    return (project.evidences || [])
+      .filter(
+        (e) =>
+          e.id !== "ev-coda-spectrogram" &&
+          e.id !== "ev-folk-song-rhythm" &&
+          !e.title.includes("古謡") &&
+          !e.title.includes("スペクトログラム") &&
+          !e.title.includes("スペクロログラム")
+      )
+      .map((e) => {
+        const master = masterEvidenceMap[e.id];
+        return master ? { ...e, title: master.title, description: master.description } : e;
+      });
+  }, [project.evidences, masterEvidenceMap]);
   const filteredEvidences =
     evidenceDayFilter === "all"
       ? allEvidences
@@ -1313,7 +1336,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <FileText className="h-4 w-4 text-amber-400" />
             ② 証拠資料（文書・カード）
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              {(project.evidences || []).length}件
+              {allEvidences.length}件
             </span>
           </button>
 
@@ -1739,7 +1762,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-400 hover:text-white"
                   }`}
                 >
-                  全て({(project.evidences || []).length})
+                  全て({allEvidences.length})
                 </button>
                 {[1, 2, 3, 4, 5, 6, 7].map((d) => (
                   <button
@@ -3095,7 +3118,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     <span>
                       📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
                       {
-                        (project.evidences || []).filter(
+                        allEvidences.filter(
                           (e) => e.foundPhase === activeTimelineStep.dayNumber
                         ).length
                       }
@@ -3106,7 +3129,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     </span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {(project.evidences || [])
+                    {allEvidences
                       .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
                       .map((ev) => (
                         <div
@@ -3117,7 +3140,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           <span>{ev.title}</span>
                         </div>
                       ))}
-                    {(project.evidences || []).filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
+                    {allEvidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
                       <span className="text-xs text-slate-500 italic">このフェーズで開示される証拠はありません</span>
                     )}
                   </div>
