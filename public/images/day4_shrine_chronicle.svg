@@ -46,89 +46,105 @@
     <path d="M 1324 914 L 1304 914 L 1304 934" />
   </g>
 
-  <!-- 縦罫線（薄い墨色のガイドライン：右から左へ55pxピッチ） -->
-  <g stroke="#c7b69b" stroke-width="0.8" opacity="0.55">
-    <line x1="1265" y1="76" x2="1265" y2="914"/>
-    <line x1="1205" y1="76" x2="1205" y2="914"/>
-    <line x1="1145" y1="76" x2="1145" y2="914"/>
-    <line x1="1065" y1="76" x2="1065" y2="914"/>
-    <line x1="985" y1="76" x2="985" y2="914"/>
-    <line x1="930" y1="76" x2="930" y2="914"/>
-    <line x1="875" y1="76" x2="875" y2="914"/>
-    <line x1="795" y1="76" x2="795" y2="914"/>
-    <line x1="740" y1="76" x2="740" y2="914"/>
-    <line x1="660" y1="76" x2="660" y2="914"/>
+  <!-- 縦罫線（薄い墨色のガイドライン：列間の区切り） -->
+  <g stroke="#c7b69b" stroke-width="0.75" opacity="0.45">
+    <line x1="1210" y1="76" x2="1210" y2="914"/>
+    <line x1="1150" y1="76" x2="1150" y2="914"/>
+    <line x1="1085" y1="76" x2="1085" y2="914"/>
+    <line x1="1025" y1="76" x2="1025" y2="914"/>
+    <line x1="975" y1="76" x2="975" y2="914"/>
+    <line x1="925" y1="76" x2="925" y2="914"/>
+    <line x1="870" y1="76" x2="870" y2="914"/>
+    <line x1="815" y1="76" x2="815" y2="914"/>
+    <line x1="765" y1="76" x2="765" y2="914"/>
+    <line x1="710" y1="76" x2="710" y2="914"/>
+    <line x1="655" y1="76" x2="655" y2="914"/>
     <line x1="605" y1="76" x2="605" y2="914"/>
-    <line x1="550" y1="76" x2="550" y2="914"/>
-    <line x1="495" y1="76" x2="495" y2="914"/>
-    <line x1="415" y1="76" x2="415" y2="914"/>
-    <line x1="360" y1="76" x2="360" y2="914"/>
-    <line x1="305" y1="76" x2="305" y2="914"/>
+    <line x1="555" y1="76" x2="555" y2="914"/>
+    <line x1="505" y1="76" x2="505" y2="914"/>
+    <line x1="450" y1="76" x2="450" y2="914"/>
+    <line x1="395" y1="76" x2="395" y2="914"/>
+    <line x1="345" y1="76" x2="345" y2="914"/>
+    <line x1="295" y1="76" x2="295" y2="914"/>
+    <line x1="245" y1="76" x2="245" y2="914"/>
   </g>
 
   <!-- ==============================================================
        本文（右から左へ、縦書きレイアウト）
-       フォントは伝統的な毛筆・明朝体スタックを指定
+       各条は「一、」を上段配置し、続く行を一段下げて配置
+       1行あたりの文字数を20〜27字に抑え、枠内に完全に収まる設計
        ============================================================== -->
   <g style="font-family: 'Yu Mincho', 'Hiragino Mincho ProN', 'Source Han Serif', 'MS Mincho', serif; writing-mode: vertical-rl; text-orientation: upright;" fill="#201a14">
 
     <!-- 表題：小笠原社記（抄） -->
-    <text x="1235" y="125" font-size="38" font-weight="900" letter-spacing="0.22em" fill="#17120e">
+    <text x="1240" y="140" font-size="38" font-weight="900" letter-spacing="0.22em" fill="#17120e">
       小笠原社記（抄）
     </text>
 
     <!-- 副題：小笠原神社社蔵 -->
-    <text x="1175" y="165" font-size="20" font-weight="bold" letter-spacing="0.16em" fill="#3a3026">
+    <text x="1180" y="180" font-size="20" font-weight="bold" letter-spacing="0.16em" fill="#3a3026">
       小笠原神社社蔵
     </text>
 
     <!-- 年号・日付：享保十二年 丁未（ひのとひつじ）水無月 -->
-    <text x="1105" y="145" font-size="23" font-weight="bold" letter-spacing="0.12em" fill="#2b231c">
+    <text x="1120" y="150" font-size="22" font-weight="bold" letter-spacing="0.12em" fill="#2b231c">
       享保十二年　丁未（ひのとひつじ）水無月
     </text>
 
     <!-- 第一条：海鳴りと巨影の出現 -->
-    <text x="1025" y="145" font-size="22" letter-spacing="0.08em">
-      一、南の沖合深くより、地霊の唸るが如き重き海鳴り昼夜止まず。
+    <text x="1050" y="145" font-size="21" letter-spacing="0.06em">
+      一、南の沖合深くより、
     </text>
-    <text x="965" y="180" font-size="22" letter-spacing="0.08em">
-      海面には波風なきに大いなるうねり立ち、島人は水底に墨の如き長き巨影、
+    <text x="1000" y="175" font-size="21" letter-spacing="0.06em">
+      地霊の唸るが如き重き海鳴り昼夜止まず。
     </text>
-    <text x="905" y="180" font-size="22" letter-spacing="0.08em">
-      這い廻るを見る。
+    <text x="950" y="175" font-size="21" letter-spacing="0.06em">
+      海面には波風なきに大いなるうねり立ち、
+    </text>
+    <text x="900" y="175" font-size="21" letter-spacing="0.06em">
+      島人は水底に墨の如き長き巨影、這い廻るを見る。
     </text>
 
     <!-- 第二条：大地震動と赤土の濁り、無数の礫（軽石）浮上 -->
-    <text x="825" y="145" font-size="22" letter-spacing="0.08em">
-      一、かの巨影の過ぎ行くに従いて、海底の大地激しく震動し、
+    <text x="840" y="145" font-size="21" letter-spacing="0.06em">
+      一、かの巨影の過ぎ行くに従いて、
     </text>
-    <text x="765" y="180" font-size="22" letter-spacing="0.08em">
-      三日と置かずして海は赤土の如く濁りて、無数の礫が水面に浮かぶをみる。
+    <text x="790" y="175" font-size="21" letter-spacing="0.06em">
+      海底の大地激しく震動し、三日と置かずして
+    </text>
+    <text x="740" y="175" font-size="21" letter-spacing="0.06em">
+      海は赤土の如く濁りて、無数の礫が水面に浮かぶをみる。
     </text>
 
     <!-- 第三条：古記の盟約儀式「沖へ舟を漕ぎ出し、海中へ長き筒を差し入れ…」 -->
-    <text x="685" y="145" font-size="22" letter-spacing="0.08em">
+    <text x="680" y="145" font-size="21" letter-spacing="0.06em">
       一、島人等、大いなる災厄の到来と恐れおののく。
     </text>
-    <text x="630" y="180" font-size="22" letter-spacing="0.08em">
+    <text x="630" y="175" font-size="21" letter-spacing="0.06em">
       社家に伝わる古記を紐解くに、
     </text>
-    <text x="575" y="180" font-size="22" letter-spacing="0.08em">
-      「海に大いなる影現れ火の山騒ぐ時は、沖へ舟を漕ぎ出し、
+    <text x="580" y="175" font-size="21" letter-spacing="0.06em">
+      「海に大いなる影現れ火の山騒ぐ時は、
     </text>
-    <text x="520" y="180" font-size="22" letter-spacing="0.08em">
-      海中へ長き筒を差し入れ、盟約の祈りを捧ぐべし」とあり。
+    <text x="530" y="175" font-size="21" letter-spacing="0.06em">
+      沖へ舟を漕ぎ出し、海中へ長き筒を差し入れ、
+    </text>
+    <text x="480" y="175" font-size="21" letter-spacing="0.06em">
+      盟約の祈りを捧ぐべし」とあり。
     </text>
 
     <!-- 第四条：海中筒による祈礼奏上と沈静化 -->
-    <text x="440" y="145" font-size="22" letter-spacing="0.08em">
+    <text x="420" y="145" font-size="21" letter-spacing="0.06em">
       一、神主ならびに島中の漕ぎ手、小舟にて沖合へと漕ぎ出で、
     </text>
-    <text x="385" y="180" font-size="22" letter-spacing="0.08em">
+    <text x="370" y="175" font-size="21" letter-spacing="0.06em">
       竹の海中筒を海原へ差し入れ、水底へ祈礼を奏上せり。
     </text>
-    <text x="330" y="180" font-size="22" letter-spacing="0.08em">
-      祈り果てて後、海鳴りも火の山の煙も漸く収まり、海面は鏡の如く静まり返りたり。
+    <text x="320" y="175" font-size="21" letter-spacing="0.06em">
+      祈り果てて後、海鳴りも火の山の煙も漸く収まり、
+    </text>
+    <text x="270" y="175" font-size="21" letter-spacing="0.06em">
+      海面は鏡の如く静まり返りたり。
     </text>
   </g>
 
@@ -136,7 +152,7 @@
        落款印（朱印）：小笠原神社 蔵書之印
        伝統的な角印・篆書体風（左下に堂々と捺印）
        ============================================================== -->
-  <g transform="translate(145, 680)" filter="url(#seal-stamp)">
+  <g transform="translate(115, 680)" filter="url(#seal-stamp)">
     <!-- 印影外枠（二重枠・朱色） -->
     <rect x="0" y="0" width="125" height="125" fill="#ba331c" rx="4" opacity="0.9"/>
     <rect x="5" y="5" width="115" height="115" fill="none" stroke="#faf0e6" stroke-width="3" rx="2" opacity="0.95"/>
@@ -159,8 +175,10 @@
     </g>
   </g>
 
-  <!-- 現代の史料編纂整理票（下部余白：古文書が公的機関で保管・整理されているリアリティ） -->
-  <g style="font-family: 'Courier New', monospace; font-size: 11px;" fill="#6e6050" opacity="0.8">
-    <text x="75" y="924">【史料番号】小笠原島誌 古記録群 函号十七 『享保十二年海異記（抜粋写）』 所蔵: 東京都小笠原支庁保管 / 小笠原神社社蔵</text>
+  <!-- 下部注記：史料編纂所 整理番号ラベル風 -->
+  <g opacity="0.45" transform="translate(80, 938)">
+    <text x="0" y="0" font-family="'Courier New', monospace" font-size="10" fill="#524539" letter-spacing="0.1em">
+      HISTORICAL ARCHIVE REF: OGASAWARA-SHRINE-MANUSCRIPT #KYO-1727-06 | CLASSIFIED EVIDENCE DOCUMENT
+    </text>
   </g>
 </svg>
