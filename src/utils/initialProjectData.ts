@@ -30,7 +30,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
   {
     id: "vis-day2-aerial",
     title: "【Day 2】羽田航空基地 MA722 緊急航空偵察写真",
-    subtitle: "西之島北西海域・水深10〜20m熱水回避浮上時の巨大影",
+    subtitle: "西之島北西海域・水深10〜20m急浮上時の巨大影",
     boardType: "aerial_photo",
     dayNumber: 2,
     imageUrl: "/images/aerial_recon_wide.jpg",

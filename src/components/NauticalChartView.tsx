@@ -42,7 +42,7 @@ export const THEATER_TIMELINE_POINTS = [
     distance: "約130 km",
     depth: "約2,000m",
     status: "海底火山突発噴火",
-    summary: "西之島海底火山の突発大噴火。熱水回避のため水深10〜20mに急浮上したケルビン波と数百mの影を空撮。",
+    summary: "西之島海底火山の突発大噴火。水深10〜20mに急浮上したケルビン波と数百mの影を空撮。",
     coords: "27°15'N, 140°53'E",
     tag: "Day 2 噴火",
     color: "amber",

@@ -78,9 +78,9 @@ export function evaluateSectorSonar(sectorId: string): SectorSonarResult {
       sectorId,
       status: "direct_hit",
       title: "🎯【直下探知・潜航目標捕捉！】",
-      summary: "深度400mに巨大生体エコーを捕捉！ 目標が熱水を避けるため海面十数mへ急浮上！",
+      summary: "深度400mに巨大生体エコーを捕捉！ 目標が海面十数mへ急浮上！",
       details:
-        "水深400mより巨大な生体シグネチャーを直下探知。鳥島沖の海底噴火に伴う高温の熱水（熱水プルーム）を回避するためか、物体は一時的に海面近く（水深10〜20m）へ急浮上している。ヘリ急行により目視および写真撮影が可能！",
+        "水深400mより巨大な生体シグネチャーを直下探知。物体は一時的に海面近く（水深10〜20m）へ急浮上している。ヘリ急行により目視および写真撮影が可能！",
     };
   }
 
@@ -731,7 +731,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                               <div className="flex items-center justify-between">
                                 <span className="font-bold text-amber-300 text-[10px] flex items-center gap-1">
                                   <ImageIcon className="h-3 w-3" />
-                                  海上保安庁 MA722撮影 広角空撮写真（熱水回避浮上時）
+                                  海上保安庁 MA722撮影 広角空撮写真（急浮上時）
                                 </span>
                                 <button
                                   type="button"
@@ -1129,7 +1129,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             🎉【セクター特定 成功！】（セクター B-3 水深400m）
                           </strong>
                           <p className="mt-0.5 text-[11px] text-emerald-300">
-                            海底噴火の熱水を避けるため海面近く（水深10〜20m）へ一時的に急浮上した巨大生物を、急行した捜索ヘリが上空後方から目視確認！ 巨大な触手と胴体の写真撮影に成功しました！
+                            海面近く（水深10〜20m）へ一時的に急浮上した巨大生物を、急行した捜索ヘリが上空後方から目視確認！ 巨大な触手と胴体の写真撮影に成功しました！
                           </p>
                           <span className="text-[10px] text-slate-300 mt-1 inline-block">
                             👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された高解像度写真と観測所見を確認できます。
@@ -3577,7 +3577,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 ・背景（写真上方）に西之島海底火山の噴煙が明瞭に確認できる。<br />
                 ・中央部海面に、時速約6km（約3.3ノット）で北上する水面下物体が形成した明瞭なV字型の<strong>ケルビン波（航跡波）</strong>を観測。<br />
-                ・ケルビン波が海面に現れていることから、撮影当時、対象は海底火山の高温熱水を回避するために一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
+                ・ケルビン波が海面に現れていることから、撮影当時、対象は何らかの理由により一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
                 ・水面下に透けて見える影の推定全長は<strong>300〜400メートル</strong>。<br />
                 ・なお、撮影から数分後、影は急速に水深800m以深の深海へ潜航し、光学視界から消失した。
               </p>

@@ -901,7 +901,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                               <div className="flex items-center justify-between mb-2">
                                 <span className="font-bold text-amber-300 text-[11px] flex items-center gap-1">
                                   <ImageIcon className="h-3.5 w-3.5" />
-                                  海上保安庁 MA722撮影 広角空撮写真（熱水回避浮上時）
+                                  海上保安庁 MA722撮影 広角空撮写真（急浮上時）
                                 </span>
                                 <button
                                   onClick={() => setIsPhotoModalOpen(true)}
@@ -2376,7 +2376,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               <p className="text-[11px] text-slate-300 leading-relaxed">
                 ・背景（写真上方）に西之島海底火山の噴煙が明瞭に確認できる。<br />
                 ・中央部海面に、時速約6km（約3.3ノット）で北上する水面下物体が形成した明瞭なV字型の<strong>ケルビン波（航跡波）</strong>を観測。<br />
-                ・ケルビン波が海面に現れていることから、撮影当時、対象は海底火山の高温熱水を回避するために一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
+                ・ケルビン波が海面に現れていることから、撮影当時、対象は何らかの理由により一時的に<strong>水深10〜20mの海面直下スレスレまで急浮上</strong>していたと推定される。<br />
                 ・水面下に透けて見える影の推定全長は<strong>300〜400メートル</strong>。<br />
                 ・なお、撮影から数分後、影は急速に水深800m以深の深海へ潜航し、光学視界から消失した。
               </p>
