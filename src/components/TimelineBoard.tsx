@@ -34,6 +34,7 @@ import {
   CheckCircle2,
   MessageSquare,
   Sparkles,
+  PhoneCall,
 } from "lucide-react";
 import {
   TOKYO_ACTIONS,
@@ -3180,7 +3181,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>📡 4. 海自ソナー網 送信準備完了</span>
+                    <span>📡 4. 防衛庁交渉 ＆ 潜水艦SOFAR層放流</span>
                   </button>
                 </div>
 
@@ -3511,23 +3512,101 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ4: 海自ソナー網開放・実弾攻撃抑制の緊急交渉 ＆ 深夜事前放流 --- */}
+                {/* --- タブ4: 防衛庁運用企画局長との緊急電話交渉 ＆ 潜水艦SOFAR層深夜放流 --- */}
                 {day6ActiveTab === "sonar_network" && (
-                  <div className="space-y-3 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
+                  <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【海自海底固定ソナー網（SOSUS）開放 ＆ 実弾攻撃抑制の緊急交渉 ＆ 深夜事前放流】</span>
+                        <span>📡 【防衛庁 運用企画局長との直接電話交渉 ＆ 潜水艦深海SOFAR層事前放流】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        古代の「海中筒」の役割を、現代の<strong>海上自衛隊固定音響ソナー網（伊豆小笠原海底固定ソナー群 SOSUS）</strong>に接続。朝潮危機管理官（PC1）と貝浜リエゾン（PC2）が防衛省上層部・官邸と緊急交渉を敢行し、最高機密であるソナー網の利用と、明朝の<strong>「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」</strong>を合意させました。
+                        完成した祝詞音声を海中へ届けるため、朝潮危機管理官（PC1）と貝浜リエゾン（PC2）を中心に合同対策チーム全員が防衛庁上層部と緊急交渉を敢行。海上自衛隊潜水艦の深海SOFAR層（水深1,000m）潜航放流と、翌朝の「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」を合意させます。
                       </p>
                     </div>
 
+                    {/* 長津の仲介アナウンス */}
+                    <div className="rounded-lg bg-black/60 border border-cyan-900/60 p-3 space-y-1 font-mono text-[11px]">
+                      <strong className="text-cyan-300 block font-bold flex items-center gap-1.5">
+                        <Radio className="h-3.5 w-3.5 text-cyan-400" />
+                        📢 【長津オペレーターの仲介アナウンス】:
+                      </strong>
+                      <p className="italic text-cyan-100 leading-relaxed">
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁の上層部への連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、こんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡することだけです。頼みますね」
+                      </p>
+                    </div>
+
+                    {/* 防衛庁 運用企画局長との直接電話交渉パネル */}
+                    <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-3.5 space-y-3 font-mono text-blue-100">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-900/60 pb-1.5">
+                        <span className="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
+                          <PhoneCall className="h-4 w-4 text-amber-400" />
+                          <span>📞 【極秘ホットライン：防衛庁 運用企画局長との直接電話交渉】</span>
+                        </span>
+                        <span className="text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded border border-red-800 font-bold">
+                          回線暗号化接続中
+                        </span>
+                      </div>
+
+                      <div className="space-y-1 text-slate-200 leading-relaxed text-[11px]">
+                        <p className="text-slate-400 text-[10px] italic">
+                          （ツーツーツー……ガチャッ。受話器の向こうから、重苦しく威圧感のある声が響く）
+                        </p>
+                        <p className="italic text-blue-200">
+                          （🎙️ 防衛庁 運用企画局長）:「――防衛庁運用企画局長だ。合同対策本部だな。こんな深夜に緊急回線を繋いでくるとは、一体何の用件だね？」
+                        </p>
+                      </div>
+
+                      {/* 局長の2大疑問と論破ロジック */}
+                      <div className="grid grid-cols-2 gap-3 text-[11px]">
+                        <div className="rounded bg-slate-900/90 p-2.5 border border-slate-700 space-y-1.5">
+                          <strong className="text-rose-400 block font-bold border-b border-rose-900/50 pb-1 text-xs">
+                            ❓ 局長の疑念①：【信ぴょう性はあるのか？】
+                          </strong>
+                          <p className="text-slate-300 italic text-[10px]">
+                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトや神話を信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？」
+                          </p>
+                          <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
+                            <strong className="text-emerald-200 block font-bold">🎯 論破の決め手:</strong>
+                            <p>・Day 5で魚雷が直撃しても泥のように瞬時に再結合した事実（通常兵器は完全無効）。</p>
+                            <p>・実弾の衝撃は海底マグマ網を刺激し、富士山破局噴火を早める自殺行為。</p>
+                            <p>・怪異の超群体を音響的に制圧・完全捕食できる自然界唯一の天敵がマッコウクジラである（浪寄准教授＆朝倉ノートの科学的裏付け）。</p>
+                          </div>
+                        </div>
+
+                        <div className="rounded bg-slate-900/90 p-2.5 border border-slate-700 space-y-1.5">
+                          <strong className="text-amber-400 block font-bold border-b border-amber-900/50 pb-1 text-xs">
+                            ❓ 局長の疑念②：【時間的猶予はあるのか？】
+                          </strong>
+                          <p className="text-slate-300 italic text-[10px]">
+                            「仮に正しくとも明朝には駿河湾奥へ突入する。なぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？ 明日の朝、現場を見てからでは遅いのか？」
+                          </p>
+                          <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
+                            <strong className="text-emerald-200 block font-bold">🎯 論破の決め手:</strong>
+                            <p>・太平洋沖のクジラが駿河湾まで泳ぎ着くには最低6〜8時間の移動時間が不可欠。</p>
+                            <p>・怪異は時速6km（日速150km）で北上しており、残り24時間で直撃する。</p>
+                            <p>・今夜潜水艦が水深1,000mのSOFAR層（低周波音が地球規模で遠くまで届く深海音響チャンネル）から事前放流しなければ、明朝の到達に物理的に絶対間に合わない！</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 局長の屈服・承認 */}
+                      <div className="rounded bg-black/70 border border-blue-900 p-2.5 text-slate-200 space-y-1">
+                        <strong className="text-cyan-300 block font-bold text-xs flex items-center gap-1.5">
+                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
+                          <span>🤝 【局長の屈服・承認（合意成立）】:</span>
+                        </strong>
+                        <p className="italic text-cyan-100 leading-relaxed text-[11px]">
+                          （🎙️ 防衛庁 運用企画局長）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そしてクジラの遊泳速度の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 潜水艦SOFAR層装填と深夜事前放流 */}
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-semibold text-slate-200">
-                          🌐 深海音響層（SOFAR）装填パケット: <span className="font-mono text-cyan-300">「人・勇魚・契り、集ひ来、大獲物ぞ、喰らへ」</span>
+                          🌐 潜水艦SOFAR層 放流パケット: <span className="font-mono text-cyan-300">「人・勇魚・契り、集ひ来、大獲物ぞ、喰らへ」</span>
                         </span>
                         <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
                           day6ReadyStatus === "idle"
@@ -3542,27 +3621,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </span>
                       </div>
 
-                      {/* 交渉合意と深夜事前放流の必然性 */}
-                      <div className="rounded bg-black/40 border border-slate-800 p-3 space-y-2 text-[11px]">
-                        <div className="flex items-center gap-2 text-cyan-300 font-bold">
-                          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                          <span>自衛隊との二重防壁協定 ＆ クジラ移動時間の逆算完了</span>
-                        </div>
-                        <p className="text-slate-300 leading-relaxed font-mono text-[10px]">
-                          「太平洋沖のマッコウクジラたちが駿河湾まで泳ぎ着くには、最低でも6〜8時間の移動時間がかかります。
-                          明朝の怪異到達に間に合わせるため、<strong>今夜（Day 6深夜）のうちに全海域ソナー網から祝詞信号の事前放流を開始</strong>します！ 自衛隊部隊は駿河湾奥で魚雷発射管を開き、最後の防波堤（フェイルセーフ）として固唾を呑んで待機します！」
-                        </p>
-                      </div>
-
                       <button
                         onClick={handleDay6TestPlay}
                         disabled={day6ReadyStatus === "testing"}
                         className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
                       >
                         <Volume2 className="h-4 w-4" />
-                        {day6ReadyStatus === "idle" && "海自ソナー網への装填信号をテスト試聴する"}
+                        {day6ReadyStatus === "idle" && "潜水艦ハイドロスピーカー装填信号をテスト試聴する"}
                         {day6ReadyStatus === "testing" && "信号テスト再生中……"}
-                        {day6ReadyStatus === "ready" && "装填信号を再テスト試聴（深夜放流・Day 7待機完了）"}
+                        {day6ReadyStatus === "ready" && "装填信号を再テスト試聴（深夜SOFAR放流・Day 7待機完了）"}
                       </button>
 
                       {/* 長津からの作戦命名提案パネル */}
@@ -3578,7 +3645,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </div>
                         <div className="rounded bg-black/40 border border-cyan-950 p-2.5 text-[11px] text-slate-200">
                           <p className="italic leading-relaxed font-mono text-cyan-100">
-                            （🎙️ 首席オペレーター 長津）:「――長津より作戦提案です。古文書の祝詞と恩師の音響研究、そして海上自衛隊の全ソナー網を結集するこの前代未聞の迎撃作戦に……当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 明朝の決戦、全員が心を一つにして立ち向かうための名前です！」
+                            （🎙️ 首席オペレーター 長津）:「――長津より作戦提案です。古文書の祝詞と恩師の音響研究、そして海上自衛隊潜水艦の深海SOFAR層放流を結集するこの前代未聞の迎撃作戦に……当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 明朝の決戦、全員が心を一つにして立ち向かうための名前です！」
                           </p>
                         </div>
                         <div className="flex flex-wrap items-center gap-2 pt-1 text-xs">
@@ -3682,7 +3749,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <div className="space-y-2 bg-black/60 p-3.5 rounded border border-cyan-950 text-slate-100 font-mono text-[11px] leading-relaxed">
                     <p className="italic">
-                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告！ 海自潜水艦および深海音響網（SOSUS）に、前代未聞の巨大な生体音響反応を探知！ ……クジラです！ 昨夜から放流を続けた祝詞に応え、太平洋沖から夜を徹して泳いできたマッコウクジラの大群が……駿河湾口深海へ到達いたしました！」
+                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告！ 海自潜水艦の深海音響探知により、前代未聞の巨大な生体音響反応を探知！ ……クジラです！ 昨夜から放流を続けた祝詞に応え、太平洋沖から夜を徹して泳いできたマッコウクジラの大群が……駿河湾口深海へ到達いたしました！」
                     </p>
                     <p className="italic text-cyan-200">
                       「クジラたちの頭部から放たれた強力な生体ソナーが、水深800mの暗黒に潜む怪異を完全に捉えました！ 群れが一斉に深海へ突入……捕食行動を開始！ ――信じられません、怪異の細胞間ネットワーク同調音が、クジラたちの音波に呑み込まれ、急速に崩壊・分断されていきます！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしています！」

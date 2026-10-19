@@ -440,7 +440,11 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「（昼）――各員へ報告。海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
 
-「（夕〜夜）――警報！ 海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如復活・激化いたしました！ 破局噴火まで残り24時間、巨大生物は生存しており、海底マグマ網へ向かって直接突入を試みています！」`,
+「（夕〜夜）――警報！ 海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如復活・激化いたしました！ 破局噴火まで残り24時間、巨大生物は生存しており、海底マグマ網へ向かって直接突入を試みています！」
+
+【長津の電話交渉前アナウンス】
+（🎙️ 首席オペレーター 長津）:
+「――防衛庁の上層部への連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、こんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡することだけです。頼みますね」`,
 
   7: `【フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食】
 （🎙️ 首席オペレーター 長津）:
@@ -448,7 +452,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 【フェーズ2：首席オペレーター 長津 感涙の作戦成功アナウンス】
 （🎙️ 首席オペレーター 長津）:
-「――各員へ緊急報告！ 深海音響網（SOSUS）より入電！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしました！ 気象庁火山監視課より緊急電、富士山地下深部における火山性微動、急激に減衰……完全に停止いたしました！ 海底噴火の連鎖も完全に沈静化！ 富士山の破局噴火危機は……完全に回避されました！
+「――各員へ緊急報告！ 海自潜水艦の深海音響探知により入電！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしました！ 気象庁火山監視課より緊急電、富士山地下深部における火山性微動、急激に減衰……完全に停止いたしました！ 海底噴火の連鎖も完全に沈静化！ 富士山の破局噴火危機は……完全に回避されました！
 防衛省・自衛艦隊司令部より全潜水艦へ通達入電、『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』！ 自衛隊の実弾は一発も撃たれることなく、海底火山を刺激するリスクも完全に消滅いたしました！
 ……勝ったのです。朝潮危機管理官、貝浜リエゾン、坂凪隊長、太刀魚観測員、浪寄准教授、初瀬さん……！ 太古から受け継がれた海の約束と、みなさんが結集した科学と勇気が……この国を、日本を救いました……っ！！」
 
@@ -524,7 +528,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript === step?.incidentOverview ||
       !existing.readAloudScript.includes("長津") ||
       (dayNumber === 1 && !existing.readAloudScript.includes("パパズドルフィン")) ||
-      (dayNumber === 6 && (existing.readAloudScript.includes("舌クリック音") || existing.readAloudScript.includes("フェーズ1") || existing.readAloudScript.includes("フェーズ4"))) ||
+      (dayNumber === 6 && (existing.readAloudScript.includes("舌クリック音") || existing.readAloudScript.includes("フェーズ1") || existing.readAloudScript.includes("フェーズ4") || !existing.readAloudScript.includes("連絡先があります"))) ||
       (dayNumber === 7 && (existing.readAloudScript.includes("重魚雷一斉飽和攻撃") || existing.readAloudScript.includes("粉砕アシスト") || !existing.readAloudScript.includes("だが、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
