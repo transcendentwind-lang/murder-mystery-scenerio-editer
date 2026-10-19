@@ -2135,51 +2135,50 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：合成新言語祝詞の完成 ＆ 翌朝（Day 7）決戦への装填スタンバイ */}
+                  {/* フェーズ4：合成新言語祝詞の完成 ＆ 自衛隊緊急交渉（ソナー開放・攻撃抑制） */}
                   <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【フェーズ4：合成新言語祝詞の完成 ＆ 翌朝（Day 7）決戦への装填スタンバイ】</span>
+                        <span>📡 【フェーズ4：合成新言語祝詞の完成 ＆ 自衛隊緊急交渉（ソナー開放・実弾攻撃抑制）】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("climax-call")}
                         className="flex items-center gap-1.5 rounded bg-gradient-to-r from-cyan-600 to-indigo-600 px-2.5 py-1 text-[11px] font-bold text-white hover:from-cyan-500 hover:to-indigo-500 transition shadow"
                       >
-                        <Volume2 className="h-3.5 w-3.5" /> 8語メッセージ信号を試聴
+                        <Volume2 className="h-3.5 w-3.5" /> 祝詞メッセージ信号を試聴
                       </button>
                     </div>
                     <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
                       <p className="italic">
-                        「朝潮危機管理官をはじめ、プレイヤー全員の知見が結集し、『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の合成新言語祝詞が完成！ 貝浜リエゾン（PC2）が海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）へ信号パケットを装填し、発信系統の同期テストを完了しました」
-                      </p>
-                      <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
-                        「実際の海中へのメガワット級大出力放流は、明日・Day 7の駿河湾最終決戦にて、怪異の突入および魚雷攻撃に合わせて実行されます！ 6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）は固い決意を胸に、運命の決戦の朝を迎えます――」
+                        「小笠原現地組と東京班の知見が結集し、『人（ひと）・勇魚（いさ）・契り（ちぎり）、集ひ来（つどひこ）、大獲物ぞ（おほえものぞ）、喰らへ（くらへ）』という8語の合成新言語祝詞（クリック音パルス）が完成！ 朝潮危機管理官（PC1）と貝浜リエゾン（PC2）が防衛省上層部・官邸と緊急交渉を敢行し、最高機密である【海底固定ソナー網（SOSUS）の音響送信利用】と、翌朝の【実弾魚雷攻撃を直ちに行わずクジラの捕食を見守りギリギリまで攻撃抑制・待機（スタンドバイ）させること】の合意を取り付けました」
                       </p>
                     </div>
-                    <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
-                      <strong>✅ Day 6 達成演出:</strong>
-                      「合成新言語祝詞の完成と海自ソナー網への装填完了！ 明朝・Day 7、駿河湾での人類・自衛隊・マッコウクジラ連合による【大捕食作戦】が決行されます！」
+                    <div className="rounded bg-indigo-950/40 border border-indigo-800/60 p-2.5 text-[11px] text-indigo-200 space-y-1">
+                      <strong>⚖️ GM進行ガイド（自衛隊説得の論点）:</strong>
+                      <p className="text-slate-300 leading-relaxed text-[10px]">
+                        「通常兵器の実弾魚雷で攻撃すれば、怪異の細胞は再結合するだけでなく、海底火山を爆発させて富士山破局噴火を早める自殺行為となる（PC4・PC5の見立て）。クジラによる自然界の捕食こそが唯一の完全制圧策である」という論拠を突きつけ、自衛隊を「最後の防衛線（フェイルセーフ）」として待機させる協定を結ばせます。
+                      </p>
                     </div>
                   </div>
 
-                  {/* フェーズ4.5：長津からの作戦命名提案 ＆ 合同チーム作戦名の決定 */}
+                  {/* フェーズ4.5：深夜の全海域ソナー事前放流開始 ＆ 合同チーム作戦名（オペレーション名）の決定 */}
                   <div className="rounded-xl border border-cyan-700/80 bg-[#081a20] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Sparkles className="h-4 w-4 text-cyan-400" />
-                        【フェーズ4.5：長津からの作戦命名提案 ＆ 合同チーム作戦名の決定】
+                        【フェーズ4.5：深夜の全海域ソナー事前放流開始 ＆ 合同チーム作戦名の命名】
                       </span>
                       <span className="text-[10px] text-cyan-300 font-mono bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
-                        作戦命名イベント
+                        深夜事前放流 ＆ 作戦命名
                       </span>
                     </div>
                     <div className="rounded-lg bg-black/60 border border-cyan-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-cyan-300 block font-bold">
-                        📢 【長津の作戦命名提案セリフ（GM読み上げ用）】:
+                        📢 【長津の深夜放流 ＆ 作戦命名アナウンス（GM読み上げ用）】:
                       </strong>
                       <p className="italic leading-relaxed font-mono text-cyan-100">
-                        （🎙️ 首席オペレーター 長津）:「――長津より提案があります。古文書の祝詞と恩師の音響研究、そして海上自衛隊の全ソナー網を結集するこの前代未聞の迎撃作戦に……当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 明朝の決戦、全員が心を一つにして立ち向かうための名前です！」
+                        （🎙️ 首席オペレーター 長津）:「――太平洋沖のクジラたちが駿河湾まで泳ぎ着くには、最低でも6〜8時間の移動時間がかかります！ 今夜のうちに呼び集めなければ、明朝の怪異侵入に間に合いません！ 海自固定ソナー網（SOSUS）を開放し、深海音響層へ向け『人・勇魚・契り……』の祝詞信号を一晩中放流開始いたします！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」
                       </p>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
@@ -2195,126 +2194,134 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         発動予定: 【{operationName || "未命名作戦"}】
                       </span>
                     </div>
-                    <p className="text-[10px] text-slate-400">
-                      💡 <strong>GMメモ</strong>: プレイヤー全員で「オペレーション・〇〇」や自由な作戦名を相談して決めてください。Day 7の決戦画面に「オペレーション：〇〇 発動！」として反映されます。
-                    </p>
                   </div>
                 </div>
               )}
 
               {currentDay === 7 && (
-                <div className="space-y-3.5 text-xs leading-relaxed">
+                <div className="space-y-4 text-xs leading-relaxed">
                   {/* 作戦発動ヘッダーバナー */}
                   <div className="rounded-xl border border-cyan-500/80 bg-gradient-to-r from-[#07242c] via-[#093539] to-[#07242c] p-3 text-cyan-200 shadow-lg flex flex-wrap items-center justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-cyan-300 animate-spin-slow" />
                       <span className="font-bold text-white text-xs">
-                        🚀 【{operationName || "合同迎撃作戦"} 発動】
+                        🚀 【{operationName || "合同迎撃作戦"} 最終結果】
                       </span>
                       <span className="rounded bg-black/50 px-2 py-0.5 text-[10px] text-amber-300 font-mono border border-amber-900/60">
                         迎撃標的: 【{creatureCodename || "ワタツミ"}】
                       </span>
                     </div>
                     <span className="text-[10px] text-cyan-300 font-mono">
-                      海自全ソナー網 × マッコウクジラ深海大捕食
+                      海自海底固定ソナー網事前放流 × マッコウクジラ深海大捕食
                     </span>
                   </div>
 
-                  {/* フェーズ1：駿河湾口突入 ＆ 水深600〜1,000mの境界戦 */}
+                  {/* フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食 */}
                   <div className="rounded-xl border border-rose-900/60 bg-[#160f1c] p-3.5 space-y-2 shadow-md">
                     <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-rose-400" />
-                        【フェーズ1：駿河湾口突入 ＆ 水深600〜1,000mの最終戦況】
+                        【フェーズ1：運命の夜明け・駿河湾口突入 ＆ 夜通し泳いだクジラ群の到達・大捕食】
                       </span>
-                      <span className="text-[10px] font-mono text-rose-400 font-bold bg-rose-950/80 px-2 py-0.5 rounded border border-rose-800/80">
-                        富士山破局噴火まで 残り数時間
+                      <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
+                        微動完全停止・作戦成功
                       </span>
                     </div>
-                    <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1">
-                      <strong className="text-rose-300 block font-bold">📢 【GMナレーション：深海境界域での最終突入】</strong>
+                    <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1.5">
+                      <strong className="text-cyan-300 block font-bold">🌊 深海での決着ナレーション（GM読み上げ用）:</strong>
                       <p className="italic leading-relaxed font-mono">
-                        （🎙️ 首席オペレーター 長津）:「怪異は海面へ浮上せず、通常兵器の魚雷が水圧で圧壊する限界スレスレ――<strong>水深600mから1,000mの超深海</strong>を維持したまま、駿河トラフ境界へ突入しました。富士山直下のマグマ網まであとわずか。もはや一刻の猶予もありません！」
+                        「怪異が水深600〜1,000mを維持して駿河湾奥へ突入。湾奥に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機します。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ2：自衛隊魚雷一斉飽和攻撃 ＆ ソナー照射（アシスト） */}
-                  <div className="rounded-xl border border-amber-900/60 bg-[#171210] p-3.5 space-y-2 shadow-md">
-                    <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5 border-b border-amber-900/40 pb-1.5">
-                      <Flame className="h-4 w-4 text-amber-400" />
-                      【フェーズ2：海自潜水艦部隊 重魚雷一斉飽和攻撃（群体粉砕アシスト）】
-                    </span>
-                    <p className="italic text-slate-200 leading-relaxed bg-black/40 p-2.5 rounded border border-amber-950 font-mono">
-                      「貝浜リエゾン（PC2）の座標指示に基づき、海自潜水艦部隊が限界深度へ向け最新鋭重魚雷の一斉飽和攻撃を敢行！ 大出力ソナーのPing音が深海を貫き、直後――深海の闇の中で巨大な爆炎が連鎖します！ 魚雷の爆風により、巨大群体は一時的にバラバラに粉砕・分断されました！」
-                    </p>
-                    <div className="text-[10px] text-amber-300/90 bg-amber-950/30 p-2 rounded border border-amber-900/40">
-                      💡 <strong>自衛隊の貢献</strong>: 魚雷単独では再結合を許してしまいますが、「大出力ソナーによる標的照射」と「巨大群体を一口サイズに引き裂く粉砕」という最高のアシストを果たします！
-                    </div>
-                  </div>
-
-                  {/* フェーズ3：全海域大出力ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン） */}
+                  {/* フェーズ2：長津オペレーターの感涙アナウンス */}
                   <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400 animate-pulse" />
-                        <span>📡 【フェーズ3：海自大出力ソナー網放流 ＆ クジラたちのメッセージリレー（歌のバトン）】</span>
+                        <span>📢 【フェーズ2：首席オペレーター 長津 感涙の作戦成功アナウンス】</span>
                       </span>
-                      <button
-                        onClick={() => handlePlayAudioCue("sonar-broadcast")}
-                        className="flex items-center gap-1.5 rounded bg-gradient-to-r from-emerald-600 via-cyan-600 to-indigo-600 px-3 py-1.5 text-[11px] font-bold text-white hover:from-emerald-500 hover:via-cyan-500 hover:to-indigo-500 transition shadow-lg"
-                      >
-                        <Volume2 className="h-3.5 w-3.5" /> 大出力ソナー放流 ＆ メッセージリレー再生
-                      </button>
                     </div>
-                    <div className="space-y-2 bg-black/40 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] leading-relaxed">
+                    <div className="space-y-2 bg-black/50 p-3 rounded border border-cyan-950 text-slate-100 font-mono text-[11px] leading-relaxed">
                       <p className="italic">
-                        「貝浜リエゾン（PC2）の号令とともに、海自全潜水艦・護衛艦・固定音響ソナー網（SOSUS）より『人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ』という8語の新言語祝詞が太平洋全域へメガワット級大出力で放流されます！」
+                        （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告！ 海自潜水艦および深海音響網（SOSUS）に、前代未聞の巨大な生体音響反応を探知！ ……クジラです！ 昨夜から放流を続けた祝詞に応え、太平洋沖から夜を徹して泳いできたマッコウクジラの大群が……駿河湾口深海へ到達いたしました！」
                       </p>
-                      <p className="italic text-cyan-200 border-t border-cyan-900/40 pt-1.5">
-                        「……すると海の中で奇跡が起こります。至近海域の1頭のマッコウクジラがこの音を聞き、【了解】という明瞭な2連クリック音を返信。直後、そのクジラは自らまったく同じ歌（8語のメッセージ）を高らかに歌いながら北へ遊泳を開始したのです！
-                        その歌を耳にした沖合数十キロの別のクジラが【了解】を返し、また自ら同じ歌を歌い継いでいく……。海の中は次々に響く了解音と、遠方からこだまするクジラの歌のカノン（輪唱）に包まれます。クジラたちは太平洋全域でメッセージをリレーしているのです！」
+                      <p className="italic text-cyan-200">
+                        「クジラたちの頭部から放たれた強力な生体ソナーが、水深800mの暗黒に潜む怪異を完全に捉えました！ 群れが一斉に深海へ突入……捕食行動を開始！ ――信じられません、怪異の細胞間ネットワーク同調音が、クジラたちの音波に呑み込まれ、急速に崩壊・分断されていきます！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしています！」
                       </p>
-                    </div>
-                    <div className="rounded bg-emerald-950/50 border border-emerald-800/60 p-2 text-[10px] text-emerald-200">
-                      <strong>✅ クジラ群の大集結:</strong>
-                      「駿河湾沖、伊豆諸島、鳥島沖から無数のマッコウクジラ群が歌をリレーし合い、駿河トラフ水深1,000mの決戦海域へ向けて超高速で集結を開始しました！」
+                      <p className="italic text-emerald-200">
+                        「――気象庁火山監視課より緊急電！ 富士山地下深部における火山性微動、急激に減衰……完全に停止いたしました！ 海底噴火の連鎖も完全に沈静化！ 富士山の破局噴火危機は……完全に回避されました！」
+                      </p>
+                      <p className="italic text-amber-200">
+                        「防衛省・自衛艦隊司令部より全潜水艦へ通達入電！ 『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』！ 自衛隊の実弾は一発も撃たれることなく、海底火山を刺激するリスクも完全に消滅いたしました！」
+                      </p>
+                      <p className="italic text-white font-bold border-t border-cyan-900/60 pt-1.5">
+                        「……勝ったのです。朝潮危機管理官、貝浜リエゾン、坂凪隊長、太刀魚観測員、浪寄准教授、初瀬さん……！ 太古から受け継がれた海の約束と、みなさんが結集した科学と勇気が……この国を、日本を救いました……っ！！」
+                      </p>
                     </div>
                   </div>
 
-                  {/* フェーズ4：マッコウクジラ深海大捕食（完全消滅 ＆ 微動停止） */}
-                  <div className="rounded-xl border border-emerald-900/70 bg-[#081b16] p-3.5 space-y-2.5 shadow-lg">
-                    <span className="font-bold text-emerald-300 text-xs flex items-center gap-1.5 border-b border-emerald-900/40 pb-1.5">
-                      <Volume2 className="h-4 w-4 text-emerald-400" />
-                      【フェーズ4：マッコウクジラ深海大捕食（完全消滅 ＆ 微動停止）】
+                  {/* フェーズ3：海上自衛隊幹部からの直通電話（大人の本音と政治的思惑） */}
+                  <div className="rounded-xl border border-blue-900/80 bg-[#0d162b] p-3.5 space-y-2.5 shadow-md">
+                    <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
+                      <Shield className="h-4 w-4 text-blue-400" />
+                      【フェーズ3：海上自衛隊幹部からの直通電話（政治的思惑と大人の本音）】
                     </span>
-                    <p className="italic text-slate-100 leading-relaxed bg-black/50 p-2.5 rounded border border-emerald-950 font-mono">
-                      「リレーされた歌に導かれ、水深1,000m以深の漆黒の闇から、数百頭のマッコウクジラ群が一斉に突入してきます！ 筋肉に酸素を蓄えた深海の王たちが、魚雷で一口サイズに粉砕された怪異を片っ端から噛み砕き、貪り喰らい尽くしていく！ 再結合の暇など微塵も与えられず、怪異はクジラたちの胃袋へと完全に消滅しました！」
-                    </p>
-                    <div className="rounded bg-emerald-950/60 border border-emerald-700/80 p-2 text-[11px] text-emerald-200">
-                      <strong>🎉 【作戦成功・微動完全停止】</strong>:
-                      富士山地下のマグマ微動が急速に減衰し、完全に静寂を取り戻しました。日本壊滅・破局大噴火は完全に回避されたのです！
+                    <div className="rounded bg-black/60 border border-blue-800/60 p-3 text-[11px] text-blue-100 space-y-2 font-mono">
+                      <p className="text-slate-400 text-[10px] italic">
+                        （長津の歓声が響く司令室。突如、防衛省直通のホットライン赤電話が鳴り響く）
+                      </p>
+                      <p className="italic leading-relaxed">
+                        （🎙️ 防衛省・自衛艦隊幹部）:「――朝潮君、貝浜君、聞こえるかね。<br />
+                        ……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。<br /><br />
+                        だがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。<br /><br />
+                        このあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。そもそも、クジラの攻撃で相手が完全に消滅したという確固たる証拠があるわけでもないだろう？<br /><br />
+                        世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。……君たちの功績は、一切表には出せない。国家防衛機密として処理される。<br /><br />
+                        すまんが、分かってくれ。<br /><br />
+                        このあと、政府からの発表がある。<br /><br />
+                        <strong className="text-amber-300 text-xs font-bold">……だが、君たちが正しかった。感謝する</strong>」
+                      </p>
+                      <p className="text-slate-400 text-[10px] italic">
+                        （ツーツーツー……と静かに終話音が響く）
+                      </p>
                     </div>
                   </div>
 
-                  {/* フェーズ5：エピローグ演出（語られざる英雄たち） */}
+                  {/* フェーズ4：テレビ臨時ニュース（政府公式発表の全国報道） */}
+                  <div className="rounded-xl border border-red-900/80 bg-[#1a0f12] p-3.5 space-y-2.5 shadow-md">
+                    <span className="font-bold text-red-300 text-xs flex items-center gap-1.5 border-b border-red-900/40 pb-1.5">
+                      <Flame className="h-4 w-4 text-red-400" />
+                      【フェーズ4：テレビ臨時ニュース（政府公式発表の全国報道）】
+                    </span>
+                    <div className="rounded bg-black/60 border border-red-800/60 p-3 text-[11px] text-red-100 space-y-2 font-mono">
+                      <p className="text-slate-400 text-[10px] italic">
+                        （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
+                      </p>
+                      <p className="italic leading-relaxed">
+                        （🎙️ ニュースアナウンサー）:「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。<br /><br />
+                        伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、<strong>一連の危機事態が完全に沈静化した</strong>と発表しました。<br /><br />
+                        政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。<br /><br />
+                        これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊および護衛艦による一斉射撃と実弾掃討作戦を敢行し、<strong>海上自衛隊の迅速な武力行使によって、この巨大生物を完全に撃滅・駆除した</strong>とのことです。<br /><br />
+                        巨大生物の駆除に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。<br /><br />
+                        会見の最後で総理大臣は、『自衛隊の果敢な決断と迅速な行動が、国土と国民の生命を守り抜いた』と、部隊の功績を高く評価する声明を発表しています――」
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* フェーズ5：アンサング・ヒーロー（名もなき英雄たち）のエピローグ */}
                   <div className="rounded-xl border border-indigo-800/70 bg-[#0f1226] p-3.5 space-y-2 shadow-md">
                     <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5 border-b border-indigo-900/40 pb-1.5">
-                      <span>🕊️ 【フェーズ5：エピローグ演出・語られざる英雄たち（Unsung Heroes）】</span>
+                      <span>🕊️ 【フェーズ5：エピローグ・アンサング・ヒーロー（名もなき英雄たち）】</span>
                     </span>
-                    <div className="grid grid-cols-2 gap-2 text-[11px]">
-                      <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
-                        <strong className="text-slate-200 block text-[10px]">📢 政府・自衛隊の公式発表:</strong>
-                        <p className="italic text-slate-300 leading-relaxed font-mono text-[10px]">
-                          「海上自衛隊潜水艦部隊による重魚雷の一斉飽和攻撃により、水深600〜1,000mの目標を完全撃退・殲滅成功。メディアは自衛隊の防衛作戦の成功を讃え、軍部上層部は火力の勝利と総括した」
-                        </p>
-                      </div>
-                      <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-2.5 space-y-1">
-                        <strong className="text-amber-300 block text-[10px]">⭐ 6人のアンサング・ヒーロー:</strong>
-                        <p className="italic text-slate-200 leading-relaxed font-mono text-[10px]">
-                          「『俺たちの手柄は歴史のどこにも載らないな』『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』――真実を胸に秘めた6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬）は、静かに日常へと帰っていく」
-                        </p>
-                      </div>
+                    <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-3 space-y-1.5 text-[11px] text-slate-200 font-mono">
+                      <strong className="text-amber-300 block text-xs">⭐ 6人の英雄たちの結び:</strong>
+                      <p className="italic leading-relaxed">
+                        「『俺たちの手柄は歴史のどこにも載らないな』<br />
+                        『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』<br /><br />
+                        テレビ画面に映る総理の誇らしげな笑顔と、国民の安堵の歓声を背に、6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬／5名時は5人）は静かにデスクを片付け、日常へと戻っていく。<br />
+                        誰からも讃えられず、歴史に記録されることもない――だが、自分たちがこの国と海を守り抜いたという確かな誇りを胸に」
+                      </p>
                     </div>
                   </div>
                 </div>
