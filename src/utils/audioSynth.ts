@@ -311,6 +311,7 @@ class UnderwaterAudioEngine {
    * 元神主の子ども【吉備津】の口伝クリック音サンプル
    * 「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
    * （人・勇魚・契り、探せ、大獲物ぞ、集ひ来）
+   * 音響・祝詞解析スタジオの単語定義（word-human, word-whale, word-promise, word-search, word-giant-prey, word-gather）と完全に同一の音響を連続再生
    */
   public async playKibitsuOralClickDemo(): Promise<void> {
     this.initContext();
@@ -318,82 +319,28 @@ class UnderwaterAudioEngine {
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    // 拍1: （カッ・カッ）「ひ・と」
-    this.playTongueClickSound(2500);
-    await sleep(180);
-    this.playTongueClickSound(2400);
-    await sleep(350);
+    // 拍1: （カッ・カッ）「ひ・と」【解析スタジオ: 人間（word-human）】
+    await this.playWordSound("word-human", 1.0);
+    await sleep(400);
 
-    // 拍2: （ド・ドーン）「い・さ」（重低音）
-    if (this.ctx) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(320, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(140, this.ctx.currentTime + 0.35);
-      gain.gain.setValueAtTime(0.45, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.38);
-      osc.connect(gain);
-      gain.connect(this.analyser);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.4);
-    }
+    // 拍2: （ド・ドーン）「い・さ」【解析スタジオ: クジラ（word-whale）】
+    await this.playWordSound("word-whale", 1.0);
     await sleep(450);
 
-    // 拍3: （チ・トン・チ）「ち・ぎ・り」
-    this.playTongueClickSound(2800);
-    await sleep(160);
-    if (this.ctx) {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      osc.type = "triangle";
-      osc.frequency.setValueAtTime(420, this.ctx.currentTime);
-      gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.18);
-      osc.connect(gain);
-      gain.connect(this.analyser);
-      osc.start();
-      osc.stop(this.ctx.currentTime + 0.2);
-    }
-    await sleep(180);
-    this.playTongueClickSound(2600);
-    await sleep(420);
+    // 拍3: （チ・トン・チ）「ち・ぎ・り」【解析スタジオ: 約束（word-promise）】
+    await this.playWordSound("word-promise", 1.0);
+    await sleep(450);
 
-    // 拍4: （タン・タン・タン）「さ・が・せ」（等間隔の探査パルス）
-    for (let i = 0; i < 3; i++) {
-      this.playTongueClickSound(2200);
-      if (this.ctx) {
-        const osc = this.ctx.createOscillator();
-        const gain = this.ctx.createGain();
-        osc.type = "sine";
-        osc.frequency.setValueAtTime(360, this.ctx.currentTime);
-        gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.25);
-        osc.connect(gain);
-        gain.connect(this.analyser);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.28);
-      }
-      await sleep(240);
-    }
-    await sleep(200);
+    // 拍4: （タン・タン・タン）「さ・が・せ」【解析スタジオ: 探せ（word-search）】
+    await this.playWordSound("word-search", 1.0);
+    await sleep(400);
 
-    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」（超高速バーストクリック）
-    for (let i = 0; i < 6; i++) {
-      this.playTongueClickSound(3000 + i * 80);
-      await sleep(55);
-    }
-    await sleep(420);
+    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」【解析スタジオ: 巨大な餌（word-giant-prey）】
+    await this.playWordSound("word-giant-prey", 1.0);
+    await sleep(450);
 
-    // 拍6: （カ・カ・カカッ！）「つ・ど・ひ・こ！」（加速する4連打）
-    this.playTongueClickSound(2300);
-    await sleep(140);
-    this.playTongueClickSound(2400);
-    await sleep(140);
-    this.playTongueClickSound(2600);
-    await sleep(90);
-    this.playTongueClickSound(2800);
-    await sleep(300);
+    // 拍6: （カ・カ・カカッ！）「つ・ど・ひ・こ！」【解析スタジオ: 集まれ（word-gather）】
+    await this.playWordSound("word-gather", 1.0);
   }
 
   /**
