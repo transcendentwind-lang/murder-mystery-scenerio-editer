@@ -1175,6 +1175,67 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
+                  {/* フェーズ3.5：アクティブソノブイ終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出） */}
+                  <div className="rounded-xl border border-amber-900/60 bg-slate-900 p-4 space-y-3 shadow-md">
+                    <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
+                      <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
+                      <span className="font-bold text-amber-300 text-xs">
+                        【フェーズ3.5：ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への証拠配布】
+                      </span>
+                    </div>
+
+                    <div className="rounded bg-slate-950/80 border border-amber-900/40 p-3 text-[11px] text-amber-200">
+                      <p className="font-semibold text-white mb-1">
+                        🎙️ 首席オペレーター 長津のアナウンス（成否問わず読み上げ）:
+                      </p>
+                      <blockquote className="border-l-2 border-amber-500 pl-3 py-1 text-slate-200 italic leading-relaxed">
+                        「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                      </blockquote>
+                    </div>
+
+                    <div className="rounded-lg bg-slate-950 p-3 border border-slate-800 space-y-2 text-[11px] text-slate-300">
+                      <span className="font-bold text-white text-xs block mb-1">
+                        📦 GMから3名のプレイヤーへ以下の証拠カードを個別配備:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-2">
+                          <span className="font-bold text-indigo-300 block text-[10px]">太刀魚（PC4／気象庁）</span>
+                          <span className="font-semibold text-white text-[11px]">西之島〜鳥島沖 距離観測データ</span>
+                          <p className="text-[10px] text-slate-400 mt-0.5">西之島（0km地点）〜鳥島沖カルデラ間の距離: <strong>336 km</strong></p>
+                        </div>
+                        <div className="rounded border border-cyan-900/60 bg-cyan-950/30 p-2">
+                          <span className="font-bold text-cyan-300 block text-[10px]">貝浜（PC3／海上保安庁）</span>
+                          <span className="font-semibold text-white text-[11px]">鳥島沖 ソノブイ探知記録</span>
+                          <p className="text-[10px] text-slate-400 mt-0.5">鳥島沖での巨大生物探知・急浮上確認時刻: <strong>Day 3 16:00</strong></p>
+                        </div>
+                        <div className="rounded border border-emerald-900/60 bg-emerald-950/30 p-2">
+                          <span className="font-bold text-emerald-300 block text-[10px]">浪寄（PC5／大学准教授）</span>
+                          <span className="font-semibold text-white text-[11px]">遭難船救助・目撃時刻調書</span>
+                          <p className="text-[10px] text-slate-400 mt-0.5">Day 1遭難船救助および巨大影の襲撃目撃時刻: <strong>Day 1 08:00</strong></p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* GM用正解メモ・計算アシスト */}
+                    <div className="rounded-lg bg-emerald-950/20 border border-emerald-900/50 p-3 text-[11px] text-slate-300 space-y-1.5">
+                      <span className="font-bold text-emerald-300 text-xs block">
+                        💡 【GM用正解メモ・計算アシスト（プレイヤーへの誘導用）】
+                      </span>
+                      <p>
+                        ・<strong>経過時間の計算</strong>: Day 1 08:00 ➔ Day 3 16:00 ＝ <strong>56 時間</strong>（48時間 ＋ 8時間）
+                      </p>
+                      <p>
+                        ・<strong>移動速度の計算</strong>: 336 km ÷ 56 時間 ＝ <strong className="text-white">時速 6.0 km</strong>（日速 約144 km）
+                      </p>
+                      <p>
+                        ・<strong>翌日（Day 4）の北上予想</strong>: 明日（Day 4）にはさらに約144km北上するため、海図上で<strong className="text-white">須美寿島〜明神礁付近</strong>に到達する見込み。
+                      </p>
+                      <p className="text-[10px] text-slate-400">
+                        ※プレイヤー同士が情報を持ち寄って「時速6km」「明日は明神礁のあたり」と推測できたら大成功です！
+                      </p>
+                    </div>
+                  </div>
+
                   {/* フェーズ4：初瀬 / PC6（救護・神職血統）個別ハンドアウト GMガイド */}
                   <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-3 space-y-1.5">
                     <div className="flex items-center gap-1.5 font-bold text-indigo-300 text-xs">

@@ -322,8 +322,8 @@ export const initialProject: MMProject = {
         {
           id: "cap-4-1",
           name: "海底火山連動シミュレーション",
-          description: "海底火山の噴火データから、物体の時速約6kmでの北上ペースを割り出す。",
-          targetPhase: 2,
+          description: "西之島から鳥島沖海底カルデラまでの移動距離（336km）を算出し、距離観測データを共有する。",
+          targetPhase: 3,
           unlockedEvidenceIds: ["ev-volcano-chain-log"],
         },
         {
@@ -622,12 +622,33 @@ export const initialProject: MMProject = {
     },
     {
       id: "ev-volcano-chain-log",
-      title: "連動噴火データシート",
-      description: "物体の北上ルートに沿って、海底付近での特別な振動により西之島〜鳥島周辺の海底火山の地殻活動が次々と刺激され活性化している記録。",
+      title: "西之島〜鳥島沖 距離観測データ",
+      description: "気象庁および海上保安庁による海底地形・火山観測データ。西之島（0km地点）から、Day 2に噴火した鳥島沖海底カルデラまでの伊豆・小笠原海嶺沿いの直線移動距離は【約336km】と精密計測された。物体の通過に伴う連動噴火の痕跡と完全に一致している。",
       ownerId: "pc-4",
-      foundPhase: 2,
-      visibility: "public",
+      foundPhase: 3,
+      visibility: "shareable",
       category: "data",
+      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、太刀魚（PC4）へ配備",
+    },
+    {
+      id: "ev-torishima-sonar-time",
+      title: "鳥島沖 ソノブイ探知記録",
+      description: "海上保安庁・捜索ヘリによる鳥島沖アクティブソノブイ探知ログ。音響反射により巨大生物の潜航位置を特定し、海面下（水深10〜20m）への急浮上および巨大な影を目視・確認した時刻は【Day 3 16:00】である。",
+      ownerId: "pc-3",
+      foundPhase: 3,
+      visibility: "shareable",
+      category: "data",
+      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、貝浜（PC3）へ配備",
+    },
+    {
+      id: "ev-day1-rescue-time",
+      title: "遭難船救助・目撃時刻調書",
+      description: "浪寄准教授が現地救助隊と共に行った遭難船救助および聞き取りの公式記録。Day 1に西之島近海で漂流する遭難船を救助した際、船長らが『深海から巨大な黒い影が現れ、船が襲われた』と証言した正確な目撃時刻は【Day 1 08:00】と記録されている。",
+      ownerId: "pc-5",
+      foundPhase: 3,
+      visibility: "shareable",
+      category: "testimony",
+      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、浪寄（PC5）へ配備",
     },
     {
       id: "ev-tokyo-meteorite-analysis",
@@ -1065,8 +1086,8 @@ export const pc4For6Players = {
     {
       id: "cap-4-1",
       name: "海底火山連動シミュレーション",
-      description: "海底火山の噴火データから、物体の時速約6kmでの北上ペースを割り出す。",
-      targetPhase: 2,
+      description: "西之島から鳥島沖海底カルデラまでの移動距離（336km）を算出し、距離観測データを共有する。",
+      targetPhase: 3,
       unlockedEvidenceIds: ["ev-volcano-chain-log"],
     },
     {
@@ -1184,8 +1205,8 @@ export const pc4For5Players = {
     {
       id: "cap-4-1",
       name: "海底火山連動シミュレーション",
-      description: "海底火山の噴火データから、物体の時速約6kmでの北上ペースを割り出す。",
-      targetPhase: 2,
+      description: "西之島から鳥島沖海底カルデラまでの移動距離（336km）を算出し、距離観測データを共有する。",
+      targetPhase: 3,
       unlockedEvidenceIds: ["ev-volcano-chain-log"],
     },
     {

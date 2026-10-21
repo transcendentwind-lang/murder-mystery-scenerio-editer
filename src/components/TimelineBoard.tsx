@@ -1342,7 +1342,55 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ④ 初瀬（PC6／5名時は太刀魚PC4）専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
+                {/* ④ 【Day 3 ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出）】 */}
+                <div className="rounded-xl border border-amber-900/60 bg-gradient-to-r from-slate-950 via-[#181308] to-slate-950 p-4 shadow-md space-y-3">
+                  <div className="flex items-center gap-2 border-b border-amber-900/40 pb-2">
+                    <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
+                    <span className="font-bold text-xs text-amber-300">
+                      【索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示】
+                    </span>
+                  </div>
+
+                  <div className="rounded border border-amber-800/40 bg-slate-950/80 p-3 text-[11px] text-amber-200">
+                    <span className="font-semibold text-white block mb-1">
+                      🎙️ 首席オペレーター 長津からのアナウンス:
+                    </span>
+                    <p className="italic text-slate-200 leading-relaxed pl-2 border-l-2 border-amber-500">
+                      「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                    </p>
+                  </div>
+
+                  <div className="space-y-1.5">
+                    <span className="text-[11px] font-bold text-slate-300 block">
+                      🧩 3名の手元に配備された情報断片（各自のデータを持ち寄って計算してください）:
+                    </span>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-2.5">
+                        <span className="font-bold text-[10px] text-indigo-300 block">太刀魚（PC4／気象庁）</span>
+                        <span className="font-semibold text-white text-[11px] block mt-0.5">西之島〜鳥島沖 距離観測データ</span>
+                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                          西之島（0km地点）から鳥島沖海底カルデラまでの伊豆・小笠原海嶺沿いの直線距離: <strong>336 km</strong>
+                        </p>
+                      </div>
+                      <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/30 p-2.5">
+                        <span className="font-bold text-[10px] text-cyan-300 block">貝浜（PC3／海上保安庁）</span>
+                        <span className="font-semibold text-white text-[11px] block mt-0.5">鳥島沖 ソノブイ探知記録</span>
+                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                          鳥島沖海域にて巨大生物の音響反射を捉え、水深10〜20mへの急浮上を目視・確認した時刻: <strong>Day 3 16:00</strong>
+                        </p>
+                      </div>
+                      <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/30 p-2.5">
+                        <span className="font-bold text-[10px] text-emerald-300 block">浪寄（PC5／大学准教授）</span>
+                        <span className="font-semibold text-white text-[11px] block mt-0.5">遭難船救助・目撃時刻調書</span>
+                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
+                          Day 1に西之島近海で漂流する遭難船を救助した際、船長らが巨大な黒い影に襲撃された正確な目撃時刻: <strong>Day 1 08:00</strong>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* ⑤ 初瀬（PC6／5名時は太刀魚PC4）専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
                 <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-3.5 space-y-2">
                   <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                     <div className="flex items-center gap-1.5">
