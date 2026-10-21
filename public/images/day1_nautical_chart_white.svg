@@ -16,11 +16,11 @@
   <!-- 浅瀬・陸地 -->
   <circle cx="890" cy="110" r="260" fill="url(#shallow-grad-ogasawara)" />
 
-  <!-- 父島 -->
-  <path d="M 870 0 Q 860 60 890 100 T 960 120 L 1000 110 L 1000 0 Z" fill="#e2e8f0" stroke="#475569" stroke-width="1.8" />
-  <text x="910" y="45" font-size="12" font-weight="bold" fill="#1e293b" letter-spacing="2">父 島</text>
-  <text x="895" y="62" font-size="9" font-weight="semibold" fill="#475569" letter-spacing="1">CHICHI-JIMA</text>
-  <text x="890" y="76" font-size="8" fill="#64748b">(南崎・ジョンビーチ)</text>
+  <!-- 父島（最南端：南崎・ジョンビーチ周辺） -->
+  <path d="M 865 42 Q 860 75 888 108 T 958 120 L 958 42 Z" fill="#e2e8f0" stroke="#475569" stroke-width="1.8" />
+  <text x="912" y="66" font-size="11" font-weight="bold" fill="#1e293b" letter-spacing="2" text-anchor="middle">父 島</text>
+  <text x="912" y="80" font-size="8.5" font-weight="semibold" fill="#475569" letter-spacing="1" text-anchor="middle">CHICHI-JIMA</text>
+  <text x="912" y="94" font-size="7.5" fill="#64748b" text-anchor="middle">(南崎・ジョンビーチ)</text>
 
   <!-- 南島 -->
   <path d="M 790 140 C 805 125 825 130 835 150 C 840 170 820 185 800 180 C 785 175 780 155 790 140 Z" fill="#e2e8f0" stroke="#475569" stroke-width="1.6" />

@@ -500,20 +500,20 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
                 <>
                   <circle cx="890" cy="110" r="260" fill="url(#shallow-grad-ogasawara)" />
 
-                  {/* 父島（南西海岸・南崎・ハートロック方面） */}
+                  {/* 父島（最南端：南崎・ジョンビーチ周辺） */}
                   <path
-                    d="M 870 0 Q 860 60 890 100 T 960 120 L 1000 110 L 1000 0 Z"
+                    d="M 865 42 Q 860 75 888 108 T 958 120 L 958 42 Z"
                     fill="#e2e8f0"
                     stroke="#475569"
                     strokeWidth="1.8"
                   />
-                  <text x="910" y="45" fontSize="12" fontWeight="bold" fill="#1e293b" letterSpacing="2">
+                  <text x="912" y="66" fontSize="11" fontWeight="bold" fill="#1e293b" letterSpacing="2" textAnchor="middle">
                     父 島
                   </text>
-                  <text x="895" y="62" fontSize="9" fontWeight="semibold" fill="#475569" letterSpacing="1">
+                  <text x="912" y="80" fontSize="8.5" fontWeight="semibold" fill="#475569" letterSpacing="1" textAnchor="middle">
                     CHICHI-JIMA
                   </text>
-                  <text x="890" y="76" fontSize="8" fill="#64748b">
+                  <text x="912" y="94" fontSize="7.5" fill="#64748b" textAnchor="middle">
                     (南崎・ジョンビーチ)
                   </text>
 
