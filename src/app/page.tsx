@@ -18,6 +18,7 @@ import { DocumentDesignStudio } from "@/components/DocumentDesignStudio";
 import { AiChatPanel, ChatMessage, PersonaType } from "@/components/AiChatPanel";
 import { SynopsisModal } from "@/components/SynopsisModal";
 import { ProjectManagerModal } from "@/components/ProjectManagerModal";
+import { WhaleSonarMobileApp } from "@/components/WhaleSonarMobileApp";
 import {
   Compass,
   Users,
@@ -27,6 +28,7 @@ import {
   FolderKanban,
   ChevronDown,
   Palette,
+  Smartphone,
 } from "lucide-react";
 
 type ActiveTab =
@@ -34,12 +36,13 @@ type ActiveTab =
   | "characters_handouts"
   | "gm_dashboard"
   | "design_studio"
-  | "export_synopsis";
+  | "export_synopsis"
+  | "whale_sonar_app";
 
 export default function WorkbenchPage() {
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
-  const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
+  const [activeTab, setActiveTab] = useState<ActiveTab>("whale_sonar_app");
   const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState<boolean>(false);
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
@@ -273,6 +276,20 @@ export default function WorkbenchPage() {
               <FileText className="h-4 w-4 text-indigo-400" />
               ⑤ 企画書・一括台本
             </button>
+
+            {/* ⑥ クジラ音響モバイルアプリ（プレイヤー操作用クリック音生成＆行動表示） */}
+            <button
+              onClick={() => setActiveTab("whale_sonar_app")}
+              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                activeTab === "whale_sonar_app"
+                  ? "bg-cyan-600 text-white shadow ring-2 ring-cyan-400/50"
+                  : "text-cyan-300 hover:text-white hover:bg-slate-900"
+              }`}
+              title="プレイヤーがスマホでクリック音パターンを鳴らし、クジラの行動テキストを表示するWebアプリ"
+            >
+              <Smartphone className="h-4 w-4 text-cyan-300" />
+              📱 クジラ音響アプリ
+            </button>
           </div>
         </div>
       </header>
@@ -394,6 +411,14 @@ export default function WorkbenchPage() {
               project={project}
               onNavigateToDesignStudio={() => setActiveTab("design_studio")}
               onUpdateProject={handleUpdateProject}
+            />
+          )}
+
+          {/* ⑥ クジラ音響モバイルアプリ（クリック音パターン生成 ＆ クジラ行動表示） */}
+          {activeTab === "whale_sonar_app" && (
+            <WhaleSonarMobileApp
+              words={project.crypticWords}
+              grammar={project.crypticGrammar}
             />
           )}
         </main>
