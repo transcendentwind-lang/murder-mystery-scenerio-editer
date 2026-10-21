@@ -623,7 +623,7 @@ export const initialProject: MMProject = {
     {
       id: "ev-volcano-chain-log",
       title: "西之島〜鳥島沖 距離観測データ",
-      description: "気象庁および海上保安庁による海底地形・火山観測データ。西之島（0km地点）から、Day 2に噴火した鳥島沖海底カルデラまでの伊豆・小笠原海嶺沿いの直線移動距離は【約336km】と精密計測された。物体の通過に伴う連動噴火の痕跡と完全に一致している。",
+      description: "気象庁および海上保安庁による海底地形・火山観測データ。西之島（0km地点）から、Day 2に噴火した鳥島沖海底カルデラまでの伊豆・小笠原海嶺沿いの直線移動距離は【約336km】と精密計測された。巨大物体の通過後しばらくして噴火が起きており、関連性が認められる。",
       ownerId: "pc-4",
       foundPhase: 3,
       visibility: "shareable",
