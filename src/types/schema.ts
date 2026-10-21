@@ -49,7 +49,7 @@ export interface EvidenceItem {
   foundPhase: number;          // 入手フェーズ/Day (1-7)
   visibility: EvidenceVisibility; // 公開区分 (個別秘匿 / 譲渡可能 / 全体公開)
   acquisitionCondition?: string;  // 入手条件・関連アクション
-  category: 'document' | 'data' | 'sample' | 'testimony' | 'audio';
+  category: 'document' | 'data' | 'sample' | 'testimony' | 'audio' | 'research_note';
 }
 
 export interface IncidentStep {
