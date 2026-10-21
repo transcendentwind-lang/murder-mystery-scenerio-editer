@@ -388,7 +388,12 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
   3: `【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
 （🎙️ 首席オペレーター 長津）:
-「――小笠原航空基地より大型捜索ヘリが緊急発進いたしました。洋上に展開する巡視船PLH-31『あきつしま』での洋上給油を中継し、鳥島沖の噴火海域へ投入されます。各員への任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して三辺測量で距離を割り出し、その姿を捉えよ！』」
+「――小笠原基地より小笠原現地メンバーを載せた大型捜索ヘリが緊急発進いたしました。鳥島沖での探索活動をするため、いったん海上保安庁が洋上に展開する巡視船PLH-31『あきつしま』に着陸、洋上給油を行って鳥島沖の噴火海域での調査を行なってください。目標としては、アクティブソナーのついたソノブイを投下し、巨大生物の現時点の場所を特定することです。ソノブイは3つあり、できれば複数回ソナーの範囲内にいれて場所を特定してください」
+
+【フェーズ2：アクティブソノブイ調査終了後の状況案内 ＆ 北上予測要請】
+（🎙️ 首席オペレーター 長津）:
+「噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+※ここで太刀魚（EV-16: 西之島〜鳥島沖 距離観測データ）、貝浜（EV-17: 鳥島沖 ソノブイ探知記録）、浪寄（EV-18: 遭難船救助・目撃時刻調書）の3名へそれぞれ証拠資料を配布し、移動速度（約150km/日）と明日（Day 4）の北上予測（明神礁周辺）を検討させてください。
 
 【フェーズ5：写真データ受信 ＆ 合同対策本部への諮問】
 （🎙️ 首席オペレーター 長津）:
@@ -486,6 +491,58 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 誰からも讃えられず、歴史に記録されることもない――だが、自分たちがこの国と海を守り抜いたという確かな誇りを胸に」`,
 };
 
+// GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
+const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
+  1: [
+    "合同対策本部の首席オペレーター長津として緊急回線を開設し、各員の役職・氏名・専門分野の点呼を行わせる（目標時間: 30分）",
+    "遭難海図を展開し、風圧流（南西強風）と海流（北東流）の両方の影響をプレイヤーに整理させる",
+    "2つの力を合成した漂流方向（東北東）と暗礁群の位置を考慮させ、救難艇を急行させるべき海域を決定させる",
+    "救難艇による間一髪の救助成功を伝え、船長の証言（EV-08）および不審なダイバーの大型冷凍ボックス（EV-07）を開示する",
+  ],
+  2: [
+    "西之島沖の突発噴火と移動する巨大な影の目撃情報を伝え、対策チームの即応体制維持を通達する（目標時間: 25分）",
+    "東京側（3択中1つ）と小笠原現地（4択中2つ）の調査枠を提示する（※以後選択不可となる注意を伝える）",
+    "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
+    "※GM注意（ネタバレ防止）：この段階では「ダイオウイカの超群体」という真相は絶対に明かさないこと",
+  ],
+  3: [
+    "鳥島沖海底噴火を伝え、大型捜索ヘリが巡視船「あきつしま」で洋上給油を行い、ソノブイ3基を投下する任務をアナウンスする（目標時間: 25分）",
+    "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置を特定させる",
+    "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 16:00）、浪寄（EV-18: Day1救助時間 08:00）の3名へ証拠を配布する",
+    "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
+    "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（防衛省の法的判断）へ諮問する",
+    "朝潮危機管理官（PC1）に「防衛出動を要請するか、見送るか」の最終決定を行わせる（※Day 4の政府反応分岐へ影響）",
+    "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠）を選択させ、証拠資料を開示する",
+  ],
+  4: [
+    "明神礁の海底噴火と日速150kmでの正確な北上、火山性微動と物体の完全一致をアナウンスする（目標時間: 25分）",
+    "前日の朝潮の決断に応じた政府・自衛隊の反応（要請時: 内閣見送りだが海幕照会／見送り時: 運用企画局照会）を読み上げる",
+    "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
+    "防衛省が武力出動ではなく「害獣駆除（災害派遣）」として海自全部隊動員・通常兵器による実弾迎撃作戦を決定した通達を読み上げる",
+    "新規2枠＋Day 3繰り越し分2枠（計4枠）を選択させ、朝倉教授の研究日誌や小笠原社記などを開示する",
+  ],
+  5: [
+    "民間臨時ニュースを読み上げ、富士山深部の微動観測と噴火警戒レベル引き上げ・避難準備指示を伝える（目標時間: 25分）",
+    "自衛隊の実弾迎撃作戦が最高軍事機密に移行し、交戦情報提供が遮断されたことをアナウンスする",
+    "防衛省から貝浜への直通無線を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える",
+    "朝倉教授のクジラ構文規則（EV-31）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
+  ],
+  6: [
+    "昼の沈静化アナウンスから一転、夕〜夜に怪異が駿河トラフへ高速再浮上し、破局噴火まで残り24時間となった警報を発令する（目標時間: 30分）",
+    "朝倉教授の音響実録4件（EV-32〜35）と構文規則を統合し、クジラを駿河湾へ招集するための「新言語祝詞」を完成させる",
+    "長津が電話を繋ぎ、「私にできるのは連絡することだけです。頼みますね」とプレイヤーへ交渉を託す",
+    "防衛庁運用企画局長との電話交渉を演出し、潜水艦による深海SOFAR層での祝詞音声放流、および「魚雷攻撃の中止・抑制（スタンドダウン）」を説得させる",
+    "局長の作戦承諾を伝え、全艦が固唾を呑んで待機する緊迫感の中でDay 6を終了する",
+  ],
+  7: [
+    "祝詞に応えて夜通し泳いできたマッコウクジラ群が駿河湾深海へ到達し、怪異を大捕食したこと、富士山微動が完全停止したことを劇的に描写する（目標時間: 30分）",
+    "長津が涙ながらに各員の名前を呼び、日本が救われた歓喜と全部隊攻撃中止（スタンドダウン）を告げる",
+    "防衛省幹部からの電話を読み上げ、「世間への説明のため自衛隊が掃討攻撃したことにする。君たちの功績は国家防衛機密として公表できないが、君たちが正しかった」という大人の本音を伝える",
+    "「海上自衛隊の果敢な武力行使によって巨大生物を完全撃滅」という公式テレビニュースを読み上げる",
+    "歴史には残らなくとも、海と国を守り抜いた誇りを胸に日常へ戻る6人のエピローグを読み上げ、ゲームを終了・感想戦へ移行する",
+  ],
+};
+
 // デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外）
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
   const base =
@@ -506,13 +563,14 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
   const timeline = project.timeline || [];
   const step = timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
 
-  const defaultCheckpoints = [
-    `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
-      dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
-    }分）をタイマーセットする`,
-    `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
-    `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
-  ];
+  const defaultCheckpoints =
+    DEFAULT_GM_CHECKPOINTS[dayNumber] || [
+      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
+        dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
+      }分）をタイマーセットする`,
+      `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
+      `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
+    ];
 
   const defaultBgm =
     dayNumber <= 2
@@ -528,15 +586,18 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript === step?.incidentOverview ||
       !existing.readAloudScript.includes("長津") ||
       (dayNumber === 1 && !existing.readAloudScript.includes("パパズドルフィン")) ||
+      (dayNumber === 3 && !existing.readAloudScript.includes("ソノブイは3つあり")) ||
       (dayNumber === 6 && (existing.readAloudScript.includes("舌クリック音") || existing.readAloudScript.includes("フェーズ1") || existing.readAloudScript.includes("フェーズ4") || !existing.readAloudScript.includes("連絡先があります"))) ||
       (dayNumber === 7 && (existing.readAloudScript.includes("重魚雷一斉飽和攻撃") || existing.readAloudScript.includes("粉砕アシスト") || !existing.readAloudScript.includes("だが、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
-    const checkpoints =
-      Array.isArray(existing.gmCheckpoints) && existing.gmCheckpoints.length > 0
-        ? existing.gmCheckpoints
-        : defaultCheckpoints;
+    const isOldCheckpoints =
+      !Array.isArray(existing.gmCheckpoints) ||
+      existing.gmCheckpoints.length <= 3 ||
+      existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間");
+
+    const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
 
     return {
       ...existing,
@@ -2976,77 +3037,21 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                    ============================================================ */}
                 <div className="page-break-before my-8 border-t-2 border-dashed border-indigo-400 pt-5 relative">
                   <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full border border-indigo-300 bg-indigo-50 px-3.5 py-0.5 text-[11px] font-bold text-indigo-900 shadow-sm flex items-center gap-1.5 no-print">
-                    <span>📄 【2ページ目】 司令部・現地対応 ＆ 進行管理シート</span>
+                    <span>📄 【2ページ目】 GM進行管理シート</span>
                   </div>
                 </div>
 
                 {/* ============================================================
-                    【2ページ目】：司令部・現地対応 ＆ 進行管理シート
+                    【2ページ目】：進行管理シート
                    ============================================================ */}
                 <div className="space-y-5">
                   {/* 2ページ目ヘッダー帯 */}
                   <div className={`rounded-md px-4 py-2.5 ${accent.headerBg} ${accent.headerText} flex items-center justify-between text-xs shadow-sm`}>
                     <div className="flex items-center gap-2">
                       <span className="font-bold">Day {activeTimelineStep.dayNumber} {activeTimelineStep.situationTitle}</span>
-                      <span className="opacity-75">｜ 司令部・現地対応方針 ＆ 進行管理</span>
+                      <span className="opacity-75">｜ GM進行管理シート</span>
                     </div>
                     <span className="text-[10px] opacity-75 font-mono">[Page 2/2]</span>
-                  </div>
-
-                  {/* 🏢 司令部対応（上段・全幅2段配置・スクロールなし全文表示） */}
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/90 shadow-sm`}>
-                    <div className="mb-2 flex items-center justify-between border-b border-indigo-100 pb-1.5">
-                      <div className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
-                        <Building2 className="h-4 w-4 text-indigo-700" />
-                        🏢 司令部・後方拠点の動きと誘導ポイント
-                      </div>
-                      <span className="text-[10px] text-slate-500 font-normal">※全幅表示</span>
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={Math.max(5, (activeTimelineStep.hqResponse || "").split("\n").length + 2)}
-                        value={activeTimelineStep.hqResponse}
-                        onChange={(e) =>
-                          handleUpdateActiveTimelineStep((s) => ({
-                            ...s,
-                            hqResponse: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-3 text-xs leading-relaxed text-slate-900 focus:outline-none focus:border-indigo-600 font-sans"
-                      />
-                    ) : (
-                      <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                        {activeTimelineStep.hqResponse}
-                      </p>
-                    )}
-                  </div>
-
-                  {/* ⚓ 現地救難隊対応（下段・全幅2段配置・スクロールなし全文表示） */}
-                  <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/90 shadow-sm`}>
-                    <div className="mb-2 flex items-center justify-between border-b border-emerald-100 pb-1.5">
-                      <div className="text-xs font-bold text-emerald-950 flex items-center gap-1.5">
-                        <Anchor className="h-4 w-4 text-emerald-700" />
-                        ⚓ 現地・フィールド班の動きと誘導ポイント
-                      </div>
-                      <span className="text-[10px] text-slate-500 font-normal">※全幅表示</span>
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={Math.max(5, (activeTimelineStep.fieldResponse || "").split("\n").length + 2)}
-                        value={activeTimelineStep.fieldResponse}
-                        onChange={(e) =>
-                          handleUpdateActiveTimelineStep((s) => ({
-                            ...s,
-                            fieldResponse: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-400 bg-white p-3 text-xs leading-relaxed text-slate-900 focus:outline-none focus:border-emerald-600 font-sans"
-                      />
-                    ) : (
-                      <p className="whitespace-pre-wrap text-xs leading-relaxed text-slate-800">
-                        {activeTimelineStep.fieldResponse}
-                      </p>
-                    )}
                   </div>
 
                 {/* ✅ GM進行チェックポイント（直接追加・編集可能） */}
