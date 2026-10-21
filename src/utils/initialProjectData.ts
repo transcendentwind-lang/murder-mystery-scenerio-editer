@@ -523,7 +523,7 @@ export const initialProject: MMProject = {
     {
       id: "ev-radio-fragment",
       title: "遭難無線ログ",
-      description: "救難信号途絶直前に救護班が受信したノイズ混じりの微弱音声。『メーデー！メーデー！風で舵が効かない！真横から波（海流）を受けている！計器が全部――（激しいノイズで途絶）』。風と海流の双方を強く受けている事実を示す。",
+      description: "救難信号途絶直前に救護班が受信したノイズ混じりの微弱音声。『メーデー！メーデー！風で舵が効かない！真横から波（海流）を受けている！計器が全部――（激しいノイズで途絶）』。風と海流の両方の影響を受けていることが分かる。",
       ownerId: "pc-6",
       foundPhase: 1,
       visibility: "shareable",
@@ -537,7 +537,7 @@ export const initialProject: MMProject = {
       ownerId: "pc-3",
       foundPhase: 1,
       visibility: "shareable",
-      category: "sample",
+      category: "testimony",
       acquisitionCondition: "Day 1: 遭難船救助オペレーション成功時",
     },
     {
@@ -666,7 +666,7 @@ export const initialProject: MMProject = {
       ownerId: "pc-4",
       foundPhase: 3,
       visibility: "shareable",
-      category: "sample",
+      category: "data",
       acquisitionCondition: "Day 3以降: 小笠原側アクション【F-3A】等で調査可能（翌日以降も繰り越し調査可能）",
     },
     {
