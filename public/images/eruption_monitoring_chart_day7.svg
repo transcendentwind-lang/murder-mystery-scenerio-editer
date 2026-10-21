@@ -188,7 +188,7 @@
   <ellipse cx="505.0" cy="219.8" rx="4" ry="4" fill="#fee2e2" stroke="#dc2626" stroke-width="1.8"/>
   <text x="514.0" y="222.8" fill="#0f172a" font-size="11" font-weight="bold">御蔵島</text>
 
-  <!-- 🌟 Day 5 (Day 4噴火マーク) 御蔵島沖 海底噴火 -->
+  <!-- 🌟 Day 5 (噴火後4日目マーク) 御蔵島沖 海底噴火 -->
   <g transform="translate(480.0, 230.0)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -199,7 +199,7 @@
     <line x1="-12" y1="-3" x2="-45" y2="-10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(-235, -28)">
       <rect width="185" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="92" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 4 御蔵島沖海底噴火</text>
+      <text x="92" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後4日目 御蔵島沖海底噴火</text>
       <text x="92" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ噴火（M4地震誘発）</text>
     </g>
   </g>
@@ -247,12 +247,12 @@
     <line x1="-12" y1="-4" x2="-45" y2="-12" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(-255, -30)">
       <rect width="205" height="38" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="102" y="16" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 3 明神礁 連動大噴火</text>
-      <text x="102" y="29" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ突発噴火（Day 4朝 観測）</text>
+      <text x="102" y="16" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後3日目 明神礁 連動大噴火</text>
+      <text x="102" y="29" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ突発噴火（連動大爆発）</text>
     </g>
   </g>
 
-  <!-- 鳥島 (Day 2 噴火) -->
+  <!-- 鳥島 (噴火後2日目 噴火) -->
   <g transform="translate(623.5, 442.0)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -264,7 +264,7 @@
     <line x1="8" y1="0" x2="26" y2="0" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(26, -18)">
       <rect width="165" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 2 鳥島沖海底噴火</text>
+      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後2日目 鳥島沖海底噴火</text>
       <text x="82" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ連動大爆発</text>
     </g>
   </g>
@@ -273,7 +273,7 @@
   <ellipse cx="630.2" cy="486.3" rx="2" ry="2" fill="#dcfce7" stroke="#15803d" stroke-width="1.4"/>
   <text x="637.2" y="489.3" fill="#334155" font-size="10">孀婦岩</text>
 
-  <!-- 西之島 (Day 1 噴火) -->
+  <!-- 西之島 (噴火後1日目 噴火) -->
   <g transform="translate(719.9, 647.3)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -285,7 +285,7 @@
     <line x1="-8" y1="-2" x2="-26" y2="-10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(-205, -28)">
       <rect width="175" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 1 突発的大規模噴火</text>
+      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後1日目 突発的大規模噴火</text>
       <text x="87" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">火山灰・噴煙・周辺航行警報</text>
     </g>
   </g>
@@ -315,7 +315,7 @@
   </text>
   <rect x="640" y="8" width="540" height="32" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2" filter="url(#glow-red)"/>
   <text x="910" y="28" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">
-    🚨 富士山爆発的噴火開始 ｜ 噴煙高度18,000m成層圏到達 ｜ 巨大噴煙が東京・首都圏到達 (D7)
+    🚨 富士山爆発的噴火開始 ｜ 噴煙高度18,000m成層圏到達 ｜ 巨大噴煙が東京・首都圏到達 (噴火後6日目)
   </text>
 
   <!-- 凡例パネル -->

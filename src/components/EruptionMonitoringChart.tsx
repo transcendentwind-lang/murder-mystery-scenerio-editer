@@ -361,7 +361,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
               filter="url(#glow-red)"
             />
             <text x="92" y="15" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-              🔴 Day 4 御蔵島沖海底噴火
+              🔴 噴火後4日目 御蔵島沖海底噴火
             </text>
             <text x="92" y="28" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
               海底カルデラ噴火（M4地震誘発）
@@ -483,16 +483,16 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
               filter="url(#glow-red)"
             />
             <text x="102" y="16" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-              🔴 Day 3 明神礁 連動大噴火
+              🔴 噴火後3日目 明神礁 連動大噴火
             </text>
             <text x="102" y="29" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
-              海底カルデラ突発噴火（Day 4朝 観測）
+              海底カルデラ突発噴火（連動大爆発）
             </text>
           </g>
         </g>
       )}
 
-      {/* 鳥島 (Day 2 噴火) */}
+      {/* 鳥島 (噴火後2日目 噴火) */}
       <g transform="translate(623.5, 442.0)">
         <circle r="22" fill="#ef4444" opacity="0.3" filter="url(#glow-red)" />
         <circle r="12" fill="#dc2626" opacity="0.6" />
@@ -522,7 +522,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
             filter="url(#glow-red)"
           />
           <text x="82" y="15" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-            🔴 Day 2 鳥島沖海底噴火
+            🔴 噴火後2日目 鳥島沖海底噴火
           </text>
           <text x="82" y="28" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
             海底カルデラ連動大爆発
@@ -534,7 +534,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <ellipse cx="630.2" cy="486.3" rx="2" ry="2" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
       <text x="637.2" y="489.3" fill="#94a3b8" fontSize="10" fontWeight="normal" textAnchor="start">孀婦岩</text>
 
-      {/* 西之島 (Day 1 噴火) */}
+      {/* 西之島 (噴火後1日目 噴火) */}
       <g transform="translate(719.9, 647.3)">
         <circle r="22" fill="#ef4444" opacity="0.3" filter="url(#glow-red)" />
         <circle r="12" fill="#dc2626" opacity="0.6" />
@@ -564,7 +564,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
             filter="url(#glow-red)"
           />
           <text x="87" y="15" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">
-            🔴 Day 1 突発的大規模噴火
+            🔴 噴火後1日目 突発的大規模噴火
           </text>
           <text x="87" y="28" fill="#fecaca" fontSize="9" fontFamily="monospace" textAnchor="middle">
             火山灰・噴煙・周辺航行警報
@@ -625,14 +625,14 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         textAnchor="middle"
       >
         {isDay7
-          ? "🚨 富士山爆発的噴火開始 ｜ 噴煙高度18,000m成層圏到達 ｜ 巨大噴煙が東京・首都圏到達 (D7)"
+          ? "🚨 富士山爆発的噴火開始 ｜ 噴煙高度18,000m成層圏到達 ｜ 巨大噴煙が東京・首都圏到達 (噴火後6日目)"
           : isDay6OrLater
-          ? "観測記録：御蔵島沖噴火(D4) ｜ 富士山地下微動(D5) ｜ 伊豆大島M5.1震度4(D6)"
+          ? "観測記録：御蔵島沖噴火(噴火後4日目) ｜ 富士山地下微動(噴火後5日目) ｜ 伊豆大島M5.1震度4(噴火後6日目)"
           : isDay5OrLater
-          ? "噴火記録：西之島(D1) ｜ 鳥島沖(D2) ｜ 明神礁(D3) ｜ 御蔵島沖(D4)"
+          ? "噴火記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目) ｜ 明神礁(噴火後3日目) ｜ 御蔵島沖(噴火後4日目)"
           : isDay4OrLater
-          ? "噴火記録：西之島(Day 1) ｜ 鳥島沖(Day 2) ｜ 明神礁(Day 3)"
-          : "噴火観測記録：西之島(Day 1) ｜ 鳥島沖(Day 2)"}
+          ? "噴火記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目) ｜ 明神礁(噴火後3日目)"
+          : "噴火観測記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目)"}
       </text>
 
       {/* 左下：凡例パネル */}
@@ -647,8 +647,8 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
             : isDay5OrLater
             ? "噴火地点（西之島 / 鳥島沖 / 明神礁 / 御蔵島沖）"
             : isDay4OrLater
-            ? "噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 明神礁）"
-            : "噴火確認地点（Day 1 西之島 / Day 2 鳥島）"}
+            ? "噴火確認地点（噴火後1日目 西之島 / 噴火後2日目 鳥島 / 噴火後3日目 明神礁）"
+            : "噴火確認地点（噴火後1日目 西之島 / 噴火後2日目 鳥島）"}
         </text>
         {/* 凡例2 */}
         {isDay7 ? (

@@ -157,7 +157,7 @@
   <text x="589.2" y="382.9" fill="#334155" font-size="10" font-weight="normal" text-anchor="start">須美寿島</text>
   <text x="589.2" y="394.9" fill="#854d0e" font-size="9" font-weight="bold" text-anchor="start">未噴火</text>
 
-  <!-- 鳥島 (Day 2 噴火) -->
+  <!-- 鳥島 (噴火後2日目 噴火) -->
   <g transform="translate(623.5, 442.0)">
     <!-- 噴火パルスエフェクト -->
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
@@ -174,7 +174,7 @@
     <!-- 噴火記録バッジ（東側海域に配置） -->
     <g transform="translate(26, -18)">
       <rect width="165" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 2 鳥島沖海底噴火</text>
+      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後2日目 鳥島沖海底噴火</text>
       <text x="82" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ連動大爆発</text>
     </g>
   </g>
@@ -183,7 +183,7 @@
   <ellipse cx="630.2" cy="486.3" rx="2" ry="2" fill="#dcfce7" stroke="#15803d" stroke-width="1.4"/>
   <text x="637.2" y="489.3" fill="#334155" font-size="10" font-weight="normal" text-anchor="start">孀婦岩</text>
 
-  <!-- 西之島 (Day 1 噴火) -->
+  <!-- 西之島 (噴火後1日目 噴火) -->
   <g transform="translate(719.9, 647.3)">
     <!-- 噴火パルスエフェクト -->
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
@@ -200,7 +200,7 @@
     <!-- 噴火記録バッジ（北西側海域に配置・地名に絶対被らない） -->
     <g transform="translate(-205, -28)">
       <rect width="175" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 1 突発的大規模噴火</text>
+      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後1日目 突発的大規模噴火</text>
       <text x="87" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">火山灰・噴煙・周辺航行警報</text>
     </g>
   </g>
@@ -233,7 +233,7 @@
   <text x="24" y="38" fill="#475569" font-size="10" font-family="monospace">JAPAN COAST GUARD - VOLCANIC ACTIVITY MONITORING REPORT (CHART NO. V-2024 / WGS84)</text>
 
   <rect x="860" y="8" width="320" height="32" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
-  <text x="1020" y="28" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">噴火観測記録：西之島(Day 1) ｜ 鳥島沖(Day 2)</text>
+  <text x="1020" y="28" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">噴火観測記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目)</text>
 
   <!-- 左下：凡例パネル -->
   <g transform="translate(80, 615)">
@@ -241,7 +241,7 @@
     <text x="12" y="18" fill="#0f172a" font-size="11" font-weight="bold">【海図凡例 ＆ 観測要綱】</text>
     <!-- 凡例1 -->
     <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444"/>
-    <text x="32" y="36" fill="#b91c1c" font-size="10" font-weight="bold">噴火確認地点（Day 1 西之島 / Day 2 鳥島）</text>
+    <text x="32" y="36" fill="#b91c1c" font-size="10" font-weight="bold">噴火確認地点（噴火後1日目 西之島 / 噴火後2日目 鳥島）</text>
     <!-- 凡例2 -->
     <line x1="12" y1="52" x2="28" y2="52" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="3,3"/>
     <text x="34" y="56" fill="#334155" font-size="10">火山フロント (伊豆・小笠原火山弧：北端 伊豆半島)</text>

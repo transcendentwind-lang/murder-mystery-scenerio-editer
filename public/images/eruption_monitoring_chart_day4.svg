@@ -143,7 +143,7 @@
   <ellipse cx="581.2" cy="379.9" rx="3" ry="3" fill="#dcfce7" stroke="#15803d" stroke-width="1.4"/>
   <text x="589.2" y="382.9" fill="#334155" font-size="10">須美寿島</text>
 
-  <!-- 🌟 Day 4 (Day 3噴火マーク) 明神礁 海底噴火 -->
+  <!-- 🌟 Day 4 (噴火後3日目マーク) 明神礁 海底噴火 -->
   <g transform="translate(568.0, 348.0)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -154,12 +154,12 @@
     <line x1="-12" y1="-4" x2="-45" y2="-12" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(-255, -30)">
       <rect width="205" height="38" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="102" y="16" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 3 明神礁 連動大噴火</text>
-      <text x="102" y="29" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ突発噴火（Day 4朝 観測）</text>
+      <text x="102" y="16" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後3日目 明神礁 連動大噴火</text>
+      <text x="102" y="29" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ突発噴火（連動大爆発）</text>
     </g>
   </g>
 
-  <!-- 鳥島 (Day 2 噴火) -->
+  <!-- 鳥島 (噴火後2日目 噴火) -->
   <g transform="translate(623.5, 442.0)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -171,7 +171,7 @@
     <line x1="8" y1="0" x2="26" y2="0" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(26, -18)">
       <rect width="165" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 2 鳥島沖海底噴火</text>
+      <text x="82" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後2日目 鳥島沖海底噴火</text>
       <text x="82" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">海底カルデラ連動大爆発</text>
     </g>
   </g>
@@ -180,7 +180,7 @@
   <ellipse cx="630.2" cy="486.3" rx="2" ry="2" fill="#dcfce7" stroke="#15803d" stroke-width="1.4"/>
   <text x="637.2" y="489.3" fill="#334155" font-size="10">孀婦岩</text>
 
-  <!-- 西之島 (Day 1 噴火) -->
+  <!-- 西之島 (噴火後1日目 噴火) -->
   <g transform="translate(719.9, 647.3)">
     <circle r="22" fill="#fee2e2" opacity="0.75" stroke="#ef4444" stroke-width="1.5"/>
     <circle r="12" fill="#fecaca" opacity="0.85" stroke="#dc2626" stroke-width="1.2"/>
@@ -192,7 +192,7 @@
     <line x1="-8" y1="-2" x2="-26" y2="-10" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="2,2"/>
     <g transform="translate(-205, -28)">
       <rect width="175" height="36" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.5" />
-      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 Day 1 突発的大規模噴火</text>
+      <text x="87" y="15" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">🔴 噴火後1日目 突発的大規模噴火</text>
       <text x="87" y="28" fill="#7f1d1d" font-size="9" font-family="monospace" text-anchor="middle">火山灰・噴煙・周辺航行警報</text>
     </g>
   </g>
@@ -222,7 +222,7 @@
   </text>
   <rect x="740" y="8" width="440" height="32" rx="4" fill="#fee2e2" stroke="#ef4444" stroke-width="1.2"/>
   <text x="960" y="28" fill="#b91c1c" font-size="11" font-weight="bold" text-anchor="middle">
-    噴火記録：西之島(Day 1) ｜ 鳥島沖(Day 2) ｜ 明神礁(Day 3)
+    噴火記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目) ｜ 明神礁(噴火後3日目)
   </text>
 
   <!-- 凡例パネル -->
@@ -231,7 +231,7 @@
     <text x="12" y="18" fill="#0f172a" font-size="11" font-weight="bold">【海図凡例 ＆ 観測要綱】</text>
     <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444"/>
     <text x="32" y="36" fill="#b91c1c" font-size="10" font-weight="bold">
-      噴火確認地点（Day 1 西之島 / Day 2 鳥島 / Day 3 明神礁）
+      噴火確認地点（噴火後1日目 西之島 / 噴火後2日目 鳥島 / 噴火後3日目 明神礁）
     </text>
     <circle cx="20" cy="54" r="6" fill="none" stroke="#f59e0b" stroke-width="1.5"/>
     <text x="32" y="58" fill="#fbbf24" font-size="10" font-weight="bold">
