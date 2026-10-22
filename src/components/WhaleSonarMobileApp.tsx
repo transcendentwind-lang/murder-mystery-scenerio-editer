@@ -610,7 +610,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // ==========================================
   // Canvasへの「時間変化で形が残る波形」描画関数
-  // 横軸＝時間(ms)、縦軸＝上段:音の高さ(Hz階段)＋中段:クリック振動波形バー(振幅と減衰エンベロープ)
+  // 3語以下は1段表示、4語以上になるときは上下2段に分けて見やすく表示
   // ==========================================
   const drawPersistentWaveform = useCallback(
     (
@@ -629,38 +629,42 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       ctx.fillStyle = "rgb(2, 6, 23)";
       ctx.fillRect(0, 0, W, H);
 
-      // 背景グリッド線（時間軸 ＆ 周波数・振幅軸）
-      ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(14, 116, 144, 0.22)";
-      ctx.beginPath();
-      for (let x = 36; x < W; x += 45) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, H - 18);
-      }
-      for (let y = 18; y < H - 18; y += 22) {
-        ctx.moveTo(32, y);
-        ctx.lineTo(W, y);
-      }
-      ctx.stroke();
+      const isTwoRows = Boolean(trace && trace.segments.length >= 4);
+      const rowCount = isTwoRows ? 2 : 1;
+      const rowHeight = H / rowCount;
+      const leftPad = 36;
+      const usableW = W - 44;
 
-      // 中心ベースライン（振幅ゼロ線）
-      const centerY = Math.floor((H - 18) * 0.56);
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.28)";
-      ctx.setLineDash([4, 4]);
-      ctx.beginPath();
-      ctx.moveTo(32, centerY);
-      ctx.lineTo(W, centerY);
-      ctx.stroke();
-      ctx.setLineDash([]);
-
-      // 左端の周波数・高さ目安ラベル
-      ctx.fillStyle = "rgba(148, 163, 184, 0.7)";
-      ctx.font = "9px monospace";
-      ctx.fillText("高音", 4, 24);
-      ctx.fillText("中音", 4, centerY + 3);
-      ctx.fillText("低音", 4, H - 24);
-
+      // 空の状態（まだ音を鳴らしていないとき）
       if (!trace || trace.segments.length === 0) {
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(14, 116, 144, 0.22)";
+        ctx.beginPath();
+        for (let x = 36; x < W; x += 45) {
+          ctx.moveTo(x, 0);
+          ctx.lineTo(x, H - 18);
+        }
+        for (let y = 18; y < H - 18; y += 22) {
+          ctx.moveTo(32, y);
+          ctx.lineTo(W, y);
+        }
+        ctx.stroke();
+
+        const centerY = Math.floor((H - 18) * 0.56);
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.28)";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(32, centerY);
+        ctx.lineTo(W, centerY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        ctx.fillStyle = "rgba(148, 163, 184, 0.7)";
+        ctx.font = "9px monospace";
+        ctx.fillText("高音", 4, 24);
+        ctx.fillText("中音", 4, centerY + 3);
+        ctx.fillText("低音", 4, H - 24);
+
         ctx.fillStyle = "rgba(148, 163, 184, 0.6)";
         ctx.font = "11px sans-serif";
         ctx.textAlign = "center";
@@ -673,142 +677,229 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         return;
       }
 
-      const usableW = W - 44;
-      const leftPad = 36;
-      const totalMs = trace.totalDurationMs;
-      const timeToX = (ms: number) =>
-        leftPad + Math.min(1, Math.max(0, ms / totalMs)) * usableW;
+      // 4語以上の場合は前半（上段）と後半（下段）に分割
+      const splitIdx = isTwoRows
+        ? Math.ceil(trace.segments.length / 2)
+        : trace.segments.length;
 
-      // 周波数(1000Hz〜3700Hz)をY座標(上=高音16px 〜 下=低音 H-28px)にマッピング
-      const freqToY = (freq: number) => {
-        const norm = Math.min(1, Math.max(0, (freq - 1050) / (3700 - 1050)));
-        const topY = 18;
-        const bottomY = H - 28;
-        return bottomY - norm * (bottomY - topY);
-      };
+      const rowsData = isTwoRows
+        ? [
+            {
+              rowIndex: 0,
+              segments: trace.segments.slice(0, splitIdx),
+              startIndexOffset: 0,
+            },
+            {
+              rowIndex: 1,
+              segments: trace.segments.slice(splitIdx),
+              startIndexOffset: splitIdx,
+            },
+          ]
+        : [
+            {
+              rowIndex: 0,
+              segments: trace.segments,
+              startIndexOffset: 0,
+            },
+          ];
 
-      // 下部の時間目盛り描画 (0.0s, 0.2s, 0.4s...)
-      ctx.fillStyle = "rgba(100, 116, 139, 0.9)";
-      ctx.font = "9px monospace";
-      const stepMs = totalMs <= 1200 ? 200 : totalMs <= 2500 ? 400 : 1000;
-      for (let t = 0; t <= totalMs; t += stepMs) {
-        const tx = timeToX(t);
-        ctx.fillText(`${(t / 1000).toFixed(1)}s`, tx - 8, H - 5);
-      }
+      rowsData.forEach((row) => {
+        if (row.segments.length === 0) return;
 
-      // 各単語セグメントの区切り線と波形を描画
-      trace.segments.forEach((seg, segIdx) => {
-        const segStartX = timeToX(seg.startOffsetMs);
+        const rowTop = row.rowIndex * rowHeight;
+        const rowBottom = rowTop + rowHeight;
+        const plotTop = rowTop + 16;
+        const plotBottom = rowBottom - 16;
+        const centerY = Math.floor(plotTop + (plotBottom - plotTop) * 0.54);
 
-        // 複数語のときは単語境界線とラベルを表示
-        if (trace.segments.length > 1) {
-          if (segIdx > 0) {
-            ctx.strokeStyle = "rgba(99, 102, 241, 0.45)";
-            ctx.setLineDash([2, 3]);
-            ctx.beginPath();
-            ctx.moveTo(segStartX - 6, 4);
-            ctx.lineTo(segStartX - 6, H - 18);
-            ctx.stroke();
-            ctx.setLineDash([]);
-          }
-          ctx.fillStyle = "rgba(165, 243, 252, 0.85)";
-          ctx.font = "bold 9px sans-serif";
-          ctx.fillText(
-            `${segIdx + 1}.${seg.buttonCode}`,
-            segStartX + 2,
-            12
-          );
-        }
-
-        // 1. 音程（周波数）の推移を示す破線ライン（同じ単語内のパルス同士を繋ぐ）
-        if (seg.pulses.length > 1) {
-          ctx.strokeStyle = "rgba(251, 191, 36, 0.55)"; // amber-400
-          ctx.lineWidth = 1.5;
+        // 上段と下段の境界線（2段表示時）
+        if (row.rowIndex === 1) {
+          ctx.strokeStyle = "rgba(56, 189, 248, 0.35)";
+          ctx.lineWidth = 1;
           ctx.beginPath();
-          seg.pulses.forEach((p, pIdx) => {
-            const absMs = seg.startOffsetMs + p.delayMs;
-            const px = timeToX(absMs);
-            const py = freqToY(p.freqHz);
-            if (pIdx === 0) ctx.moveTo(px, py);
-            else ctx.lineTo(px, py);
-          });
+          ctx.moveTo(0, rowTop);
+          ctx.lineTo(W, rowTop);
           ctx.stroke();
         }
 
-        // 2. 各クリックパルスの「時間減衰エンベロープ波形バー」と「音程ドット」を描画
-        seg.pulses.forEach((p) => {
-          const absStartMs = seg.startOffsetMs + p.delayMs;
-          // 再生中の場合、まだプレイヘッドが到達していないパルスは薄く表示し、通過したパルスはくっきり残す
-          const isReached =
-            currentPlayheadMs === null || currentPlayheadMs >= absStartMs;
-
-          const startX = timeToX(absStartMs);
-          const endX = Math.max(
-            startX + 6,
-            timeToX(absStartMs + p.durationMs)
-          );
-          const pulseWidth = endX - startX;
-          const pitchY = freqToY(p.freqHz);
-
-          // 音の高さに応じたカラーリング（高音＝シアン、中音＝インディゴ/エメラルド、重低音＝アンバー/オレンジ）
-          let mainColor = "#22d3ee"; // 高音シアン
-          let glowColor = "rgba(34, 211, 238, 0.35)";
-          if (p.freqHz <= 1400) {
-            mainColor = "#f59e0b"; // 重低音アンバー
-            glowColor = "rgba(245, 158, 11, 0.35)";
-          } else if (p.freqHz <= 2000) {
-            mainColor = "#34d399"; // 中低音エメラルド
-            glowColor = "rgba(52, 211, 153, 0.35)";
-          }
-
-          ctx.globalAlpha = isReached ? 1.0 : 0.25;
-
-          // (A) クリック波形の減衰オシレーション（時間変化で残るギザギザの減衰波）
-          const maxAmpPx = ((H - 26) * 0.4) * p.amplitude;
-          ctx.fillStyle = glowColor;
-          ctx.beginPath();
-          ctx.moveTo(startX, centerY - maxAmpPx);
-          ctx.lineTo(endX, centerY);
-          ctx.lineTo(startX, centerY + maxAmpPx);
-          ctx.closePath();
-          ctx.fill();
-
-          // 細かい縦バーで音波の減衰形状をリアルに描く
-          ctx.strokeStyle = mainColor;
-          ctx.lineWidth = 1.6;
-          ctx.beginPath();
-          const barStep = 2.5;
-          for (let bx = startX; bx <= endX; bx += barStep) {
-            const progress = (bx - startX) / Math.max(1, pulseWidth);
-            // 指数減衰 × 高周波振動
-            const decay = Math.exp(-progress * 3.2);
-            const osc = Math.cos(progress * Math.PI * 5);
-            const h = Math.max(2, maxAmpPx * decay * Math.abs(osc));
-            ctx.moveTo(bx, centerY - h);
-            ctx.lineTo(bx, centerY + h);
-          }
-          ctx.stroke();
-
-          // (B) 音の高さ（周波数）を示す発光ポイント（上=高音、下=低音）
-          ctx.fillStyle = "#fde047"; // yellow-300
-          ctx.beginPath();
-          ctx.arc(startX + 1.5, pitchY, 3.2, 0, Math.PI * 2);
-          ctx.fill();
-
-          ctx.globalAlpha = 1.0;
-        });
-      });
-
-      // 再生中の現在時刻プレイヘッド（赤いスイープ線）
-      if (currentPlayheadMs !== null) {
-        const playheadX = timeToX(currentPlayheadMs);
-        ctx.strokeStyle = "#f43f5e"; // rose-500
-        ctx.lineWidth = 2;
+        // 各段のグリッド線
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = "rgba(14, 116, 144, 0.2)";
         ctx.beginPath();
-        ctx.moveTo(playheadX, 0);
-        ctx.lineTo(playheadX, H - 16);
+        for (let x = leftPad; x < W; x += 45) {
+          ctx.moveTo(x, rowTop + 2);
+          ctx.lineTo(x, rowBottom - 14);
+        }
+        const yStep = Math.max(16, Math.floor((plotBottom - plotTop) / 3));
+        for (let y = plotTop; y <= plotBottom; y += yStep) {
+          ctx.moveTo(32, y);
+          ctx.lineTo(W, y);
+        }
         ctx.stroke();
-      }
+
+        // 中心ベースライン（振幅ゼロ線）
+        ctx.strokeStyle = "rgba(56, 189, 248, 0.28)";
+        ctx.setLineDash([4, 4]);
+        ctx.beginPath();
+        ctx.moveTo(32, centerY);
+        ctx.lineTo(W, centerY);
+        ctx.stroke();
+        ctx.setLineDash([]);
+
+        // 左端の周波数・高さ目安ラベル
+        ctx.fillStyle = "rgba(148, 163, 184, 0.75)";
+        ctx.font = "9px monospace";
+        ctx.fillText("高音", 4, plotTop + 6);
+        ctx.fillText("中音", 4, centerY + 3);
+        ctx.fillText("低音", 4, plotBottom - 2);
+
+        // この段の時間範囲（rowStartMs 〜 rowEndMs）を算出
+        const firstSeg = row.segments[0];
+        const lastSeg = row.segments[row.segments.length - 1];
+        const rowStartMs = Math.max(0, firstSeg.startOffsetMs - 70);
+        const rowEndMs = Math.max(
+          rowStartMs + 800,
+          lastSeg.startOffsetMs + lastSeg.durationMs + 110
+        );
+        const rowDurationMs = Math.max(1, rowEndMs - rowStartMs);
+
+        const timeToX = (absMs: number) =>
+          leftPad +
+          Math.min(1, Math.max(0, (absMs - rowStartMs) / rowDurationMs)) *
+            usableW;
+
+        const freqToY = (freq: number) => {
+          const norm = Math.min(
+            1,
+            Math.max(0, (freq - 1050) / (3700 - 1050))
+          );
+          return plotBottom - norm * (plotBottom - plotTop);
+        };
+
+        // 下部の時間目盛り描画
+        ctx.fillStyle = "rgba(100, 116, 139, 0.9)";
+        ctx.font = "8.5px monospace";
+        const stepMs =
+          rowDurationMs <= 1200 ? 200 : rowDurationMs <= 2600 ? 400 : 800;
+        const firstTick = Math.ceil(rowStartMs / stepMs) * stepMs;
+        for (let t = firstTick; t <= rowEndMs; t += stepMs) {
+          const tx = timeToX(t);
+          ctx.fillText(`${(t / 1000).toFixed(1)}s`, tx - 8, rowBottom - 4);
+        }
+
+        // 各単語セグメントの区切り線と波形を描画
+        row.segments.forEach((seg, localIdx) => {
+          const globalIdx = row.startIndexOffset + localIdx;
+          const segStartX = timeToX(seg.startOffsetMs);
+
+          // 複数語のときは単語境界線と番号ラベルを表示
+          if (trace.segments.length > 1) {
+            if (localIdx > 0) {
+              ctx.strokeStyle = "rgba(99, 102, 241, 0.45)";
+              ctx.setLineDash([2, 3]);
+              ctx.beginPath();
+              ctx.moveTo(segStartX - 6, rowTop + 4);
+              ctx.lineTo(segStartX - 6, rowBottom - 14);
+              ctx.stroke();
+              ctx.setLineDash([]);
+            }
+            ctx.fillStyle = "rgba(165, 243, 252, 0.9)";
+            ctx.font = "bold 9px sans-serif";
+            ctx.fillText(
+              `${globalIdx + 1}.${seg.buttonCode}`,
+              segStartX + 2,
+              rowTop + 11
+            );
+          }
+
+          // 1. 音程（周波数）の推移を示す破線ライン
+          if (seg.pulses.length > 1) {
+            ctx.strokeStyle = "rgba(251, 191, 36, 0.55)";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            seg.pulses.forEach((p, pIdx) => {
+              const absMs = seg.startOffsetMs + p.delayMs;
+              const px = timeToX(absMs);
+              const py = freqToY(p.freqHz);
+              if (pIdx === 0) ctx.moveTo(px, py);
+              else ctx.lineTo(px, py);
+            });
+            ctx.stroke();
+          }
+
+          // 2. 各クリックパルスの時間減衰エンベロープ波形バーと音程ドットを描画
+          seg.pulses.forEach((p) => {
+            const absStartMs = seg.startOffsetMs + p.delayMs;
+            const isReached =
+              currentPlayheadMs === null || currentPlayheadMs >= absStartMs;
+
+            const startX = timeToX(absStartMs);
+            const endX = Math.max(
+              startX + 6,
+              timeToX(absStartMs + p.durationMs)
+            );
+            const pulseWidth = endX - startX;
+            const pitchY = freqToY(p.freqHz);
+
+            let mainColor = "#22d3ee";
+            let glowColor = "rgba(34, 211, 238, 0.35)";
+            if (p.freqHz <= 1400) {
+              mainColor = "#f59e0b";
+              glowColor = "rgba(245, 158, 11, 0.35)";
+            } else if (p.freqHz <= 2000) {
+              mainColor = "#34d399";
+              glowColor = "rgba(52, 211, 153, 0.35)";
+            }
+
+            ctx.globalAlpha = isReached ? 1.0 : 0.25;
+
+            const maxAmpPx = ((plotBottom - plotTop) * 0.42) * p.amplitude;
+            ctx.fillStyle = glowColor;
+            ctx.beginPath();
+            ctx.moveTo(startX, centerY - maxAmpPx);
+            ctx.lineTo(endX, centerY);
+            ctx.lineTo(startX, centerY + maxAmpPx);
+            ctx.closePath();
+            ctx.fill();
+
+            ctx.strokeStyle = mainColor;
+            ctx.lineWidth = 1.6;
+            ctx.beginPath();
+            const barStep = 2.5;
+            for (let bx = startX; bx <= endX; bx += barStep) {
+              const progress = (bx - startX) / Math.max(1, pulseWidth);
+              const decay = Math.exp(-progress * 3.2);
+              const osc = Math.cos(progress * Math.PI * 5);
+              const h = Math.max(2, maxAmpPx * decay * Math.abs(osc));
+              ctx.moveTo(bx, centerY - h);
+              ctx.lineTo(bx, centerY + h);
+            }
+            ctx.stroke();
+
+            ctx.fillStyle = "#fde047";
+            ctx.beginPath();
+            ctx.arc(startX + 1.5, pitchY, 3.0, 0, Math.PI * 2);
+            ctx.fill();
+
+            ctx.globalAlpha = 1.0;
+          });
+        });
+
+        // 再生中の現在時刻プレイヘッド（該当する段のみに赤いスイープ線を表示）
+        if (
+          currentPlayheadMs !== null &&
+          currentPlayheadMs >= rowStartMs &&
+          currentPlayheadMs <= rowEndMs
+        ) {
+          const playheadX = timeToX(currentPlayheadMs);
+          ctx.strokeStyle = "#f43f5e";
+          ctx.lineWidth = 2;
+          ctx.beginPath();
+          ctx.moveTo(playheadX, rowTop + 2);
+          ctx.lineTo(playheadX, rowBottom - 14);
+          ctx.stroke();
+        }
+      });
     },
     []
   );
@@ -1693,8 +1784,16 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       <canvas
                         ref={canvasRef}
                         width={400}
-                        height={112}
-                        className="w-full h-28 block"
+                        height={
+                          waveformTrace && waveformTrace.segments.length >= 4
+                            ? 216
+                            : 112
+                        }
+                        className={`w-full block transition-all duration-200 ${
+                          waveformTrace && waveformTrace.segments.length >= 4
+                            ? "h-52"
+                            : "h-28"
+                        }`}
                       />
                     </div>
 
