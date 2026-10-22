@@ -2193,190 +2193,192 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
               )}
             </div>
 
-            {/* 右側パネル：あてはめ状態管理 ＆ ワンタップ実験プリセット ＆ 試行錯誤ログ */}
-            <div className="w-full lg:w-96 space-y-4">
-              {/* 日本語あてはめ管理（初期リセット／答え合わせプレビュー） */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
-                <div className="flex items-center justify-between">
+            {/* 右側パネル（作者・テスト用）：プレイヤー専用画面（standalone）では非表示 */}
+            {!standalone && (
+              <div className="w-full lg:w-96 space-y-4">
+                {/* 日本語あてはめ管理（初期リセット／答え合わせプレビュー） */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Tag className="h-4 w-4 text-emerald-400" />
+                      <h3 className="text-xs font-bold text-white">
+                        日本語あてはめ状態の管理（作者・テスト用）
+                      </h3>
+                    </div>
+                    <span className="text-[11px] font-mono text-emerald-300">
+                      {assignedCount}/{orderedWords.length}語
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    初期状態では朝倉教授が示した<strong>『ゴゴゴゴ……＝海の下の火山』『ドォン……ドォン……＝警戒せよ』の2語のみ確定</strong>しており、残りの10語はプレイヤーが実験しながら別画面で日本語をあてはめます。
+                  </p>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={handleResetPlayerLabelsToInitial}
+                      className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-[11px] font-bold text-slate-200 hover:border-amber-500/50 hover:text-amber-300 transition flex items-center justify-center gap-1.5"
+                    >
+                      <RotateCcw className="h-3.5 w-3.5" />
+                      初期状態（2語のみ確定）に戻す
+                    </button>
+                    <button
+                      onClick={handleFillAllCorrectLabelsForPreview}
+                      className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-3 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-900/50 transition flex items-center justify-center gap-1.5"
+                    >
+                      <Eye className="h-3.5 w-3.5" />
+                      正解の日本語をすべてあてはめる
+                    </button>
+                  </div>
+                </div>
+
+                {/* ワンタップで試せる代表パターン */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <Tag className="h-4 w-4 text-emerald-400" />
+                    <Sparkles className="h-4 w-4 text-amber-400" />
                     <h3 className="text-xs font-bold text-white">
-                      日本語あてはめ状態の管理（作者・テスト用）
+                      ワンタップ動作テスト（代表的な正解パターン）
                     </h3>
                   </div>
-                  <span className="text-[11px] font-mono text-emerald-300">
-                    {assignedCount}/{orderedWords.length}語
-                  </span>
-                </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  初期状態では朝倉教授が示した<strong>『ゴゴゴゴ……＝海の下の火山』『ドォン……ドォン……＝警戒せよ』の2語のみ確定</strong>しており、残りの10語はプレイヤーが実験しながら別画面で日本語をあてはめます。
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <button
-                    onClick={handleResetPlayerLabelsToInitial}
-                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-[11px] font-bold text-slate-200 hover:border-amber-500/50 hover:text-amber-300 transition flex items-center justify-center gap-1.5"
-                  >
-                    <RotateCcw className="h-3.5 w-3.5" />
-                    初期状態（2語のみ確定）に戻す
-                  </button>
-                  <button
-                    onClick={handleFillAllCorrectLabelsForPreview}
-                    className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-3 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-900/50 transition flex items-center justify-center gap-1.5"
-                  >
-                    <Eye className="h-3.5 w-3.5" />
-                    正解の日本語をすべてあてはめる
-                  </button>
-                </div>
-              </div>
-
-              {/* ワンタップで試せる代表パターン */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
-                <div className="flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-amber-400" />
-                  <h3 className="text-xs font-bold text-white">
-                    ワンタップ動作テスト（代表的な正解パターン）
-                  </h3>
-                </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  下のボタンを押すと、クリック音パターンが再生されて時間変化の波形が画面に残り、クジラの行動が文字で表示されます。
-                </p>
-
-                <div className="space-y-2">
-                  {[
-                    {
-                      label: "①「西に向かう」＋「集まれ」を鳴らす",
-                      sub: "ピ・ポ・ポン ＋ カ・カ・カカッ！ ➔『クジラが西に移動した』",
-                      seq: ["word-go-west", "word-gather"],
-                      color:
-                        "border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-200",
-                    },
-                    {
-                      label: "②「北に向かう」＋「集まれ」を鳴らす",
-                      sub: "ピ・ピピッ ＋ カ・カ・カカッ！ ➔『クジラが北に移動した』",
-                      seq: ["word-go-north", "word-gather"],
-                      color:
-                        "border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/60 text-indigo-200",
-                    },
-                    {
-                      label: "③「海の下の火山」＋「警戒せよ」を鳴らす",
-                      sub: "ゴゴゴゴ… ＋ ドォン… ➔『海底火山から一斉退避した』",
-                      seq: ["word-subsea-volcano", "word-alert"],
-                      color:
-                        "border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/50 text-amber-200",
-                    },
-                    {
-                      label: "④「探せ」＋「巨大な餌」＋「集まれ」を鳴らす",
-                      sub: "タン・タン・タン ＋ チチチ… ＋ カ・カ・カカッ！ ➔『イカを捕食』",
-                      seq: ["word-search", "word-giant-prey", "word-gather"],
-                      color:
-                        "border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-200",
-                    },
-                    {
-                      label: "⑤ クライマックス「完全版8語祝詞」を鳴らす",
-                      sub: "人とクジラの約束・海底火山を北へ探せ・巨大な餌に集まれ",
-                      seq: [
-                        "word-human",
-                        "word-whale",
-                        "word-promise",
-                        "word-subsea-volcano",
-                        "word-go-north",
-                        "word-search",
-                        "word-giant-prey",
-                        "word-gather",
-                      ],
-                      color:
-                        "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",
-                    },
-                  ].map((preset, i) => (
-                    <button
-                      key={i}
-                      onClick={() => {
-                        setAssigningTargetWordId(null);
-                        handleTransmitSequence(
-                          preset.seq,
-                          preset.seq.length === 8 ? "1000m" : selectedDepth === "500m" ? "50m" : selectedDepth
-                        );
-                      }}
-                      disabled={isPlaying}
-                      className={`w-full rounded-xl border p-2.5 text-left transition disabled:opacity-40 ${preset.color}`}
-                    >
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs font-bold">{preset.label}</span>
-                        <Play className="h-3.5 w-3.5 shrink-0" />
-                      </div>
-                      <div className="mt-0.5 text-[10px] opacity-80">
-                        {preset.sub}
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* プレイヤーの試行錯誤履歴ログ */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                    <History className="h-4 w-4 text-cyan-400" />
-                    発信・観測ログ履歴（試行錯誤の記録）
-                  </span>
-                  {attemptLogs.length > 0 && (
-                    <button
-                      onClick={() => setAttemptLogs([])}
-                      className="text-[10px] text-slate-500 hover:text-slate-300"
-                    >
-                      履歴クリア
-                    </button>
-                  )}
-                </div>
-
-                {attemptLogs.length === 0 ? (
-                  <p className="text-xs text-slate-500 py-4 text-center">
-                    まだクリック音を発信していません。
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    下のボタンを押すと、クリック音パターンが再生されて時間変化の波形が画面に残り、クジラの行動が文字で表示されます。
                   </p>
-                ) : (
-                  <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
-                    {attemptLogs.map((log) => (
-                      <div
-                        key={log.id}
-                        className="rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs space-y-1"
+
+                  <div className="space-y-2">
+                    {[
+                      {
+                        label: "①「西に向かう」＋「集まれ」を鳴らす",
+                        sub: "ピ・ポ・ポン ＋ カ・カ・カカッ！ ➔『クジラが西に移動した』",
+                        seq: ["word-go-west", "word-gather"],
+                        color:
+                          "border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-200",
+                      },
+                      {
+                        label: "②「北に向かう」＋「集まれ」を鳴らす",
+                        sub: "ピ・ピピッ ＋ カ・カ・カカッ！ ➔『クジラが北に移動した』",
+                        seq: ["word-go-north", "word-gather"],
+                        color:
+                          "border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/60 text-indigo-200",
+                      },
+                      {
+                        label: "③「海の下の火山」＋「警戒せよ」を鳴らす",
+                        sub: "ゴゴゴゴ… ＋ ドォン… ➔『海底火山から一斉退避した』",
+                        seq: ["word-subsea-volcano", "word-alert"],
+                        color:
+                          "border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/50 text-amber-200",
+                      },
+                      {
+                        label: "④「探せ」＋「巨大な餌」＋「集まれ」を鳴らす",
+                        sub: "タン・タン・タン ＋ チチチ… ＋ カ・カ・カカッ！ ➔『イカを捕食』",
+                        seq: ["word-search", "word-giant-prey", "word-gather"],
+                        color:
+                          "border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-200",
+                      },
+                      {
+                        label: "⑤ クライマックス「完全版8語祝詞」を鳴らす",
+                        sub: "人とクジラの約束・海底火山を北へ探せ・巨大な餌に集まれ",
+                        seq: [
+                          "word-human",
+                          "word-whale",
+                          "word-promise",
+                          "word-subsea-volcano",
+                          "word-go-north",
+                          "word-search",
+                          "word-giant-prey",
+                          "word-gather",
+                        ],
+                        color:
+                          "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",
+                      },
+                    ].map((preset, i) => (
+                      <button
+                        key={i}
+                        onClick={() => {
+                          setAssigningTargetWordId(null);
+                          handleTransmitSequence(
+                            preset.seq,
+                            preset.seq.length === 8 ? "1000m" : selectedDepth === "500m" ? "50m" : selectedDepth
+                          );
+                        }}
+                        disabled={isPlaying}
+                        className={`w-full rounded-xl border p-2.5 text-left transition disabled:opacity-40 ${preset.color}`}
                       >
                         <div className="flex items-center justify-between">
-                          <span
-                            className={`font-bold text-[11px] ${
-                              log.status === "success"
-                                ? "text-emerald-400"
-                                : log.status === "partial"
-                                ? "text-amber-400"
-                                : "text-rose-400"
-                            }`}
-                          >
-                            {log.title}
-                          </span>
-                          <span className="text-[10px] font-mono text-slate-500">
-                            [{log.depthId}] {log.timestamp}
-                          </span>
+                          <span className="text-xs font-bold">{preset.label}</span>
+                          <Play className="h-3.5 w-3.5 shrink-0" />
                         </div>
-                        <div className="flex flex-wrap gap-1">
-                          {log.sequenceIds.map((id, idx) => {
-                            const meta = getWordButtonMeta(id);
-                            return (
-                              <span
-                                key={`${log.id}-${idx}`}
-                                className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] text-slate-300"
-                              >
-                                {meta.assignedJapanese
-                                  ? `${meta.code}:${meta.assignedJapanese}`
-                                  : `${meta.code}(${meta.onomatopoeia})`}
-                              </span>
-                            );
-                          })}
+                        <div className="mt-0.5 text-[10px] opacity-80">
+                          {preset.sub}
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
-                )}
+                </div>
+
+                {/* プレイヤーの試行錯誤履歴ログ */}
+                <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-2.5">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                      <History className="h-4 w-4 text-cyan-400" />
+                      発信・観測ログ履歴（試行錯誤の記録）
+                    </span>
+                    {attemptLogs.length > 0 && (
+                      <button
+                        onClick={() => setAttemptLogs([])}
+                        className="text-[10px] text-slate-500 hover:text-slate-300"
+                      >
+                        履歴クリア
+                      </button>
+                    )}
+                  </div>
+
+                  {attemptLogs.length === 0 ? (
+                    <p className="text-xs text-slate-500 py-4 text-center">
+                      まだクリック音を発信していません。
+                    </p>
+                  ) : (
+                    <div className="max-h-60 overflow-y-auto space-y-2 pr-1">
+                      {attemptLogs.map((log) => (
+                        <div
+                          key={log.id}
+                          className="rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs space-y-1"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`font-bold text-[11px] ${
+                                log.status === "success"
+                                  ? "text-emerald-400"
+                                  : log.status === "partial"
+                                  ? "text-amber-400"
+                                  : "text-rose-400"
+                              }`}
+                            >
+                              {log.title}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-500">
+                              [{log.depthId}] {log.timestamp}
+                            </span>
+                          </div>
+                          <div className="flex flex-wrap gap-1">
+                            {log.sequenceIds.map((id, idx) => {
+                              const meta = getWordButtonMeta(id);
+                              return (
+                                <span
+                                  key={`${log.id}-${idx}`}
+                                  className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] text-slate-300"
+                                >
+                                  {meta.assignedJapanese
+                                    ? `${meta.code}:${meta.assignedJapanese}`
+                                    : `${meta.code}(${meta.onomatopoeia})`}
+                                </span>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
