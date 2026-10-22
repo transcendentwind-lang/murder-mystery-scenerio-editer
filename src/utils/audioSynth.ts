@@ -164,25 +164,60 @@ class UnderwaterAudioEngine {
       case "word-human": // 人間：舌クリック吸着音 均等2連打
         await this.playClickPattern([0, 240], 2300, speedMultiplier);
         break;
-      case "word-whale": // クジラ：重厚な低音長打
-        await this.playClickPattern([0, 480], 1500, speedMultiplier);
+      case "word-whale": // クジラ：重厚な低音長打（ド・ドーン）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 1650, duration: 0.025, volume: 0.85 },
+            { delayMs: 420, freq: 1350, duration: 0.04, volume: 0.95 },
+          ],
+          speedMultiplier
+        );
         break;
-      case "word-promise": // 約束（盟約）：共鳴する高低交差3連打
-        await this.playClickPattern([0, 180, 360], 2600, speedMultiplier);
+      case "word-promise": // 約束（盟約）：共鳴する高低交差3連打（チ・トン・チ）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 2900, duration: 0.016, volume: 0.85 },
+            { delayMs: 190, freq: 1750, duration: 0.024, volume: 0.9 },
+            { delayMs: 380, freq: 2900, duration: 0.016, volume: 0.85 },
+          ],
+          speedMultiplier
+        );
         break;
 
       // --- 地理・行動・目標の言葉 ---
-      case "word-subsea-volcano": // 海の下の火山：重低音の連続地鳴りパルス
-        await this.playClickPattern([0, 200, 400, 600], 1200, speedMultiplier);
+      case "word-subsea-volcano": // 海の下の火山：重低音の連続地鳴りパルス（ゴゴゴゴ……）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 1250, duration: 0.032, volume: 0.9 },
+            { delayMs: 180, freq: 1200, duration: 0.032, volume: 0.9 },
+            { delayMs: 360, freq: 1180, duration: 0.035, volume: 0.92 },
+            { delayMs: 540, freq: 1150, duration: 0.038, volume: 0.95 },
+          ],
+          speedMultiplier
+        );
         break;
-      case "word-search": // 探せ（索敵）：等間隔の探査パルス
+      case "word-search": // 探せ（索敵）：等間隔の探査パルス（タン・タン・タン）
         await this.playClickPattern([0, 250, 500], 2400, speedMultiplier);
         break;
-      case "word-go-north": // 北に向かう：上昇テンポ・高音パルス
-        await this.playClickPattern([0, 160, 280], 2900, speedMultiplier);
+      case "word-go-north": // 北に向かう：上昇テンポ・高音パルス（ピ・ピピッ）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.8 },
+            { delayMs: 170, freq: 2850, duration: 0.015, volume: 0.85 },
+            { delayMs: 290, freq: 3300, duration: 0.015, volume: 0.9 },
+          ],
+          speedMultiplier
+        );
         break;
-      case "word-go-south": // 南に向かう：低音下降パルス
-        await this.playClickPattern([0, 220, 440], 1700, speedMultiplier);
+      case "word-go-south": // 南に向かう：低音下降パルス（ポ・ポポン）
+        await this.playMelodicPattern(
+          [
+            { delayMs: 0, freq: 2100, duration: 0.018, volume: 0.8 },
+            { delayMs: 220, freq: 1750, duration: 0.02, volume: 0.85 },
+            { delayMs: 440, freq: 1450, duration: 0.025, volume: 0.9 },
+          ],
+          speedMultiplier
+        );
         break;
       case "word-go-east": // 東に向かう：鋭い急上昇2点打（ツ・ピィッ！ / 1,800Hz ➔ 3,200Hz）
         await this.playMelodicPattern(

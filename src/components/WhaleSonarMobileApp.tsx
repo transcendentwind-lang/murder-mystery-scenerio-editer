@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
 import { audioEngine } from "@/utils/audioSynth";
 import {
@@ -19,11 +19,14 @@ import {
   Trash2,
   ExternalLink,
   Eye,
-  EyeOff,
-  Compass,
   Waves,
   History,
   HelpCircle,
+  Tag,
+  Lock,
+  ArrowLeft,
+  Check,
+  Activity,
 } from "lucide-react";
 
 export interface WhaleBehaviorRule {
@@ -221,7 +224,152 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
   },
 ];
 
+// ==========================================
+// 朝倉教授が最初に示した「最初から日本語が確定している2つの音」
+// ==========================================
+export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
+  "word-subsea-volcano": "海の下の火山",
+  "word-alert": "警戒せよ",
+};
+
+// プレイヤーがあてはめ画面で選択できる日本語の候補リスト
+export const JAPANESE_MEANING_CANDIDATES: {
+  label: string;
+  subHint: string;
+  isLockedInitial?: boolean;
+}[] = [
+  { label: "人間", subHint: "祝詞・伝承に登場する主体" },
+  { label: "クジラ", subHint: "深海の同胞・勇魚（いさ）" },
+  { label: "約束", subHint: "太古に交わされた盟約・契り" },
+  { label: "北に向かう", subHint: "移動・方位の指示" },
+  { label: "南に向かう", subHint: "移動・方位の指示" },
+  { label: "東に向かう", subHint: "移動・方位の指示" },
+  { label: "西に向かう", subHint: "移動・方位の指示" },
+  { label: "探せ", subHint: "索敵・捜索の行動指示" },
+  { label: "巨大な餌", subHint: "ご馳走・大獲物（ダイオウイカ）" },
+  { label: "集まれ", subHint: "群れへの招集・合流の号令" },
+  {
+    label: "海の下の火山",
+    subHint: "朝倉教授の記録No.14により最初から確定",
+    isLockedInitial: true,
+  },
+  {
+    label: "警戒せよ",
+    subHint: "朝倉教授の記録No.14により最初から確定",
+    isLockedInitial: true,
+  },
+];
+
+// ==========================================
+// 時間軸波形描画用の各クリック音パルス定義（横軸＝時間ms、縦軸＝周波数Hz・振幅）
+// ==========================================
+export interface AcousticPulsePoint {
+  delayMs: number;
+  freqHz: number;
+  durationMs: number;
+  amplitude: number;
+}
+
+export function getWordAcousticPulses(wordId: string): AcousticPulsePoint[] {
+  switch (wordId) {
+    case "word-subsea-volcano": // ゴゴゴゴ……（重低音連続地鳴り4連パルス）
+      return [
+        { delayMs: 0, freqHz: 1250, durationMs: 130, amplitude: 0.92 },
+        { delayMs: 180, freqHz: 1200, durationMs: 130, amplitude: 0.92 },
+        { delayMs: 360, freqHz: 1180, durationMs: 140, amplitude: 0.95 },
+        { delayMs: 540, freqHz: 1150, durationMs: 150, amplitude: 0.98 },
+      ];
+    case "word-alert": // ドォン……ドォン……（重低音の長間隔2連警告パルス）
+      return [
+        { delayMs: 0, freqHz: 1300, durationMs: 180, amplitude: 0.98 },
+        { delayMs: 550, freqHz: 1200, durationMs: 200, amplitude: 0.95 },
+      ];
+    case "word-human": // カッ・カッ（均等2連打）
+      return [
+        { delayMs: 0, freqHz: 2300, durationMs: 55, amplitude: 0.85 },
+        { delayMs: 240, freqHz: 2300, durationMs: 55, amplitude: 0.85 },
+      ];
+    case "word-whale": // ド・ドーン（重厚な低音長打）
+      return [
+        { delayMs: 0, freqHz: 1650, durationMs: 90, amplitude: 0.85 },
+        { delayMs: 420, freqHz: 1350, durationMs: 170, amplitude: 0.96 },
+      ];
+    case "word-promise": // チ・トン・チ（高低交差3連打）
+      return [
+        { delayMs: 0, freqHz: 2900, durationMs: 50, amplitude: 0.85 },
+        { delayMs: 190, freqHz: 1750, durationMs: 85, amplitude: 0.9 },
+        { delayMs: 380, freqHz: 2900, durationMs: 50, amplitude: 0.85 },
+      ];
+    case "word-go-north": // ピ・ピピッ（上昇高音3連パルス）
+      return [
+        { delayMs: 0, freqHz: 2400, durationMs: 50, amplitude: 0.8 },
+        { delayMs: 170, freqHz: 2850, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 290, freqHz: 3300, durationMs: 45, amplitude: 0.95 },
+      ];
+    case "word-go-south": // ポ・ポポン（下降低音3連パルス）
+      return [
+        { delayMs: 0, freqHz: 2100, durationMs: 65, amplitude: 0.82 },
+        { delayMs: 220, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
+        { delayMs: 440, freqHz: 1450, durationMs: 95, amplitude: 0.92 },
+      ];
+    case "word-go-east": // ツ・ピィッ！（急上昇2点打）
+      return [
+        { delayMs: 0, freqHz: 1800, durationMs: 70, amplitude: 0.82 },
+        { delayMs: 240, freqHz: 3200, durationMs: 50, amplitude: 0.95 },
+      ];
+    case "word-go-west": // ピ・ポ・ポン（階段状下降3点打）
+      return [
+        { delayMs: 0, freqHz: 3200, durationMs: 50, amplitude: 0.88 },
+        { delayMs: 190, freqHz: 2300, durationMs: 65, amplitude: 0.85 },
+        { delayMs: 380, freqHz: 1500, durationMs: 95, amplitude: 0.9 },
+      ];
+    case "word-search": // タン・タン・タン（等間隔3連打）
+      return [
+        { delayMs: 0, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
+        { delayMs: 250, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
+        { delayMs: 500, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
+      ];
+    case "word-giant-prey": // チチチチチチッ！（高音超高速8連バースト）
+      return [0, 60, 120, 180, 240, 300, 360, 420].map((d, i) => ({
+        delayMs: d,
+        freqHz: 3500 + (i % 2) * 150,
+        durationMs: 35,
+        amplitude: 0.85 + (i / 8) * 0.12,
+      }));
+    case "word-gather": // カ・カ・カカッ！（加速する4連打）
+      return [
+        { delayMs: 0, freqHz: 2800, durationMs: 55, amplitude: 0.82 },
+        { delayMs: 280, freqHz: 2850, durationMs: 50, amplitude: 0.86 },
+        { delayMs: 460, freqHz: 2900, durationMs: 45, amplitude: 0.92 },
+        { delayMs: 560, freqHz: 3000, durationMs: 50, amplitude: 0.98 },
+      ];
+    default:
+      return [
+        { delayMs: 0, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
+        { delayMs: 200, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
+      ];
+  }
+}
+
+export interface TimelineWaveformSegment {
+  wordId: string;
+  buttonCode: string;
+  assignedLabel: string;
+  startOffsetMs: number;
+  durationMs: number;
+  pulses: AcousticPulsePoint[];
+}
+
+export interface RecordedWaveformTrace {
+  title: string;
+  wordIds: string[];
+  totalDurationMs: number;
+  segments: TimelineWaveformSegment[];
+  recordedAt: string;
+}
+
 const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v1";
+const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v1";
 
 interface AttemptLog {
   id: string;
@@ -237,7 +385,7 @@ interface AttemptLog {
 interface WhaleSonarMobileAppProps {
   words: CrypticWord[];
   grammar?: CrypticGrammar;
-  standalone?: boolean; // /sonar ページ等で単体フル画面表示する場合 true
+  standalone?: boolean;
 }
 
 export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
@@ -250,13 +398,37 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
   const [activeWordId, setActiveWordId] = useState<string | null>(null);
   const [isAmbientOn, setIsAmbientOn] = useState(false);
-  const [showMeaningHint, setShowMeaningHint] = useState(true);
   const [currentOutcome, setCurrentOutcome] = useState<AttemptLog | null>(null);
   const [attemptLogs, setAttemptLogs] = useState<AttemptLog[]>([]);
   const [viewMode, setViewMode] = useState<"mobile_player" | "rule_editor">(
     "mobile_player"
   );
   const [relayStageText, setRelayStageText] = useState<string | null>(null);
+
+  // ==========================================
+  // プレイヤーによる「音への日本語あてはめ」状態管理
+  // 初期状態では「海の下の火山（ゴゴゴゴ…）」と「警戒せよ（ドォン…ドォン…）」の2語のみ確定
+  // ==========================================
+  const [playerAssignedLabels, setPlayerAssignedLabels] = useState<
+    Record<string, string>
+  >({
+    ...LOCKED_INITIAL_MEANINGS,
+  });
+
+  // 日本語をあてはめる別画面（選択画面）への遷移ステート
+  // null のときはメインのクリック音ボタン画面、wordId が入っているときはその音の「日本語あてはめ選択画面」を表示
+  const [assigningTargetWordId, setAssigningTargetWordId] = useState<
+    string | null
+  >(null);
+
+  // ==========================================
+  // 時間変化で形が残る波形データ（最新再生された音のタイムライン記録）
+  // ==========================================
+  const [waveformTrace, setWaveformTrace] =
+    useState<RecordedWaveformTrace | null>(null);
+  const [playbackProgressMs, setPlaybackProgressMs] = useState<number | null>(
+    null
+  );
 
   // 新規ルール追加用ステート
   const [newRuleName, setNewRuleName] = useState("");
@@ -266,22 +438,100 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [newRuleBadge, setNewRuleBadge] = useState("🐋 クジラ行動反応");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const animRef = useRef<number | null>(null);
+  const assignCanvasRef = useRef<HTMLCanvasElement | null>(null);
+  const progressTimerRef = useRef<number | null>(null);
 
-  // ルールのローカルストレージ読み込み
+  // クリック音ボタンの表示順（確定済みの2語を先頭に配置し、残りを番号順に配置）
+  const orderedWords = React.useMemo(() => {
+    const locked = words.filter((w) => LOCKED_INITIAL_MEANINGS[w.id]);
+    const unlocked = words.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
+    return [...locked, ...unlocked];
+  }, [words]);
+
+  // 各wordIdに対するボタン番号（例: "音 #01", "音 #02"...）と音響擬音ラベルを取得
+  const getWordButtonMeta = useCallback(
+    (wordId: string) => {
+      const idx = orderedWords.findIndex((w) => w.id === wordId);
+      const numStr = idx >= 0 ? String(idx + 1).padStart(2, "0") : "00";
+      const wordObj = words.find((w) => w.id === wordId);
+      const onomatopoeia =
+        wordObj?.soundPattern.match(/（(.+?)）/)?.[1] ||
+        wordObj?.soundPattern ||
+        "クリック音";
+      const isLocked = Boolean(LOCKED_INITIAL_MEANINGS[wordId]);
+      const assignedJapanese =
+        LOCKED_INITIAL_MEANINGS[wordId] || playerAssignedLabels[wordId] || "";
+
+      return {
+        code: `音 #${numStr}`,
+        onomatopoeia,
+        symbol: wordObj?.symbol || "●●",
+        isLocked,
+        assignedJapanese,
+        trueMeaning: wordObj ? wordObj.meaning.split("（")[0] : wordId,
+      };
+    },
+    [orderedWords, words, playerAssignedLabels]
+  );
+
+  // ローカルストレージからルールとプレイヤーの日本語あてはめ状態を復元
   useEffect(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY_RULES);
-      if (saved) {
-        const parsed = JSON.parse(saved);
+      const savedRules = localStorage.getItem(STORAGE_KEY_RULES);
+      if (savedRules) {
+        const parsed = JSON.parse(savedRules);
         if (Array.isArray(parsed) && parsed.length > 0) {
           setRules(parsed);
+        }
+      }
+      const savedLabels = localStorage.getItem(STORAGE_KEY_PLAYER_LABELS);
+      if (savedLabels) {
+        const parsedLabels = JSON.parse(savedLabels);
+        if (parsedLabels && typeof parsedLabels === "object") {
+          setPlayerAssignedLabels({
+            ...parsedLabels,
+            ...LOCKED_INITIAL_MEANINGS, // 確定2語は常に保証
+          });
         }
       }
     } catch {
       // ignore
     }
   }, []);
+
+  const handleSavePlayerLabels = (nextLabels: Record<string, string>) => {
+    const merged = {
+      ...nextLabels,
+      ...LOCKED_INITIAL_MEANINGS,
+    };
+    setPlayerAssignedLabels(merged);
+    try {
+      localStorage.setItem(STORAGE_KEY_PLAYER_LABELS, JSON.stringify(merged));
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleResetPlayerLabelsToInitial = () => {
+    const resetState = { ...LOCKED_INITIAL_MEANINGS };
+    setPlayerAssignedLabels(resetState);
+    try {
+      localStorage.setItem(
+        STORAGE_KEY_PLAYER_LABELS,
+        JSON.stringify(resetState)
+      );
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleFillAllCorrectLabelsForPreview = () => {
+    const allCorrect: Record<string, string> = {};
+    words.forEach((w) => {
+      allCorrect[w.id] = w.meaning.split("（")[0];
+    });
+    handleSavePlayerLabels(allCorrect);
+  };
 
   const handleSaveRules = (nextRules: WhaleBehaviorRule[]) => {
     setRules(nextRules);
@@ -292,82 +542,311 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     }
   };
 
-  // オシロスコープ波形描画
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+  // ==========================================
+  // 単語配列から「時間軸に沿って形が残る波形データ（RecordedWaveformTrace）」を生成
+  // ==========================================
+  const buildWaveformTrace = useCallback(
+    (targetWordIds: string[], customTitle?: string): RecordedWaveformTrace => {
+      let cursorMs = 80; // 左端の余白時間
+      const segments: TimelineWaveformSegment[] = [];
 
-    const render = () => {
-      animRef.current = requestAnimationFrame(render);
-      const analyser = audioEngine?.getAnalyser();
-      const bufferLength = analyser ? analyser.frequencyBinCount : 128;
-      const dataArray = new Uint8Array(bufferLength);
-      if (analyser) {
-        analyser.getByteTimeDomainData(dataArray);
-      } else {
-        dataArray.fill(128);
-      }
+      targetWordIds.forEach((wId) => {
+        const pulses = getWordAcousticPulses(wId);
+        const meta = getWordButtonMeta(wId);
+        const lastPulse = pulses[pulses.length - 1];
+        const wordSpanMs = lastPulse
+          ? lastPulse.delayMs + lastPulse.durationMs + 140
+          : 500;
 
+        segments.push({
+          wordId: wId,
+          buttonCode: meta.code,
+          assignedLabel: meta.assignedJapanese || "未解明（？？？）",
+          startOffsetMs: cursorMs,
+          durationMs: wordSpanMs,
+          pulses,
+        });
+
+        cursorMs += wordSpanMs + 220; // 単語間のインターバル
+      });
+
+      const totalDurationMs = Math.max(850, cursorMs - 100);
+      return {
+        title:
+          customTitle ||
+          (targetWordIds.length === 1
+            ? `${getWordButtonMeta(targetWordIds[0]).code}『${
+                getWordButtonMeta(targetWordIds[0]).onomatopoeia
+              }』の音響波形`
+            : `${targetWordIds.length}語連結パターンの音響波形`),
+        wordIds: [...targetWordIds],
+        totalDurationMs,
+        segments,
+        recordedAt: new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit",
+        }),
+      };
+    },
+    [getWordButtonMeta]
+  );
+
+  // ==========================================
+  // Canvasへの「時間変化で形が残る波形」描画関数
+  // 横軸＝時間(ms)、縦軸＝上段:音の高さ(Hz階段)＋中段:クリック振動波形バー(振幅と減衰エンベロープ)
+  // ==========================================
+  const drawPersistentWaveform = useCallback(
+    (
+      canvas: HTMLCanvasElement | null,
+      trace: RecordedWaveformTrace | null,
+      currentPlayheadMs: number | null
+    ) => {
+      if (!canvas) return;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) return;
+
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // 背景塗りつぶし
       ctx.fillStyle = "rgb(2, 6, 23)";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillRect(0, 0, W, H);
 
-      // ソナーグリッド
+      // 背景グリッド線（時間軸 ＆ 周波数・振幅軸）
       ctx.lineWidth = 1;
-      ctx.strokeStyle = "rgba(14, 116, 144, 0.2)";
+      ctx.strokeStyle = "rgba(14, 116, 144, 0.22)";
       ctx.beginPath();
-      for (let x = 0; x < canvas.width; x += 36) {
+      for (let x = 36; x < W; x += 45) {
         ctx.moveTo(x, 0);
-        ctx.lineTo(x, canvas.height);
+        ctx.lineTo(x, H - 18);
       }
-      for (let y = 0; y < canvas.height; y += 24) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(canvas.width, y);
+      for (let y = 18; y < H - 18; y += 22) {
+        ctx.moveTo(32, y);
+        ctx.lineTo(W, y);
       }
       ctx.stroke();
 
-      // 波形ライン
-      ctx.lineWidth = 2.5;
-      ctx.strokeStyle = isPlaying ? "#22d3ee" : "#38bdf8";
-      ctx.shadowColor = "#06b6d4";
-      ctx.shadowBlur = isPlaying ? 10 : 4;
-
+      // 中心ベースライン（振幅ゼロ線）
+      const centerY = Math.floor((H - 18) * 0.56);
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.28)";
+      ctx.setLineDash([4, 4]);
       ctx.beginPath();
-      const sliceWidth = (canvas.width * 1.0) / bufferLength;
-      let x = 0;
-
-      for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = (v * canvas.height) / 2;
-        if (i === 0) {
-          ctx.moveTo(x, y);
-        } else {
-          ctx.lineTo(x, y);
-        }
-        x += sliceWidth;
-      }
-      ctx.lineTo(canvas.width, canvas.height / 2);
+      ctx.moveTo(32, centerY);
+      ctx.lineTo(W, centerY);
       ctx.stroke();
-      ctx.shadowBlur = 0;
-    };
+      ctx.setLineDash([]);
 
-    render();
-    return () => {
-      if (animRef.current) cancelAnimationFrame(animRef.current);
-    };
-  }, [isPlaying]);
+      // 左端の周波数・高さ目安ラベル
+      ctx.fillStyle = "rgba(148, 163, 184, 0.7)";
+      ctx.font = "9px monospace";
+      ctx.fillText("高音", 4, 24);
+      ctx.fillText("中音", 4, centerY + 3);
+      ctx.fillText("低音", 4, H - 24);
 
-  // 単語ボタンを押した時（クリック音を鳴らしてパターン末尾に追加）
+      if (!trace || trace.segments.length === 0) {
+        ctx.fillStyle = "rgba(148, 163, 184, 0.6)";
+        ctx.font = "11px sans-serif";
+        ctx.textAlign = "center";
+        ctx.fillText(
+          "音を鳴らすと、ここに時間変化の波形・リズムが記録されて残ります",
+          W / 2 + 10,
+          centerY + 4
+        );
+        ctx.textAlign = "start";
+        return;
+      }
+
+      const usableW = W - 44;
+      const leftPad = 36;
+      const totalMs = trace.totalDurationMs;
+      const timeToX = (ms: number) =>
+        leftPad + Math.min(1, Math.max(0, ms / totalMs)) * usableW;
+
+      // 周波数(1000Hz〜3700Hz)をY座標(上=高音16px 〜 下=低音 H-28px)にマッピング
+      const freqToY = (freq: number) => {
+        const norm = Math.min(1, Math.max(0, (freq - 1050) / (3700 - 1050)));
+        const topY = 18;
+        const bottomY = H - 28;
+        return bottomY - norm * (bottomY - topY);
+      };
+
+      // 下部の時間目盛り描画 (0.0s, 0.2s, 0.4s...)
+      ctx.fillStyle = "rgba(100, 116, 139, 0.9)";
+      ctx.font = "9px monospace";
+      const stepMs = totalMs <= 1200 ? 200 : totalMs <= 2500 ? 400 : 1000;
+      for (let t = 0; t <= totalMs; t += stepMs) {
+        const tx = timeToX(t);
+        ctx.fillText(`${(t / 1000).toFixed(1)}s`, tx - 8, H - 5);
+      }
+
+      // 各単語セグメントの区切り線と波形を描画
+      trace.segments.forEach((seg, segIdx) => {
+        const segStartX = timeToX(seg.startOffsetMs);
+
+        // 複数語のときは単語境界線とラベルを表示
+        if (trace.segments.length > 1) {
+          if (segIdx > 0) {
+            ctx.strokeStyle = "rgba(99, 102, 241, 0.45)";
+            ctx.setLineDash([2, 3]);
+            ctx.beginPath();
+            ctx.moveTo(segStartX - 6, 4);
+            ctx.lineTo(segStartX - 6, H - 18);
+            ctx.stroke();
+            ctx.setLineDash([]);
+          }
+          ctx.fillStyle = "rgba(165, 243, 252, 0.85)";
+          ctx.font = "bold 9px sans-serif";
+          ctx.fillText(
+            `${segIdx + 1}.${seg.buttonCode}`,
+            segStartX + 2,
+            12
+          );
+        }
+
+        // 1. 音程（周波数）の推移を示す破線ライン（同じ単語内のパルス同士を繋ぐ）
+        if (seg.pulses.length > 1) {
+          ctx.strokeStyle = "rgba(251, 191, 36, 0.55)"; // amber-400
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          seg.pulses.forEach((p, pIdx) => {
+            const absMs = seg.startOffsetMs + p.delayMs;
+            const px = timeToX(absMs);
+            const py = freqToY(p.freqHz);
+            if (pIdx === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+          });
+          ctx.stroke();
+        }
+
+        // 2. 各クリックパルスの「時間減衰エンベロープ波形バー」と「音程ドット」を描画
+        seg.pulses.forEach((p) => {
+          const absStartMs = seg.startOffsetMs + p.delayMs;
+          // 再生中の場合、まだプレイヘッドが到達していないパルスは薄く表示し、通過したパルスはくっきり残す
+          const isReached =
+            currentPlayheadMs === null || currentPlayheadMs >= absStartMs;
+
+          const startX = timeToX(absStartMs);
+          const endX = Math.max(
+            startX + 6,
+            timeToX(absStartMs + p.durationMs)
+          );
+          const pulseWidth = endX - startX;
+          const pitchY = freqToY(p.freqHz);
+
+          // 音の高さに応じたカラーリング（高音＝シアン、中音＝インディゴ/エメラルド、重低音＝アンバー/オレンジ）
+          let mainColor = "#22d3ee"; // 高音シアン
+          let glowColor = "rgba(34, 211, 238, 0.35)";
+          if (p.freqHz <= 1400) {
+            mainColor = "#f59e0b"; // 重低音アンバー
+            glowColor = "rgba(245, 158, 11, 0.35)";
+          } else if (p.freqHz <= 2000) {
+            mainColor = "#34d399"; // 中低音エメラルド
+            glowColor = "rgba(52, 211, 153, 0.35)";
+          }
+
+          ctx.globalAlpha = isReached ? 1.0 : 0.25;
+
+          // (A) クリック波形の減衰オシレーション（時間変化で残るギザギザの減衰波）
+          const maxAmpPx = ((H - 26) * 0.4) * p.amplitude;
+          ctx.fillStyle = glowColor;
+          ctx.beginPath();
+          ctx.moveTo(startX, centerY - maxAmpPx);
+          ctx.lineTo(endX, centerY);
+          ctx.lineTo(startX, centerY + maxAmpPx);
+          ctx.closePath();
+          ctx.fill();
+
+          // 細かい縦バーで音波の減衰形状をリアルに描く
+          ctx.strokeStyle = mainColor;
+          ctx.lineWidth = 1.6;
+          ctx.beginPath();
+          const barStep = 2.5;
+          for (let bx = startX; bx <= endX; bx += barStep) {
+            const progress = (bx - startX) / Math.max(1, pulseWidth);
+            // 指数減衰 × 高周波振動
+            const decay = Math.exp(-progress * 3.2);
+            const osc = Math.cos(progress * Math.PI * 5);
+            const h = Math.max(2, maxAmpPx * decay * Math.abs(osc));
+            ctx.moveTo(bx, centerY - h);
+            ctx.lineTo(bx, centerY + h);
+          }
+          ctx.stroke();
+
+          // (B) 音の高さ（周波数）を示す発光ポイント（上=高音、下=低音）
+          ctx.fillStyle = "#fde047"; // yellow-300
+          ctx.beginPath();
+          ctx.arc(startX + 1.5, pitchY, 3.2, 0, Math.PI * 2);
+          ctx.fill();
+
+          ctx.globalAlpha = 1.0;
+        });
+      });
+
+      // 再生中の現在時刻プレイヘッド（赤いスイープ線）
+      if (currentPlayheadMs !== null) {
+        const playheadX = timeToX(currentPlayheadMs);
+        ctx.strokeStyle = "#f43f5e"; // rose-500
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(playheadX, 0);
+        ctx.lineTo(playheadX, H - 16);
+        ctx.stroke();
+      }
+    },
+    []
+  );
+
+  // 波形Traceまたは再生位置が変わるたびにCanvasを更新（再生後も消えずに残る！）
+  useEffect(() => {
+    drawPersistentWaveform(canvasRef.current, waveformTrace, playbackProgressMs);
+    drawPersistentWaveform(
+      assignCanvasRef.current,
+      waveformTrace,
+      playbackProgressMs
+    );
+  }, [waveformTrace, playbackProgressMs, drawPersistentWaveform, assigningTargetWordId]);
+
+  // 単一または複数の音を再生しながら、プレイヘッドを時間軸に沿って走らせ、完了後も波形を残すヘルパー
+  const startWaveformPlayheadAnimation = (totalMs: number) => {
+    if (progressTimerRef.current) {
+      window.clearInterval(progressTimerRef.current);
+    }
+    const startTime = performance.now();
+    setPlaybackProgressMs(0);
+
+    progressTimerRef.current = window.setInterval(() => {
+      const elapsed = performance.now() - startTime;
+      if (elapsed >= totalMs) {
+        if (progressTimerRef.current) {
+          window.clearInterval(progressTimerRef.current);
+          progressTimerRef.current = null;
+        }
+        // null にすると全パルスが100%くっきり残った状態で固定表示される
+        setPlaybackProgressMs(null);
+      } else {
+        setPlaybackProgressMs(elapsed);
+      }
+    }, 25);
+  };
+
+  // 単語ボタンを押した時（クリック音を鳴らしてパターン末尾に追加 ＋ 波形を記録して残す）
   const handleAddWordAndPlay = async (wordId: string) => {
     if (isPlaying) return;
-    setSelectedSequence((prev) => [...prev, wordId]);
+    const nextSeq = [...selectedSequence, wordId];
+    setSelectedSequence(nextSeq);
     setActiveWordId(wordId);
+
+    // 今押した単音の波形（または組み立て中シーケンスの波形）を即座に描画して残す
+    const trace = buildWaveformTrace([wordId]);
+    setWaveformTrace(trace);
+    startWaveformPlayheadAnimation(trace.totalDurationMs);
+
     await audioEngine?.playWordSound(wordId, 1.0);
     setActiveWordId(null);
   };
 
-  // 試聴のみ（パターンには追加しない）
+  // 試聴のみ（パターンには追加せず、その音の波形を画面に残す）
   const handlePreviewWordOnly = async (
     e: React.MouseEvent,
     wordId: string
@@ -375,8 +854,36 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     e.stopPropagation();
     if (isPlaying) return;
     setActiveWordId(wordId);
+
+    const trace = buildWaveformTrace([wordId]);
+    setWaveformTrace(trace);
+    startWaveformPlayheadAnimation(trace.totalDurationMs);
+
     await audioEngine?.playWordSound(wordId, 1.0);
     setActiveWordId(null);
+  };
+
+  // 「日本語をあてはめる」別画面を開く（開いた時にその音の波形も表示）
+  const handleOpenAssignScreen = (e: React.MouseEvent, wordId: string) => {
+    e.stopPropagation();
+    if (LOCKED_INITIAL_MEANINGS[wordId]) return;
+    const trace = buildWaveformTrace([wordId]);
+    setWaveformTrace(trace);
+    setPlaybackProgressMs(null);
+    setAssigningTargetWordId(wordId);
+  };
+
+  // 別画面で日本語を選択してあてはめる
+  const handleSelectJapaneseForWord = (wordId: string, japaneseLabel: string) => {
+    if (LOCKED_INITIAL_MEANINGS[wordId]) return;
+    const next = { ...playerAssignedLabels };
+    if (!japaneseLabel) {
+      delete next[wordId];
+    } else {
+      next[wordId] = japaneseLabel;
+    }
+    handleSavePlayerLabels(next);
+    setAssigningTargetWordId(null); // メイン画面に戻る
   };
 
   // 1文字削除・全クリア
@@ -392,7 +899,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setRelayStageText(null);
   };
 
-  // パターン判定ロジック（完全一致 ＋ 試行錯誤への状況別ヒント応答）
+  // パターン判定ロジック
   const evaluatePatternOutcome = (seq: string[]): AttemptLog => {
     const nowStr = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -424,25 +931,25 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       };
     }
 
-    // 2. 1語のみ発信された場合（構文規則のフィードバック）
+    // 2. 1語のみ発信された場合
     if (seq.length === 1) {
-      const singleWord = words.find((w) => w.id === seq[0]);
-      const wordLabel = singleWord
-        ? singleWord.meaning.split("（")[0]
-        : "単一パルス";
+      const meta = getWordButtonMeta(seq[0]);
+      const labelStr = meta.assignedJapanese
+        ? `『${meta.assignedJapanese}』（${meta.code}）`
+        : `${meta.code}（${meta.onomatopoeia}）`;
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
         sequenceIds: [...seq],
         matchedRuleId: null,
         title: "🌊 クジラは静観している（1語単独の発信）",
-        text: `『${wordLabel}』のクリック音が海中に響いたが、クジラたちは動く気配を見せない。\n（※クジラの言語は「了解」を除き、2つ以上のクリック音を組み合わせた連鎖になって初めて行動を起こすようだ）`,
+        text: `${labelStr}のクリック音が海中に響いたが、クジラたちは動く気配を見せない。\n（※クジラの言語は「了解」を除き、2つ以上のクリック音を組み合わせた連鎖になって初めて行動を起こすようだ）`,
         badge: "💡 2語以上の組み合わせが必要",
         status: "partial",
       };
     }
 
-    // 3. 方角が入っているが「集まれ」「探せ」等の動詞が後ろにない場合、または語順が逆の場合
+    // 3. 方角と「集まれ」の語順が逆の場合
     const directions = [
       { id: "word-go-west", dirName: "西" },
       { id: "word-go-north", dirName: "北" },
@@ -452,7 +959,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     const matchedDir = directions.find((d) => seq.includes(d.id));
 
     if (matchedDir && seq.length === 2) {
-      // 逆順（例：集まれ ＋ 西に向かう）チェック
       if (seq[0] === "word-gather" && seq[1] === matchedDir.id) {
         return {
           id: `log-${Date.now()}`,
@@ -460,7 +966,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           sequenceIds: [...seq],
           matchedRuleId: null,
           title: `🐋 クジラたちは戸惑い、${matchedDir.dirName}の方角を気にしている`,
-          text: `『集まれ』の後に『${matchedDir.dirName}に向かう』が鳴らされたため、語順が逆でクジラたちが混乱しているようだ。\n先に【方角】を鳴らし、その後に【集まれ（または探せ）】を鳴らしてみよう！`,
+          text: `語順が逆のためクジラたちが混乱しているようだ。\n先に【方角の音】を鳴らし、その後に【行動（集まれ／探せ）の音】を鳴らしてみよう！`,
           badge: "🔄 語順が逆の可能性",
           status: "partial",
         };
@@ -480,7 +986,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     };
   };
 
-  // パターンを海中に放流（再生＆判定＆行動表示）
+  // パターンを海中に放流（再生＆時間軸波形の記録＆判定＆行動表示）
   const handleTransmitSequence = async (overrideSeq?: string[]) => {
     const targetSeq = overrideSeq || selectedSequence;
     if (targetSeq.length === 0 || isPlaying) return;
@@ -493,6 +999,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setCurrentOutcome(null);
     setRelayStageText(null);
 
+    // 連結シーケンス全体の波形Traceを作成して時間軸アニメーション開始（再生後も画面に残る）
+    const seqTrace = buildWaveformTrace(targetSeq);
+    setWaveformTrace(seqTrace);
+    startWaveformPlayheadAnimation(seqTrace.totalDurationMs);
+
     // 1語ずつハイライトしながらクリック音を順番に再生
     for (let i = 0; i < targetSeq.length; i++) {
       setActivePlayingIndex(i);
@@ -502,16 +1013,16 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     }
     setActivePlayingIndex(null);
     setActiveWordId(null);
+    setPlaybackProgressMs(null); // 波形全体を100%確定表示した状態でホールド
 
     // 判定
     const outcome = evaluatePatternOutcome(targetSeq);
     const matchedRule = rules.find((r) => r.id === outcome.matchedRuleId);
 
-    // 少しの間（海中伝播の演出 450ms）を置いてクジラの応答音を再生
+    // 海中伝播の余韻を置いてクジラの応答音を再生
     await new Promise((r) => setTimeout(r, 450));
 
     if (matchedRule?.responseSoundType === "yes_ack") {
-      // クジラからの「了解（カッ！）」クリック応答
       await audioEngine?.playWordSound("word-yes", 1.0);
     } else if (matchedRule?.responseSoundType === "alert_boom") {
       await audioEngine?.playWordSound("word-alert", 1.0);
@@ -520,7 +1031,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       await new Promise((r) => setTimeout(r, 250));
       await audioEngine?.playWordSound("word-prey", 1.1);
     } else if (matchedRule?.responseSoundType === "full_relay") {
-      // 8語完全祝詞のときは圧巻のリレー音響も発動
       audioEngine?.playWhaleMessageRelayChorus((statusText) => {
         setRelayStageText(statusText);
       });
@@ -528,6 +1038,26 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
     setCurrentOutcome(outcome);
     setAttemptLogs((prev) => [outcome, ...prev]);
+    setIsPlaying(false);
+  };
+
+  // 現在残っている波形をもう一度再生して確認する
+  const handleReplayLastWaveform = async () => {
+    if (!waveformTrace || waveformTrace.wordIds.length === 0 || isPlaying) {
+      return;
+    }
+    setIsPlaying(true);
+    startWaveformPlayheadAnimation(waveformTrace.totalDurationMs);
+    for (let i = 0; i < waveformTrace.wordIds.length; i++) {
+      const wId = waveformTrace.wordIds[i];
+      setActiveWordId(wId);
+      await audioEngine?.playWordSound(wId, 1.0);
+      if (waveformTrace.wordIds.length > 1) {
+        await new Promise((r) => setTimeout(r, 280));
+      }
+    }
+    setActiveWordId(null);
+    setPlaybackProgressMs(null);
     setIsPlaying(false);
   };
 
@@ -563,13 +1093,18 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     handleSaveRules(DEFAULT_BEHAVIOR_RULES);
   };
 
+  // 解明済み（あてはめ済み）の語数カウント
+  const assignedCount = Object.keys(playerAssignedLabels).filter(
+    (k) => Boolean(playerAssignedLabels[k])
+  ).length;
+
   return (
     <div
       className={`flex flex-col bg-slate-950 text-slate-100 ${
         standalone ? "min-h-screen w-full" : "h-full w-full overflow-hidden"
       }`}
     >
-      {/* ワークベンチ内表示時のみ：上部モード切替バー（スマホ画面 ⇔ パターン設定管理 ⇔ 別タブで開く） */}
+      {/* ワークベンチ内表示時のみ：上部モード切替バー */}
       {!standalone && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/90 px-6 py-2.5">
           <div className="flex items-center gap-2.5">
@@ -578,13 +1113,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             </div>
             <div>
               <h2 className="text-xs font-bold text-white flex items-center gap-2">
-                プレイヤー操作用「クジラクリック音発信 ＆ 行動観測」モバイルWebアプリ
+                プレイヤー操作用「クジラクリック音解読・行動観測」モバイルWebアプリ
                 <span className="rounded bg-cyan-950 border border-cyan-700/60 px-2 py-0.5 text-[10px] text-cyan-300 font-mono">
                   /sonar
                 </span>
               </h2>
               <p className="text-[11px] text-slate-400">
-                ボタンを押してクリック音のパターンを鳴らすと、パターンに応じて「クジラが西に移動した」等の行動が文字で表示されます。
+                再生した音の波形が時間軸で画面に残り、各クリック音ボタンに「日本語の意味」を別画面からあてはめて解読を進められます。
               </p>
             </div>
           </div>
@@ -796,7 +1331,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       </span>
                     </div>
 
-                    {/* パターン並び順 */}
                     <div className="flex flex-wrap items-center gap-1.5 pt-1">
                       {rule.sequence.map((wId, idx) => {
                         const w = words.find((item) => item.id === wId);
@@ -813,7 +1347,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       })}
                     </div>
 
-                    {/* 表示される文字 */}
                     <div className="mt-2 rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-2.5">
                       <div className="text-xs font-bold text-emerald-300">
                         表示見出し：『{rule.behaviorTitle}』
@@ -850,11 +1383,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         </div>
       ) : (
         /* ==========================================
-           📱 プレイヤー用モバイルアプリ画面（スマホUI + PC時は右側にクイック試聴＆ガイド）
+           📱 プレイヤー用モバイルアプリ画面
            ========================================== */
         <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
           <div className="mx-auto flex max-w-6xl flex-col lg:flex-row items-start justify-center gap-6">
-            {/* 左（メイン）：スマホ実機サイズの音響トランスミッター＆行動観測アプリ */}
+            {/* 左（メイン）：スマホ実機サイズの音響解読＆行動観測アプリ */}
             <div className="w-full max-w-md mx-auto rounded-[28px] border-2 border-cyan-500/30 bg-slate-950 shadow-2xl shadow-cyan-950/50 overflow-hidden flex flex-col">
               {/* スマホアプリ上部ステータス＆ヘッダー */}
               <div className="bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 px-4 py-3 border-b border-cyan-500/20 flex items-center justify-between">
@@ -866,45 +1399,22 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   <div>
                     <div className="text-xs font-bold tracking-wider text-white flex items-center gap-1.5">
                       <Waves className="h-3.5 w-3.5 text-cyan-400" />
-                      深海クジラ音響発信・観測機
+                      クジラ音響解読・発信端末
                     </div>
                     <div className="text-[10px] font-mono text-cyan-400/80">
-                      SOFAR CODA TRANSCEIVER v2.4
+                      解読状況: {assignedCount} / {orderedWords.length} 語あてはめ済
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  {/* 意味ラベルのON/OFF切り替え（プレイヤー推理モード切替） */}
-                  <button
-                    onClick={() => setShowMeaningHint(!showMeaningHint)}
-                    className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] font-bold border transition ${
-                      showMeaningHint
-                        ? "border-amber-500/40 bg-amber-950/40 text-amber-300"
-                        : "border-slate-700 bg-slate-900 text-slate-400"
-                    }`}
-                    title="ボタンに「西に向かう」などの意味を表示するか、音の特徴だけを表示するかを切り替えます"
-                  >
-                    {showMeaningHint ? (
-                      <>
-                        <Eye className="h-3 w-3" />
-                        意味表示: ON
-                      </>
-                    ) : (
-                      <>
-                        <EyeOff className="h-3 w-3" />
-                        音のみ表示
-                      </>
-                    )}
-                  </button>
-
                   {/* 深海アンビエント音 */}
                   <button
                     onClick={() => {
                       const next = audioEngine?.toggleAmbient();
                       setIsAmbientOn(!!next);
                     }}
-                    className={`flex items-center gap-1 rounded-lg px-2 py-1 text-[10px] font-bold border transition ${
+                    className={`flex items-center gap-1 rounded-lg px-2.5 py-1 text-[10px] font-bold border transition ${
                       isAmbientOn
                         ? "border-cyan-400 bg-cyan-900/60 text-cyan-200"
                         : "border-slate-700 bg-slate-900 text-slate-400"
@@ -916,288 +1426,538 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     ) : (
                       <VolumeX className="h-3 w-3" />
                     )}
-                    海音
+                    深海音
                   </button>
                 </div>
               </div>
 
-              {/* ① リアルタイム波形モニター ＆ クジラ行動テキスト表示スクリーン */}
-              <div className="p-3.5 bg-slate-900/60 border-b border-slate-800 space-y-3">
-                {/* 波形Canvas */}
-                <div className="relative h-20 w-full rounded-xl border border-cyan-500/30 bg-slate-950 overflow-hidden">
-                  <canvas
-                    ref={canvasRef}
-                    width={400}
-                    height={90}
-                    className="w-full h-full"
-                  />
-                  <div className="absolute top-1.5 left-2.5 flex items-center gap-1.5 text-[10px] font-mono text-cyan-400/90">
-                    <Radio className="h-3 w-3 animate-pulse" />
-                    {isPlaying
-                      ? "TRANSMITTING CLICK CODA..."
-                      : activeWordId
-                      ? `PULSE: ${activeWordId.toUpperCase()}`
-                      : "HYDROPHONE READY (水深800m監視中)"}
-                  </div>
-                </div>
-
-                {/* ★超重要：クジラの行動が文字で表示されるメインモニター枠★ */}
-                <div
-                  className={`min-h-[116px] rounded-xl border p-3.5 transition-all duration-300 flex flex-col justify-center ${
-                    isPlaying
-                      ? "border-cyan-500/60 bg-cyan-950/30 animate-pulse"
-                      : currentOutcome?.status === "success"
-                      ? "border-emerald-400 bg-gradient-to-br from-emerald-950/70 via-cyan-950/50 to-slate-950 shadow-lg shadow-emerald-950/50"
-                      : currentOutcome?.status === "partial"
-                      ? "border-amber-400/70 bg-amber-950/30"
-                      : currentOutcome?.status === "fail"
-                      ? "border-rose-500/50 bg-rose-950/25"
-                      : "border-slate-800 bg-slate-950/90"
-                  }`}
-                >
-                  {isPlaying ? (
-                    <div className="text-center space-y-1.5 py-2">
-                      <div className="text-xs font-bold text-cyan-300 flex items-center justify-center gap-2">
-                        <Waves className="h-4 w-4 animate-bounce" />
-                        海中にクリック音パターンを放流しています……
-                      </div>
-                      <p className="text-[11px] text-cyan-400/80">
-                        クジラたちの反応をソナーで観測中……
-                      </p>
-                    </div>
-                  ) : currentOutcome ? (
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between gap-2">
-                        <span
-                          className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
-                            currentOutcome.status === "success"
-                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40"
-                              : currentOutcome.status === "partial"
-                              ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
-                              : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
-                          }`}
+              {/* ==========================================
+                 画面分岐：
+                 A. 「日本語をあてはめる」別画面（assigningTargetWordId が選択されている時）
+                 B. メインのクリック音ボタン＆波形＆行動観測画面
+                 ========================================== */}
+              {assigningTargetWordId ? (
+                /* ------------------------------------------
+                   【別画面】クリック音に日本語をあてはめる選択画面
+                   ------------------------------------------ */
+                (() => {
+                  const targetMeta = getWordButtonMeta(assigningTargetWordId);
+                  return (
+                    <div className="p-4 bg-slate-950 flex-1 flex flex-col space-y-4">
+                      {/* 戻るナビゲーション */}
+                      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <button
+                          onClick={() => setAssigningTargetWordId(null)}
+                          className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white transition"
                         >
-                          {currentOutcome.status === "success" ? (
-                            <CheckCircle2 className="h-3 w-3" />
-                          ) : (
-                            <AlertCircle className="h-3 w-3" />
+                          <ArrowLeft className="h-3.5 w-3.5 text-cyan-400" />
+                          クリック音一覧に戻る
+                        </button>
+                        <span className="text-[11px] font-bold text-amber-300">
+                          日本語あてはめ画面
+                        </span>
+                      </div>
+
+                      {/* 対象のクリック音情報 ＆ その場での再生・波形確認 */}
+                      <div className="rounded-xl border border-cyan-500/40 bg-slate-900/90 p-3.5 space-y-2.5">
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <div className="flex items-center gap-2">
+                              <span className="rounded bg-cyan-950 border border-cyan-600/60 px-2 py-0.5 font-mono text-xs font-bold text-cyan-300">
+                                {targetMeta.code}
+                              </span>
+                              <span className="text-sm font-extrabold text-amber-300">
+                                『{targetMeta.onomatopoeia}』
+                              </span>
+                            </div>
+                            <p className="mt-1 text-[11px] text-slate-300">
+                              現在のあてはめ：
+                              {targetMeta.assignedJapanese ? (
+                                <span className="ml-1 font-bold text-emerald-300">
+                                  【{targetMeta.assignedJapanese}】
+                                </span>
+                              ) : (
+                                <span className="ml-1 text-slate-500">
+                                  未解明（？？？）
+                                </span>
+                              )}
+                            </p>
+                          </div>
+
+                          <button
+                            onClick={(e) =>
+                              handlePreviewWordOnly(e, assigningTargetWordId)
+                            }
+                            className="flex items-center gap-1.5 rounded-xl bg-cyan-600 px-3 py-2 text-xs font-bold text-white shadow hover:bg-cyan-500 transition"
+                          >
+                            <Volume2 className="h-4 w-4" />
+                            音を聴く
+                          </button>
+                        </div>
+
+                        {/* 別画面内でも残っている時間変化波形を確認可能 */}
+                        <div className="rounded-lg border border-slate-800 bg-slate-950 overflow-hidden">
+                          <canvas
+                            ref={assignCanvasRef}
+                            width={380}
+                            height={96}
+                            className="w-full h-24"
+                          />
+                        </div>
+                      </div>
+
+                      {/* 日本語候補リスト */}
+                      <div className="space-y-2">
+                        <div className="flex items-center justify-between">
+                          <h3 className="text-xs font-bold text-white flex items-center gap-1.5">
+                            <Tag className="h-3.5 w-3.5 text-amber-400" />
+                            このクリック音にあてはめる日本語を選択してください
+                          </h3>
+                          {targetMeta.assignedJapanese && (
+                            <button
+                              onClick={() =>
+                                handleSelectJapaneseForWord(
+                                  assigningTargetWordId,
+                                  ""
+                                )
+                              }
+                              className="text-[11px] text-rose-400 hover:text-rose-300 underline"
+                            >
+                              未解明（？？？）に戻す
+                            </button>
                           )}
-                          {currentOutcome.badge}
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          {currentOutcome.timestamp}
-                        </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-2 max-h-[340px] overflow-y-auto pr-0.5">
+                          {JAPANESE_MEANING_CANDIDATES.map((cand) => {
+                            const isSelectedHere =
+                              targetMeta.assignedJapanese === cand.label;
+
+                            // 他のボタンにすでにあてはめられているかチェック
+                            const assignedOtherWordId = Object.keys(
+                              playerAssignedLabels
+                            ).find(
+                              (wId) =>
+                                wId !== assigningTargetWordId &&
+                                playerAssignedLabels[wId] === cand.label
+                            );
+                            const otherMeta = assignedOtherWordId
+                              ? getWordButtonMeta(assignedOtherWordId)
+                              : null;
+
+                            return (
+                              <button
+                                key={cand.label}
+                                disabled={cand.isLockedInitial}
+                                onClick={() =>
+                                  handleSelectJapaneseForWord(
+                                    assigningTargetWordId,
+                                    cand.label
+                                  )
+                                }
+                                className={`rounded-xl border p-2.5 text-left transition flex flex-col justify-between ${
+                                  cand.isLockedInitial
+                                    ? "border-slate-800 bg-slate-900/40 opacity-50 cursor-not-allowed"
+                                    : isSelectedHere
+                                    ? "border-emerald-400 bg-emerald-950/70 text-white ring-1 ring-emerald-400"
+                                    : "border-slate-800 bg-slate-900 hover:border-amber-400/60 hover:bg-slate-800/80"
+                                }`}
+                              >
+                                <div className="flex items-center justify-between gap-1">
+                                  <span className="text-xs font-extrabold text-white">
+                                    {cand.label}
+                                  </span>
+                                  {cand.isLockedInitial ? (
+                                    <span className="inline-flex items-center gap-0.5 rounded bg-slate-800 px-1.5 py-0.5 text-[9px] text-amber-300">
+                                      <Lock className="h-2.5 w-2.5" />
+                                      確定済
+                                    </span>
+                                  ) : isSelectedHere ? (
+                                    <span className="inline-flex items-center gap-0.5 rounded bg-emerald-500/20 px-1.5 py-0.5 text-[9px] font-bold text-emerald-300">
+                                      <Check className="h-2.5 w-2.5" />
+                                      選択中
+                                    </span>
+                                  ) : otherMeta ? (
+                                    <span className="rounded bg-indigo-950 border border-indigo-700/60 px-1.5 py-0.5 text-[9px] text-indigo-300">
+                                      {otherMeta.code}で使用中
+                                    </span>
+                                  ) : null}
+                                </div>
+                                <div className="mt-1 text-[10px] text-slate-400 leading-tight">
+                                  {cand.subHint}
+                                </div>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })()
+              ) : (
+                /* ------------------------------------------
+                   【メイン画面】波形モニター・クジラ行動表示・クリック音パッド
+                   ------------------------------------------ */
+                <>
+                  {/* ① 時間変化で形が残る波形モニター ＆ クジラ行動テキスト表示スクリーン */}
+                  <div className="p-3.5 bg-slate-900/60 border-b border-slate-800 space-y-3">
+                    {/* 時間軸波形レコーダー枠 */}
+                    <div className="rounded-xl border border-cyan-500/30 bg-slate-950 overflow-hidden">
+                      <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-slate-800/80 bg-slate-900/80">
+                        <div className="flex items-center gap-1.5 text-[10px] font-bold text-cyan-300">
+                          <Activity className="h-3.5 w-3.5 text-cyan-400" />
+                          <span>
+                            {waveformTrace
+                              ? waveformTrace.title
+                              : "時間変化・音響波形ログ（再生後も形が残ります）"}
+                          </span>
+                        </div>
+                        {waveformTrace && (
+                          <button
+                            onClick={handleReplayLastWaveform}
+                            disabled={isPlaying}
+                            className="flex items-center gap-1 rounded bg-cyan-950 border border-cyan-600/50 px-2 py-0.5 text-[10px] font-bold text-cyan-200 hover:bg-cyan-800 disabled:opacity-40 transition"
+                            title="今画面に残っている波形の音をもう一度再生します"
+                          >
+                            <Play className="h-2.5 w-2.5" />
+                            波形を再再生
+                          </button>
+                        )}
                       </div>
 
-                      {/* クジラの行動（大きな文字表示） */}
-                      <div
-                        className={`text-sm font-extrabold tracking-wide leading-snug ${
-                          currentOutcome.status === "success"
-                            ? "text-emerald-200"
-                            : currentOutcome.status === "partial"
-                            ? "text-amber-200"
-                            : "text-rose-200"
-                        }`}
-                      >
-                        {currentOutcome.title}
-                      </div>
+                      <canvas
+                        ref={canvasRef}
+                        width={400}
+                        height={112}
+                        className="w-full h-28 block"
+                      />
+                    </div>
 
-                      {/* 詳細な描写テキスト */}
-                      <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-line">
-                        {currentOutcome.text}
-                      </p>
+                    {/* ★クジラの行動が文字で表示されるメインモニター枠★ */}
+                    <div
+                      className={`min-h-[104px] rounded-xl border p-3 transition-all duration-300 flex flex-col justify-center ${
+                        isPlaying
+                          ? "border-cyan-500/60 bg-cyan-950/30 animate-pulse"
+                          : currentOutcome?.status === "success"
+                          ? "border-emerald-400 bg-gradient-to-br from-emerald-950/70 via-cyan-950/50 to-slate-950 shadow-lg shadow-emerald-950/50"
+                          : currentOutcome?.status === "partial"
+                          ? "border-amber-400/70 bg-amber-950/30"
+                          : currentOutcome?.status === "fail"
+                          ? "border-rose-500/50 bg-rose-950/25"
+                          : "border-slate-800 bg-slate-950/90"
+                      }`}
+                    >
+                      {isPlaying ? (
+                        <div className="text-center space-y-1 py-2">
+                          <div className="text-xs font-bold text-cyan-300 flex items-center justify-center gap-2">
+                            <Waves className="h-4 w-4 animate-bounce" />
+                            海中にクリック音パターンを放流しています……
+                          </div>
+                          <p className="text-[11px] text-cyan-400/80">
+                            クジラたちの反応をソナーで観測中……
+                          </p>
+                        </div>
+                      ) : currentOutcome ? (
+                        <div className="space-y-1.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span
+                              className={`inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[10px] font-bold ${
+                                currentOutcome.status === "success"
+                                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40"
+                                  : currentOutcome.status === "partial"
+                                  ? "bg-amber-500/20 text-amber-300 border border-amber-400/40"
+                                  : "bg-rose-500/20 text-rose-300 border border-rose-400/40"
+                              }`}
+                            >
+                              {currentOutcome.status === "success" ? (
+                                <CheckCircle2 className="h-3 w-3" />
+                              ) : (
+                                <AlertCircle className="h-3 w-3" />
+                              )}
+                              {currentOutcome.badge}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">
+                              {currentOutcome.timestamp}
+                            </span>
+                          </div>
 
-                      {relayStageText && (
-                        <div className="mt-2 rounded-lg border border-cyan-400/50 bg-cyan-950/60 px-2.5 py-1.5 text-[11px] font-bold text-cyan-200">
-                          {relayStageText}
+                          <div
+                            className={`text-sm font-extrabold tracking-wide leading-snug ${
+                              currentOutcome.status === "success"
+                                ? "text-emerald-200"
+                                : currentOutcome.status === "partial"
+                                ? "text-amber-200"
+                                : "text-rose-200"
+                            }`}
+                          >
+                            {currentOutcome.title}
+                          </div>
+
+                          <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-line">
+                            {currentOutcome.text}
+                          </p>
+
+                          {relayStageText && (
+                            <div className="mt-2 rounded-lg border border-cyan-400/50 bg-cyan-950/60 px-2.5 py-1.5 text-[11px] font-bold text-cyan-200">
+                              {relayStageText}
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-center space-y-1 py-1.5">
+                          <div className="text-xs font-bold text-slate-400">
+                            【クジラの行動観測モニター】
+                          </div>
+                          <p className="text-[11px] text-slate-500 leading-relaxed">
+                            クリック音ボタンを組み合わせて「海中に鳴らす」を押すと、
+                            <br />
+                            ここにクジラの行動が文字で表示されます。
+                          </p>
                         </div>
                       )}
                     </div>
-                  ) : (
-                    <div className="text-center space-y-1 py-2">
-                      <div className="text-xs font-bold text-slate-400">
-                        【クジラの行動観測モニター】
+                  </div>
+
+                  {/* ② 組み立て中のクリック音パターン（シーケンスバー） ＆ 発信ボタン */}
+                  <div className="p-3.5 bg-slate-950 border-b border-slate-800 space-y-2.5">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
+                        <span>発信するクリック音パターン</span>
+                        <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
+                          {selectedSequence.length}語
+                        </span>
+                      </span>
+
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={handleBackspace}
+                          disabled={selectedSequence.length === 0 || isPlaying}
+                          className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
+                        >
+                          <Delete className="h-3 w-3" />
+                          1つ戻す
+                        </button>
+                        <button
+                          onClick={handleClear}
+                          disabled={selectedSequence.length === 0 || isPlaying}
+                          className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
+                        >
+                          <RotateCcw className="h-3 w-3" />
+                          クリア
+                        </button>
                       </div>
-                      <p className="text-[11px] text-slate-500 leading-relaxed">
-                        下のボタンを押してクリック音のパターンを組み立て、
-                        <br />
-                        「海中に鳴らす（発信）」を押すと、ここにクジラの行動が文字で表示されます。
-                      </p>
                     </div>
-                  )}
-                </div>
-              </div>
 
-              {/* ② 組み立て中のクリック音パターン（シーケンスバー） ＆ 発信ボタン */}
-              <div className="p-3.5 bg-slate-950 border-b border-slate-800 space-y-2.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
-                    <span>発信するクリック音パターン</span>
-                    <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
-                      {selectedSequence.length}語
-                    </span>
-                  </span>
+                    {/* 選択された音のスロット表示（あてはめた日本語があればそれを表示） */}
+                    <div className="min-h-[46px] rounded-xl border border-slate-800 bg-slate-900/80 p-2 flex flex-wrap items-center gap-1.5">
+                      {selectedSequence.length === 0 ? (
+                        <span className="text-xs text-slate-500 px-1">
+                          下のクリック音ボタンをタップしてパターンを作ってください
+                        </span>
+                      ) : (
+                        selectedSequence.map((wId, index) => {
+                          const meta = getWordButtonMeta(wId);
+                          const isCurrentStep = activePlayingIndex === index;
+                          return (
+                            <React.Fragment key={`${wId}-${index}`}>
+                              <button
+                                onClick={(e) => handlePreviewWordOnly(e, wId)}
+                                className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
+                                  isCurrentStep
+                                    ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
+                                    : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
+                                }`}
+                                title="タップしてこの音と波形を確認"
+                              >
+                                <span className="text-[10px] font-mono text-cyan-300">
+                                  {index + 1}.
+                                </span>
+                                <span>
+                                  {meta.assignedJapanese
+                                    ? `${meta.assignedJapanese}`
+                                    : `${meta.code}（${meta.onomatopoeia}）`}
+                                </span>
+                              </button>
+                              {index < selectedSequence.length - 1 && (
+                                <span className="text-slate-500 text-xs font-bold">
+                                  ＋
+                                </span>
+                              )}
+                            </React.Fragment>
+                          );
+                        })
+                      )}
+                    </div>
 
-                  <div className="flex items-center gap-1.5">
+                    {/* 発信（再生＆判定）メインボタン */}
                     <button
-                      onClick={handleBackspace}
+                      onClick={() => handleTransmitSequence()}
                       disabled={selectedSequence.length === 0 || isPlaying}
-                      className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
+                      className="w-full rounded-xl bg-gradient-to-r from-cyan-600 via-teal-500 to-indigo-600 py-3 px-4 text-sm font-extrabold text-white shadow-lg shadow-cyan-600/30 hover:from-cyan-500 hover:to-indigo-500 active:scale-[0.99] disabled:opacity-40 transition flex items-center justify-center gap-2"
                     >
-                      <Delete className="h-3 w-3" />
-                      1つ戻す
-                    </button>
-                    <button
-                      onClick={handleClear}
-                      disabled={selectedSequence.length === 0 || isPlaying}
-                      className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
-                    >
-                      <RotateCcw className="h-3 w-3" />
-                      クリア
+                      <Volume2
+                        className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
+                      />
+                      {isPlaying
+                        ? "クリック音パターンを放流中..."
+                        : "🔊 このパターンを海中に鳴らす（発信）"}
                     </button>
                   </div>
-                </div>
 
-                {/* 選択された音のスロット表示 */}
-                <div className="min-h-[48px] rounded-xl border border-slate-800 bg-slate-900/80 p-2 flex flex-wrap items-center gap-1.5">
-                  {selectedSequence.length === 0 ? (
-                    <span className="text-xs text-slate-500 px-1">
-                      下のクリック音ボタンをタップしてパターンを作ってください
-                    </span>
-                  ) : (
-                    selectedSequence.map((wId, index) => {
-                      const word = words.find((w) => w.id === wId);
-                      const isCurrentStep = activePlayingIndex === index;
-                      const shortMeaning = word
-                        ? word.meaning.split("（")[0]
-                        : wId;
-                      const shortSound =
-                        word?.soundPattern.match(/（(.+?)）/)?.[1] ||
-                        word?.symbol ||
-                        "";
-                      return (
-                        <React.Fragment key={`${wId}-${index}`}>
-                          <button
-                            onClick={() => audioEngine?.playWordSound(wId, 1.0)}
-                            className={`rounded-lg px-2.5 py-1 text-xs font-bold transition flex items-center gap-1 ${
-                              isCurrentStep
-                                ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
-                                : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
+                  {/* ③ クリック音ボタン一覧（日本語あてはめボタン付き） */}
+                  <div className="p-3.5 space-y-2.5 bg-slate-950">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-200">
+                        クリック音ボタン（タップで音を鳴らして追加）
+                      </span>
+                      <span className="text-[10px] text-amber-300">
+                        「日本語をあてはめる」で意味を記録
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      {orderedWords.map((w) => {
+                        const isActive = activeWordId === w.id;
+                        const meta = getWordButtonMeta(w.id);
+
+                        return (
+                          <div
+                            key={w.id}
+                            onClick={() => handleAddWordAndPlay(w.id)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === "Enter" || e.key === " ") {
+                                handleAddWordAndPlay(w.id);
+                              }
+                            }}
+                            className={`group relative rounded-xl border p-2.5 text-left transition cursor-pointer select-none flex flex-col justify-between ${
+                              isActive
+                                ? "border-cyan-400 bg-cyan-950/80 shadow-md shadow-cyan-500/20 ring-1 ring-cyan-400"
+                                : meta.isLocked
+                                ? "border-amber-500/40 bg-slate-900/95 hover:border-amber-400"
+                                : meta.assignedJapanese
+                                ? "border-emerald-500/40 bg-slate-900/95 hover:border-emerald-400"
+                                : "border-slate-800 bg-slate-900/90 hover:border-cyan-500/50 hover:bg-slate-900"
                             }`}
-                            title="タップしてこの音を確認"
                           >
-                            <span className="text-[10px] font-mono text-cyan-300">
-                              {index + 1}.
-                            </span>
-                            <span>
-                              {showMeaningHint
-                                ? shortMeaning
-                                : shortSound || word?.symbol}
-                            </span>
-                          </button>
-                          {index < selectedSequence.length - 1 && (
-                            <span className="text-slate-500 text-xs font-bold">
-                              ＋
-                            </span>
-                          )}
-                        </React.Fragment>
-                      );
-                    })
-                  )}
-                </div>
+                            {/* 上段：音響番号 ＋ 試聴アイコン */}
+                            <div>
+                              <div className="flex items-center justify-between gap-1">
+                                <span className="rounded bg-slate-950 border border-slate-700 px-1.5 py-0.5 font-mono text-[10px] font-bold text-cyan-300">
+                                  {meta.code}
+                                </span>
 
-                {/* 発信（再生＆判定）メインボタン */}
-                <button
-                  onClick={() => handleTransmitSequence()}
-                  disabled={selectedSequence.length === 0 || isPlaying}
-                  className="w-full rounded-xl bg-gradient-to-r from-cyan-600 via-teal-500 to-indigo-600 py-3 px-4 text-sm font-extrabold text-white shadow-lg shadow-cyan-600/30 hover:from-cyan-500 hover:to-indigo-500 active:scale-[0.99] disabled:opacity-40 transition flex items-center justify-center gap-2"
-                >
-                  <Volume2
-                    className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
-                  />
-                  {isPlaying
-                    ? "クリック音パターンを放流中..."
-                    : "🔊 このパターンを海中に鳴らす（発信）"}
-                </button>
-              </div>
+                                <button
+                                  type="button"
+                                  onClick={(e) =>
+                                    handlePreviewWordOnly(e, w.id)
+                                  }
+                                  className="rounded-lg bg-slate-800/90 px-1.5 py-1 text-[10px] font-bold text-cyan-300 hover:bg-cyan-600 hover:text-white transition flex items-center gap-1"
+                                  title="パターンに追加せず、クリック音と波形だけを確認します"
+                                >
+                                  <Volume2 className="h-3 w-3" />
+                                  試聴
+                                </button>
+                              </div>
 
-              {/* ③ クリック音ボタン一覧（プレイヤーがタップして音を鳴らす＆組み立てるパッド） */}
-              <div className="p-3.5 space-y-2.5 bg-slate-950">
-                <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-300">
-                    クリック音ボタン（タップで音が鳴り、パターンに追加）
-                  </span>
-                  <span className="text-[10px] text-slate-500">
-                    🔊アイコンは試聴のみ
-                  </span>
-                </div>
+                              {/* 中段：クリック音の響き */}
+                              <div className="mt-1.5 text-xs font-extrabold text-amber-200">
+                                『{meta.onomatopoeia}』
+                              </div>
 
-                <div className="grid grid-cols-2 gap-2">
-                  {words.map((w) => {
-                    const isActive = activeWordId === w.id;
-                    const shortMeaning = w.meaning.split("（")[0];
-                    const onomatopoeia =
-                      w.soundPattern.match(/（(.+?)）/)?.[1] || w.soundPattern;
-                    const rhythmDesc = w.soundPattern.replace(/（.+?）/, "");
+                              {/* あてはめられた日本語の表示エリア */}
+                              <div className="mt-1">
+                                {meta.isLocked ? (
+                                  <div className="inline-flex items-center gap-1 rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-xs font-extrabold text-amber-200">
+                                    <Lock className="h-3 w-3 text-amber-400 shrink-0" />
+                                    {meta.assignedJapanese}
+                                  </div>
+                                ) : meta.assignedJapanese ? (
+                                  <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-xs font-extrabold text-emerald-200">
+                                    <Tag className="h-3 w-3 text-emerald-400 shrink-0" />
+                                    {meta.assignedJapanese}
+                                  </div>
+                                ) : (
+                                  <div className="text-[11px] font-bold text-slate-500">
+                                    【未解明：？？？】
+                                  </div>
+                                )}
+                              </div>
+                            </div>
 
-                    return (
-                      <div
-                        key={w.id}
-                        onClick={() => handleAddWordAndPlay(w.id)}
-                        role="button"
-                        tabIndex={0}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter" || e.key === " ") {
-                            handleAddWordAndPlay(w.id);
-                          }
-                        }}
-                        className={`group relative rounded-xl border p-2.5 text-left transition cursor-pointer select-none active:scale-[0.97] ${
-                          isActive
-                            ? "border-cyan-400 bg-cyan-950/80 shadow-md shadow-cyan-500/20 ring-1 ring-cyan-400"
-                            : "border-slate-800 bg-slate-900/90 hover:border-cyan-500/50 hover:bg-slate-900"
-                        }`}
-                      >
-                        <div className="flex items-start justify-between gap-1">
-                          <div className="flex items-center gap-1.5">
-                            <span className="rounded bg-slate-950 border border-slate-700 px-1.5 py-0.5 font-mono text-[11px] font-bold text-cyan-300">
-                              {w.symbol}
-                            </span>
-                            {showMeaningHint && (
-                              <span className="text-xs font-extrabold text-white">
-                                {shortMeaning}
-                              </span>
-                            )}
+                            {/* 下段：「日本語をあてはめる」別画面遷移ボタン（確定2語は確定済表示） */}
+                            <div className="mt-2 pt-1.5 border-t border-slate-800/80">
+                              {meta.isLocked ? (
+                                <div className="text-[10px] font-semibold text-amber-400/90 flex items-center gap-1">
+                                  <CheckCircle2 className="h-3 w-3 shrink-0" />
+                                  朝倉教授記録により確定
+                                </div>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={(e) =>
+                                    handleOpenAssignScreen(e, w.id)
+                                  }
+                                  className={`w-full rounded-lg py-1 px-2 text-[10px] font-bold transition flex items-center justify-center gap-1 ${
+                                    meta.assignedJapanese
+                                      ? "bg-slate-800 text-emerald-300 hover:bg-slate-700 border border-emerald-500/30"
+                                      : "bg-indigo-600/30 text-indigo-200 hover:bg-indigo-600 hover:text-white border border-indigo-500/40"
+                                  }`}
+                                >
+                                  <Tag className="h-3 w-3" />
+                                  {meta.assignedJapanese
+                                    ? "日本語を変更する"
+                                    : "日本語をあてはめる"}
+                                </button>
+                              )}
+                            </div>
                           </div>
-
-                          {/* 試聴のみボタン */}
-                          <button
-                            type="button"
-                            onClick={(e) => handlePreviewWordOnly(e, w.id)}
-                            className="rounded-lg bg-slate-800/90 p-1.5 text-cyan-300 hover:bg-cyan-600 hover:text-white transition"
-                            title="パターンに追加せず、クリック音だけを試聴します"
-                          >
-                            <Volume2 className="h-3.5 w-3.5" />
-                          </button>
-                        </div>
-
-                        <div className="mt-1.5">
-                          <div className="text-xs font-bold text-amber-300/95">
-                            『{onomatopoeia}』
-                          </div>
-                          <div className="text-[10px] text-slate-400 truncate">
-                            {rhythmDesc}
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
 
-            {/* 右側パネル：ワンタップ実験プリセット ＆ 試行錯誤ログ ＆ 使い方ガイド */}
+            {/* 右側パネル：あてはめ状態管理 ＆ ワンタップ実験プリセット ＆ 試行錯誤ログ */}
             <div className="w-full lg:w-96 space-y-4">
-              {/* ワンタップで試せる代表パターン（ユーザーの「西に集まれ」など） */}
+              {/* 日本語あてはめ管理（初期リセット／答え合わせプレビュー） */}
+              <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-4 w-4 text-emerald-400" />
+                    <h3 className="text-xs font-bold text-white">
+                      日本語あてはめ状態の管理（作者・テスト用）
+                    </h3>
+                  </div>
+                  <span className="text-[11px] font-mono text-emerald-300">
+                    {assignedCount}/{orderedWords.length}語
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-relaxed">
+                  初期状態では朝倉教授が示した<strong>『ゴゴゴゴ……＝海の下の火山』『ドォン……ドォン……＝警戒せよ』の2語のみ確定</strong>しており、残りの10語はプレイヤーが実験しながら別画面で日本語をあてはめます。
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <button
+                    onClick={handleResetPlayerLabelsToInitial}
+                    className="rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 text-[11px] font-bold text-slate-200 hover:border-amber-500/50 hover:text-amber-300 transition flex items-center justify-center gap-1.5"
+                  >
+                    <RotateCcw className="h-3.5 w-3.5" />
+                    初期状態（2語のみ確定）に戻す
+                  </button>
+                  <button
+                    onClick={handleFillAllCorrectLabelsForPreview}
+                    className="rounded-xl border border-emerald-500/40 bg-emerald-950/30 px-3 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-900/50 transition flex items-center justify-center gap-1.5"
+                  >
+                    <Eye className="h-3.5 w-3.5" />
+                    正解の日本語をすべてあてはめる
+                  </button>
+                </div>
+              </div>
+
+              {/* ワンタップで試せる代表パターン */}
               <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
                 <div className="flex items-center gap-2">
                   <Sparkles className="h-4 w-4 text-amber-400" />
@@ -1206,7 +1966,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-400 leading-relaxed">
-                  下のボタンを押すと、自動的にそのクリック音パターンが鳴り響き、スマホ画面上にクジラの行動が文字で表示されます。
+                  下のボタンを押すと、クリック音パターンが再生されて時間変化の波形が画面に残り、クジラの行動が文字で表示されます。
                 </p>
 
                 <div className="space-y-2">
@@ -1258,7 +2018,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   ].map((preset, i) => (
                     <button
                       key={i}
-                      onClick={() => handleTransmitSequence(preset.seq)}
+                      onClick={() => {
+                        setAssigningTargetWordId(null);
+                        handleTransmitSequence(preset.seq);
+                      }}
                       disabled={isPlaying}
                       className={`w-full rounded-xl border p-2.5 text-left transition disabled:opacity-40 ${preset.color}`}
                     >
@@ -1320,13 +2083,15 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         </div>
                         <div className="flex flex-wrap gap-1">
                           {log.sequenceIds.map((id, idx) => {
-                            const w = words.find((item) => item.id === id);
+                            const meta = getWordButtonMeta(id);
                             return (
                               <span
                                 key={`${log.id}-${idx}`}
                                 className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] text-slate-300"
                               >
-                                {w ? w.meaning.split("（")[0] : id}
+                                {meta.assignedJapanese
+                                  ? `${meta.code}:${meta.assignedJapanese}`
+                                  : `${meta.code}(${meta.onomatopoeia})`}
                               </span>
                             );
                           })}
@@ -1335,17 +2100,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     ))}
                   </div>
                 )}
-              </div>
-
-              {/* プレイヤー共有・ヒント案内 */}
-              <div className="rounded-2xl border border-slate-800 bg-slate-900/50 p-4 space-y-2 text-xs text-slate-300">
-                <div className="font-bold text-cyan-300 flex items-center gap-1.5">
-                  <HelpCircle className="h-4 w-4" />
-                  プレイヤーへの見せ方の切り替えポイント
-                </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed">
-                  スマホ画面右上の<strong>「意味表示: ON / 音のみ表示」</strong>を切り替えると、ボタンの「西に向かう」「集まれ」といった日本語を隠し、<strong>『ピ・ポ・ポン』『カ・カ・カカッ！』という音の特徴だけを表示するモード</strong>にできます。ハンドアウトの手がかりと照らし合わせて推理させる際に最適です！
-                </p>
               </div>
             </div>
           </div>
