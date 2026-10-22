@@ -189,7 +189,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [creatureCodename, setCreatureCodename] = useState<string>("ワタツミ");
 
   // Day 4 アクション選択状態（東京1枠、現地2枠 / Day 3繰り越し含む）
-  const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4A");
+  const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4B");
   const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
   const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
@@ -3137,30 +3137,30 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     Day 5で選ばれなかった東京側アクションについても、東京の対策チーム（朝潮PC1危機管理官 ＆ 貝浜PC2防衛省リエゾン）が夜を徹して調査・照会を完遂！
-                    Day 6開始時点で<strong>「謎のダイバーグループによる富士山麓への荷物搬入 ＆ 神社から盗まれた複数隕石の海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
+                    Day 6開始時点で<strong>「複数神社からの隕石盗難 ＆ 海域投棄の特定」</strong>と<strong>「元神主の子どもの舌クリック口伝」</strong>の両方が手元に揃いました。
                   </p>
 
                   <div className="grid grid-cols-2 gap-3 text-[11px]">
-                    {/* 富士山麓・発送先民家への荷物搬入 & 複数隕石の海域投棄 */}
+                    {/* 複数神社からの隕石盗難 ＆ 海域投棄の特定 */}
                     <div className={`rounded-lg border p-3 space-y-1.5 transition ${
-                      day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A"
+                      day5TokyoAction === "T-3C"
                         ? "bg-slate-900/90 border-emerald-700/80"
                         : "bg-indigo-950/60 border-cyan-500/80 shadow-md"
                     }`}>
                       <div className="flex items-center justify-between">
                         <span className="font-bold text-slate-100 flex items-center gap-1">
-                          ⛰️ 富士山麓・発送先民家への荷物搬入 ＆ 複数隕石の海域投棄
+                          ⛩️ 複数神社からの隕石盗難 ＆ 海域投棄の特定
                         </span>
                         <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${
-                          day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A"
+                          day5TokyoAction === "T-3C"
                             ? "bg-emerald-950 text-emerald-300 border border-emerald-700"
                             : "bg-cyan-950 text-cyan-300 border border-cyan-700"
                         }`}>
-                          {day5TokyoAction === "T-4A" || day5TokyoAction === "T-5A" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
+                          {day5TokyoAction === "T-3C" ? "Day 5で調査完了" : "Day 6朝に東京班より追加報告"}
                         </span>
                       </div>
                       <p className="text-slate-300 text-[10px] leading-relaxed">
-                        謎のダイバーグループが運んだクーラーボックスは、富士山麓の民家を経由して車で山麓の方へ運ばれていた。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっており、レジャーボートを使ったダイバー達によって「青ヶ島沖・八丈島付近・三宅島付近」の海に落とされていた可能性が判明！ 巨大生物が「地磁気」と「隕石が放つ特殊な物質」を感知して北上し富士山を目指す真の動機が浮き彫りになる！
+                        小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっており、レジャーボートを使ったダイバー達によって「青ヶ島沖・八丈島付近・三宅島付近」の海に投棄されていたことが判明！ 巨大生物が「地磁気」と「隕石が放つ特殊な物質」を感知して北上し富士山を目指す真の動機が浮き彫りになる！
                       </p>
                     </div>
 

@@ -182,12 +182,12 @@ export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
   },
   {
     id: "F-3C",
-    title: "F-3C: 不審なダイバーたちについての調査",
+    title: "F-3C: 救助されたダイバーたちについての調査",
     organization: "小笠原海運 二見港貨物取扱所",
     evidenceId: "ev-diver-shipping-waybill",
     badge: "貨物台帳＆職員証言",
-    summary: "港の貨物台帳と港の職員からの聞き取り。Day 1でダイバー達が海から引き揚げた大型冷凍ボックスは「静岡県・富士山麓の民家」宛てに発送されていた。輸送を担当した港の職員は、氷が入っていたにしても異様に重かったと証言。",
-    detail: "港の貨物台帳と港の職員からの聞き取り。Day 1でダイバー達が海から引き揚げた大型冷凍ボックスは「静岡県・富士山麓の民家」宛てに発送されていた。輸送を担当した港の職員は、氷が入っていたにしても異様に重かったと証言。",
+    summary: "港の貨物台帳と港の職員からの聞き取り。Day 1でダイバー達が海から引き揚げた大型冷凍ボックスは「静岡県・富士山麓の民家」宛てに発送されていた。現時点ではこれ以上の追跡は困難である。",
+    detail: "港の貨物台帳と港の職員からの聞き取り。Day 1でダイバー達が海から引き揚げた大型冷凍ボックスは「静岡県・富士山麓の民家」宛てに発送されていた。現時点ではこれ以上の追跡は困難である。",
   },
   {
     id: "F-3D",
@@ -205,15 +205,6 @@ export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
 // ※Day 3で未選択の項目も繰り越し調査可能
 // ==========================================
 export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
-  {
-    id: "T-4A",
-    title: "T-4A: 富士山麓の発送先民家についての調査",
-    organization: "警視庁公安部 / 静岡県警",
-    evidenceId: "ev-cult-cargo",
-    badge: "盗難隕石投棄＆富士山麓搬入",
-    summary: "静岡県警と警視庁の合同捜査の報告。もともと小笠原・八丈島・三宅島の神社に保管・奉納されていた隕石が盗難にあっていた件についての捜査報告。盗難に前後してレジャーボートの貸し出し記録があり、青ヶ島沖・八丈島付近・三宅島付近でダイバー達が利用。個人情報が確認できる船長は船の利用を依頼されたのみで、乗り込んだ数名の人間は偽名を使っており、特定ができていない。ダイバー達が小笠原の海から引き揚げたクーラーボックスについても調査。輸送された先の、富士山麓の民家に普段から人は住んでいなかった。配達員によると、受け取りの際には地元では見かけない人がいて、荷物を車に乗せて富士山麓のほうへ向かったという。",
-    detail: "静岡県警と警視庁の合同捜査の報告。もともと小笠原・八丈島・三宅島の神社に保管・奉納されていた隕石が盗難にあっていた件についての捜査報告。盗難に前後してレジャーボートの貸し出し記録があり、青ヶ島沖・八丈島付近・三宅島付近でダイバー達が利用。個人情報が確認できる船長は船の利用を依頼されたのみで、乗り込んだ数名の人間は偽名を使っており、特定ができていない。ダイバー達が小笠原の海から引き揚げたクーラーボックスについても調査。輸送された先の、富士山麓の民家に普段から人は住んでいなかった。配達員によると、受け取りの際には地元では見かけない人がいて、荷物を車に乗せて富士山麓のほうへ向かったという。",
-  },
   {
     id: "T-4B",
     title: "T-4B: 都内にいる元神主の子どもの捜索",
@@ -286,7 +277,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [selectedDay3FieldActions, setSelectedDay3FieldActions] = useState<string[]>(["F-3A", "F-3B"]);
 
   // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠 / Day 3繰り越し含む）
-  const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4A");
+  const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4B");
   const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
 
   // Day 5 総力調査アクションの選択状態（東京: 1枠, 現地: 2枠 / 未選択プールから選択）
