@@ -435,6 +435,9 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     string | null
   >(null);
 
+  // 狂気の深淵モード（画面全体の枠が赤くなり、日本語を全てあてはめた状態）
+  const [isAbyssMode, setIsAbyssMode] = useState(false);
+
   // ==========================================
   // 時間変化で形が残る波形データ（最新再生された音のタイムライン記録）
   // ==========================================
@@ -531,6 +534,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const handleResetPlayerLabelsToInitial = () => {
     const resetState = { ...LOCKED_INITIAL_MEANINGS };
     setPlayerAssignedLabels(resetState);
+    setIsAbyssMode(false);
     try {
       localStorage.setItem(
         STORAGE_KEY_PLAYER_LABELS,
@@ -547,6 +551,12 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       allCorrect[w.id] = w.meaning.split("（")[0];
     });
     handleSavePlayerLabels(allCorrect);
+  };
+
+  // 「狂気の深淵を覗き込み、クジラの言語をより理解する」ボタンを押した時の処理
+  const handleEnterAbyssMode = () => {
+    setIsAbyssMode(true);
+    handleFillAllCorrectLabelsForPreview();
   };
 
   const handleSaveRules = (nextRules: WhaleBehaviorRule[]) => {
@@ -1544,20 +1554,48 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
           <div className="mx-auto flex max-w-6xl flex-col lg:flex-row items-start justify-center gap-6">
             {/* 左（メイン）：スマホ実機サイズの音響解読＆行動観測アプリ */}
-            <div className="w-full max-w-md mx-auto rounded-[28px] border-2 border-cyan-500/30 bg-slate-950 shadow-2xl shadow-cyan-950/50 overflow-hidden flex flex-col">
+            <div
+              className={`w-full max-w-md mx-auto rounded-[28px] bg-slate-950 overflow-hidden flex flex-col transition-all duration-500 ${
+                isAbyssMode
+                  ? "border-4 border-red-600 ring-4 ring-red-500/40 shadow-[0_0_50px_rgba(220,38,38,0.65)]"
+                  : "border-2 border-cyan-500/30 shadow-2xl shadow-cyan-950/50"
+              }`}
+            >
               {/* スマホアプリ上部ステータス＆ヘッダー */}
-              <div className="bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 px-4 py-3 border-b border-cyan-500/20 flex items-center justify-between">
+              <div
+                className={`px-4 py-3 border-b flex items-center justify-between transition-colors duration-500 ${
+                  isAbyssMode
+                    ? "bg-gradient-to-r from-red-950 via-rose-950/80 to-red-950 border-red-500/50"
+                    : "bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 border-cyan-500/20"
+                }`}
+              >
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-400" />
+                    <span
+                      className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${
+                        isAbyssMode ? "bg-red-500" : "bg-cyan-400"
+                      }`}
+                    />
+                    <span
+                      className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                        isAbyssMode ? "bg-red-500" : "bg-cyan-400"
+                      }`}
+                    />
                   </span>
                   <div>
                     <div className="text-xs font-bold tracking-wider text-white flex items-center gap-1.5">
-                      <Waves className="h-3.5 w-3.5 text-cyan-400" />
+                      <Waves
+                        className={`h-3.5 w-3.5 ${
+                          isAbyssMode ? "text-red-400" : "text-cyan-400"
+                        }`}
+                      />
                       クジラ音響解読・発信端末
                     </div>
-                    <div className="text-[10px] font-mono text-cyan-400/80">
+                    <div
+                      className={`text-[10px] font-mono ${
+                        isAbyssMode ? "text-red-300" : "text-cyan-400/80"
+                      }`}
+                    >
                       解読状況: {assignedCount} / {orderedWords.length} 語あてはめ済
                     </div>
                   </div>
@@ -2133,6 +2171,22 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                           </div>
                         );
                       })}
+                    </div>
+
+                    {/* アプリ画面の一番下：狂気の深淵ボタン */}
+                    <div className="pt-3 border-t border-slate-800/80">
+                      <button
+                        type="button"
+                        onClick={handleEnterAbyssMode}
+                        className={`w-full rounded-xl border px-3 py-3 text-xs font-extrabold tracking-wide transition-all duration-300 flex items-center justify-center gap-2 ${
+                          isAbyssMode
+                            ? "border-red-500 bg-gradient-to-r from-red-950 via-red-900/90 to-red-950 text-red-100 shadow-lg shadow-red-950/90 ring-1 ring-red-400/60"
+                            : "border-red-900/60 bg-slate-950/90 text-red-400/90 hover:border-red-500 hover:bg-red-950/60 hover:text-red-200 shadow-inner"
+                        }`}
+                      >
+                        <Eye className="h-4 w-4 shrink-0 text-red-400" />
+                        <span>狂気の深淵を覗き込み、クジラの言語をより理解する</span>
+                      </button>
                     </div>
                   </div>
                 </>
