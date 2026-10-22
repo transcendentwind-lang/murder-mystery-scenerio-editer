@@ -371,17 +371,16 @@ export interface RecordedWaveformTrace {
 const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v1";
 const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v1";
 
-export type TransmitDepthId = "20m" | "200m" | "800m" | "2000m";
+export type TransmitDepthId = "50m" | "500m" | "1000m";
 
 export const TRANSMIT_DEPTH_OPTIONS: {
   id: TransmitDepthId;
   label: string;
   subLabel: string;
 }[] = [
-  { id: "20m", label: "水深 20m", subLabel: "表層・浅海" },
-  { id: "200m", label: "水深 200m", subLabel: "中層域" },
-  { id: "800m", label: "水深 800m", subLabel: "深海層" },
-  { id: "2000m", label: "水深 2,000m", subLabel: "超深海" },
+  { id: "50m", label: "水深 50m", subLabel: "表層" },
+  { id: "500m", label: "水深 500m", subLabel: "主水温躍層" },
+  { id: "1000m", label: "水深 1000m", subLabel: "SOFAR層" },
 ];
 
 interface AttemptLog {
@@ -408,7 +407,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 }) => {
   const [rules, setRules] = useState<WhaleBehaviorRule[]>(DEFAULT_BEHAVIOR_RULES);
   const [selectedSequence, setSelectedSequence] = useState<string[]>([]);
-  const [selectedDepth, setSelectedDepth] = useState<TransmitDepthId>("800m");
+  const [selectedDepth, setSelectedDepth] = useState<TransmitDepthId>("50m");
   const [isPlaying, setIsPlaying] = useState(false);
   const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
   const [activeWordId, setActiveWordId] = useState<string | null>(null);
@@ -927,35 +926,22 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       second: "2-digit",
     });
 
-    const depthLabel =
-      TRANSMIT_DEPTH_OPTIONS.find((d) => d.id === depth)?.label || depth;
+    const depthOpt = TRANSMIT_DEPTH_OPTIONS.find((d) => d.id === depth);
+    const depthLabel = depthOpt
+      ? `${depthOpt.label}（${depthOpt.subLabel}）`
+      : depth;
 
-    // 浅海（20m）の場合：表層の水温躍層と波音に阻まれて深海のクジラまで届かない
-    if (depth === "20m") {
+    // 水深 500m（主水温躍層）：伝搬距離が最も短い（10km）ため、音波が屈折・散乱して沖合のクジラまで届かない
+    if (depth === "500m") {
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
         depthId: depth,
         sequenceIds: [...seq],
         matchedRuleId: null,
-        title: `🌊 水深が浅すぎるため（${depthLabel}）、クジラまで音が届いていないようだ`,
-        text: "海面付近の波音と水温の壁（躍層）に阻まれ、クリック音が深海へ減衰してしまった。クジラが泳ぐ深さに合わせて、流す深さを変えて試してみよう。",
-        badge: `⚠️ 水深不足（${depthLabel}）`,
-        status: "partial",
-      };
-    }
-
-    // 超深海（2,000m）の場合：深すぎて海底地形に吸収される
-    if (depth === "2000m") {
-      return {
-        id: `log-${Date.now()}`,
-        timestamp: nowStr,
-        depthId: depth,
-        sequenceIds: [...seq],
-        matchedRuleId: null,
-        title: `🌊 水深が深すぎるため（${depthLabel}）、音が海底に吸収されてしまった`,
-        text: "水深2,000mの海底地形にクリック音が反響・吸収され、クジラたちの回遊層から外れているようだ。もう少し浅い深海層（800mや200m）を選んでみよう。",
-        badge: `⚠️ 水深過大（${depthLabel}）`,
+        title: `🌊 主水温躍層（水深 500m）で音が屈折・散乱し、クジラまで届かなかったようだ`,
+        text: "水深500mの主水温躍層では水温の急激な変化により音波が大きく屈折・減衰してしまうため、沖合のクジラたちまで音が届いていない。別の水深を選んで試してみよう。",
+        badge: `⚠️ 音響散乱・減衰（${depthLabel}）`,
         status: "partial",
       };
     }
@@ -968,17 +954,17 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     );
 
     if (exactMatch) {
-      // 完全版8語祝詞のとき、中層（200m）だと近くの1頭にしか届かず、太平洋全域へ届けるには深海（800m）が必要
-      if (exactMatch.id === "rule-final-8words" && depth === "200m") {
+      // 完全版8語祝詞のとき、水深 50m（表層：30km圏内）だと近海のクジラにしか届かず、太平洋全域（1万km）へ届けるには水深 1000m（SOFAR層）が必要
+      if (exactMatch.id === "rule-final-8words" && depth === "50m") {
         return {
           id: `log-${Date.now()}`,
           timestamp: nowStr,
           depthId: depth,
           sequenceIds: [...seq],
           matchedRuleId: null,
-          title: `🐋 近くのクジラは反応したが、${depthLabel}では太平洋全域の群れまで音が届かない！`,
-          text: "8語のメッセージ自体は正しく伝わっているが、水深200mでは音が遠くの海まで伝播しない。太平洋全体のクジラへ歌をリレーさせるには、音が減衰せず遠くまで届く【水深 800m（深海層）】を選ぼう！",
-          badge: `💡 深海 800m が必要`,
+          title: `🐋 近海のクジラは反応したが、水深 50m（表層）では太平洋全域の群れまで音が届かない！`,
+          text: "8語のメッセージ自体は正しく成立しているが、表層（水深50m）では近海にしか音が届かない。太平洋全域のクジラ群へ歌をリレーさせるには、音が減衰せず遠くまで伝わる【水深 1000m（SOFAR層）】を選ぼう！",
+          badge: `💡 SOFAR層（水深 1000m）が必要`,
           status: "partial",
         };
       }
@@ -1868,7 +1854,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       )}
                     </div>
 
-                    {/* クリック音パターンを流す深さ（水深）選択 */}
+                    {/* クリック音パターンを流す深さ（水深）選択（3種類：50m表層 / 500m主水温躍層 / 1000m SOFAR層） */}
                     <div className="space-y-1.5 pt-0.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1">
@@ -1877,14 +1863,17 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         </span>
                         <span className="text-[10px] font-mono text-cyan-300">
                           現在:{" "}
-                          {
-                            TRANSMIT_DEPTH_OPTIONS.find(
+                          {(() => {
+                            const cur = TRANSMIT_DEPTH_OPTIONS.find(
                               (d) => d.id === selectedDepth
-                            )?.label
-                          }
+                            );
+                            return cur
+                              ? `${cur.label}（${cur.subLabel}）`
+                              : selectedDepth;
+                          })()}
                         </span>
                       </div>
-                      <div className="grid grid-cols-4 gap-1.5">
+                      <div className="grid grid-cols-3 gap-2">
                         {TRANSMIT_DEPTH_OPTIONS.map((depthOpt) => {
                           const isSelected = selectedDepth === depthOpt.id;
                           return (
@@ -1893,16 +1882,16 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               type="button"
                               disabled={isPlaying}
                               onClick={() => setSelectedDepth(depthOpt.id)}
-                              className={`rounded-lg border py-1.5 px-1 text-center transition ${
+                              className={`rounded-lg border py-2 px-1.5 text-center transition ${
                                 isSelected
                                   ? "border-cyan-400 bg-cyan-950/90 text-white shadow ring-1 ring-cyan-400/60"
                                   : "border-slate-800 bg-slate-900/80 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                               }`}
                             >
-                              <div className="text-[11px] font-extrabold leading-tight">
+                              <div className="text-xs font-extrabold leading-tight">
                                 {depthOpt.label}
                               </div>
-                              <div className="text-[9px] opacity-80 leading-tight mt-0.5">
+                              <div className="text-[10px] text-cyan-300/90 font-semibold leading-tight mt-0.5">
                                 {depthOpt.subLabel}
                               </div>
                             </button>
@@ -2150,7 +2139,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       key={i}
                       onClick={() => {
                         setAssigningTargetWordId(null);
-                        handleTransmitSequence(preset.seq);
+                        handleTransmitSequence(
+                          preset.seq,
+                          preset.seq.length === 8 ? "1000m" : selectedDepth === "500m" ? "50m" : selectedDepth
+                        );
                       }}
                       disabled={isPlaying}
                       className={`w-full rounded-xl border p-2.5 text-left transition disabled:opacity-40 ${preset.color}`}
