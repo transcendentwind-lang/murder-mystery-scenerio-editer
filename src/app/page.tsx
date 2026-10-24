@@ -113,9 +113,11 @@ export default function WorkbenchPage() {
         sender: "ai",
         persona: "drama_director",
         text: `👥 プレイ人数を【${newCount}名モード】に設定しました！\n\n${
-          newCount === 6
-            ? "【🌟 6名モード（本編・推奨：東京2名 ＋ 小笠原4名）】\n作者の構想する本来の完全版構成です！\n・海上保安庁東京本部（PC1 朝潮: 危機管理官、PC2 貝浜: 防衛省リエゾン）\n・小笠原現場（PC3 坂凪: 救難担当官、PC4 太刀魚: 純粋気象観測員、PC5 浪寄: 生物学者、PC6 初瀬: 救護担当者）\n6名それぞれが独立した唯一無二の専門知見（海の勘・科学・生態系・信仰伝承）を持ち寄り、濃密な群像劇と8語祝詞完成の達成感を最大限に味わえます。"
-            : "【5名モード（人数調整用：東京2名 ＋ 小笠原3名）】\n小笠原現地チームを3名体制（PC3 坂凪: 救難担当官、PC4 太刀魚: 気象観測員 兼 神社社家、PC5 浪寄: 生物学者）に集約しました。\nPC4太刀魚が近代科学観測官と実家（小笠原神社）の古文書・祝詞・無線ログを兼任し（PC6初瀬の役割を統合）、5名プレイ時でも証拠や暗号パズルを100%欠落なく遊ぶことができます。"
+          newCount === 7
+            ? "【🌟 7名モード（東京3名 ＋ 小笠原4名）】\n首席オペレーターの『長津（PC7）』をプレイヤーが担当し、海上保安庁東京本部が3名体制（PC1 朝潮: 危機管理官、PC2 貝浜: 防衛省リエゾン、PC7 長津: 首席通信解析官）となります！\nさらに各Day開始時にGMから朝潮（および長津）へ『Day別・対策本部ブリーフィング＆指揮官ミッションシート』が手渡され、プレイヤー主導で対策本部を指揮・進行できます。"
+            : newCount === 6
+            ? "【🌟 6名モード（本編・標準：東京2名 ＋ 小笠原4名 ／ 長津はGM担当）】\n・海上保安庁東京本部（PC1 朝潮: 危機管理官、PC2 貝浜: 防衛省リエゾン ※長津はGMが担当）\n・小笠原現場（PC3 坂凪: 救難担当官、PC4 太刀魚: 純粋気象観測員、PC5 浪寄: 生物学者、PC6 初瀬: 救護担当者）\n各Day開始時にGMから朝潮へ『Day別・対策本部ブリーフィング＆指揮官ミッションシート』を渡すことで、朝潮がリーダーとして自然に会議を主導できます。"
+            : "【5名モード（人数調整用：東京2名 ＋ 小笠原3名 ／ 長津はGM担当）】\n小笠原現地チームを3名体制（PC3 坂凪: 救難担当官、PC4 太刀魚: 気象観測員 兼 神社社家、PC5 浪寄: 生物学者）に集約しました。\nPC4太刀魚が近代科学観測官と実家（小笠原神社）の古文書・祝詞・無線ログを兼任し（PC6初瀬の役割を統合）、5名プレイ時でも証拠や暗号パズルを100%欠落なく遊ぶことができます。"
         }\n\n登場人物ハンドアウトや台本出力でも即座に反映されています。`,
         timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
       },
@@ -323,8 +325,20 @@ export default function WorkbenchPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {/* 6名（本編・推奨） / 5名（調整用） プレイ人数切り替えトグル */}
+                  {/* 7名（長津PC参加） / 6名（本編・標準） / 5名（調整用） プレイ人数切り替えトグル */}
                   <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                    <button
+                      onClick={() => handleTogglePlayerCount(7)}
+                      className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                        project.playerCount === 7
+                          ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                      }`}
+                      title="東京3名（PC1朝潮・PC2貝浜・PC7長津）＋小笠原4名（PC3・PC4・PC5・PC6）の7人プレイ構成"
+                    >
+                      <Users className="h-3.5 w-3.5" />
+                      7人プレイ（長津PC参加）
+                    </button>
                     <button
                       onClick={() => handleTogglePlayerCount(6)}
                       className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
@@ -332,10 +346,10 @@ export default function WorkbenchPage() {
                           ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
                           : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                       }`}
-                      title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名の本来の完全版構成（作者推奨）"
+                      title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名（長津はGM担当）の6人プレイ標準構成"
                     >
                       <Users className="h-3.5 w-3.5" />
-                      6人プレイ（本編・推奨）
+                      6人プレイ（標準・長津GM）
                     </button>
                     <button
                       onClick={() => handleTogglePlayerCount(5)}
@@ -344,7 +358,7 @@ export default function WorkbenchPage() {
                           ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
                           : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                       }`}
-                      title="小笠原3名（PC3・PC4統合・PC5）＋東京2名の人数調整用構成"
+                      title="小笠原3名（PC3・PC4統合・PC5）＋東京2名（長津はGM担当）の5人プレイ調整用構成"
                     >
                       <Users className="h-3.5 w-3.5" />
                       5人プレイ（調整用）

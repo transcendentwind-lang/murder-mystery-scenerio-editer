@@ -15,7 +15,7 @@ import {
   GmProgressionNote,
   EvidenceVisibility,
 } from "@/types/schema";
-import { initialVisualBoards, initialProject } from "@/utils/initialProjectData";
+import { initialVisualBoards, initialProject, DAILY_COMMANDER_BRIEFINGS } from "@/utils/initialProjectData";
 import {
   Sparkles,
   Printer,
@@ -520,19 +520,19 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 // GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   1: [
-    "合同対策本部の首席オペレーター長津として緊急回線を開設し、各員の役職・氏名・専門分野の点呼を行わせる（目標時間: 30分）",
+    "【Day 1 開始時】GMから朝潮（PC1）（7名プレイ時は長津（PC7）経由）へ『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮主導で各員の点呼・自己紹介を行わせる（目標時間: 30分）",
     "遭難海図を展開し、風圧流（南西強風）と海流（北東流）の両方の影響をプレイヤーに整理させる",
     "2つの力を合成した漂流方向（東北東）と暗礁群の位置を考慮させ、救難艇を急行させるべき海域を決定させる",
     "救難艇による間一髪の救助成功を伝え、船長の証言（EV-08）および不審なダイバーの大型冷凍ボックス（EV-07）を開示する",
   ],
   2: [
-    "西之島沖の突発噴火と移動する巨大な影の目撃情報を伝え、対策チームの即応体制維持を通達する（目標時間: 25分）",
+    "【Day 2 開始時】GMから朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡し、西之島沖噴火と巨大影の状況報告・即応体制維持を共有させる（目標時間: 25分）",
     "東京側（3択中1つ）と小笠原現地（4択中2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
     "※GM注意（ネタバレ防止）：この段階では「ダイオウイカの超群体」という真相は絶対に明かさないこと",
   ],
   3: [
-    "鳥島沖海底噴火を伝え、大型捜索ヘリが巡視船「あきつしま」で洋上給油を行い、ソノブイ3基を投下する任務をアナウンスする（目標時間: 25分）",
+    "【Day 3 開始時】GMから朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡し、鳥島沖噴火とソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
     "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置を特定させる",
     "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 16:00）、浪寄（EV-18: Day1救助時間 08:00）の3名へ証拠を配布する",
     "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
@@ -542,32 +542,30 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
     "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠）を選択させ、証拠資料を開示する",
   ],
   4: [
-    "明神礁の海底噴火と日速150kmでの正確な北上、火山性微動と物体の完全一致をアナウンスする（目標時間: 25分）",
-    "前日の朝潮の決断に応じた政府・自衛隊の反応（要請時: 内閣見送りだが海幕照会／見送り時: 運用企画局照会）を読み上げる",
+    "【Day 4 開始時】GMから朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡し、明神礁噴火と日速150kmでの北上、前日の決断に応じた政府反応を伝える（目標時間: 25分）",
     "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
     "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して収集済みの全証拠資料を一括開示する",
-    "防衛省が武力出動ではなく「害獣駆除（災害派遣）」として海自全部隊動員・通常兵器による実弾迎撃作戦を決定した通達を読み上げる",
+    "対策本部として巨大生物の最終目的地（東京湾か富士山か）を結論づけさせた後、防衛省が「害獣駆除（災害派遣）」として海自全部隊動員・実弾迎撃作戦を決定した通達を読み上げる",
   ],
   5: [
-    "民間臨時ニュースを読み上げ、富士山深部の微動観測と噴火警戒レベル引き上げ・避難準備指示を伝える（目標時間: 25分）",
-    "自衛隊の実弾迎撃作戦が最高軍事機密に移行し、交戦情報提供が遮断されたことをアナウンスする",
-    "防衛省から貝浜への直通無線を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える",
+    "【Day 5 開始時】GMから朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート』を手渡し、富士山深部の微動ニュース・猶予時間計算指令（残距離240km÷時速5km＝48時間）・軍事機密による情報遮断を伝える（目標時間: 25分）",
     "朝倉教授のクジラ構文規則（EV-30：『了解した』以外のクジラ言語はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
+    "終盤、防衛省から貝浜への直通無線を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える",
   ],
   6: [
-    "昼の沈静化アナウンスから一転、夕〜夜に怪異が駿河トラフへ高速再浮上し、破局噴火まで残り24時間となった警報を発令する（目標時間: 30分）",
+    "【Day 6 開始時】GMから朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡し、昼の沈静化から一転して夕方に駿河トラフへ高速再浮上（残り24時間）した警報を発令する（目標時間: 30分）",
     "朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則を統合し、クジラを駿河湾へ招集するための「新言語祝詞」（参考正解例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組等）を完成させる",
-    "長津が電話を繋ぎ、「私にできるのは連絡することだけです。頼みますね」とプレイヤーへ交渉を託す",
+    "長津が防衛庁運用企画局長への直通回線を繋ぎ（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる",
     "防衛庁運用企画局長との電話交渉を演出し、「通常兵器無効と火山刺激リスク」「深夜SOFAR層放流とクジラ到達時間（6〜8時間）の逆算」を説明・説得させる",
     "局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げる",
-    "深夜の潜水艦による深海SOFAR層での祝詞音声放流開始を伝え、プレイヤー全員で決戦の【作戦名（オペレーション名）】を命名・決定させる",
+    "深夜の潜水艦による深海SOFAR層での祝詞音声放流開始を伝え、朝潮の指揮で決戦の【作戦名（オペレーション名）】を命名・決定させる",
   ],
   7: [
-    "祝詞に応えて夜通し泳いできたマッコウクジラ群が駿河湾深海へ到達し、怪異を大捕食したこと、富士山微動が完全停止したことを劇的に描写する（目標時間: 30分）",
-    "長津が涙ながらに各員の名前を呼び、日本が救われた歓喜と全部隊攻撃中止（スタンドダウン）を告げる",
+    "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・怪異の大捕食・富士山微動の完全停止を劇的に描写する（目標時間: 30分）",
+    "長津が涙ながらに各員の名前を呼び（7名時はPC7長津またはGM）、日本が救われた歓喜と全部隊攻撃中止（スタンドダウン）を告げる",
     "防衛省幹部からの電話を読み上げ、「世間への説明のため自衛隊が掃討攻撃したことにする。君たちの功績は国家防衛機密として公表できないが、君たちが正しかった」という大人の本音を伝える",
     "「海上自衛隊の果敢な武力行使によって巨大生物を完全撃滅」という公式テレビニュースを読み上げる",
-    "歴史には残らなくとも、海と国を守り抜いた誇りを胸に日常へ戻る6人のエピローグを読み上げ、ゲームを終了・感想戦へ移行する",
+    "朝潮の指揮で対策本部を解散し、海と国を守り抜いた誇りを胸に日常へ戻る英雄たちのエピローグを読み上げ、ゲームを終了・感想戦へ移行する",
   ],
 };
 
@@ -862,7 +860,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   onSendAiPrompt,
 }) => {
   const [category, setCategory] = useState<StudioCategory>("handouts");
-  const [handoutViewMode, setHandoutViewMode] = useState<"sheet" | "cards">("sheet");
+  const [handoutViewMode, setHandoutViewMode] = useState<"sheet" | "cards" | "daily_briefings">("sheet");
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
@@ -1552,6 +1550,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               >
                 🃏 別配付カード（初期所持品・携行アイテム ／ 固有能力・専門スキル）
               </button>
+              <button
+                onClick={() => setHandoutViewMode("daily_briefings")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  handoutViewMode === "daily_briefings"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                📋 Day別・朝潮＆長津ブリーフィング指令書（各Day開始時にGMから配布）
+              </button>
             </div>
           </div>
           <span className="text-[11px] text-slate-400">
@@ -1770,34 +1778,46 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </h3>
               </div>
 
-              {/* 本紙（6項目） vs 別配付カード（所持品・能力）切替 */}
-              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              {/* 本紙（6項目） vs 別配付カード（所持品・能力） vs Day別ブリーフィング指令書 切替 */}
+              <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setHandoutViewMode("sheet")}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-bold transition ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "sheet"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  📄 ハンドアウト本紙
+                  📄 本紙
                 </button>
                 <button
                   onClick={() => setHandoutViewMode("cards")}
-                  className={`rounded-md px-2 py-1.5 text-[11px] font-bold transition ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "cards"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🃏 所持品・能力カード
+                  🃏 カード
+                </button>
+                <button
+                  onClick={() => setHandoutViewMode("daily_briefings")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    handoutViewMode === "daily_briefings"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📋 Day別指令
                 </button>
               </div>
 
               <p className="text-[10px] text-slate-400 leading-relaxed">
                 {handoutViewMode === "sheet"
                   ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
-                  : "ハンドアウト本紙とは別に各プレイヤーへ配る「初期所持品」「固有能力」のカードシートです。"}
+                  : handoutViewMode === "cards"
+                  ? "ハンドアウト本紙とは別に各プレイヤーへ配る「初期所持品」「固有能力」のカードシートです。"
+                  : "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"}
               </p>
 
               <div className="space-y-2">
@@ -2363,7 +2383,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </div>
                     </div>
                   </div>
-                ) : (
+                ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
                      🃏 別配付カードシート（初期所持品・携行アイテム ＆ 固有能力・専門スキル）
                      ------------------------------------------------------------ */
@@ -2575,6 +2595,81 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           </div>
                         ))}
                       </div>
+                    </div>
+                  </div>
+                ) : (
+                  /* ------------------------------------------------------------
+                     📋 Day別・朝潮＆長津ブリーフィング指令書（各Day開始時にGMから1枚ずつ配布）
+                     ------------------------------------------------------------ */
+                  <div className="space-y-6">
+                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
+                      <div>
+                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                          {project.title} ― 対策本部・日次ブリーフィング ＆ 指揮官ミッションシート（Day 1〜Day 7）
+                        </span>
+                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                          危機管理官 朝潮（PC1）＆ 首席オペレーター 長津（PC7 / 6名時はGM）専用・Day別配布シート
+                        </h2>
+                      </div>
+                      <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded">
+                        ※ネタバレ防止のため、最初から一括配布せず【各Dayの開始時に1枚ずつ】GMから渡してください
+                      </span>
+                    </div>
+
+                    <div className="space-y-5">
+                      {DAILY_COMMANDER_BRIEFINGS.map((b) => (
+                        <div
+                          key={b.dayNumber}
+                          className="rounded-md border-2 border-slate-800 bg-white p-4 shadow-sm space-y-3 break-inside-avoid"
+                        >
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-800 pb-2">
+                            <div className="flex items-center gap-2">
+                              <span className="rounded bg-slate-900 px-2.5 py-0.5 text-xs font-black text-white">
+                                DAY {b.dayNumber} 指令書
+                              </span>
+                              <h3 className="text-sm font-black text-slate-900">{b.title}</h3>
+                            </div>
+                            <span className="text-xs font-bold text-slate-600 font-mono">
+                              目標進行時間: {b.targetMinutes}分
+                            </span>
+                          </div>
+
+                          {/* 上段：長津からの緊急通信ブリーフィング */}
+                          <div className="rounded border border-slate-300 bg-slate-50 p-3 space-y-1">
+                            <div className="flex items-center justify-between">
+                              <span className="text-xs font-bold text-slate-800">
+                                {b.nagatsuBriefingTitle}
+                              </span>
+                              <span className="text-[10px] text-slate-500">
+                                ※7名時は長津（PC7）、6名時はGMが読み上げて報告
+                              </span>
+                            </div>
+                            <p className="text-xs leading-relaxed text-slate-800 font-medium">
+                              {b.nagatsuBriefingText}
+                            </p>
+                          </div>
+
+                          {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
+                          <div className="rounded border border-slate-300 bg-white p-3 space-y-1.5">
+                            <div className="text-xs font-bold text-slate-900 border-b border-slate-200 pb-1">
+                              🧭 危機管理官 朝潮（PC1）がこのDayで指揮・達成すべきミッション
+                            </div>
+                            <ul className="space-y-1.5 text-xs leading-relaxed text-slate-800 list-none">
+                              {b.asashioMissions.map((m, mIdx) => (
+                                <li key={mIdx} className="flex items-start gap-2">
+                                  <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
+                                  <span>{m}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="text-[10px] text-slate-500 flex items-center justify-between pt-1 border-t border-dashed border-slate-200">
+                            <span>📌 GM配布タイミング: {b.gmHandoutNote}</span>
+                            <span className="font-mono">COMMAND-BRIEFING-DAY0{b.dayNumber}</span>
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
@@ -2918,17 +3013,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 <div className="space-y-5">
                   {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
                   <div className="rounded-md border border-cyan-400/80 bg-white/95 p-3 text-xs text-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-2 border-l-4 border-l-cyan-600">
-                    <div className="flex items-center gap-2">
+                    <div className="flex flex-wrap items-center gap-2">
                       <span className="font-bold text-cyan-900 flex items-center gap-1.5 text-xs">
                         <Radio className="h-4 w-4 text-cyan-700 shrink-0" />
-                        🎙️ GM役柄・立ち位置：【合同対策本部 首席オペレーター 長津（ながつ）】
+                        🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
                       </span>
                       <span className="text-[11px] text-slate-600">
-                        ｜ プレイヤー（危機管理官・防衛省・現地・学者等）の判断を尊重し、状況アナウンス・回線接続・時間管理を行う司令室のサポート役
+                        ｜ 各Day開始時にGMから朝潮（PC1）（7名時は長津経由）へ『Day別・ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮の指揮で会議を開始させます
                       </span>
                     </div>
                     <span className="rounded bg-cyan-100 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-900 shrink-0">
-                      SUPPORT ROLE
+                      6-7 PLAYERS READY
                     </span>
                   </div>
 

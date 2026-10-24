@@ -542,6 +542,7 @@ interface AttemptLog {
   timestamp: string;
   sequenceIds: string[];
   matchedRuleId: string | null;
+  matchedRuleIds?: string[];
   title: string;
   text: string;
   badge: string;
@@ -1098,14 +1099,15 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     }, 25);
   };
 
-  // 単語ボタンを押した時（クリック音を鳴らしてパターン末尾に追加 ＋ 波形を記録して残す）
+  // 単語ボタンを押した時（最大8語までパターン末尾に追加 ＋ クリック音と波形を記録して残す）
   const handleAddWordAndPlay = async (wordId: string) => {
     if (isPlaying) return;
-    const nextSeq = [...selectedSequence, wordId];
-    setSelectedSequence(nextSeq);
+    if (selectedSequence.length < 8) {
+      setSelectedSequence([...selectedSequence, wordId]);
+    }
     setActiveWordId(wordId);
 
-    // 今押した単音の波形（または組み立て中シーケンスの波形）を即座に描画して残す
+    // 今押した単音の波形を即座に描画して残す
     const trace = buildWaveformTrace([wordId]);
     setWaveformTrace(trace);
     startWaveformPlayheadAnimation(trace.totalDurationMs);
@@ -1166,7 +1168,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setCurrentOutcome(null);
   };
 
-  // パターン判定ロジック（クジラは了解「カッ」以外は厳密な順序の2語の組み合わせで話す）
+  // パターン判定ロジック（最大8語まで入力可能、先頭から2語ずつ区切って順番に判定）
   const evaluatePatternOutcome = (seq: string[]): AttemptLog => {
     const nowStr = new Date().toLocaleTimeString([], {
       hour: "2-digit",
@@ -1181,6 +1183,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         timestamp: nowStr,
         sequenceIds: [...seq],
         matchedRuleId: null,
+        matchedRuleIds: [],
         title: "クジラから『カッ（了解した）』というクリック音が返ってきた",
         text: "",
         badge: "🐋 応答確認",
@@ -1188,70 +1191,77 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       };
     }
 
-    // 2. 登録ルール（2語成語・厳密な順序）との完全一致検索
-    const exactMatch = rules.find(
-      (r) =>
-        r.sequence.length === seq.length &&
-        r.sequence.every((id, idx) => id === seq[idx])
-    );
-
-    if (exactMatch) {
-      return {
-        id: `log-${Date.now()}`,
-        timestamp: nowStr,
-        sequenceIds: [...seq],
-        matchedRuleId: exactMatch.id,
-        title: exactMatch.behaviorTitle,
-        text:
-          exactMatch.behaviorText !== exactMatch.behaviorTitle
-            ? exactMatch.behaviorText
-            : "",
-        badge: exactMatch.directionBadge || "🐋 クジラのアクション",
-        status: "success",
-      };
-    }
-
-    // 3. 1語のみ（了解以外）発信された場合
+    // 2. 1語のみ（了解以外）発信された場合
     if (seq.length === 1) {
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
         sequenceIds: [...seq],
         matchedRuleId: null,
+        matchedRuleIds: [],
         title: "クジラは反応していない（1語単独の発信）",
         text: "クジラは了解である「カッ」以外は、2語の組み合わせ（厳密な順序）で話すようだ。",
-        badge: "💡 2語の組み合わせが必要",
+        badge: "💡 2語ごとの組み合わせが必要",
         status: "partial",
       };
     }
 
-    // 4. 3語以上発信された場合（複数文をつなげた返答はなし）
-    if (seq.length >= 3) {
+    // 3. 先頭から2語ずつペア（[0,1], [2,3], [4,5], [6,7]）にして順番に判定
+    const matchedRules: WhaleBehaviorRule[] = [];
+    let hasReversedPair = false;
+
+    for (let i = 0; i + 1 < seq.length; i += 2) {
+      const w1 = seq[i];
+      const w2 = seq[i + 1];
+
+      const exactPairMatch = rules.find(
+        (r) => r.sequence.length === 2 && r.sequence[0] === w1 && r.sequence[1] === w2
+      );
+      if (exactPairMatch) {
+        matchedRules.push(exactPairMatch);
+      } else {
+        const revMatch = rules.find(
+          (r) => r.sequence.length === 2 && r.sequence[0] === w2 && r.sequence[1] === w1
+        );
+        if (revMatch) {
+          hasReversedPair = true;
+        }
+      }
+    }
+
+    // 2語ごとに判定して成立しているものが1つ以上あれば、成立した順番に行動を表示
+    if (matchedRules.length > 0) {
+      const orderedTitle =
+        matchedRules.length === 1
+          ? matchedRules[0].behaviorTitle
+          : matchedRules.map((r) => `・${r.behaviorTitle}`).join("\n");
+
+      const badgeLabel =
+        matchedRules.length === 1
+          ? matchedRules[0].directionBadge || "🐋 クジラのアクション"
+          : `🐋 クジラのアクション（${matchedRules.length}件成立）`;
+
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
         sequenceIds: [...seq],
-        matchedRuleId: null,
-        title: "クジラは反応していない（3語以上の発信）",
-        text: "クジラは2語の組み合わせで話すため、3語以上つなげても意味が通じないようだ。2語の組み合わせで発信してみよう。",
-        badge: "❌ 2語で発信してください",
-        status: "fail",
+        matchedRuleId: matchedRules[0].id,
+        matchedRuleIds: matchedRules.map((r) => r.id),
+        title: orderedTitle,
+        text: "",
+        badge: badgeLabel,
+        status: "success",
       };
     }
 
-    // 5. 2語だが逆順になっているペアがあるかチェック
-    const reversedMatch = rules.find(
-      (r) =>
-        r.sequence.length === 2 &&
-        r.sequence[0] === seq[1] &&
-        r.sequence[1] === seq[0]
-    );
-    if (reversedMatch) {
+    // 4. 成立したペアが0件で、逆順になっているペアが含まれる場合
+    if (hasReversedPair) {
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
         sequenceIds: [...seq],
         matchedRuleId: null,
+        matchedRuleIds: [],
         title: "クジラは反応していない（語順が逆のようだ）",
         text: "2語の順序が厳密に決まっているようだ。前後の順番を入れ替えて試してみよう。",
         badge: "🔄 語順不一致",
@@ -1259,26 +1269,28 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       };
     }
 
-    // 6. その他の未定義パターン
+    // 5. その他の未定義パターン
     return {
       id: `log-${Date.now()}`,
       timestamp: nowStr,
       sequenceIds: [...seq],
       matchedRuleId: null,
+      matchedRuleIds: [],
       title: "クリック音は海へ反響したが、クジラは反応していない",
-      text: "この2語の組み合わせでは意味が成立しなかったようだ。",
+      text: "この組み合わせでは2語成語が成立しなかったようだ。",
       badge: "❌ パターン不一致",
       status: "fail",
     };
   };
 
-  // パターンを海中に放流（再生＆時間軸波形の記録＆判定＆行動表示）
+  // パターンを海中に放流（再生＆時間軸波形の記録＆2語ごとの判定＆行動表示）
   const handleTransmitSequence = async (overrideSeq?: string[]) => {
-    const targetSeq = overrideSeq || selectedSequence;
+    const rawSeq = overrideSeq || selectedSequence;
+    const targetSeq = rawSeq.slice(0, 8);
     if (targetSeq.length === 0 || isPlaying) return;
 
     if (overrideSeq) {
-      setSelectedSequence(overrideSeq);
+      setSelectedSequence(targetSeq);
     }
 
     setIsPlaying(true);
@@ -1300,9 +1312,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setActiveWordId(null);
     setPlaybackProgressMs(null); // 波形全体を100%確定表示した状態でホールド
 
-    // 判定
+    // 2語ごとの判定
     const outcome = evaluatePatternOutcome(targetSeq);
-    const matchedRule = rules.find((r) => r.id === outcome.matchedRuleId);
+    const matchedList = (outcome.matchedRuleIds || [])
+      .map((id) => rules.find((r) => r.id === id))
+      .filter((r): r is WhaleBehaviorRule => Boolean(r));
 
     // 少し余韻を置いてから結果表示＆正解ファンファーレ（⑤太古の深海共鳴ファンファーレ）を再生
     await new Promise((r) => setTimeout(r, 300));
@@ -1310,18 +1324,20 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setCurrentOutcome(outcome);
     setAttemptLogs((prev) => [outcome, ...prev]);
 
-    if (matchedRule) {
+    if (matchedList.length > 0) {
       await audioEngine?.playSuccessFanfare();
-      if (matchedRule.responseSoundType === "greet_you_echo") {
-        await new Promise((r) => setTimeout(r, 200));
-        await audioEngine?.playWordSound("word-greet", 1.0);
-        await new Promise((r) => setTimeout(r, 240));
-        await audioEngine?.playWordSound("word-you", 1.0);
-      } else if (matchedRule.responseSoundType === "greet_human_echo") {
-        await new Promise((r) => setTimeout(r, 200));
-        await audioEngine?.playWordSound("word-greet", 1.0);
-        await new Promise((r) => setTimeout(r, 240));
-        await audioEngine?.playWordSound("word-human", 1.0);
+      for (const mRule of matchedList) {
+        if (mRule.responseSoundType === "greet_you_echo") {
+          await new Promise((r) => setTimeout(r, 200));
+          await audioEngine?.playWordSound("word-greet", 1.0);
+          await new Promise((r) => setTimeout(r, 240));
+          await audioEngine?.playWordSound("word-you", 1.0);
+        } else if (mRule.responseSoundType === "greet_human_echo") {
+          await new Promise((r) => setTimeout(r, 200));
+          await audioEngine?.playWordSound("word-greet", 1.0);
+          await new Promise((r) => setTimeout(r, 240));
+          await audioEngine?.playWordSound("word-human", 1.0);
+        }
       }
     } else if (targetSeq.length === 1 && targetSeq[0] === "word-ack") {
       await audioEngine?.playWordSound("word-ack", 1.0);

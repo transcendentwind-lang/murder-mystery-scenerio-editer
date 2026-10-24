@@ -240,8 +240,8 @@ export function getStoredProjects(): MMProject[] {
       const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
       if (initialIdx >= 0) {
         const storedInit = parsed[initialIdx];
-        const is5Players = storedInit.playerCount === 5;
-        const masterCharacters = getCharactersForPlayerCount(is5Players ? 5 : 6);
+        const pCount = storedInit.playerCount === 5 ? 5 : storedInit.playerCount === 7 ? 7 : 6;
+        const masterCharacters = getCharactersForPlayerCount(pCount);
         const masterCharMap = new Map<string, Character>(
           masterCharacters.map((c) => [c.id, c as Character])
         );

@@ -38,6 +38,7 @@ import {
   PhoneCall,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
+import { DAILY_COMMANDER_BRIEFINGS } from "@/utils/initialProjectData";
 import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
@@ -431,14 +432,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
     } else if (cue === "climax-call") {
       audioEngine?.playMessageSequence(
         [
-          "word-human",
-          "word-whale",
+          "word-human-whale",
           "word-promise",
           "word-subsea-volcano",
-          "word-go-north",
           "word-search",
-          "word-giant-prey",
+          "word-go-north",
           "word-gather",
+          "word-giant-prey",
+          "word-attack",
         ],
         1.0
       );
@@ -511,8 +512,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             <Users className="h-3.5 w-3.5 text-indigo-400" />
             <span className="font-bold text-white">{project.playerCount}名</span>
             <span className="text-[10px] text-slate-400">
-              (東京2名 / 小笠原{project.playerCount === 5 ? "3名" : "4名"})
-              {project.playerCount === 6 ? " 【本編・推奨】" : " 【調整用】"}
+              (東京{project.playerCount === 7 ? "3名" : "2名"} / 小笠原{project.playerCount === 5 ? "3名" : "4名"})
+              {project.playerCount === 7
+                ? " 【長津PC参加】"
+                : project.playerCount === 6
+                ? " 【標準・長津GM】"
+                : " 【調整用】"}
             </span>
           </div>
         </div>
@@ -607,6 +612,39 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 {currentTimelineStep?.incidentOverview}
               </p>
             </div>
+
+            {/* 📋 各Day開始時にGMから朝潮（および7名時は長津）へ渡す日次ブリーフィング＆指揮官ミッション */}
+            {(() => {
+              const briefing = DAILY_COMMANDER_BRIEFINGS.find((b) => b.dayNumber === currentDay);
+              if (!briefing) return null;
+              return (
+                <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 p-4 space-y-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-800/40 pb-2">
+                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
+                      <FileText className="h-4 w-4 text-amber-400" />
+                      📋 【Day {currentDay} 開始時にGMから配布】朝潮（PC1）＆ 長津（PC7）用 ブリーフィング・指揮官ミッション
+                    </span>
+                    <span className="rounded bg-amber-950 px-2 py-0.5 text-[10px] font-bold text-amber-200 border border-amber-700/60">
+                      {project.playerCount === 7 ? "7名時：長津(PC7)➔朝潮(PC1)へ手渡し" : "6名時：GM(長津)➔朝潮(PC1)へ手渡し"}
+                    </span>
+                  </div>
+                  <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
+                    <div className="font-bold text-cyan-300 text-[11px]">{briefing.nagatsuBriefingTitle}</div>
+                    <p className="text-slate-300 leading-relaxed text-[11px]">{briefing.nagatsuBriefingText}</p>
+                  </div>
+                  <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
+                    <div className="font-bold text-amber-300 text-[11px]">
+                      🧭 危機管理官 朝潮（PC1）がこのDayで指揮・達成すべきミッション:
+                    </div>
+                    <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-200">
+                      {briefing.asashioMissions.map((m, idx) => (
+                        <li key={idx}>{m}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              );
+            })()}
 
             {/* GM演出用NPCセリフ・ナレーションスクリプト */}
             <div className="space-y-3">
