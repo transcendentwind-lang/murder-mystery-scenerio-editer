@@ -32,194 +32,250 @@ import {
 export interface WhaleBehaviorRule {
   id: string;
   name: string;
-  sequence: string[]; // wordIdの配列
-  responseSoundType: "yes_ack" | "alert_boom" | "feeding_burst" | "full_relay" | "none";
+  sequence: string[]; // wordIdの配列（厳密な順序）
+  responseSoundType:
+    | "yes_ack"
+    | "greet_you_echo"
+    | "greet_human_echo"
+    | "none";
   behaviorTitle: string;
   behaviorText: string;
   directionBadge?: string;
   category: "movement" | "action" | "ritual" | "other";
 }
 
+// ==========================================
+// 2語成語（全23パターン・順序厳守）のクジラ行動定義
+// ==========================================
 export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
   {
-    id: "rule-west-gather",
-    name: "西に集まれ（人工音誘導テスト再現）",
-    sequence: ["word-go-west", "word-gather"],
+    id: "rule-01-volcano-alert",
+    name: "海の下の火山 ＋ 周囲を警戒せよ",
+    sequence: ["word-subsea-volcano", "word-alert"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが西に移動した",
-    behaviorText:
-      "海中から短く澄んだクリック音『カッ！（了解）』が返ってきた。\n直後、近くにいたクジラの群れが一斉に進路を変え、西の海域へと整然と移動を開始した！",
-    directionBadge: "⬅️ 西（WEST）へ移動",
-    category: "movement",
+    behaviorTitle: "クジラは海底火山を警戒し始めた",
+    behaviorText: "クジラは海底火山を警戒し始めた",
+    directionBadge: "🌋 海底火山を警戒",
+    category: "action",
   },
   {
-    id: "rule-north-gather",
-    name: "北に集まれ",
-    sequence: ["word-go-north", "word-gather"],
+    id: "rule-02-enemy-alert",
+    name: "敵がいる ＋ 周囲を警戒せよ",
+    sequence: ["word-enemy", "word-alert"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが北に移動した",
-    behaviorText:
-      "海中から『カッ！（了解）』と応答が返り、クジラの群れが一斉に向きを変えて北の海域へと移動を開始した！",
-    directionBadge: "⬆️ 北（NORTH）へ移動",
-    category: "movement",
+    behaviorTitle: "クジラは周囲の動く大きな生き物への警戒をし始めた",
+    behaviorText: "クジラは周囲の動く大きな生き物への警戒をし始めた",
+    directionBadge: "⚠️ 外敵への警戒開始",
+    category: "action",
   },
   {
-    id: "rule-east-gather",
-    name: "東に集まれ",
+    id: "rule-03-enemy-flee",
+    name: "敵がいる ＋ 逃げろ",
+    sequence: ["word-enemy", "word-flee"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラは周囲の動く大きな生き物から逃げ始めた",
+    behaviorText: "クジラは周囲の動く大きな生き物から逃げ始めた",
+    directionBadge: "💨 外敵から退避",
+    category: "action",
+  },
+  {
+    id: "rule-04-enemy-attack",
+    name: "敵がいる ＋ 攻撃せよ",
+    sequence: ["word-enemy", "word-attack"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラは周囲の動く大きな生き物を攻撃し始めた",
+    behaviorText: "クジラは周囲の動く大きな生き物を攻撃し始めた",
+    directionBadge: "⚔️ 外敵を攻撃開始",
+    category: "action",
+  },
+  {
+    id: "rule-05-volcano-search",
+    name: "海の下の火山 ＋ 探せ",
+    sequence: ["word-subsea-volcano", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラは海底火山を探し始めた",
+    behaviorText: "クジラは海底火山を探し始めた",
+    directionBadge: "🌋 海底火山を索敵",
+    category: "action",
+  },
+  {
+    id: "rule-06-volcano-flee",
+    name: "海の下の火山 ＋ 逃げろ",
+    sequence: ["word-subsea-volcano", "word-flee"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラは海底火山から逃げ始めた",
+    behaviorText: "クジラは海底火山から逃げ始めた",
+    directionBadge: "💨 海底火山から退避",
+    category: "action",
+  },
+  {
+    id: "rule-07-normal-prey-gather",
+    name: "普通の餌 ＋ 集まれ",
+    sequence: ["word-normal-prey", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラはイカなどの餌に集まり始めた",
+    behaviorText: "クジラはイカなどの餌に集まり始めた",
+    directionBadge: "🦑 普通の餌に集合",
+    category: "action",
+  },
+  {
+    id: "rule-08-giant-prey-gather",
+    name: "大きい・たくさんの餌 ＋ 集まれ",
+    sequence: ["word-giant-prey", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラが大量の餌に集まり始めた",
+    behaviorText: "クジラが大量の餌に集まり始めた",
+    directionBadge: "🦑 大量の餌に集合",
+    category: "action",
+  },
+  {
+    id: "rule-09-whale-child-feed",
+    name: "我ら・自分（クジラ） ＋ （子ども）餌をくれ",
+    sequence: ["word-whale", "word-child-feed"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "親クジラが子クジラに母乳を与え始めた",
+    behaviorText: "親クジラが子クジラに母乳を与え始めた",
+    directionBadge: "🐋 子クジラへ授乳",
+    category: "action",
+  },
+  {
+    id: "rule-10-child-here-gather",
+    name: "（子ども）自分の場所はここだ ＋ 集まれ",
+    sequence: ["word-child-here", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "親クジラが子クジラを探し始め、側に寄り添った",
+    behaviorText: "親クジラが子クジラを探し始め、側に寄り添った",
+    directionBadge: "🐋 子クジラに寄り添う",
+    category: "action",
+  },
+  {
+    id: "rule-11-child-here-feed",
+    name: "（子ども）自分の場所はここだ ＋ （子ども）餌をくれ",
+    sequence: ["word-child-here", "word-child-feed"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "親クジラが子クジラを探し始め、母乳を与え始めた",
+    behaviorText: "親クジラが子クジラを探し始め、母乳を与え始めた",
+    directionBadge: "🐋 子クジラ発見・授乳",
+    category: "action",
+  },
+  {
+    id: "rule-12-calf-gather",
+    name: "クジラの子ども ＋ 集まれ",
+    sequence: ["word-calf", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "子クジラが集まり始めた",
+    behaviorText: "子クジラが集まり始めた",
+    directionBadge: "🐋 子クジラが集合",
+    category: "action",
+  },
+  {
+    id: "rule-13-calf-search",
+    name: "クジラの子ども ＋ 探せ",
+    sequence: ["word-calf", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラが子クジラを探し始めた",
+    behaviorText: "クジラが子クジラを探し始めた",
+    directionBadge: "🐋 子クジラを捜索",
+    category: "action",
+  },
+  {
+    id: "rule-14-greet-you",
+    name: "挨拶／こんにちは ＋ あなたたち・あなた",
+    sequence: ["word-greet", "word-you"],
+    responseSoundType: "greet_you_echo",
+    behaviorTitle: "同じコーダ（ズジーズ・ズ/ドド・ツツツ）が帰ってきた",
+    behaviorText: "同じコーダ（ズジーズ・ズ/ドド・ツツツ）が帰ってきた",
+    directionBadge: "📡 コーダ応答受信",
+    category: "ritual",
+  },
+  {
+    id: "rule-15-east-gather",
+    name: "東 ＋ 集まれ",
     sequence: ["word-go-east", "word-gather"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが東に移動した",
-    behaviorText:
-      "海中から『カッ！（了解）』と応答が返り、クジラの群れが一斉に向きを変えて東の海域へと移動を開始した！",
-    directionBadge: "➡️ 東（EAST）へ移動",
+    behaviorTitle: "付近のクジラが発声地点に対して東に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して東に集まり始めた",
+    directionBadge: "➡️ 東に集まり始めた",
     category: "movement",
   },
   {
-    id: "rule-south-gather",
-    name: "南に集まれ",
+    id: "rule-16-west-gather",
+    name: "西 ＋ 集まれ",
+    sequence: ["word-go-west", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して西に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して西に集まり始めた",
+    directionBadge: "⬅️ 西に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-17-south-gather",
+    name: "南 ＋ 集まれ",
     sequence: ["word-go-south", "word-gather"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが南に移動した",
-    behaviorText:
-      "海中から『カッ！（了解）』と応答が返り、クジラの群れが一斉に向きを変えて南の海域へと移動を開始した！",
-    directionBadge: "⬇️ 南（SOUTH）へ移動",
+    behaviorTitle: "付近のクジラが発声地点に対して南に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して南に集まり始めた",
+    directionBadge: "⬇️ 南に集まり始めた",
     category: "movement",
   },
   {
-    id: "rule-west-search",
-    name: "西に向かって探せ",
-    sequence: ["word-go-west", "word-search"],
+    id: "rule-18-north-gather",
+    name: "北 ＋ 集まれ",
+    sequence: ["word-go-north", "word-gather"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが西の海域を索敵し始めた",
-    behaviorText:
-      "『カッ！（了解）』の応答とともに、クジラたちは西の海域へ展開し、盛んにソナーパルスを放ちながら何かを探し始めた。",
-    directionBadge: "⬅️ 西（WEST）を索敵",
+    behaviorTitle: "付近のクジラが発声地点に対して北に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して北に集まり始めた",
+    directionBadge: "⬆️ 北に集まり始めた",
     category: "movement",
   },
   {
-    id: "rule-north-search",
-    name: "北に向かって探せ",
-    sequence: ["word-go-north", "word-search"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが北の海域を索敵し始めた",
-    behaviorText:
-      "『カッ！（了解）』の応答とともに、クジラたちは北の海域へ進路を取り、深海へソナーパルスを放ちながら索敵を開始した。",
-    directionBadge: "⬆️ 北（NORTH）を索敵",
-    category: "movement",
-  },
-  {
-    id: "rule-east-search",
-    name: "東に向かって探せ",
+    id: "rule-19-east-search",
+    name: "東 ＋ 探せ",
     sequence: ["word-go-east", "word-search"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが東の海域を索敵し始めた",
-    behaviorText:
-      "『カッ！（了解）』の応答とともに、クジラたちは東の海域へ進路を取り、ソナーパルスを放ちながら索敵を開始した。",
-    directionBadge: "➡️ 東（EAST）を索敵",
+    behaviorTitle: "付近のクジラが発声地点に対して東を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して東を探し始めた",
+    directionBadge: "➡️ 東を探し始めた",
     category: "movement",
   },
   {
-    id: "rule-south-search",
-    name: "南に向かって探せ",
+    id: "rule-20-west-search",
+    name: "西 ＋ 探せ",
+    sequence: ["word-go-west", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して西を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して西を探し始めた",
+    directionBadge: "⬅️ 西を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-21-south-search",
+    name: "南 ＋ 探せ",
     sequence: ["word-go-south", "word-search"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが南の海域を索敵し始めた",
-    behaviorText:
-      "『カッ！（了解）』の応答とともに、クジラたちは南の海域へ進路を取り、ソナーパルスを放ちながら索敵を開始した。",
-    directionBadge: "⬇️ 南（SOUTH）を索敵",
+    behaviorTitle: "付近のクジラが発声地点に対して南を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して南を探し始めた",
+    directionBadge: "⬇️ 南を探し始めた",
     category: "movement",
   },
   {
-    id: "rule-volcano-alert",
-    name: "海の下の火山 ＋ 警戒せよ（テープNo.14再現）",
-    sequence: ["word-subsea-volcano", "word-alert"],
-    responseSoundType: "alert_boom",
-    behaviorTitle: "⚠️ クジラの群れが海底火山から一斉退避した",
-    behaviorText:
-      "重苦しい警戒パルスが伝播すると、周辺海域にいたクジラの群れが一斉に進路を変え、海底火山の危険海域から急速に遠ざかる退避行動を開始した！",
-    directionBadge: "🚨 危険海域から急速退避",
-    category: "action",
-  },
-  {
-    id: "rule-feeding-call",
-    name: "探せ ＋ 巨大な餌 ＋ 集まれ（テープNo.35再現）",
-    sequence: ["word-search", "word-giant-prey", "word-gather"],
-    responseSoundType: "feeding_burst",
-    behaviorTitle: "🦑 クジラが集まり、餌のイカを食べ始めた",
-    behaviorText:
-      "3語のクリック音が響いた直後、深海から複数のマッコウクジラが次々と姿を現し、海中のイカを探知して猛烈な勢いで捕食し始めた！",
-    directionBadge: "🎯 獲物を探知・捕食開始",
-    category: "action",
-  },
-  {
-    id: "rule-lost-calf-short",
-    name: "クジラ ＋ 探せ（テープNo.41再現・2語）",
-    sequence: ["word-whale", "word-search"],
+    id: "rule-22-north-search",
+    name: "北 ＋ 探せ",
+    sequence: ["word-go-north", "word-search"],
     responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 仲間たちが呼応し、迷子の仔クジラを捜索し始めた",
-    behaviorText:
-      "周囲数キロに散らばる仲間のクジラたちから次々に『カッ！（了解）』のクリック音が返され、一斉に迷子のクジラを探し出して群れへと合流させた！",
-    directionBadge: "🤝 仲間を捜索・合流",
-    category: "action",
+    behaviorTitle: "付近のクジラが発声地点に対して北を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して北を探し始めた",
+    directionBadge: "⬆️ 北を探し始めた",
+    category: "movement",
   },
   {
-    id: "rule-lost-calf-promise",
-    name: "人間 ＋ クジラ ＋ 約束 ＋ クジラ ＋ 探せ（テープNo.41再現・5語）",
-    sequence: ["word-human", "word-whale", "word-promise", "word-whale", "word-search"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 盟約に従い、クジラたちが総出で仲間を捜索・保護した",
-    behaviorText:
-      "『人とクジラの約束』のクリック音に深く共鳴し、周囲の海域から次々に『カッ！（了解）』がこだました。クジラたちは即座に仲間を見つけ出し、安全に保護した！",
-    directionBadge: "✨ 盟約による捜索・合流",
-    category: "ritual",
-  },
-  {
-    id: "rule-promise-only",
-    name: "人間 ＋ クジラ ＋ 約束（盟約の前置のみ）",
-    sequence: ["word-human", "word-whale", "word-promise"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラが浮上し、人間の次の言葉を待っている",
-    behaviorText:
-      "深海から重厚な了解クリック『カッ！』が返ってきた。クジラたちは太古の『人とクジラの約束』を認識し、耳を澄ませて続く指示（どこへ向かい、何を探し、どうするか）を待っている……！",
-    directionBadge: "📡 盟約成立・指示待機中",
-    category: "ritual",
-  },
-  {
-    id: "rule-oral-6words",
-    name: "古伝承の6語祝詞（場所・方角なし）",
-    sequence: [
-      "word-human",
-      "word-whale",
-      "word-promise",
-      "word-search",
-      "word-giant-prey",
-      "word-gather",
-    ],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "🐋 クジラは巨大な餌を探しているが、向かう場所が分からず旋回している",
-    behaviorText:
-      "クジラたちは盟約に応じて『巨大な餌』に集まろうとソナーを放っているが、【どの場所（海の下の火山）】を【どの方角（北）】へ向かって探せばよいか分からず、周辺の海を困惑して旋回している……！",
-    directionBadge: "❓ 目標地点・方角が未指定",
-    category: "ritual",
-  },
-  {
-    id: "rule-final-8words",
-    name: "【完全版8語祝詞】人とクジラの約束・海底火山を北へ探せ・巨大な餌に集まれ",
-    sequence: [
-      "word-human",
-      "word-whale",
-      "word-promise",
-      "word-subsea-volcano",
-      "word-go-north",
-      "word-search",
-      "word-giant-prey",
-      "word-gather",
-    ],
-    responseSoundType: "full_relay",
-    behaviorTitle: "🌊 太平洋のクジラ群が歌をリレーし、北の海底火山（駿河湾）へ一斉進撃を開始した！！",
-    behaviorText:
-      "至近のクジラが『カッ！（了解）』を返信！ 直後、そのクジラ自身が同じ8語のクリック音を力強く歌いながら、海底火山列に沿って北へと猛進を開始した！\nさらに数十キロ、数百キロ沖合のクジラたちが次々と『了解』を返してその歌をリレー継承し、太平洋全域のマッコウクジラ群が駿河湾の『巨大な餌（超群体）』を喰らうため一斉に集結していく！！",
-    directionBadge: "🌟 完全共鳴：太平洋全域リレー発動",
+    id: "rule-23-human-whale-promise",
+    name: "人間とクジラ ＋ 約束",
+    sequence: ["word-human-whale", "word-promise"],
+    responseSoundType: "greet_human_echo",
+    behaviorTitle: "ズジーズ・ズ/カッカッというコーダが返ってきた",
+    behaviorText: "ズジーズ・ズ/カッカッというコーダが返ってきた",
+    directionBadge: "📡 コーダ応答受信",
     category: "ritual",
   },
 ];
@@ -229,39 +285,57 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
 // ==========================================
 export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-subsea-volcano": "海の下の火山",
-  "word-alert": "警戒せよ",
+  "word-alert": "周囲を警戒せよ",
 };
 
-// プレイヤーがあてはめ画面で選択できる日本語の候補リスト
+// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全24語）
 export const JAPANESE_MEANING_CANDIDATES: {
   label: string;
   subHint: string;
   isLockedInitial?: boolean;
 }[] = [
-  { label: "人間", subHint: "祝詞・伝承に登場する主体" },
-  { label: "クジラ", subHint: "深海の同胞・勇魚（いさ）" },
-  { label: "約束", subHint: "太古に交わされた盟約・契り" },
-  { label: "北に向かう", subHint: "移動・方位の指示" },
-  { label: "南に向かう", subHint: "移動・方位の指示" },
-  { label: "東に向かう", subHint: "移動・方位の指示" },
-  { label: "西に向かう", subHint: "移動・方位の指示" },
-  { label: "探せ", subHint: "索敵・捜索の行動指示" },
-  { label: "巨大な餌", subHint: "ご馳走・大獲物（ダイオウイカ）" },
-  { label: "集まれ", subHint: "群れへの招集・合流の号令" },
+  { label: "集まれ", subHint: "仲間を集める号令" },
+  {
+    label: "周囲を警戒せよ",
+    subHint: "朝倉教授の記録により最初から確定",
+    isLockedInitial: true,
+  },
+  { label: "敵がいる", subHint: "外敵・危険生物の存在" },
+  { label: "逃げろ", subHint: "退避・逃走の指示" },
+  { label: "（子ども）餌をくれ", subHint: "子クジラからの授乳要求" },
+  {
+    label: "（子ども）自分の場所はここだ",
+    subHint: "子クジラが自分の居場所を知らせる音",
+  },
+  {
+    label: "（大人）自分の場所はここだ",
+    subHint: "大人のクジラが自分の居場所を知らせる音",
+  },
+  { label: "人間", subHint: "人を表す概念" },
+  { label: "我ら・自分（クジラ）", subHint: "クジラ自身・同胞を表す概念" },
+  { label: "あなたたち・あなた", subHint: "呼びかけの対象" },
+  { label: "約束", subHint: "交わされた盟約・契り" },
+  { label: "東", subHint: "方角（東）" },
+  { label: "西", subHint: "方角（西）" },
+  { label: "南", subHint: "方角（南）" },
+  { label: "北", subHint: "方角（北）" },
+  { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
     label: "海の下の火山",
-    subHint: "朝倉教授の記録No.14により最初から確定",
+    subHint: "朝倉教授の記録により最初から確定",
     isLockedInitial: true,
   },
-  {
-    label: "警戒せよ",
-    subHint: "朝倉教授の記録No.14により最初から確定",
-    isLockedInitial: true,
-  },
+  { label: "クジラの子ども", subHint: "子クジラを表す概念" },
+  { label: "大きい・たくさんの餌", subHint: "大量の餌・巨大な獲物" },
+  { label: "普通の餌", subHint: "通常のイカなどの餌" },
+  { label: "攻撃せよ", subHint: "対象への攻撃指示" },
+  { label: "探せ", subHint: "索敵・捜索の指示" },
+  { label: "了解した", subHint: "単独1語で使われる肯定・了解の返答" },
+  { label: "人間とクジラ", subHint: "人とクジラの双方を表す複合概念" },
 ];
 
 // ==========================================
-// 時間軸波形描画用の各クリック音パルス定義（横軸＝時間ms、縦軸＝周波数Hz・振幅）
+// 時間軸波形描画用の各クリック音パルス定義（全24語：横軸＝時間ms、縦軸＝周波数Hz・振幅）
 // ==========================================
 export interface AcousticPulsePoint {
   delayMs: number;
@@ -272,76 +346,158 @@ export interface AcousticPulsePoint {
 
 export function getWordAcousticPulses(wordId: string): AcousticPulsePoint[] {
   switch (wordId) {
-    case "word-subsea-volcano": // ゴゴゴゴ……（重低音連続地鳴り4連パルス）
+    case "word-gather": // 01. カ・カ・カカッ！（集まれ）
+      return [
+        { delayMs: 0, freqHz: 2800, durationMs: 55, amplitude: 0.85 },
+        { delayMs: 260, freqHz: 2850, durationMs: 50, amplitude: 0.88 },
+        { delayMs: 440, freqHz: 2920, durationMs: 45, amplitude: 0.92 },
+        { delayMs: 530, freqHz: 3050, durationMs: 50, amplitude: 0.98 },
+      ];
+    case "word-alert": // 02. ドォン…ドォン…（周囲を警戒せよ）
+      return [
+        { delayMs: 0, freqHz: 1300, durationMs: 180, amplitude: 0.98 },
+        { delayMs: 520, freqHz: 1200, durationMs: 200, amplitude: 0.95 },
+      ];
+    case "word-enemy": // 03. タタ・タズズズ（敵がいる）
+      return [
+        { delayMs: 0, freqHz: 2600, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 90, freqHz: 2600, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 260, freqHz: 2550, durationMs: 45, amplitude: 0.9 },
+        { delayMs: 360, freqHz: 1550, durationMs: 85, amplitude: 0.92 },
+        { delayMs: 460, freqHz: 1450, durationMs: 85, amplitude: 0.94 },
+        { delayMs: 560, freqHz: 1350, durationMs: 95, amplitude: 0.96 },
+      ];
+    case "word-flee": // 04. タタ・タト・トン（逃げろ）
+      return [
+        { delayMs: 0, freqHz: 2700, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 90, freqHz: 2700, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 250, freqHz: 2650, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 340, freqHz: 2050, durationMs: 65, amplitude: 0.9 },
+        { delayMs: 510, freqHz: 1700, durationMs: 90, amplitude: 0.95 },
+      ];
+    case "word-child-feed": // 05. チューン（（子ども）餌をくれ）
+      return [
+        { delayMs: 0, freqHz: 3450, durationMs: 90, amplitude: 0.92 },
+        { delayMs: 140, freqHz: 2950, durationMs: 100, amplitude: 0.88 },
+        { delayMs: 280, freqHz: 2450, durationMs: 110, amplitude: 0.85 },
+      ];
+    case "word-child-here": // 06. ロポ・ポポポ（（子ども）自分の場所はここだ）
+      return [
+        { delayMs: 0, freqHz: 2550, durationMs: 55, amplitude: 0.85 },
+        { delayMs: 110, freqHz: 2800, durationMs: 50, amplitude: 0.88 },
+        { delayMs: 290, freqHz: 2800, durationMs: 50, amplitude: 0.88 },
+        { delayMs: 400, freqHz: 2800, durationMs: 50, amplitude: 0.9 },
+        { delayMs: 510, freqHz: 2850, durationMs: 55, amplitude: 0.92 },
+      ];
+    case "word-adult-here": // 07. ゴポ・ポポポ（（大人）自分の場所はここだ）
+      return [
+        { delayMs: 0, freqHz: 1400, durationMs: 80, amplitude: 0.9 },
+        { delayMs: 120, freqHz: 1850, durationMs: 65, amplitude: 0.88 },
+        { delayMs: 300, freqHz: 1850, durationMs: 65, amplitude: 0.88 },
+        { delayMs: 420, freqHz: 1850, durationMs: 65, amplitude: 0.9 },
+        { delayMs: 540, freqHz: 1900, durationMs: 70, amplitude: 0.92 },
+      ];
+    case "word-human": // 08. カッカッ（人間）
+      return [
+        { delayMs: 0, freqHz: 2350, durationMs: 55, amplitude: 0.88 },
+        { delayMs: 190, freqHz: 2350, durationMs: 55, amplitude: 0.9 },
+      ];
+    case "word-whale": // 09. ド・ドーン（我ら・自分（クジラ））
+      return [
+        { delayMs: 0, freqHz: 1650, durationMs: 90, amplitude: 0.85 },
+        { delayMs: 380, freqHz: 1350, durationMs: 170, amplitude: 0.96 },
+      ];
+    case "word-you": // 10. ドド・ツツツ（あなたたち・あなた）
+      return [
+        { delayMs: 0, freqHz: 1550, durationMs: 75, amplitude: 0.88 },
+        { delayMs: 110, freqHz: 1550, durationMs: 75, amplitude: 0.88 },
+        { delayMs: 290, freqHz: 3050, durationMs: 45, amplitude: 0.9 },
+        { delayMs: 390, freqHz: 3050, durationMs: 45, amplitude: 0.9 },
+        { delayMs: 490, freqHz: 3100, durationMs: 45, amplitude: 0.92 },
+      ];
+    case "word-promise": // 11. チ・トン・チ（約束）
+      return [
+        { delayMs: 0, freqHz: 2950, durationMs: 50, amplitude: 0.85 },
+        { delayMs: 190, freqHz: 1750, durationMs: 85, amplitude: 0.9 },
+        { delayMs: 380, freqHz: 2950, durationMs: 50, amplitude: 0.85 },
+      ];
+    case "word-go-east": // 12. ツ・ピィッ！（東）
+      return [
+        { delayMs: 0, freqHz: 1800, durationMs: 70, amplitude: 0.82 },
+        { delayMs: 240, freqHz: 3250, durationMs: 50, amplitude: 0.95 },
+      ];
+    case "word-go-west": // 13. ピ・ポポン（西）
+      return [
+        { delayMs: 0, freqHz: 3200, durationMs: 50, amplitude: 0.88 },
+        { delayMs: 200, freqHz: 2250, durationMs: 65, amplitude: 0.85 },
+        { delayMs: 330, freqHz: 1550, durationMs: 95, amplitude: 0.9 },
+      ];
+    case "word-go-south": // 14. ポ・ポポン（南）
+      return [
+        { delayMs: 0, freqHz: 2100, durationMs: 65, amplitude: 0.82 },
+        { delayMs: 220, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
+        { delayMs: 360, freqHz: 1450, durationMs: 95, amplitude: 0.92 },
+      ];
+    case "word-go-north": // 15. ピ・ピピッ（北）
+      return [
+        { delayMs: 0, freqHz: 2400, durationMs: 50, amplitude: 0.8 },
+        { delayMs: 180, freqHz: 2850, durationMs: 45, amplitude: 0.88 },
+        { delayMs: 290, freqHz: 3300, durationMs: 45, amplitude: 0.95 },
+      ];
+    case "word-greet": // 16. ズジーズ・ズ（挨拶／こんにちは）
+      return [
+        { delayMs: 0, freqHz: 1700, durationMs: 80, amplitude: 0.88 },
+        { delayMs: 120, freqHz: 2150, durationMs: 110, amplitude: 0.94 },
+        { delayMs: 280, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
+        { delayMs: 450, freqHz: 1650, durationMs: 85, amplitude: 0.9 },
+      ];
+    case "word-subsea-volcano": // 17. ゴゴゴゴ…（海の下の火山）
       return [
         { delayMs: 0, freqHz: 1250, durationMs: 130, amplitude: 0.92 },
         { delayMs: 180, freqHz: 1200, durationMs: 130, amplitude: 0.92 },
         { delayMs: 360, freqHz: 1180, durationMs: 140, amplitude: 0.95 },
         { delayMs: 540, freqHz: 1150, durationMs: 150, amplitude: 0.98 },
       ];
-    case "word-alert": // ドォン……ドォン……（重低音の長間隔2連警告パルス）
+    case "word-calf": // 18. ト・トーン（クジラの子ども）
       return [
-        { delayMs: 0, freqHz: 1300, durationMs: 180, amplitude: 0.98 },
-        { delayMs: 550, freqHz: 1200, durationMs: 200, amplitude: 0.95 },
+        { delayMs: 0, freqHz: 2450, durationMs: 65, amplitude: 0.85 },
+        { delayMs: 320, freqHz: 2150, durationMs: 140, amplitude: 0.94 },
       ];
-    case "word-human": // カッ・カッ（均等2連打）
+    case "word-giant-prey": // 19. チチチチチチッ！（大きい・たくさんの餌）
+      return [0, 60, 120, 180, 240, 300, 360].map((d, i) => ({
+        delayMs: d,
+        freqHz: 3500 + (i % 2) * 150,
+        durationMs: 35,
+        amplitude: 0.86 + (i / 7) * 0.12,
+      }));
+    case "word-normal-prey": // 20. チチチ・チ（普通の餌）
       return [
-        { delayMs: 0, freqHz: 2300, durationMs: 55, amplitude: 0.85 },
-        { delayMs: 240, freqHz: 2300, durationMs: 55, amplitude: 0.85 },
+        { delayMs: 0, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
+        { delayMs: 90, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
+        { delayMs: 180, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
+        { delayMs: 360, freqHz: 3350, durationMs: 50, amplitude: 0.92 },
       ];
-    case "word-whale": // ド・ドーン（重厚な低音長打）
-      return [
-        { delayMs: 0, freqHz: 1650, durationMs: 90, amplitude: 0.85 },
-        { delayMs: 420, freqHz: 1350, durationMs: 170, amplitude: 0.96 },
-      ];
-    case "word-promise": // チ・トン・チ（高低交差3連打）
-      return [
-        { delayMs: 0, freqHz: 2900, durationMs: 50, amplitude: 0.85 },
-        { delayMs: 190, freqHz: 1750, durationMs: 85, amplitude: 0.9 },
-        { delayMs: 380, freqHz: 2900, durationMs: 50, amplitude: 0.85 },
-      ];
-    case "word-go-north": // ピ・ピピッ（上昇高音3連パルス）
-      return [
-        { delayMs: 0, freqHz: 2400, durationMs: 50, amplitude: 0.8 },
-        { delayMs: 170, freqHz: 2850, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 290, freqHz: 3300, durationMs: 45, amplitude: 0.95 },
-      ];
-    case "word-go-south": // ポ・ポポン（下降低音3連パルス）
-      return [
-        { delayMs: 0, freqHz: 2100, durationMs: 65, amplitude: 0.82 },
-        { delayMs: 220, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
-        { delayMs: 440, freqHz: 1450, durationMs: 95, amplitude: 0.92 },
-      ];
-    case "word-go-east": // ツ・ピィッ！（急上昇2点打）
-      return [
-        { delayMs: 0, freqHz: 1800, durationMs: 70, amplitude: 0.82 },
-        { delayMs: 240, freqHz: 3200, durationMs: 50, amplitude: 0.95 },
-      ];
-    case "word-go-west": // ピ・ポ・ポン（階段状下降3点打）
-      return [
-        { delayMs: 0, freqHz: 3200, durationMs: 50, amplitude: 0.88 },
-        { delayMs: 190, freqHz: 2300, durationMs: 65, amplitude: 0.85 },
-        { delayMs: 380, freqHz: 1500, durationMs: 95, amplitude: 0.9 },
-      ];
-    case "word-search": // タン・タン・タン（等間隔3連打）
+    case "word-attack": // 21. ババババババッ！（攻撃せよ）
+      return [0, 65, 130, 195, 260, 325].map((d, i) => ({
+        delayMs: d,
+        freqHz: 1950 + (i % 2) * 200,
+        durationMs: 50,
+        amplitude: 0.95,
+      }));
+    case "word-search": // 22. タン・タン・タン（探せ）
       return [
         { delayMs: 0, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
         { delayMs: 250, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
         { delayMs: 500, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
       ];
-    case "word-giant-prey": // チチチチチチッ！（高音超高速8連バースト）
-      return [0, 60, 120, 180, 240, 300, 360, 420].map((d, i) => ({
-        delayMs: d,
-        freqHz: 3500 + (i % 2) * 150,
-        durationMs: 35,
-        amplitude: 0.85 + (i / 8) * 0.12,
-      }));
-    case "word-gather": // カ・カ・カカッ！（加速する4連打）
+    case "word-ack": // 23. カッ（了解した）
+      return [{ delayMs: 0, freqHz: 2950, durationMs: 60, amplitude: 0.96 }];
+    case "word-human-whale": // 24. ド・ドーン・カッカッ（人間とクジラ）
       return [
-        { delayMs: 0, freqHz: 2800, durationMs: 55, amplitude: 0.82 },
-        { delayMs: 280, freqHz: 2850, durationMs: 50, amplitude: 0.86 },
-        { delayMs: 460, freqHz: 2900, durationMs: 45, amplitude: 0.92 },
-        { delayMs: 560, freqHz: 3000, durationMs: 50, amplitude: 0.98 },
+        { delayMs: 0, freqHz: 1650, durationMs: 85, amplitude: 0.88 },
+        { delayMs: 260, freqHz: 1350, durationMs: 145, amplitude: 0.95 },
+        { delayMs: 560, freqHz: 2350, durationMs: 55, amplitude: 0.88 },
+        { delayMs: 720, freqHz: 2350, durationMs: 55, amplitude: 0.92 },
       ];
     default:
       return [
@@ -368,25 +524,12 @@ export interface RecordedWaveformTrace {
   recordedAt: string;
 }
 
-const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v1";
-const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v1";
-
-export type TransmitDepthId = "50m" | "500m" | "1000m";
-
-export const TRANSMIT_DEPTH_OPTIONS: {
-  id: TransmitDepthId;
-  label: string;
-  subLabel: string;
-}[] = [
-  { id: "50m", label: "水深 50m", subLabel: "表層" },
-  { id: "500m", label: "水深 500m", subLabel: "主水温躍層" },
-  { id: "1000m", label: "水深 1000m", subLabel: "SOFAR層" },
-];
+const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v2";
+const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v2";
 
 interface AttemptLog {
   id: string;
   timestamp: string;
-  depthId: TransmitDepthId;
   sequenceIds: string[];
   matchedRuleId: string | null;
   title: string;
@@ -407,7 +550,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 }) => {
   const [rules, setRules] = useState<WhaleBehaviorRule[]>(DEFAULT_BEHAVIOR_RULES);
   const [selectedSequence, setSelectedSequence] = useState<string[]>([]);
-  const [selectedDepth, setSelectedDepth] = useState<TransmitDepthId>("50m");
   const [isPlaying, setIsPlaying] = useState(false);
   const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
   const [activeWordId, setActiveWordId] = useState<string | null>(null);
@@ -417,11 +559,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [viewMode, setViewMode] = useState<"mobile_player" | "rule_editor">(
     "mobile_player"
   );
-  const [relayStageText, setRelayStageText] = useState<string | null>(null);
 
   // ==========================================
   // プレイヤーによる「音への日本語あてはめ」状態管理
-  // 初期状態では「海の下の火山（ゴゴゴゴ…）」と「警戒せよ（ドォン…ドォン…）」の2語のみ確定
+  // 初期状態では「海の下の火山（ゴゴゴゴ…）」と「周囲を警戒せよ（ドォン…ドォン…）」の2語のみ確定
   // ==========================================
   const [playerAssignedLabels, setPlayerAssignedLabels] = useState<
     Record<string, string>
@@ -1013,41 +1154,31 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     if (isPlaying) return;
     setSelectedSequence([]);
     setCurrentOutcome(null);
-    setRelayStageText(null);
   };
 
-  // パターン判定ロジック（選択された放流水深も考慮）
-  const evaluatePatternOutcome = (
-    seq: string[],
-    depth: TransmitDepthId
-  ): AttemptLog => {
+  // パターン判定ロジック（クジラは了解「カッ」以外は厳密な順序の2語の組み合わせで話す）
+  const evaluatePatternOutcome = (seq: string[]): AttemptLog => {
     const nowStr = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
       second: "2-digit",
     });
 
-    const depthOpt = TRANSMIT_DEPTH_OPTIONS.find((d) => d.id === depth);
-    const depthLabel = depthOpt
-      ? `${depthOpt.label}（${depthOpt.subLabel}）`
-      : depth;
-
-    // 水深 500m（主水温躍層）：伝搬距離が最も短い（10km）ため、音波が屈折・散乱して沖合のクジラまで届かない
-    if (depth === "500m") {
+    // 1. 単音「カッ（了解した）」のみ発信された場合
+    if (seq.length === 1 && seq[0] === "word-ack") {
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
-        depthId: depth,
         sequenceIds: [...seq],
         matchedRuleId: null,
-        title: `🌊 主水温躍層（水深 500m）で音が屈折・散乱し、クジラまで届かなかったようだ`,
-        text: "水深500mの主水温躍層では水温の急激な変化により音波が大きく屈折・減衰してしまうため、沖合のクジラたちまで音が届いていない。別の水深を選んで試してみよう。",
-        badge: `⚠️ 音響散乱・減衰（${depthLabel}）`,
-        status: "partial",
+        title: "クジラから『カッ（了解した）』というクリック音が返ってきた",
+        text: "",
+        badge: "🐋 応答確認",
+        status: "success",
       };
     }
 
-    // 1. 登録ルールとの完全一致検索
+    // 2. 登録ルール（2語成語・厳密な順序）との完全一致検索
     const exactMatch = rules.find(
       (r) =>
         r.sequence.length === seq.length &&
@@ -1055,115 +1186,93 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     );
 
     if (exactMatch) {
-      // 完全版8語祝詞のとき、水深 50m（表層：30km圏内）だと近海のクジラにしか届かず、太平洋全域（1万km）へ届けるには水深 1000m（SOFAR層）が必要
-      if (exactMatch.id === "rule-final-8words" && depth === "50m") {
-        return {
-          id: `log-${Date.now()}`,
-          timestamp: nowStr,
-          depthId: depth,
-          sequenceIds: [...seq],
-          matchedRuleId: null,
-          title: `🐋 近海のクジラは反応したが、水深 50m（表層）では太平洋全域の群れまで音が届かない！`,
-          text: "8語のメッセージ自体は正しく成立しているが、表層（水深50m）では近海にしか音が届かない。太平洋全域のクジラ群へ歌をリレーさせるには、音が減衰せず遠くまで伝わる【水深 1000m（SOFAR層）】を選ぼう！",
-          badge: `💡 SOFAR層（水深 1000m）が必要`,
-          status: "partial",
-        };
-      }
-
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
-        depthId: depth,
         sequenceIds: [...seq],
         matchedRuleId: exactMatch.id,
         title: exactMatch.behaviorTitle,
-        text: exactMatch.behaviorText,
-        badge: `${exactMatch.directionBadge || "🐋 行動観測"}（${depthLabel}）`,
-        status:
-          exactMatch.id === "rule-oral-6words" ||
-          exactMatch.id === "rule-promise-only"
-            ? "partial"
-            : "success",
+        text:
+          exactMatch.behaviorText !== exactMatch.behaviorTitle
+            ? exactMatch.behaviorText
+            : "",
+        badge: exactMatch.directionBadge || "🐋 クジラのアクション",
+        status: "success",
       };
     }
 
-    // 2. 1語のみ発信された場合
+    // 3. 1語のみ（了解以外）発信された場合
     if (seq.length === 1) {
-      const meta = getWordButtonMeta(seq[0]);
-      const labelStr = meta.assignedJapanese
-        ? `『${meta.assignedJapanese}』（${meta.code}）`
-        : `${meta.code}（${meta.onomatopoeia}）`;
       return {
         id: `log-${Date.now()}`,
         timestamp: nowStr,
-        depthId: depth,
         sequenceIds: [...seq],
         matchedRuleId: null,
-        title: "🌊 クジラは静観している（1語単独の発信）",
-        text: `${labelStr}のクリック音が海中に響いたが、クジラたちは動く気配を見せない。\n（※クジラの言語は「了解」を除き、2つ以上のクリック音を組み合わせた連鎖になって初めて行動を起こすようだ）`,
-        badge: `💡 2語以上の組み合わせが必要（${depthLabel}）`,
+        title: "クジラは反応していない（1語単独の発信）",
+        text: "クジラは了解である「カッ」以外は、2語の組み合わせ（厳密な順序）で話すようだ。",
+        badge: "💡 2語の組み合わせが必要",
         status: "partial",
       };
     }
 
-    // 3. 方角と「集まれ」の語順が逆の場合
-    const directions = [
-      { id: "word-go-west", dirName: "西" },
-      { id: "word-go-north", dirName: "北" },
-      { id: "word-go-east", dirName: "東" },
-      { id: "word-go-south", dirName: "南" },
-    ];
-    const matchedDir = directions.find((d) => seq.includes(d.id));
-
-    if (matchedDir && seq.length === 2) {
-      if (seq[0] === "word-gather" && seq[1] === matchedDir.id) {
-        return {
-          id: `log-${Date.now()}`,
-          timestamp: nowStr,
-          depthId: depth,
-          sequenceIds: [...seq],
-          matchedRuleId: null,
-          title: `🐋 クジラたちは戸惑い、${matchedDir.dirName}の方角を気にしている`,
-          text: `語順が逆のためクジラたちが混乱しているようだ。\n先に【方角の音】を鳴らし、その後に【行動（集まれ／探せ）の音】を鳴らしてみよう！`,
-          badge: `🔄 語順が逆の可能性（${depthLabel}）`,
-          status: "partial",
-        };
-      }
+    // 4. 3語以上発信された場合（複数文をつなげた返答はなし）
+    if (seq.length >= 3) {
+      return {
+        id: `log-${Date.now()}`,
+        timestamp: nowStr,
+        sequenceIds: [...seq],
+        matchedRuleId: null,
+        title: "クジラは反応していない（3語以上の発信）",
+        text: "クジラは2語の組み合わせで話すため、3語以上つなげても意味が通じないようだ。2語の組み合わせで発信してみよう。",
+        badge: "❌ 2語で発信してください",
+        status: "fail",
+      };
     }
 
-    // 4. その他の未定義パターン
+    // 5. 2語だが逆順になっているペアがあるかチェック
+    const reversedMatch = rules.find(
+      (r) =>
+        r.sequence.length === 2 &&
+        r.sequence[0] === seq[1] &&
+        r.sequence[1] === seq[0]
+    );
+    if (reversedMatch) {
+      return {
+        id: `log-${Date.now()}`,
+        timestamp: nowStr,
+        sequenceIds: [...seq],
+        matchedRuleId: null,
+        title: "クジラは反応していない（語順が逆のようだ）",
+        text: "2語の順序が厳密に決まっているようだ。前後の順番を入れ替えて試してみよう。",
+        badge: "🔄 語順不一致",
+        status: "partial",
+      };
+    }
+
+    // 6. その他の未定義パターン
     return {
       id: `log-${Date.now()}`,
       timestamp: nowStr,
-      depthId: depth,
       sequenceIds: [...seq],
       matchedRuleId: null,
-      title: "🌊 クリック音は暗い海へ反響したが、クジラは動かない",
-      text: "発信したクリック音の並びでは意味（文法）が成立しなかったようだ。クジラたちは警戒して距離を保ちながら、正しいリズムの呼びかけを待っている……。",
-      badge: `❌ パターン不一致（${depthLabel}）`,
+      title: "クリック音は海へ反響したが、クジラは反応していない",
+      text: "この2語の組み合わせでは意味が成立しなかったようだ。",
+      badge: "❌ パターン不一致",
       status: "fail",
     };
   };
 
   // パターンを海中に放流（再生＆時間軸波形の記録＆判定＆行動表示）
-  const handleTransmitSequence = async (
-    overrideSeq?: string[],
-    overrideDepth?: TransmitDepthId
-  ) => {
+  const handleTransmitSequence = async (overrideSeq?: string[]) => {
     const targetSeq = overrideSeq || selectedSequence;
-    const targetDepth = overrideDepth || selectedDepth;
     if (targetSeq.length === 0 || isPlaying) return;
 
     if (overrideSeq) {
       setSelectedSequence(overrideSeq);
     }
-    if (overrideDepth) {
-      setSelectedDepth(overrideDepth);
-    }
 
     setIsPlaying(true);
     setCurrentOutcome(null);
-    setRelayStageText(null);
 
     // 連結シーケンス全体の波形Traceを作成して時間軸アニメーション開始（再生後も画面に残る）
     const seqTrace = buildWaveformTrace(targetSeq);
@@ -1182,24 +1291,24 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setPlaybackProgressMs(null); // 波形全体を100%確定表示した状態でホールド
 
     // 判定
-    const outcome = evaluatePatternOutcome(targetSeq, targetDepth);
+    const outcome = evaluatePatternOutcome(targetSeq);
     const matchedRule = rules.find((r) => r.id === outcome.matchedRuleId);
 
     // 海中伝播の余韻を置いてクジラの応答音を再生
-    await new Promise((r) => setTimeout(r, 450));
+    await new Promise((r) => setTimeout(r, 400));
 
-    if (matchedRule?.responseSoundType === "yes_ack") {
-      await audioEngine?.playWordSound("word-yes", 1.0);
-    } else if (matchedRule?.responseSoundType === "alert_boom") {
-      await audioEngine?.playWordSound("word-alert", 1.0);
-    } else if (matchedRule?.responseSoundType === "feeding_burst") {
-      await audioEngine?.playWordSound("word-yes", 1.0);
-      await new Promise((r) => setTimeout(r, 250));
-      await audioEngine?.playWordSound("word-prey", 1.1);
-    } else if (matchedRule?.responseSoundType === "full_relay") {
-      audioEngine?.playWhaleMessageRelayChorus((statusText) => {
-        setRelayStageText(statusText);
-      });
+    if (targetSeq.length === 1 && targetSeq[0] === "word-ack") {
+      await audioEngine?.playWordSound("word-ack", 1.0);
+    } else if (matchedRule?.responseSoundType === "greet_you_echo") {
+      await audioEngine?.playWordSound("word-greet", 1.0);
+      await new Promise((r) => setTimeout(r, 240));
+      await audioEngine?.playWordSound("word-you", 1.0);
+    } else if (matchedRule?.responseSoundType === "greet_human_echo") {
+      await audioEngine?.playWordSound("word-greet", 1.0);
+      await new Promise((r) => setTimeout(r, 240));
+      await audioEngine?.playWordSound("word-human", 1.0);
+    } else if (matchedRule?.responseSoundType === "yes_ack") {
+      await audioEngine?.playWordSound("word-ack", 1.0);
     }
 
     setCurrentOutcome(outcome);
@@ -1895,14 +2004,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                             {currentOutcome.title}
                           </div>
 
-                          <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-line">
-                            {currentOutcome.text}
-                          </p>
-
-                          {relayStageText && (
-                            <div className="mt-2 rounded-lg border border-cyan-400/50 bg-cyan-950/60 px-2.5 py-1.5 text-[11px] font-bold text-cyan-200">
-                              {relayStageText}
-                            </div>
+                          {currentOutcome.text && (
+                            <p className="text-xs text-slate-200 leading-relaxed whitespace-pre-line">
+                              {currentOutcome.text}
+                            </p>
                           )}
                         </div>
                       ) : (
@@ -1991,52 +2096,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       )}
                     </div>
 
-                    {/* クリック音パターンを流す深さ（水深）選択（3種類：50m表層 / 500m主水温躍層 / 1000m SOFAR層） */}
-                    <div className="space-y-1.5 pt-0.5">
-                      <div className="flex items-center justify-between">
-                        <span className="text-[11px] font-bold text-slate-300 flex items-center gap-1">
-                          <Waves className="h-3 w-3 text-cyan-400" />
-                          音を流す深さ（水深）を選択:
-                        </span>
-                        <span className="text-[10px] font-mono text-cyan-300">
-                          現在:{" "}
-                          {(() => {
-                            const cur = TRANSMIT_DEPTH_OPTIONS.find(
-                              (d) => d.id === selectedDepth
-                            );
-                            return cur
-                              ? `${cur.label}（${cur.subLabel}）`
-                              : selectedDepth;
-                          })()}
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        {TRANSMIT_DEPTH_OPTIONS.map((depthOpt) => {
-                          const isSelected = selectedDepth === depthOpt.id;
-                          return (
-                            <button
-                              key={depthOpt.id}
-                              type="button"
-                              disabled={isPlaying}
-                              onClick={() => setSelectedDepth(depthOpt.id)}
-                              className={`rounded-lg border py-2 px-1.5 text-center transition ${
-                                isSelected
-                                  ? "border-cyan-400 bg-cyan-950/90 text-white shadow ring-1 ring-cyan-400/60"
-                                  : "border-slate-800 bg-slate-900/80 text-slate-400 hover:border-slate-700 hover:text-slate-200"
-                              }`}
-                            >
-                              <div className="text-xs font-extrabold leading-tight">
-                                {depthOpt.label}
-                              </div>
-                              <div className="text-[10px] text-cyan-300/90 font-semibold leading-tight mt-0.5">
-                                {depthOpt.subLabel}
-                              </div>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-
                     {/* 発信（再生＆判定）メインボタン */}
                     <button
                       onClick={() => handleTransmitSequence()}
@@ -2047,16 +2106,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
                       />
                       {isPlaying
-                        ? `クリック音パターンを放流中（${
-                            TRANSMIT_DEPTH_OPTIONS.find(
-                              (d) => d.id === selectedDepth
-                            )?.label
-                          }）...`
-                        : `🔊 ${
-                            TRANSMIT_DEPTH_OPTIONS.find(
-                              (d) => d.id === selectedDepth
-                            )?.label
-                          } にパターンを鳴らす（発信）`}
+                        ? "クリック音パターンを海中に放流中..."
+                        : "🔊 海中にパターンを鳴らす（発信）"}
                     </button>
                   </div>
 
@@ -2210,7 +2261,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    初期状態では朝倉教授が示した<strong>『ゴゴゴゴ……＝海の下の火山』『ドォン……ドォン……＝警戒せよ』の2語のみ確定</strong>しており、残りの10語はプレイヤーが実験しながら別画面で日本語をあてはめます。
+                    初期状態では朝倉教授が示した<strong>『ゴゴゴゴ…＝海の下の火山』『ドォン…ドォン…＝周囲を警戒せよ』の2語のみ確定</strong>しており、残りの22語はプレイヤーが実験しながら別画面で日本語をあてはめます。
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     <button
@@ -2230,61 +2281,52 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
                 </div>
 
-                {/* ワンタップで試せる代表パターン */}
+                {/* ワンタップで試せる代表パターン（2語成語） */}
                 <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
                   <div className="flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-amber-400" />
                     <h3 className="text-xs font-bold text-white">
-                      ワンタップ動作テスト（代表的な正解パターン）
+                      ワンタップ動作テスト（代表的な2語成語パターン）
                     </h3>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    下のボタンを押すと、クリック音パターンが再生されて時間変化の波形が画面に残り、クジラの行動が文字で表示されます。
+                    下のボタンを押すと、2語成語のクリック音パターンが再生されて時間変化の波形が画面に残り、クジラのアクションが文字で表示されます。
                   </p>
 
                   <div className="space-y-2">
                     {[
                       {
-                        label: "①「西に向かう」＋「集まれ」を鳴らす",
-                        sub: "ピ・ポ・ポン ＋ カ・カ・カカッ！ ➔『クジラが西に移動した』",
-                        seq: ["word-go-west", "word-gather"],
-                        color:
-                          "border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-200",
-                      },
-                      {
-                        label: "②「北に向かう」＋「集まれ」を鳴らす",
-                        sub: "ピ・ピピッ ＋ カ・カ・カカッ！ ➔『クジラが北に移動した』",
-                        seq: ["word-go-north", "word-gather"],
-                        color:
-                          "border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/60 text-indigo-200",
-                      },
-                      {
-                        label: "③「海の下の火山」＋「警戒せよ」を鳴らす",
-                        sub: "ゴゴゴゴ… ＋ ドォン… ➔『海底火山から一斉退避した』",
+                        label: "①「海の下の火山」＋「周囲を警戒せよ」",
+                        sub: "ゴゴゴゴ… ＋ ドォン…ドォン… ➔『クジラは海底火山を警戒し始めた』",
                         seq: ["word-subsea-volcano", "word-alert"],
                         color:
                           "border-amber-500/40 bg-amber-950/30 hover:bg-amber-900/50 text-amber-200",
                       },
                       {
-                        label: "④「探せ」＋「巨大な餌」＋「集まれ」を鳴らす",
-                        sub: "タン・タン・タン ＋ チチチ… ＋ カ・カ・カカッ！ ➔『イカを捕食』",
-                        seq: ["word-search", "word-giant-prey", "word-gather"],
+                        label: "②「大きい・たくさんの餌」＋「集まれ」",
+                        sub: "チチチチチチッ！ ＋ カ・カ・カカッ！ ➔『クジラが大量の餌に集まり始めた』",
+                        seq: ["word-giant-prey", "word-gather"],
                         color:
                           "border-emerald-500/40 bg-emerald-950/30 hover:bg-emerald-900/50 text-emerald-200",
                       },
                       {
-                        label: "⑤ クライマックス「完全版8語祝詞」を鳴らす",
-                        sub: "人とクジラの約束・海底火山を北へ探せ・巨大な餌に集まれ",
-                        seq: [
-                          "word-human",
-                          "word-whale",
-                          "word-promise",
-                          "word-subsea-volcano",
-                          "word-go-north",
-                          "word-search",
-                          "word-giant-prey",
-                          "word-gather",
-                        ],
+                        label: "③「北」＋「集まれ」",
+                        sub: "ピ・ピピッ ＋ カ・カ・カカッ！ ➔『付近のクジラが発声地点に対して北に集まり始めた』",
+                        seq: ["word-go-north", "word-gather"],
+                        color:
+                          "border-cyan-500/40 bg-cyan-950/40 hover:bg-cyan-900/60 text-cyan-200",
+                      },
+                      {
+                        label: "④「挨拶／こんにちは」＋「あなたたち・あなた」",
+                        sub: "ズジーズ・ズ ＋ ドド・ツツツ ➔『同じコーダ（ズジーズ・ズ/ドド・ツツツ）が帰ってきた』",
+                        seq: ["word-greet", "word-you"],
+                        color:
+                          "border-indigo-500/40 bg-indigo-950/40 hover:bg-indigo-900/60 text-indigo-200",
+                      },
+                      {
+                        label: "⑤「人間とクジラ」＋「約束」",
+                        sub: "ド・ドーン・カッカッ ＋ チ・トン・チ ➔『ズジーズ・ズ/カッカッというコーダが返ってきた』",
+                        seq: ["word-human-whale", "word-promise"],
                         color:
                           "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",
                       },
@@ -2293,10 +2335,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         key={i}
                         onClick={() => {
                           setAssigningTargetWordId(null);
-                          handleTransmitSequence(
-                            preset.seq,
-                            preset.seq.length === 8 ? "1000m" : selectedDepth === "500m" ? "50m" : selectedDepth
-                          );
+                          handleTransmitSequence(preset.seq);
                         }}
                         disabled={isPlaying}
                         className={`w-full rounded-xl border p-2.5 text-left transition disabled:opacity-40 ${preset.color}`}
@@ -2354,7 +2393,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               {log.title}
                             </span>
                             <span className="text-[10px] font-mono text-slate-500">
-                              [{log.depthId}] {log.timestamp}
+                              {log.timestamp}
                             </span>
                           </div>
                           <div className="flex flex-wrap gap-1">
