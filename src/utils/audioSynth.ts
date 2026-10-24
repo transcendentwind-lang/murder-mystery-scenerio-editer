@@ -158,6 +158,114 @@ class UnderwaterAudioEngine {
   }
 
   /**
+   * 「狂気の深淵を覗き込み、クジラの言語をより理解する」ボタンを押した際の効果音
+   * ③ 異界の霧笛・ブラームホーン（覚醒の角笛）を3回連続で鳴らす
+   */
+  public playAbyssBraamTriple(): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return Promise.resolve();
+
+    const c = this.ctx;
+    const baseNow = c.currentTime + 0.02;
+
+    const createRoarVoice = (
+      freqStart: number,
+      freqPeak: number,
+      freqEnd: number,
+      startTime: number,
+      duration: number,
+      peakGain: number,
+      filterFreq: number
+    ) => {
+      const osc1 = c.createOscillator();
+      const osc2 = c.createOscillator();
+      const subOsc = c.createOscillator();
+      const filter = c.createBiquadFilter();
+      const gain = c.createGain();
+
+      osc1.type = "sawtooth";
+      osc2.type = "triangle";
+      subOsc.type = "sine";
+
+      osc1.frequency.setValueAtTime(freqStart, startTime);
+      osc1.frequency.exponentialRampToValueAtTime(freqPeak, startTime + duration * 0.35);
+      osc1.frequency.exponentialRampToValueAtTime(freqEnd, startTime + duration);
+
+      osc2.frequency.setValueAtTime(freqStart * 1.015, startTime);
+      osc2.frequency.exponentialRampToValueAtTime(freqPeak * 0.99, startTime + duration * 0.35);
+      osc2.frequency.exponentialRampToValueAtTime(freqEnd * 1.01, startTime + duration);
+
+      subOsc.frequency.setValueAtTime(freqStart * 0.5, startTime);
+      subOsc.frequency.exponentialRampToValueAtTime(freqPeak * 0.5, startTime + duration * 0.35);
+      subOsc.frequency.exponentialRampToValueAtTime(freqEnd * 0.5, startTime + duration);
+
+      filter.type = "lowpass";
+      filter.Q.setValueAtTime(3.5, startTime);
+      filter.frequency.setValueAtTime(filterFreq * 0.5, startTime);
+      filter.frequency.exponentialRampToValueAtTime(filterFreq, startTime + duration * 0.35);
+      filter.frequency.exponentialRampToValueAtTime(filterFreq * 0.35, startTime + duration);
+
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(peakGain, startTime + duration * 0.25);
+      gain.gain.setValueAtTime(peakGain * 0.9, startTime + duration * 0.55);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      osc1.connect(filter);
+      osc2.connect(filter);
+      subOsc.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.analyser!);
+
+      osc1.start(startTime);
+      osc2.start(startTime);
+      subOsc.start(startTime);
+      osc1.stop(startTime + duration + 0.05);
+      osc2.stop(startTime + duration + 0.05);
+      subOsc.stop(startTime + duration + 0.05);
+    };
+
+    const createUnderwaterRumble = (startTime: number, duration: number, peakGain: number) => {
+      const bufferSize = Math.floor(c.sampleRate * duration);
+      const buffer = c.createBuffer(1, bufferSize, c.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        data[i] = Math.random() * 2 - 1;
+      }
+      const noise = c.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = c.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(140, startTime);
+      filter.frequency.exponentialRampToValueAtTime(220, startTime + duration * 0.4);
+      filter.frequency.exponentialRampToValueAtTime(90, startTime + duration);
+
+      const gain = c.createGain();
+      gain.gain.setValueAtTime(0.0001, startTime);
+      gain.gain.linearRampToValueAtTime(peakGain, startTime + duration * 0.3);
+      gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+      noise.connect(filter);
+      filter.connect(gain);
+      gain.connect(this.analyser!);
+
+      noise.start(startTime);
+      noise.stop(startTime + duration + 0.05);
+    };
+
+    // ③ 異界の霧笛・ブラームホーン（覚醒の角笛）を3回鳴らす
+    [0.0, 2.2, 4.4].forEach((offset) => {
+      const t = baseNow + offset;
+      createUnderwaterRumble(t, 2.1, 0.18);
+      createRoarVoice(65.4, 65.4, 58.2, t, 2.0, 0.24, 320);
+      createRoarVoice(98.0, 95.0, 87.3, t + 0.04, 1.9, 0.14, 350);
+      createRoarVoice(130.8, 128.0, 116.5, t + 0.08, 1.8, 0.10, 400);
+    });
+
+    return new Promise((resolve) => setTimeout(resolve, 6600));
+  }
+
+  /**
    * パターンに基づいた連続クリック音の再生
    * @param pattern 各クリックの間隔ミリ秒の配列 (例: [0, 150, 300])
    * @param speedMultiplier 速度倍率 (1.0 = 標準, 0.5 = スロー)

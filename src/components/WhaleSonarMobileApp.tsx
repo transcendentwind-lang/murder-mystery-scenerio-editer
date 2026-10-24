@@ -709,6 +709,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const handleEnterAbyssMode = () => {
     setIsAbyssMode(true);
     handleFillAllCorrectLabelsForPreview();
+    audioEngine?.playAbyssBraamTriple();
   };
 
   const handleSaveRules = (nextRules: WhaleBehaviorRule[]) => {
