@@ -2257,6 +2257,36 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             {/* 右側パネル（作者・テスト用）：プレイヤー専用画面（standalone）では非表示 */}
             {!standalone && (
               <div className="w-full lg:w-96 space-y-4">
+                {/* スマホ読み取り用QRコード（外部アクセス用） */}
+                <div className="rounded-2xl border border-cyan-500/40 bg-slate-900/90 p-4 space-y-3 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <Smartphone className="h-4 w-4 text-cyan-400" />
+                      <h3 className="text-xs font-bold text-white">
+                        スマホ読み取り用QRコード（外部公開URL）
+                      </h3>
+                    </div>
+                    <span className="rounded bg-cyan-950 border border-cyan-700/60 px-2 py-0.5 text-[10px] font-mono text-cyan-300">
+                      PW: whale-study
+                    </span>
+                  </div>
+                  <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3">
+                    <img
+                      src="/images/sonar_qr.png"
+                      alt="プレイヤー専用画面QRコード"
+                      className="h-44 w-44 object-contain"
+                    />
+                  </div>
+                  <div className="text-[11px] text-slate-300 space-y-1">
+                    <div>
+                      スマホのカメラで上のQRコードを読み取ると、外部回線（4G/5G）から直接プレイヤー画面が開きます。
+                    </div>
+                    <div className="rounded bg-slate-950 px-2 py-1 font-mono text-[10px] text-cyan-300 break-all">
+                      https://sterling-smaller-asian-campaigns.trycloudflare.com/sonar
+                    </div>
+                  </div>
+                </div>
+
                 {/* 日本語あてはめ管理（初期リセット／答え合わせプレビュー） */}
                 <div className="rounded-2xl border border-slate-800 bg-slate-900/70 p-4 space-y-3">
                   <div className="flex items-center justify-between">
