@@ -2023,7 +2023,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                           </div>
 
                           <div
-                            className={`text-sm font-extrabold tracking-wide leading-snug ${
+                            className={`text-sm font-extrabold tracking-wide leading-snug whitespace-pre-line ${
                               currentOutcome.status === "success"
                                 ? "text-emerald-200"
                                 : currentOutcome.status === "partial"
@@ -2061,7 +2061,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
                         <span>発信するクリック音パターン</span>
                         <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
-                          {selectedSequence.length}語
+                          {selectedSequence.length} / 8語（2語ごと判定）
                         </span>
                       </span>
 
@@ -2116,8 +2116,14 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                                 </span>
                               </button>
                               {index < selectedSequence.length - 1 && (
-                                <span className="text-slate-500 text-xs font-bold">
-                                  ＋
+                                <span
+                                  className={`text-xs font-bold ${
+                                    index % 2 === 1
+                                      ? "text-cyan-400 px-1"
+                                      : "text-slate-500"
+                                  }`}
+                                >
+                                  {index % 2 === 1 ? "｜" : "＋"}
                                 </span>
                               )}
                             </React.Fragment>
@@ -2390,6 +2396,19 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         color:
                           "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",
                       },
+                      {
+                        label:
+                          "⑥【4語連続】「北＋集まれ」｜「大きい・たくさんの餌＋食べる」",
+                        sub: "2語ごとに順番に判定 ➔ 2つのクジラの行動が順番に表示されるテスト",
+                        seq: [
+                          "word-go-north",
+                          "word-gather",
+                          "word-giant-prey",
+                          "word-eat",
+                        ],
+                        color:
+                          "border-purple-500/40 bg-purple-950/30 hover:bg-purple-900/50 text-purple-200",
+                      },
                     ].map((preset, i) => (
                       <button
                         key={i}
@@ -2440,9 +2459,9 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                           key={log.id}
                           className="rounded-xl border border-slate-800 bg-slate-950 p-2.5 text-xs space-y-1"
                         >
-                          <div className="flex items-center justify-between">
+                          <div className="flex items-start justify-between gap-2">
                             <span
-                              className={`font-bold text-[11px] ${
+                              className={`font-bold text-[11px] whitespace-pre-line ${
                                 log.status === "success"
                                   ? "text-emerald-400"
                                   : log.status === "partial"
