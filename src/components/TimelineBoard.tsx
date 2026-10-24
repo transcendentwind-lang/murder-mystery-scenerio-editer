@@ -3814,12 +3814,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ③ 海上自衛隊幹部からの直通電話（大人の本音と政治的思惑） */}
+                {/* ③ 海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示） */}
                 <div className="rounded-xl border border-blue-900/80 bg-[#0d162b] p-4 space-y-2.5 shadow-md">
                   <div className="flex items-center justify-between border-b border-blue-900/40 pb-1.5">
                     <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5">
                       <Shield className="h-4 w-4 text-blue-400" />
-                      ③ 📞 【海上自衛隊幹部からの直通電話（政治的思惑と大人の本音）】
+                      ③ 📞 【海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示）】
                     </span>
                   </div>
                   <div className="rounded bg-black/60 border border-blue-800/60 p-3.5 text-[11px] text-blue-100 space-y-2 font-mono">
@@ -3831,10 +3831,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。<br /><br />
                       だがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。<br /><br />
                       このあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。そもそも、クジラの攻撃で相手が完全に消滅したという確固たる証拠があるわけでもないだろう？<br /><br />
-                      世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。……君たちの功績は、一切表には出せない。国家防衛機密として処理される。<br /><br />
-                      すまんが、分かってくれ。<br /><br />
-                      このあと、政府からの発表がある。<br /><br />
-                      <strong className="text-amber-300 text-xs font-bold">……だが、君たちが正しかった。感謝する</strong>」
+                      世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。<br /><br />
+                      <strong className="text-cyan-200 font-bold">君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる</strong>」
+                    </p>
+                    <div className="rounded bg-blue-950/60 border border-blue-700/60 p-2 text-[10px] text-amber-300 font-bold">
+                      👉 ここで一度プレイヤーたちに、「①功績を出さず国家防衛上の機密として処理させるか」「②対策本部の功績として発表し自衛隊の活動を不要にするか」を判断・回答させます。
+                    </div>
+                    <p className="italic leading-relaxed pt-1">
+                      （🎙️ 防衛省・自衛艦隊幹部）:「……わかった。このあと、政府からの発表がある。<br />
+                      <strong className="text-amber-300 text-xs font-bold">いずれにしても、君たちが正しかった。感謝する</strong>」
                     </p>
                     <p className="text-slate-400 text-[10px] italic">
                       （ツーツーツー……と静かに終話音が響く）
@@ -3842,16 +3847,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ④ テレビ臨時ニュース（政府公式発表の全国報道） */}
-                <div className="rounded-xl border border-red-900/80 bg-[#1a0f12] p-4 space-y-2.5 shadow-md">
+                {/* ④ テレビ臨時ニュース（政府公式発表の全国報道・2パターン分岐） */}
+                <div className="rounded-xl border border-red-900/80 bg-[#1a0f12] p-4 space-y-3 shadow-md">
                   <div className="flex items-center justify-between border-b border-red-900/60 pb-1.5">
                     <span className="font-bold text-red-300 text-xs flex items-center gap-1.5">
                       <Flame className="h-4 w-4 text-red-400" />
-                      ④ 📺 【テレビ臨時ニュース（政府公式発表の全国報道）】
+                      ④ 📺 【テレビ臨時ニュース（政府公式発表・プレイヤーの選択に応じた2パターン）】
                     </span>
                     <span className="text-[10px] text-red-300 font-mono">全国各局一斉緊急特報</span>
                   </div>
+
+                  {/* パターンA */}
                   <div className="rounded bg-black/60 border border-red-800/60 p-3.5 text-[11px] text-red-100 space-y-2 font-mono">
+                    <div className="text-amber-300 font-bold text-xs border-b border-red-900/50 pb-1">
+                      ▼ パターンA：「功績を出さず、海上自衛隊の戦果として処理する」を選んだ場合
+                    </div>
                     <p className="text-slate-400 text-[10px] italic">
                       （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
                     </p>
@@ -3864,23 +3874,37 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       会見の最後で総理大臣は、『自衛隊の果敢な決断と迅速な行動が、国土と国民の生命を守り抜いた』と、部隊の功績を高く評価する声明を発表しています――」
                     </p>
                   </div>
+
+                  {/* パターンB */}
+                  <div className="rounded bg-black/60 border border-emerald-800/60 p-3.5 text-[11px] text-emerald-100 space-y-2 font-mono">
+                    <div className="text-emerald-300 font-bold text-xs border-b border-emerald-900/50 pb-1">
+                      ▼ パターンB：「対策本部の功績として発表し、自衛隊の活動は不要にする」を選んだ場合
+                    </div>
+                    <p className="text-slate-400 text-[10px] italic">
+                      （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
+                    </p>
+                    <p className="italic leading-relaxed">
+                      （🎙️ ニュースアナウンサー）:「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。<br /><br />
+                      伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、<strong>一連の危機事態が完全に沈静化した</strong>と発表しました。<br /><br />
+                      政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。<br /><br />
+                      政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同海難対策本部』の特別チームが機転を効かせ、<strong>深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を沈静化・駆除することに成功したため、海上自衛隊による武力攻撃は不要となった</strong>とのことです。<br /><br />
+                      巨大生物の無力化に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。<br /><br />
+                      会見の最後で総理大臣は、『一発の砲火も交えることなく、現場の機転と科学の力で日本を救った合同対策本部のメンバーたちは、まさに我が国の誇りでありヒーローである』と、その功績を最大限に称える声明を発表しています――」
+                    </p>
+                  </div>
                 </div>
 
-                {/* ⑤ アンサング・ヒーロー（名もなき英雄たち）のエピローグ */}
+                {/* ⑤ エピローグ */}
                 <div className="rounded-xl border border-indigo-800/70 bg-[#0f1226] p-4 space-y-3 shadow-md">
                   <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
                     <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                      <span>⑤ 🕊️ 【エピローグ：アンサング・ヒーロー（名もなき英雄たち）】</span>
+                      <span>⑤ 🕊️ 【エピローグ（それぞれの日常へ）】</span>
                     </span>
                     <span className="text-[10px] text-slate-400 font-mono">作戦完結・それぞれの日常へ</span>
                   </div>
                   <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-3.5 space-y-2 text-[11px] text-slate-200 font-mono">
-                    <strong className="text-amber-300 block text-xs">⭐ 6人の英雄たちの結び:</strong>
                     <p className="italic leading-relaxed">
-                      「『俺たちの手柄は歴史のどこにも載らないな』<br />
-                      『ええ。ですが、駿河湾の底でクジラたちと交わしたあの約束だけは本物でした』<br /><br />
-                      テレビ画面に映る総理の誇らしげな記者会見と、国民の安堵の歓声を背に、6人（朝潮・貝浜・坂凪・太刀魚・浪寄・初瀬／5名時は5人）は静かにデスクを片付け、日常へと戻っていく。<br />
-                      誰からも讃えられず、歴史に記録されることもない――だが、自分たちがこの国と海を守り抜いたという確かな誇りを胸に」
+                      テレビから流れる臨時ニュースと、日本中を包む安堵のざわめきを背に、合同海難対策本部のメンバーたちは静かにデスクを片付け、それぞれの日常へと戻っていく。
                     </p>
                   </div>
                 </div>
