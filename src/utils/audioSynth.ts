@@ -118,6 +118,46 @@ class UnderwaterAudioEngine {
   }
 
   /**
+   * 2語成語の正解時に鳴る「太古の深海共鳴ファンファーレ（サンプル⑤：ゴォーン・シャラン♪）」
+   */
+  public playSuccessFanfare(): Promise<void> {
+    this.initContext();
+    if (!this.ctx || !this.analyser) return Promise.resolve();
+
+    const c = this.ctx;
+    const playTone = (
+      freq: number,
+      startOffset: number,
+      duration: number,
+      type: OscillatorType = "sine",
+      peakGain = 0.25
+    ) => {
+      const osc = c.createOscillator();
+      const gain = c.createGain();
+      osc.type = type;
+      const t0 = c.currentTime + startOffset;
+      osc.frequency.setValueAtTime(freq, t0);
+      gain.gain.setValueAtTime(0.0001, t0);
+      gain.gain.linearRampToValueAtTime(peakGain, t0 + 0.02);
+      gain.gain.exponentialRampToValueAtTime(0.0001, t0 + duration);
+      osc.connect(gain);
+      gain.connect(this.analyser!);
+      osc.start(t0);
+      osc.stop(t0 + duration + 0.02);
+    };
+
+    // ⑤ 太古の深海共鳴ファンファーレ（ゴォーン・シャラン♪）
+    playTone(220, 0.0, 1.3, "sine", 0.32);
+    playTone(440, 0.0, 1.2, "triangle", 0.18);
+    playTone(659.25, 0.18, 1.1, "sine", 0.22);
+    playTone(880, 0.34, 1.1, "sine", 0.25);
+    playTone(1108.73, 0.50, 1.2, "sine", 0.26);
+    playTone(1760, 0.65, 1.1, "sine", 0.15);
+
+    return new Promise((resolve) => setTimeout(resolve, 900));
+  }
+
+  /**
    * パターンに基づいた連続クリック音の再生
    * @param pattern 各クリックの間隔ミリ秒の配列 (例: [0, 150, 300])
    * @param speedMultiplier 速度倍率 (1.0 = 標準, 0.5 = スロー)

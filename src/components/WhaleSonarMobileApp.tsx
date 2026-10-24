@@ -1304,25 +1304,29 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     const outcome = evaluatePatternOutcome(targetSeq);
     const matchedRule = rules.find((r) => r.id === outcome.matchedRuleId);
 
-    // 海中伝播の余韻を置いてクジラの応答音を再生
-    await new Promise((r) => setTimeout(r, 400));
-
-    if (targetSeq.length === 1 && targetSeq[0] === "word-ack") {
-      await audioEngine?.playWordSound("word-ack", 1.0);
-    } else if (matchedRule?.responseSoundType === "greet_you_echo") {
-      await audioEngine?.playWordSound("word-greet", 1.0);
-      await new Promise((r) => setTimeout(r, 240));
-      await audioEngine?.playWordSound("word-you", 1.0);
-    } else if (matchedRule?.responseSoundType === "greet_human_echo") {
-      await audioEngine?.playWordSound("word-greet", 1.0);
-      await new Promise((r) => setTimeout(r, 240));
-      await audioEngine?.playWordSound("word-human", 1.0);
-    } else if (matchedRule?.responseSoundType === "yes_ack") {
-      await audioEngine?.playWordSound("word-ack", 1.0);
-    }
+    // 少し余韻を置いてから結果表示＆正解ファンファーレ（⑤太古の深海共鳴ファンファーレ）を再生
+    await new Promise((r) => setTimeout(r, 300));
 
     setCurrentOutcome(outcome);
     setAttemptLogs((prev) => [outcome, ...prev]);
+
+    if (matchedRule) {
+      await audioEngine?.playSuccessFanfare();
+      if (matchedRule.responseSoundType === "greet_you_echo") {
+        await new Promise((r) => setTimeout(r, 200));
+        await audioEngine?.playWordSound("word-greet", 1.0);
+        await new Promise((r) => setTimeout(r, 240));
+        await audioEngine?.playWordSound("word-you", 1.0);
+      } else if (matchedRule.responseSoundType === "greet_human_echo") {
+        await new Promise((r) => setTimeout(r, 200));
+        await audioEngine?.playWordSound("word-greet", 1.0);
+        await new Promise((r) => setTimeout(r, 240));
+        await audioEngine?.playWordSound("word-human", 1.0);
+      }
+    } else if (targetSeq.length === 1 && targetSeq[0] === "word-ack") {
+      await audioEngine?.playWordSound("word-ack", 1.0);
+    }
+
     setIsPlaying(false);
   };
 
