@@ -288,7 +288,7 @@ class UnderwaterAudioEngine {
           speedMultiplier
         );
         break;
-      case "word-go-west": // 13. ピ・ポポン（西）
+      case "word-go-west": // 13. ピ・ポ・ポン（西）
         await this.playMelodicPattern(
           [
             { delayMs: 0, freq: 3200, duration: 0.015, volume: 0.88 },
@@ -463,10 +463,10 @@ class UnderwaterAudioEngine {
   }
 
   /**
-   * 元神主の子ども【吉備津】の口伝クリック音サンプル
-   * 「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
-   * （人・勇魚・契り、探せ、大獲物ぞ、集ひ来）
-   * 音響・祝詞解析スタジオの単語定義（word-human, word-whale, word-promise, word-search, word-giant-prey, word-gather）と完全に同一の音響を連続再生
+   * 元神主の子ども【吉備津】の口伝クリック音サンプル（2語＋2語＝計4語）
+   * 「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
+   * （人と勇魚、契り、大獲物ぞ、集ひ来）
+   * 音響・祝詞解析スタジオの単語定義（word-human-whale, word-promise, word-giant-prey, word-gather）と完全に同一の音響を連続再生
    */
   public async playKibitsuOralClickDemo(): Promise<void> {
     this.initContext();
@@ -474,27 +474,19 @@ class UnderwaterAudioEngine {
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    // 拍1: （カッ・カッ）「ひ・と」【解析スタジオ: 人間（word-human）】
-    await this.playWordSound("word-human", 1.0);
-    await sleep(400);
-
-    // 拍2: （ド・ドーン）「い・さ」【解析スタジオ: クジラ（word-whale）】
-    await this.playWordSound("word-whale", 1.0);
+    // 拍1: （ド・ドーン・カッカッ）「ひとといさ」【解析スタジオ: 人間とクジラ（word-human-whale）】
+    await this.playWordSound("word-human-whale", 1.0);
     await sleep(450);
 
-    // 拍3: （チ・トン・チ）「ち・ぎ・り」【解析スタジオ: 約束（word-promise）】
+    // 拍2: （チ・トン・チ）「ち・ぎ・り」【解析スタジオ: 約束（word-promise）】
     await this.playWordSound("word-promise", 1.0);
-    await sleep(450);
+    await sleep(500);
 
-    // 拍4: （タン・タン・タン）「さ・が・せ」【解析スタジオ: 探せ（word-search）】
-    await this.playWordSound("word-search", 1.0);
-    await sleep(400);
-
-    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」【解析スタジオ: 巨大な餌（word-giant-prey）】
+    // 拍3: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」【解析スタジオ: 大きい・たくさんの餌（word-giant-prey）】
     await this.playWordSound("word-giant-prey", 1.0);
     await sleep(450);
 
-    // 拍6: （カ・カ・カカッ！）「つ・ど・ひ・こ！」【解析スタジオ: 集まれ（word-gather）】
+    // 拍4: （カ・カ・カカッ！）「つ・ど・ひ・こ！」【解析スタジオ: 集まれ（word-gather）】
     await this.playWordSound("word-gather", 1.0);
   }
 
@@ -586,14 +578,14 @@ class UnderwaterAudioEngine {
     if (!this.ctx || !this.analyser) return;
 
     const fullMessageWords = [
-      "word-human",
-      "word-whale",
+      "word-human-whale",
       "word-promise",
       "word-subsea-volcano",
-      "word-go-north",
       "word-search",
-      "word-giant-prey",
+      "word-go-north",
       "word-gather",
+      "word-giant-prey",
+      "word-attack",
     ];
 
     // --- ステージ1: 海自大出力ソナー網からのパルス放流 ---

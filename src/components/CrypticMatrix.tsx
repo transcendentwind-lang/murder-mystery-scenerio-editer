@@ -118,10 +118,10 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             onClick={handlePlayFullCorrectMessage}
             disabled={isPlayingFull}
             className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 disabled:opacity-50 transition shadow shadow-indigo-600/30"
-            title="完成した8語新言語祝詞（人とクジラの約束…）を海自ソナー放流の順序で通し試聴します"
+            title="完成した8語新言語祝詞（2語成語×4組の参考正解例）を海自ソナー放流の順序で通し試聴します"
           >
             <Play className={`h-3.5 w-3.5 ${isPlayingFull ? "animate-spin" : ""}`} />
-            {isPlayingFull ? "完成祝詞を放流中..." : "完成祝詞（8語）を通し試聴"}
+            {isPlayingFull ? "完成祝詞を放流中..." : "完成祝詞（2語×4組・参考例）を通し試聴"}
           </button>
 
           {/* Day 1〜Day 6の連鎖ガイド表示トグル */}
@@ -270,11 +270,11 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
                 <span>知見が結集した新言語構文（5名時は太刀魚が初瀬を統合）</span>
               </div>
               <ul className="space-y-1.5 text-[11px] text-slate-400 pl-4 list-disc">
-                <li>初瀬 / PC6（救護・神職／5名時は太刀魚）: 祝詞巻物の点刻記号（「人間」「クジラ」「約束」）</li>
+                <li>初瀬 / PC6（救護・神職／5名時は太刀魚）: 祝詞巻物・口伝の点刻記号（「人間とクジラ」「約束」）</li>
                 <li>太刀魚 / PC4（観測）: 連動海底火山の熱水・地鳴り音響ログ（「海の下の火山」）</li>
-                <li>貝浜 / PC2（音響）: 音響航法の方位コーダ（「北に向かう」などの東西南北）</li>
-                <li>浪寄 / PC5（生物）: 朝倉教授ノートの探索・号令コーダ（「探せ」「集まれ」）</li>
-                <li>坂凪 / PC3（船長）: 小笠原捕鯨唄の手拍子リズム（「巨大な餌」）</li>
+                <li>貝浜 / PC2（音響）: 音響航法の方位コーダ（「北」などの東西南北）</li>
+                <li>浪寄 / PC5（生物）: 朝倉教授ノートの探索・号令・攻撃コーダ（「探せ」「集まれ」「攻撃せよ」）</li>
+                <li>坂凪 / PC3（船長）: 大獲物のクリック音リズム（「大きい・たくさんの餌」）</li>
                 <li>朝潮 / PC1（司令）: 海上自衛隊大出力ソナー網の軍事アクセス承認と全回線統合</li>
               </ul>
             </div>

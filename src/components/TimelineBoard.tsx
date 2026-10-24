@@ -2389,7 +2389,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -2953,7 +2953,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（カッ・カッ）（ド・ドーン）（チ・トン・チ）（タン・タン・タン）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -3529,31 +3529,31 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <div className="flex flex-col gap-2 rounded bg-slate-950 p-3 border border-slate-800 mt-2">
                         <div className="flex items-center justify-between">
                           <span className="text-slate-300 text-[11px]">
-                            合成新言語メッセージ構文: <strong className="text-amber-300">「人とクジラの約束。海の下の火山を北に向かって探せ。巨大な餌に集まれ」</strong>
+                            合成新言語メッセージ構文（参考正解例）: <strong className="text-amber-300">「【人間とクジラ・約束】【海の下の火山・探せ】【北・集まれ】【大きい・たくさんの餌・攻撃せよ】」</strong>
                           </span>
                           <button
                             onClick={() =>
                               audioEngine?.playMessageSequence(
                                 [
-                                  "word-human",
-                                  "word-whale",
+                                  "word-human-whale",
                                   "word-promise",
                                   "word-subsea-volcano",
-                                  "word-go-north",
                                   "word-search",
-                                  "word-giant-prey",
+                                  "word-go-north",
                                   "word-gather",
+                                  "word-giant-prey",
+                                  "word-attack",
                                 ],
                                 1.0
                               )
                             }
                             className="flex items-center gap-1.5 rounded bg-indigo-600 px-3 py-1.5 font-bold text-white hover:bg-indigo-500 transition shadow text-xs shrink-0"
                           >
-                            <Volume2 className="h-4 w-4" /> 8語シーケンスをテスト試聴
+                            <Volume2 className="h-4 w-4" /> 8語シーケンス（2語×4組）をテスト試聴
                           </button>
                         </div>
                         <p className="text-[10px] text-slate-400 font-mono">
-                          構成: [人間・クジラ・約束] ➔ [海の下の火山・北に向かう・探せ] ➔ [巨大な餌・集まれ]
+                          構成（2語成語×4組の参考例）: [人間とクジラ＋約束] ➔ [海の下の火山＋探せ] ➔ [北＋集まれ] ➔ [大きい・たくさんの餌＋攻撃せよ]
                         </p>
                       </div>
                     </div>
@@ -3654,7 +3654,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg bg-slate-900 border border-slate-800 p-3 space-y-2.5">
                       <div className="flex flex-wrap items-center justify-between gap-2">
                         <span className="font-semibold text-slate-200">
-                          🌐 潜水艦SOFAR層 放流パケット: <span className="font-mono text-cyan-300">「人・勇魚・契り、探せ、大獲物ぞ、集ひ来」</span>
+                          🌐 潜水艦SOFAR層 放流パケット（参考例）: <span className="font-mono text-cyan-300">「【人間とクジラ・約束】【海の下の火山・探せ】【北・集まれ】【大きい・たくさんの餌・攻撃せよ】」</span>
                         </span>
                         <span className={`text-[11px] px-2 py-0.5 rounded font-bold ${
                           day6ReadyStatus === "idle"

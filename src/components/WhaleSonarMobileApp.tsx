@@ -45,7 +45,7 @@ export interface WhaleBehaviorRule {
 }
 
 // ==========================================
-// 2語成語（全23パターン・順序厳守）のクジラ行動定義
+// 2語成語（全24パターン・順序厳守）のクジラ行動定義
 // ==========================================
 export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
   {
@@ -278,6 +278,16 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     directionBadge: "📡 コーダ応答受信",
     category: "ritual",
   },
+  {
+    id: "rule-24-giant-prey-attack",
+    name: "大きい・たくさんの餌 ＋ 攻撃せよ",
+    sequence: ["word-giant-prey", "word-attack"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "クジラは巨大な獲物・たくさんの餌への一斉攻撃を開始した",
+    behaviorText: "クジラは巨大な獲物・たくさんの餌への一斉攻撃を開始した",
+    directionBadge: "⚔️ 巨大獲物へ攻撃開始",
+    category: "action",
+  },
 ];
 
 // ==========================================
@@ -426,7 +436,7 @@ export function getWordAcousticPulses(wordId: string): AcousticPulsePoint[] {
         { delayMs: 0, freqHz: 1800, durationMs: 70, amplitude: 0.82 },
         { delayMs: 240, freqHz: 3250, durationMs: 50, amplitude: 0.95 },
       ];
-    case "word-go-west": // 13. ピ・ポポン（西）
+    case "word-go-west": // 13. ピ・ポ・ポン（西）
       return [
         { delayMs: 0, freqHz: 3200, durationMs: 50, amplitude: 0.88 },
         { delayMs: 200, freqHz: 2250, durationMs: 65, amplitude: 0.85 },
@@ -524,7 +534,7 @@ export interface RecordedWaveformTrace {
   recordedAt: string;
 }
 
-const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v2";
+const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v3";
 const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v2";
 
 interface AttemptLog {
