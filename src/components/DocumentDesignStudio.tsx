@@ -2638,22 +2638,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                      🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全10枚）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・表裏仕様）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 1/4サイズ固定）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
                           長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-01〜NG-10）
                         </h2>
                       </div>
-                      <div className="no-print flex flex-wrap items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         <a
                           href="/pdfs/nagatsu-announcement-cards.pdf"
                           download="長津専用_途中および達成アナウンスカード_全10枚.pdf"
                           className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
                         >
-                          📥 完成版PDFを直接ダウンロード（全10枚）
+                          📥 完成版PDFを直接ダウンロード（全10枚・A4 4分割）
                         </a>
                         <button
                           type="button"
@@ -2666,15 +2666,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </div>
                     </div>
 
-                    <div className="space-y-6">
-                      {NAGATSU_PHASE_CARDS.map((nc) => (
+                    <div className="space-y-6 print:space-y-0">
+                      {NAGATSU_PHASE_CARDS.map((nc, idx) => (
                         <div
                           key={nc.id}
-                          className="rounded-lg border border-slate-200 bg-slate-50/40 p-4 break-inside-avoid"
+                          className={`rounded-lg border border-slate-200 bg-slate-50/40 p-4 print:border-0 print:bg-transparent print:p-0 print:mb-[8mm] break-inside-avoid ${
+                            idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
+                          }`}
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5">
-                            {/* 左：表面 */}
-                            <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[240px] shadow-sm">
+                          <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
+                            {/* 左：表面（A4 1/4サイズ固定） */}
+                            <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                               <div className="flex items-center justify-between text-xs">
                                 <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
                                   {nc.timingBadge}
@@ -2713,8 +2715,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               </div>
                             </div>
 
-                            {/* 右：本文面 */}
-                            <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[240px] shadow-sm">
+                            {/* 右：本文面（A4 1/4サイズ固定） */}
+                            <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                               <div>
                                 <div className="flex items-center justify-between text-xs mb-2">
                                   <span
