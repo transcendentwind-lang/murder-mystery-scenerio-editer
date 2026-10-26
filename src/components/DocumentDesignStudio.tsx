@@ -21,6 +21,7 @@ import {
   initialProject,
   DAILY_COMMANDER_BRIEFINGS,
   SPECIAL_CHARACTER_CARDS,
+  NAGATSU_PHASE_CARDS,
 } from "@/utils/initialProjectData";
 import {
   Sparkles,
@@ -363,15 +364,15 @@ const PAPER_STYLES: Record<DocumentPaperStyle, { name: string; className: string
 const DEFAULT_GM_NARRATIONS: Record<number, string> = {
   1: `【フェーズ1：緊急回線接続 ＆ 各員自己紹介】
 （🎙️ 首席オペレーター 長津）:
-「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船（総トン数約40t）が突如全電源を喪失、AISも停波し、救難信号を発信した直後に通信が途絶いたしました。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
+「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から既に20分が経過しており、現場の救難艇が海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
 
 【フェーズ2：遭難海図展開 ＆ 漂流捜索方針の決定】
 （🎙️ 首席オペレーター 長津）:
 「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
 
-【フェーズ4：救助成功アナウンス】
+【フェーズ4：救助成功アナウンス（長津アナウンスカード NG-01）】
 （🎙️ 首席オペレーター 長津）:
-「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
+「――坂凪救難担当官率いる現場救難艇より入電！ 東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船『パパズドルフィン』を捕捉・接舷！ 初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの全員救出に成功いたしました！」
 
 【NPC 船長（救助直後）】:
 民間チャーター船「パパズドルフィン」の船長からの事情聴取調書。船長は荒波で不安定な足場でもしっかりとした足取りで救難艇へと乗り込んできた。
@@ -386,7 +387,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
   2: `【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
 （🎙️ 首席オペレーター 長津）:
 「長津です。皆様、お疲れ様です。気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。現場海域の船舶の避難は完了していますが、新しい指示がでています。
-西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に手を回す余裕はありませんので、各自の専門知識を持ち寄りどの調査を優先して実行すべきか合議をお願いいたします」
+西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
 
 【GMからの案内】:
 「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
@@ -396,35 +397,31 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
   3: `【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
 （🎙️ 首席オペレーター 長津）:
-「――小笠原基地より小笠原現地メンバーを載せた大型捜索ヘリが緊急発進いたしました。鳥島沖での探索活動をするため、いったん海上保安庁が洋上に展開する巡視船PLH-31『あきつしま』に着陸、洋上給油を行って鳥島沖の噴火海域での調査を行なってください。目標としては、アクティブソナーのついたソノブイを投下し、巨大生物の現時点の場所を特定することです。ソノブイは3つあり、できれば複数回ソナーの範囲内にいれて場所を特定してください」
+「――小笠原基地より小笠原現地メンバーを乗せた大型捜索ヘリが緊急発進いたしました。鳥島沖での探索活動を行うため、巡視船『あきつしま』で洋上給油を行い、鳥島沖の噴火海域でアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定してください」
 
-【フェーズ2：アクティブソノブイ調査終了後の状況案内 ＆ 北上予測要請】
+【フェーズ2：アクティブソノブイ調査終了後の状況案内 ＆ 北上予測要請（長津アナウンスカード NG-02）】
 （🎙️ 首席オペレーター 長津）:
-「噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」
 ※ここで太刀魚（EV-16: 西之島〜鳥島沖 距離観測データ）、貝浜（EV-17: 鳥島沖 ソノブイ探知記録）、浪寄（EV-18: 遭難船救助・目撃時刻調書）の3名へそれぞれ証拠資料を配布し、移動速度（約150km/日）と明日（Day 4）の北上予測（明神礁周辺）を検討させてください。
 
-【フェーズ5：写真データ受信 ＆ 合同対策本部への諮問】
+【フェーズ5：写真データ受信 ＆ 合同対策本部への諮問（長津アナウンスカード NG-03）】
 （🎙️ 首席オペレーター 長津）:
-「――洋上捜索ヘリより至急電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております」
+「――洋上捜索ヘリより至急電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております」
 
 ① 海上保安庁 ➔ 浪寄准教授（PC5: 海洋生物学者）への相談:
-「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+「浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大質量について、生物学的な所見を提示してください」
 
 ② 海上保安庁 ➔ 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
-「貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
+「貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
 
-【防衛庁・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定】
+【防衛庁・官邸からの緊急諮問：呼称（コードネーム）決定と指揮官最終決断の要請（長津アナウンスカード NG-04）】
 （🎙️ 首席オペレーター 長津）:
-「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています。どちらを公式コードネームとして採択しますか？（※もちろん、チーム独自の命名でも構いません）」
-※チームで合議させ、以降はこの決定したコードネームを用いて呼称させます。
+「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」
+※チームで合議させ、以降はこの決定したコードネームを用いて呼称させます。`,
 
-【朝潮危機管理官（PC1）の決断とDay 4へのブリッジ】
+  4: `【フェーズ1：明神礁海底噴火 ＆ 火山活動・地震観測報告】
 （🎙️ 首席オペレーター 長津）:
-「各員の意見が出揃いました。朝潮危機管理官（PC1）、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします」`,
-
-  4: `【フェーズ1：明神礁海底噴火 ＆ 火山活動・地震観測報告（客観的事実のみ伝達）】
-（🎙️ 首席オペレーター 長津）:
-「――各員へ緊急報告です。未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が、火山性微動を断続的に探知しています。防衛庁のパッシブソナーによる潜航物体の位置と、この火山性微動の発生源は完全に一致しており、物体は【日速約150km】のペースで正確に北上を続けています」
+「――各員へ緊急報告です。未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が火山性微動を断続的に探知しています。防衛庁のパッシブソナーによる潜航物体の位置と火山性微動の発生源は完全に一致しており、物体は【日速約150km】で正確に北上を続けています。政府および防衛庁より『この生物は一体どこへ向かい、何を引き起こす見立てなのか、対策本部の専門的予測を至急提出してほしい』との緊急照会が入っています。なお事態の緊迫化を受け、本日より当対策本部は調査枠制限を撤廃する【即応総力体制】へ移行します！」
 
 【フェーズ2：前日の意思決定に応じた政府・防衛省の反応通達（分岐）】
 
@@ -440,7 +437,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――物体は日速約150kmで北上中、このままでは数日中に伊豆諸島マグマ網を経て富士山直下に到達し、破局的連動噴火を誘発する恐れがあります！ 国家存亡の危機を受け、当合同対策本部はこれより【即応総力体制】へ移行いたします！ これまでの調査枠制限をすべて撤廃し、東京本部および小笠原現地の各班が収集したすべての重要調査資料（都内・元神主の子どもの捜索、朝倉教授の研究日誌・野帳、小笠原社記原本など）を一括して全開示いたします！ 各員、総力を結集して情報の照合と真相の解明を急いでください！」
 
-【フェーズ5：防衛省・統合幕僚監部通達（害獣駆除方針決定）】
+【フェーズ5：防衛省・統合幕僚監部通達（害獣駆除方針決定・長津アナウンスカード NG-05）】
 （🎙️ 首席オペレーター 長津）:
 「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定いたしました！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」`,
 
@@ -448,11 +445,15 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――民間放送局の臨時ニュースをお伝えします。『伊豆諸島を北上する連続海底噴火と群発地震を受け、気象庁は富士山地下深部において微弱な火山性微動が観測されたと発表しました。政府は万一に備えて災害対策本部を設置しており、速報として「伊豆七島の活火山について噴火警戒レベルを【レベル3（入山規制）】に引き上げ、さらに【レベル4（避難準備）】に上がった場合に備えて島民へ避難準備を指示したこと、また富士山については突然の噴火が起きたとしてもただちに避難が必要となることはない」という声明を発表しています。この後、9時からは専門家を呼んでこの連鎖噴火の影響について議論を深めていきます』」
 
+【フェーズ1.5：防衛庁・火山噴火予知連絡会からの至急指令「富士山噴火猶予時間の計算」】
+（🎙️ 首席オペレーター 長津）:
+「――防衛庁および火山噴火予知連絡会より至急指令が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】。危機到達まであと何時間の猶予があるのか直ちに計算して報告せよ！』とのことです！ 各員、至急計算をお願いします！」
+
 【フェーズ2：防衛省通達（軍事機密指定による情報遮断）】
 （🎙️ 首席オペレーター 長津）:
 「――防衛省より緊急回線で入電。『これより自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行する。交戦状況に関する情報提供はここを以て遮断する。対策本部は作戦干渉を解かれ、独自の調査任務に戻られたし』との通達です」
 
-【フェーズ3：防衛省より貝浜（PC2）への緊急ホットライン】
+【フェーズ3：防衛省より貝浜（PC2）への緊急ホットライン（長津アナウンスカード NG-06）】
 （🎙️ 首席オペレーター 長津）:
 「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
 【防衛省作戦本部】:
@@ -462,7 +463,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「（昼）――各員へ報告。海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
 
-「（夕〜夜）――警報！ 海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如復活・激化いたしました！ 破局噴火まで残り24時間、巨大生物は生存しており、海底マグマ網へ向かって直接突入を試みています！」
+「（夕〜夜）――緊急警報！ 海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如復活・激化いたしました！ 破局噴火まで残り24時間、巨大生物は生存しており、海底マグマ網へ向かって直接突入を試みています！」
 
 【長津の電話交渉前アナウンス】
 （🎙️ 首席オペレーター 長津）:
@@ -483,19 +484,20 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 防衛庁 運用企画局長・岸部）:
 「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
 
-【フェーズ4.5：深夜の潜水艦SOFAR層放流開始 ＆ 作戦名の命名】
+【フェーズ4.5：深夜の潜水艦SOFAR層放流開始 ＆ 作戦名の命名（長津アナウンスカード NG-07）】
 （🎙️ 首席オペレーター 長津）:
 「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞の放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）とクジラたちの共鳴に乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」
 ※プレイヤー全員で合議し、決戦の作戦名（例: オペレーション・ワタツミ、大捕食作戦等）を決定させてください。`,
 
   7: `【フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食】
 （🎙️ 首席オペレーター 長津）:
+「――夜明けを迎えました。目標は水深600〜1,000mを維持して駿河湾奥へ突入！ 湾奥に展開する海上自衛隊の潜水艦部隊および深海ソナー網より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
 「――怪異が水深600〜1,000mを維持して駿河湾奥へ突入！ 湾奥に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機しています。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
 
-【フェーズ2：首席オペレーター 長津 感涙の作戦成功アナウンス】
+【フェーズ2：首席オペレーター 長津 感涙の作戦成功アナウンス（長津アナウンスカード NG-08）】
 （🎙️ 首席オペレーター 長津）:
-「――各員へ緊急報告！ 海自潜水艦の深海音響探知により入電！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしました！ 気象庁火山監視課より緊急電、富士山地下深部における火山性微動、急激に減衰……完全に停止いたしました！ 海底噴火の連鎖も完全に沈静化！ 富士山の破局噴火危機は……完全に回避されました！
-防衛省・自衛艦隊司令部より全潜水艦へ通達入電、『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』！ 自衛隊の実弾は一発も撃たれることなく、海底火山を刺激するリスクも完全に消滅いたしました！
+「――各員へ緊急報告！ 海自潜水艦の深海音響探知により、前代未聞の巨大な生体音響反応を探知！ ……クジラです！ 昨夜から放流を続けた祝詞に応え、太平洋沖から夜を徹して泳いできたマッコウクジラの大群が駿河湾深海へ到達いたしました！ クジラたちの生体ソナーが水深800mの怪異を捉え、一斉に深海へ突入……大捕食を開始！ 怪異の同調音がクジラたちの音波に呑み込まれ、太古の盟約通り大獲物を喰らい尽くしました！
+――気象庁火山監視課より緊急電！ 富士山地下深部における火山性微動、急激に減衰……完全に停止！ 防衛省・自衛艦隊司令部より全潜水艦へ通達入電、『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』！ 自衛隊の実弾は一発も撃たれることなく、海底火山を刺激するリスクも完全に消滅いたしました！
 ……勝ったのです。朝潮危機管理官、貝浜リエゾン、坂凪隊長、太刀魚観測員、浪寄准教授、初瀬さん……！ 太古から受け継がれた海の約束と、みなさんが結集した科学と勇気が……この国を、日本を救いました……っ！！」
 
 【フェーズ3：海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示）】
@@ -518,7 +520,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 【フェーズ4：テレビ臨時ニュース（政府公式発表の全国報道・2パターン分岐）】
 （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
 
-▼ パターンA：「功績を出さず、海上自衛隊の戦果として処理する」を選んだ場合
+▼ パターンA：「功績を出さず、海上自衛隊の戦果として処理する」を選んだ場合（長津アナウンスカード NG-09）
 （🎙️ ニュースアナウンサー）:
 「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。
 伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。
@@ -527,14 +529,14 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 巨大生物の駆除に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。
 会見の最後で総理大臣は、『自衛隊の果敢な決断と迅速な行動が、国土と国民の生命を守り抜いた』と、部隊の功績を高く評価する声明を発表しています――」
 
-▼ パターンB：「対策本部の功績として発表し、自衛隊は何もせず解決したとする」を選んだ場合
+▼ パターンB：「対策本部の功績として発表し、自衛隊は何もせず解決したとする」を選んだ場合（長津アナウンスカード NG-10）
 （🎙️ ニュースアナウンサー）:
 「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。
 伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。
 政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。
-政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同海難対策本部』の特別チームが機転を効かせ、深海へ特殊な薬剤を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を無力化・駆除することに成功したため、海上自衛隊による武力攻撃は一切不要となったとのことです。
+政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同海難対策本部』の特別チームが機転を効かせ、深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を沈静化・駆除することに成功したため、海上自衛隊による武力攻撃は不要となったとのことです。
 巨大生物の無力化に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。
-会見の最後で総理大臣は、『一発の砲火も交えることなく、科学と現場の機転によって日本を救った合同対策本部のメンバーたちは、まさに我が国の誇りであり英雄である』と、その歴史的功績を最大限に称える声明を発表しています――」
+会見の最後で総理大臣は、『一発の砲火も交えることなく、現場の機転と科学の力で日本を救った合同対策本部のメンバーたちは、まさに我が国の誇りでありヒーローである』と、その功績を最大限に称える声明を発表しています――」
 
 【フェーズ5：エピローグ（それぞれの日常へ）】
 テレビから流れる臨時ニュースと、日本中を包む安堵のざわめきを背に、合同海難対策本部のメンバーたちは静かにデスクを片付け、それぞれの日常へと戻っていく。`,
@@ -634,12 +636,13 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       !existing.readAloudScript ||
       existing.readAloudScript === step?.incidentOverview ||
       !existing.readAloudScript.includes("長津") ||
-      (dayNumber === 1 && (!existing.readAloudScript.includes("パパズドルフィン") || !existing.readAloudScript.includes("おがさわら丸"))) ||
-      (dayNumber === 2 && !existing.readAloudScript.includes("あとのタイミングの行動で調べることができます")) ||
-      (dayNumber === 3 && (!existing.readAloudScript.includes("コードネーム") || !existing.readAloudScript.includes("海上警備行動を発令するか"))) ||
-      (dayNumber === 4 && !existing.readAloudScript.includes("即応総力体制")) ||
-      (dayNumber === 6 && (!existing.readAloudScript.includes("岸部") || !existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
-      (dayNumber === 7 && (existing.readAloudScript.includes("重魚雷一斉飽和攻撃") || existing.readAloudScript.includes("粉砕アシスト") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
+      (dayNumber === 1 && (!existing.readAloudScript.includes("パパズドルフィン") || !existing.readAloudScript.includes("NG-01"))) ||
+      (dayNumber === 2 && !existing.readAloudScript.includes("優先度を決めて調査をお願いします")) ||
+      (dayNumber === 3 && (!existing.readAloudScript.includes("NG-02") || !existing.readAloudScript.includes("NG-04"))) ||
+      (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("NG-05"))) ||
+      (dayNumber === 5 && (!existing.readAloudScript.includes("時速5km") || !existing.readAloudScript.includes("NG-06"))) ||
+      (dayNumber === 6 && (!existing.readAloudScript.includes("岸部") || !existing.readAloudScript.includes("NG-07"))) ||
+      (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -880,7 +883,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   onSendAiPrompt,
 }) => {
   const [category, setCategory] = useState<StudioCategory>("handouts");
-  const [handoutViewMode, setHandoutViewMode] = useState<"sheet" | "cards" | "daily_briefings">("sheet");
+  const [handoutViewMode, setHandoutViewMode] = useState<
+    "sheet" | "cards" | "daily_briefings" | "nagatsu_cards"
+  >("sheet");
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
@@ -1547,9 +1552,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       {/* 2. サブバー：個人ハンドアウト時は「本紙 vs 別配付カード切替」、それ以外は「Gemini AI デザイン着せ替えバー」 */}
       {category === "handouts" ? (
         <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-bold text-slate-300">表示・印刷対象：</span>
-            <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+            <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
               <button
                 onClick={() => setHandoutViewMode("sheet")}
                 className={`rounded-md px-3 py-1 text-xs font-bold transition ${
@@ -1558,7 +1563,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                📄 個人ハンドアウト本紙（6つの構成要素）
+                📄 個人ハンドアウト本紙（6項目）
               </button>
               <button
                 onClick={() => setHandoutViewMode("cards")}
@@ -1568,7 +1573,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                🃏 別配付カード（初期所持品・携行アイテム ／ 固有能力・専門スキル）
+                🃏 特別配布カード（全7枚）
               </button>
               <button
                 onClick={() => setHandoutViewMode("daily_briefings")}
@@ -1578,12 +1583,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                📋 Day別・朝潮＆長津ブリーフィング指令書（各Day開始時にGMから配布）
+                📋 Day別・朝潮＆長津ブリーフィング指令書
+              </button>
+              <button
+                onClick={() => setHandoutViewMode("nagatsu_cards")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  handoutViewMode === "nagatsu_cards"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）
               </button>
             </div>
           </div>
           <span className="text-[11px] text-slate-400">
-            ※個人ハンドアウトは特別なテーマ装飾を省き、読みやすい標準構成にまとめています
+            ※個人ハンドアウト・カード類は特別なテーマ装飾を省き、読みやすい標準構成にまとめています
           </span>
         </div>
       ) : (
@@ -1798,8 +1813,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </h3>
               </div>
 
-              {/* 本紙（6項目） vs 各キャラクターへの特別配布カード vs Day別ブリーフィング指令書 切替 */}
-              <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              {/* 本紙（6項目） vs 各キャラクターへの特別配布カード vs Day別ブリーフィング指令書 vs 長津アナウンスカード 切替 */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setHandoutViewMode("sheet")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
@@ -1830,6 +1845,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 >
                   📋 Day別指令
                 </button>
+                <button
+                  onClick={() => setHandoutViewMode("nagatsu_cards")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    handoutViewMode === "nagatsu_cards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🎙️ 長津カード
+                </button>
               </div>
 
               <p className="text-[10px] text-slate-400 leading-relaxed">
@@ -1837,7 +1862,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
                   : handoutViewMode === "cards"
                   ? "キャラクターごとに順次配布される「特別配布カード（全7枚）」です。"
-                  : "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"}
+                  : handoutViewMode === "daily_briefings"
+                  ? "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"
+                  : "7名プレイ時に長津（PC7）がフェーズ途中・達成時に読み上げる専用アナウンスカード（全10枚・表裏仕様）です。"}
               </p>
 
               <div className="space-y-2">
@@ -2450,7 +2477,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                     : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
                                 }`}
                               >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5">
                                   {/* 左：表面 */}
                                   <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[250px] shadow-sm">
                                     <div className="flex items-center justify-between text-xs">
@@ -2524,12 +2551,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       );
                     })()}
                   </div>
-                ) : (
+                ) : handoutViewMode === "daily_briefings" ? (
                   /* ------------------------------------------------------------
                      📋 Day別・朝潮＆長津ブリーフィング指令書
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
+                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-2">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
                           {project.title} ― 対策本部・日次ブリーフィング ＆ 指揮官ミッションシート（Day 1〜Day 7）
@@ -2538,6 +2565,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別指令シート
                         </h2>
                       </div>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutViewMode("nagatsu_cards")}
+                        className="no-print flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                      >
+                        🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
+                      </button>
                     </div>
 
                     <div className="space-y-5">
@@ -2594,6 +2628,124 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                           <div className="text-[10px] text-slate-500 flex items-center justify-end pt-1 border-t border-dashed border-slate-200">
                             <span className="font-mono">COMMAND-BRIEFING-DAY0{b.dayNumber}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  /* ------------------------------------------------------------
+                     🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全10枚）
+                     ------------------------------------------------------------ */
+                  <div className="space-y-6">
+                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・表裏仕様）
+                        </span>
+                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-01〜NG-10）
+                        </h2>
+                      </div>
+                      <div className="no-print flex flex-wrap items-center gap-2">
+                        <a
+                          href="/pdfs/nagatsu-announcement-cards.pdf"
+                          download="長津専用_途中および達成アナウンスカード_全10枚.pdf"
+                          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                        >
+                          📥 完成版PDFを直接ダウンロード（全10枚）
+                        </a>
+                        <button
+                          type="button"
+                          onClick={handlePrintDesignedSheet}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                        >
+                          <Printer className="h-3.5 w-3.5" />
+                          ブラウザ印刷 / PDF保存
+                        </button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-6">
+                      {NAGATSU_PHASE_CARDS.map((nc) => (
+                        <div
+                          key={nc.id}
+                          className="rounded-lg border border-slate-200 bg-slate-50/40 p-4 break-inside-avoid"
+                        >
+                          <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5">
+                            {/* 左：表面 */}
+                            <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[240px] shadow-sm">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                  {nc.timingBadge}
+                                </span>
+                                <span
+                                  className="rounded px-2.5 py-0.5 font-bold text-white"
+                                  style={{ backgroundColor: nc.accentHex }}
+                                >
+                                  長津アナウンスカード
+                                </span>
+                              </div>
+
+                              <div className="my-auto py-5 text-center space-y-2">
+                                <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                  海上保安庁・合同海難対策本部
+                                </div>
+                                {nc.frontTitleHtml ? (
+                                  <div
+                                    className="text-xl font-black text-slate-900 leading-snug"
+                                    dangerouslySetInnerHTML={{ __html: nc.frontTitleHtml }}
+                                  />
+                                ) : (
+                                  <div className="text-xl font-black text-slate-900 leading-snug">
+                                    {nc.title}
+                                  </div>
+                                )}
+                                <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                  長津アナウンスカード
+                                </div>
+                              </div>
+
+                              <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                                <span className="font-mono text-xs font-bold text-slate-500">
+                                  {nc.cardCode} / 10
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* 右：本文面 */}
+                            <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[240px] shadow-sm">
+                              <div>
+                                <div className="flex items-center justify-between text-xs mb-2">
+                                  <span
+                                    className="rounded px-2.5 py-0.5 font-bold text-white"
+                                    style={{ backgroundColor: nc.accentHex }}
+                                  >
+                                    長津アナウンスカード
+                                  </span>
+                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                    {nc.timingBadge}
+                                  </span>
+                                </div>
+
+                                <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                                  <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                                    {nc.title}
+                                  </h4>
+                                </div>
+
+                                <div
+                                  className="text-xs leading-[2.0] text-slate-800 text-left [&_rt]:text-[8.5px] [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                  dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
+                                />
+                              </div>
+
+                              <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
+                                <span className="font-mono font-bold text-slate-500">
+                                  {nc.cardCode} / 10
+                                </span>
+                              </div>
+                            </div>
                           </div>
                         </div>
                       ))}
@@ -3213,7 +3365,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {/* ----------------------------------------------------------------
                 共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
                ---------------------------------------------------------------- */}
-            {category !== "visuals" && (
+            {category !== "visuals" && !(category === "handouts" && handoutViewMode !== "sheet") && (
               <div
                 className={`mt-8 flex flex-wrap items-center justify-between border-t pt-3 text-[11px] opacity-75 ${accent.borderSub}`}
               >

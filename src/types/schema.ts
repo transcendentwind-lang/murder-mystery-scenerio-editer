@@ -184,6 +184,18 @@ export interface SpecialCharacterCard {
   fivePlayerFallbackNote?: string; // 5名プレイ時・6名プレイ時の代替配布注記
 }
 
+export interface NagatsuPhaseCard {
+  id: string;
+  cardCode: string;            // 例: "NG-01"
+  dayNumber: number;           // 1〜7
+  timingBadge: string;         // 例: "Day 1 達成時", "Day 3 途中①"
+  title: string;               // カードタイトル
+  frontTitleHtml?: string;     // 表面改行整形用
+  description: string;         // プレーンテキスト
+  rubyHtml: string;            // 専門用語・地名のみルビ付きのHTML本文
+  accentHex: string;           // バッジ背景色
+}
+
 export interface MMProject {
   id?: string;
   createdAt?: string;
@@ -209,6 +221,7 @@ export interface MMProject {
   visualBoards?: VisualBoardItem[];
   gmNotes?: Record<number, GmProgressionNote>;
   specialCharacterCards?: SpecialCharacterCard[];
+  nagatsuPhaseCards?: NagatsuPhaseCard[];
 }
 
 
