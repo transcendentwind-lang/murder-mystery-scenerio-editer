@@ -3242,7 +3242,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <span>👅 【古代祝詞の真実：喉の声ではなく、舌を弾く「吸着破裂音」】</span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed">
-                          神社の古文書に残された特殊な発音記号『吸音・弾舌』の解読により、島に伝わる古代祝詞は通常の人間の声（喉声）ではなく、<strong>舌を上顎・歯茎に強く打ち鳴らす「舌クリック音（吸着音）」</strong>で構成されていたことが判明。
+                          初瀬（PC6）が実家に保管していた『神社の祝詞の複製』と、東京班が突き止めた元神主の遺族・吉備津の証言により、島に伝わる古代祝詞は通常の人間の声（喉声）ではなく、<strong>舌を上顎・歯茎に強く打ち鳴らす「舌クリック音（吸着音）」</strong>で構成されていたことが判明。
                         </p>
                       </div>
                       <button
@@ -3259,10 +3259,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         ⚠️ 【核心の真相：祝詞を単純に日本語として読んだだけでは無力！】
                       </strong>
                       <p className="text-slate-200 leading-relaxed">
-                        古文書の注記にはこう断言されています――『<strong>祝詞の言の葉（日本語の意味や音読）そのものに験があるにあらず。祝詞を唱うる口蓋の動きにて舌を弾き、神音（クリック音）を鳴らすことこそが誠の祈りなり。言の葉をただ声高に読むのみでは海面に弾かれ水底へ届かじ</strong>』。
+                        『神社の祝詞の複製』の注釈にはこう記されています――『<strong>祝詞の言の葉そのものに験（しるし）があるにあらず。言の葉をただ声高に読むのみでは、海面に弾かれ水底へ届かじ</strong>』。そして吉備津の証言により『<strong>祝詞は声高に日本語を読むのではなく、舌を弾いてクリック音を海中筒から放つものだ</strong>』と判明しました。
                       </p>
                       <p className="text-slate-400 leading-relaxed border-t border-amber-900/40 pt-1">
-                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>特定の口蓋・舌の動作を必然的に引き起こす『祝詞の型』</strong>として口伝パッケージングしていたのです！
+                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>『人と勇魚の契り　大獲物ぞ　集ひ来よ』という祝詞の型と口伝</strong>として伝えていたのです！
                       </p>
                     </div>
 
@@ -3327,10 +3327,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                         <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
                           <span className="font-bold text-amber-300 flex items-center gap-1">
-                            ② 祝詞の現存
+                            ② 祝詞の複製と口伝
                           </span>
                           <p className="text-slate-300 text-[10px] leading-relaxed">
-                            神社奥殿に祝詞の記録が現存する。しかし日本語の言霊ではなく、点刻記号（舌を弾くクリック音）の作法だった。
+                            初瀬の『神社の祝詞の複製』（言の葉を読むのみでは水底へ届かじ）と、元神主遺族（吉備津）の証言により、舌を弾くクリック音の作法と判明。
                           </p>
                         </div>
 
@@ -3560,16 +3560,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ4: 防衛庁運用企画局長との緊急電話交渉 ＆ 潜水艦SOFAR層深夜放流 --- */}
+                {/* --- タブ4: 防衛庁運用企画局長・岸部との緊急電話交渉 ＆ 潜水艦SOFAR層深夜放流 --- */}
                 {day6ActiveTab === "sonar_network" && (
                   <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【防衛庁 運用企画局長との直接電話交渉 ＆ 潜水艦深海SOFAR層事前放流】</span>
+                        <span>📡 【防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉 ＆ 潜水艦深海SOFAR層事前放流】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        完成した祝詞音声を海中へ届けるため、朝潮危機管理官（PC1）と貝浜リエゾン（PC2）を中心に合同対策チーム全員が防衛庁上層部と緊急交渉を敢行。海上自衛隊潜水艦の深海SOFAR層（水深1,000m）潜航放流と、翌朝の「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」を合意させます。
+                        完成した祝詞音声を海中へ届けるため、長津（岸部局長の親戚）の個人的コネクションを通じて朝潮危機管理官（PC1）と貝浜リエゾン（PC2）を中心に合同対策チーム全員が防衛庁運用企画局長・岸部（きしべ）と緊急交渉を敢行。海上自衛隊潜水艦の深海SOFAR層（水深1,000m）潜航放流と、翌朝の「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」を合意させます。
                       </p>
                     </div>
 
@@ -3577,22 +3577,22 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg bg-black/60 border border-cyan-900/60 p-3 space-y-1 font-mono text-[11px]">
                       <strong className="text-cyan-300 block font-bold flex items-center gap-1.5">
                         <Radio className="h-3.5 w-3.5 text-cyan-400" />
-                        📢 【長津オペレーターの仲介アナウンス】:
+                        📢 【長津オペレーターの仲介アナウンス（特別配布カードSP-07）】:
                       </strong>
                       <p className="italic text-cyan-100 leading-relaxed">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁の上層部への連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、こんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡することだけです。頼みますね」
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
                       </p>
                     </div>
 
-                    {/* 防衛庁 運用企画局長との直接電話交渉パネル */}
+                    {/* 防衛庁 運用企画局長・岸部との直接電話交渉パネル */}
                     <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-3.5 space-y-3 font-mono text-blue-100">
                       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-900/60 pb-1.5">
                         <span className="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
                           <PhoneCall className="h-4 w-4 text-amber-400" />
-                          <span>📞 【極秘ホットライン：防衛庁 運用企画局長との直接電話交渉】</span>
+                          <span>📞 【極秘ホットライン：防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉】</span>
                         </span>
                         <span className="text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded border border-red-800 font-bold">
-                          回線暗号化接続中
+                          長津の親戚コネクション直通回線
                         </span>
                       </div>
 
@@ -3601,51 +3601,50 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           （ツーツーツー……ガチャッ。受話器の向こうから、重苦しく威圧感のある声が響く）
                         </p>
                         <p className="italic text-blue-200">
-                          （🎙️ 防衛庁 運用企画局長）:「――防衛庁運用企画局長だ。合同対策本部だな。こんな深夜に緊急回線を繋いでくるとは、一体何の用件だね？」
+                          （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
                         </p>
                       </div>
 
-                      {/* 局長の2大疑問と論破ロジック */}
+                      {/* 岸部局長の2大疑問と論破ロジック */}
                       <div className="grid grid-cols-2 gap-3 text-[11px]">
                         <div className="rounded bg-slate-900/90 p-2.5 border border-slate-700 space-y-1.5">
                           <strong className="text-rose-400 block font-bold border-b border-rose-900/50 pb-1 text-xs">
-                            ❓ 局長の疑念①：【信ぴょう性はあるのか？】
+                            ❓ 岸部局長の疑念①：【信ぴょう性と伝達手段はあるのか？】
                           </strong>
                           <p className="text-slate-300 italic text-[10px]">
-                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトや神話を信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？」
+                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ そもそもどうやって広大な海のクジラにその音を届けるつもりだ？」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
-                            <strong className="text-emerald-200 block font-bold">🎯 論破の決め手:</strong>
-                            <p>・Day 5で魚雷が直撃しても泥のように瞬時に再結合した事実（通常兵器は完全無効）。</p>
-                            <p>・実弾の衝撃は海底マグマ網を刺激し、富士山破局噴火を早める自殺行為。</p>
-                            <p>・怪異の超群体を音響的に制圧・完全捕食できる自然界唯一の天敵がマッコウクジラである（浪寄准教授＆朝倉ノートの科学的裏付け）。</p>
+                            <strong className="text-emerald-200 block font-bold">🎯 論破の決め手（どちらの伝達方法でも正解）:</strong>
+                            <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は完全無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
+                            <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、人工的な音を大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 
                         <div className="rounded bg-slate-900/90 p-2.5 border border-slate-700 space-y-1.5">
                           <strong className="text-amber-400 block font-bold border-b border-amber-900/50 pb-1 text-xs">
-                            ❓ 局長の疑念②：【時間的猶予はあるのか？】
+                            ❓ 岸部局長の疑念②：【時間的猶予・なぜ深夜なのか？】
                           </strong>
                           <p className="text-slate-300 italic text-[10px]">
                             「仮に正しくとも明朝には駿河湾奥へ突入する。なぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？ 明日の朝、現場を見てからでは遅いのか？」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手:</strong>
-                            <p>・太平洋沖のクジラが駿河湾まで泳ぎ着くには最低6〜8時間の移動時間が不可欠。</p>
-                            <p>・怪異は時速6km（日速150km）で北上しており、残り24時間で直撃する。</p>
-                            <p>・今夜潜水艦が水深1,000mのSOFAR層（低周波音が地球規模で遠くまで届く深海音響チャンネル）から事前放流しなければ、明朝の到達に物理的に絶対間に合わない！</p>
+                            <p>・小笠原〜伊豆諸島沖の太平洋に散らばるクジラの群れが、音を受け取ってから全速力で泳いで駿河湾へ集結するには<strong>6〜8時間の移動時間</strong>が必要（浪寄の特別配布カードSP-06）。</p>
+                            <p>・怪異は明朝には駿河湾へ到達するため、6〜8時間前である<strong>今夜（前日の深夜）のうちに音の発信を開始しなければ物理的に絶対間に合わない！</strong></p>
                           </div>
                         </div>
                       </div>
 
-                      {/* 局長の屈服・承認 */}
+                      {/* 岸部局長の屈服・承認 */}
                       <div className="rounded bg-black/70 border border-blue-900 p-2.5 text-slate-200 space-y-1">
                         <strong className="text-cyan-300 block font-bold text-xs flex items-center gap-1.5">
                           <CheckCircle2 className="h-4 w-4 text-emerald-400" />
-                          <span>🤝 【局長の屈服・承認（合意成立）】:</span>
+                          <span>🤝 【岸部局長の屈服・承認（合意成立）】:</span>
                         </strong>
                         <p className="italic text-cyan-100 leading-relaxed text-[11px]">
-                          （🎙️ 防衛庁 運用企画局長）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そしてクジラの遊泳速度の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+                          （🎙️ 防衛庁 運用企画局長・岸部）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
                         </p>
                       </div>
                     </div>

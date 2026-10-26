@@ -38,7 +38,7 @@ import {
   PhoneCall,
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
-import { DAILY_COMMANDER_BRIEFINGS } from "@/utils/initialProjectData";
+import { DAILY_COMMANDER_BRIEFINGS, SPECIAL_CHARACTER_CARDS } from "@/utils/initialProjectData";
 import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
@@ -2133,12 +2133,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「――古文書の神代文字の注釈にあった『吸音・弾舌』という奇妙な記号。坂凪（PC3）と浪寄（PC5）が照合した瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
+                      「――初瀬（PC6）の実家に保管されていた『神社の祝詞の複製』の注釈『言の葉をただ声高に読むのみでは、海面に弾かれ水底へ届かじ』と、東京班が突き止めた元神主の遺族・吉備津の証言『舌を弾いてクリック音を海中筒から放つものだ』が照合された瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
                     </p>
                     <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2 text-[11px] text-amber-200 space-y-1">
                       <strong>⚠️ GM進行ヒント（プレイヤーが「祝詞を読めばいいのか？」と誤解した時の誘導）:</strong>
                       <p className="text-slate-200 leading-relaxed">
-                        「祝詞を普通に日本語として読んでも、空気と水面の境界面で99.9%が跳ね返り反射して深海には届きません。祝詞の言の葉（言葉）そのものに力があるのではなく、祝詞を唱える口と舌の動きによって『舌クリック音』を発生させることが本体です。太古の島人は、音響物理を知らない後世の人間にこのクリック音を誤りなく継承させるため、『祝詞の型』として口伝に残したのです。」
+                        「祝詞を普通に日本語として読んでも、空気と水面の境界面で99.9%が跳ね返り反射して深海には届きません。祝詞の言の葉（言葉）そのものに力があるのではなく、舌を弾いて『クリック音』を発生させることが本体です。太古の島人は、音響物理を知らない後世の人間にこのクリック音を誤りなく継承させるため、『人と勇魚の契り　大獲物ぞ　集ひ来よ』という祝詞の型と口伝に残したのです。」
                       </p>
                     </div>
                   </div>
@@ -2157,7 +2157,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-cyan-950">
-                      「小笠原の古文書に驚くべき歴史的記録が記されています。『太古、海より触手うごめく巨大な烏賊（イカ）の如き魔物の塊り現れしとき、島人は海中筒より鯨の神音を響かせ、鯨の群れを召喚せり。鯨どもはその巨大なるイカの塊りを片っ端から貪り喰らい尽くし、海は平穏を取り戻せり』……！」
+                      「小笠原の古文書『小笠原社記（抄）』に驚くべき歴史的記録が記されています。『太古、海底の噴火とともに黒き巨影が現れしとき、島人は海中筒より鯨の神音を響かせ、太古の契りに応ずるが如く数多の鯨（勇魚）が集まり来たりて深海へ突入し、海は平穏を取り戻せり』……！」
                     </p>
                     <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2.5 rounded border border-cyan-900/40 space-y-1.5">
                       <strong className="text-cyan-200 font-bold block">
@@ -2167,13 +2167,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ朝倉教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
                       </p>
                       <ul className="list-disc list-inside space-y-0.5 pl-1 text-[10px] text-slate-300">
-                        <li><strong>① 儀礼の存在</strong>: 噴火や巨大生物出現時、神社では海へ出て水底へ祝詞を読む儀礼があった</li>
-                        <li><strong>② 祝詞の現存</strong>: 神社奥殿に祝詞が現存（ただし日本語ではなく舌打ちの記号）</li>
-                        <li><strong>③ 怪異の動機と火山刺激</strong>: 古文書に『巨大生物は地磁気と星の石（隕石）が放つ特殊な物質を追って集め、海底付近で特別な振動を起こして海底火山を目覚めさせる』と明記</li>
-                        <li><strong>④ 太古の解決史</strong>: 古文書に『太古に祝詞でマッコウクジラを呼び、巨大なイカの塊りを捕食させた』前例がある</li>
+                        <li><strong>① 儀礼の存在</strong>: 噴火や巨大生物出現時、神社では海へ出て海中筒から水底へ祝詞を響かせる儀礼があった</li>
+                        <li><strong>② 祝詞の複製と口伝</strong>: 初瀬の『神社の祝詞の複製』（『人と勇魚の契り　大獲物ぞ　集ひ来よ』・言の葉を読むのみでは水底へ届かじ）と、元神主遺族（吉備津）の証言（舌を弾くクリック音）が合致</li>
+                        <li><strong>③ 怪異の動機と火山刺激</strong>: 巨大生物は地磁気と隕石が放つ特殊な物質を追って北上し、海底付近で特別な振動を起こして海底火山を目覚めさせている</li>
+                        <li><strong>④ 太古の解決史</strong>: 『小笠原社記（抄）』に、太古に海中筒の祈りでマッコウクジラを呼び集め、深海の怪異（巨大なイカの塊り）を捕食させて鎮めた前例がある</li>
                       </ul>
                       <p className="text-amber-300 text-[10px] pt-1 border-t border-cyan-900/60 font-semibold">
-                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラは統率できない。そこで必要になるのが――朝倉教授のクジラ言語ノートだ！」
+                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラを駿河湾へ導けない。そこで必要になるのが――朝倉教授のクジラ言語ノートだ！」
                       </p>
                     </div>
                   </div>
@@ -2226,12 +2226,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4：祝詞完成 ＆ 防衛庁運用企画局長との直接電話交渉（潜水艦SOFAR層放流・攻撃抑制） */}
+                  {/* フェーズ4：祝詞完成 ＆ 防衛庁運用企画局長・岸部との直接電話交渉（潜水艦SOFAR層放流・攻撃抑制） */}
                   <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【フェーズ4：祝詞完成 ＆ 防衛庁運用企画局長との直接電話交渉（潜水艦SOFAR層放流）】</span>
+                        <span>📡 【フェーズ4：祝詞完成 ＆ 防衛庁 運用企画局長・岸部との直接電話交渉（潜水艦SOFAR層放流）】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("climax-call")}
@@ -2243,21 +2243,21 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     {/* 長津の仲介アナウンス */}
                     <div className="bg-black/50 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] space-y-1">
-                      <strong className="text-cyan-300 block font-bold">📢 【長津の電話交渉前アナウンス（GM読み上げ用）】:</strong>
+                      <strong className="text-cyan-300 block font-bold">📢 【長津の電話交渉前アナウンス（GM読み上げ用 ／ 7名時はPC7長津の特別配布カードSP-07に基づく）】:</strong>
                       <p className="italic text-cyan-100 leading-relaxed">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁の上層部への連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、こんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡することだけです。頼みますね」
+                        （🎙️ 首席オペレーター 長津）:「――防衛庁において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
                       </p>
                     </div>
 
-                    {/* 防衛庁 運用企画局長との直接電話交渉パネル */}
+                    {/* 防衛庁 運用企画局長・岸部との直接電話交渉パネル */}
                     <div className="rounded bg-blue-950/40 border border-blue-800/60 p-3 text-[11px] text-blue-100 space-y-2.5 font-mono">
                       <div className="flex items-center justify-between border-b border-blue-900/40 pb-1">
                         <span className="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
                           <PhoneCall className="h-3.5 w-3.5 text-amber-400" />
-                          <span>📞 【ホットライン：防衛庁 運用企画局長との直接電話交渉】</span>
+                          <span>📞 【ホットライン：防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉】</span>
                         </span>
                         <span className="text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded border border-red-800 font-bold">
-                          極秘暗号回線
+                          長津の親戚コネクション直通回線
                         </span>
                       </div>
 
@@ -2266,50 +2266,49 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           （ツーツーツー……ガチャッ。受話器の向こうから、重苦しく威圧感のある声が響く）
                         </p>
                         <p className="italic text-blue-200">
-                          （🎙️ 防衛庁 運用企画局長）:「――防衛庁運用企画局長だ。合同対策本部だな。こんな深夜に緊急回線を繋いでくるとは、一体何の用件だね？」
+                          （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
                         </p>
                       </div>
 
-                      {/* 局長の2大疑問と論破ロジック */}
+                      {/* 岸部局長の2大疑問と論破ロジック */}
                       <div className="grid grid-cols-2 gap-2 text-[10px] pt-1">
                         <div className="rounded bg-slate-900/90 p-2 border border-slate-700 space-y-1">
                           <strong className="text-rose-400 block font-bold border-b border-rose-900/50 pb-0.5">
-                            ❓ 局長の疑念①：【信ぴょう性はあるのか？】
+                            ❓ 岸部局長の疑念①：【信ぴょう性と伝達手段はあるのか？】
                           </strong>
                           <p className="text-slate-300 italic">
-                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトや神話を信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？」
+                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ そもそもどうやって広大な海のクジラにその音を届けるつもりだ？」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
-                            <strong>🎯 論破ポイント:</strong>
-                            <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は無効）。</p>
-                            <p>・実弾爆発は海底火山を刺激し、富士山破局噴火を早める自殺行為。</p>
-                            <p>・怪異の細胞ネットワークを音響制圧・完全捕食できる自然界唯一の天敵がマッコウクジラ（浪寄・朝倉ノートの科学的知見）。</p>
+                            <strong>🎯 論破ポイント（どちらの伝達方法でも正解）:</strong>
+                            <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
+                            <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず1万km届く深海音響チャネル）へ潜り、人工的な音を大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 
                         <div className="rounded bg-slate-900/90 p-2 border border-slate-700 space-y-1">
                           <strong className="text-amber-400 block font-bold border-b border-amber-900/50 pb-0.5">
-                            ❓ 局長の疑念②：【時間的猶予はあるのか？】
+                            ❓ 岸部局長の疑念②：【時間的猶予・なぜ深夜なのか？】
                           </strong>
                           <p className="text-slate-300 italic">
                             「仮に正しくとも明朝には駿河湾奥へ突入する。なぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？ 明日の朝、現場を見てからでは遅いのか？」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
                             <strong>🎯 論破ポイント:</strong>
-                            <p>・太平洋沖のクジラが駿河湾まで泳ぎ着くには最低6〜8時間必要。</p>
-                            <p>・怪異は時速6kmで正確に北上中（残り24時間で直撃）。</p>
-                            <p>・今夜潜水艦が水深1,000mのSOFAR層（低周波音が地球規模で届く深海チャンネル）から放流しなければ、明朝の到達に物理的に絶対間に合わない！</p>
+                            <p>・小笠原〜伊豆諸島沖の太平洋に散らばるクジラの群れが、音を受け取ってから全速力で泳いで駿河湾へ集結するには<strong>6〜8時間の移動時間</strong>が必要（浪寄の特別配布カードSP-06）。</p>
+                            <p>・怪異は明朝には駿河湾へ到達するため、6〜8時間前である<strong>今夜（前日の深夜）のうちに音の発信を開始しなければ物理的に絶対間に合わない！</strong></p>
                           </div>
                         </div>
                       </div>
 
-                      {/* 局長の折れるシーン */}
+                      {/* 岸部局長の折れるシーン */}
                       <div className="rounded bg-black/60 border border-blue-900 p-2 text-slate-200 space-y-1">
                         <strong className="text-cyan-300 block font-bold">
-                          🤝 【局長の屈服・承認（GM読み上げ用）】:
+                          🤝 【岸部局長の屈服・承認（GM読み上げ用）】:
                         </strong>
                         <p className="italic text-cyan-100 leading-relaxed text-[10.5px]">
-                          （🎙️ 防衛庁 運用企画局長）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そしてクジラの遊泳速度の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+                          （🎙️ 防衛庁 運用企画局長・岸部）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
                         </p>
                       </div>
                     </div>
@@ -2509,6 +2508,54 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
         {/* 右側：このフェーズで公開すべき証拠とプレイヤー管理 */}
         <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
+          {/* 各キャラクターへの特別配布カード（このDayに開示されるカード） */}
+          {(() => {
+            const daySpecialCards = SPECIAL_CHARACTER_CARDS.filter(
+              (sc) => sc.revealDayNumber === currentDay
+            );
+            if (daySpecialCards.length === 0) return null;
+            return (
+              <div className="mb-4 rounded-xl border border-amber-700/70 bg-amber-950/20 p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-[11px] font-bold text-amber-300 flex items-center gap-1.5">
+                    🃏 Day {currentDay} 特別配布カード（各キャラクター専用）
+                  </span>
+                  <span className="rounded bg-amber-900/80 px-1.5 py-0.5 text-[9px] font-bold text-amber-200">
+                    {daySpecialCards.length}枚配布
+                  </span>
+                </div>
+                <div className="space-y-2">
+                  {daySpecialCards.map((sc) => (
+                    <div
+                      key={sc.id}
+                      className="rounded-lg border border-amber-800/60 bg-slate-950 p-2.5 text-xs space-y-1"
+                    >
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-bold text-amber-200">
+                          [{sc.cardCode}] {sc.title}
+                        </span>
+                        <span
+                          className="rounded px-1.5 py-0.5 text-[9px] font-bold text-white shrink-0"
+                          style={{ backgroundColor: sc.accentHex }}
+                        >
+                          {sc.categoryLabel}
+                        </span>
+                      </div>
+                      <p className="text-[10.5px] text-slate-300 leading-relaxed whitespace-pre-wrap">
+                        {sc.description}
+                      </p>
+                      {sc.fivePlayerFallbackNote && (
+                        <div className="text-[9.5px] text-amber-400 font-semibold pt-0.5">
+                          {sc.fivePlayerFallbackNote}
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
           <div className="flex items-center justify-between mb-3">
             <h4 className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Day {currentDay} 配布・開示証拠チェック

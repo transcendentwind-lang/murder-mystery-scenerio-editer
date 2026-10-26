@@ -168,6 +168,22 @@ export interface GmProgressionNote {
   bgmCue: string;
 }
 
+export interface SpecialCharacterCard {
+  id: string;
+  cardCode: string;            // 例: "SP-01"
+  characterId: string;         // 例: "pc-1"
+  characterName: string;       // 例: "朝潮（あさしお）"
+  profession: string;          // 例: "海上保安庁東京本部 危機管理官"
+  revealDayLabel: string;      // 例: "初期配布", "Day 2 配布"
+  revealDayNumber: number;     // 1〜6 (初期は1)
+  title: string;               // カードタイトル
+  frontTitleHtml?: string;     // オモテ面改行整形用
+  description: string;         // カード詳細テキスト
+  categoryLabel: string;       // 例: "特別配布カード・所持品", "特別配布カード・専用記憶"
+  accentHex: string;           // バッジ背景色
+  fivePlayerFallbackNote?: string; // 5名プレイ時・6名プレイ時の代替配布注記
+}
+
 export interface MMProject {
   id?: string;
   createdAt?: string;
@@ -192,6 +208,7 @@ export interface MMProject {
   documentDesigns?: Record<string, DocumentDesignOverride>;
   visualBoards?: VisualBoardItem[];
   gmNotes?: Record<number, GmProgressionNote>;
+  specialCharacterCards?: SpecialCharacterCard[];
 }
 
 

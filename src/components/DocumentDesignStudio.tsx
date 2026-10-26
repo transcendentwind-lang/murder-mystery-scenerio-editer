@@ -14,8 +14,14 @@ import {
   VisualBoardItem,
   GmProgressionNote,
   EvidenceVisibility,
+  SpecialCharacterCard,
 } from "@/types/schema";
-import { initialVisualBoards, initialProject, DAILY_COMMANDER_BRIEFINGS } from "@/utils/initialProjectData";
+import {
+  initialVisualBoards,
+  initialProject,
+  DAILY_COMMANDER_BRIEFINGS,
+  SPECIAL_CHARACTER_CARDS,
+} from "@/utils/initialProjectData";
 import {
   Sparkles,
   Printer,
@@ -458,23 +464,26 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 【長津の電話交渉前アナウンス】
 （🎙️ 首席オペレーター 長津）:
-「――防衛庁の上層部への連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、こんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡することだけです。頼みますね」
+「――防衛庁において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
 
-【防衛庁 運用企画局長との直接電話交渉】
+【防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉】
 （ツーツーツー……ガチャッ）
-（🎙️ 防衛庁 運用企画局長）:
-「――防衛庁運用企画局長だ。合同対策本部だな。こんな深夜に緊急回線を繋いでくるとは、一体何の用件だね？」
+（🎙️ 防衛庁 運用企画局長・岸部）:
+「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
 
-（🎙️ 防衛庁 運用企画局長）:
-「……クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ なぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？」
-※GM進行メモ: プレイヤーたちに「①通常兵器無効と火山刺激リスク」「②SOFAR層放流とクジラ到達に必要な6〜8時間の逆算」を説明させてください。
+（🎙️ 防衛庁 運用企画局長・岸部）:
+「……クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ そもそもどうやって広大な海のクジラにその音を届けるつもりだ？ そしてなぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？」
+※GM進行メモ: プレイヤーたちに以下の3点を説明・説得させてください。
+  ① 通常兵器の無効化と火山刺激リスク（魚雷が直撃しても再結合し、爆発衝撃は富士山噴火を誘発する。天敵はマッコウクジラのみ）
+  ② 広域への音響伝達方法（「水深1,000mのSOFAR層から潜水艦で大出力放流すれば音が減衰せず広域へ届く」または「音を受け取ったクジラ側が特別な行動・共鳴リレーで仲間へ次々と伝える」のどちらの方法でも正解）
+  ③ 集合に必要な時間の逆算（太平洋沖のクジラが全速力で泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには深夜のうちに音の発信を開始しなければならない）
 
-（🎙️ 防衛庁 運用企画局長）:
-「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そしてクジラの遊泳速度の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+（🎙️ 防衛庁 運用企画局長・岸部）:
+「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
 
 【フェーズ4.5：深夜の潜水艦SOFAR層放流開始 ＆ 作戦名の命名】
 （🎙️ 首席オペレーター 長津）:
-「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞の放流を開始いたしました！ 音波は海中音響チャンネルに乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」
+「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞の放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）とクジラたちの共鳴に乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」
 ※プレイヤー全員で合議し、決戦の作戦名（例: オペレーション・ワタツミ、大捕食作戦等）を決定させてください。`,
 
   7: `【フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食】
@@ -532,44 +541,44 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 // GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   1: [
-    "【Day 1 開始時】GMから朝潮（PC1）（7名プレイ時は長津（PC7）経由）へ『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮主導で各員の点呼・自己紹介を行わせる（目標時間: 30分）",
+    "【Day 1 開始時】朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』を渡し、あわせて『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 30分）",
     "遭難海図を展開し、風圧流（南西強風）と海流（北東流）の両方の影響をプレイヤーに整理させる",
     "2つの力を合成した漂流方向（東北東）と暗礁群の位置を考慮させ、救難艇を急行させるべき海域を決定させる",
     "救難艇による間一髪の救助成功を伝え、船長の証言（EV-08）および不審なダイバーの大型冷凍ボックス（EV-07）を開示する",
   ],
   2: [
-    "【Day 2 開始時】GMから朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡し、西之島沖噴火と巨大影の状況報告・即応体制維持を共有させる（目標時間: 25分）",
+    "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "東京側（3択中1つ）と小笠原現地（4択中2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
     "※GM注意（ネタバレ防止）：この段階では「ダイオウイカの超群体」という真相は絶対に明かさないこと",
   ],
   3: [
-    "【Day 3 開始時】GMから朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡し、鳥島沖噴火とソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
+    "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
     "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置を特定させる",
     "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 16:00）、浪寄（EV-18: Day1救助時間 08:00）の3名へ証拠を配布する",
     "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
-    "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（防衛省の法的判断）へ諮問する",
+    "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（特別配布カード『文民統制の仕組み』に基づく法的判断）へ諮問する",
     "防衛庁・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※Day 4の政府反応分岐へ影響）",
     "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠）を選択させ、証拠資料を開示する",
   ],
   4: [
-    "【Day 4 開始時】GMから朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡し、明神礁噴火と日速150kmでの北上、前日の決断に応じた政府反応を伝える（目標時間: 25分）",
+    "【Day 4 開始時】初瀬（PC6 ※5名時は太刀魚PC4）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
     "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して収集済みの全証拠資料を一括開示する",
     "対策本部として巨大生物の最終目的地（東京湾か富士山か）を結論づけさせた後、防衛省が「害獣駆除（災害派遣）」として海自全部隊動員・実弾迎撃作戦を決定した通達を読み上げる",
   ],
   5: [
-    "【Day 5 開始時】GMから朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート』を手渡し、富士山深部の微動ニュース・猶予時間計算指令（残距離240km÷時速5km＝48時間）・軍事機密による情報遮断を伝える（目標時間: 25分）",
+    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "朝倉教授のクジラ構文規則（EV-30：『了解した』以外のクジラ言語はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
     "終盤、防衛省から貝浜への直通無線を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える",
   ],
   6: [
-    "【Day 6 開始時】GMから朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡し、昼の沈静化から一転して夕方に駿河トラフへ高速再浮上（残り24時間）した警報を発令する（目標時間: 30分）",
-    "朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則を統合し、クジラを駿河湾へ招集するための「新言語祝詞」（参考正解例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組等）を完成させる",
-    "長津が防衛庁運用企画局長への直通回線を繋ぎ（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる",
-    "防衛庁運用企画局長との電話交渉を演出し、「通常兵器無効と火山刺激リスク」「深夜SOFAR層放流とクジラ到達時間（6〜8時間）の逆算」を説明・説得させる",
-    "局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げる",
+    "【Day 6 開始時】7名プレイ時は長津（PC7）へ特別配布カード『SP-07：防衛庁 運用企画局長とのコネクション』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 30分）",
+    "朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（参考正解例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組等）を完成させる",
+    "長津が親戚（叔父）である防衛庁運用企画局長・岸部（きしべ）への直通回線を繋ぎ（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる",
+    "岸部運用企画局長との電話交渉を演出し、「①通常兵器無効と火山刺激リスク」「②SOFAR層大出力放流またはクジラ同士の共鳴リレーによる広域伝達」「③クジラ集合に必要な移動時間（6〜8時間）の逆算による深夜放流の必要性」を説明・説得させる",
+    "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げる",
     "深夜の潜水艦による深海SOFAR層での祝詞音声放流開始を伝え、朝潮の指揮で決戦の【作戦名（オペレーション名）】を命名・決定させる",
   ],
   7: [
@@ -627,7 +636,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 2 && !existing.readAloudScript.includes("あとのタイミングの行動で調べることができます")) ||
       (dayNumber === 3 && (!existing.readAloudScript.includes("コードネーム") || !existing.readAloudScript.includes("海上警備行動を発令するか"))) ||
       (dayNumber === 4 && !existing.readAloudScript.includes("即応総力体制")) ||
-      (dayNumber === 6 && (!existing.readAloudScript.includes("防衛庁運用企画局長だ") || !existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
+      (dayNumber === 6 && (!existing.readAloudScript.includes("岸部") || !existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
       (dayNumber === 7 && (existing.readAloudScript.includes("重魚雷一斉飽和攻撃") || existing.readAloudScript.includes("粉砕アシスト") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
@@ -636,10 +645,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       !Array.isArray(existing.gmCheckpoints) ||
       existing.gmCheckpoints.length <= 3 ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
-      (dayNumber === 2 && !existing.gmCheckpoints.some((c) => c.includes("あとの行動で調査可能"))) ||
-      (dayNumber === 3 && !existing.gmCheckpoints.some((c) => c.includes("コードネーム"))) ||
-      (dayNumber === 4 && !existing.gmCheckpoints.some((c) => c.includes("即応総力体制"))) ||
-      (dayNumber === 6 && !existing.gmCheckpoints.some((c) => c.includes("作戦名（オペレーション名）")));
+      (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
 
@@ -1790,7 +1796,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </h3>
               </div>
 
-              {/* 本紙（6項目） vs 別配付カード（所持品・能力） vs Day別ブリーフィング指令書 切替 */}
+              {/* 本紙（6項目） vs 各キャラクターへの特別配布カード vs Day別ブリーフィング指令書 切替 */}
               <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setHandoutViewMode("sheet")}
@@ -1810,7 +1816,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🃏 カード
+                  🃏 特別カード
                 </button>
                 <button
                   onClick={() => setHandoutViewMode("daily_briefings")}
@@ -1828,13 +1834,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 {handoutViewMode === "sheet"
                   ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
                   : handoutViewMode === "cards"
-                  ? "ハンドアウト本紙とは別に各プレイヤーへ配る「初期所持品」「固有能力」のカードシートです。"
+                  ? "各キャラクター専用で順次開示される「各キャラクターへの特別配布カード（全7枚・証拠資料と同サイズ）」です。"
                   : "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"}
               </p>
 
               <div className="space-y-2">
                 {project.characters.map((c, idx) => {
                   const isSelected = c.id === activeChar?.id;
+                  const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
                   return (
                     <button
                       key={c.id}
@@ -1850,12 +1857,19 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           PC-{idx + 1} /{" "}
                           {c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
                         </span>
-                        <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-300">
-                          所持品{(c.initialItems || []).length}・能力{(c.capabilities || []).length}
-                        </span>
+                        {spCard && (
+                          <span className="rounded bg-indigo-900/80 border border-indigo-700 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">
+                            {spCard.revealDayLabel}
+                          </span>
+                        )}
                       </div>
                       <div className="mt-1 font-bold text-sm text-white">{c.name}</div>
                       <div className="text-xs text-slate-400 truncate">{c.profession}</div>
+                      {spCard && (
+                        <div className="mt-1 text-[10px] text-amber-300/90 truncate">
+                          🃏 特別配布: {spCard.title}
+                        </div>
+                      )}
                     </button>
                   );
                 })}
@@ -2397,217 +2411,202 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 別配付カードシート（初期所持品・携行アイテム ＆ 固有能力・専門スキル）
+                     🃏 各キャラクターへの特別配布カード（全7枚・各キャラクター専用・証拠資料と同サイズ）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="border-b-2 border-slate-800 pb-3 flex items-baseline justify-between">
+                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 個人別配付カードシート（切り取り配布用）
+                          {project.title} ― 各キャラクターへの特別配布カード（全7枚・証拠資料カードと同サイズ）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          {activeChar.name}（{activeChar.profession}）配布カード一覧
+                          各キャラクター専用・特別配布カード一覧（初期〜Day 6 順次開示）
                         </h2>
                       </div>
-                      <span className="text-xs text-slate-500">
-                        ※点線に沿って切り取り、ハンドアウト本紙とは別に配布してください
+                      <span className="text-xs text-slate-600 font-semibold">
+                        ※各キャラクター専用 ／ 大きさ・表裏デザインは証拠資料カードと完全同一サイズ（A4 4分割）
                       </span>
                     </div>
 
-                    {/* 初期所持品・携行アイテムカード一覧 */}
-                    <div className="space-y-3">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-bold text-slate-800">
-                          ■ 初期所持品・携行アイテムカード（{(activeChar.initialItems || []).length}枚）
-                        </h3>
-                        {isDirectEditMode && (
-                          <button
-                            onClick={() =>
-                              handleUpdateActiveChar((c) => ({
-                                ...c,
-                                initialItems: [...(c.initialItems || []), "新規所持品アイテム"],
-                              }))
-                            }
-                            className="no-print rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
-                          >
-                            ＋ 所持品カードを追加
-                          </button>
-                        )}
-                      </div>
+                    {/* 選択中キャラクターの特別配布カード（表・裏 2面プレビュー） */}
+                    {(() => {
+                      const cardsSource =
+                        project.specialCharacterCards && project.specialCharacterCards.length === 7
+                          ? project.specialCharacterCards
+                          : SPECIAL_CHARACTER_CARDS;
+                      const activeSpCard =
+                        cardsSource.find((sc) => sc.characterId === activeChar.id) || cardsSource[0];
 
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {(activeChar.initialItems || []).map((item, iIdx) => (
-                          <div
-                            key={iIdx}
-                            className="rounded-md border-2 border-dashed border-slate-400 bg-white p-4 shadow-sm"
-                          >
-                            <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1 text-[10px] font-bold text-slate-500">
-                              <span>【初期所持品・携行アイテム】 {activeChar.name}</span>
+                      return (
+                        <div className="space-y-6">
+                          <div className="rounded-lg border-2 border-indigo-600 bg-indigo-50/50 p-4">
+                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
                               <div className="flex items-center gap-2">
-                                <span className="font-mono">ITEM-{iIdx + 1}</span>
-                                {isDirectEditMode && (
-                                  <button
-                                    onClick={() =>
-                                      handleUpdateActiveChar((c) => ({
-                                        ...c,
-                                        initialItems: c.initialItems.filter(
-                                          (_, idx) => idx !== iIdx
-                                        ),
-                                      }))
-                                    }
-                                    className="no-print text-slate-400 hover:text-red-600"
-                                    title="この所持品カードを削除"
-                                  >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </button>
-                                )}
+                                <span
+                                  className="rounded px-2.5 py-0.5 text-xs font-bold text-white"
+                                  style={{ backgroundColor: activeSpCard.accentHex }}
+                                >
+                                  {activeSpCard.categoryLabel}
+                                </span>
+                                <span className="rounded bg-white border border-slate-300 px-2.5 py-0.5 text-xs font-bold text-slate-800">
+                                  開示時期: {activeSpCard.revealDayLabel}
+                                </span>
+                                <span className="font-mono text-xs font-bold text-slate-500">
+                                  {activeSpCard.cardCode} / 07
+                                </span>
                               </div>
-                            </div>
-                            {isDirectEditMode ? (
-                              <input
-                                type="text"
-                                value={item}
-                                onChange={(e) => {
-                                  const nextItems = [...activeChar.initialItems];
-                                  nextItems[iIdx] = e.target.value;
-                                  handleUpdateActiveChar((c) => ({
-                                    ...c,
-                                    initialItems: nextItems,
-                                  }));
-                                }}
-                                className="w-full rounded border border-dashed border-slate-300 bg-slate-50 px-2.5 py-1.5 text-sm font-bold text-slate-900 focus:border-slate-800 focus:outline-none"
-                              />
-                            ) : (
-                              <div className="text-sm font-bold text-slate-900 py-1">{item}</div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-
-                    {/* 固有能力・専門スキルカード一覧 */}
-                    <div className="space-y-3 pt-2">
-                      <div className="flex items-center justify-between">
-                        <h3 className="text-xs font-bold text-slate-800">
-                          ■ 固有能力・専門スキルカード（{(activeChar.capabilities || []).length}枚）
-                        </h3>
-                        {isDirectEditMode && (
-                          <button
-                            onClick={() =>
-                              handleUpdateActiveChar((c) => ({
-                                ...c,
-                                capabilities: [
-                                  ...(c.capabilities || []),
-                                  {
-                                    id: `cap-${Date.now()}`,
-                                    name: "新規専門スキル",
-                                    description: "スキルの効果・調査内容を記載",
-                                    targetPhase: 1,
-                                  },
-                                ],
-                              }))
-                            }
-                            className="no-print rounded bg-slate-800 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-slate-700"
-                          >
-                            ＋ スキルカードを追加
-                          </button>
-                        )}
-                      </div>
-
-                      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                        {(activeChar.capabilities || []).map((cap, cIdx) => (
-                          <div
-                            key={cap.id || cIdx}
-                            className="rounded-md border-2 border-dashed border-slate-400 bg-white p-4 shadow-sm"
-                          >
-                            <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-1 text-[10px] font-bold text-slate-500">
-                              <span>【固有能力・専門スキル】 {activeChar.name}</span>
-                              <span className="font-mono">SKILL-{cIdx + 1}</span>
+                              {activeSpCard.fivePlayerFallbackNote && (
+                                <span className="text-xs font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded">
+                                  {activeSpCard.fivePlayerFallbackNote}
+                                </span>
+                              )}
                             </div>
 
-                            {isDirectEditMode ? (
-                              <div className="space-y-2">
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[11px] font-bold text-slate-700">
-                                    使用可能: Day
+                            {/* 証拠資料カードと同サイズのオモテ面・ウラ面横並びプレビュー */}
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                              {/* オモテ面（表紙） */}
+                              <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[260px] shadow-sm relative">
+                                <div className="flex items-center justify-between text-xs">
+                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                    {activeSpCard.revealDayLabel}
                                   </span>
-                                  <input
-                                    type="number"
-                                    min={1}
-                                    max={7}
-                                    value={cap.targetPhase}
-                                    onChange={(e) => {
-                                      const nextCaps = [...activeChar.capabilities];
-                                      nextCaps[cIdx] = {
-                                        ...cap,
-                                        targetPhase: parseInt(e.target.value, 10) || 1,
-                                      };
-                                      handleUpdateActiveChar((c) => ({
-                                        ...c,
-                                        capabilities: nextCaps,
-                                      }));
-                                    }}
-                                    className="w-14 rounded border border-slate-300 bg-white px-2 py-0.5 text-xs font-bold text-slate-900"
-                                  />
-                                  <input
-                                    type="text"
-                                    value={cap.name}
-                                    onChange={(e) => {
-                                      const nextCaps = [...activeChar.capabilities];
-                                      nextCaps[cIdx] = { ...cap, name: e.target.value };
-                                      handleUpdateActiveChar((c) => ({
-                                        ...c,
-                                        capabilities: nextCaps,
-                                      }));
-                                    }}
-                                    className="flex-1 rounded border border-dashed border-slate-300 bg-slate-50 px-2 py-1 text-xs font-bold text-slate-900"
-                                  />
-                                  <button
-                                    onClick={() =>
-                                      handleUpdateActiveChar((c) => ({
-                                        ...c,
-                                        capabilities: c.capabilities.filter(
-                                          (_, idx) => idx !== cIdx
-                                        ),
-                                      }))
-                                    }
-                                    className="no-print text-slate-400 hover:text-red-600"
-                                    title="このスキルカードを削除"
+                                  <span
+                                    className="rounded px-2.5 py-0.5 font-bold text-white"
+                                    style={{ backgroundColor: activeSpCard.accentHex }}
                                   >
-                                    <Trash2 className="h-3.5 w-3.5" />
-                                  </button>
-                                </div>
-                                <textarea
-                                  rows={3}
-                                  value={cap.description}
-                                  onChange={(e) => {
-                                    const nextCaps = [...activeChar.capabilities];
-                                    nextCaps[cIdx] = { ...cap, description: e.target.value };
-                                    handleUpdateActiveChar((c) => ({
-                                      ...c,
-                                      capabilities: nextCaps,
-                                    }));
-                                  }}
-                                  className="w-full rounded border border-dashed border-slate-300 bg-slate-50 p-2 text-xs leading-relaxed text-slate-800"
-                                />
-                              </div>
-                            ) : (
-                              <div>
-                                <div className="font-bold text-sm text-slate-900">
-                                  <span className="mr-1.5 inline-block rounded bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-800">
-                                    Day {cap.targetPhase}
+                                    {activeSpCard.characterName.split("（")[0]} 専用カード
                                   </span>
-                                  {cap.name}
                                 </div>
-                                <div className="mt-1.5 text-xs text-slate-700 leading-relaxed">
-                                  {cap.description}
+
+                                <div className="my-auto py-5 text-center space-y-2">
+                                  <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                    海上保安庁・合同海難対策本部
+                                  </div>
+                                  <div className="text-xl font-black text-slate-900 leading-snug">
+                                    {activeSpCard.title}
+                                  </div>
+                                  <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                    各キャラクターへの特別配布カード（{activeSpCard.characterName}）
+                                  </div>
+                                </div>
+
+                                <div className="border-t border-dashed border-slate-300 pt-2 flex items-end justify-between">
+                                  <span className="font-mono text-xs font-bold text-slate-500">
+                                    {activeSpCard.cardCode} / 07 [オモテ面]
+                                  </span>
+                                  <div className="border-2 border-red-600 rounded px-2 py-0.5 text-center -rotate-3">
+                                    <span className="text-[10px] font-extrabold text-red-600 leading-tight block">
+                                      個人専用特別資料
+                                      <br />
+                                      【{activeSpCard.characterName.split("（")[0]}】
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
-                            )}
+
+                              {/* ウラ面（詳細テキスト） */}
+                              <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[260px] shadow-sm">
+                                <div>
+                                  <div className="flex items-center justify-between text-xs mb-2">
+                                    <span
+                                      className="rounded px-2.5 py-0.5 font-bold text-white"
+                                      style={{ backgroundColor: activeSpCard.accentHex }}
+                                    >
+                                      {activeSpCard.categoryLabel}
+                                    </span>
+                                    <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                      {activeSpCard.revealDayLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                                    <h3 className="text-base font-extrabold text-slate-900">
+                                      {activeSpCard.title}
+                                    </h3>
+                                  </div>
+
+                                  <div className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
+                                    {activeSpCard.description}
+                                  </div>
+                                </div>
+
+                                <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-between text-xs">
+                                  <span className="text-[11px] text-slate-500 font-semibold">
+                                    対象: {activeSpCard.characterName}
+                                  </span>
+                                  <span className="font-mono font-bold text-slate-500">
+                                    {activeSpCard.cardCode} / 07 [ウラ面]
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        ))}
-                      </div>
-                    </div>
+
+                          {/* 全7枚の特別配布カード一覧（証拠資料カードと同サイズ・2列グリッド） */}
+                          <div className="space-y-3 pt-2">
+                            <div className="flex items-center justify-between border-b border-slate-300 pb-1.5">
+                              <h3 className="text-sm font-bold text-slate-900">
+                                ■ 全キャラクター特別配布カード一覧（全7枚・開示順）
+                              </h3>
+                              <span className="text-xs text-slate-500">
+                                クリックすると該当キャラクターに切り替えられます
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                              {cardsSource.map((card, idx) => {
+                                const isCurrent = card.id === activeSpCard.id;
+                                return (
+                                  <div
+                                    key={card.id}
+                                    onClick={() => setSelectedCharId(card.characterId)}
+                                    className={`cursor-pointer rounded-md border-2 p-4 flex flex-col justify-between transition shadow-sm ${
+                                      isCurrent
+                                        ? "border-indigo-600 bg-indigo-50/30 ring-2 ring-indigo-500/30"
+                                        : "border-slate-700 bg-white hover:border-indigo-400"
+                                    }`}
+                                  >
+                                    <div>
+                                      <div className="flex items-center justify-between text-xs mb-2">
+                                        <span
+                                          className="rounded px-2 py-0.5 font-bold text-white"
+                                          style={{ backgroundColor: card.accentHex }}
+                                        >
+                                          {card.categoryLabel}
+                                        </span>
+                                        <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                          {card.revealDayLabel}
+                                        </span>
+                                      </div>
+
+                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2 flex items-baseline justify-between gap-2">
+                                        <h4 className="text-sm font-extrabold text-slate-900">
+                                          {idx + 1}. {card.title}
+                                        </h4>
+                                        <span className="text-[11px] font-bold text-slate-600 shrink-0">
+                                          {card.characterName}
+                                        </span>
+                                      </div>
+
+                                      <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
+                                        {card.description}
+                                      </p>
+                                    </div>
+
+                                    <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-between text-[11px] text-slate-500">
+                                      <span>{card.fivePlayerFallbackNote || "各キャラクター専用・証拠カード同サイズ"}</span>
+                                      <span className="font-mono font-bold">
+                                        {card.cardCode} / 07
+                                      </span>
+                                    </div>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
                 ) : (
                   /* ------------------------------------------------------------
