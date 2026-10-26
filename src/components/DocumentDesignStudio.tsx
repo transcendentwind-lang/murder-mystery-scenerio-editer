@@ -2557,15 +2557,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           </div>
 
                           {/* 上段：長津からの緊急通信ブリーフィング */}
-                          <div className="rounded border border-slate-300 bg-slate-50 p-3 space-y-1">
+                          <div className="rounded border border-slate-300 bg-slate-50 p-3 space-y-1.5">
                             <div className="flex items-center justify-between">
                               <span className="text-xs font-bold text-slate-800">
                                 {b.nagatsuBriefingTitle}
                               </span>
                             </div>
-                            <p className="text-xs leading-relaxed text-slate-800 font-medium">
-                              {b.nagatsuBriefingText}
-                            </p>
+                            {b.nagatsuBriefingRubyHtml ? (
+                              <p
+                                className="text-xs leading-[2.2] text-slate-800 font-medium [&_rt]:text-[9px] [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
+                              />
+                            ) : (
+                              <p className="text-xs leading-relaxed text-slate-800 font-medium">
+                                {b.nagatsuBriefingText}
+                              </p>
+                            )}
                           </div>
 
                           {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
