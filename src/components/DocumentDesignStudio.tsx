@@ -1834,7 +1834,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 {handoutViewMode === "sheet"
                   ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
                   : handoutViewMode === "cards"
-                  ? "各キャラクター専用で順次開示される「各キャラクターへの特別配布カード（全7枚・証拠資料と同サイズ）」です。"
+                  ? "キャラクターごとに順次配布される「特別配布カード（全7枚）」です。"
                   : "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"}
               </p>
 
@@ -2411,199 +2411,113 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 各キャラクターへの特別配布カード（全7枚・各キャラクター専用・証拠資料と同サイズ）
+                     🃏 特別配布カード（全7枚・各カードの表面＋本文面ペア表示）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 各キャラクターへの特別配布カード（全7枚・証拠資料カードと同サイズ）
+                          {project.title} ― 特別配布カード（全7枚）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          各キャラクター専用・特別配布カード一覧（初期〜Day 6 順次開示）
+                          特別配布カード一覧（全7枚）
                         </h2>
                       </div>
-                      <span className="text-xs text-slate-600 font-semibold">
-                        ※各キャラクター専用 ／ 大きさ・表裏デザインは証拠資料カードと完全同一サイズ（A4 4分割）
-                      </span>
                     </div>
 
-                    {/* 選択中キャラクターの特別配布カード（表・裏 2面プレビュー） */}
                     {(() => {
                       const cardsSource =
                         project.specialCharacterCards && project.specialCharacterCards.length === 7
                           ? project.specialCharacterCards
                           : SPECIAL_CHARACTER_CARDS;
-                      const activeSpCard =
-                        cardsSource.find((sc) => sc.characterId === activeChar.id) || cardsSource[0];
 
                       return (
                         <div className="space-y-6">
-                          <div className="rounded-lg border-2 border-indigo-600 bg-indigo-50/50 p-4">
-                            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                              <div className="flex items-center gap-2">
-                                <span
-                                  className="rounded px-2.5 py-0.5 text-xs font-bold text-white"
-                                  style={{ backgroundColor: activeSpCard.accentHex }}
-                                >
-                                  {activeSpCard.categoryLabel}
-                                </span>
-                                <span className="rounded bg-white border border-slate-300 px-2.5 py-0.5 text-xs font-bold text-slate-800">
-                                  開示時期: {activeSpCard.revealDayLabel}
-                                </span>
-                                <span className="font-mono text-xs font-bold text-slate-500">
-                                  {activeSpCard.cardCode} / 07
-                                </span>
-                              </div>
-                              {activeSpCard.fivePlayerFallbackNote && (
-                                <span className="text-xs font-bold text-amber-800 bg-amber-100 border border-amber-300 px-2 py-0.5 rounded">
-                                  {activeSpCard.fivePlayerFallbackNote}
-                                </span>
-                              )}
-                            </div>
+                          {cardsSource.map((card) => {
+                            const charShort = card.characterName.split("（")[0];
+                            const cardLabel = `特別配布カード（${charShort}）`;
+                            const isSelected = card.characterId === activeChar.id;
 
-                            {/* 証拠資料カードと同サイズのオモテ面・ウラ面横並びプレビュー */}
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                              {/* オモテ面（表紙） */}
-                              <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[260px] shadow-sm relative">
-                                <div className="flex items-center justify-between text-xs">
-                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                    {activeSpCard.revealDayLabel}
-                                  </span>
-                                  <span
-                                    className="rounded px-2.5 py-0.5 font-bold text-white"
-                                    style={{ backgroundColor: activeSpCard.accentHex }}
-                                  >
-                                    {activeSpCard.characterName.split("（")[0]} 専用カード
-                                  </span>
-                                </div>
+                            return (
+                              <div
+                                key={card.id}
+                                onClick={() => setSelectedCharId(card.characterId)}
+                                className={`cursor-pointer rounded-lg border p-4 transition ${
+                                  isSelected
+                                    ? "border-indigo-500 bg-indigo-50/30 ring-1 ring-indigo-500/30"
+                                    : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
+                                }`}
+                              >
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                                  {/* 左：表面 */}
+                                  <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[250px] shadow-sm">
+                                    <div className="flex items-center justify-between text-xs">
+                                      <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                        {card.revealDayLabel}
+                                      </span>
+                                      <span
+                                        className="rounded px-2.5 py-0.5 font-bold text-white"
+                                        style={{ backgroundColor: card.accentHex }}
+                                      >
+                                        {cardLabel}
+                                      </span>
+                                    </div>
 
-                                <div className="my-auto py-5 text-center space-y-2">
-                                  <div className="text-[11px] font-bold tracking-widest text-slate-500">
-                                    海上保安庁・合同海難対策本部
-                                  </div>
-                                  <div className="text-xl font-black text-slate-900 leading-snug">
-                                    {activeSpCard.title}
-                                  </div>
-                                  <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
-                                    各キャラクターへの特別配布カード（{activeSpCard.characterName}）
-                                  </div>
-                                </div>
+                                    <div className="my-auto py-5 text-center space-y-2">
+                                      <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                        海上保安庁・合同海難対策本部
+                                      </div>
+                                      <div className="text-xl font-black text-slate-900 leading-snug">
+                                        {card.title}
+                                      </div>
+                                      <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                        {cardLabel}
+                                      </div>
+                                    </div>
 
-                                <div className="border-t border-dashed border-slate-300 pt-2 flex items-end justify-between">
-                                  <span className="font-mono text-xs font-bold text-slate-500">
-                                    {activeSpCard.cardCode} / 07 [オモテ面]
-                                  </span>
-                                  <div className="border-2 border-red-600 rounded px-2 py-0.5 text-center -rotate-3">
-                                    <span className="text-[10px] font-extrabold text-red-600 leading-tight block">
-                                      個人専用特別資料
-                                      <br />
-                                      【{activeSpCard.characterName.split("（")[0]}】
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-
-                              {/* ウラ面（詳細テキスト） */}
-                              <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[260px] shadow-sm">
-                                <div>
-                                  <div className="flex items-center justify-between text-xs mb-2">
-                                    <span
-                                      className="rounded px-2.5 py-0.5 font-bold text-white"
-                                      style={{ backgroundColor: activeSpCard.accentHex }}
-                                    >
-                                      {activeSpCard.categoryLabel}
-                                    </span>
-                                    <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                      {activeSpCard.revealDayLabel}
-                                    </span>
+                                    <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                                      <span className="font-mono text-xs font-bold text-slate-500">
+                                        {card.cardCode} / 07
+                                      </span>
+                                    </div>
                                   </div>
 
-                                  <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
-                                    <h3 className="text-base font-extrabold text-slate-900">
-                                      {activeSpCard.title}
-                                    </h3>
-                                  </div>
-
-                                  <div className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
-                                    {activeSpCard.description}
-                                  </div>
-                                </div>
-
-                                <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-between text-xs">
-                                  <span className="text-[11px] text-slate-500 font-semibold">
-                                    対象: {activeSpCard.characterName}
-                                  </span>
-                                  <span className="font-mono font-bold text-slate-500">
-                                    {activeSpCard.cardCode} / 07 [ウラ面]
-                                  </span>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          {/* 全7枚の特別配布カード一覧（証拠資料カードと同サイズ・2列グリッド） */}
-                          <div className="space-y-3 pt-2">
-                            <div className="flex items-center justify-between border-b border-slate-300 pb-1.5">
-                              <h3 className="text-sm font-bold text-slate-900">
-                                ■ 全キャラクター特別配布カード一覧（全7枚・開示順）
-                              </h3>
-                              <span className="text-xs text-slate-500">
-                                クリックすると該当キャラクターに切り替えられます
-                              </span>
-                            </div>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                              {cardsSource.map((card, idx) => {
-                                const isCurrent = card.id === activeSpCard.id;
-                                return (
-                                  <div
-                                    key={card.id}
-                                    onClick={() => setSelectedCharId(card.characterId)}
-                                    className={`cursor-pointer rounded-md border-2 p-4 flex flex-col justify-between transition shadow-sm ${
-                                      isCurrent
-                                        ? "border-indigo-600 bg-indigo-50/30 ring-2 ring-indigo-500/30"
-                                        : "border-slate-700 bg-white hover:border-indigo-400"
-                                    }`}
-                                  >
+                                  {/* 右：本文面 */}
+                                  <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[250px] shadow-sm">
                                     <div>
                                       <div className="flex items-center justify-between text-xs mb-2">
                                         <span
-                                          className="rounded px-2 py-0.5 font-bold text-white"
+                                          className="rounded px-2.5 py-0.5 font-bold text-white"
                                           style={{ backgroundColor: card.accentHex }}
                                         >
-                                          {card.categoryLabel}
+                                          {cardLabel}
                                         </span>
                                         <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
                                           {card.revealDayLabel}
                                         </span>
                                       </div>
 
-                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2 flex items-baseline justify-between gap-2">
-                                        <h4 className="text-sm font-extrabold text-slate-900">
-                                          {idx + 1}. {card.title}
-                                        </h4>
-                                        <span className="text-[11px] font-bold text-slate-600 shrink-0">
-                                          {card.characterName}
-                                        </span>
+                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                                        <h3 className="text-base font-extrabold text-slate-900">
+                                          {card.title}
+                                        </h3>
                                       </div>
 
-                                      <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
+                                      <div className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
                                         {card.description}
-                                      </p>
+                                      </div>
                                     </div>
 
-                                    <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-between text-[11px] text-slate-500">
-                                      <span>{card.fivePlayerFallbackNote || "各キャラクター専用・証拠カード同サイズ"}</span>
-                                      <span className="font-mono font-bold">
+                                    <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
+                                      <span className="font-mono font-bold text-slate-500">
                                         {card.cardCode} / 07
                                       </span>
                                     </div>
                                   </div>
-                                );
-                              })}
-                            </div>
-                          </div>
+                                </div>
+                              </div>
+                            );
+                          })}
                         </div>
                       );
                     })()}
