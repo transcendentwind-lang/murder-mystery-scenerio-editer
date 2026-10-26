@@ -2524,7 +2524,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : (
                   /* ------------------------------------------------------------
-                     📋 Day別・朝潮＆長津ブリーフィング指令書（各Day開始時にGMから1枚ずつ配布）
+                     📋 Day別・朝潮＆長津ブリーフィング指令書
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
@@ -2533,12 +2533,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {project.title} ― 対策本部・日次ブリーフィング ＆ 指揮官ミッションシート（Day 1〜Day 7）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          危機管理官 朝潮（PC1）＆ 首席オペレーター 長津（PC7 / 6名時はGM）専用・Day別配布シート
+                          危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別指令シート
                         </h2>
                       </div>
-                      <span className="text-xs font-semibold text-indigo-700 bg-indigo-50 border border-indigo-200 px-2.5 py-1 rounded">
-                        ※ネタバレ防止のため、最初から一括配布せず【各Dayの開始時に1枚ずつ】GMから渡してください
-                      </span>
                     </div>
 
                     <div className="space-y-5">
@@ -2565,9 +2562,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               <span className="text-xs font-bold text-slate-800">
                                 {b.nagatsuBriefingTitle}
                               </span>
-                              <span className="text-[10px] text-slate-500">
-                                ※7名時は長津（PC7）、6名時はGMが読み上げて報告
-                              </span>
                             </div>
                             <p className="text-xs leading-relaxed text-slate-800 font-medium">
                               {b.nagatsuBriefingText}
@@ -2577,7 +2571,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
                           <div className="rounded border border-slate-300 bg-white p-3 space-y-1.5">
                             <div className="text-xs font-bold text-slate-900 border-b border-slate-200 pb-1">
-                              🧭 危機管理官 朝潮（PC1）がこのDayで指揮・達成すべきミッション
+                              🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション
                             </div>
                             <ul className="space-y-1.5 text-xs leading-relaxed text-slate-800 list-none">
                               {b.asashioMissions.map((m, mIdx) => (
@@ -2589,8 +2583,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </ul>
                           </div>
 
-                          <div className="text-[10px] text-slate-500 flex items-center justify-between pt-1 border-t border-dashed border-slate-200">
-                            <span>📌 GM配布タイミング: {b.gmHandoutNote}</span>
+                          <div className="text-[10px] text-slate-500 flex items-center justify-end pt-1 border-t border-dashed border-slate-200">
                             <span className="font-mono">COMMAND-BRIEFING-DAY0{b.dayNumber}</span>
                           </div>
                         </div>
