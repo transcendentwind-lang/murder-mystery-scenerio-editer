@@ -1386,6 +1386,15 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       page-break-before: always !important;
       break-before: page !important;
     }
+    ruby {
+      ruby-align: center;
+      white-space: nowrap;
+    }
+    rt {
+      font-size: 6px !important;
+      line-height: 1 !important;
+      letter-spacing: -0.03em !important;
+    }
   </style>
 </head>
 <body>
@@ -2565,13 +2574,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別指令シート
                         </h2>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => setHandoutViewMode("nagatsu_cards")}
-                        className="no-print flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
-                      >
-                        🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
-                      </button>
+                      <div className="no-print flex flex-wrap items-center gap-2">
+                        <a
+                          href="/pdfs/daily-commander-briefings.pdf"
+                          download="朝潮_長津専用_Day別ブリーフィング指令書_全7日.pdf"
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                        >
+                          📥 Day別指令書PDFを直接ダウンロード（全7日）
+                        </a>
+                        <button
+                          type="button"
+                          onClick={() => setHandoutViewMode("nagatsu_cards")}
+                          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                        >
+                          🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
+                        </button>
+                      </div>
                     </div>
 
                     <div className="space-y-5">
@@ -2601,7 +2619,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
                             {b.nagatsuBriefingRubyHtml ? (
                               <p
-                                className="text-xs leading-[2.2] text-slate-800 font-medium [&_rt]:text-[9px] [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                className="text-xs leading-[2.1] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[6.8px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
                                 dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
                               />
                             ) : (
@@ -2737,7 +2755,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </div>
 
                                 <div
-                                  className="text-xs leading-[2.0] text-slate-800 text-left [&_rt]:text-[8.5px] [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                  className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
                                   dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                                 />
                               </div>
