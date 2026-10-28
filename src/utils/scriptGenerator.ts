@@ -551,3 +551,458 @@ export function printDocumentText(title: string, markdownOrText: string): void {
   }
 }
 
+/**
+ * HTMLエスケープヘルパー
+ */
+function escapeHtmlForB5(str: string = ""): string {
+  return str
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+/**
+ * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト単体HTML生成
+ * 構成：所属・氏名、公開プロフィール、自己紹介、あなたの内面（誇り＆喪失）、あなたの記憶
+ * ※秘匿目標・所持品リスト・後ろめたさは排除した完全協力型高密度レイアウト
+ */
+export function generateB5HandoutSingleHtml(
+  c: Character,
+  projectTitle: string,
+  index: number
+): string {
+  const memoryText = [c.introduction, c.handout?.backgroundTimeline]
+    .filter(Boolean)
+    .join("\n\n");
+
+  const locationText =
+    c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊";
+
+  return `
+  <div class="b5-sheet">
+    <!-- ヘッダー -->
+    <div class="header-band">
+      <div class="header-left">
+        <span class="sub-title">合同海難対策本部 記録資料</span>
+        <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
+      </div>
+      <div class="header-right">
+        <span class="confidential-badge">【非公開・個人ハンドアウト】</span>
+        <span class="location-badge">拠点：${locationText}</span>
+      </div>
+    </div>
+
+    <!-- 所属・氏名 IDプレート -->
+    <div class="id-plate">
+      <div class="id-info">
+        <div class="profession-label">${escapeHtmlForB5(c.profession)}</div>
+        <div class="character-name">${escapeHtmlForB5(c.name)}</div>
+      </div>
+      <div class="id-meta">
+        <div class="pc-badge">PC-${index + 1}</div>
+        <div class="coop-status">【完全協力型】秘匿目標なし</div>
+      </div>
+    </div>
+
+    <!-- 公開情報エリア（2列対称グリッド） -->
+    <div class="grid-2col">
+      <!-- 公開プロフィール -->
+      <div class="card card-public">
+        <div class="card-header">
+          <span class="card-title">🌐 【公開情報】全員に公開できるプロフィール</span>
+          <span class="card-sub-hint">（自己紹介で開示）</span>
+        </div>
+        <div class="card-content">
+          ${escapeHtmlForB5(c.handout?.publicProfile || "").replace(/\n/g, "<br/>")}
+        </div>
+      </div>
+
+      <!-- 自己紹介（開始時台詞） -->
+      <div class="card card-intro">
+        <div class="card-header intro-header">
+          <span class="card-title">💬 【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
+        </div>
+        <div class="card-content quote-content">
+          ${escapeHtmlForB5(c.handout?.handoutBody || "").replace(/\n/g, "<br/>")}
+        </div>
+      </div>
+    </div>
+
+    <!-- 非公開情報：あなたの内面（2列対称グリッド） -->
+    <div class="internal-drama-section">
+      <div class="section-title-bar">
+        <span class="section-title">🔒 あなたの内面（非公開）・行動指針</span>
+        <span class="section-notice">※他プレイヤーには非公開（ロールプレイの軸となります）</span>
+      </div>
+      <div class="grid-2col">
+        <!-- 誇り・信条 -->
+        <div class="card card-pride">
+          <div class="card-sub-header pride-header">✦ 誇り・信条・行動指針</div>
+          <div class="card-content">
+            ${escapeHtmlForB5(c.handout?.internalDrama?.pride || "").replace(/\n/g, "<br/>")}
+          </div>
+        </div>
+
+        <!-- 過去の喪失・悔恨 -->
+        <div class="card card-loss">
+          <div class="card-sub-header loss-header">✦ 過去の喪失・悔恨</div>
+          <div class="card-content">
+            ${escapeHtmlForB5(c.handout?.internalDrama?.loss || "").replace(/\n/g, "<br/>")}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 非公開情報：あなたの記憶（全幅） -->
+    <div class="card card-memory">
+      <div class="card-header memory-header">
+        <span class="card-title">📖 あなたの記憶（当日の状況・背景情報）</span>
+        <span class="memory-badge">非公開情報：他プレイヤーには見せないでください</span>
+      </div>
+      <div class="memory-content">
+        ${escapeHtmlForB5(memoryText).replace(/\n/g, "<br/>")}
+      </div>
+    </div>
+
+    <!-- フッター -->
+    <div class="footer-band">
+      <span>合同海難対策本部 記録 // JIS B5 規格ハンドアウト</span>
+      <span class="coop-note">※本作品は完全協力型インシデントです（秘匿目標・所持品リストなし）</span>
+      <span class="page-num">B5 1/1 頁</span>
+    </div>
+  </div>
+  `;
+}
+
+/**
+ * B5印刷用共通スタイルシート定義
+ */
+export const B5_HANDOUT_PRINT_STYLES = `
+  @page {
+    size: B5 portrait;
+    margin: 8mm 9mm;
+  }
+  * {
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: #0f172a;
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Segoe UI", Roboto, Meiryo, sans-serif;
+    font-size: 10pt;
+    line-height: 1.48;
+  }
+  .b5-sheet {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+  .b5-page-break {
+    page-break-after: always !important;
+    break-after: page !important;
+  }
+  .header-band {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 4px;
+  }
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .sub-title {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+  }
+  .project-title {
+    font-size: 9.5pt;
+    font-weight: 900;
+    color: #0f172a;
+  }
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .confidential-badge {
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
+  .location-badge {
+    border: 1px solid #cbd5e1;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 7.5pt;
+    font-weight: 600;
+    padding: 2px 6px;
+    border-radius: 3px;
+  }
+  .id-plate {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 8px 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .profession-label {
+    font-size: 8pt;
+    font-weight: 600;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+  .character-name {
+    font-size: 15pt;
+    font-weight: 900;
+    letter-spacing: 0.03em;
+    color: #ffffff;
+  }
+  .id-meta {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 3px;
+  }
+  .pc-badge {
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(255,255,255,0.12);
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 8.5pt;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+  }
+  .coop-status {
+    font-size: 7pt;
+    font-weight: 700;
+    color: #6ee7b7;
+  }
+  .grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .card {
+    border-radius: 5px;
+    border: 1px solid #cbd5e1;
+    padding: 7px 9px;
+    background: #ffffff;
+  }
+  .card-public {
+    background: #f8fafc;
+  }
+  .card-intro {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+  }
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .card-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1e293b;
+  }
+  .card-sub-hint {
+    font-size: 7pt;
+    color: #64748b;
+  }
+  .card-content {
+    font-size: 8.5pt;
+    line-height: 1.48;
+    color: #1e293b;
+  }
+  .quote-content {
+    font-style: italic;
+    border-left: 3px solid #6366f1;
+    padding-left: 6px;
+    color: #0f172a;
+  }
+  .internal-drama-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .section-title-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px;
+  }
+  .section-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #0f172a;
+  }
+  .section-notice {
+    font-size: 7pt;
+    color: #64748b;
+  }
+  .card-pride {
+    background: #fffbeb;
+    border-color: #fde68a;
+  }
+  .pride-header {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #78350f;
+    border-bottom: 1px solid #fde68a;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .card-loss {
+    background: #f8fafc;
+    border-color: #e2e8f0;
+  }
+  .loss-header {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #334155;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 2px;
+    margin-bottom: 4px;
+  }
+  .card-memory {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    padding: 8px 10px;
+  }
+  .memory-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 3px;
+    margin-bottom: 5px;
+  }
+  .memory-badge {
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    color: #be123c;
+    font-size: 7pt;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 3px;
+  }
+  .memory-content {
+    font-size: 8.5pt;
+    line-height: 1.58;
+    color: #0f172a;
+  }
+  .footer-band {
+    margin-top: 2px;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 7pt;
+    color: #64748b;
+  }
+  .coop-note {
+    font-weight: 600;
+    color: #475569;
+  }
+  .page-num {
+    font-family: monospace;
+  }
+`;
+
+/**
+ * JIS B5サイズ印刷ダイアログ実行（単体または全員分一括）
+ */
+export function printCharacterHandoutsB5(
+  characters: Character[],
+  projectTitle: string,
+  selectedCharId?: string
+): void {
+  const targetChars = selectedCharId
+    ? characters.filter((c) => c.id === selectedCharId)
+    : characters;
+
+  if (targetChars.length === 0) return;
+
+  const pagesHtml = targetChars
+    .map((c, idx) => {
+      const origIndex = characters.findIndex((orig) => orig.id === c.id);
+      const sheetHtml = generateB5HandoutSingleHtml(
+        c,
+        projectTitle,
+        origIndex >= 0 ? origIndex : idx
+      );
+      const isLast = idx === targetChars.length - 1;
+      return `<div class="${isLast ? "" : "b5-page-break"}">${sheetHtml}</div>`;
+    })
+    .join("\n");
+
+  const fullHtml = `<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtmlForB5(projectTitle)} - B5 個人ハンドアウト</title>
+  <style>
+    ${B5_HANDOUT_PRINT_STYLES}
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`;
+
+  const iframe = document.createElement("iframe");
+  iframe.style.position = "fixed";
+  iframe.style.right = "0";
+  iframe.style.bottom = "0";
+  iframe.style.width = "0";
+  iframe.style.height = "0";
+  iframe.style.border = "0";
+  document.body.appendChild(iframe);
+
+  const doc = iframe.contentWindow?.document;
+  if (doc) {
+    doc.open();
+    doc.write(fullHtml);
+    doc.close();
+    setTimeout(() => {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      setTimeout(() => {
+        if (document.body.contains(iframe)) {
+          document.body.removeChild(iframe);
+        }
+      }, 3000);
+    }, 350);
+  }
+}
+
+

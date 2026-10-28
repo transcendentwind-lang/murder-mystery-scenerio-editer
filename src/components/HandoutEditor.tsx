@@ -7,6 +7,7 @@ import {
   printDocumentText,
   formatCharacterHandoutMarkdown,
   formatCharacterCardsMarkdown,
+  printCharacterHandoutsB5,
 } from "@/utils/scriptGenerator";
 
 interface HandoutEditorProps {
@@ -74,17 +75,11 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
 
   const handlePrintSelectedChar = () => {
     if (!selectedChar) return;
-    const md =
-      `# 個人ハンドアウト：${selectedChar.name}\n\n` + formatCharacterHandoutMarkdown(selectedChar);
-    printDocumentText(`${selectedChar.name}_個人ハンドアウト`, md);
+    printCharacterHandoutsB5(characters, "燃える海を渡る声", selectedChar.id);
   };
 
   const handlePrintAllChars = () => {
-    let md = `# 個人ハンドアウト全集（${characters.length}名編成）\n\n`;
-    characters.forEach((c) => {
-      md += formatCharacterHandoutMarkdown(c);
-    });
-    printDocumentText(`個人ハンドアウト全集_${characters.length}名版`, md);
+    printCharacterHandoutsB5(characters, "燃える海を渡る声");
   };
 
   const handlePrintAllCards = () => {
@@ -110,18 +105,18 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
           <button
             onClick={handlePrintSelectedChar}
             className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
-            title="選択中のキャラクターの個人ハンドアウト（6項目）のみをシンプルなA4白背景で印刷"
+            title="選択中のキャラクターの個人ハンドアウトを美しいB5規格で印刷・PDF保存"
           >
             <Printer className="h-3.5 w-3.5 text-emerald-400" />
-            このPCのHO本紙を印刷
+            このPCのHOをB5印刷
           </button>
           <button
             onClick={handlePrintAllChars}
             className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
-            title="全キャラクターの個人ハンドアウト本紙（6項目）を一括印刷"
+            title="全キャラクターの個人ハンドアウトを美しいB5規格で一括印刷・PDF保存（各PC1ページ）"
           >
             <Printer className="h-3.5 w-3.5" />
-            🖨️ 全員分のHO本紙を一括印刷
+            🖨️ 全員分のHOを一括B5印刷
           </button>
           <button
             onClick={handlePrintAllCards}
