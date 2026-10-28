@@ -175,20 +175,20 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                     ? "bg-indigo-600 text-white shadow"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
-                title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名の完全版構成（本編・推奨）"
+                title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名（長津はGM担当）の標準構成"
               >
-                6名モード（本編・推奨）
+                6名モード（標準・長津GM）
               </button>
               <button
-                onClick={() => onTogglePlayerCount(5)}
+                onClick={() => onTogglePlayerCount(7)}
                 className={`flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-bold transition ${
-                  playerCount === 5
+                  playerCount === 7
                     ? "bg-indigo-600 text-white shadow"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
-                title="小笠原3名（PC3・PC4統合・PC5）＋東京2名の人数調整用構成"
+                title="東京3名（PC1・PC2・PC7長津）＋小笠原4名の7人プレイ構成"
               >
-                5名モード（調整用）
+                7名モード（長津PC参加）
               </button>
             </div>
           )}
@@ -209,7 +209,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                 海難救助対策チーム ({characters.length}名)
               </h3>
               <span className="rounded bg-indigo-950/80 px-2 py-0.5 text-[10px] font-bold text-indigo-300 border border-indigo-500/30">
-                {characters.length === 6 ? "6名編成（本編・推奨）" : "5名編成（調整用）"}
+                {characters.length === 7 ? "7名編成（長津PC参加）" : "6名編成（標準・長津GM）"}
               </span>
             </div>
             <div className="space-y-2">
@@ -229,17 +229,6 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="font-bold text-xs text-white">{char.name}</span>
-                        {char.id === "pc-4" && (
-                          <span
-                            className={`rounded px-1.5 py-0.2 text-[9px] font-bold ${
-                              characters.length === 6
-                                ? "bg-slate-800 text-slate-300 border border-slate-700"
-                                : "bg-amber-500/20 text-amber-300 border border-amber-500/30"
-                            }`}
-                          >
-                            {characters.length === 6 ? "本編：純粋観測員" : "調整：社家兼任"}
-                          </span>
-                        )}
                       </div>
                       <span
                         className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
@@ -266,56 +255,6 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
 
           {/* 右カラム：選択PCの詳細・イントロ・できること */}
           <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
-            {/* PC4本編純粋版の案内バナー */}
-            {selectedChar.id === "pc-4" && characters.length === 6 && (
-              <div className="mb-4 rounded-lg border border-indigo-500/30 bg-indigo-950/30 p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Users className="h-4 w-4 text-indigo-400" />
-                    <span className="text-xs font-bold text-indigo-200">
-                      6人プレイ（本編・推奨）：純粋な海洋・気象観測員
-                    </span>
-                  </div>
-                  {onTogglePlayerCount && (
-                    <button
-                      onClick={() => onTogglePlayerCount(5)}
-                      className="text-[11px] text-slate-400 hover:text-amber-300 underline"
-                    >
-                      人数調整用（5名モード・社家兼任）に切り替える
-                    </button>
-                  )}
-                </div>
-                <p className="mt-1.5 text-[11px] leading-relaxed text-slate-300/80">
-                  近代科学データ分析に特化した専門員です。小笠原現場ではPC3（船長・海の勘）、PC5（生物学者・生態系）、PC6（神職・救護）と4名それぞれの職能が分担され、最高のロールプレイ純度と群像劇体験が味わえます。
-                </p>
-              </div>
-            )}
-
-            {/* PC4統合版の案内バナー */}
-            {selectedChar.id === "pc-4" && characters.length === 5 && (
-              <div className="mb-4 rounded-lg border border-amber-500/40 bg-amber-950/20 p-3">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="h-4 w-4 text-amber-400" />
-                    <span className="text-xs font-bold text-amber-200">
-                      5人プレイ（人数調整用）：統合キャラクター（観測員 兼 神社社家）
-                    </span>
-                  </div>
-                  {onTogglePlayerCount && (
-                    <button
-                      onClick={() => onTogglePlayerCount(6)}
-                      className="text-[11px] text-indigo-400 hover:text-indigo-300 font-bold underline"
-                    >
-                      6名プレイ（本編・推奨）に戻す
-                    </button>
-                  )}
-                </div>
-                <p className="mt-1.5 text-[11px] leading-relaxed text-amber-300/80">
-                  急な欠員時や5名で遊ぶ場合の調整モードです。PC4が近代科学観測官と島の神社社家を兼任し、土蔵の古文書・祝詞・無線ログをすべて所持することで、パズルや証拠の欠落なく遊べます。
-                </p>
-              </div>
-            )}
-
             <div className="mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
                 <h3 className="text-base font-bold text-white">{selectedChar.name}</h3>

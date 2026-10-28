@@ -493,7 +493,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-lg border border-emerald-900/40 bg-emerald-950/20 p-3">
                 <label className="mb-1 flex items-center gap-1.5 font-bold text-emerald-300">
                   <Radio className="h-3.5 w-3.5" />
-                  現地救難隊の動き (坂凪・太刀魚・浪寄・初瀬 / 5名時は坂凪・太刀魚・浪寄)
+                  現地救難隊の動き (坂凪・太刀魚・浪寄・初瀬)
                 </label>
                 <p className="text-[11px] text-slate-300 leading-relaxed">
                   {currentStep.fieldResponse}
@@ -608,10 +608,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </span>
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2 pt-0.5">
-                    <p>・<strong>朝潮 / PC1 (風)</strong>: 南西の強風15m/s ➔ 北東へ約1.5ノット押し流される</p>
-                    <p>・<strong>太刀魚 / PC4・浪寄 / PC5 (海流・潮目)</strong>: 黒潮支流の表層流は真東へ2.0ノット（減衰なし）</p>
-                    <p>・<strong>初瀬 / PC6 (無線・5名時は太刀魚)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
-                    <p>・<strong>坂凪 / PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
+                    <p>・<strong>朝潮 / PC1 (風圧流)</strong>: 40t船体は風速の5%の速度で風下に流される（北東へ約1.5ノット）</p>
+                    <p>・<strong>太刀魚 / PC4 (海流・風速)</strong>: 黒潮支流の表層流は真東へ2.0ノット、南西からの強風約30kt（15m/s）</p>
+                    <p>・<strong>浪寄 / PC5 (到着所要時間)</strong>: 現場海域に到着するまで約40分（長津アナウンスの20分経過と合わせ1時間後の到着地点を推測）</p>
+                    <p>・<strong>初瀬 / PC6 (無線)</strong>: 『真横から波を受けている』＝風と海流双方の横波</p>
+                    <p className="md:col-span-2">・<strong>坂凪 / PC3 (海難救助)</strong>: 東側・南東側には危険な暗礁群。1時間後の北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して暗礁手前で救助成功！</p>
                   </div>
                 </div>
               </div>
@@ -1390,13 +1391,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ⑤ 初瀬（PC6／5名時は太刀魚PC4）専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
+                {/* ⑤ 初瀬（PC6）専用個別ハンドアウト（神社の特別儀式：海に出て毎日祝詞を唱える言い伝え） */}
                 <div className="rounded-xl border border-indigo-800 bg-[#0e0e24] p-3.5 space-y-2">
                   <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                     <div className="flex items-center gap-1.5">
                       <Scroll className="h-4 w-4 text-indigo-400" />
                       <span className="font-bold text-xs text-white">
-                        【初瀬（PC6／5名時は太刀魚PC4）専用 個別ハンドアウト】社家に伝わる海鳴りの言い伝え
+                        【初瀬（PC6）専用 個別ハンドアウト】社家に伝わる海鳴りの言い伝え
                       </span>
                     </div>
                     <button
@@ -1410,8 +1411,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
                   </p>
                   <div className="rounded bg-indigo-950/60 border border-indigo-900/80 p-2 text-[10px] text-amber-200">
-                    ⚠️ <strong>【初瀬（PC6／5名時は太刀魚PC4）プレイヤー心得（重要制約）】</strong>:
-                    現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）※5名プレイ時はPC4太刀魚がこの役割を兼任します。
+                    ⚠️ <strong>【初瀬（PC6）プレイヤー心得（重要制約）】</strong>:
+                    現時点であなたが知っているのは<strong>「火山が連続で爆発し、巨大なものが海を移動するときには、海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。具体的な祝詞の文言や奏上方法は古文書にも記されておらず、現時点では一切分かりません。（Day 6までお預けとなります）
                   </div>
                 </div>
 
@@ -1803,7 +1804,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
                         <strong className="text-teal-300 block">太刀魚（PC4: 観測員）</strong>
-                        火山連動シミュレーションと本土到達カウントダウン（※5名時は初瀬の神職伝承も統合）
+                        火山連動シミュレーションと本土到達カウントダウン
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
                         <strong className="text-teal-300 block">浪寄（PC5: 海洋生物学者）</strong>
@@ -1811,7 +1812,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
                         <strong className="text-teal-300 block">初瀬（PC6: 救護担当・神職）</strong>
-                        古文書の海鳴り・海に出て祝詞を唱える儀式の予兆（※5名時は太刀魚が兼任）
+                        古文書の海鳴り・海に出て祝詞を唱える儀式の予兆
                       </div>
                     </div>
                   </div>
@@ -2053,7 +2054,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <Anchor className="h-4 w-4 text-teal-400 shrink-0 mt-0.5" />
                     <div>
                       <strong className="text-white block font-bold text-[11px]">
-                        ⚓ 小笠原現地組（坂凪・太刀魚・浪寄・初瀬／5名時は坂凪・太刀魚・浪寄）：洋上展開終了・父島本島へ帰還
+                        ⚓ 小笠原現地組（坂凪・太刀魚・浪寄・初瀬）：洋上展開終了・父島本島へ帰還
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
                         長距離ヘリ捜索および巡視船給油ミッションを完遂し、父島二見港へ帰還。島民避難の受け入れと、島に残された記録の調査体制へ移行。
@@ -4289,7 +4290,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     救難信号発信位置（海図中心：27°04.0&apos;N, 142°06.0&apos;E）を中心に、北東に父島・南島、東側（740, 350）および南東側（660, 480）に危険な暗礁群が点在しています。<br />
-                    各PCの専門知識（風向風速15m/s、表層流速2.0kt、潮目、船の姿勢）を合成し、救難艇が急行すべき漂流予測海域を自力で作図計算してください。
+                    各PCの専門知識（風向風速15m/s、表層流速2.0kt、現場海域までの到着所要時間40分、船の姿勢）を合成し、救難艇が急行すべき1時間後の漂流予測海域を自力で作図計算してください。
                   </p>
                 </div>
               ) : (
@@ -4332,10 +4333,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white">
-                    【初瀬（PC6／5名時は太刀魚PC4）専用 個別ハンドアウト】
+                    【初瀬（PC6）専用 個別ハンドアウト】
                   </h3>
                   <p className="text-[11px] text-indigo-300 font-medium">
-                    小笠原神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録（※5名プレイ時はPC4太刀魚が兼任）
+                    小笠原神社 社家に伝わる秘事口伝 ＆ 古代儀式の記録
                   </p>
                 </div>
               </div>
@@ -4377,7 +4378,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <div className="rounded-xl bg-amber-950/40 border border-amber-600/60 p-4 space-y-2 text-amber-200 shadow">
                 <div className="flex items-center gap-2 font-bold text-amber-300 text-xs">
                   <AlertTriangle className="h-4 w-4 text-amber-400" />
-                  【初瀬（PC6／5名時は太刀魚PC4）プレイヤーの心得と重要制約】
+                  【初瀬（PC6）プレイヤーの心得と重要制約】
                 </div>
                 <div className="text-[11px] leading-relaxed space-y-1.5 text-slate-300">
                   <p>

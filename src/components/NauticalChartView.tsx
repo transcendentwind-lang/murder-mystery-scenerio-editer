@@ -1099,9 +1099,9 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               </div>
 
               <div className="rounded border border-slate-800 bg-slate-950 p-2.5">
-                <span className="font-bold text-sky-300">② 海流の影響 (PC4 ＆ PC5)</span>
+                <span className="font-bold text-sky-300">② 海流の影響 (PC4) ＆ 到着所要時間 (PC5)</span>
                 <p className="text-[11px] text-slate-400 mt-0.5">
-                  黒潮支流の表層流は【真東へ2.0ノット】。水温データから冷水塊との潮目に乗っており減衰なし（1時間で真東へ2.0海里）。海流だけ追うと真東へ向かってしまう。
+                  太刀魚（PC4）のデータより黒潮支流は【真東へ2.0ノット】。さらに浪寄（PC5）の経験より【現場海域到着まで約40分】かかるため、長津アナウンスの『現在20分経過』と合わせて【1時間後の到着地点】を推測する。
                 </p>
               </div>
 

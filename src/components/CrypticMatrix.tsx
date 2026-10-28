@@ -239,7 +239,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
                 古代神社の盟約祝詞（海中筒の作法 ＆ 語順文法）
               </span>
               <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] text-amber-300">
-                初瀬 / PC6（5名時は太刀魚）が所持
+                初瀬 / PC6 が所持
               </span>
             </div>
             <p className="text-xs text-slate-300 leading-relaxed">
@@ -267,10 +267,10 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             <div className="rounded-lg border border-slate-800 bg-slate-950 p-3 space-y-2 text-xs">
               <div className="flex items-center gap-2 text-emerald-400 font-semibold">
                 <CheckCircle2 className="h-4 w-4" />
-                <span>知見が結集した新言語構文（5名時は太刀魚が初瀬を統合）</span>
+                <span>知見が結集した新言語構文</span>
               </div>
               <ul className="space-y-1.5 text-[11px] text-slate-400 pl-4 list-disc">
-                <li>初瀬 / PC6（救護・神職／5名時は太刀魚）: 祝詞巻物・口伝の点刻記号（「人間とクジラ」「約束」）</li>
+                <li>初瀬 / PC6（救護・神職）: 祝詞巻物・口伝の点刻記号（「人間とクジラ」「約束」）</li>
                 <li>太刀魚 / PC4（観測）: 連動海底火山の熱水・地鳴り音響ログ（「海の下の火山」）</li>
                 <li>貝浜 / PC2（音響）: 音響航法の方位コーダ（「北」などの東西南北）</li>
                 <li>浪寄 / PC5（生物）: 朝倉教授ノートの探索・号令・攻撃コーダ（「探せ」「集まれ」「攻撃せよ」）</li>

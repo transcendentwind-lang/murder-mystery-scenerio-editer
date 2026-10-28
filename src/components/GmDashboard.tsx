@@ -663,7 +663,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
                     <span className="font-bold text-indigo-300">【フェーズ1：緊急回線接続 ＆ 各員自己紹介】</span>
                     <p className="text-slate-300 mt-1 italic">
-                      （🎙️ 首席オペレーター 長津）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から既に20分が経過しており、現場の救難艇が海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
+                      （🎙️ 首席オペレーター 長津）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
                     </p>
                   </div>
 
@@ -703,7 +703,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="text-slate-300 italic">
-                      （🎙️ 首席オペレーター 長津）:「――救難信号の発信から既に20分が経過しております。救難艇が現場海域へ到達するまでさらに40分――合計1時間、遭難船は漂流し続けます。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）をはじめ各員、暗礁群の配置と海流を考慮し、救難艇を急行させるべき捜索海域の決定をお願いいたします」
+                      （🎙️ 首席オペレーター 長津）:「――救難信号の発信から現在20分が経過しております。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）、浪寄准教授（PC5）をはじめ各員、救難艇が現場海域に到着するまでの所要時間や暗礁群の配置、風・海流を考慮し、到着時点での漂流位置を推測して急行させるべき捜索海域の決定をお願いいたします」
                     </p>
                   </div>
 
@@ -717,18 +717,18 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                     <div className="space-y-1 text-[11px] text-slate-300">
                       <p className="font-bold text-slate-200">🔍 各員の開示情報と漂流ベクトル（GM用正解メモ）:</p>
-                      <p>・<strong className="text-white">朝潮 / PC1 (風)</strong>: 南西の強風15m/s → 船は北東へ約1.5ノット押し流される</p>
-                      <p>・<strong className="text-white">太刀魚 / PC4 (海流)</strong>: 黒潮支流の表層流は真東へ2.0ノット</p>
-                      <p>・<strong className="text-white">浪寄 / PC5 (潮目)</strong>: 冷水塊境界に乗っており東向き海流は減衰なし</p>
-                      <p>・<strong className="text-white">初瀬 / PC6 (無線・5名時は太刀魚)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
-                      <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
+                      <p>・<strong className="text-white">朝潮 / PC1 (風圧流)</strong>: 40t船体は風速の5%の速度で風下に流される（南西30kt × 5% ＝ 北東へ約1.5ノット）</p>
+                      <p>・<strong className="text-white">太刀魚 / PC4 (海流・風速)</strong>: 黒潮支流の表層流は真東へ2.0ノット、現場海域の風は南西から約30ノット（15m/s）</p>
+                      <p>・<strong className="text-white">浪寄 / PC5 (到着所要時間)</strong>: 救難艇が現場海域に到着するまで約40分かかる（長津アナウンスの『現在20分経過』と合わせて合計1時間後の到着地点を推測）</p>
+                      <p>・<strong className="text-white">初瀬 / PC6 (遭難無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
+                      <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、1時間後の北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
                     </div>
                   </div>
 
                   <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
                     <span className="font-bold text-slate-300">【フェーズ4：救助成功アナウンス】</span>
                     <p className="text-slate-400 mt-1 italic">
-                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6／5名時は太刀魚）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
+                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
                     </p>
                   </div>
 
@@ -1275,14 +1275,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-3 space-y-1.5">
                     <div className="flex items-center gap-1.5 font-bold text-indigo-300 text-xs">
                       <Scroll className="h-4 w-4 text-indigo-400" />
-                      【フェーズ4：初瀬 / PC6（救護・神職血統／5名時は太刀魚）個別ハンドアウト GMガイド】
+                      【フェーズ4：初瀬 / PC6（救護・神職血統）個別ハンドアウト GMガイド】
                     </div>
                     <blockquote className="border-l-2 border-indigo-500 pl-3 py-0.5 text-slate-300 text-[11px] italic">
                       「南の海にて火の山が連なりて火を吹き、海の中を巨大なる何ものかが北へと泳ぎ去るとき……島人は沖へ舟を漕ぎ出し、海に向かいて毎日、祝詞を唱えねばならぬ」
                     </blockquote>
                     <div className="rounded bg-indigo-950 border border-indigo-800 p-2 text-[10px] text-amber-200">
                       ⚠️ <strong>【重要制約】</strong>:
-                      初瀬（PC6／5名時は太刀魚PC4）に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
+                      初瀬（PC6）に分かっていいのは<strong>「海に出て毎日祝詞を唱える特別な儀式が存在する」ということだけ</strong>です。祝詞の具体的な文言や方法はDay 6まで絶対に明かさないよう誘導してください。
                     </div>
                   </div>
 
@@ -3034,7 +3034,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     【プレイヤー提示用 白地図】漂流予測パズル作図要領:
                   </strong>
                   <p className="text-[11px] text-slate-300">
-                    救難信号発信位置を中心に、北東に父島・南島、東側および南東側に危険な暗礁群が点在。各PCの専門知識（風・海流・潮目・船の姿勢）を合成して自力で作図計算させます（解答非表示）。
+                    救難信号発信位置を中心に、北東に父島・南島、東側および南東側に危険な暗礁群が点在。各PCの専門知識（風・海流・到着所要時間40分・船の姿勢）を合成して自力で作図計算させます（解答非表示）。
                   </p>
                 </div>
               ) : (

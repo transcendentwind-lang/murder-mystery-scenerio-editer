@@ -2,7 +2,6 @@ import { MMProject, Character, IncidentStep, EvidenceItem, LockCriterion, Candid
 import {
   initialProject,
   initialVisualBoards,
-  pc4For5Players,
   pc4For6Players,
   pc6Character,
   getCharactersForPlayerCount,
@@ -240,7 +239,7 @@ export function getStoredProjects(): MMProject[] {
       const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
       if (initialIdx >= 0) {
         const storedInit = parsed[initialIdx];
-        const pCount = storedInit.playerCount === 5 ? 5 : storedInit.playerCount === 7 ? 7 : 6;
+        const pCount = storedInit.playerCount === 7 ? 7 : 6;
         const masterCharacters = getCharactersForPlayerCount(pCount);
         const masterCharMap = new Map<string, Character>(
           masterCharacters.map((c) => [c.id, c as Character])
@@ -272,18 +271,15 @@ export function getStoredProjects(): MMProject[] {
           return sc;
         });
 
-        // 6名モードで PC6 が未登録ならマスターから追加
-        if (!is5Players && !updatedCharacters.some((c: Character) => c.id === "pc-6")) {
+        // PC6 が未登録ならマスターから追加
+        if (!updatedCharacters.some((c: Character) => c.id === "pc-6")) {
           const pc6 = masterCharMap.get("pc-6");
           if (pc6) {
             updatedCharacters.push(pc6);
           }
         }
 
-        // 5名モードで万一 PC6 が残っていたら除外
-        const filteredCharacters = is5Players
-          ? updatedCharacters.filter((c: Character) => c.id !== "pc-6")
-          : updatedCharacters;
+        const filteredCharacters = updatedCharacters;
 
         // マスター証拠のマップ（最新の簡易タイトルと説明文）
         const masterEvidenceMap = new Map<string, EvidenceItem>(
@@ -292,6 +288,7 @@ export function getStoredProjects(): MMProject[] {
 
         parsed[initialIdx] = {
           ...storedInit,
+          playerCount: pCount,
           title: initialProject.title,
           subtitle: initialProject.subtitle,
           concept: initialProject.concept,
