@@ -45,6 +45,7 @@ export interface EvidenceItem {
   id: string;
   title: string;               // 証拠名
   description: string;         // 詳細テキスト
+  glossaryNote?: string;       // カード下部余白の初心者向け用語解説（「〜とは：…」）
   ownerId: string;             // 入手者ID ('all' または characterId)
   foundPhase: number;          // 入手フェーズ/Day (1-7)
   visibility: EvidenceVisibility; // 公開区分 (個別秘匿 / 譲渡可能 / 全体公開)
@@ -179,6 +180,7 @@ export interface SpecialCharacterCard {
   title: string;               // カードタイトル
   frontTitleHtml?: string;     // オモテ面改行整形用
   description: string;         // カード詳細テキスト
+  glossaryNote?: string;       // カード下部余白の初心者向け用語解説（「〜とは：…」）
   categoryLabel: string;       // 例: "特別配布カード・所持品", "特別配布カード・専用記憶"
   accentHex: string;           // バッジ背景色
   fivePlayerFallbackNote?: string; // 5名プレイ時・6名プレイ時の代替配布注記

@@ -906,7 +906,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
   );
-  const [evidenceDayFilter, setEvidenceDayFilter] = useState<number | "all">("all");
+  const [evidenceDayFilter, setEvidenceDayFilter] = useState<number | "all" | "glossary">("all");
+  const [evidenceViewMode, setEvidenceViewMode] = useState<"cards_a4" | "single">("cards_a4");
   const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
   const [visualOrientation, setVisualOrientation] = useState<"portrait" | "landscape_rotated">("landscape_rotated");
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
@@ -956,12 +957,21 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       )
       .map((e) => {
         const master = masterEvidenceMap[e.id];
-        return master ? { ...e, title: master.title, description: master.description } : e;
+        return master
+          ? {
+              ...e,
+              title: master.title,
+              description: master.description,
+              glossaryNote: e.glossaryNote ?? master.glossaryNote,
+            }
+          : e;
       });
   }, [project.evidences, masterEvidenceMap]);
   const filteredEvidences =
     evidenceDayFilter === "all"
       ? allEvidences
+      : evidenceDayFilter === "glossary"
+      ? allEvidences.filter((e) => Boolean(e.glossaryNote))
       : allEvidences.filter((e) => e.foundPhase === evidenceDayFilter);
 
   const activeEvidence =
@@ -1373,6 +1383,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     document.body.appendChild(printWin);
 
     const isB5HandoutSheet = category === "handouts" && handoutViewMode === "sheet";
+    const isSingleEvidenceSheet = category === "evidences" && evidenceViewMode === "single";
     const doc = printWin.contentWindow?.document;
     if (doc) {
       doc.open();
@@ -1384,8 +1395,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @page {
-      size: ${category === "evidences" || isB5HandoutSheet ? "B5 portrait" : "A4 portrait"};
-      margin: ${isB5HandoutSheet ? "8mm 9mm" : category === "evidences" ? "12mm" : "8mm"};
+      size: ${isSingleEvidenceSheet || isB5HandoutSheet ? "B5 portrait" : "A4 portrait"};
+      margin: ${isB5HandoutSheet ? "8mm 9mm" : isSingleEvidenceSheet ? "12mm" : "8mm"};
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -1621,7 +1632,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
         </div>
       </div>
 
-      {/* 2. サブバー：個人ハンドアウト時は「本紙 vs 別配付カード切替」、それ以外は「Gemini AI デザイン着せ替えバー」 */}
+      {/* 2. サブバー：個人ハンドアウト時は「本紙 vs 別配付カード切替」、証拠資料時は「A4 4分割カード一覧 vs 個別編集切替」、それ以外は「Gemini AI デザイン着せ替えバー」 */}
       {category === "handouts" ? (
         <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
@@ -1671,6 +1682,37 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           </div>
           <span className="text-[11px] text-slate-400">
             ※個人ハンドアウト・カード類は特別なテーマ装飾を省き、読みやすい標準構成にまとめています
+          </span>
+        </div>
+      ) : category === "evidences" ? (
+        <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-slate-300">表示・印刷モード：</span>
+            <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              <button
+                onClick={() => setEvidenceViewMode("cards_a4")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  evidenceViewMode === "cards_a4"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                🃏 証拠カード一覧（A4 4分割・均一サイズ印刷）
+              </button>
+              <button
+                onClick={() => setEvidenceViewMode("single")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  evidenceViewMode === "single"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                📄 個別カード詳細・直接編集
+              </button>
+            </div>
+          </div>
+          <span className="text-[11px] text-slate-400">
+            ※下部余白に初心者向けの用語解説（「〜とは：…」）が自動配置され、特別配布カードと完全に同一サイズ（A4 4分割）で印刷できます
           </span>
         </div>
       ) : (
@@ -1994,7 +2036,31 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
               </div>
 
-              {/* フェーズ絞り込み */}
+              {/* A4 4分割カード一覧 vs 個別カード編集 切替 */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  onClick={() => setEvidenceViewMode("cards_a4")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    evidenceViewMode === "cards_a4"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🃏 A4 4分割一覧
+                </button>
+                <button
+                  onClick={() => setEvidenceViewMode("single")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    evidenceViewMode === "single"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📄 個別詳細・編集
+                </button>
+              </div>
+
+              {/* フェーズ・用語解説絞り込み */}
               <div className="flex flex-wrap gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
                 <button
                   onClick={() => setEvidenceDayFilter("all")}
@@ -2005,6 +2071,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   }`}
                 >
                   全て({allEvidences.length})
+                </button>
+                <button
+                  onClick={() => setEvidenceDayFilter("glossary")}
+                  className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                    evidenceDayFilter === "glossary"
+                      ? "bg-emerald-600 text-white"
+                      : "text-emerald-400 hover:text-white"
+                  }`}
+                  title="初心者向け用語解説（下部余白）が追加された16枚の証拠カードのみに絞り込みます"
+                >
+                  📖 用語解説付き({allEvidences.filter((e) => Boolean(e.glossaryNote)).length})
                 </button>
                 {[1, 2, 3, 4, 5, 6, 7].map((d) => (
                   <button
@@ -2024,6 +2101,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               <div className="space-y-2">
                 {filteredEvidences.map((ev) => {
                   const isSelected = ev.id === activeEvidence?.id;
+                  const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
                   return (
                     <button
                       key={ev.id}
@@ -2035,9 +2113,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }`}
                     >
                       <div className="flex items-center justify-between gap-1">
-                        <span className="rounded bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">
-                          Day {ev.foundPhase}
-                        </span>
+                        <div className="flex items-center gap-1">
+                          <span className="text-[10px] font-mono font-bold text-slate-400">
+                            EV-{String(globalIdx).padStart(2, "0")}
+                          </span>
+                          <span className="rounded bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">
+                            Day {ev.foundPhase}
+                          </span>
+                        </div>
                         <span className="text-[10px] text-slate-400 font-mono">
                           {ev.category === "document"
                             ? "📄 文書記録"
@@ -2053,6 +2136,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="mt-1.5 font-bold text-xs text-white line-clamp-2">
                         {ev.title}
                       </div>
+                      {ev.glossaryNote && (
+                        <div className="mt-1 text-[10px] text-emerald-300/90 truncate">
+                          📖 下部余白に用語解説あり
+                        </div>
+                      )}
                     </button>
                   );
                 })}
@@ -2204,7 +2292,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : category === "handouts"
                 ? `${handoutViewMode === "sheet" ? "max-w-[720px]" : "max-w-4xl"} bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none`
                 : category === "evidences"
-                ? "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
+                ? evidenceViewMode === "cards_a4"
+                  ? "max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none"
+                  : "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
                 : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12 max-w-4xl`
             }`}
           >
@@ -2658,7 +2748,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                   {/* 右：本文面（A4 1/4サイズ固定） */}
                                   <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                                     <div>
-                                      <div className="flex items-center justify-between text-xs mb-2">
+                                      <div className="flex items-center justify-between text-xs mb-1.5">
                                         <span
                                           className="rounded px-2.5 py-0.5 font-bold text-white"
                                           style={{ backgroundColor: card.accentHex }}
@@ -2670,21 +2760,34 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                         </span>
                                       </div>
 
-                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
                                         <h3 className="text-base font-extrabold text-slate-900">
                                           {card.title}
                                         </h3>
                                       </div>
 
-                                      <div className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap text-justify">
+                                      <div
+                                        className={`${
+                                          card.glossaryNote
+                                            ? "text-[11px] leading-[1.48]"
+                                            : "text-xs leading-relaxed"
+                                        } text-slate-800 whitespace-pre-wrap text-justify`}
+                                      >
                                         {card.description}
                                       </div>
                                     </div>
 
-                                    <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
-                                      <span className="font-mono font-bold text-slate-500">
-                                        {card.cardCode} / 07
-                                      </span>
+                                    <div className="mt-2 space-y-1.5">
+                                      {card.glossaryNote && (
+                                        <div className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-[9.5px] leading-[1.35] text-slate-700 whitespace-pre-wrap">
+                                          {card.glossaryNote}
+                                        </div>
+                                      )}
+                                      <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
+                                        <span className="font-mono font-bold text-slate-500">
+                                          {card.cardCode} / 07
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
@@ -2911,155 +3014,336 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             )}
 
             {/* ================================================================
-                ② 証拠資料（テキスト中心の調査記録・文書）のデザイン＆直接編集ビュー
+                ② 証拠資料（A4 4分割カード一覧 ＆ 個別カードの直接編集ビュー）
                ================================================================ */}
-            {category === "evidences" && activeEvidence && (() => {
-              const ownerChar = project.characters.find((c) => c.id === activeEvidence.ownerId);
-              const ownerName =
-                activeEvidence.ownerId === "all" || !activeEvidence.ownerId
-                  ? "全体公開 / 現場資料"
-                  : ownerChar
-                  ? `${ownerChar.name}（${ownerChar.profession || "所持"}）`
-                  : activeEvidence.ownerId;
+            {category === "evidences" && (
+              evidenceViewMode === "cards_a4" ? (
+                <div className="space-y-6">
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― 証拠資料カード一覧（A4 1/4サイズ固定・下部余白の用語解説付き）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        証拠カード一覧（表示中：{filteredEvidences.length}枚 ／ 全{allEvidences.length}枚・特別配布カード同一サイズ）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() =>
+                          setEvidenceDayFilter(
+                            evidenceDayFilter === "glossary" ? "all" : "glossary"
+                          )
+                        }
+                        className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition ${
+                          evidenceDayFilter === "glossary"
+                            ? "border-indigo-600 bg-indigo-50 text-indigo-800"
+                            : "border-emerald-600 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
+                        }`}
+                      >
+                        {evidenceDayFilter === "glossary"
+                          ? `📚 全証拠カード（${allEvidences.length}枚）を表示`
+                          : `📖 用語解説付きカード（${
+                              allEvidences.filter((e) => Boolean(e.glossaryNote)).length
+                            }枚）のみに絞り込む`}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        A4 4分割（均一サイズ）で印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
 
-              return (
-                <div className="space-y-4">
-                  {/* B5カード ヘッダー＆メタ情報 */}
-                  <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
-                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs">
-                      {/* Day & 種別 */}
-                      <div className="flex items-center gap-2">
-                        <span className="rounded bg-slate-800 px-2.5 py-1 font-mono font-bold text-white shadow-sm">
-                          証拠資料カード
-                        </span>
+                  <div className="space-y-6 print:space-y-0">
+                    {filteredEvidences.map((ev, idx) => {
+                      const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
+                      const evCode = `EV-${String(globalIdx).padStart(2, "0")}`;
+                      const ownerChar = project.characters.find((c) => c.id === ev.ownerId);
+                      const ownerShort = ownerChar
+                        ? ownerChar.name.split("（")[0]
+                        : "全体公開";
+                      const isSelected = ev.id === activeEvidence?.id;
+
+                      return (
+                        <div
+                          key={ev.id}
+                          onClick={() => setSelectedEvidenceId(ev.id)}
+                          className={`card-pair-row cursor-pointer rounded-lg border p-4 transition print:border-0 print:bg-transparent print:p-0 print:ring-0 print:mb-[8mm] break-inside-avoid ${
+                            idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
+                          } ${
+                            isSelected
+                              ? "border-indigo-500 bg-indigo-50/30 ring-1 ring-indigo-500/30"
+                              : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
+                          }`}
+                        >
+                          <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
+                            {/* 左：表面（A4 1/4サイズ固定） */}
+                            <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                              <div className="flex items-center justify-between text-xs">
+                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                  Day {ev.foundPhase} 開示
+                                </span>
+                                <span className="rounded bg-slate-800 px-2.5 py-0.5 font-bold text-white">
+                                  証拠資料カード（{ownerShort}）
+                                </span>
+                              </div>
+
+                              <div className="my-auto py-5 text-center space-y-2">
+                                <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                  海上保安庁・合同海難対策本部
+                                </div>
+                                <div className="text-xl font-black text-slate-900 leading-snug px-2">
+                                  {ev.title}
+                                </div>
+                                <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                  証拠資料カード（{ownerShort}）
+                                </div>
+                              </div>
+
+                              <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                                <span className="font-mono text-xs font-bold text-slate-500">
+                                  {evCode} / {String(allEvidences.length).padStart(2, "0")}
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* 右：本文面＋下部余白の用語解説（A4 1/4サイズ固定） */}
+                            <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                              <div>
+                                <div className="flex items-center justify-between text-xs mb-1.5">
+                                  <span className="rounded bg-slate-800 px-2.5 py-0.5 font-bold text-white">
+                                    証拠資料カード（{ownerShort}）
+                                  </span>
+                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                    Day {ev.foundPhase} 開示
+                                  </span>
+                                </div>
+
+                                <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
+                                  <h3 className="text-base font-extrabold text-slate-900">
+                                    {ev.title}
+                                  </h3>
+                                </div>
+
+                                <div
+                                  className={`${
+                                    ev.glossaryNote
+                                      ? "text-[11px] leading-[1.46]"
+                                      : "text-xs leading-relaxed"
+                                  } text-slate-800 whitespace-pre-wrap text-justify`}
+                                >
+                                  {ev.description}
+                                </div>
+                              </div>
+
+                              <div className="mt-2 space-y-1.5">
+                                {ev.glossaryNote && (
+                                  <div className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-[9.5px] leading-[1.35] text-slate-700 whitespace-pre-wrap">
+                                    {ev.glossaryNote}
+                                  </div>
+                                )}
+                                <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
+                                  <span className="font-mono font-bold text-slate-500">
+                                    {evCode} / {String(allEvidences.length).padStart(2, "0")}
+                                  </span>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : (
+                activeEvidence && (() => {
+                  const ownerChar = project.characters.find((c) => c.id === activeEvidence.ownerId);
+                  const ownerName =
+                    activeEvidence.ownerId === "all" || !activeEvidence.ownerId
+                      ? "全体公開 / 現場資料"
+                      : ownerChar
+                      ? `${ownerChar.name}（${ownerChar.profession || "所持"}）`
+                      : activeEvidence.ownerId;
+
+                  return (
+                    <div className="space-y-4">
+                      {/* B5カード ヘッダー＆メタ情報 */}
+                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                        <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs">
+                          {/* Day & 種別 */}
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-slate-800 px-2.5 py-1 font-mono font-bold text-white shadow-sm">
+                              証拠資料カード
+                            </span>
+                            {isDirectEditMode ? (
+                              <select
+                                value={activeEvidence.foundPhase}
+                                onChange={(e) =>
+                                  handleUpdateActiveEvidence((ev) => ({
+                                    ...ev,
+                                    foundPhase: parseInt(e.target.value, 10) || 1,
+                                  }))
+                                }
+                                className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-800"
+                              >
+                                {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+                                  <option key={d} value={d}>
+                                    開示: Day {d}
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <span className="rounded bg-slate-200 px-2 py-0.5 font-bold text-slate-700">
+                                開示フェーズ: Day {activeEvidence.foundPhase}
+                              </span>
+                            )}
+                          </div>
+
+                          {/* 所持者 & カテゴリ */}
+                          <div className="flex flex-wrap items-center gap-2 text-xs">
+                            {isDirectEditMode ? (
+                              <>
+                                <select
+                                  value={activeEvidence.ownerId || "all"}
+                                  onChange={(e) =>
+                                    handleUpdateActiveEvidence((ev) => ({
+                                      ...ev,
+                                      ownerId: e.target.value,
+                                    }))
+                                  }
+                                  className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
+                                >
+                                  <option value="all">🌐 全体公開 / 現場</option>
+                                  {project.characters.map((c) => (
+                                    <option key={c.id} value={c.id}>
+                                      👤 {c.name}
+                                    </option>
+                                  ))}
+                                </select>
+                                <select
+                                  value={activeEvidence.category}
+                                  onChange={(e) =>
+                                    handleUpdateActiveEvidence((ev) => ({
+                                      ...ev,
+                                      category: e.target.value as EvidenceItem["category"],
+                                    }))
+                                  }
+                                  className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
+                                >
+                                  <option value="document">📄 文書・記録</option>
+                                  <option value="data">📊 観測・データ</option>
+                                  <option value="sample">🔬 検体・物証</option>
+                                  <option value="testimony">🗣️ 証言・調書</option>
+                                  <option value="audio">📻 音声・ログ</option>
+                                </select>
+                              </>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
+                                所持: {ownerName}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* 件名 / タイトル */}
+                        <div className="mt-3">
+                          <span className="block text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                            資料件名
+                          </span>
+                          {isDirectEditMode ? (
+                            <input
+                              type="text"
+                              value={activeEvidence.title}
+                              onChange={(e) =>
+                                handleUpdateActiveEvidence((ev) => ({
+                                  ...ev,
+                                  title: e.target.value,
+                                }))
+                              }
+                              className="mt-1 w-full rounded border border-slate-300 bg-white px-3 py-1.5 text-base font-bold text-slate-900 focus:border-slate-600 focus:outline-none"
+                            />
+                          ) : (
+                            <h1 className="mt-1 text-lg font-bold text-slate-900">
+                              {activeEvidence.title}
+                            </h1>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* 本文エリア（B5カードの適正サイズ） */}
+                      <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+                        <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-2">
+                          <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                            ■ 記録・本文内容
+                          </span>
+                          {isDirectEditMode && (
+                            <span className="text-[10px] text-slate-400">
+                              ※直接編集可能
+                            </span>
+                          )}
+                        </div>
                         {isDirectEditMode ? (
-                          <select
-                            value={activeEvidence.foundPhase}
+                          <textarea
+                            rows={10}
+                            value={activeEvidence.description}
                             onChange={(e) =>
                               handleUpdateActiveEvidence((ev) => ({
                                 ...ev,
-                                foundPhase: parseInt(e.target.value, 10) || 1,
+                                description: e.target.value,
                               }))
                             }
-                            className="rounded border border-slate-300 bg-white px-2 py-1 text-xs font-bold text-slate-800"
-                          >
-                            {[1, 2, 3, 4, 5, 6, 7].map((d) => (
-                              <option key={d} value={d}>
-                                開示: Day {d}
-                              </option>
-                            ))}
-                          </select>
+                            className="w-full rounded border border-dashed border-slate-300 bg-slate-50/50 p-3 text-sm leading-relaxed text-slate-900 focus:border-slate-500 focus:bg-white focus:outline-none"
+                          />
                         ) : (
-                          <span className="rounded bg-slate-200 px-2 py-0.5 font-bold text-slate-700">
-                            開示フェーズ: Day {activeEvidence.foundPhase}
-                          </span>
+                          <div className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
+                            {activeEvidence.description}
+                          </div>
                         )}
                       </div>
 
-                      {/* 所持者 & カテゴリ */}
-                      <div className="flex flex-wrap items-center gap-2 text-xs">
-                        {isDirectEditMode ? (
-                          <>
-                            <select
-                              value={activeEvidence.ownerId || "all"}
+                      {/* 下部余白：初心者向け用語解説（「〜とは：…」） */}
+                      {(activeEvidence.glossaryNote || isDirectEditMode) && (
+                        <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 shadow-sm">
+                          <div className="mb-1.5 flex items-center justify-between border-b border-slate-200 pb-1.5">
+                            <span className="text-xs font-bold text-slate-700">
+                              📖 用語解説（カード下部余白に表示）
+                            </span>
+                            {isDirectEditMode && (
+                              <span className="text-[10px] text-slate-400">
+                                ※空欄にすると非表示になります
+                              </span>
+                            )}
+                          </div>
+                          {isDirectEditMode ? (
+                            <textarea
+                              rows={3}
+                              placeholder="例：※風圧流（リーウェイ）とは：エンジンが止まった船などが、海面に出ている船体に風を受けることで、風下の方向へと押し流される現象のこと。"
+                              value={activeEvidence.glossaryNote || ""}
                               onChange={(e) =>
                                 handleUpdateActiveEvidence((ev) => ({
                                   ...ev,
-                                  ownerId: e.target.value,
+                                  glossaryNote: e.target.value,
                                 }))
                               }
-                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
-                            >
-                              <option value="all">🌐 全体公開 / 現場</option>
-                              {project.characters.map((c) => (
-                                <option key={c.id} value={c.id}>
-                                  👤 {c.name}
-                                </option>
-                              ))}
-                            </select>
-                            <select
-                              value={activeEvidence.category}
-                              onChange={(e) =>
-                                handleUpdateActiveEvidence((ev) => ({
-                                  ...ev,
-                                  category: e.target.value as EvidenceItem["category"],
-                                }))
-                              }
-                              className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
-                            >
-                              <option value="document">📄 文書・記録</option>
-                              <option value="data">📊 観測・データ</option>
-                              <option value="sample">🔬 検体・物証</option>
-                              <option value="testimony">🗣️ 証言・調書</option>
-                              <option value="audio">📻 音声・ログ</option>
-                            </select>
-                          </>
-                        ) : (
-                          <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
-                            所持: {ownerName}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* 件名 / タイトル */}
-                    <div className="mt-3">
-                      <span className="block text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                        資料件名
-                      </span>
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={activeEvidence.title}
-                          onChange={(e) =>
-                            handleUpdateActiveEvidence((ev) => ({
-                              ...ev,
-                              title: e.target.value,
-                            }))
-                          }
-                          className="mt-1 w-full rounded border border-slate-300 bg-white px-3 py-1.5 text-base font-bold text-slate-900 focus:border-slate-600 focus:outline-none"
-                        />
-                      ) : (
-                        <h1 className="mt-1 text-lg font-bold text-slate-900">
-                          {activeEvidence.title}
-                        </h1>
+                              className="w-full rounded border border-dashed border-slate-300 bg-white p-2.5 text-xs leading-relaxed text-slate-800 focus:border-slate-500 focus:outline-none"
+                            />
+                          ) : (
+                            <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-700">
+                              {activeEvidence.glossaryNote}
+                            </div>
+                          )}
+                        </div>
                       )}
                     </div>
-                  </div>
-
-                  {/* 本文エリア（B5カードの適正サイズ） */}
-                  <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
-                    <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-2">
-                      <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
-                        ■ 記録・本文内容
-                      </span>
-                      {isDirectEditMode && (
-                        <span className="text-[10px] text-slate-400">
-                          ※直接編集可能
-                        </span>
-                      )}
-                    </div>
-                    {isDirectEditMode ? (
-                      <textarea
-                        rows={10}
-                        value={activeEvidence.description}
-                        onChange={(e) =>
-                          handleUpdateActiveEvidence((ev) => ({
-                            ...ev,
-                            description: e.target.value,
-                          }))
-                        }
-                        className="w-full rounded border border-dashed border-slate-300 bg-slate-50/50 p-3 text-sm leading-relaxed text-slate-900 focus:border-slate-500 focus:bg-white focus:outline-none"
-                      />
-                    ) : (
-                      <div className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
-                        {activeEvidence.description}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })()}
+                  );
+                })()
+              )
+            )}
 
             {/* ================================================================
                 ③ 全体提示される地図や写真（ビジュアル提示ボード）のA4印刷最大化ビュー

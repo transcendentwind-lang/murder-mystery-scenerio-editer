@@ -349,7 +349,11 @@ export function generateFullScriptMarkdown(project: MMProject): string {
     if (e.acquisitionCondition) {
       md += `- **入手条件**: ${e.acquisitionCondition}\n`;
     }
-    md += `- **内容**: ${e.description}\n\n`;
+    md += `- **内容**: ${e.description}\n`;
+    if (e.glossaryNote) {
+      md += `- **用語解説（下部余白）**: ${e.glossaryNote}\n`;
+    }
+    md += `\n`;
   });
   md += `---\n\n`;
 

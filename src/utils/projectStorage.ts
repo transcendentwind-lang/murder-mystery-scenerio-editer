@@ -5,6 +5,8 @@ import {
   pc4For6Players,
   pc6Character,
   getCharactersForPlayerCount,
+  SPECIAL_CHARACTER_CARDS,
+  NAGATSU_PHASE_CARDS,
 } from "./initialProjectData";
 
 const STORAGE_KEY_PROJECTS = "mm_workbench_projects_v1";
@@ -301,6 +303,8 @@ export function getStoredProjects(): MMProject[] {
           visualBoards: initialVisualBoards,
           crypticWords: initialProject.crypticWords,
           crypticGrammar: initialProject.crypticGrammar,
+          specialCharacterCards: SPECIAL_CHARACTER_CARDS,
+          nagatsuPhaseCards: NAGATSU_PHASE_CARDS,
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
 
@@ -318,7 +322,14 @@ export function getStoredProjects(): MMProject[] {
               )
               .map((e) => {
                 const master = masterEvidenceMap.get(e.id);
-                return master ? { ...e, title: master.title, description: master.description } : e;
+                return master
+                  ? {
+                      ...e,
+                      title: master.title,
+                      description: master.description,
+                      glossaryNote: master.glossaryNote,
+                    }
+                  : e;
               });
           }
           if (proj.timeline && Array.isArray(proj.timeline)) {
@@ -365,7 +376,14 @@ export function saveProjectToStorage(project: MMProject): void {
       )
       .map((e) => {
         const master = masterEvidenceMap.get(e.id);
-        return master ? { ...e, title: master.title, description: master.description } : e;
+        return master
+          ? {
+              ...e,
+              title: master.title,
+              description: master.description,
+              glossaryNote: e.glossaryNote ?? master.glossaryNote,
+            }
+          : e;
       });
 
     const sanitizedTimeline = (project.timeline || []).map((step) => ({

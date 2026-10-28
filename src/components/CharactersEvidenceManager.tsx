@@ -402,6 +402,11 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                       rows={4}
                       className="mt-2 w-full rounded border border-slate-800 bg-slate-950 p-2 text-xs leading-relaxed text-slate-300 focus:border-indigo-500 focus:outline-none"
                     />
+                    {ev.glossaryNote && (
+                      <div className="mt-1.5 rounded border border-slate-800 bg-slate-950/80 px-2 py-1.5 text-[10.5px] leading-snug text-emerald-300/90 whitespace-pre-wrap">
+                        {ev.glossaryNote}
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-3 border-t border-slate-800 pt-2 text-[11px] space-y-1.5">

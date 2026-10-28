@@ -2700,6 +2700,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-400 leading-relaxed">{ev.description}</p>
+                    {ev.glossaryNote && (
+                      <p className="mt-1.5 rounded border border-slate-800 bg-slate-900/70 px-2 py-1 text-[10px] text-slate-400 leading-snug whitespace-pre-wrap">
+                        {ev.glossaryNote}
+                      </p>
+                    )}
                     {ev.id === "ev-aerial-recon-report" && isActionSelected && (
                       <button
                         onClick={() => setIsPhotoModalOpen(true)}
