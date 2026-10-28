@@ -595,15 +595,27 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
 };
 
-// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外）
+// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外、新規追加ボードも自動マージ）
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
-  const base =
+  if (
     project.visualBoards &&
     project.visualBoards.length > 0 &&
     project.visualBoards.some((v) => v.id === "vis-day7-eruption")
-      ? project.visualBoards
-      : initialVisualBoards;
-  return base.filter((v) => v.id !== "vis-route-map");
+  ) {
+    const existingMap = new Map(project.visualBoards.map((v) => [v.id, v]));
+    const merged: VisualBoardItem[] = [];
+    for (const initItem of initialVisualBoards) {
+      merged.push(existingMap.get(initItem.id) || initItem);
+      existingMap.delete(initItem.id);
+    }
+    for (const customItem of existingMap.values()) {
+      if (customItem.id !== "vis-route-map") {
+        merged.push(customItem);
+      }
+    }
+    return merged;
+  }
+  return initialVisualBoards.filter((v) => v.id !== "vis-route-map");
 }
 
 // デフォルトのGM進行ノートを取得するヘルパー
@@ -2047,7 +2059,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   return (
                     <button
                       key={vb.id}
-                      onClick={() => setSelectedVisualId(vb.id)}
+                      onClick={() => {
+                        setSelectedVisualId(vb.id);
+                        if (vb.orientation) {
+                          setVisualOrientation(vb.orientation);
+                        }
+                      }}
                       className={`w-full rounded-xl border p-3 text-left transition ${
                         isSelected
                           ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
