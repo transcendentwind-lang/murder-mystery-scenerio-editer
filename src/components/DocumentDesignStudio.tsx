@@ -31,7 +31,7 @@ import {
   Check,
   Users,
   FileText,
-  Map,
+  Map as MapIcon,
   Radio,
   Plus,
   Trash2,
@@ -602,13 +602,16 @@ function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
     project.visualBoards.length > 0 &&
     project.visualBoards.some((v) => v.id === "vis-day7-eruption")
   ) {
-    const existingMap = new Map(project.visualBoards.map((v) => [v.id, v]));
+    const existingMap: Record<string, VisualBoardItem> = {};
+    project.visualBoards.forEach((v) => {
+      existingMap[v.id] = v;
+    });
     const merged: VisualBoardItem[] = [];
     for (const initItem of initialVisualBoards) {
-      merged.push(existingMap.get(initItem.id) || initItem);
-      existingMap.delete(initItem.id);
+      merged.push(existingMap[initItem.id] || initItem);
+      delete existingMap[initItem.id];
     }
-    for (const customItem of existingMap.values()) {
+    for (const customItem of Object.values(existingMap)) {
       if (customItem.id !== "vis-route-map") {
         merged.push(customItem);
       }
@@ -1493,7 +1496,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
             }`}
           >
-            <Map className="h-4 w-4 text-cyan-400" />
+            <MapIcon className="h-4 w-4 text-cyan-400" />
             ③ 全体提示の地図・写真
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
               {visualBoards.length}枚
