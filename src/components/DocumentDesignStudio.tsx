@@ -2327,12 +2327,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         </div>
                       </div>
 
-                      <div className="flex flex-col items-end gap-1">
-                        <span className="rounded border border-slate-500 bg-white/10 px-2.5 py-0.5 font-mono text-xs font-bold text-white tracking-widest">
+                      <div className="flex items-center">
+                        <span className="rounded border border-slate-500 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold text-white tracking-widest">
                           PC-{project.characters.findIndex((c) => c.id === activeChar.id) + 1}
-                        </span>
-                        <span className="text-[10px] font-semibold text-emerald-300">
-                          【完全協力型】秘匿目標なし
                         </span>
                       </div>
                     </div>
@@ -2517,11 +2514,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     </div>
 
                     {/* ⑥ B5フッター（公式記録フォーマット） */}
-                    <div className="pt-2 border-t border-slate-200 flex flex-wrap items-center justify-between text-[9.5px] text-slate-500">
+                    <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[9.5px] text-slate-500">
                       <span>合同海難対策本部 記録 // JIS B5 規格ハンドアウト</span>
-                      <span className="font-semibold text-slate-600">
-                        ※本作品は完全協力型インシデントです（秘匿目標・所持品リストなし）
-                      </span>
                       <span className="font-mono">B5 1/1 頁</span>
                     </div>
                   </div>

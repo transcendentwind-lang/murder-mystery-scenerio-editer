@@ -602,7 +602,6 @@ export function generateB5HandoutSingleHtml(
       </div>
       <div class="id-meta">
         <div class="pc-badge">PC-${index + 1}</div>
-        <div class="coop-status">【完全協力型】秘匿目標なし</div>
       </div>
     </div>
 
@@ -669,7 +668,6 @@ export function generateB5HandoutSingleHtml(
     <!-- フッター -->
     <div class="footer-band">
       <span>合同海難対策本部 記録 // JIS B5 規格ハンドアウト</span>
-      <span class="coop-note">※本作品は完全協力型インシデントです（秘匿目標・所持品リストなし）</span>
       <span class="page-num">B5 1/1 頁</span>
     </div>
   </div>
