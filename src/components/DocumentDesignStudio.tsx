@@ -1372,6 +1372,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     printWin.style.border = "0";
     document.body.appendChild(printWin);
 
+    const isB5HandoutSheet = category === "handouts" && handoutViewMode === "sheet";
     const doc = printWin.contentWindow?.document;
     if (doc) {
       doc.open();
@@ -1383,8 +1384,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @page {
-      size: ${category === "evidences" || category === "handouts" ? "B5 portrait" : "A4 portrait"};
-      margin: ${category === "handouts" ? "8mm 9mm" : category === "evidences" ? "12mm" : "8mm"};
+      size: ${category === "evidences" || isB5HandoutSheet ? "B5 portrait" : "A4 portrait"};
+      margin: ${isB5HandoutSheet ? "8mm 9mm" : category === "evidences" ? "12mm" : "8mm"};
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -1395,12 +1396,35 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       margin: 0;
       padding: 0;
       background: #ffffff;
-      font-size: ${category === "handouts" ? "10pt" : "11px"};
-      line-height: ${category === "handouts" ? "1.5" : "1.45"};
+      font-size: ${isB5HandoutSheet ? "10pt" : "11px"};
+      line-height: ${isB5HandoutSheet ? "1.5" : "1.45"};
     }
     .page-break-before {
       page-break-before: always !important;
       break-before: page !important;
+    }
+    @media print {
+      .card-pair-row {
+        border: none !important;
+        background: transparent !important;
+        padding: 0 !important;
+        margin-bottom: 8mm !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .card-pair-grid {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 8mm !important;
+      }
+      .card-face-134mm {
+        height: 134mm !important;
+        min-height: 134mm !important;
+        max-height: 134mm !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+      }
     }
     ruby {
       ruby-align: center;
@@ -2178,7 +2202,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               category === "visuals"
                 ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
                 : category === "handouts"
-                ? "max-w-[720px] bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none"
+                ? `${handoutViewMode === "sheet" ? "max-w-[720px]" : "max-w-4xl"} bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none`
                 : category === "evidences"
                 ? "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
                 : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12 max-w-4xl`
@@ -2541,17 +2565,27 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 特別配布カード（全7枚・各カードの表面＋本文面ペア表示）
+                     🃏 特別配布カード（全7枚・各カードの表面＋本文面ペア表示・A4 1/4サイズ固定）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-baseline justify-between gap-2">
+                    <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 特別配布カード（全7枚）
+                          {project.title} ― 特別配布カード（全7枚・A4 1/4サイズ固定）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          特別配布カード一覧（全7枚）
+                          特別配布カード一覧（全7枚・証拠カード同一サイズ）
                         </h2>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={handlePrintDesignedSheet}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                        >
+                          <Printer className="h-3.5 w-3.5" />
+                          A4 4分割（均一サイズ）で印刷 / PDF保存
+                        </button>
                       </div>
                     </div>
 
@@ -2562,8 +2596,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           : SPECIAL_CHARACTER_CARDS;
 
                       return (
-                        <div className="space-y-6">
-                          {cardsSource.map((card) => {
+                        <div className="space-y-6 print:space-y-0">
+                          {cardsSource.map((card, idx) => {
                             const charShort = card.characterName.split("（")[0];
                             const cardLabel = `特別配布カード（${charShort}）`;
                             const isSelected = card.characterId === activeChar.id;
@@ -2572,15 +2606,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               <div
                                 key={card.id}
                                 onClick={() => setSelectedCharId(card.characterId)}
-                                className={`cursor-pointer rounded-lg border p-4 transition ${
+                                className={`card-pair-row cursor-pointer rounded-lg border p-4 transition print:border-0 print:bg-transparent print:p-0 print:ring-0 print:mb-[8mm] break-inside-avoid ${
+                                  idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
+                                } ${
                                   isSelected
                                     ? "border-indigo-500 bg-indigo-50/30 ring-1 ring-indigo-500/30"
                                     : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
                                 }`}
                               >
-                                <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5">
-                                  {/* 左：表面 */}
-                                  <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[250px] shadow-sm">
+                                <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
+                                  {/* 左：表面（A4 1/4サイズ固定） */}
+                                  <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                                     <div className="flex items-center justify-between text-xs">
                                       <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
                                         {card.revealDayLabel}
@@ -2597,9 +2633,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                       <div className="text-[11px] font-bold tracking-widest text-slate-500">
                                         海上保安庁・合同海難対策本部
                                       </div>
-                                      <div className="text-xl font-black text-slate-900 leading-snug">
-                                        {card.title}
-                                      </div>
+                                      {card.frontTitleHtml ? (
+                                        <div
+                                          className="text-xl font-black text-slate-900 leading-snug"
+                                          dangerouslySetInnerHTML={{ __html: card.frontTitleHtml }}
+                                        />
+                                      ) : (
+                                        <div className="text-xl font-black text-slate-900 leading-snug">
+                                          {card.title}
+                                        </div>
+                                      )}
                                       <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
                                         {cardLabel}
                                       </div>
@@ -2612,8 +2655,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                     </div>
                                   </div>
 
-                                  {/* 右：本文面 */}
-                                  <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[250px] shadow-sm">
+                                  {/* 右：本文面（A4 1/4サイズ固定） */}
+                                  <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                                     <div>
                                       <div className="flex items-center justify-between text-xs mb-2">
                                         <span
@@ -2780,13 +2823,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       {NAGATSU_PHASE_CARDS.map((nc, idx) => (
                         <div
                           key={nc.id}
-                          className={`rounded-lg border border-slate-200 bg-slate-50/40 p-4 print:border-0 print:bg-transparent print:p-0 print:mb-[8mm] break-inside-avoid ${
+                          className={`card-pair-row rounded-lg border border-slate-200 bg-slate-50/40 p-4 print:border-0 print:bg-transparent print:p-0 print:mb-[8mm] break-inside-avoid ${
                             idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
                           }`}
                         >
-                          <div className="grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
+                          <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
                             {/* 左：表面（A4 1/4サイズ固定） */}
-                            <div className="rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                            <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                               <div className="flex items-center justify-between text-xs">
                                 <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
                                   {nc.timingBadge}
@@ -2826,7 +2869,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
 
                             {/* 右：本文面（A4 1/4サイズ固定） */}
-                            <div className="rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                            <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
                               <div>
                                 <div className="flex items-center justify-between text-xs mb-2">
                                   <span
