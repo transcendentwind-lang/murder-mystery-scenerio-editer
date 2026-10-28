@@ -326,6 +326,7 @@ export function getStoredProjects(): MMProject[] {
                   ? {
                       ...e,
                       title: master.title,
+                      frontTitleHtml: master.frontTitleHtml,
                       description: master.description,
                       glossaryNote: master.glossaryNote,
                     }
@@ -380,6 +381,7 @@ export function saveProjectToStorage(project: MMProject): void {
           ? {
               ...e,
               title: master.title,
+              frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
               description: master.description,
               glossaryNote: e.glossaryNote ?? master.glossaryNote,
             }

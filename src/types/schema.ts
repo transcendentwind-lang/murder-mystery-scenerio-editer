@@ -44,6 +44,7 @@ export type EvidenceVisibility = 'private' | 'shareable' | 'public';
 export interface EvidenceItem {
   id: string;
   title: string;               // 証拠名
+  frontTitleHtml?: string;     // カード表面タイトルの改行整形用HTML（例: "遭難船スペックおよび<br>風圧流データ"）
   description: string;         // 詳細テキスト
   glossaryNote?: string;       // カード下部余白の初心者向け用語解説（「〜とは：…」）
   ownerId: string;             // 入手者ID ('all' または characterId)

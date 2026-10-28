@@ -102,6 +102,172 @@ const formatJapaneseParagraphs = (text: string): string => {
     .join("\n");
 };
 
+/**
+ * 証拠カード表面タイトルの改行整形ヘルパー
+ * ・明示的な frontTitleHtml があればそれを優先
+ * ・「および」が含まれる場合は「および<br>」で改行
+ */
+const formatEvidenceFrontTitleHtml = (title: string, explicitHtml?: string): string => {
+  if (explicitHtml) return explicitHtml;
+  if (!title) return "";
+  if (title.includes("および")) {
+    return title.replace(/および/g, "および<br>");
+  }
+  return title;
+};
+
+/**
+ * 証拠カードの所持PC・開示Dayに応じたカラーテーマを返すヘルパー
+ */
+const getEvidenceCardColorTheme = (ownerId: string, foundPhase: number) => {
+  const charMap: Record<
+    string,
+    {
+      badgeBg: string;
+      borderHex: string;
+      headerHex: string;
+      dividerHex: string;
+      frontBgHex: string;
+    }
+  > = {
+    "char-asashio": {
+      badgeBg: "#1e40af",
+      borderHex: "#1e3a8a",
+      headerHex: "#1e40af",
+      dividerHex: "#93c5fd",
+      frontBgHex: "#f8fafc",
+    },
+    "char-kaihama": {
+      badgeBg: "#3730a3",
+      borderHex: "#312e81",
+      headerHex: "#3730a3",
+      dividerHex: "#a5b4fc",
+      frontBgHex: "#f8fafc",
+    },
+    "char-sakanagi": {
+      badgeBg: "#0f766e",
+      borderHex: "#115e59",
+      headerHex: "#0f766e",
+      dividerHex: "#5eead4",
+      frontBgHex: "#f8fafc",
+    },
+    "char-tachiuo": {
+      badgeBg: "#0369a1",
+      borderHex: "#075985",
+      headerHex: "#0369a1",
+      dividerHex: "#7dd3fc",
+      frontBgHex: "#f8fafc",
+    },
+    "char-namiyose": {
+      badgeBg: "#6d28d9",
+      borderHex: "#5b21b6",
+      headerHex: "#6d28d9",
+      dividerHex: "#c4b5fd",
+      frontBgHex: "#f8fafc",
+    },
+    "char-hatsuse": {
+      badgeBg: "#b45309",
+      borderHex: "#92400e",
+      headerHex: "#b45309",
+      dividerHex: "#fcd34d",
+      frontBgHex: "#fffbeb",
+    },
+  };
+
+  const dayMap: Record<
+    number,
+    { dayBg: string; dayBorder: string; dayText: string }
+  > = {
+    1: { dayBg: "#eff6ff", dayBorder: "#93c5fd", dayText: "#1d4ed8" },
+    2: { dayBg: "#f0fdfa", dayBorder: "#5eead4", dayText: "#0f766e" },
+    3: { dayBg: "#f0f9ff", dayBorder: "#7dd3fc", dayText: "#0369a1" },
+    4: { dayBg: "#fffbeb", dayBorder: "#fcd34d", dayText: "#b45309" },
+    5: { dayBg: "#fff1f2", dayBorder: "#fda4af", dayText: "#be123c" },
+    6: { dayBg: "#faf5ff", dayBorder: "#d8b4fe", dayText: "#6d28d9" },
+  };
+
+  const charTheme = charMap[ownerId] || {
+    badgeBg: "#0f766e",
+    borderHex: "#1e3a8a",
+    headerHex: "#0f766e",
+    dividerHex: "#93c5fd",
+    frontBgHex: "#f8fafc",
+  };
+  const dayTheme = dayMap[foundPhase] || dayMap[1];
+
+  return { ...charTheme, ...dayTheme };
+};
+
+/**
+ * カード裏面（詳細内容）のカラーハイライト描画ヘルパー
+ * ・【重要内容】をクリムゾンレッド太字＋淡いローズ背景で強調
+ * ・『発言・証言引用』をディープインディゴ色（内部の【】も維持）で強調
+ */
+const renderBracketHighlights = (segment: string, keyPrefix: string): React.ReactNode => {
+  const parts = segment.split(/(【[^】]+】)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("【") && part.endsWith("】")) {
+      return (
+        <span
+          key={`${keyPrefix}-b-${i}`}
+          className="font-extrabold rounded-[2px] px-0.5"
+          style={{ color: "#b91c1c", backgroundColor: "#fff1f2" }}
+        >
+          {part}
+        </span>
+      );
+    }
+    return <React.Fragment key={`${keyPrefix}-t-${i}`}>{part}</React.Fragment>;
+  });
+};
+
+const renderColoredCardBody = (text: string): React.ReactNode => {
+  if (!text) return null;
+  const quoteParts = text.split(/(『[^』]+』)/g);
+  return quoteParts.map((part, idx) => {
+    if (part.startsWith("『") && part.endsWith("』")) {
+      return (
+        <span
+          key={`q-${idx}`}
+          className="font-semibold"
+          style={{ color: "#1e3a8a" }}
+        >
+          {renderBracketHighlights(part, `q-${idx}`)}
+        </span>
+      );
+    }
+    return renderBracketHighlights(part, `p-${idx}`);
+  });
+};
+
+/**
+ * カード下部余白の初心者向け用語解説（「※〇〇とは：…」）をカラー整形して描画するヘルパー
+ */
+const renderColoredGlossaryNote = (note: string): React.ReactNode => {
+  if (!note) return null;
+  const lines = note.split("\n");
+  return lines.map((line, idx) => {
+    const colonIdx = line.indexOf("：");
+    if (colonIdx !== -1) {
+      const head = line.slice(0, colonIdx + 1);
+      const body = line.slice(colonIdx + 1);
+      return (
+        <div key={idx} className={idx > 0 ? "mt-0.5" : ""}>
+          <span className="font-extrabold" style={{ color: "#0369a1" }}>
+            {head}
+          </span>
+          <span style={{ color: "#1e293b" }}>{body}</span>
+        </div>
+      );
+    }
+    return (
+      <div key={idx} className={idx > 0 ? "mt-0.5" : ""} style={{ color: "#1e293b" }}>
+        {line}
+      </div>
+    );
+  });
+};
+
 // テーマ定義マスター
 const THEME_PRESETS: Record<
   DocumentThemeId,
@@ -961,6 +1127,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           ? {
               ...e,
               title: master.title,
+              frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
               description: master.description,
               glossaryNote: e.glossaryNote ?? master.glossaryNote,
             }
@@ -2705,10 +2872,23 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 }`}
                               >
                                 <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
-                                  {/* 左：表面（A4 1/4サイズ固定） */}
-                                  <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                                  {/* 左：表面（A4 1/4サイズ固定・カラー） */}
+                                  <div
+                                    className="card-face-134mm rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                                    style={{
+                                      borderColor: card.accentHex,
+                                      backgroundColor: "#f8fafc",
+                                    }}
+                                  >
                                     <div className="flex items-center justify-between text-xs">
-                                      <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                      <span
+                                        className="rounded border px-2 py-0.5 font-bold"
+                                        style={{
+                                          backgroundColor: "#eff6ff",
+                                          borderColor: "#93c5fd",
+                                          color: "#1e40af",
+                                        }}
+                                      >
                                         {card.revealDayLabel}
                                       </span>
                                       <span
@@ -2720,7 +2900,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                     </div>
 
                                     <div className="my-auto py-5 text-center space-y-2">
-                                      <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                      <div
+                                        className="text-[11px] font-bold tracking-widest"
+                                        style={{ color: card.accentHex }}
+                                      >
                                         海上保安庁・合同海難対策本部
                                       </div>
                                       {card.frontTitleHtml ? (
@@ -2733,20 +2916,32 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                           {card.title}
                                         </div>
                                       )}
-                                      <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                      <div
+                                        className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
+                                        style={{
+                                          borderColor: card.accentHex,
+                                          color: card.accentHex,
+                                        }}
+                                      >
                                         {cardLabel}
                                       </div>
                                     </div>
 
                                     <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
-                                      <span className="font-mono text-xs font-bold text-slate-500">
+                                      <span
+                                        className="font-mono text-xs font-bold"
+                                        style={{ color: card.accentHex }}
+                                      >
                                         {card.cardCode} / 07
                                       </span>
                                     </div>
                                   </div>
 
-                                  {/* 右：本文面（A4 1/4サイズ固定） */}
-                                  <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                                  {/* 右：本文面（A4 1/4サイズ固定・カラー） */}
+                                  <div
+                                    className="card-face-134mm rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                                    style={{ borderColor: card.accentHex }}
+                                  >
                                     <div>
                                       <div className="flex items-center justify-between text-xs mb-1.5">
                                         <span
@@ -2755,13 +2950,26 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                         >
                                           {cardLabel}
                                         </span>
-                                        <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                        <span
+                                          className="rounded border px-2 py-0.5 font-bold"
+                                          style={{
+                                            backgroundColor: "#eff6ff",
+                                            borderColor: "#93c5fd",
+                                            color: "#1e40af",
+                                          }}
+                                        >
                                           {card.revealDayLabel}
                                         </span>
                                       </div>
 
-                                      <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
-                                        <h3 className="text-base font-extrabold text-slate-900">
+                                      <div
+                                        className="border-b-2 pb-1.5 mb-2"
+                                        style={{ borderColor: card.accentHex }}
+                                      >
+                                        <h3
+                                          className="text-base font-extrabold"
+                                          style={{ color: "#0f172a" }}
+                                        >
                                           {card.title}
                                         </h3>
                                       </div>
@@ -2773,18 +2981,27 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                             : "text-xs leading-relaxed"
                                         } text-slate-800 whitespace-pre-wrap text-justify`}
                                       >
-                                        {card.description}
+                                        {renderColoredCardBody(card.description)}
                                       </div>
                                     </div>
 
                                     <div className="mt-2 space-y-1.5">
                                       {card.glossaryNote && (
-                                        <div className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-[9.5px] leading-[1.35] text-slate-700 whitespace-pre-wrap">
-                                          {card.glossaryNote}
+                                        <div
+                                          className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                          style={{
+                                            backgroundColor: "#f0f9ff",
+                                            borderColor: "#7dd3fc",
+                                          }}
+                                        >
+                                          {renderColoredGlossaryNote(card.glossaryNote)}
                                         </div>
                                       )}
                                       <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                                        <span className="font-mono font-bold text-slate-500">
+                                        <span
+                                          className="font-mono font-bold"
+                                          style={{ color: card.accentHex }}
+                                        >
                                           {card.cardCode} / 07
                                         </span>
                                       </div>
@@ -3068,6 +3285,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         ? ownerChar.name.split("（")[0]
                         : "全体公開";
                       const isSelected = ev.id === activeEvidence?.id;
+                      const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);
+                      const formattedFrontTitleHtml = formatEvidenceFrontTitleHtml(
+                        ev.title,
+                        ev.frontTitleHtml
+                      );
 
                       return (
                         <div
@@ -3082,50 +3304,98 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           }`}
                         >
                           <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
-                            {/* 左：表面（A4 1/4サイズ固定） */}
-                            <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                            {/* 左：表面（A4 1/4サイズ固定・カラー＆意味区切り改行） */}
+                            <div
+                              className="card-face-134mm rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                              style={{
+                                borderColor: cardColor.borderHex,
+                                backgroundColor: cardColor.frontBgHex,
+                              }}
+                            >
                               <div className="flex items-center justify-between text-xs">
-                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                <span
+                                  className="rounded border px-2 py-0.5 font-bold"
+                                  style={{
+                                    backgroundColor: cardColor.dayBg,
+                                    borderColor: cardColor.dayBorder,
+                                    color: cardColor.dayText,
+                                  }}
+                                >
                                   Day {ev.foundPhase} 開示
                                 </span>
-                                <span className="rounded bg-slate-800 px-2.5 py-0.5 font-bold text-white">
+                                <span
+                                  className="rounded px-2.5 py-0.5 font-bold text-white"
+                                  style={{ backgroundColor: cardColor.badgeBg }}
+                                >
                                   証拠資料カード（{ownerShort}）
                                 </span>
                               </div>
 
                               <div className="my-auto py-5 text-center space-y-2">
-                                <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                <div
+                                  className="text-[11px] font-bold tracking-widest"
+                                  style={{ color: cardColor.headerHex }}
+                                >
                                   海上保安庁・合同海難対策本部
                                 </div>
-                                <div className="text-xl font-black text-slate-900 leading-snug px-2">
-                                  {ev.title}
-                                </div>
-                                <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                <div
+                                  className="text-xl font-black text-slate-900 leading-snug px-2"
+                                  dangerouslySetInnerHTML={{ __html: formattedFrontTitleHtml }}
+                                />
+                                <div
+                                  className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
+                                  style={{
+                                    borderColor: cardColor.dividerHex,
+                                    color: cardColor.headerHex,
+                                  }}
+                                >
                                   証拠資料カード（{ownerShort}）
                                 </div>
                               </div>
 
                               <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
-                                <span className="font-mono text-xs font-bold text-slate-500">
+                                <span
+                                  className="font-mono text-xs font-bold"
+                                  style={{ color: cardColor.headerHex }}
+                                >
                                   {evCode} / {String(allEvidences.length).padStart(2, "0")}
                                 </span>
                               </div>
                             </div>
 
-                            {/* 右：本文面＋下部余白の用語解説（A4 1/4サイズ固定） */}
-                            <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
+                            {/* 右：本文面＋下部余白の用語解説（A4 1/4サイズ固定・カラー） */}
+                            <div
+                              className="card-face-134mm rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                              style={{ borderColor: cardColor.borderHex }}
+                            >
                               <div>
                                 <div className="flex items-center justify-between text-xs mb-1.5">
-                                  <span className="rounded bg-slate-800 px-2.5 py-0.5 font-bold text-white">
+                                  <span
+                                    className="rounded px-2.5 py-0.5 font-bold text-white"
+                                    style={{ backgroundColor: cardColor.badgeBg }}
+                                  >
                                     証拠資料カード（{ownerShort}）
                                   </span>
-                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                  <span
+                                    className="rounded border px-2 py-0.5 font-bold"
+                                    style={{
+                                      backgroundColor: cardColor.dayBg,
+                                      borderColor: cardColor.dayBorder,
+                                      color: cardColor.dayText,
+                                    }}
+                                  >
                                     Day {ev.foundPhase} 開示
                                   </span>
                                 </div>
 
-                                <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
-                                  <h3 className="text-base font-extrabold text-slate-900">
+                                <div
+                                  className="border-b-2 pb-1.5 mb-2"
+                                  style={{ borderColor: cardColor.borderHex }}
+                                >
+                                  <h3
+                                    className="text-base font-extrabold"
+                                    style={{ color: "#0f172a" }}
+                                  >
                                     {ev.title}
                                   </h3>
                                 </div>
@@ -3137,18 +3407,27 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                       : "text-xs leading-relaxed"
                                   } text-slate-800 whitespace-pre-wrap text-justify`}
                                 >
-                                  {ev.description}
+                                  {renderColoredCardBody(ev.description)}
                                 </div>
                               </div>
 
                               <div className="mt-2 space-y-1.5">
                                 {ev.glossaryNote && (
-                                  <div className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1.5 text-[9.5px] leading-[1.35] text-slate-700 whitespace-pre-wrap">
-                                    {ev.glossaryNote}
+                                  <div
+                                    className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                    style={{
+                                      backgroundColor: "#f0f9ff",
+                                      borderColor: "#7dd3fc",
+                                    }}
+                                  >
+                                    {renderColoredGlossaryNote(ev.glossaryNote)}
                                   </div>
                                 )}
                                 <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                                  <span className="font-mono font-bold text-slate-500">
+                                  <span
+                                    className="font-mono font-bold"
+                                    style={{ color: cardColor.headerHex }}
+                                  >
                                     {evCode} / {String(allEvidences.length).padStart(2, "0")}
                                   </span>
                                 </div>
@@ -3169,15 +3448,28 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : ownerChar
                       ? `${ownerChar.name}（${ownerChar.profession || "所持"}）`
                       : activeEvidence.ownerId;
+                  const singleColor = getEvidenceCardColorTheme(
+                    activeEvidence.ownerId,
+                    activeEvidence.foundPhase
+                  );
 
                   return (
                     <div className="space-y-4">
                       {/* B5カード ヘッダー＆メタ情報 */}
-                      <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+                      <div
+                        className="rounded-lg border-2 p-4"
+                        style={{
+                          borderColor: singleColor.borderHex,
+                          backgroundColor: singleColor.frontBgHex,
+                        }}
+                      >
                         <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-3 text-xs">
                           {/* Day & 種別 */}
                           <div className="flex items-center gap-2">
-                            <span className="rounded bg-slate-800 px-2.5 py-1 font-mono font-bold text-white shadow-sm">
+                            <span
+                              className="rounded px-2.5 py-1 font-mono font-bold text-white shadow-sm"
+                              style={{ backgroundColor: singleColor.badgeBg }}
+                            >
                               証拠資料カード
                             </span>
                             {isDirectEditMode ? (
@@ -3198,7 +3490,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 ))}
                               </select>
                             ) : (
-                              <span className="rounded bg-slate-200 px-2 py-0.5 font-bold text-slate-700">
+                              <span
+                                className="rounded border px-2 py-0.5 font-bold"
+                                style={{
+                                  backgroundColor: singleColor.dayBg,
+                                  borderColor: singleColor.dayBorder,
+                                  color: singleColor.dayText,
+                                }}
+                              >
                                 開示フェーズ: Day {activeEvidence.foundPhase}
                               </span>
                             )}
@@ -3243,7 +3542,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </select>
                               </>
                             ) : (
-                              <span className="inline-flex items-center gap-1 rounded bg-slate-200/80 px-2 py-0.5 font-medium text-slate-700">
+                              <span
+                                className="inline-flex items-center gap-1 rounded px-2.5 py-0.5 font-bold text-white"
+                                style={{ backgroundColor: singleColor.badgeBg }}
+                              >
                                 所持: {ownerName}
                               </span>
                             )}
@@ -3252,7 +3554,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                         {/* 件名 / タイトル */}
                         <div className="mt-3">
-                          <span className="block text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                          <span
+                            className="block text-[10px] font-bold tracking-wider uppercase"
+                            style={{ color: singleColor.headerHex }}
+                          >
                             資料件名
                           </span>
                           {isDirectEditMode ? (
@@ -3268,7 +3573,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               className="mt-1 w-full rounded border border-slate-300 bg-white px-3 py-1.5 text-base font-bold text-slate-900 focus:border-slate-600 focus:outline-none"
                             />
                           ) : (
-                            <h1 className="mt-1 text-lg font-bold text-slate-900">
+                            <h1 className="mt-1 text-lg font-extrabold text-slate-900">
                               {activeEvidence.title}
                             </h1>
                           )}
@@ -3276,9 +3581,18 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </div>
 
                       {/* 本文エリア（B5カードの適正サイズ） */}
-                      <div className="rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
-                        <div className="mb-2 flex items-center justify-between border-b border-slate-200 pb-2">
-                          <span className="text-xs font-bold uppercase tracking-wider text-slate-600">
+                      <div
+                        className="rounded-lg border-2 bg-white p-5 shadow-sm"
+                        style={{ borderColor: singleColor.borderHex }}
+                      >
+                        <div
+                          className="mb-2 flex items-center justify-between border-b-2 pb-2"
+                          style={{ borderColor: singleColor.dividerHex }}
+                        >
+                          <span
+                            className="text-xs font-bold uppercase tracking-wider"
+                            style={{ color: singleColor.headerHex }}
+                          >
                             ■ 記録・本文内容
                           </span>
                           {isDirectEditMode && (
@@ -3301,16 +3615,28 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           />
                         ) : (
                           <div className="whitespace-pre-wrap text-sm leading-relaxed text-slate-800">
-                            {activeEvidence.description}
+                            {renderColoredCardBody(activeEvidence.description)}
                           </div>
                         )}
                       </div>
 
                       {/* 下部余白：初心者向け用語解説（「〜とは：…」） */}
                       {(activeEvidence.glossaryNote || isDirectEditMode) && (
-                        <div className="rounded-lg border border-slate-300 bg-slate-50 p-4 shadow-sm">
-                          <div className="mb-1.5 flex items-center justify-between border-b border-slate-200 pb-1.5">
-                            <span className="text-xs font-bold text-slate-700">
+                        <div
+                          className="rounded-lg border p-4 shadow-sm"
+                          style={{
+                            backgroundColor: "#f0f9ff",
+                            borderColor: "#7dd3fc",
+                          }}
+                        >
+                          <div
+                            className="mb-1.5 flex items-center justify-between border-b pb-1.5"
+                            style={{ borderColor: "#bae6fd" }}
+                          >
+                            <span
+                              className="text-xs font-extrabold"
+                              style={{ color: "#0369a1" }}
+                            >
                               📖 用語解説（カード下部余白に表示）
                             </span>
                             {isDirectEditMode && (
@@ -3333,8 +3659,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               className="w-full rounded border border-dashed border-slate-300 bg-white p-2.5 text-xs leading-relaxed text-slate-800 focus:border-slate-500 focus:outline-none"
                             />
                           ) : (
-                            <div className="whitespace-pre-wrap text-xs leading-relaxed text-slate-700">
-                              {activeEvidence.glossaryNote}
+                            <div className="whitespace-pre-wrap text-xs leading-relaxed">
+                              {renderColoredGlossaryNote(activeEvidence.glossaryNote || "")}
                             </div>
                           )}
                         </div>
