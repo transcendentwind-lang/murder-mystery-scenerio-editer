@@ -2380,7 +2380,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3">
                     <img
-                      src="/images/sonar_qr.png"
+                      src="/images/sonar_qr.png?v=20261030"
                       alt="プレイヤー専用画面QRコード"
                       className="h-44 w-44 object-contain"
                     />
@@ -2390,7 +2390,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       スマホのカメラで上のQRコードを読み取ると、外部回線（4G/5G）から直接プレイヤー画面が開きます。
                     </div>
                     <div className="rounded bg-slate-950 px-2 py-1 font-mono text-[10px] text-cyan-300 break-all">
-                      https://sterling-smaller-asian-campaigns.trycloudflare.com/sonar
+                      https://sensitivity-disposition-tub-choir.trycloudflare.com/sonar
                     </div>
                   </div>
                 </div>
