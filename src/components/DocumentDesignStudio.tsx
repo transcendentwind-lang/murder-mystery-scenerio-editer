@@ -657,6 +657,10 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛庁からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
 
+【GM進行メモ：クジラ言語の解読時間と『狂気の深淵を覗く』使用時の5分延長ルール】
+※クジラ言語アプリを用いた新言語祝詞（2語×4組）の解読・組み立て時間は【目安15分】です。
+※もし解読の途中でプレイヤーがアプリ内の【狂気の深淵を覗き込み、クジラの言語をより理解する】ボタンを押した場合は、すべての言語（全24語）の意味が判明しますが、それを全員で共有して構文（2語×4組）に組み立てる時間が必要になるため、解読の制限時間を【5分延長】してください。
+
 【長津の電話交渉前アナウンス（新言語祝詞の音声完成後・Day 6 途中① 指令書 ＆ SP-07連動）】
 （🎙️ 首席オペレーター 長津）:
 「――クジラを呼び寄せる新言語祝詞の音声が完成しましたね！ しかし、防衛庁の上層部は『さらなる魚雷の飽和攻撃』の準備を進めており、通常のルートで上申しても潜水艦で祝詞の音声を流すような作戦は到底承認されません。……朝潮危機管理官、皆さん、実は防衛庁で自衛隊部隊の運用を統括する最高責任者・【運用企画局長の岸部（きしべ）】は私の親戚（叔父）にあたりまして、直通の連絡先を持っています。厳格な現実主義者ですが、科学的な根拠と計算に基づく進言であれば耳を傾けてくれるはずです。準備が整い次第、回線を繋ぎますので直接説得を頼みます！」
@@ -790,7 +794,8 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   6: [
     "【Day 6 開始時】7名プレイ時は長津（PC7）へ特別配布カード『SP-07：防衛庁 運用企画局長とのコネクション』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート（朝8時時点：巨大生物の完全回復・北上再開と火山性微動再開、駿河湾到達まで24時間）』を手渡す（目標時間: 30分）",
-    "東京班が徹夜で回収した残りの資料、朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組）を完成させる",
+    "東京班が徹夜で回収した残りの資料、朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組）を完成させる（解読時間目安：15分）",
+    "【『狂気の深淵を覗く』使用時の5分延長ルール】プレイヤーがクジラ言語アプリで『狂気の深淵を覗く』を使用した場合は、全24語の意味が判明するため、それを全員で共有して構文（2語×4組）に組み立てる時間として解読の制限時間を【5分延長】する",
     "祝詞音声の完成後、朝潮へ『Day 6 途中① 指令書』を渡し、長津が親戚（叔父）である防衛庁運用企画局長・岸部（きしべ）への直通回線を繋いで（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
     "【岸部局長の反論による思考誘導】祝詞の解読ができていれば、もし『水深1,000mのSOFAR層（潜水艦）』や『クジラの移動時間（6〜8時間＝今夜の送信が必要）』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
     "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げ、続けて深夜の潜水艦による深海SOFAR層での祝詞音声放流開始（NG-07）をアナウンスする",
@@ -866,7 +871,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 3 && (!existing.readAloudScript.includes("NG-02") || !existing.readAloudScript.includes("NG-04"))) ||
       (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("最終目的地の結論分岐"))) ||
       (dayNumber === 5 && (!existing.readAloudScript.includes("時速5km") || !existing.readAloudScript.includes("どうして魚雷の命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.readAloudScript.includes("朝8時") || existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
+      (dayNumber === 6 && (!existing.readAloudScript.includes("朝8時") || !existing.readAloudScript.includes("5分延長") || existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
       (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
@@ -877,7 +882,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
       (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
+      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || !existing.gmCheckpoints.some((c) => c.includes("5分延長")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
