@@ -2358,14 +2358,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：Day 5 結末（防衛省から貝浜への緊急打診：魚雷集中攻撃の是非と浪寄への諮問） */}
+                  {/* フェーズ3：Day 5 結末（防衛省から貝浜への緊急打診：魚雷命中後のソナー観測報告と浪寄への諮問） */}
                   <div className="rounded-xl border border-red-800 bg-[#1e0d14] p-3.5 space-y-2.5 shadow-lg">
                     <span className="font-bold text-red-400 text-xs flex items-center gap-1.5 border-b border-red-900/50 pb-1.5">
                       <ShieldAlert className="h-4 w-4 text-red-400 animate-pulse" />
-                      【フェーズ3（Day 5 結末）：防衛省からの緊急入電「魚雷直撃・浪寄准教授への統率＆火山刺激メカニズム照会」】
+                      【フェーズ3（Day 5 結末）：防衛省作戦本部からの緊急入電（NG-06 ＆ Day 5 途中①指令書）】
                     </span>
                     <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-2">
-                      <strong className="text-red-300 block font-bold">💥 【防衛省より貝浜（PC2）への無線（GM読み上げ用台本）】</strong>
+                      <strong className="text-red-300 block font-bold">💥 【防衛省作戦本部より貝浜（PC2）への無線（GM読み上げ用台本）】</strong>
                       <p className="italic text-slate-300 text-[10px]">
                         （🎙️ 首席オペレーター 長津）:「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
                       </p>
@@ -2378,17 +2378,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       )}
                       <p className="italic text-slate-100 leading-relaxed font-mono">
-                        【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ 貝浜、直ちにあの生物の写真解析を行った浪寄准教授（PC5）の意見を確認してくれ！」
+                        【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。しかし、目標が発している特有の振動が起きておらず、それにあわせて火山性の周期的な微動が収まっていることを確認できている。アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授（PC5）の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？！」
                       </p>
                       <div className="rounded bg-red-950/70 border border-red-800/80 p-2 text-[10px] text-amber-200 space-y-1">
-                        <strong>🎯 GM聞き出しポイント（貝浜 / PC2 ➔ 浪寄 / PC5へ確認させる問い）:</strong>
+                        <strong>🎯 GM聞き出しポイント（貝浜 / PC2 ➔ 浪寄 / PC5らへ確認させる問い）:</strong>
                         <ul className="list-disc list-inside space-y-0.5 pl-1 text-slate-200">
-                          <li>「通常兵器で倒せないなら、あいつらは一体どうやって一つの個体として統率（情報伝達）されているのか？」</li>
-                          <li>「そして、どうやって海底火山や富士山を刺激し、なぜ一直線に北上できているのか？」</li>
+                          <li>「どうして魚雷が命中した後に、ゆっくり深海に沈み込みながら元の大きさへ復活してしまうのか？」（➔ 1匹の巨大生物ではなく、無数のダイオウイカの【群体（コロニー）】であるため）</li>
+                          <li>「そして、なぜ一直線に富士山を目指しているのか？」（➔ 地磁気と、小笠原・八丈島・三宅島から盗まれて海に落とされた複数の隕石、および富士山麓へ運ばれた隕石を追っているため）</li>
                         </ul>
-                        <p className="text-slate-300 pt-0.5">
-                          💡 <strong>解明されるメカニズム</strong>: ①巨大生物は<strong>海底付近で海底地震を起こすような特別な振動</strong>を発生させ、それが海底火山を次々と刺激している。②生物が北上できる理由は<strong>「地磁気」と「隕石が放つ特殊な物質」</strong>の2つであり、小笠原・八丈島・三宅島の神社から組織的に盗まれた複数の隕石が<strong>青ヶ島沖・八丈島付近・三宅島付近の海に落とされていた</strong>ため、その痕跡を辿って富士山麓へ迫っている！ そして個体の統率は「音響・クジラ言語（コーダ）」へと繋がります。
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -2397,31 +2394,23 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 6 && (
                 <div className="space-y-3.5 text-xs leading-relaxed">
-                  {/* 状況推移：一時的沈静化（潜航）から終盤の再浮上・微動復活へ */}
+                  {/* 朝8時ブリーフィング：巨大生物の完全回復・北上再開 ＆ 富士山地下微動再開 */}
                   <div className="rounded-xl border border-rose-900/60 bg-[#19101c] p-3.5 space-y-2 shadow-md">
                     <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-amber-400" />
-                        【Day 6 戦況推移：一時的沈静化（潜航） ➔ 終盤の急激な再浮上・微動復活】
+                        【Day 6 朝8時ブリーフィング：巨大生物の完全回復・北上再開 ＆ 富士山微動再開】
                       </span>
                       <span className="text-[10px] font-mono text-red-400 font-bold bg-red-950/80 px-2 py-0.5 rounded border border-red-800/80">
-                        破局噴火まで残り 24時間
+                        駿河湾到達まで 24時間
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-2.5 text-[11px]">
-                      <div className="rounded bg-black/40 border border-slate-800 p-2.5 space-y-1">
-                        <strong className="text-cyan-300 block">昼の演出（一時的沈静化と迎撃完了見込み）:</strong>
-                        <p className="italic text-slate-300 leading-relaxed font-mono">
-                          （🎙️ 首席オペレーター 長津）:「（昼）――各員へ報告。海上自衛隊の迎撃行動により、巨大生物は活動を停止しました。御蔵島沖噴火は小康状態となり、富士山地下の微動も一時的に沈静化しています。富士山の噴火についてもまだ予断を許さないものの、この巨大生物と噴火が関係あるとする意見が多く、撃退したことにより事態が沈静化するだろうという意見が多く見られます。直接の因果関係が認められないことからメディアには引き続き巨大生物の情報は出せません。これでこの一連の作戦は完了となる見込みです」
-                        </p>
-                      </div>
-                      <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 space-y-1">
-                        <strong className="text-rose-300 block">夕〜夜の演出（急激な再浮上と微動復活・激化！）:</strong>
-                        <p className="italic text-rose-100 leading-relaxed font-mono">
-                          （🎙️ 首席オペレーター 長津）:「（夕〜夜）――緊急警報！ 海上自衛隊の深海ソナーが駿河トラフ境界へ向けて高速で再浮上する巨大影を探知！ 同時に富士山地下の火山性微動が突如復活・激化いたしました！ 破局噴火まで残り24時間、巨大生物は生存しており海底マグマ網へ直接突入を試みています！」
-                        </p>
-                      </div>
+                    <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 text-[11px] space-y-1">
+                      <strong className="text-rose-300 block">朝のブリーフィング（朝8時・巨大生物の回復と北上再開）:</strong>
+                      <p className="italic text-rose-100 leading-relaxed font-mono">
+                        （🎙️ 首席オペレーター 長津）:「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛庁からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
+                      </p>
                     </div>
                   </div>
 
@@ -2652,37 +2641,24 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ4.5：深夜の潜水艦SOFAR層事前放流開始 ＆ 作戦命名 */}
+                  {/* フェーズ4.5：深夜の潜水艦SOFAR層事前放流開始 */}
                   <div className="rounded-xl border border-cyan-700/80 bg-[#081a20] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Sparkles className="h-4 w-4 text-cyan-400" />
-                        【フェーズ4.5：深夜の潜水艦SOFAR層事前放流開始 ＆ 合同チーム作戦名の命名】
+                        【フェーズ4.5：深夜の潜水艦SOFAR層での新言語祝詞・放流開始（NG-07）】
                       </span>
                       <span className="text-[10px] text-cyan-300 font-mono bg-cyan-950 px-2 py-0.5 rounded border border-cyan-800">
-                        潜水艦SOFAR放流 ＆ 作戦命名
+                        潜水艦SOFAR放流開始
                       </span>
                     </div>
                     <div className="rounded-lg bg-black/60 border border-cyan-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-cyan-300 block font-bold">
-                        📢 【長津の深夜潜水艦放流 ＆ 作戦命名アナウンス（GM読み上げ用）】:
+                        📢 【長津の深夜潜水艦放流開始アナウンス（GM読み上げ用 ／ 長津カード NG-07）】:
                       </strong>
                       <p className="italic leading-relaxed font-mono text-cyan-100">
-                        （🎙️ 首席オペレーター 長津）:「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞『人と勇魚、契り……』の放流を開始いたしました！ 音波は海中音響チャンネルに乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」
+                        （🎙️ 首席オペレーター 長津）:「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞の放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）とクジラたちの共鳴に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」
                       </p>
-                    </div>
-                    <div className="flex flex-wrap items-center gap-2 pt-1 text-[11px]">
-                      <span className="text-slate-300 font-bold">作戦名入力:</span>
-                      <input
-                        type="text"
-                        value={operationName}
-                        onChange={(e) => setOperationName(e.target.value)}
-                        placeholder="例: オペレーション・ワタツミ / 大捕食作戦"
-                        className="bg-slate-950 border border-slate-700 rounded px-2.5 py-1 text-xs text-cyan-300 w-64 font-bold focus:border-cyan-400 outline-none"
-                      />
-                      <span className="text-[10px] text-emerald-400 font-mono">
-                        発動予定: 【{operationName || "未命名作戦"}】
-                      </span>
                     </div>
                   </div>
                 </div>
