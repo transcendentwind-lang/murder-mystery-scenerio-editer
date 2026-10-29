@@ -1129,7 +1129,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
   const [visualOrientation, setVisualOrientation] = useState<"portrait" | "landscape_rotated">("landscape_rotated");
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
-  const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "all_in_one" | "daily_sheet">("flowchart");
+  const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
   const isDirectEditMode = false;
@@ -1805,16 +1805,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           {category === "gm_guides" && (
             <>
               <a
-                href="/pdfs/gm-complete-progression-guide.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/25 transition"
-                title="A4・1枚の成功・失敗分岐フローチャート図と、Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括印刷用PDFを開きます"
-              >
-                <Printer className="h-4 w-4" />
-                🖨️ GM進行資料を一括印刷 / PDF（フローチャート＋全7日進行表）
-              </a>
-              <a
                 href="/pdfs/gm-branching-flowchart.pdf"
                 target="_blank"
                 rel="noopener noreferrer"
@@ -1822,7 +1812,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 title="A4用紙1枚にDay 1〜Day 7すべてが収まった成功・失敗分岐フローチャート図PDFを開きます"
               >
                 <Printer className="h-4 w-4" />
-                🗺️ 分岐フローチャート図のみ印刷 / PDF（A4・1枚）
+                🖨️ フローチャートを印刷 / PDF
+              </a>
+              <a
+                href="/pdfs/gm-complete-progression-guide.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/25 transition"
+                title="Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括印刷用PDFを開きます"
+              >
+                <Printer className="h-4 w-4" />
+                🖨️ 進行資料を一括印刷 / PDF
               </a>
             </>
           )}
@@ -1915,7 +1915,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       ) : category === "gm_guides" ? (
         <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="text-xs font-bold text-slate-300">GM進行資料モード：</span>
+            <span className="text-xs font-bold text-slate-300">表示切替：</span>
             <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
               <button
                 onClick={() => setGmGuideViewMode("flowchart")}
@@ -1925,17 +1925,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                🔀 成功・失敗分岐フローチャート図（A4・1枚完結）
-              </button>
-              <button
-                onClick={() => setGmGuideViewMode("all_in_one")}
-                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
-                  gmGuideViewMode === "all_in_one"
-                    ? "bg-emerald-600 text-white shadow"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
-              >
-                📚 GM進行資料一括表示（フローチャート＋全7日進行表）
+                🔀 成功・失敗分岐フローチャート（A4・1枚）
               </button>
               <button
                 onClick={() => setGmGuideViewMode("daily_sheet")}
@@ -1945,30 +1935,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                📄 Day別 GM進行台本＆管理シート
+                📄 Day別 GM進行資料
               </button>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <a
-              href="/pdfs/gm-complete-progression-guide.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              🖨️ 一括印刷PDFを開く（フローチャート＋全7日）
-            </a>
-            <a
-              href="/pdfs/gm-branching-flowchart.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              📄 分岐チャート図PDF（A4・1枚）
-            </a>
-          </div>
+          <span className="text-[11px] text-slate-400">
+            ※右上の印刷ボタンから「フローチャート（A4・1枚）」と「進行資料（全7日分一括）」をそれぞれ印刷できます
+          </span>
         </div>
       ) : (
         <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5">
@@ -2483,7 +2456,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 GM進行資料（全{project.timeline.length}フェーズ）
               </h3>
 
-              {/* フローチャート（A4・1枚） vs 一括表示 vs Day別進行台本 切替ボタン */}
+              {/* フローチャート（A4・1枚） vs Day別進行資料 切替ボタン */}
               <div className="grid grid-cols-1 gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
                 <button
                   onClick={() => setGmGuideViewMode("flowchart")}
@@ -2493,19 +2466,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-300 hover:bg-slate-900 hover:text-white"
                   }`}
                 >
-                  <span>🔀 成功・失敗分岐フローチャート図</span>
+                  <span>🔀 成功・失敗分岐フローチャート</span>
                   <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">A4・1枚</span>
-                </button>
-                <button
-                  onClick={() => setGmGuideViewMode("all_in_one")}
-                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
-                    gmGuideViewMode === "all_in_one"
-                      ? "bg-emerald-600 text-white shadow"
-                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
-                  }`}
-                >
-                  <span>📚 GM進行資料一括表示（全7日＋図）</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">完全版</span>
                 </button>
                 <button
                   onClick={() => setGmGuideViewMode("daily_sheet")}
@@ -2515,38 +2477,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-300 hover:bg-slate-900 hover:text-white"
                   }`}
                 >
-                  <span>📄 Day別 GM進行台本＆管理シート</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">各Day</span>
+                  <span>📄 Day別 GM進行資料</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">Day 1〜7</span>
                 </button>
-              </div>
-
-              {/* 左サイドバーにも一括印刷PDFボタンを常設 */}
-              <div className="space-y-1.5 pt-1">
-                <a
-                  href="/pdfs/gm-complete-progression-guide.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-2 text-xs font-bold text-white shadow transition"
-                >
-                  <Printer className="h-3.5 w-3.5 shrink-0" />
-                  <span>🖨️ GM進行資料を一括印刷 / PDF</span>
-                </a>
-                <a
-                  href="/pdfs/gm-branching-flowchart.pdf"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
-                >
-                  <Printer className="h-3.5 w-3.5 shrink-0" />
-                  <span>🗺️ 分岐チャート図のみ印刷（A4・1枚）</span>
-                </a>
               </div>
 
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 {gmGuideViewMode === "flowchart"
-                  ? "Day 1〜Day 7までの全ての成功・失敗ルート（Day 1再挑戦＆証言カード繰越、Day 4東京湾結論時の迎撃遅延＆嫌味、Day 6岸部局長の反論誘導など）をA4・1枚に凝縮したチャート図です。"
-                  : gmGuideViewMode === "all_in_one"
-                  ? "A4・1枚の成功・失敗分岐フローチャート図と、Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括表示です。"
+                  ? "Day 1〜Day 7までの全ての成功・失敗ルートをA4・1枚に凝縮したチャート図です。"
                   : "各Dayごとの読み上げスクリプト、時間配分、成功・失敗分岐フロー、開示証拠リストを確認できます。"}
               </p>
 
@@ -2600,8 +2538,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             ref={printableSheetRef}
             className={`mx-auto transition-all relative ${
               category === "visuals" ||
-              (category === "gm_guides" &&
-                (gmGuideViewMode === "flowchart" || gmGuideViewMode === "all_in_one"))
+              (category === "gm_guides" && gmGuideViewMode === "flowchart")
                 ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
                 : category === "handouts"
                 ? `${handoutViewMode === "sheet" ? "max-w-[720px]" : "max-w-4xl"} bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none`
@@ -4110,145 +4047,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     selectedDay={selectedGmDay}
                     onSelectDay={setSelectedGmDay}
                   />
-                </div>
-              ) : gmGuideViewMode === "all_in_one" ? (
-                <div className="space-y-10">
-                  {/* 1枚目：A4・1枚完結の成功・失敗分岐フローチャート図 */}
-                  <div>
-                    <div className="no-print mb-2 flex items-center justify-between rounded-lg bg-slate-950 border border-slate-800 px-4 py-2 text-xs text-slate-200">
-                      <span className="font-bold text-emerald-400">
-                        📄 【1枚目】 Day 1〜Day 7 成功・失敗分岐フローチャート（A4・1枚完結）
-                      </span>
-                      <a
-                        href="/pdfs/gm-complete-progression-guide.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="rounded bg-emerald-600 hover:bg-emerald-500 px-3 py-1 font-bold text-white transition"
-                      >
-                        🖨️ 全ページ一括印刷用PDFを開く
-                      </a>
-                    </div>
-                    <GmOnePageFlowchart
-                      projectTitle={project.title}
-                      selectedDay={selectedGmDay}
-                      onSelectDay={setSelectedGmDay}
-                    />
-                  </div>
-
-                  {/* 2枚目以降：Day 1 〜 Day 7 の全GM進行台本＆管理シート一括展開 */}
-                  {project.timeline.map((step) => {
-                    const note = getGmNoteForDay(project, step.dayNumber);
-                    const dayFc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
-                    const stepEvidences = allEvidences.filter(
-                      (e) => e.foundPhase === step.dayNumber
-                    );
-                    return (
-                      <div
-                        key={step.dayNumber}
-                        className="page-break-before rounded-sm bg-white text-slate-900 border-2 border-slate-800 p-6 sm:p-8 shadow-xl space-y-5 font-sans"
-                      >
-                        <div className="rounded-md bg-slate-900 text-white p-4 flex flex-wrap items-center justify-between gap-3">
-                          <div>
-                            <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300">
-                              GM PROGRESSION GUIDE // DAY {step.dayNumber}
-                            </span>
-                            <h2 className="text-base sm:text-lg font-black mt-0.5">
-                              {step.situationTitle}
-                            </h2>
-                          </div>
-                          <div className="flex items-center gap-4 text-xs">
-                            <span>📍 {step.locationName}</span>
-                            <span className="rounded bg-white/15 px-2.5 py-1 font-mono font-bold text-amber-300">
-                              ⏱️ 目標 {note.targetMinutes} 分
-                            </span>
-                          </div>
-                        </div>
-
-                        <div className="rounded border border-slate-300 bg-slate-100 px-3.5 py-2 text-xs text-slate-800">
-                          <strong>🔊 演出・BGMキュー：</strong> {note.bgmCue}
-                        </div>
-
-                        <div className="rounded-md border-2 border-indigo-900 bg-indigo-50/30 p-4 space-y-2">
-                          <div className="text-xs font-black text-indigo-950">
-                            📢 【Day {step.dayNumber} GM演出用ナレーション ＆ NPCセリフ台本】
-                          </div>
-                          <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 bg-white p-3.5 rounded border border-indigo-200">
-                            {note.readAloudScript}
-                          </div>
-                        </div>
-
-                        {dayFc && (
-                          <div className="rounded-md border-2 border-slate-700 bg-slate-50 p-3.5 space-y-2">
-                            <div className="text-xs font-extrabold text-slate-900 flex items-center justify-between">
-                              <span>
-                                🔀 Day {dayFc.dayNumber} 分岐・リカバリー指針（{dayFc.decisionTaskTitle}）
-                              </span>
-                              <span className="text-[10px] font-bold text-rose-700">
-                                {dayFc.hasFailureBranch ? "分岐・反論誘導あり" : "失敗要素なし"}
-                              </span>
-                            </div>
-                            <div className="space-y-1.5">
-                              {dayFc.branches.map((br) => (
-                                <div
-                                  key={br.id}
-                                  className="rounded border border-slate-300 bg-white p-2 text-[11px] space-y-1"
-                                >
-                                  <div className="font-bold text-slate-900">
-                                    {br.conditionLabel} ➔ {br.outcomeTitle}
-                                  </div>
-                                  <div className="text-slate-700 whitespace-pre-wrap">
-                                    {br.gmActionAndDialogue}
-                                  </div>
-                                  {br.penaltyOrCarryOver && (
-                                    <div className="font-bold text-rose-800">
-                                      📌 {br.penaltyOrCarryOver}
-                                    </div>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        )}
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                          <div className="rounded-md border border-slate-300 bg-white p-3.5">
-                            <div className="text-xs font-bold text-slate-900 mb-2">
-                              ✅ Day {step.dayNumber} GM進行チェックリスト
-                            </div>
-                            <ul className="space-y-1.5 text-xs text-slate-800">
-                              {(note.gmCheckpoints || []).map((chk, cIdx) => (
-                                <li key={cIdx} className="flex items-start gap-2">
-                                  <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
-                                  <span>{chk}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          <div className="rounded-md border border-slate-300 bg-white p-3.5">
-                            <div className="text-xs font-bold text-slate-900 mb-2">
-                              📂 Day {step.dayNumber} 開示証拠資料（{stepEvidences.length}件）
-                            </div>
-                            <div className="flex flex-wrap gap-1.5">
-                              {stepEvidences.map((ev) => (
-                                <span
-                                  key={ev.id}
-                                  className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-800"
-                                >
-                                  📄 {ev.title}
-                                </span>
-                              ))}
-                              {stepEvidences.length === 0 && (
-                                <span className="text-xs text-slate-500">
-                                  このフェーズで開示される証拠はありません
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
                 </div>
               ) : (
                 <div className="space-y-6">
