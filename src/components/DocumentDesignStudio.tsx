@@ -704,8 +704,8 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
   7: `【フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食】
 （🎙️ 首席オペレーター 長津）:
-「――夜明けを迎えました。目標は水深600〜1,000mを維持して駿河湾奥へ突入！ 湾奥に展開する海上自衛隊の潜水艦部隊および深海ソナー網より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
-「――怪異が水深600〜1,000mを維持して駿河湾奥へ突入！ 湾奥に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機しています。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
+「――夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、目標は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および深海ソナー網より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
+「――怪異が水深600〜1,000mを維持して駿河湾付近まで接近！ 周辺海域に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機しています。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
 
 【フェーズ2：首席オペレーター 長津 感涙の作戦成功アナウンス（長津アナウンスカード NG-08）】
 （🎙️ 首席オペレーター 長津）:
@@ -872,7 +872,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("最終目的地の結論分岐"))) ||
       (dayNumber === 5 && (!existing.readAloudScript.includes("時速5km") || !existing.readAloudScript.includes("どうして魚雷の命中後に復活してしまうのか"))) ||
       (dayNumber === 6 && (!existing.readAloudScript.includes("朝8時") || !existing.readAloudScript.includes("5分延長") || existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
-      (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
+      (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった") || !existing.readAloudScript.includes("駿河湾付近まで接近")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 

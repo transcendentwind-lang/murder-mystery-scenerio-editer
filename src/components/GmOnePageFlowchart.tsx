@@ -306,7 +306,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
             </div>
             <div className="mt-1 rounded bg-white/10 p-1 text-[9.5px] text-indigo-100 border border-white/15">
               <span className="font-bold text-amber-300">🎯 判定課題：</span>
-              個体（イワナガ）が目指す最終目的地は？
+              未確認巨大生物が目指す最終目的地は？
             </div>
           </div>
 
@@ -314,7 +314,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
             {/* 正解：富士山 */}
             <div className="rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1 flex items-center justify-between gap-2">
               <div>
-                <span className="font-black text-emerald-900">🟢【正解：「富士山（駿河湾奥）」と結論】</span>
+                <span className="font-black text-emerald-900">🟢【正解：「富士山（駿河湾）」と結論】</span>
                 <span className="ml-1.5 font-medium text-slate-800">
                   自衛隊が早期に駿河湾沖へ展開（通常位置で迎撃へ）
                 </span>
@@ -371,16 +371,16 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
-                自衛隊の攻撃強行 ＆
+                噴火猶予48時間の算出 ＆
                 <br />
-                噴火タイムリミット算出
+                海自魚雷命中と深海回復
               </div>
             </div>
           </div>
           <div className="col-span-9 p-2 bg-slate-50/70 flex items-center justify-between gap-2 text-[10.5px]">
             <div className="space-y-0.5">
               <div className="font-bold text-slate-900">
-                🔵【共通進行】攻撃により個体が12ノットへ倍速化 ➔ 富士山噴火まで【残り約30〜31時間】を算出
+                🔵【共通進行】残距離240km ÷ 時速5km ＝ 【残り48時間】を算出 ／ 魚雷命中後も深海で元の大きさに戻る傾向（NG-06・Day 5 途中①）
               </div>
               <div className="text-[10px] text-rose-900 font-semibold">
                 📌 Day 4「東京湾」結論時の変化：自衛隊の展開が遅れたため、<strong>「より駿河湾に近い位置」で攻撃が行われた描写</strong>になる（以降の進行・数値は共通）
@@ -417,9 +417,9 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-black leading-tight">
-                クジラの祝詞の解読 ＆
+                朝8時北上再開・祝詞解読
                 <br />
-                岸部局長との緊急交渉
+                ＆ 岸部局長との緊急交渉
               </div>
             </div>
             <div className="mt-1 space-y-1">
@@ -459,12 +459,12 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               <div className="grid grid-cols-2 gap-1.5 text-[9.5px]">
                 <div className="rounded border border-amber-400 bg-white px-2 py-1 leading-snug">
                   <strong className="text-purple-900">💬 反論①（音響層への反論）：</strong>
-                  「海面からスピーカーを垂らせば済む、なぜ潜水艦が要る？」
-                  <br />➔ PLに<strong>『水深1,000mのSOFAR層で発信する必要がある』</strong>と解答を導かせる
+                  「海面や浅い海から音を出しても減衰して消える、具体的な海の層と手段を示せ！」
+                  <br />➔ PLに<strong>『水深1,000mのSOFAR層まで潜水艦で潜って放流する』</strong>と解答を導かせる
                 </div>
                 <div className="rounded border border-amber-400 bg-white px-2 py-1 leading-snug">
                   <strong className="text-purple-900">💬 反論②（移動時間への反論）：</strong>
-                  「明朝、駿河湾の入り口で鳴らせば十分だろう？」
+                  「明朝、目標が駿河湾に現れてから音を流せば十分ではないのか？」
                   <br />➔ PLに<strong>『クジラが集まるのに6〜8時間かかる（今夜送信が必要）』</strong>と解答を導かせる
                 </div>
               </div>
@@ -497,9 +497,9 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
-                駿河湾最終決戦 ＆
+                駿河湾付近接近・クジラ捕食
                 <br />
-                公式発表方針の選択
+                ＆ 公式発表方針の選択
               </div>
             </div>
           </div>
@@ -509,15 +509,15 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 🟦【A案：自衛隊の戦果として発表（NG-09）】
               </div>
               <div className="text-[9.5px] text-slate-700">
-                怪獣と共鳴の真実を秘匿し、社会の混乱防止と組織の秩序を守る結末
+                功績を国家防衛機密とし、海上自衛隊の実弾掃討で駆除したと発表する結末
               </div>
             </div>
             <div className="rounded border-2 border-amber-600 bg-amber-50/70 px-2.5 py-1 flex flex-col justify-center">
               <div className="font-black text-amber-950">
-                🟧【B案：特命対策室の英雄的活躍として発表（NG-10）】
+                🟧【B案：合同対策本部のヒーロー功績として発表（NG-10）】
               </div>
               <div className="text-[9.5px] text-slate-700">
-                クジラの祝詞による共鳴と真実を公表し、新たな時代の扉を開く結末
+                祝詞の詳細は伏せつつ、対策本部が特別な薬で無力化した英雄として発表する結末
               </div>
             </div>
           </div>

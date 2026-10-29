@@ -2527,7 +2527,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       </div>
                       <p className="text-slate-300 text-[10px] pt-1 border-t border-indigo-900/60">
-                        🎯 <strong>Day 5 防衛庁の問いへの完全回答</strong>: 「通常兵器で倒せない怪異の群体統率の正体は、音響による細胞間ネットワーク同調。そしてその音波帯域を完全に制圧・捕食できる自然界唯一の天敵こそが、マッコウクジラなのです！」
+                        🎯 <strong>Day 5 防衛庁の問いへの完全回答</strong>: 「魚雷命中後に深海で元の大きさに復活してしまうのは、1匹の生物ではなく無数のダイオウイカの【超群体（コロニー）】だから！ そして地磁気と隕石を追って富士山を目指しているその群体は、天敵である【マッコウクジラの大群】を呼び寄せて捕食させることでしか完全無力化できない！」
                       </p>
                     </div>
                   </div>
@@ -2537,7 +2537,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【フェーズ4：祝詞完成 ＆ 防衛庁 運用企画局長・岸部との直接電話交渉（潜水艦SOFAR層放流）】</span>
+                        <span>📡 【フェーズ4：祝詞完成（Day 6 途中①指令書） ＆ 防衛庁 運用企画局長・岸部との直接電話交渉】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("climax-call")}
@@ -2549,9 +2549,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     {/* 長津の仲介アナウンス */}
                     <div className="bg-black/50 p-2.5 rounded border border-cyan-950 text-slate-200 font-mono text-[11px] space-y-1">
-                      <strong className="text-cyan-300 block font-bold">📢 【長津の電話交渉前アナウンス（GM読み上げ用 ／ 7名時はPC7長津の特別配布カードSP-07に基づく）】:</strong>
+                      <strong className="text-cyan-300 block font-bold">📢 【長津の電話交渉前アナウンス（Day 6 途中①指令書 ／ 7名時はPC7長津の特別配布カードSP-07に基づく）】:</strong>
                       <p className="italic text-cyan-100 leading-relaxed">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
+                        （🎙️ 首席オペレーター 長津）:「――クジラを駿河湾へ呼び寄せる『新言語の祝詞音声』がついに完成しましたね！ しかし、この音声を太平洋全域のクジラに届けるには海上自衛隊の協力が不可欠です。実は、防衛庁で自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は私の親戚（叔父）にあたりまして、直通の連絡先があります。ただ、厳格なリアリストである岸部局長がこんな作戦を簡単に許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。今から直通回線を繋ぎますので、説得を頼みますね！」
                       </p>
                     </div>
 
@@ -2608,7 +2608,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
                             <strong>🎯 反論から導き出させる解答（どちらの伝達方法でも正解）:</strong>
-                            <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
+                            <p>・Day 5で魚雷が命中しても深海で元の大きさに復活してしまった事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
                             <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず届く深海音響チャネル）へ潜り、大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
                             <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
                           </div>
@@ -2671,7 +2671,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex items-center gap-2">
                       <Sparkles className="h-4 w-4 text-cyan-300 animate-spin-slow" />
                       <span className="font-bold text-white text-xs">
-                        🚀 【{operationName || "合同迎撃作戦"} 最終結果】
+                        🚀 【駿河湾 最終迎撃作戦 結果】
                       </span>
                       <span className="rounded bg-black/50 px-2 py-0.5 text-[10px] text-amber-300 font-mono border border-amber-900/60">
                         迎撃標的: 【{creatureCodename || "ワタツミ"}】
@@ -2687,19 +2687,19 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-rose-400" />
-                        【フェーズ1：運命の夜明け・駿河湾口突入 ＆ 夜通し泳いだクジラ群の到達・大捕食】
+                        【フェーズ1：運命の夜明け・駿河湾付近まで接近 ＆ 夜通し泳いだクジラ群の到達・大捕食】
                       </span>
                       <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
                         微動完全停止・作戦成功
                       </span>
                     </div>
                     <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1.5">
-                      <strong className="text-cyan-300 block font-bold">🌊 夜明けの突入報告 ＆ 深海での決着ナレーション（GM読み上げ用）:</strong>
+                      <strong className="text-cyan-300 block font-bold">🌊 夜明けの接近報告 ＆ 深海での決着ナレーション（GM読み上げ用）:</strong>
                       <p className="italic leading-relaxed font-mono text-cyan-100">
-                        （🎙️ 首席オペレーター 長津）:「――夜明けを迎えました。目標は水深600〜1,000mを維持して駿河湾奥へ突入！ 湾奥に展開する海上自衛隊の潜水艦部隊および深海ソナー網より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
+                        （🎙️ 首席オペレーター 長津）:「――夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、目標は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および深海ソナー網より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
                       </p>
                       <p className="italic leading-relaxed font-mono">
-                        「怪異が水深600〜1,000mを維持して駿河湾奥へ突入。湾奥に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機します。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
+                        「怪異が水深600〜1,000mを維持して駿河湾付近まで接近。周辺海域に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機します。直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で怪異を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 怪異の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
                       </p>
                     </div>
                   </div>

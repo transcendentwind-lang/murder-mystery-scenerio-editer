@@ -161,99 +161,58 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       <text x="386.5" y="165.9" fill="#cbd5e1" fontSize="11" fontWeight="bold">伊豆半島</text>
       <text x="589.6" y="126.8" fill="#cbd5e1" fontSize="11">房総半島</text>
 
-      {/* 富士山 ＆ 東京 ＆ Day 7火山灰プルーム */}
+      {/* 駿河湾付近（Day 7：目標接近・クジラ大群集結海域） */}
       {isDay7 && (
-        <g>
-          {/* 広域火山灰降灰警戒エリア（外層プルーム：相模湾・東京・房総半島を覆う） */}
-          <path
-            d="M 357.8 119.3 C 400 50, 520 40, 680 55 C 760 65, 820 90, 850 140 C 870 180, 800 210, 710 220 C 580 230, 480 200, 420 180 Z"
-            fill="url(#ash-plume-gradient)"
-            opacity="0.55"
-            filter="url(#glow-orange)"
-          />
-          {/* 高濃度火山灰雲・成層圏噴煙柱（中層プルーム） */}
-          <path
-            d="M 357.8 119.3 C 390 70, 480 60, 600 70 C 680 80, 720 110, 700 150 C 660 180, 550 170, 440 150 Z"
-            fill="#334155"
-            opacity="0.75"
-          />
-          {/* 噴煙コア・高温火砕プルーム（内層コア） */}
-          <path
-            d="M 357.8 119.3 C 380 90, 440 85, 520 90 C 570 95, 580 125, 540 140 C 470 150, 410 140, 370 130 Z"
-            fill="url(#fuji-core)"
-            opacity="0.85"
-            filter="url(#glow-red)"
-          />
-          {/* 噴煙移流ベクトル */}
-          <line x1="375" y1="115" x2="520" y2="100" stroke="#fbbf24" strokeWidth="2.5" strokeDasharray="6 3" markerEnd="url(#arrow-vector)" />
-          <text x="445" y="92" fill="#fef08a" fontSize="9" fontWeight="bold" textAnchor="middle" filter="url(#glow-orange)">
-            ジェット気流移流 (東 85km/h) ➔
-          </text>
+        <g transform="translate(335.0, 178.0)">
+          <circle r="28" fill="#0ea5e9" opacity="0.25" filter="url(#glow-orange)" />
+          <circle r="20" fill="none" stroke="#38bdf8" strokeWidth="2" strokeDasharray="4 2" opacity="0.95" />
+          <circle r="12" fill="none" stroke="#ef4444" strokeWidth="2" opacity="0.95" />
+          <circle r="4" fill="#ef4444" />
+          <g transform="translate(-225, -12)">
+            <rect width="205" height="36" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+            <text x="102" y="15" fill="#38bdf8" fontSize="10" fontWeight="bold" textAnchor="middle">
+              ⚠️ 目標が駿河湾付近まで接近 (水深600-1000m)
+            </text>
+            <text x="102" y="28" fill="#fef08a" fontSize="9" fontWeight="bold" textAnchor="middle">
+              🐋 マッコウクジラ大群 集結・大捕食海域
+            </text>
+          </g>
         </g>
       )}
 
       {/* 富士山 */}
       <g transform="translate(357.8, 119.3)">
-        {isDay7 ? (
-          <g>
-            <circle r="38" fill="#ef4444" opacity="0.2" filter="url(#glow-red)" />
-            <circle r="26" fill="none" stroke="#ef4444" strokeWidth="2" strokeDasharray="4 2" opacity="0.9" />
-            <circle r="16" fill="#f97316" opacity="0.5" filter="url(#glow-orange)" />
-            <polygon points="0,-20 5,-6 19,-6 8,3 12,17 0,8 -12,17 -8,3 -19,-6 -5,-6" fill="#fef08a" stroke="#b45309" strokeWidth="1.5" />
-            <circle r="4" fill="#ffffff" />
-            <path d="M -10 10 L 0 -10 L 10 10 Z" fill="#f8fafc" stroke="#dc2626" strokeWidth="2" />
-            <text x="-16" y="-26" fill="#f8fafc" fontSize="13" fontWeight="bold" textAnchor="end">富士山</text>
-            <text x="-16" y="-14" fill="#fca5a5" fontSize="9" fontFamily="monospace" textAnchor="end">(3,776m)</text>
-            <g transform="translate(-215, -4)">
-              <rect width="200" height="36" rx="4" fill="#991b1b" stroke="#fca5a5" strokeWidth="1.5" filter="url(#glow-red)" />
-              <text x="100" y="15" fill="#ffffff" fontSize="11" fontWeight="bold" textAnchor="middle">🚨 富士山 爆発的噴火開始</text>
-              <text x="100" y="28" fill="#fef08a" fontSize="9" fontWeight="bold" textAnchor="middle">噴煙高度18,000m・噴火警戒Lv5</text>
+        <g>
+          {isDay5OrLater && (
+            <g>
+              <circle r="30" fill="url(#seismic-wave)" />
+              <circle r="22" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.85" />
+              <circle r="14" fill="none" stroke="#dc2626" strokeWidth="2" opacity="0.95" />
             </g>
-          </g>
-        ) : (
-          <g>
-            {isDay5OrLater && (
-              <g>
-                <circle r="30" fill="url(#seismic-wave)" />
-                <circle r="22" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" opacity="0.85" />
-                <circle r="14" fill="none" stroke="#dc2626" strokeWidth="2" opacity="0.95" />
-              </g>
-            )}
-            <path d="M -10 10 L 0 -10 L 10 10 Z" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1.5" />
-            <path d="M -4 -2 L 0 -10 L 4 -2 L 2 -1 L 0 -3 L -2 -1 Z" fill="#38bdf8" />
-            <text x="14" y="-2" fill="#f8fafc" fontSize="12" fontWeight="bold">富士山</text>
-            <text x="14" y="9" fill="#94a3b8" fontSize="9" fontFamily="monospace">(3,776m)</text>
-            {isDay5OrLater && (
-              <g transform="translate(-140, -32)">
-                <rect width="185" height="24" rx="4" fill="#7f1d1d" stroke="#f87171" strokeWidth="1.2" filter="url(#glow-red)" />
-                <text x="92" y="16" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">
-                  ⚠️ 深部火山性微動観測（連動危機）
-                </text>
-              </g>
-            )}
-          </g>
-        )}
+          )}
+          <path d="M -10 10 L 0 -10 L 10 10 Z" fill="#f8fafc" stroke="#e2e8f0" strokeWidth="1.5" />
+          <path d="M -4 -2 L 0 -10 L 4 -2 L 2 -1 L 0 -3 L -2 -1 Z" fill="#38bdf8" />
+          <text x="14" y="-2" fill="#f8fafc" fontSize="12" fontWeight="bold">富士山</text>
+          <text x="14" y="9" fill="#94a3b8" fontSize="9" fontFamily="monospace">(3,776m)</text>
+          {isDay5OrLater && (
+            <g transform="translate(-145, -34)">
+              <rect width="195" height="24" rx="4" fill="#7f1d1d" stroke="#f87171" strokeWidth="1.2" filter="url(#glow-red)" />
+              <text x="97" y="16" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">
+                {isDay7
+                  ? "⚠️ 富士山地下 火山性微動継続"
+                  : isDay6OrLater
+                  ? "⚠️ 富士山地下 火山性微動再開"
+                  : "⚠️ 深部火山性微動観測（連動危機）"}
+              </text>
+            </g>
+          )}
+        </g>
       </g>
 
       {/* 東京 */}
       <g transform="translate(533.8, 97.5)">
-        {isDay7 ? (
-          <g>
-            <circle r="16" fill="#1e293b" opacity="0.6" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="3 2" />
-            <circle r="5" fill="#ef4444" stroke="#ffffff" strokeWidth="2" />
-            <text x="12" y="-4" fill="#ffffff" fontSize="12" fontWeight="bold">東京</text>
-            <g transform="translate(12, 6)">
-              <rect width="170" height="28" rx="4" fill="#1e293b" stroke="#f87171" strokeWidth="1.5" opacity="0.95" />
-              <text x="85" y="13" fill="#fca5a5" fontSize="9.5" fontWeight="bold" textAnchor="middle">⚠️ 火山灰プルーム直下</text>
-              <text x="85" y="24" fill="#fef08a" fontSize="8.5" textAnchor="middle">首都圏降灰確認・広域避難発令</text>
-            </g>
-          </g>
-        ) : (
-          <g>
-            <circle r="4" fill="#38bdf8" stroke="#ffffff" strokeWidth="1.5" />
-            <text x="8" y="-4" fill="#38bdf8" fontSize="11" fontWeight="bold">東京</text>
-          </g>
-        )}
+        <circle r="4" fill="#38bdf8" stroke="#ffffff" strokeWidth="1.5" />
+        <text x="8" y="-4" fill="#38bdf8" fontSize="11" fontWeight="bold">東京</text>
       </g>
 
       {/* 火山フロント（破線：伊豆・小笠原火山弧／北端：伊豆半島） */}
@@ -279,36 +238,29 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       {/* 伊豆諸島各島 */}
       {/* 伊豆大島 */}
       <g transform="translate(469.5, 162.0)">
-        {isDay6OrLater ? (
-          <g>
-            <circle r="36" fill="#ef4444" opacity="0.18" filter="url(#glow-red)" />
-            <circle r="28" fill="none" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="4 2" opacity="0.85" />
-            <circle r="18" fill="none" stroke="#dc2626" strokeWidth="2" opacity="0.95" />
-            <line x1="-6" y1="-6" x2="6" y2="6" stroke="#ffffff" strokeWidth="2.5" />
-            <line x1="6" y1="-6" x2="-6" y2="6" stroke="#ffffff" strokeWidth="2.5" />
-            <ellipse cx="0" cy="0" rx="7" ry="9" fill="#1e293b" stroke="#ef4444" strokeWidth="2" />
-            <text x="14" y="-2" fill="#ffffff" fontSize="11" fontWeight="bold">伊豆大島</text>
-            <g transform="translate(14, 5)">
-              <rect width="175" height="24" rx="4" fill="#991b1b" stroke="#fca5a5" strokeWidth="1.2" filter="url(#glow-red)" />
-              <text x="87" y="16" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">⚠️ M5.1 最大震度4 地震観測</text>
-            </g>
-          </g>
-        ) : isDay5OrLater ? (
-          <g>
-            <circle r="18" fill="none" stroke="#f59e0b" strokeWidth="1.2" strokeDasharray="2 2" opacity="0.8" />
-            <circle r="12" fill="none" stroke="#f59e0b" strokeWidth="1.5" opacity="0.9" />
-            <ellipse cx="0" cy="0" rx="7" ry="9" fill="#1e293b" stroke="#f59e0b" strokeWidth="1.5" />
-            <text x="12" y="3" fill="#cbd5e1" fontSize="11" fontWeight="bold">伊豆大島</text>
-            <text x="12" y="15" fill="#f59e0b" fontSize="9" fontWeight="bold">⚠️ 火山性微動観測（群発微動）</text>
-          </g>
-        ) : (
-          <g>
-            <ellipse cx="0" cy="0" rx="7" ry="9" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
-            <text x="12" y="3" fill="#cbd5e1" fontSize="11" fontWeight="bold">伊豆大島</text>
-            <text x="12" y="15" fill="#eab308" fontSize="9">未噴火（警戒海域）</text>
-          </g>
-        )}
+        <ellipse cx="0" cy="0" rx="7" ry="9" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
+        <text x="12" y="3" fill="#cbd5e1" fontSize="11" fontWeight="bold">伊豆大島</text>
+        <text x="12" y="15" fill="#eab308" fontSize="9">未噴火（警戒海域）</text>
       </g>
+
+      {/* Day 6：三宅島〜駿河トラフ境界への北上再開マーカー */}
+      {isDay6OrLater && !isDay7 && (
+        <g transform="translate(395.0, 205.0)">
+          <circle r="22" fill="#ef4444" opacity="0.22" filter="url(#glow-red)" />
+          <circle r="14" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="4 2" />
+          <circle r="4" fill="#fbbf24" />
+          <line x1="0" y1="0" x2="-45" y2="-22" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#arrow-vector)" />
+          <g transform="translate(-235, -14)">
+            <rect width="215" height="34" rx="4" fill="#7f1d1d" stroke="#fca5a5" strokeWidth="1.3" />
+            <text x="107" y="14" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">
+              ⚠️ 朝8時回復・駿河トラフ境界へ北上再開
+            </text>
+            <text x="107" y="27" fill="#fef08a" fontSize="8.5" fontWeight="bold" textAnchor="middle">
+              駿河湾まで残り約24時間（微動再開）
+            </text>
+          </g>
+        </g>
+      )}
 
       {/* 利島 */}
       <ellipse cx="450.8" cy="176.2" rx="3" ry="3" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
@@ -625,9 +577,9 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         textAnchor="middle"
       >
         {isDay7
-          ? "🚨 富士山爆発的噴火開始 ｜ 噴煙高度18,000m成層圏到達 ｜ 巨大噴煙が東京・首都圏到達 (噴火後6日目)"
+          ? "観測記録：富士山地下 火山性微動継続 ｜ 目標が駿河湾付近まで接近 (水深600-1,000m) ｜ マッコウクジラ大群集結"
           : isDay6OrLater
-          ? "観測記録：御蔵島沖噴火(噴火後4日目) ｜ 富士山地下微動(噴火後5日目) ｜ 伊豆大島M5.1震度4(噴火後6日目)"
+          ? "観測記録：朝8時 巨大生物回復・駿河トラフ境界へ北上再開 ｜ 富士山地下 火山性微動再開 (駿河湾まで24時間)"
           : isDay5OrLater
           ? "噴火記録：西之島(噴火後1日目) ｜ 鳥島沖(噴火後2日目) ｜ 明神礁(噴火後3日目) ｜ 御蔵島沖(噴火後4日目)"
           : isDay4OrLater
@@ -642,9 +594,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         {/* 凡例1 */}
         <polygon points="18,34 21,30 26,30 23,35 25,40 18,37 12,40 14,35 10,30 15,30" fill="#ef4444" />
         <text x="32" y="36" fill="#fca5a5" fontSize="10" fontWeight="bold">
-          {isDay7
-            ? "噴火地点（富士山・御蔵島沖・明神礁・鳥島・西之島）"
-            : isDay5OrLater
+          {isDay5OrLater
             ? "噴火地点（西之島 / 鳥島沖 / 明神礁 / 御蔵島沖）"
             : isDay4OrLater
             ? "噴火確認地点（噴火後1日目 西之島 / 噴火後2日目 鳥島 / 噴火後3日目 明神礁）"
@@ -653,16 +603,16 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
         {/* 凡例2 */}
         {isDay7 ? (
           <g>
-            <circle cx="20" cy="54" r="6" fill="none" stroke="#ef4444" strokeWidth="1.5" />
-            <text x="32" y="58" fill="#fca5a5" fontSize="10" fontWeight="bold">
-              🚨 富士山 爆発的破局噴火（噴煙18,000m・東京到達）
+            <circle cx="20" cy="54" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+            <text x="32" y="58" fill="#38bdf8" fontSize="10" fontWeight="bold">
+              ⚠️ 駿河湾付近まで接近 ＆ 富士山地下 微動継続
             </text>
           </g>
         ) : isDay6OrLater ? (
           <g>
             <circle cx="20" cy="54" r="6" fill="none" stroke="#ef4444" strokeWidth="1.5" />
             <text x="32" y="58" fill="#fca5a5" fontSize="10" fontWeight="bold">
-              ⚠️ 伊豆大島 M5.1 震度4地震 ＆ 富士山地下微動
+              ⚠️ 駿河トラフ境界へ北上再開 ＆ 富士山微動再開
             </text>
           </g>
         ) : isDay5OrLater ? (
