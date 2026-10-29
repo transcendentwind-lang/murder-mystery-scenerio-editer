@@ -589,6 +589,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // 狂気の深淵モード（画面全体の枠が赤くなり、日本語を全てあてはめた状態）
   const [isAbyssMode, setIsAbyssMode] = useState(false);
+  // 3回のブラームホーンに合わせて画面を激しく揺らす演出ステート
+  const [isAbyssShaking, setIsAbyssShaking] = useState(false);
+  const iosHapticLabelRef = useRef<HTMLLabelElement | null>(null);
+  const abyssShakeTimersRef = useRef<number[]>([]);
 
   // ==========================================
   // 時間変化で形が残る波形データ（最新再生された音のタイムライン記録）
@@ -687,6 +691,9 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     const resetState = { ...LOCKED_INITIAL_MEANINGS };
     setPlayerAssignedLabels(resetState);
     setIsAbyssMode(false);
+    setIsAbyssShaking(false);
+    abyssShakeTimersRef.current.forEach((id) => window.clearTimeout(id));
+    abyssShakeTimersRef.current = [];
     try {
       localStorage.setItem(
         STORAGE_KEY_PLAYER_LABELS,
@@ -710,6 +717,49 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setIsAbyssMode(true);
     handleFillAllCorrectLabelsForPreview();
     audioEngine?.playAbyssBraamTriple();
+
+    // 1. iPhone（iOS 17.4+ Safari）向け：Taptic Engine 触覚振動を起動
+    try {
+      iosHapticLabelRef.current?.click();
+    } catch {
+      // ignore
+    }
+
+    // 2. Android等（Web Vibration API対応端末）向け：3回のブラームホーンに合わせて3回振動
+    try {
+      if (typeof navigator !== "undefined" && "vibrate" in navigator) {
+        navigator.vibrate([1600, 600, 1600, 600, 1700]);
+      }
+    } catch {
+      // ignore
+    }
+
+    // 3. 3回のブラームホーン（0秒、2.2秒、4.4秒）に完全同期して画面全体を3回激しく揺らす演出
+    abyssShakeTimersRef.current.forEach((id) => window.clearTimeout(id));
+    abyssShakeTimersRef.current = [];
+
+    const schedule = [
+      { delay: 0, shaking: true, haptic: false },
+      { delay: 1650, shaking: false, haptic: false },
+      { delay: 2200, shaking: true, haptic: true },
+      { delay: 3850, shaking: false, haptic: false },
+      { delay: 4400, shaking: true, haptic: true },
+      { delay: 6150, shaking: false, haptic: false },
+    ];
+
+    schedule.forEach((step) => {
+      const tId = window.setTimeout(() => {
+        setIsAbyssShaking(step.shaking);
+        if (step.haptic) {
+          try {
+            iosHapticLabelRef.current?.click();
+          } catch {
+            // ignore
+          }
+        }
+      }, step.delay);
+      abyssShakeTimersRef.current.push(tId);
+    });
   };
 
   const handleSaveRules = (nextRules: WhaleBehaviorRule[]) => {
@@ -1692,6 +1742,37 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
            📱 プレイヤー用モバイルアプリ画面
            ========================================== */
         <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
+          {/* 深淵モード発動時の3連シェイク＆赤色脈動アニメーション定義 ＋ iOS Safari 触覚振動トリガー */}
+          <style>{`
+            @keyframes abyss-quake {
+              0%   { transform: translate(0, 0) rotate(0deg); }
+              10%  { transform: translate(-8px, -5px) rotate(-1.2deg); }
+              20%  { transform: translate(8px, 4px) rotate(1.2deg); }
+              30%  { transform: translate(-9px, 5px) rotate(-1.0deg); }
+              40%  { transform: translate(7px, -6px) rotate(1.1deg); }
+              50%  { transform: translate(-7px, 4px) rotate(-1.2deg); }
+              60%  { transform: translate(8px, 3px) rotate(1.0deg); }
+              70%  { transform: translate(-6px, -4px) rotate(-0.8deg); }
+              80%  { transform: translate(6px, 4px) rotate(0.8deg); }
+              90%  { transform: translate(-4px, -2px) rotate(-0.5deg); }
+              100% { transform: translate(0, 0) rotate(0deg); }
+            }
+            .abyss-quake-active {
+              animation: abyss-quake 0.22s infinite ease-in-out;
+              box-shadow: 0 0 80px rgba(239, 68, 68, 0.95), inset 0 0 35px rgba(220, 38, 38, 0.55) !important;
+            }
+          `}</style>
+          <label
+            ref={iosHapticLabelRef}
+            aria-hidden="true"
+            className="sr-only pointer-events-none opacity-0 fixed -top-10 -left-10"
+          >
+            <input
+              type="checkbox"
+              {...({ switch: "" } as React.InputHTMLAttributes<HTMLInputElement>)}
+            />
+          </label>
+
           <div className="mx-auto flex max-w-6xl flex-col lg:flex-row items-start justify-center gap-6">
             {/* 左（メイン）：スマホ実機サイズの音響解読＆行動観測アプリ */}
             <div
@@ -1699,7 +1780,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                 isAbyssMode
                   ? "border-4 border-red-600 ring-4 ring-red-500/40 shadow-[0_0_50px_rgba(220,38,38,0.65)]"
                   : "border-2 border-cyan-500/30 shadow-2xl shadow-cyan-950/50"
-              }`}
+              } ${isAbyssShaking ? "abyss-quake-active" : ""}`}
             >
               {/* スマホアプリ上部ステータス＆ヘッダー */}
               <div
