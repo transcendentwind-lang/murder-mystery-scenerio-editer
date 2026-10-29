@@ -9,6 +9,7 @@ import {
   DAY5_TOKYO_ACTIONS,
   DAY5_FIELD_ACTIONS,
 } from "@/components/GmDashboard";
+import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
 
 /**
  * 企画概要・プロット紹介 Markdown 生成
@@ -337,6 +338,29 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `     - テレビの臨時ニュースにて、『海上自衛隊が巨大生物を完全撃滅・駆除。富士山噴火レベル引き下げ』が報じられる。\n`;
   md += `  5. 【エピローグ：アンサング・ヒーロー（名もなき英雄たちの帰還）】\n`;
   md += `     - 世間には自衛隊の戦果として称賛される中、真実を胸に秘めたメンバーたちは、誰からも讃えられぬ『名もなき英雄』としてそれぞれの日常へと静かに帰還する。\n\n`;
+  md += `---\n\n`;
+
+  // --- 第3章別冊：GM用進行資料「各Dayごとの成功・失敗分岐フローチャート」 ---
+  md += `## 🔀 第3章別冊：各Dayごとの成功・失敗分岐フローチャート（GM進行資料）\n\n`;
+  GM_DAY_FLOWCHARTS.forEach((fc) => {
+    md += `### ${fc.dayTitle}（${fc.hasFailureBranch ? "成功・失敗・反論分岐あり" : "失敗要素なし・共通進行"}）\n`;
+    md += `- **判断・推理ポイント**: ${fc.decisionTaskTitle}\n`;
+    md += `- **正解・達成条件**: ${fc.correctConditionSummary}\n`;
+    md += `- **基本進行フロー**:\n`;
+    fc.flowSteps.forEach((s) => {
+      md += `  - ${s}\n`;
+    });
+    md += `- **成功・失敗・反論による分岐と処理**:\n`;
+    fc.branches.forEach((br) => {
+      md += `  - **${br.conditionLabel}** (${br.nextStepArrow})\n`;
+      md += `    - **結果**: ${br.outcomeTitle}\n`;
+      md += `    - **GM処理・セリフ**: ${br.gmActionAndDialogue.replace(/\n/g, " / ")}\n`;
+      if (br.penaltyOrCarryOver) {
+        md += `    - **ペナルティ・引き継ぎ**: ${br.penaltyOrCarryOver}\n`;
+      }
+    });
+    md += `- **GM進行の要点**: ${fc.gmKeyNote}\n\n`;
+  });
   md += `---\n\n`;
 
   // --- 第4章：証拠マスター一覧 ---

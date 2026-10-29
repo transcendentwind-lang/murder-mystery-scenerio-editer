@@ -39,6 +39,7 @@ import {
 } from "lucide-react";
 import { audioEngine } from "@/utils/audioSynth";
 import { DAILY_COMMANDER_BRIEFINGS, SPECIAL_CHARACTER_CARDS } from "@/utils/initialProjectData";
+import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
 import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
@@ -126,6 +127,32 @@ export const FIELD_ACTIONS: Day2ActionOption[] = [
     badge: "海底地震計・特殊振動解析",
     summary: "気象庁小笠原観測所の地震計データ。西之島の噴火以前に海底のマグマの上昇や熱水の移動に伴う振動周波を検知。この振動周波は南から北に向かって線を引くように伸びており、【西之島周辺のマグマが南側から刺激されていた】ことが判明した。また、火山の噴火にともなって地震も検出されている。",
     detail: "気象庁小笠原観測所の地震計データ。西之島の噴火以前に海底のマグマの上昇や熱水の移動に伴う振動周波を検知。この振動周波は南から北に向かって線を引くように伸びており、【西之島周辺のマグマが南側から刺激されていた】ことが判明した。また、火山の噴火にともなって地震も検出されている。",
+  },
+];
+
+// Day 1 失敗時ペナルティによって Day 2 以降の調査枠へ繰り越される NPC 証言カード定義
+export const DAY1_CARRYOVER_FIELD_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "F-0A",
+    title: "F-0A（Day 1繰越）: 救助したチャーター船『船長の証言』の聴取",
+    organization: "小笠原救護所 / 二見港",
+    evidenceId: "ev-captain-testimony",
+    badge: "Day 1繰越・船長証言",
+    summary:
+      "民間チャーター船「パパズドルフィン」船長からの事情聴取。スクリューが何かに巻き付かれたように故障し電源も喪失した。船の下にいた生物は潮吹きや尾の見え方からしてクジラではない。乗せたダイバーたちは1ヶ月前から頻繁にダイブを繰り返しており、直後に帰京した。",
+    detail:
+      "民間チャーター船「パパズドルフィン」船長からの事情聴取調書。『船はスクリューが何かに巻き付かれたように故障して、計器類も電源も壊れてお手上げになっちゃったんだ。船の下に何かいたみたいだけど、【あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかった】んでね』『今日乗せたダイバーたちは【この1ヶ月前ぐらいから頻繁にダイブ】を繰り返していて、だいぶ手慣れた様子だった。あのあとすぐに帰ると言っていたよ』",
+  },
+  {
+    id: "F-0B",
+    title: "F-0B（Day 1繰越）: 救助したダイバーの『大型冷凍ボックス』と証言の確認",
+    organization: "二見港 船客待合所",
+    evidenceId: "ev-diver-box-photo",
+    badge: "Day 1繰越・ダイバー証言",
+    summary:
+      "救助された謎のダイバーグループは酸素ボンベ等を船に残したまま、【重さ約30kgほどの異常な重量感がある大型冷凍ボックス】を抱えて救難艇に乗り込み、『目的のものが収集できた』と言い残しておがさわら丸で去っていった。",
+    detail:
+      "救助された謎のダイバーグループは、酸素ボンベなどの装備は船に残したまま、魚釣り用の少し大型のプラスチック製冷凍ボックス（クーラーボックス）を抱えて救難艇に乗り込んできた。海から引き揚げて箱に入れられるサイズだが、【重さ約30kgほどのずっしりとした異常な重量感】があった。『助かりました。船の下に何かいたみたいですね、ただの大型クジラですよ。この箱ですか？ 近辺での魚の生態調査で採集した魚が入っているんです。大変でしたがこれで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません』そう言い残し、直後に出港したおがさわら丸で去っていった。",
   },
 ];
 
@@ -301,6 +328,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [isTacticalModalOpen, setIsTacticalModalOpen] = useState(false);
   const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
+  const [isFlowchartModalOpen, setIsFlowchartModalOpen] = useState(false);
+  // Day 1 漂流予測の失敗回数（0: 1発成功［証言2個］, 1: 1回失敗➔2回目成功［証言1個・1個Day2以降へ］, 2: 2回失敗➔自動成功［証言0個・2個ともDay2以降へ］）
+  const [day1FailureCount, setDay1FailureCount] = useState<0 | 1 | 2>(0);
+  const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useState<"ev-captain-testimony" | "ev-diver-box-photo">("ev-captain-testimony");
 
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -310,6 +341,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         setIsChartModalOpen(false);
         setIsTacticalModalOpen(false);
         setIsDay1ModalOpen(false);
+        setIsFlowchartModalOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -522,8 +554,28 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           </div>
         </div>
 
-        {/* テキストエクスポートボタン群 */}
-        <div className="flex items-center gap-2">
+        {/* テキストエクスポート＆分岐フローチャートボタン群 */}
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setIsFlowchartModalOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-rose-500 transition shadow"
+            title="各Dayごとの成功・失敗分岐フローチャート（GM進行資料）を表示します"
+          >
+            <Compass className="h-3.5 w-3.5" />
+            🔀 各Day 成功・失敗分岐フローチャート
+          </button>
+
+          <a
+            href="/pdfs/gm-branching-flowchart.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1.5 rounded-lg border border-rose-500/50 bg-rose-950/60 px-2.5 py-1.5 text-xs font-bold text-rose-200 hover:bg-rose-900/70 transition"
+            title="各Dayごとの成功・失敗分岐フローチャートPDFを別タブで開きます"
+          >
+            <Printer className="h-3.5 w-3.5" />
+            分岐チャートPDF
+          </a>
+
           <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
             <button
               onClick={() => handleCopy("synopsis")}
@@ -646,6 +698,75 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               );
             })()}
 
+            {/* 🔀 このDayの成功・失敗分岐フローチャート（GM進行資料） */}
+            {(() => {
+              const fc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === currentDay);
+              if (!fc) return null;
+              return (
+                <div className="rounded-xl border border-rose-500/40 bg-rose-950/15 p-4 space-y-2.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-800/40 pb-2">
+                    <span className="font-bold text-xs text-rose-300 flex items-center gap-1.5">
+                      <Compass className="h-4 w-4 text-rose-400" />
+                      🔀 【Day {currentDay} 成功・失敗分岐フローチャート】 {fc.decisionTaskTitle}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`rounded px-2 py-0.5 text-[10px] font-bold ${
+                          fc.hasFailureBranch
+                            ? "bg-rose-600 text-white"
+                            : "bg-emerald-700 text-white"
+                        }`}
+                      >
+                        {fc.hasFailureBranch ? "成否・反論分岐あり" : "失敗要素なし（共通進行）"}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => setIsFlowchartModalOpen(true)}
+                        className="rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] font-bold text-slate-200 border border-slate-700 transition"
+                      >
+                        全7日チャート一覧を開く
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2 text-xs">
+                    {fc.branches.map((br) => (
+                      <div
+                        key={br.id}
+                        className={`rounded-lg border p-2.5 space-y-1 ${
+                          br.badgeType === "success"
+                            ? "border-emerald-700/70 bg-emerald-950/30"
+                            : br.badgeType === "retry"
+                            ? "border-amber-700/70 bg-amber-950/30"
+                            : br.badgeType === "failure"
+                            ? "border-rose-700/70 bg-rose-950/30"
+                            : br.badgeType === "counterargument"
+                            ? "border-purple-700/70 bg-purple-950/30"
+                            : "border-slate-700 bg-slate-900/60"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-1 font-bold text-white text-[11px]">
+                          <span>{br.conditionLabel}</span>
+                          <span className="font-mono text-[10px] text-cyan-300">{br.nextStepArrow}</span>
+                        </div>
+                        <div className="text-[11px] font-semibold text-amber-200">
+                          ➔ {br.outcomeTitle}
+                        </div>
+                        <p className="text-[11px] text-slate-300 whitespace-pre-wrap leading-relaxed">
+                          {br.gmActionAndDialogue}
+                        </p>
+                        {br.penaltyOrCarryOver && (
+                          <div className="text-[10.5px] font-bold text-rose-300 pt-0.5">
+                            📌 {br.penaltyOrCarryOver}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* GM演出用NPCセリフ・ナレーションスクリプト */}
             <div className="space-y-3">
               <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
@@ -725,37 +846,160 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3">
-                    <span className="font-bold text-slate-300">【フェーズ4：救助成功アナウンス】</span>
-                    <p className="text-slate-400 mt-1 italic">
-                      （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
-                    </p>
+                  {/* Day 1 成否・リトライ・ペナルティ管理コンソール */}
+                  <div className="rounded-xl border border-rose-800/70 bg-slate-900 p-3.5 space-y-3">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <AlertTriangle className="h-4 w-4 text-amber-400" />
+                        【フェーズ4：救助地点指定の成否 ＆ NPC証言ペナルティ管理】
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-400">
+                        最大2回まで地点指定可能（2回目も失敗時は自動成功）
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDay1FailureCount(0)}
+                        className={`rounded-lg border p-2.5 text-left transition ${
+                          day1FailureCount === 0
+                            ? "border-emerald-500 bg-emerald-950/60 text-white shadow"
+                            : "border-slate-800 bg-slate-950/70 text-slate-400 hover:border-slate-700"
+                        }`}
+                      >
+                        <div className="font-bold text-xs text-emerald-300">🟢 1発成功（失敗0回）</div>
+                        <div className="mt-1 text-[10.5px] text-slate-200">
+                          Day 1でNPC証言を<strong>【2つとも】</strong>取得（ペナルティなし）
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay1FailureCount(1)}
+                        className={`rounded-lg border p-2.5 text-left transition ${
+                          day1FailureCount === 1
+                            ? "border-amber-500 bg-amber-950/60 text-white shadow"
+                            : "border-slate-800 bg-slate-950/70 text-slate-400 hover:border-slate-700"
+                        }`}
+                      >
+                        <div className="font-bold text-xs text-amber-300">🟡 1回失敗 ➔ 2回目で成功</div>
+                        <div className="mt-1 text-[10.5px] text-slate-200">
+                          Day 1では証言を<strong>【1つだけ】</strong>取得。残り1つは<strong>Day 2以降の調査枠</strong>へ
+                        </div>
+                      </button>
+
+                      <button
+                        type="button"
+                        onClick={() => setDay1FailureCount(2)}
+                        className={`rounded-lg border p-2.5 text-left transition ${
+                          day1FailureCount === 2
+                            ? "border-rose-500 bg-rose-950/60 text-white shadow"
+                            : "border-slate-800 bg-slate-950/70 text-slate-400 hover:border-slate-700"
+                        }`}
+                      >
+                        <div className="font-bold text-xs text-rose-300">🔴 2回とも失敗（自動成功）</div>
+                        <div className="mt-1 text-[10.5px] text-slate-200">
+                          Day 1での証言取得は<strong>【0個】</strong>。2つとも<strong>Day 2以降の調査枠</strong>へ
+                        </div>
+                      </button>
+                    </div>
+
+                    {day1FailureCount === 1 && (
+                      <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
+                        <span className="font-bold text-amber-200">
+                          🟡 1回失敗ペナルティ：Day 1で取得する1枚を選択（もう1枚はDay 2以降へ繰り越し）：
+                        </span>
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setDay1SingleTestimonyId("ev-captain-testimony")}
+                            className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
+                              day1SingleTestimonyId === "ev-captain-testimony"
+                                ? "bg-amber-600 text-white"
+                                : "bg-slate-800 text-slate-300"
+                            }`}
+                          >
+                            EV-08：船長の証言を取得
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setDay1SingleTestimonyId("ev-diver-box-photo")}
+                            className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
+                              day1SingleTestimonyId === "ev-diver-box-photo"
+                                ? "bg-amber-600 text-white"
+                                : "bg-slate-800 text-slate-300"
+                            }`}
+                          >
+                            EV-07：大型冷凍ボックスを取得
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* 成否に応じた長津アナウンス */}
+                    <div className="rounded border border-slate-800 bg-slate-950/90 p-3">
+                      <span className="font-bold text-slate-300">
+                        {day1FailureCount === 0
+                          ? "【フェーズ4：1発救助成功アナウンス（証言2つとも取得）】"
+                          : day1FailureCount === 1
+                          ? "【フェーズ4：リトライ後の救助成功アナウンス（証言1つのみ取得・残り1つはDay 2以降へ）】"
+                          : "【フェーズ4：2回失敗後の自動救助アナウンス（証言0個・2つともDay 2以降へ）】"}
+                      </span>
+                      {day1FailureCount === 0 ? (
+                        <p className="text-slate-300 mt-1 italic">
+                          （🎙️ 首席オペレーター 長津）:「――坂凪救難担当官率いる現場救難艇より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
+                        </p>
+                      ) : day1FailureCount === 1 ? (
+                        <div className="space-y-1.5 mt-1 text-slate-300 italic">
+                          <p className="text-amber-300">
+                            （1回目失敗時・長津）:「――現場救難艇より至急電！指定された海域へ到着しましたが、波浪と視界不良のなか船影を発見できません！もう一度だけ、海流と風圧流、そして救難信号からの経過時間（20分＋航行40分＝1時間）を再計算し、急行すべき海域を再指定してください！」
+                          </p>
+                          <p>
+                            （2回目成功時・長津）:「――現場救難艇より入電！再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ただし捜索に時間を要したため、本日中に聴取・確認できるのは【船長の証言（EV-08）】または【ダイバーの大型冷凍ボックス（EV-07）】のどちらか1つだけとなります！（残る1つは明日Day 2以降の調査カードとして取得可能になります）」
+                          </p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1.5 mt-1 text-slate-300 italic">
+                          <p className="text-rose-300">
+                            （2回目も失敗時・長津）:「――現場救難艇より入電！指定海域からは外れておりましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功いたしました！しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。船長およびダイバーに関する2つの証言記録（EV-08・EV-07）は、明日Day 2以降の調査カードとして取得可能になります！」
+                          </p>
+                        </div>
+                      )}
+                    </div>
                   </div>
 
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
-                    <span className="font-bold text-amber-400">【NPC 船長（救助直後・EV-08「船長の証言」）】:</span>
-                    <p className="text-slate-400 text-[11px] italic">
-                      民間チャーター船「パパズドルフィン」の船長からの事情聴取調書。船長は荒波で不安定な足場でもしっかりとした足取りで救難艇へと乗り込んできた。
-                    </p>
-                    <p className="text-slate-200 mt-1 leading-relaxed">
-                      「お世話をかけますが、船は二見港まで曳航いただけますか。お客さんが怪我なくて、とにかく助かってよかった。船はスクリューが何かに巻き付かれたように故障して、計器類も電源も壊れてお手上げになっちゃったんだ。船の下に何かいたみたいだけど、あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかったんでね」
-                    </p>
-                    <p className="text-slate-200 mt-1 leading-relaxed">
-                      「今日乗せたダイバーたちはこの1ヶ月前ぐらいから頻繁にダイブを繰り返していて、だいぶ手慣れた様子だった。あのあとすぐに帰ると言っていたよ。海は怖いねぇ、あとでちょっと神社にお参りしてくるようにするよ」
-                    </p>
-                  </div>
-                  <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
-                    <span className="font-bold text-blue-400">【NPC 謎のダイバーグループ（救助直後・EV-07「大型冷凍ボックス」）】:</span>
-                    <p className="text-slate-400 text-[11px] italic">
-                      救助された謎のダイバーグループは、酸素ボンベなどの装備は船に残したまま、魚釣り用の少し大型のプラスチック製冷凍ボックス（クーラーボックス）を抱えて救難艇に乗り込んできた。海から引き揚げて箱に入れられるサイズだが、重さ約30kgほどのずっしりとした異常な重量感があった。
-                    </p>
-                    <p className="text-slate-200 mt-1 leading-relaxed">
-                      「助かりました。船の下に何かいたみたいですね、ただの大型クジラですよ。この箱ですか？ 近辺での魚の生態調査で採集した魚が入っているんです。大変でしたがこれで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。この便を逃すとしばらく戻れないですからね」
-                    </p>
-                    <p className="text-slate-400 text-[11px] italic">
-                      そう言い残し、彼らは直後に出港した定期船「おがさわら丸」で箱と共に小笠原諸島を去っていった。
-                    </p>
-                  </div>
+                  {(day1FailureCount === 0 ||
+                    (day1FailureCount === 1 && day1SingleTestimonyId === "ev-captain-testimony")) && (
+                    <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+                      <span className="font-bold text-amber-400">【NPC 船長（救助直後・EV-08「船長の証言」）】:</span>
+                      <p className="text-slate-400 text-[11px] italic">
+                        民間チャーター船「パパズドルフィン」の船長からの事情聴取調書。船長は荒波で不安定な足場でもしっかりとした足取りで救難艇へと乗り込んできた。
+                      </p>
+                      <p className="text-slate-200 mt-1 leading-relaxed">
+                        「お世話をかけますが、船は二見港まで曳航いただけますか。お客さんが怪我なくて、とにかく助かってよかった。船はスクリューが何かに巻き付かれたように故障して、計器類も電源も壊れてお手上げになっちゃったんだ。船の下に何かいたみたいだけど、あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかったんでね」
+                      </p>
+                      <p className="text-slate-200 mt-1 leading-relaxed">
+                        「今日乗せたダイバーたちはこの1ヶ月前ぐらいから頻繁にダイブを繰り返していて、だいぶ手慣れた様子だった。あのあとすぐに帰ると言っていたよ。海は怖いねぇ、あとでちょっと神社にお参りしてくるようにするよ」
+                      </p>
+                    </div>
+                  )}
+
+                  {(day1FailureCount === 0 ||
+                    (day1FailureCount === 1 && day1SingleTestimonyId === "ev-diver-box-photo")) && (
+                    <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
+                      <span className="font-bold text-blue-400">【NPC 謎のダイバーグループ（救助直後・EV-07「大型冷凍ボックス」）】:</span>
+                      <p className="text-slate-400 text-[11px] italic">
+                        救助された謎のダイバーグループは、酸素ボンベなどの装備は船に残したまま、魚釣り用の少し大型のプラスチック製冷凍ボックス（クーラーボックス）を抱えて救難艇に乗り込んできた。海から引き揚げて箱に入れられるサイズだが、重さ約30kgほどのずっしりとした異常な重量感があった。
+                      </p>
+                      <p className="text-slate-200 mt-1 leading-relaxed">
+                        「助かりました。船の下に何かいたみたいですね、ただの大型クジラですよ。この箱ですか？ 近辺での魚の生態調査で採集した魚が入っているんです。大変でしたがこれで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。この便を逃すとしばらく戻れないですからね」
+                      </p>
+                      <p className="text-slate-400 text-[11px] italic">
+                        そう言い残し、彼らは直後に出港した定期船「おがさわら丸」で箱と共に小笠原諸島を去っていった。
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -863,54 +1107,75 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
-                    {/* 小笠原現地側（2択） */}
-                    <div>
-                      <div className="flex items-center gap-1.5 mb-2">
-                        <Anchor className="h-3.5 w-3.5 text-teal-400" />
-                        <span className="font-bold text-teal-300 text-[11px]">
-                          小笠原現地アクション（全4枠中 2つ選択）
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-1 gap-2">
-                        {FIELD_ACTIONS.map((action) => {
-                          const isSelected = selectedFieldActions.includes(action.id);
-                          return (
-                            <button
-                              key={action.id}
-                              onClick={() => handleToggleFieldAction(action.id)}
-                              className={`flex items-start justify-between rounded-lg p-2.5 text-left transition border ${
-                                isSelected
-                                  ? "border-teal-500 bg-teal-950/60 shadow-sm"
-                                  : "border-slate-800 bg-slate-950/60 hover:bg-slate-800/60"
-                              }`}
-                            >
-                              <div className="flex-1 pr-2">
-                                <div className="flex items-center gap-2">
-                                  <span
-                                    className={`inline-block h-3.5 w-3.5 rounded border flex items-center justify-center text-[9px] font-bold ${
-                                      isSelected
-                                        ? "border-teal-400 bg-teal-500 text-white"
-                                        : "border-slate-600 bg-slate-800 text-transparent"
-                                    }`}
-                                  >
-                                    ✓
-                                  </span>
-                                  <span className="font-bold text-xs text-white">
-                                    {action.title}
-                                  </span>
-                                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] text-slate-300 font-mono">
-                                    {action.badge}
-                                  </span>
-                                </div>
-                              </div>
-                              <span className="text-[10px] text-slate-500 whitespace-nowrap">
-                                {action.organization}
+                    {/* 小笠原現地側（2択 ＋ Day 1失敗時の繰越証言カード対応） */}
+                    {(() => {
+                      const carryOverActions =
+                        day1FailureCount === 2
+                          ? DAY1_CARRYOVER_FIELD_ACTIONS
+                          : day1FailureCount === 1
+                          ? DAY1_CARRYOVER_FIELD_ACTIONS.filter(
+                              (a) => a.evidenceId !== day1SingleTestimonyId
+                            )
+                          : [];
+                      const day2FieldOptions = [...FIELD_ACTIONS, ...carryOverActions];
+
+                      return (
+                        <div>
+                          <div className="flex flex-wrap items-center justify-between gap-1.5 mb-2">
+                            <div className="flex items-center gap-1.5">
+                              <Anchor className="h-3.5 w-3.5 text-teal-400" />
+                              <span className="font-bold text-teal-300 text-[11px]">
+                                小笠原現地アクション（全{day2FieldOptions.length}枠中 2つ選択）
                               </span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
+                            </div>
+                            {carryOverActions.length > 0 && (
+                              <span className="rounded bg-amber-950 border border-amber-700 px-2 py-0.5 text-[10px] font-bold text-amber-300">
+                                ⚠️ Day 1未取得の証言カード {carryOverActions.length}枚が追加されています
+                              </span>
+                            )}
+                          </div>
+                          <div className="grid grid-cols-1 gap-2">
+                            {day2FieldOptions.map((action) => {
+                              const isSelected = selectedFieldActions.includes(action.id);
+                              return (
+                                <button
+                                  key={action.id}
+                                  onClick={() => handleToggleFieldAction(action.id)}
+                                  className={`flex items-start justify-between rounded-lg p-2.5 text-left transition border ${
+                                    isSelected
+                                      ? "border-teal-500 bg-teal-950/60 shadow-sm"
+                                      : "border-slate-800 bg-slate-950/60 hover:bg-slate-800/60"
+                                  }`}
+                                >
+                                  <div className="flex-1 pr-2">
+                                    <div className="flex items-center gap-2">
+                                      <span
+                                        className={`inline-block h-3.5 w-3.5 rounded border flex items-center justify-center text-[9px] font-bold ${
+                                          isSelected
+                                            ? "border-teal-400 bg-teal-500 text-white"
+                                            : "border-slate-600 bg-slate-800 text-transparent"
+                                        }`}
+                                      >
+                                        ✓
+                                      </span>
+                                      <span className="font-bold text-xs text-white">
+                                        {action.title}
+                                      </span>
+                                      <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[9px] text-slate-300 font-mono">
+                                        {action.badge}
+                                      </span>
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] text-slate-500 whitespace-nowrap">
+                                    {action.organization}
+                                  </span>
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      );
+                    })()}
                   </div>
 
                   {/* 選択されたアクションの調査結果 ＆ 開示内容 */}
@@ -979,7 +1244,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                     {/* 小笠原側結果 */}
                     {selectedFieldActions.map((fieldId) => {
-                      const action = FIELD_ACTIONS.find((a) => a.id === fieldId);
+                      const action = [...FIELD_ACTIONS, ...DAY1_CARRYOVER_FIELD_ACTIONS].find(
+                        (a) => a.id === fieldId
+                      );
                       if (!action) return null;
                       return (
                         <div
@@ -2066,6 +2333,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <p className="italic text-slate-300 text-[10px]">
                         （🎙️ 首席オペレーター 長津）:「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
                       </p>
+                      {day4GmDestinationDecision === "tokyo" && (
+                        <div className="rounded bg-amber-950/70 border border-amber-700/80 p-2 text-[10.5px] text-amber-200">
+                          <strong>🟡 【Day 4で「東京湾」と結論づけていた場合の展開差分（ペナルティなし）】:</strong>
+                          <p className="mt-0.5 text-slate-200 font-mono">
+                            「昨日、対策本部が『東京湾へ向かう』と結論づけたため、我が海自部隊は東京湾防衛ラインへ展開していたが、目標が駿河トラフ側へ変針したため急遽転進せざるを得ず、攻撃が遅れ【より駿河湾に近い位置】での迎撃となった！（※翌Day 6で岸部局長からこの件について嫌味を言われます）」
+                          </p>
+                        </div>
+                      )}
                       <p className="italic text-slate-100 leading-relaxed font-mono">
                         【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ 貝浜、直ちにあの生物の写真解析を行った浪寄准教授（PC5）の意見を確認してくれ！」
                       </p>
@@ -2271,37 +2546,58 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <p className="text-slate-400 text-[10px] italic">
                           （ツーツーツー……ガチャッ。受話器の向こうから、重苦しく威圧感のある声が響く）
                         </p>
-                        <p className="italic text-blue-200">
-                          （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
+                        {day4GmDestinationDecision === "tokyo" ? (
+                          <div className="rounded bg-amber-950/60 border border-amber-700/80 p-2 space-y-1">
+                            <span className="text-[10px] font-bold text-amber-300">
+                              🟡 【Day 4で「東京湾」と結論づけていた場合の嫌味セリフ】:
+                            </span>
+                            <p className="italic text-amber-100">
+                              （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。……ほう、一昨日は『巨大生物は東京湾へ向かう』と報告して我が海上自衛隊の展開を遅らせ、結果として駿河湾の目と鼻の先まで押し込まれる原因を作った対策本部の諸君か。その節は実に貴重なご高説をありがとう。で、こんな深夜に今度は一体どんな名案を持ってきたというのだね？」
+                            </p>
+                          </div>
+                        ) : (
+                          <p className="italic text-blue-200">
+                            （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
+                          </p>
+                        )}
+                      </div>
+
+                      {/* 岸部局長の反論による思考誘導（重要ルール） */}
+                      <div className="rounded bg-purple-950/50 border border-purple-700/70 p-2.5 text-[10.5px] text-purple-100 space-y-1">
+                        <strong className="text-purple-300 block font-bold">
+                          💡 【GM進行方針：岸部局長は愚かではない ― 反論によってプレイヤーに解答を導き出させる】
+                        </strong>
+                        <p className="text-slate-200 leading-relaxed">
+                          プレイヤーが「クジラの祝詞（コーダ配列）」さえ解読できていれば、もし最初の提案で<strong>「音響層（水深1,000mのSOFAR層）」</strong>や<strong>「移動時間（クジラが集まるのに6〜8時間かかるため今夜送信が必要）」</strong>が抜けていても失敗にはせず、岸部局長が下の反論セリフで鋭くツッコミを入れることで、プレイヤー自身にその場で考えさせて正解へ導いてください。
                         </p>
                       </div>
 
-                      {/* 岸部局長の2大疑問と論破ロジック */}
+                      {/* 岸部局長の2大反論と論破ロジック */}
                       <div className="grid grid-cols-2 gap-2 text-[10px] pt-1">
                         <div className="rounded bg-slate-900/90 p-2 border border-slate-700 space-y-1">
                           <strong className="text-rose-400 block font-bold border-b border-rose-900/50 pb-0.5">
-                            ❓ 岸部局長の疑念①：【信ぴょう性と伝達手段はあるのか？】
+                            ⚠️ 反論誘導①：【音響層（SOFAR層）が抜けている場合の岸部の反論】
                           </strong>
-                          <p className="text-slate-300 italic">
-                            「クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ そもそもどうやって広大な海のクジラにその音を届けるつもりだ？」
+                          <p className="text-slate-200 italic">
+                            「待て。その祝詞とやらがクジラを呼ぶ信号だとして、一体どうやって広大な太平洋にいるクジラへその音を届けるつもりだ？！ 海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラにまで音を届ける具体的な『海の層』と『手段』を示せ！」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
-                            <strong>🎯 論破ポイント（どちらの伝達方法でも正解）:</strong>
+                            <strong>🎯 反論から導き出させる解答（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
-                            <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず1万km届く深海音響チャネル）へ潜り、人工的な音を大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
-                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず届く深海音響チャネル）へ潜り、大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 
                         <div className="rounded bg-slate-900/90 p-2 border border-slate-700 space-y-1">
                           <strong className="text-amber-400 block font-bold border-b border-amber-900/50 pb-0.5">
-                            ❓ 岸部局長の疑念②：【時間的猶予・なぜ深夜なのか？】
+                            ⚠️ 反論誘導②：【移動時間（6〜8時間）が抜けている場合の岸部の反論】
                           </strong>
-                          <p className="text-slate-300 italic">
-                            「仮に正しくとも明朝には駿河湾奥へ突入する。なぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？ 明日の朝、現場を見てからでは遅いのか？」
+                          <p className="text-slate-200 italic">
+                            「潜水艦で深海から音を流す理屈はわかった。だが、なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？ それとも何か、クジラは音さえ聞けば一瞬で駿河湾へ瞬間移動してくるとでも思っているのか？！」
                           </p>
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
-                            <strong>🎯 論破ポイント:</strong>
+                            <strong>🎯 反論から導き出させる解答:</strong>
                             <p>・小笠原〜伊豆諸島沖の太平洋に散らばるクジラの群れが、音を受け取ってから全速力で泳いで駿河湾へ集結するには<strong>6〜8時間の移動時間</strong>が必要（浪寄の特別配布カードSP-06）。</p>
                             <p>・怪異は明朝には駿河湾へ到達するため、6〜8時間前である<strong>今夜（前日の深夜）のうちに音の発信を開始しなければ物理的に絶対間に合わない！</strong></p>
                           </div>
@@ -3053,6 +3349,137 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   </p>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 🔀 全7日間 成功・失敗分岐フローチャート モーダル（GM進行資料） */}
+      {isFlowchartModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setIsFlowchartModalOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-950 border border-rose-700 text-rose-400">
+                  <Compass className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    『{project.title}』 各Dayごとの成功・失敗分岐フローチャート（GM用進行資料）
+                  </h3>
+                  <p className="text-[11px] text-slate-400">
+                    Day 1の救助リトライ＆証言カード繰越、Day 4の東京湾誤答時の攻撃遅延＆嫌味、Day 6の岸部局長による反論誘導を網羅
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-2">
+                <a
+                  href="/pdfs/gm-branching-flowchart.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Printer className="h-3.5 w-3.5" />
+                  A4印刷用PDFを開く
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsFlowchartModalOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-y-auto space-y-5 pr-1">
+              {GM_DAY_FLOWCHARTS.map((fc) => (
+                <div
+                  key={fc.dayNumber}
+                  className={`rounded-xl border p-4 space-y-3 ${
+                    fc.hasFailureBranch
+                      ? "border-rose-700/70 bg-slate-900/90"
+                      : "border-slate-800 bg-slate-900/50"
+                  }`}
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
+                    <div className="flex items-center gap-2">
+                      <span className="rounded bg-indigo-600 px-2 py-0.5 font-mono text-xs font-bold text-white">
+                        DAY {fc.dayNumber}
+                      </span>
+                      <h4 className="font-bold text-sm text-white">{fc.dayTitle}</h4>
+                    </div>
+                    <span
+                      className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-bold ${
+                        fc.hasFailureBranch
+                          ? "bg-rose-600 text-white"
+                          : "bg-emerald-700 text-white"
+                      }`}
+                    >
+                      {fc.hasFailureBranch
+                        ? "🔀 成功・失敗・反論分岐あり"
+                        : "🟢 失敗要素なし（共通進行）"}
+                    </span>
+                  </div>
+
+                  <div className="rounded bg-slate-950/90 border border-slate-800 p-2.5 text-xs space-y-1">
+                    <div className="font-bold text-cyan-300">
+                      🎯 判断ポイント：{fc.decisionTaskTitle}
+                    </div>
+                    <p className="text-[11px] text-slate-300">
+                      <strong className="text-white">【正解・達成条件】：</strong>
+                      {fc.correctConditionSummary}
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 gap-2.5 text-xs">
+                    {fc.branches.map((br) => (
+                      <div
+                        key={br.id}
+                        className={`rounded-lg border p-3 space-y-1.5 ${
+                          br.badgeType === "success"
+                            ? "border-emerald-600/70 bg-emerald-950/30"
+                            : br.badgeType === "retry"
+                            ? "border-amber-600/70 bg-amber-950/30"
+                            : br.badgeType === "failure"
+                            ? "border-rose-600/70 bg-rose-950/30"
+                            : br.badgeType === "counterargument"
+                            ? "border-purple-600/70 bg-purple-950/30"
+                            : "border-slate-700 bg-slate-950/60"
+                        }`}
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-2 font-bold text-white">
+                          <span>{br.conditionLabel}</span>
+                          <span className="font-mono text-[11px] text-cyan-300">
+                            {br.nextStepArrow}
+                          </span>
+                        </div>
+                        <div className="font-semibold text-amber-200 text-xs">
+                          ➔ {br.outcomeTitle}
+                        </div>
+                        <div className="rounded bg-black/50 border border-slate-800 p-2.5 text-[11px] text-slate-200 whitespace-pre-wrap leading-relaxed">
+                          {br.gmActionAndDialogue}
+                        </div>
+                        {br.penaltyOrCarryOver && (
+                          <div className="text-[11px] font-bold text-rose-300">
+                            📌 {br.penaltyOrCarryOver}
+                          </div>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="text-[11px] text-amber-200/90 bg-amber-950/30 border border-amber-900/50 rounded px-3 py-1.5">
+                    💡 <strong>GM進行の要点：</strong> {fc.gmKeyNote}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>

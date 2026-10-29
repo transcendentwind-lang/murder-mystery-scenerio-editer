@@ -23,6 +23,7 @@ import {
   SPECIAL_CHARACTER_CARDS,
   NAGATSU_PHASE_CARDS,
 } from "@/utils/initialProjectData";
+import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
 import { printCharacterHandoutsB5 } from "@/utils/scriptGenerator";
 import {
   Sparkles,
@@ -537,16 +538,31 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――救難信号の発信から現在20分が経過しております。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）、浪寄准教授（PC5）をはじめ各員、救難艇が現場海域に到着するまでの所要時間や暗礁群の配置、風・海流を考慮し、到着時点での漂流位置を推測して急行させるべき捜索海域の決定をお願いいたします」
 
-【フェーズ4：救助成功アナウンス（長津アナウンスカード NG-01）】
-（🎙️ 首席オペレーター 長津）:
-「――坂凪救難担当官率いる現場救難艇より入電！ 東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船『パパズドルフィン』を捕捉・接舷！ 初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの全員救出に成功いたしました！」
+【フェーズ4：救助判定 ＆ 成否分岐アナウンス（最大2回まで指定可能）】
 
-【NPC 船長（救助直後）】:
+▼ 🟢 分岐1：1回目の指定で【東北東の漂流予測海域】を正解した場合（失敗0回 ➔ 証言2つとも取得）
+（🎙️ 首席オペレーター 長津 / NG-01）:
+「――坂凪救難担当官率いる現場救難艇より入電！ 東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船『パパズドルフィン』を捕捉・接舷！ 初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの全員救出に成功いたしました！」
+※ペナルティなし：【EV-08：船長の証言】と【EV-07：大型冷凍ボックス（ダイバーの証言）】の2つともその場で開示・配布します。
+
+▼ 🟡 分岐2：1回目の指定が外れた場合（もう一度だけ地点を再指定［リトライ］可能）
+（🎙️ 首席オペレーター 長津）:
+「――現場救難艇より至急電！ 指定された海域へ到着しましたが、激しい波浪と視界不良のなか船影を発見できません！ このままでは暗礁群へ流されます！ もう一度だけ、海流と風圧流、そして救難信号からの経過時間（20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」
+
+  ├─ 🟡 2回目の指定で正解した場合（失敗1回 ➔ Day 1では証言を【1つだけ】取得、残り1つはDay 2以降の調査枠へ）
+  （🎙️ 首席オペレーター 長津）:
+  「――現場救難艇より入電！ 再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日中に聴取・確認できるのは【船長の証言（EV-08）】または【ダイバーの大型冷凍ボックス（EV-07）】のどちらか1つだけとなります！（残る1つは明日Day 2以降の調査カードとして取得可能になります）」
+
+  └─ 🔴 2回目の指定も外れた場合（失敗2回 ➔ 自動的に救助成功、ただしDay 1での証言取得は【0個】・2つともDay 2以降の調査枠へ）
+  （🎙️ 首席オペレーター 長津）:
+  「――現場救難艇より入電！ 指定海域からは外れておりましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功いたしました！ しかし、救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。船長およびダイバーに関する2つの証言記録（EV-08・EV-07）は、明日Day 2以降の調査カードとして取得可能になります！」
+
+【NPC 船長（EV-08「船長の証言」取得時）】:
 民間チャーター船「パパズドルフィン」の船長からの事情聴取調書。船長は荒波で不安定な足場でもしっかりとした足取りで救難艇へと乗り込んできた。
 「お世話をかけますが、船は二見港まで曳航いただけますか。お客さんが怪我なくて、とにかく助かってよかった。船はスクリューが何かに巻き付かれたように故障して、計器類も電源も壊れてお手上げになっちゃったんだ。船の下に何かいたみたいだけど、あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかったんでね」
 「今日乗せたダイバーたちはこの1ヶ月前ぐらいから頻繁にダイブを繰り返していて、だいぶ手慣れた様子だった。あのあとすぐに帰ると言っていたよ。海は怖いねぇ、あとでちょっと神社にお参りしてくるようにするよ」
 
-【NPC 謎のダイバーグループ（救助直後）】:
+【NPC 謎のダイバーグループ（EV-07「大型冷凍ボックス」取得時）】:
 救助された謎のダイバーグループは、酸素ボンベなどの装備は船に残したまま、魚釣り用の少し大型のプラスチック製冷凍ボックス（クーラーボックス）を抱えて救難艇に乗り込んできた。海から引き揚げて箱に入れられるサイズだが、重さ約30kgほどのずっしりとした異常な重量感があった。
 「助かりました。船の下に何かいたみたいですね、ただの大型クジラですよ。この箱ですか？ 近辺での魚の生態調査で採集した魚が入っているんです。大変でしたがこれで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。この便を逃すとしばらく戻れないですからね」
 そう言い残し、彼らは直後に出港した定期船「おがさわら丸」で箱と共に小笠原諸島を去っていった。`,
@@ -556,8 +572,8 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「長津です。皆様、お疲れ様です。気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。現場海域の船舶の避難は完了していますが、新しい指示がでています。
 西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
 
-【GMからの案内】:
-「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
+【GMからの案内（Day 1の失敗ペナルティ繰越対応を含む）】:
+「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
 
 【GM演出上の最重要注意（ネタバレ防止メモ）】
 ※このDay 2の段階では、「ダイオウイカの超群体である」という正体は絶対に明かさないでください。プレイヤーたちには「ダイオウイカの触手のはずなのに、なぜ数百mもの超巨大な影なのか？」「海底火山を噴火させながら北上しているものは一体何なのか？」という強烈なサイズ矛盾とサスペンスを抱かせ、議論を深めてもらいます。`,
@@ -570,6 +586,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」
 ※ここで太刀魚（EV-16: 西之島〜鳥島沖 距離観測データ）、貝浜（EV-17: 鳥島沖 ソノブイ探知記録）、浪寄（EV-18: 遭難船救助・目撃時刻調書）の3名へそれぞれ証拠資料を配布し、移動速度（約150km/日）と明日（Day 4）の北上予測（明神礁周辺）を検討させてください。
+※GM進行メモ（失敗時の影響について）：もしプレイヤーが移動速度やDay 4到達予測地点の計算をミスしても、物語上大きな影響やペナルティは出ません（翌Day 4冒頭の明神礁噴火の事実によって自然に軌道修正されます）。
 
 【フェーズ5：写真データ受信 ＆ 合同対策本部への諮問（長津アナウンスカード NG-03）】
 （🎙️ 首席オペレーター 長津）:
@@ -584,7 +601,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 【防衛庁・官邸からの緊急諮問：呼称（コードネーム）決定と指揮官最終決断の要請（長津アナウンスカード NG-04）】
 （🎙️ 首席オペレーター 長津）:
 「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」
-※チームで合議させ、以降はこの決定したコードネームを用いて呼称させます。`,
+※チームで合議させ、以降はこの決定したコードネームを用いて呼称させます（防衛出動／警備行動のどちらを選んでもDay 4終盤で同じ結果へ合流します）。`,
 
   4: `【フェーズ1：明神礁海底噴火 ＆ 火山活動・地震観測報告】
 （🎙️ 首席オペレーター 長津）:
@@ -604,9 +621,14 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――物体は日速約150kmで北上中、このままでは数日中に伊豆諸島マグマ網を経て富士山直下に到達し、破局的連動噴火を誘発する恐れがあります！ 国家存亡の危機を受け、当合同対策本部はこれより【即応総力体制】へ移行いたします！ これまでの調査枠制限をすべて撤廃し、東京本部および小笠原現地の各班が収集したすべての重要調査資料（都内・元神主の子どもの捜索、朝倉教授の研究日誌・野帳、小笠原社記原本など）を一括して全開示いたします！ 各員、総力を結集して情報の照合と真相の解明を急いでください！」
 
+【フェーズ4：最終目的地の結論分岐（「富士山」 vs 「東京湾」）】
+※対策本部として、巨大生物の最終目的地が【富士山（駿河湾）】か【東京湾】かを結論づけさせます。
+・🟢「富士山（駿河湾）」と結論づけた場合：自衛隊が三宅島〜御蔵島沖の最適ラインへ遅滞なく展開します。
+・🟡「東京湾」と結論づけた場合：機械的なペナルティはありませんが、自衛隊の主力部隊が東京湾側へ展開してしまうため攻撃が遅れ、翌Day 5では【より駿河湾に近い位置】で攻撃することになります。さらに【Day 6の岸部局長との交渉で嫌味を言われる】ことになります。
+
 【フェーズ5：防衛省・統合幕僚監部通達（害獣駆除方針決定・長津アナウンスカード NG-05）】
 （🎙️ 首席オペレーター 長津）:
-「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定いたしました！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」`,
+「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定いたしました！ 通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」`,
 
   5: `【フェーズ1：民間放送局の臨時ニュース（富士山地下微動 ＆ 伊豆七島避難準備指示）】
 （🎙️ 首席オペレーター 長津）:
@@ -623,6 +645,10 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 【フェーズ3：防衛省より貝浜（PC2）への緊急ホットライン（長津アナウンスカード NG-06）】
 （🎙️ 首席オペレーター 長津）:
 「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
+
+※【Day 4で「東京湾」と結論づけていた場合の追加描写】：
+「（防衛省作戦本部）：昨日、対策本部が『目標は東京湾へ向かう』と結論づけたため、我が海自部隊は東京湾防衛ラインへ展開していたが、目標が三宅島から西の駿河トラフへ変針したため急遽転進せざるを得ず、迎撃が大幅に遅れ【より駿河湾に近い位置】での攻撃となった！」
+
 【防衛省作戦本部】:
 「――貝浜、防衛省作戦本部だ！ 魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部は『命中している以上、さらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できる』と主張している。だが、力押しだけで本当に通用するのか？！ 貝浜、直ちにあの生物の写真解析を行った浪寄准教授（PC5）の意見を確認してくれ！ あいつらは一体どうやって一つの個体として統率されているのか？ なぜ富士山を目指すのか？！」`,
 
@@ -638,18 +664,36 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 【防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉】
 （ツーツーツー……ガチャッ）
+
+▼ 🟢 通常時（Day 4で「富士山」と結論づけていた場合）の第一声：
 （🎙️ 防衛庁 運用企画局長・岸部）:
 「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
 
+▼ 🟡 分岐演出（Day 4で「東京湾」と結論づけていた場合）の嫌味入り第一声：
 （🎙️ 防衛庁 運用企画局長・岸部）:
-「……クジラを呼ぶ祝詞音声だと？ 国家存亡の危機にオカルトを信じて自衛隊を動かせというのか？ なぜ通常兵器ではなくクジラなのだ？ そもそもどうやって広大な海のクジラにその音を届けるつもりだ？ そしてなぜ今夜、深夜のうちに潜水艦を動かさねばならんのだ？」
-※GM進行メモ: プレイヤーたちに以下の3点を説明・説得させてください。
-  ① 通常兵器の無効化と火山刺激リスク（魚雷が直撃しても再結合し、爆発衝撃は富士山噴火を誘発する。天敵はマッコウクジラのみ）
-  ② 広域への音響伝達方法（「水深1,000mのSOFAR層から潜水艦で大出力放流すれば音が減衰せず広域へ届く」または「音を受け取ったクジラ側が特別な行動・共鳴リレーで仲間へ次々と伝える」のどちらの方法でも正解）
-  ③ 集合に必要な時間の逆算（太平洋沖のクジラが全速力で泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには深夜のうちに音の発信を開始しなければならない）
+「――防衛庁運用企画局長の岸部だ。……ほう、一昨日は『巨大生物は東京湾へ向かう』と報告して我が海上自衛隊の展開を遅らせ、結果として駿河湾の目と鼻の先まで押し込まれる原因を作った対策本部の諸君か。その節は実に貴重なご高説をありがとう。で、こんな深夜に今度は一体どんな名案を持ってきたというのだね？」
 
+【岸部局長の反論による思考誘導スクリプト（重要：岸部局長は愚かではなく、反論によってプレイヤーに解答を導き出させる）】
+※プレイヤーが「クジラの祝詞（コーダ配列）」を提示して説得を試みた際、もし以下の条件（SOFAR層・移動時間）が抜けていた場合は、岸部局長が鋭く反論してプレイヤーに考えさせます。
+
+  ├─ ⚠️ 反論誘導①：「なぜ通常兵器ではなくクジラなのか？」が曖昧な場合
+  （🎙️ 岸部局長）：
+  「海自の魚雷で仕留めきれなかったのは事実だ。だが、だからといって古文書の祝詞でクジラを呼ぶだと？ なぜ大量の魚雷による飽和攻撃ではなく、クジラでなければならんのだ？！」
+  ➔ プレイヤーから「魚雷の爆発衝撃は海底マグマを刺激して富士山噴火を誘発する危険があること」「ダイオウイカの天敵はマッコウクジラであること」を引き出す。
+
+  ├─ ⚠️ 反論誘導②：「音響層（水深1,000mのSOFAR層／潜水艦）」が抜けていた場合
+  （🎙️ 岸部局長）：
+  「待て。その祝詞とやらがクジラを呼ぶ信号だとして、一体どうやって広大な太平洋にいるクジラへその音を届けるつもりだ？！ 海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラにまで音を届ける具体的な『海の層』と『手段』を示せ！」
+  ➔ この反論により、プレイヤー（太刀魚・貝浜ら）に考えさせ、【水深1,000mのSOFAR層（深海音響チャネル）まで潜水艦で潜航して大出力放流する（＋クジラの共鳴リレー）】という解答を導き出させる！
+
+  └─ ⚠️ 反論誘導③：「移動時間（クジラが集まるのに6〜8時間＝今夜送信が必要）」が抜けていた場合
+  （🎙️ 岸部局長）：
+  「潜水艦で深海から音を流す理屈はわかった。だが、なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？ それとも何か、クジラは音さえ聞けば一瞬で駿河湾へ瞬間移動してくるとでも思っているのか？！」
+  ➔ この反論により、プレイヤー（浪寄ら）に考えさせ、【太平洋のクジラが泳いで駿河湾に集まるには6〜8時間かかるため、明朝の決戦に間に合わせるには今夜（深夜）のうちに発信しなければならない】という解答を導き出させる！
+
+【交渉成立・岸部局長の決断】
 （🎙️ 防衛庁 運用企画局長・岸部）:
-「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海SOFAR層による音響伝達とクジラの遊泳時間（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
 
 【フェーズ4.5：深夜の潜水艦SOFAR層放流開始 ＆ 作戦名の命名（長津アナウンスカード NG-07）】
 （🎙️ 首席オペレーター 長津）:
@@ -713,44 +757,46 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   1: [
     "【Day 1 開始時】朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』を渡し、あわせて『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 30分）",
-    "遭難海図を展開し、風圧流（南西強風）と海流（北東流）の両方の影響をプレイヤーに整理させる",
-    "2つの力を合成した漂流方向（東北東）と暗礁群の位置を考慮させ、救難艇を急行させるべき海域を決定させる",
-    "救難艇による間一髪の救助成功を伝え、船長の証言（EV-08）および不審なダイバーの大型冷凍ボックス（EV-07）を開示する",
+    "遭難海図を展開し、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分経過＋航行40分＝1時間後）を整理させ、救難艇を急行させるべき海域を指定させる",
+    "【失敗時の処理】1回目の指定で外れた場合は「もう一度だけ再指定（リトライ）」を許可し、2回目も外れた場合は自動的に救助成功として進行する",
+    "【証言カードのペナルティ処理】1発成功時は『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の両方をDay 1で取得。1回失敗時は1枚のみ取得（残り1枚はDay 2以降の調査枠へ）。2回失敗時は0枚（2枚ともDay 2以降の調査枠へ繰り越し）",
   ],
   2: [
     "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
-    "東京側（3択中1つ）と小笠原現地（4択中2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
+    "東京側（3択中1つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
     "※GM注意（ネタバレ防止）：この段階では「ダイオウイカの超群体」という真相は絶対に明かさないこと",
   ],
   3: [
     "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
-    "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置を特定させる",
+    "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
     "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 16:00）、浪寄（EV-18: Day1救助時間 08:00）の3名へ証拠を配布する",
-    "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
+    "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる（※計算ミスがあってもペナルティはなく、翌朝の明神礁噴火で自然に軌道修正される）",
     "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（特別配布カード『文民統制の仕組み』に基づく法的判断）へ諮問する",
     "防衛庁・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
-    "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※Day 4の政府反応分岐へ影響）",
+    "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
     "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠）を選択させ、証拠資料を開示する",
   ],
   4: [
     "【Day 4 開始時】初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
-    "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して収集済みの全証拠資料を一括開示する",
-    "対策本部として巨大生物の最終目的地（東京湾か富士山か）を結論づけさせた後、防衛省が「害獣駆除（災害派遣）」として海自全部隊動員・実弾迎撃作戦を決定した通達を読み上げる",
+    "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して未取得だった全証拠資料を一括開示する",
+    "対策本部として巨大生物の最終目的地（富士山か東京湾か）を結論づけさせる（※『東京湾』と結論づけた場合、機械的ペナルティはないが、Day 5での自衛隊の攻撃位置がより駿河湾に近い位置へ遅れ、Day 6の岸部局長交渉で嫌味を言われる）",
+    "防衛省が「害獣駆除（災害派遣）」として海自全部隊動員・実弾迎撃作戦を決定した通達（NG-05）を読み上げる",
   ],
   5: [
     "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
+    "残距離240km・時速5kmから、富士山噴火までの猶予時間（48時間）を計算させる",
     "朝倉教授のクジラ構文規則（EV-30：『了解した』以外のクジラ言語はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
-    "終盤、防衛省から貝浜への直通無線を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える",
+    "終盤、防衛省から貝浜への直通無線（NG-06）を演出し、「魚雷命中も瞬時に再結合した！力押しが通用しない」焦りと浪寄への意見確認を伝える（※Day 4で東京湾と答えていた場合は、より駿河湾に近い位置での遅滞攻撃になった旨を添える）",
   ],
   6: [
     "【Day 6 開始時】7名プレイ時は長津（PC7）へ特別配布カード『SP-07：防衛庁 運用企画局長とのコネクション』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 30分）",
-    "朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（参考正解例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組等）を完成させる",
-    "長津が親戚（叔父）である防衛庁運用企画局長・岸部（きしべ）への直通回線を繋ぎ（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる",
-    "岸部運用企画局長との電話交渉を演出し、「①通常兵器無効と火山刺激リスク」「②SOFAR層大出力放流またはクジラ同士の共鳴リレーによる広域伝達」「③クジラ集合に必要な移動時間（6〜8時間）の逆算による深夜放流の必要性」を説明・説得させる",
+    "朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組）を完成させる",
+    "長津が親戚（叔父）である防衛庁運用企画局長・岸部（きしべ）への直通回線を繋ぎ（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
+    "【岸部局長の反論による思考誘導】祝詞の解読ができていれば、もし『水深1,000mのSOFAR層（潜水艦）』や『クジラの移動時間（6〜8時間＝今夜の送信が必要）』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
     "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げる",
-    "深夜の潜水艦による深海SOFAR層での祝詞音声放流開始を伝え、朝潮の指揮で決戦の【作戦名（オペレーション名）】を命名・決定させる",
+    "深夜の潜水艦による深海SOFAR層での祝詞音声放流開始（NG-07）を伝え、朝潮の指揮で決戦の【作戦名（オペレーション名）】を命名・決定させる",
   ],
   7: [
     "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・怪異の大捕食・富士山微動の完全停止を劇的に描写する（目標時間: 30分）",
@@ -818,12 +864,12 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       !existing.readAloudScript ||
       existing.readAloudScript === step?.incidentOverview ||
       !existing.readAloudScript.includes("長津") ||
-      (dayNumber === 1 && (!existing.readAloudScript.includes("パパズドルフィン") || !existing.readAloudScript.includes("NG-01"))) ||
+      (dayNumber === 1 && (!existing.readAloudScript.includes("パパズドルフィン") || !existing.readAloudScript.includes("最大2回まで指定可能"))) ||
       (dayNumber === 2 && !existing.readAloudScript.includes("優先度を決めて調査をお願いします")) ||
       (dayNumber === 3 && (!existing.readAloudScript.includes("NG-02") || !existing.readAloudScript.includes("NG-04"))) ||
-      (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("NG-05"))) ||
+      (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("最終目的地の結論分岐"))) ||
       (dayNumber === 5 && (!existing.readAloudScript.includes("時速5km") || !existing.readAloudScript.includes("NG-06"))) ||
-      (dayNumber === 6 && (!existing.readAloudScript.includes("岸部") || !existing.readAloudScript.includes("NG-07"))) ||
+      (dayNumber === 6 && (!existing.readAloudScript.includes("反論誘導") || !existing.readAloudScript.includes("NG-07"))) ||
       (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
@@ -832,6 +878,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       !Array.isArray(existing.gmCheckpoints) ||
       existing.gmCheckpoints.length <= 3 ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
+      (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
+      (dayNumber === 6 && !existing.gmCheckpoints.some((c) => c.includes("岸部局長の反論による思考誘導"))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
@@ -1077,6 +1125,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
   const [visualOrientation, setVisualOrientation] = useState<"portrait" | "landscape_rotated">("landscape_rotated");
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
+  const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
+  const [flowchartDayFilter, setFlowchartDayFilter] = useState<"all" | "selected">("all");
 
   // 画面内テキスト直接編集モード vs 純粋プレビューモード
   const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(true);
@@ -1882,6 +1932,69 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             ※下部余白に初心者向けの用語解説（「〜とは：…」）が自動配置され、特別配布カードと完全に同一サイズ（A4 4分割）で印刷できます
           </span>
         </div>
+      ) : category === "gm_guides" ? (
+        <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="text-xs font-bold text-slate-300">GM進行資料モード：</span>
+            <div className="flex flex-wrap items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              <button
+                onClick={() => setGmGuideViewMode("flowchart")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  gmGuideViewMode === "flowchart"
+                    ? "bg-rose-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                🔀 各Day 成功・失敗分岐フローチャート（GM進行資料）
+              </button>
+              <button
+                onClick={() => setGmGuideViewMode("daily_sheet")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  gmGuideViewMode === "daily_sheet"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                📄 Day別 GM進行台本＆管理シート
+              </button>
+            </div>
+            {gmGuideViewMode === "flowchart" && (
+              <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1 ml-2">
+                <button
+                  onClick={() => setFlowchartDayFilter("all")}
+                  className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
+                    flowchartDayFilter === "all"
+                      ? "bg-emerald-600 text-white"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  📚 全7日間まとめて表示・印刷
+                </button>
+                <button
+                  onClick={() => setFlowchartDayFilter("selected")}
+                  className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
+                    flowchartDayFilter === "selected"
+                      ? "bg-emerald-600 text-white"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                >
+                  🔍 選択中の Day {selectedGmDay} のみ表示
+                </button>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href="/pdfs/gm-branching-flowchart.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              📄 分岐フローチャートPDFを開く
+            </a>
+          </div>
+        </div>
       ) : (
         <div className="border-b border-slate-800 bg-slate-900/60 px-6 py-2.5">
           <div className="flex flex-wrap items-center justify-between gap-3">
@@ -2392,19 +2505,51 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           {category === "gm_guides" && (
             <div className="space-y-3">
               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                GM進行シート（全{project.timeline.length}フェーズ）
+                GM進行資料（全{project.timeline.length}フェーズ）
               </h3>
+
+              {/* フローチャート vs Day別進行台本 切替ボタン */}
+              <div className="grid grid-cols-1 gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
+                <button
+                  onClick={() => setGmGuideViewMode("flowchart")}
+                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
+                    gmGuideViewMode === "flowchart"
+                      ? "bg-rose-600 text-white shadow"
+                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                  }`}
+                >
+                  <span>🔀 各Day 成功・失敗分岐フローチャート</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">GM必携</span>
+                </button>
+                <button
+                  onClick={() => setGmGuideViewMode("daily_sheet")}
+                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
+                    gmGuideViewMode === "daily_sheet"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                  }`}
+                >
+                  <span>📄 Day別 GM進行台本＆管理シート</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">各2頁</span>
+                </button>
+              </div>
+
               <p className="text-[11px] text-slate-400 leading-relaxed">
-                フェーズ別の読み上げスクリプト、時間配分、各班への誘導、開示証拠リストをデザインされた進行表の上で直接修正・保存できます。
+                {gmGuideViewMode === "flowchart"
+                  ? "プレイヤーの選択や成否（Day 1リトライ＆証言カード繰越、Day 4東京湾誤答時の攻撃遅延＆嫌味、Day 6岸部局長の反論誘導など）を視覚化したGM用進行フローチャートです。"
+                  : "フェーズ別の読み上げスクリプト、時間配分、成功・失敗分岐フロー、開示証拠リストをデザインされた進行表の上で直接修正・保存できます。"}
               </p>
 
               <div className="space-y-2">
                 {project.timeline.map((step) => {
                   const isSelected = step.dayNumber === selectedGmDay;
+                  const fc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
                   return (
                     <button
                       key={step.dayNumber}
-                      onClick={() => setSelectedGmDay(step.dayNumber)}
+                      onClick={() => {
+                        setSelectedGmDay(step.dayNumber);
+                      }}
                       className={`w-full rounded-xl border p-3 text-left transition ${
                         isSelected
                           ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
@@ -2415,9 +2560,15 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         <span className="rounded bg-rose-500/20 border border-rose-500/40 px-2 py-0.5 text-[10px] font-bold text-rose-300">
                           Day {step.dayNumber}
                         </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          {step.locationName}
-                        </span>
+                        {fc?.hasFailureBranch ? (
+                          <span className="rounded bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 text-[9.5px] font-bold text-amber-300">
+                            🔀 成否・反論分岐あり
+                          </span>
+                        ) : (
+                          <span className="text-[10px] font-mono text-slate-400">
+                            {step.locationName}
+                          </span>
+                        )}
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">
                         {step.situationTitle}
@@ -3847,285 +3998,590 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               );
             })()}
             {/* ================================================================
-                ④ GM用の進行資料（フェーズ別進行表・読み上げ・誘導）のデザイン＆直接編集ビュー
+                ④ GM用の進行資料（成功・失敗分岐フローチャート ＆ フェーズ別進行表）
                ================================================================ */}
             {category === "gm_guides" && activeTimelineStep && (
-              <div className="space-y-6">
-                {/* ============================================================
-                    【1ページ目】：GM演出・読み上げ台本シート
-                   ============================================================ */}
-                <div className="space-y-5">
-                  {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
-                  <div className="rounded-md border border-cyan-400/80 bg-white/95 p-3 text-xs text-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-2 border-l-4 border-l-cyan-600">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="font-bold text-cyan-900 flex items-center gap-1.5 text-xs">
-                        <Radio className="h-4 w-4 text-cyan-700 shrink-0" />
-                        🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
-                      </span>
-                      <span className="text-[11px] text-slate-600">
-                        ｜ 各Day開始時にGMから朝潮（PC1）（7名時は長津経由）へ『Day別・ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮の指揮で会議を開始させます
-                      </span>
-                    </div>
-                    <span className="rounded bg-cyan-100 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-900 shrink-0">
-                      6-7 PLAYERS READY
-                    </span>
-                  </div>
-
-                  {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
-                  <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
-                  <div className="flex flex-wrap items-end justify-between gap-4">
-                    {/* Day X 状況タイトル */}
-                    <div className="flex-1 min-w-[260px]">
-                      <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                        Day {activeTimelineStep.dayNumber} 状況タイトル
-                      </span>
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={activeTimelineStep.situationTitle}
-                          onChange={(e) =>
-                            handleUpdateActiveTimelineStep((s) => ({
-                              ...s,
-                              situationTitle: e.target.value,
-                            }))
-                          }
-                          className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-lg font-bold text-white focus:bg-white/20 focus:outline-none"
-                        />
-                      ) : (
-                        <h1 className="mt-0.5 text-lg font-bold leading-tight">{activeTimelineStep.situationTitle}</h1>
-                      )}
-                    </div>
-
-                    {/* 観測地点 ＆ 目標進行時間（同じ列に横並び・累積距離枠は削除） */}
-                    <div className="flex items-center gap-4 text-xs shrink-0">
+              gmGuideViewMode === "flowchart" ? (
+                <div className="space-y-6 font-sans">
+                  {/* フローチャート全体タイトルバナー */}
+                  <div className="rounded-lg bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-5 text-white shadow-md">
+                    <div className="flex flex-wrap items-center justify-between gap-3">
                       <div>
-                        <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                          観測地点
+                        <span className="inline-block rounded bg-rose-600 px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase text-white mb-1">
+                          GM TACTICAL FLOWCHART // 進行・分岐・リカバリー管理表
                         </span>
-                        {isDirectEditMode ? (
-                          <input
-                            type="text"
-                            value={activeTimelineStep.locationName}
-                            onChange={(e) =>
-                              handleUpdateActiveTimelineStep((s) => ({
-                                ...s,
-                                locationName: e.target.value,
-                              }))
-                            }
-                            className="mt-0.5 w-36 rounded border border-white/30 bg-white/10 px-2 py-1 text-sm font-semibold text-white focus:bg-white/20 focus:outline-none"
-                          />
-                        ) : (
-                          <div className="mt-1 text-sm font-semibold">
-                            {activeTimelineStep.locationName}
+                        <h1 className="text-lg sm:text-xl font-black tracking-tight">
+                          『{project.title}』 各Dayごとの成功・失敗分岐フローチャート（GM進行資料）
+                        </h1>
+                        <p className="text-xs text-slate-300 mt-1">
+                          プレイヤーの判断ミスや情報抜けが発生しても物語が絶対に破綻・詰みにならず、ペナルティ処理やNPCの反論誘導によってドラマチックに進行させるためのGM専用チャートです。
+                        </p>
+                      </div>
+                      <div className="no-print flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setFlowchartDayFilter(flowchartDayFilter === "all" ? "selected" : "all")
+                          }
+                          className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700 transition"
+                        >
+                          {flowchartDayFilter === "all"
+                            ? `🔍 Day ${selectedGmDay} のみ表示に切替`
+                            : "📚 全7日間一覧表示に戻す"}
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* 全7日間サマリー早見バー */}
+                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px]">
+                      {GM_DAY_FLOWCHARTS.map((fc) => (
+                        <button
+                          key={fc.dayNumber}
+                          type="button"
+                          onClick={() => {
+                            setSelectedGmDay(fc.dayNumber);
+                          }}
+                          className={`rounded border p-2 text-left transition ${
+                            selectedGmDay === fc.dayNumber
+                              ? "border-amber-400 bg-amber-500/20 text-white ring-1 ring-amber-400"
+                              : fc.hasFailureBranch
+                              ? "border-rose-500/50 bg-rose-950/40 text-rose-100 hover:bg-rose-900/50"
+                              : "border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-800"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between font-bold">
+                            <span>Day {fc.dayNumber}</span>
+                            <span>{fc.hasFailureBranch ? "🔀分岐有" : "🟢共通"}</span>
                           </div>
-                        )}
-                      </div>
-
-                      <div className="border-l border-white/25 pl-4">
-                        <span className="block text-[10px] uppercase tracking-wider opacity-75">
-                          目標進行時間
-                        </span>
-                        <div className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
-                          <Clock className="h-3.5 w-3.5 text-amber-300" />
-                          {isDirectEditMode ? (
-                            <input
-                              type="number"
-                              value={activeGmNote.targetMinutes}
-                              onChange={(e) =>
-                                handleUpdateActiveGmNote((n) => ({
-                                  ...n,
-                                  targetMinutes: parseInt(e.target.value, 10) || 20,
-                                }))
-                              }
-                              className="w-14 rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-center font-mono text-xs font-bold text-white focus:bg-white/20 focus:outline-none"
-                            />
-                          ) : (
-                            <strong>{activeGmNote.targetMinutes}</strong>
-                          )}
-                          <span>分</span>
-                        </div>
-                      </div>
+                          <div className="mt-0.5 truncate text-[9.5px] opacity-90">
+                            {fc.dayNumber === 1
+                              ? "救助地点・証言繰越"
+                              : fc.dayNumber === 2
+                              ? "失敗要素なし"
+                              : fc.dayNumber === 3
+                              ? "索敵・速度計算"
+                              : fc.dayNumber === 4
+                              ? "東京湾vs富士山"
+                              : fc.dayNumber === 5
+                              ? "攻撃位置差分"
+                              : fc.dayNumber === 6
+                              ? "岸部局長の反論誘導"
+                              : "公式発表選択"}
+                          </div>
+                        </button>
+                      ))}
                     </div>
                   </div>
-                </div>
 
-                {/* BGM・音響演出キュー枠 */}
-                <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-slate-100 px-4 py-2.5 text-xs text-slate-800">
-                  <Volume2 className="h-4 w-4 text-indigo-700 shrink-0" />
-                  <span className="font-bold shrink-0">演出・BGMキュー:</span>
-                  {isDirectEditMode ? (
-                    <input
-                      type="text"
-                      value={activeGmNote.bgmCue}
-                      onChange={(e) =>
-                        handleUpdateActiveGmNote((n) => ({ ...n, bgmCue: e.target.value }))
-                      }
-                      className="flex-1 rounded border border-dashed border-slate-400 bg-white px-2 py-0.5 text-xs text-slate-900"
-                    />
-                  ) : (
-                    <span>{activeGmNote.bgmCue}</span>
-                  )}
-                </div>
-
-                {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（スクロールなしで全行展開・印刷完全対応） */}
-                <div
-                  className={`rounded-md border-2 p-5 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
-                >
-                  <div className="mb-2.5 flex items-center justify-between">
-                    <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
-                      📢 【GM演出用ナレーション ＆ NPCセリフ台本】
-                    </span>
-                    <span className="text-[11px] text-slate-600">
-                      ※GM進行コンソールの演出用台本と連動（全行表示・直接編集・印刷対応）
-                    </span>
-                  </div>
-                  {isDirectEditMode ? (
-                    <textarea
-                      rows={Math.max(14, (activeGmNote.readAloudScript || "").split("\n").length + 2)}
-                      value={activeGmNote.readAloudScript}
-                      onChange={(e) =>
-                        handleUpdateActiveGmNote((n) => ({
-                          ...n,
-                          readAloudScript: e.target.value,
-                        }))
-                      }
-                      className="w-full rounded border border-dashed border-indigo-400 bg-white p-3.5 text-xs font-semibold leading-relaxed text-slate-900 font-mono shadow-inner focus:outline-none focus:border-indigo-600"
-                    />
-                  ) : (
-                    <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 select-text">
-                      {activeGmNote.readAloudScript}
-                    </div>
-                  )}
-                </div>
-
-                  {/* 1ページ目の末尾フッター（画面プレビュー・印刷用） */}
-                  <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[10px] text-slate-500 font-mono">
-                    <span>Day {activeTimelineStep.dayNumber} GM進行台本 [Page 1/2]</span>
-                    <span>次ページ ➔ 司令部・現地対応 ＆ 進行管理</span>
-                  </div>
-                </div>
-
-                {/* ============================================================
-                    【改ページ区切り（画面プレビュー境界 ＆ A4印刷自動改ページ）】
-                   ============================================================ */}
-                <div className="page-break-before my-8 border-t-2 border-dashed border-indigo-400 pt-5 relative">
-                  <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full border border-indigo-300 bg-indigo-50 px-3.5 py-0.5 text-[11px] font-bold text-indigo-900 shadow-sm flex items-center gap-1.5 no-print">
-                    <span>📄 【2ページ目】 GM進行管理シート</span>
-                  </div>
-                </div>
-
-                {/* ============================================================
-                    【2ページ目】：進行管理シート
-                   ============================================================ */}
-                <div className="space-y-5">
-                  {/* 2ページ目ヘッダー帯 */}
-                  <div className={`rounded-md px-4 py-2.5 ${accent.headerBg} ${accent.headerText} flex items-center justify-between text-xs shadow-sm`}>
-                    <div className="flex items-center gap-2">
-                      <span className="font-bold">Day {activeTimelineStep.dayNumber} {activeTimelineStep.situationTitle}</span>
-                      <span className="opacity-75">｜ GM進行管理シート</span>
-                    </div>
-                    <span className="text-[10px] opacity-75 font-mono">[Page 2/2]</span>
-                  </div>
-
-                {/* ✅ GM進行チェックポイント（直接追加・編集可能） */}
-                <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
-                  <div className="mb-2 flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                      <CheckSquare className="h-4 w-4 text-emerald-700" />
-                      Day {activeTimelineStep.dayNumber} GM進行チェックリスト
-                    </span>
-                    {isDirectEditMode && (
-                      <button
-                        onClick={() =>
-                          handleUpdateActiveGmNote((n) => ({
-                            ...n,
-                            gmCheckpoints: [
-                              ...(n.gmCheckpoints || []),
-                              "新規進行チェック項目を入力してください",
-                            ],
-                          }))
-                        }
-                        className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
+                  {/* 各Dayのフローチャート本体 */}
+                  <div className="space-y-6">
+                    {GM_DAY_FLOWCHARTS.filter((fc) =>
+                      flowchartDayFilter === "all" ? true : fc.dayNumber === selectedGmDay
+                    ).map((fc, idx) => (
+                      <div
+                        key={fc.dayNumber}
+                        className={`rounded-xl border-2 bg-white shadow-sm overflow-hidden break-inside-avoid ${
+                          fc.hasFailureBranch ? "border-indigo-900" : "border-slate-400"
+                        } ${idx > 0 && idx % 2 === 0 ? "page-break-before" : ""}`}
                       >
-                        ＋ チェック項目追加
-                      </button>
-                    )}
-                  </div>
-                  <div className="space-y-1.5">
-                    {(activeGmNote.gmCheckpoints || []).map((chk, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-xs">
-                        <span className="inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
-                        {isDirectEditMode ? (
-                          <>
-                            <input
-                              type="text"
-                              value={chk}
-                              onChange={(e) => {
-                                const next = [...(activeGmNote.gmCheckpoints || [])];
-                                next[idx] = e.target.value;
-                                handleUpdateActiveGmNote((n) => ({
-                                  ...n,
-                                  gmCheckpoints: next,
-                                }));
-                              }}
-                              className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-900"
-                            />
-                            <button
-                              onClick={() =>
-                                handleUpdateActiveGmNote((n) => ({
-                                  ...n,
-                                  gmCheckpoints: (n.gmCheckpoints || []).filter((_, i) => i !== idx),
-                                }))
-                              }
-                              className="no-print text-slate-400 hover:text-red-600"
-                            >
-                              <Trash2 className="h-3.5 w-3.5" />
-                            </button>
-                          </>
-                        ) : (
-                          <span>{chk}</span>
-                        )}
+                        {/* Day見出しヘッダー */}
+                        <div
+                          className={`px-4 py-3 flex flex-wrap items-center justify-between gap-2 ${
+                            fc.hasFailureBranch
+                              ? "bg-indigo-950 text-white"
+                              : "bg-slate-800 text-white"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2.5">
+                            <span className="rounded bg-white/15 px-2.5 py-0.5 font-mono text-xs font-black tracking-wider text-amber-300 border border-amber-400/40">
+                              DAY {fc.dayNumber}
+                            </span>
+                            <h2 className="text-sm sm:text-base font-extrabold">{fc.dayTitle}</h2>
+                          </div>
+                          <span
+                            className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-bold ${
+                              fc.hasFailureBranch
+                                ? "bg-rose-600 text-white"
+                                : "bg-emerald-700 text-white"
+                            }`}
+                          >
+                            {fc.hasFailureBranch
+                              ? "🔀 成功・失敗・反論分岐あり"
+                              : "🟢 失敗要素なし（共通進行）"}
+                          </span>
+                        </div>
+
+                        <div className="p-4 space-y-3.5 text-xs text-slate-800">
+                          {/* Step 1: 基本進行ステップ（矢印連結） */}
+                          <div className="rounded-lg border border-slate-300 bg-slate-50 p-3">
+                            <div className="text-[11px] font-bold text-slate-700 mb-2 flex items-center gap-1.5">
+                              <span>🧭</span>
+                              <span>Day {fc.dayNumber} の基本進行フロー</span>
+                            </div>
+                            <div className="space-y-1.5">
+                              {fc.flowSteps.map((stepText, sIdx) => (
+                                <div key={sIdx} className="flex items-start gap-2">
+                                  <span className="rounded bg-indigo-900 text-white font-mono text-[10px] font-bold px-1.5 py-0.5 shrink-0">
+                                    STEP {sIdx + 1}
+                                  </span>
+                                  <span className="text-xs font-medium text-slate-900 leading-snug">
+                                    {stepText}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* Step 2: プレイヤーの判断課題と正解条件 */}
+                          <div className="rounded-lg border border-indigo-200 bg-indigo-50/60 p-3">
+                            <div className="font-bold text-indigo-950 text-xs flex items-center gap-1.5">
+                              <span>🎯 判断・推理ポイント：</span>
+                              <span>{fc.decisionTaskTitle}</span>
+                            </div>
+                            <p className="mt-1 text-[11.5px] text-slate-700 leading-relaxed">
+                              <strong className="text-indigo-900">【正解・達成条件】：</strong>
+                              {fc.correctConditionSummary}
+                            </p>
+                          </div>
+
+                          {/* 下向きフロー矢印 */}
+                          <div className="flex items-center justify-center text-xs font-bold text-indigo-800 py-0.5">
+                            <span>▼ プレイヤーの選択・回答結果による分岐 ▼</span>
+                          </div>
+
+                          {/* Step 3: 分岐ノード一覧 */}
+                          <div className="grid grid-cols-1 gap-3">
+                            {fc.branches.map((br) => {
+                              const boxStyle =
+                                br.badgeType === "success"
+                                  ? "border-emerald-500 bg-emerald-50/50"
+                                  : br.badgeType === "retry"
+                                  ? "border-amber-500 bg-amber-50/50"
+                                  : br.badgeType === "failure"
+                                  ? "border-rose-500 bg-rose-50/50"
+                                  : br.badgeType === "counterargument"
+                                  ? "border-purple-600 bg-purple-50/50"
+                                  : "border-slate-300 bg-slate-50/70";
+
+                              const badgeStyle =
+                                br.badgeType === "success"
+                                  ? "bg-emerald-700 text-white"
+                                  : br.badgeType === "retry"
+                                  ? "bg-amber-600 text-white"
+                                  : br.badgeType === "failure"
+                                  ? "bg-rose-700 text-white"
+                                  : br.badgeType === "counterargument"
+                                  ? "bg-purple-800 text-white"
+                                  : "bg-slate-700 text-white";
+
+                              return (
+                                <div
+                                  key={br.id}
+                                  className={`rounded-lg border-2 p-3.5 space-y-2 ${boxStyle}`}
+                                >
+                                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/10 pb-1.5">
+                                    <span
+                                      className={`rounded px-2.5 py-0.5 text-[11px] font-bold ${badgeStyle}`}
+                                    >
+                                      {br.conditionLabel}
+                                    </span>
+                                    <span className="font-mono text-[11px] font-bold text-slate-700">
+                                      {br.nextStepArrow}
+                                    </span>
+                                  </div>
+
+                                  <div className="font-bold text-xs text-slate-900">
+                                    ■ 結果：{br.outcomeTitle}
+                                  </div>
+
+                                  <div className="rounded border border-slate-300/90 bg-white p-2.5 text-[11.5px] leading-relaxed text-slate-800 whitespace-pre-wrap font-medium">
+                                    {br.gmActionAndDialogue}
+                                  </div>
+
+                                  {br.penaltyOrCarryOver && (
+                                    <div className="flex items-start gap-1.5 text-[11px] font-bold text-rose-900 bg-white/80 rounded px-2.5 py-1 border border-rose-200">
+                                      <span>📌 ペナルティ・引き継ぎ処理：</span>
+                                      <span className="flex-1">{br.penaltyOrCarryOver}</span>
+                                    </div>
+                                  )}
+                                </div>
+                              );
+                            })}
+                          </div>
+
+                          {/* GM進行のポイント注記 */}
+                          <div className="rounded-md bg-slate-900 px-3.5 py-2 text-[11px] text-amber-200 flex items-start gap-2">
+                            <span className="font-bold shrink-0">💡 GM進行の要点：</span>
+                            <span className="text-slate-100">{fc.gmKeyNote}</span>
+                          </div>
+                        </div>
                       </div>
                     ))}
                   </div>
                 </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* ============================================================
+                      【1ページ目】：GM演出・読み上げ台本シート
+                     ============================================================ */}
+                  <div className="space-y-5">
+                    {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
+                    <div className="rounded-md border border-cyan-400/80 bg-white/95 p-3 text-xs text-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-2 border-l-4 border-l-cyan-600">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="font-bold text-cyan-900 flex items-center gap-1.5 text-xs">
+                          <Radio className="h-4 w-4 text-cyan-700 shrink-0" />
+                          🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
+                        </span>
+                        <span className="text-[11px] text-slate-600">
+                          ｜ 各Day開始時にGMから朝潮（PC1）（7名時は長津経由）へ『Day別・ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮の指揮で会議を開始させます
+                        </span>
+                      </div>
+                      <span className="rounded bg-cyan-100 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-900 shrink-0">
+                        6-7 PLAYERS READY
+                      </span>
+                    </div>
 
-                {/* 📂 このフェーズで開示される証拠資料（タイトルのみコンパクト圧縮表示） */}
-                <div className={`rounded-md border p-3.5 ${accent.borderSub} bg-white/85 shadow-sm`}>
-                  <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-900">
-                    <span>
-                      📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
-                      {
-                        allEvidences.filter(
-                          (e) => e.foundPhase === activeTimelineStep.dayNumber
-                        ).length
-                      }
-                      件）
-                    </span>
-                    <span className="text-[10px] text-slate-500 font-normal">
-                      ※タイトルのみ一覧
-                    </span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {allEvidences
-                      .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
-                      .map((ev) => (
-                        <div
-                          key={ev.id}
-                          className="flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm hover:border-slate-400"
-                        >
-                          <span className="text-indigo-600 font-mono text-xs">📄</span>
-                          <span>{ev.title}</span>
+                    {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
+                    <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
+                      <div className="flex flex-wrap items-end justify-between gap-4">
+                        {/* Day X 状況タイトル */}
+                        <div className="flex-1 min-w-[260px]">
+                          <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                            Day {activeTimelineStep.dayNumber} 状況タイトル
+                          </span>
+                          {isDirectEditMode ? (
+                            <input
+                              type="text"
+                              value={activeTimelineStep.situationTitle}
+                              onChange={(e) =>
+                                handleUpdateActiveTimelineStep((s) => ({
+                                  ...s,
+                                  situationTitle: e.target.value,
+                                }))
+                              }
+                              className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-lg font-bold text-white focus:bg-white/20 focus:outline-none"
+                            />
+                          ) : (
+                            <h1 className="mt-0.5 text-lg font-bold leading-tight">
+                              {activeTimelineStep.situationTitle}
+                            </h1>
+                          )}
                         </div>
-                      ))}
-                    {allEvidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber).length === 0 && (
-                      <span className="text-xs text-slate-500 italic">このフェーズで開示される証拠はありません</span>
-                    )}
+
+                        {/* 観測地点 ＆ 目標進行時間（同じ列に横並び・累積距離枠は削除） */}
+                        <div className="flex items-center gap-4 text-xs shrink-0">
+                          <div>
+                            <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                              観測地点
+                            </span>
+                            {isDirectEditMode ? (
+                              <input
+                                type="text"
+                                value={activeTimelineStep.locationName}
+                                onChange={(e) =>
+                                  handleUpdateActiveTimelineStep((s) => ({
+                                    ...s,
+                                    locationName: e.target.value,
+                                  }))
+                                }
+                                className="mt-0.5 w-36 rounded border border-white/30 bg-white/10 px-2 py-1 text-sm font-semibold text-white focus:bg-white/20 focus:outline-none"
+                              />
+                            ) : (
+                              <div className="mt-1 text-sm font-semibold">
+                                {activeTimelineStep.locationName}
+                              </div>
+                            )}
+                          </div>
+
+                          <div className="border-l border-white/25 pl-4">
+                            <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                              目標進行時間
+                            </span>
+                            <div className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
+                              <Clock className="h-3.5 w-3.5 text-amber-300" />
+                              {isDirectEditMode ? (
+                                <input
+                                  type="number"
+                                  value={activeGmNote.targetMinutes}
+                                  onChange={(e) =>
+                                    handleUpdateActiveGmNote((n) => ({
+                                      ...n,
+                                      targetMinutes: parseInt(e.target.value, 10) || 20,
+                                    }))
+                                  }
+                                  className="w-14 rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-center font-mono text-xs font-bold text-white focus:bg-white/20 focus:outline-none"
+                                />
+                              ) : (
+                                <strong>{activeGmNote.targetMinutes}</strong>
+                              )}
+                              <span>分</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* BGM・音響演出キュー枠 */}
+                    <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-slate-100 px-4 py-2.5 text-xs text-slate-800">
+                      <Volume2 className="h-4 w-4 text-indigo-700 shrink-0" />
+                      <span className="font-bold shrink-0">演出・BGMキュー:</span>
+                      {isDirectEditMode ? (
+                        <input
+                          type="text"
+                          value={activeGmNote.bgmCue}
+                          onChange={(e) =>
+                            handleUpdateActiveGmNote((n) => ({ ...n, bgmCue: e.target.value }))
+                          }
+                          className="flex-1 rounded border border-dashed border-slate-400 bg-white px-2 py-0.5 text-xs text-slate-900"
+                        />
+                      ) : (
+                        <span>{activeGmNote.bgmCue}</span>
+                      )}
+                    </div>
+
+                    {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（スクロールなしで全行展開・印刷完全対応） */}
+                    <div
+                      className={`rounded-md border-2 p-5 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
+                    >
+                      <div className="mb-2.5 flex items-center justify-between">
+                        <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
+                          📢 【GM演出用ナレーション ＆ NPCセリフ台本】
+                        </span>
+                        <span className="text-[11px] text-slate-600">
+                          ※GM進行コンソールの演出用台本と連動（全行表示・直接編集・印刷対応）
+                        </span>
+                      </div>
+                      {isDirectEditMode ? (
+                        <textarea
+                          rows={Math.max(
+                            14,
+                            (activeGmNote.readAloudScript || "").split("\n").length + 2
+                          )}
+                          value={activeGmNote.readAloudScript}
+                          onChange={(e) =>
+                            handleUpdateActiveGmNote((n) => ({
+                              ...n,
+                              readAloudScript: e.target.value,
+                            }))
+                          }
+                          className="w-full rounded border border-dashed border-indigo-400 bg-white p-3.5 text-xs font-semibold leading-relaxed text-slate-900 font-mono shadow-inner focus:outline-none focus:border-indigo-600"
+                        />
+                      ) : (
+                        <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 select-text">
+                          {activeGmNote.readAloudScript}
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 1ページ目の末尾フッター（画面プレビュー・印刷用） */}
+                    <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[10px] text-slate-500 font-mono">
+                      <span>Day {activeTimelineStep.dayNumber} GM進行台本 [Page 1/2]</span>
+                      <span>次ページ ➔ 成功・失敗分岐フローチャート ＆ 進行管理</span>
+                    </div>
+                  </div>
+
+                  {/* ============================================================
+                      【改ページ区切り（画面プレビュー境界 ＆ A4印刷自動改ページ）】
+                     ============================================================ */}
+                  <div className="page-break-before my-8 border-t-2 border-dashed border-indigo-400 pt-5 relative">
+                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full border border-indigo-300 bg-indigo-50 px-3.5 py-0.5 text-[11px] font-bold text-indigo-900 shadow-sm flex items-center gap-1.5 no-print">
+                      <span>📄 【2ページ目】 GM進行管理 ＆ 成功・失敗分岐フローチャート</span>
+                    </div>
+                  </div>
+
+                  {/* ============================================================
+                      【2ページ目】：成功・失敗分岐フローチャート ＆ 進行管理シート
+                     ============================================================ */}
+                  <div className="space-y-5">
+                    {/* 2ページ目ヘッダー帯 */}
+                    <div
+                      className={`rounded-md px-4 py-2.5 ${accent.headerBg} ${accent.headerText} flex items-center justify-between text-xs shadow-sm`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold">
+                          Day {activeTimelineStep.dayNumber} {activeTimelineStep.situationTitle}
+                        </span>
+                        <span className="opacity-75">
+                          ｜ 成功・失敗分岐フローチャート ＆ GM進行管理シート
+                        </span>
+                      </div>
+                      <span className="text-[10px] opacity-75 font-mono">[Page 2/2]</span>
+                    </div>
+
+                    {/* 🔀 Day別の成功・失敗分岐フローチャート（2ページ目に常設） */}
+                    {(() => {
+                      const dayFc = GM_DAY_FLOWCHARTS.find(
+                        (f) => f.dayNumber === activeTimelineStep.dayNumber
+                      );
+                      if (!dayFc) return null;
+                      return (
+                        <div className="rounded-lg border-2 border-indigo-900 bg-white p-4 space-y-3 shadow-sm">
+                          <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
+                            <span className="font-extrabold text-xs text-indigo-950 flex items-center gap-1.5">
+                              <span>🔀</span>
+                              <span>
+                                Day {dayFc.dayNumber} 成功・失敗分岐フローチャート（
+                                {dayFc.decisionTaskTitle}）
+                              </span>
+                            </span>
+                            <span
+                              className={`rounded px-2 py-0.5 text-[10px] font-bold ${
+                                dayFc.hasFailureBranch
+                                  ? "bg-rose-600 text-white"
+                                  : "bg-emerald-700 text-white"
+                              }`}
+                            >
+                              {dayFc.hasFailureBranch ? "分岐・ペナルティ・反論誘導あり" : "失敗要素なし"}
+                            </span>
+                          </div>
+
+                          <div className="space-y-2">
+                            {dayFc.branches.map((br) => (
+                              <div
+                                key={br.id}
+                                className={`rounded border p-2.5 text-xs space-y-1 ${
+                                  br.badgeType === "success"
+                                    ? "border-emerald-400 bg-emerald-50/50"
+                                    : br.badgeType === "retry"
+                                    ? "border-amber-400 bg-amber-50/50"
+                                    : br.badgeType === "failure"
+                                    ? "border-rose-400 bg-rose-50/50"
+                                    : br.badgeType === "counterargument"
+                                    ? "border-purple-400 bg-purple-50/50"
+                                    : "border-slate-300 bg-slate-50"
+                                }`}
+                              >
+                                <div className="flex flex-wrap items-center justify-between gap-1 font-bold text-slate-900">
+                                  <span>{br.conditionLabel}</span>
+                                  <span className="font-mono text-[10.5px] text-indigo-900">
+                                    {br.nextStepArrow}
+                                  </span>
+                                </div>
+                                <div className="text-[11px] font-semibold text-slate-800">
+                                  ➔ {br.outcomeTitle}
+                                </div>
+                                <div className="text-[11px] text-slate-700 whitespace-pre-wrap leading-relaxed bg-white/80 rounded p-2 border border-slate-200">
+                                  {br.gmActionAndDialogue}
+                                </div>
+                                {br.penaltyOrCarryOver && (
+                                  <div className="text-[10.5px] font-bold text-rose-800">
+                                    📌 {br.penaltyOrCarryOver}
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    })()}
+
+                    {/* ✅ GM進行チェックポイント（直接追加・編集可能） */}
+                    <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
+                      <div className="mb-2 flex items-center justify-between">
+                        <span className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
+                          <CheckSquare className="h-4 w-4 text-emerald-700" />
+                          Day {activeTimelineStep.dayNumber} GM進行チェックリスト
+                        </span>
+                        {isDirectEditMode && (
+                          <button
+                            onClick={() =>
+                              handleUpdateActiveGmNote((n) => ({
+                                ...n,
+                                gmCheckpoints: [
+                                  ...(n.gmCheckpoints || []),
+                                  "新規進行チェック項目を入力してください",
+                                ],
+                              }))
+                            }
+                            className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
+                          >
+                            ＋ チェック項目追加
+                          </button>
+                        )}
+                      </div>
+                      <div className="space-y-1.5">
+                        {(activeGmNote.gmCheckpoints || []).map((chk, idx) => (
+                          <div key={idx} className="flex items-center gap-2 text-xs">
+                            <span className="inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
+                            {isDirectEditMode ? (
+                              <>
+                                <input
+                                  type="text"
+                                  value={chk}
+                                  onChange={(e) => {
+                                    const next = [...(activeGmNote.gmCheckpoints || [])];
+                                    next[idx] = e.target.value;
+                                    handleUpdateActiveGmNote((n) => ({
+                                      ...n,
+                                      gmCheckpoints: next,
+                                    }));
+                                  }}
+                                  className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-900"
+                                />
+                                <button
+                                  onClick={() =>
+                                    handleUpdateActiveGmNote((n) => ({
+                                      ...n,
+                                      gmCheckpoints: (n.gmCheckpoints || []).filter(
+                                        (_, i) => i !== idx
+                                      ),
+                                    }))
+                                  }
+                                  className="no-print text-slate-400 hover:text-red-600"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </>
+                            ) : (
+                              <span>{chk}</span>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* 📂 このフェーズで開示される証拠資料（タイトルのみコンパクト圧縮表示） */}
+                    <div
+                      className={`rounded-md border p-3.5 ${accent.borderSub} bg-white/85 shadow-sm`}
+                    >
+                      <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-900">
+                        <span>
+                          📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
+                          {
+                            allEvidences.filter(
+                              (e) => e.foundPhase === activeTimelineStep.dayNumber
+                            ).length
+                          }
+                          件）
+                        </span>
+                        <span className="text-[10px] text-slate-500 font-normal">
+                          ※タイトルのみ一覧
+                        </span>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {allEvidences
+                          .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
+                          .map((ev) => (
+                            <div
+                              key={ev.id}
+                              className="flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm hover:border-slate-400"
+                            >
+                              <span className="text-indigo-600 font-mono text-xs">📄</span>
+                              <span>{ev.title}</span>
+                            </div>
+                          ))}
+                        {allEvidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
+                          .length === 0 && (
+                          <span className="text-xs text-slate-500 italic">
+                            このフェーズで開示される証拠はありません
+                          </span>
+                        )}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          )}
+              )
+            )}
 
             {/* ----------------------------------------------------------------
                 共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
