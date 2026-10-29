@@ -24,6 +24,7 @@ import {
   NAGATSU_PHASE_CARDS,
 } from "@/utils/initialProjectData";
 import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
+import { GmOnePageFlowchart } from "@/components/GmOnePageFlowchart";
 import { printCharacterHandoutsB5 } from "@/utils/scriptGenerator";
 import {
   Sparkles,
@@ -1116,6 +1117,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [handoutViewMode, setHandoutViewMode] = useState<
     "sheet" | "cards" | "daily_briefings" | "nagatsu_cards"
   >("sheet");
+  const [briefingFilterMode, setBriefingFilterMode] = useState<
+    "all" | "midday" | "start"
+  >("all");
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
@@ -1125,11 +1129,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [selectedVisualId, setSelectedVisualId] = useState<string>("vis-day1-white");
   const [visualOrientation, setVisualOrientation] = useState<"portrait" | "landscape_rotated">("landscape_rotated");
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
-  const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
-  const [flowchartDayFilter, setFlowchartDayFilter] = useState<"all" | "selected">("all");
+  const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "all_in_one" | "daily_sheet">("flowchart");
 
-  // 画面内テキスト直接編集モード vs 純粋プレビューモード
-  const [isDirectEditMode, setIsDirectEditMode] = useState<boolean>(true);
+  // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
+  const isDirectEditMode = false;
 
   // Gemini デザイン生成プロンプト入力
   const [aiDesignPrompt, setAiDesignPrompt] = useState<string>("");
@@ -1771,80 +1774,57 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           </button>
         </div>
 
-        {/* 右側：直接編集トグル・保存ボタン・デザイン印刷ボタン */}
+        {/* 右側：カテゴリー別の専用一括印刷・PDF出力ボタン（デザイン崩れ防止のため直接編集・汎用印刷ボタンは廃止） */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* 編集モード切替 */}
-          <button
-            onClick={() => setIsDirectEditMode(!isDirectEditMode)}
-            className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition ${
-              isDirectEditMode
-                ? "border-indigo-500/60 bg-indigo-950/70 text-indigo-200"
-                : "border-slate-700 bg-slate-900 text-slate-300 hover:bg-slate-800"
-            }`}
-            title="デザインされた画面の中でそのまま文字を書き換えるモードと、印刷前の純粋な完成プレビューを切り替えます"
-          >
-            {isDirectEditMode ? (
-              <>
-                <Edit3 className="h-3.5 w-3.5 text-indigo-400" />
-                画面内テキスト直接編集：ON
-              </>
-            ) : (
-              <>
-                <Eye className="h-3.5 w-3.5 text-emerald-400" />
-                完成プレビュー表示中（クリックで編集へ）
-              </>
-            )}
-          </button>
-
-          {/* 明示的保存ボタン + 保存ステータス */}
-          <button
-            onClick={handleManualSave}
-            className={`flex items-center gap-1.5 rounded-lg px-3.5 py-1.5 text-xs font-bold transition shadow ${
-              saveStatus === "just_saved"
-                ? "bg-emerald-600 text-white ring-2 ring-emerald-400"
-                : "bg-indigo-600 text-white hover:bg-indigo-500"
-            }`}
-            title="編集したテキストとデザイン枠の設定をシナリオデータへ保存します（Cmd/Ctrl+S）"
-          >
-            {saveStatus === "just_saved" ? (
-              <>
-                <Check className="h-4 w-4" />
-                保存しました！（{lastSavedTime}）
-              </>
-            ) : (
-              <>
-                <Save className="h-4 w-4" />
-                💾 修正内容を保存
-              </>
-            )}
-          </button>
-
-          {/* デザインされたまま印刷 / PDF保存 */}
-          <button
-            onClick={handlePrintDesignedSheet}
-            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/25"
-            title={
-              category === "handouts" && handoutViewMode === "sheet"
-                ? "選択中のキャラクターのハンドアウトを美しいB5規格で印刷・PDF保存します"
-                : "現在のデザイン枠・スタンプ・配色のまま印刷またはPDF保存します"
-            }
-          >
-            <Printer className="h-4 w-4" />
-            {category === "handouts" && handoutViewMode === "sheet"
-              ? "🖨️ このPCをB5印刷 / PDF"
-              : "🖨️ このデザインで印刷 / PDF保存"}
-          </button>
-
-          {/* 全員分一括B5印刷ボタン（個人ハンドアウト本紙表示時のみ） */}
           {category === "handouts" && handoutViewMode === "sheet" && (
-            <button
-              onClick={handlePrintAllCharactersB5}
-              className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/25"
-              title="全6名の個人ハンドアウトを美しいB5規格で一括印刷・PDF保存します（各キャラ1ページ）"
-            >
-              <Users className="h-4 w-4" />
-              👥 全員分を一括B5印刷 / PDF
-            </button>
+            <>
+              <button
+                onClick={() =>
+                  printCharacterHandoutsB5(
+                    activeChar ? [activeChar] : project.characters,
+                    project.title
+                  )
+                }
+                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/25"
+                title="選択中のキャラクターのハンドアウトを美しいB5規格で印刷・PDF保存します"
+              >
+                <Printer className="h-4 w-4" />
+                🖨️ このPCをB5印刷 / PDF
+              </button>
+              <button
+                onClick={handlePrintAllCharactersB5}
+                className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/25"
+                title="全プレイヤー分の個人ハンドアウトを美しいB5規格で一括印刷・PDF保存します（各キャラ1ページ）"
+              >
+                <Users className="h-4 w-4" />
+                👥 全員分を一括B5印刷 / PDF
+              </button>
+            </>
+          )}
+
+          {category === "gm_guides" && (
+            <>
+              <a
+                href="/pdfs/gm-complete-progression-guide.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/25 transition"
+                title="A4・1枚の成功・失敗分岐フローチャート図と、Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括印刷用PDFを開きます"
+              >
+                <Printer className="h-4 w-4" />
+                🖨️ GM進行資料を一括印刷 / PDF（フローチャート＋全7日進行表）
+              </a>
+              <a
+                href="/pdfs/gm-branching-flowchart.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-rose-600/25 transition"
+                title="A4用紙1枚にDay 1〜Day 7すべてが収まった成功・失敗分岐フローチャート図PDFを開きます"
+              >
+                <Printer className="h-4 w-4" />
+                🗺️ 分岐フローチャート図のみ印刷 / PDF（A4・1枚）
+              </a>
+            </>
           )}
         </div>
       </div>
@@ -1883,7 +1863,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                📋 Day別・朝潮＆長津ブリーフィング指令書
+                📋 Day別＆途中追加・朝潮＆長津ブリーフィング指令書（全12枚）
               </button>
               <button
                 onClick={() => setHandoutViewMode("nagatsu_cards")}
@@ -1924,7 +1904,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                📄 個別カード詳細・直接編集
+                📄 個別カード詳細表示
               </button>
             </div>
           </div>
@@ -1945,7 +1925,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                🔀 各Day 成功・失敗分岐フローチャート（GM進行資料）
+                🔀 成功・失敗分岐フローチャート図（A4・1枚完結）
+              </button>
+              <button
+                onClick={() => setGmGuideViewMode("all_in_one")}
+                className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                  gmGuideViewMode === "all_in_one"
+                    ? "bg-emerald-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                📚 GM進行資料一括表示（フローチャート＋全7日進行表）
               </button>
               <button
                 onClick={() => setGmGuideViewMode("daily_sheet")}
@@ -1958,32 +1948,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 📄 Day別 GM進行台本＆管理シート
               </button>
             </div>
-            {gmGuideViewMode === "flowchart" && (
-              <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1 ml-2">
-                <button
-                  onClick={() => setFlowchartDayFilter("all")}
-                  className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
-                    flowchartDayFilter === "all"
-                      ? "bg-emerald-600 text-white"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  📚 全7日間まとめて表示・印刷
-                </button>
-                <button
-                  onClick={() => setFlowchartDayFilter("selected")}
-                  className={`rounded px-2.5 py-1 text-[11px] font-bold transition ${
-                    flowchartDayFilter === "selected"
-                      ? "bg-emerald-600 text-white"
-                      : "text-slate-400 hover:text-white"
-                  }`}
-                >
-                  🔍 選択中の Day {selectedGmDay} のみ表示
-                </button>
-              </div>
-            )}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <a
+              href="/pdfs/gm-complete-progression-guide.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1.5 rounded-lg bg-emerald-700 hover:bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              🖨️ 一括印刷PDFを開く（フローチャート＋全7日）
+            </a>
             <a
               href="/pdfs/gm-branching-flowchart.pdf"
               target="_blank"
@@ -1991,7 +1966,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               className="flex items-center gap-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
             >
               <Printer className="h-3.5 w-3.5" />
-              📄 分岐フローチャートPDFを開く
+              📄 分岐チャート図PDF（A4・1枚）
             </a>
           </div>
         </div>
@@ -2257,7 +2232,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   : handoutViewMode === "cards"
                   ? "キャラクターごとに順次配布される「特別配布カード（全7枚）」です。"
                   : handoutViewMode === "daily_briefings"
-                  ? "各Dayの開始時にGMから朝潮（および7名時は長津）へ1枚ずつ渡す日次ブリーフィング＆指揮官ミッションシートです。"
+                  ? "各Day開始時の指令書（7枚）と、長津の途中アナウンス時に朝潮へ渡す途中追加指令書（5枚）の計12枚です。"
                   : "7名プレイ時に長津（PC7）がフェーズ途中・達成時に読み上げる専用アナウンスカード（全10枚・表裏仕様）です。"}
               </p>
 
@@ -2508,7 +2483,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 GM進行資料（全{project.timeline.length}フェーズ）
               </h3>
 
-              {/* フローチャート vs Day別進行台本 切替ボタン */}
+              {/* フローチャート（A4・1枚） vs 一括表示 vs Day別進行台本 切替ボタン */}
               <div className="grid grid-cols-1 gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
                 <button
                   onClick={() => setGmGuideViewMode("flowchart")}
@@ -2518,8 +2493,19 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-300 hover:bg-slate-900 hover:text-white"
                   }`}
                 >
-                  <span>🔀 各Day 成功・失敗分岐フローチャート</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">GM必携</span>
+                  <span>🔀 成功・失敗分岐フローチャート図</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">A4・1枚</span>
+                </button>
+                <button
+                  onClick={() => setGmGuideViewMode("all_in_one")}
+                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
+                    gmGuideViewMode === "all_in_one"
+                      ? "bg-emerald-600 text-white shadow"
+                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                  }`}
+                >
+                  <span>📚 GM進行資料一括表示（全7日＋図）</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">完全版</span>
                 </button>
                 <button
                   onClick={() => setGmGuideViewMode("daily_sheet")}
@@ -2530,14 +2516,38 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   }`}
                 >
                   <span>📄 Day別 GM進行台本＆管理シート</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">各2頁</span>
+                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">各Day</span>
                 </button>
+              </div>
+
+              {/* 左サイドバーにも一括印刷PDFボタンを常設 */}
+              <div className="space-y-1.5 pt-1">
+                <a
+                  href="/pdfs/gm-complete-progression-guide.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-2 text-xs font-bold text-white shadow transition"
+                >
+                  <Printer className="h-3.5 w-3.5 shrink-0" />
+                  <span>🖨️ GM進行資料を一括印刷 / PDF</span>
+                </a>
+                <a
+                  href="/pdfs/gm-branching-flowchart.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-1.5 rounded-lg bg-rose-700 hover:bg-rose-600 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Printer className="h-3.5 w-3.5 shrink-0" />
+                  <span>🗺️ 分岐チャート図のみ印刷（A4・1枚）</span>
+                </a>
               </div>
 
               <p className="text-[11px] text-slate-400 leading-relaxed">
                 {gmGuideViewMode === "flowchart"
-                  ? "プレイヤーの選択や成否（Day 1リトライ＆証言カード繰越、Day 4東京湾誤答時の攻撃遅延＆嫌味、Day 6岸部局長の反論誘導など）を視覚化したGM用進行フローチャートです。"
-                  : "フェーズ別の読み上げスクリプト、時間配分、成功・失敗分岐フロー、開示証拠リストをデザインされた進行表の上で直接修正・保存できます。"}
+                  ? "Day 1〜Day 7までの全ての成功・失敗ルート（Day 1再挑戦＆証言カード繰越、Day 4東京湾結論時の迎撃遅延＆嫌味、Day 6岸部局長の反論誘導など）をA4・1枚に凝縮したチャート図です。"
+                  : gmGuideViewMode === "all_in_one"
+                  ? "A4・1枚の成功・失敗分岐フローチャート図と、Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括表示です。"
+                  : "各Dayごとの読み上げスクリプト、時間配分、成功・失敗分岐フロー、開示証拠リストを確認できます。"}
               </p>
 
               <div className="space-y-2">
@@ -2581,31 +2591,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           )}
         </div>
 
-        {/* 右メインキャンバス：A4デザイン資料プレビュー ＆ 画面内直接テキスト編集 */}
+        {/* 右メインキャンバス：A4デザイン資料プレビュー */}
         <div className="col-span-9 flex-1 overflow-y-auto bg-slate-900/90 p-6 md:p-10">
-          {/* キャンバス上部ガイドバー */}
-          <div className="mx-auto mb-4 flex max-w-4xl items-center justify-between rounded-xl border border-slate-800 bg-slate-950/90 px-4 py-2.5 text-xs">
-            <div className="flex items-center gap-2 text-slate-300">
-              <span className="inline-block h-2.5 w-2.5 rounded-full bg-emerald-400 animate-pulse" />
-              {isDirectEditMode ? (
-                <span>
-                  💡 <strong>画面内直接編集モード</strong>：下のデザインされた用紙内の見出しや文章を<strong>直接クリックして書き換え</strong>できます（変更はリアルタイムで保存され、右上の「💾 修正内容を保存」でも確定できます）
-                </span>
-              ) : (
-                <span>
-                  👁️ <strong>完成プレビューモード</strong>：実際の配布・印刷時と同じ見た目を表示しています
-                </span>
-              )}
-            </div>
-          </div>
-
           {/* ====================================================================
               デザイン済みドキュメント用紙本体（A4相当・印刷ターゲット）
              ==================================================================== */}
           <div
             ref={printableSheetRef}
             className={`mx-auto transition-all relative ${
-              category === "visuals"
+              category === "visuals" ||
+              (category === "gm_guides" &&
+                (gmGuideViewMode === "flowchart" || gmGuideViewMode === "all_in_one"))
                 ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
                 : category === "handouts"
                 ? `${handoutViewMode === "sheet" ? "max-w-[720px]" : "max-w-4xl"} bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none`
@@ -2617,9 +2613,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             }`}
           >
             {/* ----------------------------------------------------------------
-                共通ドキュメントヘッダー（GM資料のみ表示。個人ハンドアウト・全体提示の地図/写真・証拠カードは枠不要のため非表示）
+                共通ドキュメントヘッダー（GM資料のDay別シート表示時のみ表示）
                ---------------------------------------------------------------- */}
-            {category !== "handouts" && category !== "visuals" && category !== "evidences" && (
+            {category === "gm_guides" && gmGuideViewMode === "daily_sheet" && (
               <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
                 <div className="flex flex-wrap items-start justify-between gap-4">
                   <div className="flex-1">
@@ -3168,68 +3164,165 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "daily_briefings" ? (
                   /* ------------------------------------------------------------
-                     📋 Day別・朝潮＆長津ブリーフィング指令書
+                     📋 Day別・朝潮＆長津ブリーフィング指令書（開始時7枚 ＋ 途中追加ミッション5枚 ＝ 全12枚）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-2">
-                      <div>
-                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 対策本部・日次ブリーフィング ＆ 指揮官ミッションシート（Day 1〜Day 7）
-                        </span>
-                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別指令シート
-                        </h2>
+                    <div className="no-print border-b-2 border-slate-800 pb-3 space-y-3">
+                      <div className="flex flex-wrap items-center justify-between gap-2">
+                        <div>
+                          <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                            {project.title} ― 対策本部・日次ブリーフィング ＆ 途中追加ミッション指令シート（全12枚）
+                          </span>
+                          <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                            危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別＆途中指令シート
+                          </h2>
+                          <p className="text-xs text-slate-600 mt-0.5">
+                            各Day開始時の指令書（7枚）に加え、長津が途中でアナウンスカードを読み上げる場面で朝潮へ渡す「途中追加指令書（5枚：Day 3 途中①〜③、Day 5 途中①、Day 6 途中①）」を収録しています。
+                          </p>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={handlePrintDesignedSheet}
+                            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                          >
+                            <Printer className="h-3.5 w-3.5" />
+                            表示中の指令書を印刷 / PDF保存（A4 2枚割付）
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setHandoutViewMode("nagatsu_cards")}
+                            className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                          >
+                            🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
+                          </button>
+                        </div>
                       </div>
-                      <div className="no-print flex flex-wrap items-center gap-2">
-                        <a
-                          href="/pdfs/daily-commander-briefings.pdf"
-                          download="朝潮_長津専用_Day別ブリーフィング指令書_全7日.pdf"
-                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
-                        >
-                          📥 Day別指令書PDFを直接ダウンロード（全7日）
-                        </a>
+
+                      {/* 印刷・表示フィルタ切り替えバー */}
+                      <div className="flex flex-wrap items-center gap-2 pt-1">
+                        <span className="text-xs font-bold text-slate-700">表示・印刷対象：</span>
                         <button
                           type="button"
-                          onClick={() => setHandoutViewMode("nagatsu_cards")}
-                          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                          onClick={() => setBriefingFilterMode("all")}
+                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                            briefingFilterMode === "all"
+                              ? "bg-slate-900 text-white shadow-sm"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          }`}
                         >
-                          🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
+                          📋 すべて表示（全12枚：開始時7枚＋途中追加5枚）
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBriefingFilterMode("midday")}
+                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                            briefingFilterMode === "midday"
+                              ? "bg-indigo-700 text-white shadow-sm"
+                              : "bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100"
+                          }`}
+                        >
+                          🆕 途中追加指令書のみ（計5枚：Day 3途中①〜③・Day 5途中①・Day 6途中①）
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setBriefingFilterMode("start")}
+                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
+                            briefingFilterMode === "start"
+                              ? "bg-slate-800 text-white shadow-sm"
+                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                          }`}
+                        >
+                          🌅 各Day開始時のみ（計7枚：Day 1〜Day 7）
                         </button>
                       </div>
                     </div>
 
-                    <div className="space-y-5">
-                      {DAILY_COMMANDER_BRIEFINGS.map((b) => (
+                    <div className="space-y-5 print:space-y-4">
+                      {DAILY_COMMANDER_BRIEFINGS.filter((b) =>
+                        briefingFilterMode === "all"
+                          ? true
+                          : briefingFilterMode === "midday"
+                          ? Boolean(b.isMidDayAddition)
+                          : !b.isMidDayAddition
+                      ).map((b, idx) => (
                         <div
-                          key={b.dayNumber}
-                          className="rounded-md border-2 border-slate-800 bg-white p-4 shadow-sm space-y-3 break-inside-avoid"
+                          key={b.id}
+                          className={`rounded-md border-2 bg-white p-4 shadow-sm space-y-2.5 break-inside-avoid ${
+                            idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
+                          }`}
+                          style={{
+                            borderColor: b.isMidDayAddition ? "#3730a3" : "#1e293b",
+                          }}
                         >
-                          <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-800 pb-2">
-                            <div className="flex items-center gap-2">
-                              <span className="rounded bg-slate-900 px-2.5 py-0.5 text-xs font-black text-white">
-                                DAY {b.dayNumber} 指令書
+                          <div
+                            className="flex flex-wrap items-center justify-between gap-2 border-b-2 pb-2"
+                            style={{
+                              borderColor: b.isMidDayAddition ? "#3730a3" : "#1e293b",
+                            }}
+                          >
+                            <div className="flex flex-wrap items-center gap-2">
+                              <span
+                                className="rounded px-2.5 py-0.5 text-xs font-black text-white"
+                                style={{
+                                  backgroundColor: b.isMidDayAddition ? "#3730a3" : "#0f172a",
+                                }}
+                              >
+                                {b.badgeLabel}
                               </span>
                               <h3 className="text-sm font-black text-slate-900">{b.title}</h3>
                             </div>
-                            <span className="text-xs font-bold text-slate-600 font-mono">
-                              目標進行時間: {b.targetMinutes}分
-                            </span>
+                            <div className="flex items-center gap-2">
+                              {b.linkedNagatsuCardCode && (
+                                <span
+                                  className="rounded border px-2 py-0.5 text-[11px] font-bold"
+                                  style={{
+                                    backgroundColor: "#eef2ff",
+                                    borderColor: "#a5b4fc",
+                                    color: "#312e81",
+                                  }}
+                                >
+                                  🎙️ 長津カード {b.linkedNagatsuCardCode} と同時配布
+                                </span>
+                              )}
+                              {b.targetMinutes && (
+                                <span className="text-xs font-bold text-slate-600 font-mono">
+                                  目標進行時間: {b.targetMinutes}分
+                                </span>
+                              )}
+                            </div>
                           </div>
 
-                          {/* 上段：長津からの緊急通信ブリーフィング */}
-                          <div className="rounded border border-slate-300 bg-slate-50 p-3 space-y-1.5">
-                            <div className="flex items-center justify-between">
-                              <span className="text-xs font-bold text-slate-800">
+                          {/* 上段：長津からの緊急通信ブリーフィング / 途中アナウンス */}
+                          <div
+                            className="rounded border p-3 space-y-1"
+                            style={{
+                              backgroundColor: b.isMidDayAddition ? "#f5f7ff" : "#f8fafc",
+                              borderColor: b.isMidDayAddition ? "#c7d2fe" : "#cbd5e1",
+                            }}
+                          >
+                            <div className="flex flex-wrap items-center justify-between gap-1">
+                              <span
+                                className="text-xs font-extrabold"
+                                style={{
+                                  color: b.isMidDayAddition ? "#312e81" : "#1e293b",
+                                }}
+                              >
                                 {b.nagatsuBriefingTitle}
                               </span>
+                              {b.timingNote && (
+                                <span className="text-[10.5px] font-semibold text-slate-500">
+                                  配布タイミング：{b.timingNote}
+                                </span>
+                              )}
                             </div>
                             {b.nagatsuBriefingRubyHtml ? (
                               <p
-                                className="text-xs leading-[2.1] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[6.8px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                className="text-xs leading-[2.05] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[6.8px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
                                 dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
                               />
                             ) : (
-                              <p className="text-xs leading-relaxed text-slate-800 font-medium">
+                              <p className="text-xs leading-relaxed text-slate-800 font-medium whitespace-pre-wrap">
                                 {b.nagatsuBriefingText}
                               </p>
                             )}
@@ -3237,21 +3330,29 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                           {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
                           <div className="rounded border border-slate-300 bg-white p-3 space-y-1.5">
-                            <div className="text-xs font-bold text-slate-900 border-b border-slate-200 pb-1">
-                              🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション
+                            <div
+                              className="text-xs font-extrabold border-b border-slate-200 pb-1"
+                              style={{
+                                color: b.isMidDayAddition ? "#1e3a8a" : "#0f172a",
+                              }}
+                            >
+                              {b.isMidDayAddition
+                                ? "🧭 危機管理官 朝潮がこの局面で指揮・達成すべき追加ミッション"
+                                : "🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション"}
                             </div>
                             <ul className="space-y-1.5 text-xs leading-relaxed text-slate-800 list-none">
                               {b.asashioMissions.map((m, mIdx) => (
                                 <li key={mIdx} className="flex items-start gap-2">
                                   <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
-                                  <span>{m}</span>
+                                  <span>{renderColoredCardBody(m)}</span>
                                 </li>
                               ))}
                             </ul>
                           </div>
 
-                          <div className="text-[10px] text-slate-500 flex items-center justify-end pt-1 border-t border-dashed border-slate-200">
-                            <span className="font-mono">COMMAND-BRIEFING-DAY0{b.dayNumber}</span>
+                          <div className="text-[10px] text-slate-500 flex items-center justify-between pt-1 border-t border-dashed border-slate-200">
+                            <span>{b.gmHandoutNote}</span>
+                            <span className="font-mono font-bold">{b.sheetCode}</span>
                           </div>
                         </div>
                       ))}
@@ -4002,222 +4103,152 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                ================================================================ */}
             {category === "gm_guides" && activeTimelineStep && (
               gmGuideViewMode === "flowchart" ? (
-                <div className="space-y-6 font-sans">
-                  {/* フローチャート全体タイトルバナー */}
-                  <div className="rounded-lg bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 p-5 text-white shadow-md">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div>
-                        <span className="inline-block rounded bg-rose-600 px-2.5 py-0.5 text-[10px] font-bold tracking-wider uppercase text-white mb-1">
-                          GM TACTICAL FLOWCHART // 進行・分岐・リカバリー管理表
-                        </span>
-                        <h1 className="text-lg sm:text-xl font-black tracking-tight">
-                          『{project.title}』 各Dayごとの成功・失敗分岐フローチャート（GM進行資料）
-                        </h1>
-                        <p className="text-xs text-slate-300 mt-1">
-                          プレイヤーの判断ミスや情報抜けが発生しても物語が絶対に破綻・詰みにならず、ペナルティ処理やNPCの反論誘導によってドラマチックに進行させるためのGM専用チャートです。
-                        </p>
-                      </div>
-                      <div className="no-print flex flex-wrap items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            setFlowchartDayFilter(flowchartDayFilter === "all" ? "selected" : "all")
-                          }
-                          className="rounded-lg border border-slate-600 bg-slate-800 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-700 transition"
-                        >
-                          {flowchartDayFilter === "all"
-                            ? `🔍 Day ${selectedGmDay} のみ表示に切替`
-                            : "📚 全7日間一覧表示に戻す"}
-                        </button>
-                      </div>
+                <div className="space-y-4">
+                  {/* A4・1枚完結の視覚的成功・失敗分岐フローチャート図 */}
+                  <GmOnePageFlowchart
+                    projectTitle={project.title}
+                    selectedDay={selectedGmDay}
+                    onSelectDay={setSelectedGmDay}
+                  />
+                </div>
+              ) : gmGuideViewMode === "all_in_one" ? (
+                <div className="space-y-10">
+                  {/* 1枚目：A4・1枚完結の成功・失敗分岐フローチャート図 */}
+                  <div>
+                    <div className="no-print mb-2 flex items-center justify-between rounded-lg bg-slate-950 border border-slate-800 px-4 py-2 text-xs text-slate-200">
+                      <span className="font-bold text-emerald-400">
+                        📄 【1枚目】 Day 1〜Day 7 成功・失敗分岐フローチャート（A4・1枚完結）
+                      </span>
+                      <a
+                        href="/pdfs/gm-complete-progression-guide.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="rounded bg-emerald-600 hover:bg-emerald-500 px-3 py-1 font-bold text-white transition"
+                      >
+                        🖨️ 全ページ一括印刷用PDFを開く
+                      </a>
                     </div>
-
-                    {/* 全7日間サマリー早見バー */}
-                    <div className="mt-4 grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-1.5 text-[10px]">
-                      {GM_DAY_FLOWCHARTS.map((fc) => (
-                        <button
-                          key={fc.dayNumber}
-                          type="button"
-                          onClick={() => {
-                            setSelectedGmDay(fc.dayNumber);
-                          }}
-                          className={`rounded border p-2 text-left transition ${
-                            selectedGmDay === fc.dayNumber
-                              ? "border-amber-400 bg-amber-500/20 text-white ring-1 ring-amber-400"
-                              : fc.hasFailureBranch
-                              ? "border-rose-500/50 bg-rose-950/40 text-rose-100 hover:bg-rose-900/50"
-                              : "border-slate-700 bg-slate-800/60 text-slate-300 hover:bg-slate-800"
-                          }`}
-                        >
-                          <div className="flex items-center justify-between font-bold">
-                            <span>Day {fc.dayNumber}</span>
-                            <span>{fc.hasFailureBranch ? "🔀分岐有" : "🟢共通"}</span>
-                          </div>
-                          <div className="mt-0.5 truncate text-[9.5px] opacity-90">
-                            {fc.dayNumber === 1
-                              ? "救助地点・証言繰越"
-                              : fc.dayNumber === 2
-                              ? "失敗要素なし"
-                              : fc.dayNumber === 3
-                              ? "索敵・速度計算"
-                              : fc.dayNumber === 4
-                              ? "東京湾vs富士山"
-                              : fc.dayNumber === 5
-                              ? "攻撃位置差分"
-                              : fc.dayNumber === 6
-                              ? "岸部局長の反論誘導"
-                              : "公式発表選択"}
-                          </div>
-                        </button>
-                      ))}
-                    </div>
+                    <GmOnePageFlowchart
+                      projectTitle={project.title}
+                      selectedDay={selectedGmDay}
+                      onSelectDay={setSelectedGmDay}
+                    />
                   </div>
 
-                  {/* 各Dayのフローチャート本体 */}
-                  <div className="space-y-6">
-                    {GM_DAY_FLOWCHARTS.filter((fc) =>
-                      flowchartDayFilter === "all" ? true : fc.dayNumber === selectedGmDay
-                    ).map((fc, idx) => (
+                  {/* 2枚目以降：Day 1 〜 Day 7 の全GM進行台本＆管理シート一括展開 */}
+                  {project.timeline.map((step) => {
+                    const note = getGmNoteForDay(project, step.dayNumber);
+                    const dayFc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
+                    const stepEvidences = allEvidences.filter(
+                      (e) => e.foundPhase === step.dayNumber
+                    );
+                    return (
                       <div
-                        key={fc.dayNumber}
-                        className={`rounded-xl border-2 bg-white shadow-sm overflow-hidden break-inside-avoid ${
-                          fc.hasFailureBranch ? "border-indigo-900" : "border-slate-400"
-                        } ${idx > 0 && idx % 2 === 0 ? "page-break-before" : ""}`}
+                        key={step.dayNumber}
+                        className="page-break-before rounded-sm bg-white text-slate-900 border-2 border-slate-800 p-6 sm:p-8 shadow-xl space-y-5 font-sans"
                       >
-                        {/* Day見出しヘッダー */}
-                        <div
-                          className={`px-4 py-3 flex flex-wrap items-center justify-between gap-2 ${
-                            fc.hasFailureBranch
-                              ? "bg-indigo-950 text-white"
-                              : "bg-slate-800 text-white"
-                          }`}
-                        >
-                          <div className="flex items-center gap-2.5">
-                            <span className="rounded bg-white/15 px-2.5 py-0.5 font-mono text-xs font-black tracking-wider text-amber-300 border border-amber-400/40">
-                              DAY {fc.dayNumber}
+                        <div className="rounded-md bg-slate-900 text-white p-4 flex flex-wrap items-center justify-between gap-3">
+                          <div>
+                            <span className="text-[10px] font-mono uppercase tracking-wider text-amber-300">
+                              GM PROGRESSION GUIDE // DAY {step.dayNumber}
                             </span>
-                            <h2 className="text-sm sm:text-base font-extrabold">{fc.dayTitle}</h2>
+                            <h2 className="text-base sm:text-lg font-black mt-0.5">
+                              {step.situationTitle}
+                            </h2>
                           </div>
-                          <span
-                            className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-bold ${
-                              fc.hasFailureBranch
-                                ? "bg-rose-600 text-white"
-                                : "bg-emerald-700 text-white"
-                            }`}
-                          >
-                            {fc.hasFailureBranch
-                              ? "🔀 成功・失敗・反論分岐あり"
-                              : "🟢 失敗要素なし（共通進行）"}
-                          </span>
+                          <div className="flex items-center gap-4 text-xs">
+                            <span>📍 {step.locationName}</span>
+                            <span className="rounded bg-white/15 px-2.5 py-1 font-mono font-bold text-amber-300">
+                              ⏱️ 目標 {note.targetMinutes} 分
+                            </span>
+                          </div>
                         </div>
 
-                        <div className="p-4 space-y-3.5 text-xs text-slate-800">
-                          {/* Step 1: 基本進行ステップ（矢印連結） */}
-                          <div className="rounded-lg border border-slate-300 bg-slate-50 p-3">
-                            <div className="text-[11px] font-bold text-slate-700 mb-2 flex items-center gap-1.5">
-                              <span>🧭</span>
-                              <span>Day {fc.dayNumber} の基本進行フロー</span>
+                        <div className="rounded border border-slate-300 bg-slate-100 px-3.5 py-2 text-xs text-slate-800">
+                          <strong>🔊 演出・BGMキュー：</strong> {note.bgmCue}
+                        </div>
+
+                        <div className="rounded-md border-2 border-indigo-900 bg-indigo-50/30 p-4 space-y-2">
+                          <div className="text-xs font-black text-indigo-950">
+                            📢 【Day {step.dayNumber} GM演出用ナレーション ＆ NPCセリフ台本】
+                          </div>
+                          <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 bg-white p-3.5 rounded border border-indigo-200">
+                            {note.readAloudScript}
+                          </div>
+                        </div>
+
+                        {dayFc && (
+                          <div className="rounded-md border-2 border-slate-700 bg-slate-50 p-3.5 space-y-2">
+                            <div className="text-xs font-extrabold text-slate-900 flex items-center justify-between">
+                              <span>
+                                🔀 Day {dayFc.dayNumber} 分岐・リカバリー指針（{dayFc.decisionTaskTitle}）
+                              </span>
+                              <span className="text-[10px] font-bold text-rose-700">
+                                {dayFc.hasFailureBranch ? "分岐・反論誘導あり" : "失敗要素なし"}
+                              </span>
                             </div>
                             <div className="space-y-1.5">
-                              {fc.flowSteps.map((stepText, sIdx) => (
-                                <div key={sIdx} className="flex items-start gap-2">
-                                  <span className="rounded bg-indigo-900 text-white font-mono text-[10px] font-bold px-1.5 py-0.5 shrink-0">
-                                    STEP {sIdx + 1}
-                                  </span>
-                                  <span className="text-xs font-medium text-slate-900 leading-snug">
-                                    {stepText}
-                                  </span>
+                              {dayFc.branches.map((br) => (
+                                <div
+                                  key={br.id}
+                                  className="rounded border border-slate-300 bg-white p-2 text-[11px] space-y-1"
+                                >
+                                  <div className="font-bold text-slate-900">
+                                    {br.conditionLabel} ➔ {br.outcomeTitle}
+                                  </div>
+                                  <div className="text-slate-700 whitespace-pre-wrap">
+                                    {br.gmActionAndDialogue}
+                                  </div>
+                                  {br.penaltyOrCarryOver && (
+                                    <div className="font-bold text-rose-800">
+                                      📌 {br.penaltyOrCarryOver}
+                                    </div>
+                                  )}
                                 </div>
                               ))}
                             </div>
                           </div>
+                        )}
 
-                          {/* Step 2: プレイヤーの判断課題と正解条件 */}
-                          <div className="rounded-lg border border-indigo-200 bg-indigo-50/60 p-3">
-                            <div className="font-bold text-indigo-950 text-xs flex items-center gap-1.5">
-                              <span>🎯 判断・推理ポイント：</span>
-                              <span>{fc.decisionTaskTitle}</span>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div className="rounded-md border border-slate-300 bg-white p-3.5">
+                            <div className="text-xs font-bold text-slate-900 mb-2">
+                              ✅ Day {step.dayNumber} GM進行チェックリスト
                             </div>
-                            <p className="mt-1 text-[11.5px] text-slate-700 leading-relaxed">
-                              <strong className="text-indigo-900">【正解・達成条件】：</strong>
-                              {fc.correctConditionSummary}
-                            </p>
+                            <ul className="space-y-1.5 text-xs text-slate-800">
+                              {(note.gmCheckpoints || []).map((chk, cIdx) => (
+                                <li key={cIdx} className="flex items-start gap-2">
+                                  <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
+                                  <span>{chk}</span>
+                                </li>
+                              ))}
+                            </ul>
                           </div>
 
-                          {/* 下向きフロー矢印 */}
-                          <div className="flex items-center justify-center text-xs font-bold text-indigo-800 py-0.5">
-                            <span>▼ プレイヤーの選択・回答結果による分岐 ▼</span>
-                          </div>
-
-                          {/* Step 3: 分岐ノード一覧 */}
-                          <div className="grid grid-cols-1 gap-3">
-                            {fc.branches.map((br) => {
-                              const boxStyle =
-                                br.badgeType === "success"
-                                  ? "border-emerald-500 bg-emerald-50/50"
-                                  : br.badgeType === "retry"
-                                  ? "border-amber-500 bg-amber-50/50"
-                                  : br.badgeType === "failure"
-                                  ? "border-rose-500 bg-rose-50/50"
-                                  : br.badgeType === "counterargument"
-                                  ? "border-purple-600 bg-purple-50/50"
-                                  : "border-slate-300 bg-slate-50/70";
-
-                              const badgeStyle =
-                                br.badgeType === "success"
-                                  ? "bg-emerald-700 text-white"
-                                  : br.badgeType === "retry"
-                                  ? "bg-amber-600 text-white"
-                                  : br.badgeType === "failure"
-                                  ? "bg-rose-700 text-white"
-                                  : br.badgeType === "counterargument"
-                                  ? "bg-purple-800 text-white"
-                                  : "bg-slate-700 text-white";
-
-                              return (
-                                <div
-                                  key={br.id}
-                                  className={`rounded-lg border-2 p-3.5 space-y-2 ${boxStyle}`}
+                          <div className="rounded-md border border-slate-300 bg-white p-3.5">
+                            <div className="text-xs font-bold text-slate-900 mb-2">
+                              📂 Day {step.dayNumber} 開示証拠資料（{stepEvidences.length}件）
+                            </div>
+                            <div className="flex flex-wrap gap-1.5">
+                              {stepEvidences.map((ev) => (
+                                <span
+                                  key={ev.id}
+                                  className="rounded border border-slate-300 bg-slate-50 px-2.5 py-1 text-xs font-bold text-slate-800"
                                 >
-                                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-black/10 pb-1.5">
-                                    <span
-                                      className={`rounded px-2.5 py-0.5 text-[11px] font-bold ${badgeStyle}`}
-                                    >
-                                      {br.conditionLabel}
-                                    </span>
-                                    <span className="font-mono text-[11px] font-bold text-slate-700">
-                                      {br.nextStepArrow}
-                                    </span>
-                                  </div>
-
-                                  <div className="font-bold text-xs text-slate-900">
-                                    ■ 結果：{br.outcomeTitle}
-                                  </div>
-
-                                  <div className="rounded border border-slate-300/90 bg-white p-2.5 text-[11.5px] leading-relaxed text-slate-800 whitespace-pre-wrap font-medium">
-                                    {br.gmActionAndDialogue}
-                                  </div>
-
-                                  {br.penaltyOrCarryOver && (
-                                    <div className="flex items-start gap-1.5 text-[11px] font-bold text-rose-900 bg-white/80 rounded px-2.5 py-1 border border-rose-200">
-                                      <span>📌 ペナルティ・引き継ぎ処理：</span>
-                                      <span className="flex-1">{br.penaltyOrCarryOver}</span>
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-
-                          {/* GM進行のポイント注記 */}
-                          <div className="rounded-md bg-slate-900 px-3.5 py-2 text-[11px] text-amber-200 flex items-start gap-2">
-                            <span className="font-bold shrink-0">💡 GM進行の要点：</span>
-                            <span className="text-slate-100">{fc.gmKeyNote}</span>
+                                  📄 {ev.title}
+                                </span>
+                              ))}
+                              {stepEvidences.length === 0 && (
+                                <span className="text-xs text-slate-500">
+                                  このフェーズで開示される証拠はありません
+                                </span>
+                              )}
+                            </div>
                           </div>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="space-y-6">
@@ -4586,7 +4617,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {/* ----------------------------------------------------------------
                 共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
                ---------------------------------------------------------------- */}
-            {category !== "visuals" && !(category === "handouts" && handoutViewMode !== "sheet") && (
+            {category !== "visuals" &&
+              !(category === "handouts" && handoutViewMode !== "sheet") &&
+              !(category === "gm_guides" && gmGuideViewMode !== "daily_sheet") && (
               <div
                 className={`mt-8 flex flex-wrap items-center justify-between border-t pt-3 text-[11px] opacity-75 ${accent.borderSub}`}
               >

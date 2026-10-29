@@ -1434,9 +1434,15 @@ export const pc6Character = {
  * 「対策本部・日次ブリーフィング ＆ 指揮官ミッションシート」データ（Day 1〜Day 7）
  */
 export interface DailyCommanderBriefing {
+  id: string;
   dayNumber: number;
+  badgeLabel: string;
+  sheetCode: string;
+  isMidDayAddition?: boolean;
+  linkedNagatsuCardCode?: string;
+  timingNote?: string;
   title: string;
-  targetMinutes: number;
+  targetMinutes?: number;
   nagatsuBriefingTitle: string;
   nagatsuBriefingText: string;
   nagatsuBriefingRubyHtml?: string;
@@ -1446,7 +1452,11 @@ export interface DailyCommanderBriefing {
 
 export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
   {
+    id: "cmd-day1-start",
     dayNumber: 1,
+    badgeLabel: "DAY 1 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY01",
+    timingNote: "Day 1 開始時配布",
     title: "【Day 1】民間チャーター船の全電源喪失・漂流救難作戦",
     targetMinutes: 30,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1463,7 +1473,11 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "Day 1開始時にGMから朝潮（PC1）へ渡してください（7名プレイ時は長津（PC7）が上段の緊急入信を読み上げ、朝潮へ手渡してミッションを開始します）。",
   },
   {
+    id: "cmd-day2-start",
     dayNumber: 2,
+    badgeLabel: "DAY 2 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY02",
+    timingNote: "Day 2 開始時配布",
     title: "【Day 2】西之島沖の突発海底噴火と巨大潜航影の優先調査",
     targetMinutes: 25,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1479,7 +1493,11 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "Day 2開始時にGMから朝潮（PC1）（7名時は長津経由）へ渡してください。",
   },
   {
+    id: "cmd-day3-start",
     dayNumber: 3,
+    badgeLabel: "DAY 3 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY03",
+    timingNote: "Day 3 開始時配布",
     title: "【Day 3】鳥島沖の海底噴火と洋上ソノブイ索敵作戦",
     targetMinutes: 25,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1489,14 +1507,80 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "「<ruby>小笠原<rt>おがさわら</rt></ruby>基地より<ruby>小笠原<rt>おがさわら</rt></ruby>現地メンバーを乗せた大型捜索ヘリが緊急発進いたしました。<ruby>鳥島沖<rt>とりしまおき</rt></ruby>での探索活動を行うため、<ruby>巡視船<rt>じゅんしせん</rt></ruby>『あきつしま』で<ruby>洋上<rt>ようじょう</rt></ruby><ruby>給油<rt>きゅうゆ</rt></ruby>を行い、<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の噴火海域でアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定してください」",
     asashioMissions: [
       "【ミッション①：ソノブイ投下ポイントの決定と位置特定】作戦海図（W-3100）を展開し、ソノブイ3基をどの海域（セクター）へ投下するか合議して決定し、巨大生物の現在位置を特定させてください。",
-      "【ミッション②：索敵後の上層部からの追加要請・諮問への対応】索敵結果の判明後、長津を通じて関係各所や上層部から追加の分析要請・諮問（移動予測の算出や今後の対処方針の決断など）が入電した場合は、各専門家の意見を聞いて対策本部としての結論を下してください。",
-      "【ミッション③：追加の優先調査（東京1枠・現地2枠）の選定】並行して進める本日の調査項目（東京本部3項目から1つ、小笠原現地4項目から2つ ※前日未選択分を含む）を決定し、情報を収集させてください。",
+      "【ミッション②：追加の優先調査（東京1枠・現地2枠）の選定】並行して進める本日の調査項目（東京本部3項目から1つ、小笠原現地4項目から2つ ※前日未選択分を含む）を決定し、情報を収集させてください。",
     ],
     gmHandoutNote:
       "Day 3開始時にGMから朝潮（PC1）（7名時は長津経由）へ渡してください。",
   },
   {
+    id: "cmd-day3-mid1",
+    dayNumber: 3,
+    badgeLabel: "DAY 3 途中① 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY03-MID1",
+    isMidDayAddition: true,
+    linkedNagatsuCardCode: "NG-02",
+    timingNote: "ソノブイ索敵で目標捕捉直後に配布（長津カード NG-02 と同時）",
+    title: "【Day 3 途中①】目標捕捉と北上速度・位置予測の要請",
+    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-02）",
+    nagatsuBriefingText:
+      "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+    nagatsuBriefingRubyHtml:
+      "「――洋上捜索ヘリより<ruby>入電<rt>にゅうでん</rt></ruby>！ アクティブソナーにより<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+    asashioMissions: [
+      "【追加ミッション①：巨大生物の北上速度（時速・日速）の算出】これまでの噴火・目撃時刻データと西之島〜鳥島沖の距離データ（約150km）を照合させ、巨大生物の移動スピード（時速および1日あたりの移動距離）を算出させてください。",
+      "【追加ミッション②：明日（Day 4）の到達予測海域の特定】算出した移動スピードをもとに、このまま北上を続けた場合、明日（Day 4）はどのあたり（どの島・海底火山周辺）まで北上するか予想をまとめさせてください。",
+    ],
+    gmHandoutNote:
+      "Day 3でソノブイ索敵が成功した直後、長津にアナウンスカード「NG-02」を渡し、朝潮にはこの「Day 3 途中① 指令書」を渡してください。",
+  },
+  {
+    id: "cmd-day3-mid2",
+    dayNumber: 3,
+    badgeLabel: "DAY 3 途中② 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY03-MID2",
+    isMidDayAddition: true,
+    linkedNagatsuCardCode: "NG-03",
+    timingNote: "移動速度・位置予測の算出直後、深海写真提示時に配布（長津カード NG-03 と同時）",
+    title: "【Day 3 途中②】深海写真の受信と専門家2名への緊急諮問",
+    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-03）",
+    nagatsuBriefingText:
+      "「――洋上捜索ヘリより至急電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております。\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大質量について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
+    nagatsuBriefingRubyHtml:
+      "「――洋上捜索ヘリより<ruby>至急電<rt>しきゅうでん</rt></ruby>！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む<ruby>漆黒<rt>しっこく</rt></ruby>の巨大質量、そして20本以上の無数の<ruby>触手群<rt>しょくしゅぐん</rt></ruby>を確認！ 現場の海上保安庁<ruby>警備<rt>けいび</rt></ruby><ruby>救難部<rt>きゅうなんぶ</rt></ruby>より、当合同対策チームへ緊急の<ruby>諮問<rt>しもん</rt></ruby>が下されております。<br>① <ruby>浪寄<rt>なみより</rt></ruby>准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大質量について、生物学的な所見を提示してください。<br>② <ruby>貝浜<rt>かいはま</rt></ruby>リエゾン、海上保安庁法20条に基づく<ruby>警察<rt>けいさつ</rt></ruby><ruby>比例<rt>ひれい</rt></ruby>の<ruby>原則<rt>げんそく</rt></ruby>ではこの規模の目標に対処不可能です。法的に自衛隊の<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>、あるいは<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を要請すべきか、防衛省としての判断を求めます」",
+    asashioMissions: [
+      "【追加ミッション①：浪寄准教授（PC5）からの生物学的所見の聴取】深海写真に写った「20本以上の無数の触手と数百mの巨大質量」について、浪寄准教授に生物学的な見解を提示させてください。",
+      "【追加ミッション②：貝浜リエゾン（PC2）からの法的・防衛的見解の聴取】海上保安庁の警察比例の原則を超える事態に対し、自衛隊の「防衛出動」と「海上警備行動」のどちらを要請すべきか、文民統制の仕組みを踏まえて貝浜リエゾンに判断を示させてください。",
+    ],
+    gmHandoutNote:
+      "Day 3で深海写真を提示する際、長津にアナウンスカード「NG-03」を渡し、朝潮にはこの「Day 3 途中② 指令書」を渡してください。",
+  },
+  {
+    id: "cmd-day3-mid3",
+    dayNumber: 3,
+    badgeLabel: "DAY 3 途中③ 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY03-MID3",
+    isMidDayAddition: true,
+    linkedNagatsuCardCode: "NG-04",
+    timingNote: "専門家2名の所見共有・優先調査の後に配布（長津カード NG-04 と同時）",
+    title: "【Day 3 途中③】呼称（コードネーム）決定と指揮官最終決断の要請",
+    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-04）",
+    nagatsuBriefingText:
+      "「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」",
+    nagatsuBriefingRubyHtml:
+      "「――防衛庁および<ruby>内閣<rt>ないかく</rt></ruby><ruby>官房<rt>かんぼう</rt></ruby>より至急<ruby>諮問<rt>しもん</rt></ruby>が<ruby>入電<rt>にゅうでん</rt></ruby>！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き<ruby>海神<rt>わたつみ</rt></ruby>に由来する【ワタツミ】、もしくは海洋古伝承の<ruby>異形神<rt>いぎょうしん</rt></ruby>に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、<ruby>朝潮<rt>あさしお</rt></ruby>危機管理官、指揮官として自衛隊への<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>を要請するか、または<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を発令するか最終意思決定をお願いいたします！」",
+    asashioMissions: [
+      "【追加ミッション①：未確認巨大生物の公式呼称（コードネーム）の決定】「ワタツミ」「クスルフ」またはチーム独自の名称から、対策チームとしての公式呼称を合議して決定してください。",
+      "【追加ミッション②：自衛隊への要請方針（防衛出動 または 海上警備行動）の最終決断】総指揮官として、自衛隊への「防衛出動」を要請するか「海上警備行動」を発令するか最終意思決定を下してください。",
+    ],
+    gmHandoutNote:
+      "Day 3終盤の最終決断タイミングで、長津にアナウンスカード「NG-04」を渡し、朝潮にはこの「Day 3 途中③ 指令書」を渡してください。",
+  },
+  {
+    id: "cmd-day4-start",
     dayNumber: 4,
+    badgeLabel: "DAY 4 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY04",
+    timingNote: "Day 4 開始時配布",
     title: "【Day 4】明神礁の海底噴火・即応総力体制への移行と進路予測",
     targetMinutes: 25,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1513,7 +1597,11 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "Day 4開始時にGMから朝潮（PC1）（7名時は長津経由）へ渡してください。",
   },
   {
+    id: "cmd-day5-start",
     dayNumber: 5,
+    badgeLabel: "DAY 5 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY05",
+    timingNote: "Day 5 開始時配布",
     title: "【Day 5】御蔵島沖の海底噴火・到達猶予時間の算出と独自調査の継続",
     targetMinutes: 25,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1524,13 +1612,37 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     asashioMissions: [
       "【ミッション①：危機到達までの残り時間（猶予時間）の算出・報告】防衛庁・予知連からの指令に基づき、残距離（240km）と巡航速度（時速5km）から到達まであと何時間あるのかを算出し、直ちに報告してください。",
       "【ミッション②：自衛隊の作戦情報遮断中における独自調査・資料解読】自衛隊の交戦情報が遮断されている間、対策本部で入手した新たな研究資料や古記録（クジラの音響資料や伝承など）を精査し、巨大生物の特性や対処の手がかりを洗い出してください。",
-      "【ミッション③：防衛省側から緊急連絡が入った場合の対応】もし作戦中の防衛省側からホットライン等で緊急の照会や連絡が入った場合は、専門家の知見を集約して速やかに回答してください。",
     ],
     gmHandoutNote:
       "Day 5開始時にGMから朝潮（PC1）（7名時は長津経由）へ渡してください。",
   },
   {
+    id: "cmd-day5-mid1",
+    dayNumber: 5,
+    badgeLabel: "DAY 5 途中① 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY05-MID1",
+    isMidDayAddition: true,
+    linkedNagatsuCardCode: "NG-06",
+    timingNote: "独自調査・資料精査ののち防衛省ホットライン入電時に配布（長津カード NG-06 と同時）",
+    title: "【Day 5 途中①】魚雷直撃後の再結合と防衛省からの緊急照会",
+    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-06）",
+    nagatsuBriefingText:
+      "「――暗号ホットラインに着信！ 貝浜リエゾンへ、防衛省作戦本部より直通無線が接続されました！『魚雷群は全弾直撃・命中した！ しかし……爆砕された影は泥のように瞬時に再結合した。上層部はさらに大量の魚雷を集中投入・飽和攻撃すれば殲滅できると主張しているが、力押しだけで本当に通用するのか？！ 直ちにあの生物の写真解析を行った浪寄准教授の意見を確認してくれ！ あいつらは一体どうやって一つの個体として統率されているのか？ なぜ富士山を目指すのか？！』とのことです！」",
+    nagatsuBriefingRubyHtml:
+      "「――暗号ホットラインに着信！ <ruby>貝浜<rt>かいはま</rt></ruby>リエゾンへ、防衛省作戦本部より直通無線が接続されました！『魚雷群は全弾直撃・命中した！ しかし……<ruby>爆砕<rt>ばくさい</rt></ruby>された影は泥のように瞬時に再結合した。上層部はさらに大量の魚雷を集中投入・<ruby>飽和<rt>ほうわ</rt></ruby><ruby>攻撃<rt>こうげき</rt></ruby>すれば<ruby>殲滅<rt>せんめつ</rt></ruby>できると主張しているが、力押しだけで本当に通用するのか？！ 直ちにあの生物の写真解析を行った<ruby>浪寄<rt>なみより</rt></ruby>准教授の意見を確認してくれ！ あいつらは一体どうやって一つの個体として統率されているのか？ なぜ富士山を目指すのか？！』とのことです！」",
+    asashioMissions: [
+      "【追加ミッション①：物理攻撃（魚雷飽和攻撃）の有効性と再結合の理由の確認】浪寄准教授の写真解析（EV-25）や調査資料をもとに、「なぜ魚雷で爆砕しても瞬時に再結合するのか」「大量の魚雷による力押しで殲滅できるのか」の見解をまとめさせてください。",
+      "【追加ミッション②：群体を統率する仕組みと富士山を目指す理由の回答】あの生物がどうやって一つの個体として統率されているのか、なぜ富士山を目指しているのかを整理し、防衛省作戦本部へ回答させてください。",
+    ],
+    gmHandoutNote:
+      "Day 5後半、防衛省作戦本部から緊急ホットラインが入電したタイミングで、長津にアナウンスカード「NG-06」を渡し、朝潮にはこの「Day 5 途中① 指令書」を渡してください。",
+  },
+  {
+    id: "cmd-day6-start",
     dayNumber: 6,
+    badgeLabel: "DAY 6 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY06",
+    timingNote: "Day 6 開始時配布",
     title: "【Day 6】駿河トラフ再浮上警報・打開策の確立と上層部への直談判",
     targetMinutes: 30,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
@@ -1547,7 +1659,31 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "Day 6開始時にGMから朝潮（PC1）（7名時は長津経由）へ渡してください。",
   },
   {
+    id: "cmd-day6-mid1",
+    dayNumber: 6,
+    badgeLabel: "DAY 6 途中① 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY06-MID1",
+    isMidDayAddition: true,
+    linkedNagatsuCardCode: "NG-07",
+    timingNote: "岸部局長への直談判成功・深海1,000m祝詞放流開始時に配布（長津カード NG-07 と同時）",
+    title: "【Day 6 途中①】深海SOFAR層での祝詞放流開始と作戦名の命名",
+    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-07）",
+    nagatsuBriefingText:
+      "「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 大出力深海ハイドロスピーカーより、新言語祝詞の放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）とクジラたちの共鳴に乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の迎撃作戦に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」",
+    nagatsuBriefingRubyHtml:
+      "「――海上自衛隊の潜水艦が水深1,000mの深海<ruby>SOFAR<rt>ソーファー</rt></ruby>層へ到達！ 大出力深海ハイドロスピーカーより、新言語<ruby>祝詞<rt>のりと</rt></ruby>の放流を開始いたしました！ 音波は深海音響チャネル（<ruby>SOFAR<rt>ソーファー</rt></ruby>層）とクジラたちの共鳴に乗って、太平洋全域へと急速に拡散しています！ ……そして各員、この歴史の闇で決行される前代未聞の<ruby>迎撃<rt>げいげき</rt></ruby><ruby>作戦<rt>さくせん</rt></ruby>に、当合同対策チームとしての【作戦名（オペレーション名）】をつけませんか？ 全員が心を一つにして夜明けの決戦を迎えるための名前です！」",
+    asashioMissions: [
+      "【追加ミッション：最終迎撃作戦の「作戦名（オペレーション名）」の決定】夜明けの決戦に向け、全員が心を一つにするための合同対策チームの公式作戦名（オペレーション名）を決定し、宣言してください。",
+    ],
+    gmHandoutNote:
+      "Day 6で岸部局長の承認を得て潜水艦が祝詞放流を開始した際、長津にアナウンスカード「NG-07」を渡し、朝潮にはこの「Day 6 途中① 指令書」を渡してください。",
+  },
+  {
+    id: "cmd-day7-start",
     dayNumber: 7,
+    badgeLabel: "DAY 7 指令書",
+    sheetCode: "COMMAND-BRIEFING-DAY07",
+    timingNote: "Day 7 開始時配布",
     title: "【Day 7】最終決戦の観測と合同海難対策本部の幕引き",
     targetMinutes: 30,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",

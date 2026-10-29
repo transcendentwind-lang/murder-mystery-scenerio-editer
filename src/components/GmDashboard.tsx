@@ -40,6 +40,7 @@ import {
 import { audioEngine } from "@/utils/audioSynth";
 import { DAILY_COMMANDER_BRIEFINGS, SPECIAL_CHARACTER_CARDS } from "@/utils/initialProjectData";
 import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
+import { GmOnePageFlowchart } from "./GmOnePageFlowchart";
 import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText } from "@/utils/scriptGenerator";
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
@@ -665,35 +666,70 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </p>
             </div>
 
-            {/* 📋 各Day開始時にGMから朝潮（および7名時は長津）へ渡す日次ブリーフィング＆指揮官ミッション */}
+            {/* 📋 各Day開始時・途中にGMから朝潮（および7名時は長津）へ渡すブリーフィング＆指揮官ミッション */}
             {(() => {
-              const briefing = DAILY_COMMANDER_BRIEFINGS.find((b) => b.dayNumber === currentDay);
-              if (!briefing) return null;
+              const dayBriefings = DAILY_COMMANDER_BRIEFINGS.filter((b) => b.dayNumber === currentDay);
+              if (dayBriefings.length === 0) return null;
               return (
-                <div className="rounded-xl border border-amber-500/40 bg-amber-950/20 p-4 space-y-2.5">
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-800/40 pb-2">
-                    <span className="font-bold text-xs text-amber-300 flex items-center gap-1.5">
-                      <FileText className="h-4 w-4 text-amber-400" />
-                      📋 【Day {currentDay} 開始時にGMから配布】朝潮（PC1）＆ 長津（PC7）用 ブリーフィング・指揮官ミッション
-                    </span>
-                    <span className="rounded bg-amber-950 px-2 py-0.5 text-[10px] font-bold text-amber-200 border border-amber-700/60">
-                      {project.playerCount === 7 ? "7名時：長津(PC7)➔朝潮(PC1)へ手渡し" : "6名時：GM(長津)➔朝潮(PC1)へ手渡し"}
-                    </span>
-                  </div>
-                  <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
-                    <div className="font-bold text-cyan-300 text-[11px]">{briefing.nagatsuBriefingTitle}</div>
-                    <p className="text-slate-300 leading-relaxed text-[11px]">{briefing.nagatsuBriefingText}</p>
-                  </div>
-                  <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
-                    <div className="font-bold text-amber-300 text-[11px]">
-                      🧭 危機管理官 朝潮（PC1）がこのDayで指揮・達成すべきミッション:
+                <div className="space-y-3">
+                  {dayBriefings.map((briefing) => (
+                    <div
+                      key={briefing.id}
+                      className={`rounded-xl border p-4 space-y-2.5 ${
+                        briefing.isMidDayAddition
+                          ? "border-indigo-500/50 bg-indigo-950/25"
+                          : "border-amber-500/40 bg-amber-950/20"
+                      }`}
+                    >
+                      <div
+                        className={`flex flex-wrap items-center justify-between gap-2 border-b pb-2 ${
+                          briefing.isMidDayAddition
+                            ? "border-indigo-800/40"
+                            : "border-amber-800/40"
+                        }`}
+                      >
+                        <span
+                          className={`font-bold text-xs flex items-center gap-1.5 ${
+                            briefing.isMidDayAddition ? "text-indigo-300" : "text-amber-300"
+                          }`}
+                        >
+                          <FileText
+                            className={`h-4 w-4 ${
+                              briefing.isMidDayAddition ? "text-indigo-400" : "text-amber-400"
+                            }`}
+                          />
+                          📋 【{briefing.badgeLabel}】 {briefing.title}
+                        </span>
+                        <div className="flex flex-wrap items-center gap-1.5">
+                          {briefing.linkedNagatsuCardCode && (
+                            <span className="rounded bg-indigo-900/80 px-2 py-0.5 text-[10px] font-bold text-indigo-100 border border-indigo-600">
+                              🎙️ 長津カード {briefing.linkedNagatsuCardCode} と同時配布
+                            </span>
+                          )}
+                          <span className="rounded bg-amber-950 px-2 py-0.5 text-[10px] font-bold text-amber-200 border border-amber-700/60">
+                            {briefing.timingNote ||
+                              (project.playerCount === 7
+                                ? "7名時：長津(PC7)➔朝潮(PC1)へ手渡し"
+                                : "6名時：GM(長津)➔朝潮(PC1)へ手渡し")}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
+                        <div className="font-bold text-cyan-300 text-[11px]">{briefing.nagatsuBriefingTitle}</div>
+                        <p className="text-slate-300 leading-relaxed text-[11px] whitespace-pre-wrap">{briefing.nagatsuBriefingText}</p>
+                      </div>
+                      <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 text-xs space-y-1">
+                        <div className="font-bold text-amber-300 text-[11px]">
+                          🧭 {briefing.isMidDayAddition ? "危機管理官 朝潮（PC1）がこの局面で指揮・達成すべき追加ミッション:" : "危機管理官 朝潮（PC1）がこのDayで指揮・達成すべきミッション:"}
+                        </div>
+                        <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-200">
+                          {briefing.asashioMissions.map((m, idx) => (
+                            <li key={idx}>{m}</li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
-                    <ul className="list-disc list-inside space-y-1 text-[11px] text-slate-200">
-                      {briefing.asashioMissions.map((m, idx) => (
-                        <li key={idx}>{m}</li>
-                      ))}
-                    </ul>
-                  </div>
+                  ))}
                 </div>
               );
             })()}
@@ -3361,7 +3397,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           onClick={() => setIsFlowchartModalOpen(false)}
         >
           <div
-            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[92vh]"
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
             onClick={(e) => e.stopPropagation()}
           >
             <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
@@ -3371,22 +3407,31 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 </div>
                 <div>
                   <h3 className="font-bold text-sm text-white">
-                    『{project.title}』 各Dayごとの成功・失敗分岐フローチャート（GM用進行資料）
+                    『{project.title}』 Day 1〜Day 7 成功・失敗分岐フローチャート（A4・1枚完結）
                   </h3>
                   <p className="text-[11px] text-slate-400">
-                    Day 1の救助リトライ＆証言カード繰越、Day 4の東京湾誤答時の攻撃遅延＆嫌味、Day 6の岸部局長による反論誘導を網羅
+                    Day 1の救助再挑戦＆証言カード繰越、Day 4の東京湾誤答時の攻撃遅延＆嫌味、Day 6の岸部局長による反論誘導をA4・1枚のチャート図に凝縮
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <a
-                  href="/pdfs/gm-branching-flowchart.pdf"
+                  href="/pdfs/gm-complete-progression-guide.pdf"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
                 >
                   <Printer className="h-3.5 w-3.5" />
-                  A4印刷用PDFを開く
+                  🖨️ GM進行資料一括PDF（図＋全7日）
+                </a>
+                <a
+                  href="/pdfs/gm-branching-flowchart.pdf"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Printer className="h-3.5 w-3.5" />
+                  📄 分岐チャート図のみPDF（A4・1枚）
                 </a>
                 <button
                   type="button"
@@ -3398,88 +3443,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
             </div>
 
-            <div className="mt-4 flex-1 overflow-y-auto space-y-5 pr-1">
-              {GM_DAY_FLOWCHARTS.map((fc) => (
-                <div
-                  key={fc.dayNumber}
-                  className={`rounded-xl border p-4 space-y-3 ${
-                    fc.hasFailureBranch
-                      ? "border-rose-700/70 bg-slate-900/90"
-                      : "border-slate-800 bg-slate-900/50"
-                  }`}
-                >
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
-                    <div className="flex items-center gap-2">
-                      <span className="rounded bg-indigo-600 px-2 py-0.5 font-mono text-xs font-bold text-white">
-                        DAY {fc.dayNumber}
-                      </span>
-                      <h4 className="font-bold text-sm text-white">{fc.dayTitle}</h4>
-                    </div>
-                    <span
-                      className={`rounded-full px-2.5 py-0.5 text-[10.5px] font-bold ${
-                        fc.hasFailureBranch
-                          ? "bg-rose-600 text-white"
-                          : "bg-emerald-700 text-white"
-                      }`}
-                    >
-                      {fc.hasFailureBranch
-                        ? "🔀 成功・失敗・反論分岐あり"
-                        : "🟢 失敗要素なし（共通進行）"}
-                    </span>
-                  </div>
-
-                  <div className="rounded bg-slate-950/90 border border-slate-800 p-2.5 text-xs space-y-1">
-                    <div className="font-bold text-cyan-300">
-                      🎯 判断ポイント：{fc.decisionTaskTitle}
-                    </div>
-                    <p className="text-[11px] text-slate-300">
-                      <strong className="text-white">【正解・達成条件】：</strong>
-                      {fc.correctConditionSummary}
-                    </p>
-                  </div>
-
-                  <div className="grid grid-cols-1 gap-2.5 text-xs">
-                    {fc.branches.map((br) => (
-                      <div
-                        key={br.id}
-                        className={`rounded-lg border p-3 space-y-1.5 ${
-                          br.badgeType === "success"
-                            ? "border-emerald-600/70 bg-emerald-950/30"
-                            : br.badgeType === "retry"
-                            ? "border-amber-600/70 bg-amber-950/30"
-                            : br.badgeType === "failure"
-                            ? "border-rose-600/70 bg-rose-950/30"
-                            : br.badgeType === "counterargument"
-                            ? "border-purple-600/70 bg-purple-950/30"
-                            : "border-slate-700 bg-slate-950/60"
-                        }`}
-                      >
-                        <div className="flex flex-wrap items-center justify-between gap-2 font-bold text-white">
-                          <span>{br.conditionLabel}</span>
-                          <span className="font-mono text-[11px] text-cyan-300">
-                            {br.nextStepArrow}
-                          </span>
-                        </div>
-                        <div className="font-semibold text-amber-200 text-xs">
-                          ➔ {br.outcomeTitle}
-                        </div>
-                        <div className="rounded bg-black/50 border border-slate-800 p-2.5 text-[11px] text-slate-200 whitespace-pre-wrap leading-relaxed">
-                          {br.gmActionAndDialogue}
-                        </div>
-                        {br.penaltyOrCarryOver && (
-                          <div className="text-[11px] font-bold text-rose-300">
-                            📌 {br.penaltyOrCarryOver}
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="text-[11px] text-amber-200/90 bg-amber-950/30 border border-amber-900/50 rounded px-3 py-1.5">
-                    💡 <strong>GM進行の要点：</strong> {fc.gmKeyNote}
-                  </div>
-                </div>
-              ))}
+            <div className="mt-4 flex-1 overflow-y-auto pr-1">
+              <GmOnePageFlowchart
+                projectTitle={project.title}
+                selectedDay={currentDay}
+                onSelectDay={(d) => setCurrentDay(d)}
+              />
             </div>
           </div>
         </div>
