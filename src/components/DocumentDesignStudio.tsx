@@ -1709,9 +1709,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 text-slate-100">
-      {/* 1. 最上部ヘッダー：4大資料カテゴリー切替 ＆ 保存・印刷コントロール */}
+      {/* 1. 最上部ヘッダー：4大資料カテゴリー切替（色・配置を完全統一） */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/95 px-6 py-3">
-        {/* 4大資料カテゴリータブ */}
         <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-1">
           <button
             onClick={() => setCategory("handouts")}
@@ -1721,7 +1720,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
             }`}
           >
-            <Users className="h-4 w-4 text-emerald-400" />
+            <Users className="h-4 w-4" />
             ① 個人向けハンドアウト
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
               {(project.characters || []).length}名
@@ -1736,7 +1735,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
             }`}
           >
-            <FileText className="h-4 w-4 text-amber-400" />
+            <FileText className="h-4 w-4" />
             ② 証拠資料（文書・カード）
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
               {allEvidences.length}件
@@ -1751,7 +1750,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
             }`}
           >
-            <MapIcon className="h-4 w-4 text-cyan-400" />
+            <MapIcon className="h-4 w-4" />
             ③ 全体提示の地図・写真
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
               {visualBoards.length}枚
@@ -1766,83 +1765,29 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
             }`}
           >
-            <Radio className="h-4 w-4 text-rose-400" />
+            <Radio className="h-4 w-4" />
             ④ GM用の進行資料
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
               全{project.timeline.length}フェーズ
             </span>
           </button>
         </div>
-
-        {/* 右側：カテゴリー別の専用一括印刷・PDF出力ボタン（デザイン崩れ防止のため直接編集・汎用印刷ボタンは廃止） */}
-        <div className="flex flex-wrap items-center gap-2">
-          {category === "handouts" && handoutViewMode === "sheet" && (
-            <>
-              <button
-                onClick={() =>
-                  printCharacterHandoutsB5(
-                    activeChar ? [activeChar] : project.characters,
-                    project.title
-                  )
-                }
-                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-emerald-500 transition shadow-lg shadow-emerald-600/25"
-                title="選択中のキャラクターのハンドアウトを美しいB5規格で印刷・PDF保存します"
-              >
-                <Printer className="h-4 w-4" />
-                🖨️ このPCをB5印刷 / PDF
-              </button>
-              <button
-                onClick={handlePrintAllCharactersB5}
-                className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow-lg shadow-indigo-600/25"
-                title="全プレイヤー分の個人ハンドアウトを美しいB5規格で一括印刷・PDF保存します（各キャラ1ページ）"
-              >
-                <Users className="h-4 w-4" />
-                👥 全員分を一括B5印刷 / PDF
-              </button>
-            </>
-          )}
-
-          {category === "gm_guides" && (
-            <>
-              <a
-                href="/pdfs/gm-branching-flowchart.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-rose-600/25 transition"
-                title="A4用紙1枚にDay 1〜Day 7すべてが収まった成功・失敗分岐フローチャート図PDFを開きます"
-              >
-                <Printer className="h-4 w-4" />
-                🖨️ フローチャートを印刷 / PDF
-              </a>
-              <a
-                href="/pdfs/gm-complete-progression-guide.pdf"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3.5 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/25 transition"
-                title="Day 1〜Day 7のGM進行台本・管理シートすべてをまとめた一括印刷用PDFを開きます"
-              >
-                <Printer className="h-4 w-4" />
-                🖨️ 進行資料を一括印刷 / PDF
-              </a>
-            </>
-          )}
-        </div>
       </div>
 
-      {/* 2. メイン作業エリア：左サイドバー（資料リスト・表示切替選択）＋ 右メインキャンバス（プレビューシート） */}
+      {/* 2. メイン作業エリア：左サイドバー（区分選択＆リスト）＋ 右メインキャンバス（白紙プレビュー＆右上印刷ボタン） */}
       <div className="grid flex-1 grid-cols-12 overflow-hidden">
-        {/* 左サイドバー：カテゴリー内の資料一覧 */}
+        {/* 左サイドバー：すべてのタブで「証拠資料」と同一の色・レイアウトに統一 */}
         <div className="col-span-3 flex flex-col border-r border-slate-800 bg-slate-900/50 p-4 overflow-y-auto">
           {/* ① 個人ハンドアウト ＆ 別配付カード選択リスト */}
           {category === "handouts" && (
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  プレイヤー別ハンドアウト ({project.characters.length}名)
+                  個人向けハンドアウト ({project.characters.length}名)
                 </h3>
               </div>
 
-              {/* 本紙（6項目） vs 各キャラクターへの特別配布カード vs Day別ブリーフィング指令書 vs 長津アナウンスカード 切替 */}
+              {/* 区分切替（2列グリッド・インディゴ選択で統一） */}
               <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setHandoutViewMode("sheet")}
@@ -1852,7 +1797,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  📄 本紙
+                  📄 本紙（B5）
                 </button>
                 <button
                   onClick={() => setHandoutViewMode("cards")}
@@ -1886,15 +1831,41 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
               </div>
 
-              <p className="text-[10px] text-slate-400 leading-relaxed">
-                {handoutViewMode === "sheet"
-                  ? "自分自身のキャラクターについて書かれたシンプルな6項目シートです。"
-                  : handoutViewMode === "cards"
-                  ? "キャラクターごとに順次配布される「特別配布カード（全7枚）」です。"
-                  : handoutViewMode === "daily_briefings"
-                  ? "各Day開始時の指令書（7枚）と、長津の途中アナウンス時に朝潮へ渡す途中追加指令書（5枚）の計12枚です。"
-                  : "7名プレイ時に長津（PC7）がフェーズ途中・達成時に読み上げる専用アナウンスカード（全10枚・表裏仕様）です。"}
-              </p>
+              {/* Day別指令モード時は証拠資料と同じ形式で絞り込みチップを表示 */}
+              {handoutViewMode === "daily_briefings" && (
+                <div className="flex flex-wrap gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
+                  <button
+                    onClick={() => setBriefingFilterMode("all")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      briefingFilterMode === "all"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    全て(12)
+                  </button>
+                  <button
+                    onClick={() => setBriefingFilterMode("start")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      briefingFilterMode === "start"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    各Day開始時(7)
+                  </button>
+                  <button
+                    onClick={() => setBriefingFilterMode("midday")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      briefingFilterMode === "midday"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    途中追加(5)
+                  </button>
+                </div>
+              )}
 
               <div className="space-y-2">
                 {project.characters.map((c, idx) => {
@@ -1910,24 +1881,23 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           : "border-slate-800 bg-slate-950/80 hover:border-slate-700"
                       }`}
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono font-bold text-indigo-400">
-                          PC-{idx + 1} /{" "}
-                          {c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
-                        </span>
+                      <div className="flex items-center justify-between gap-1">
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[10px] font-mono font-bold text-slate-400">
+                            PC-{idx + 1}
+                          </span>
+                          <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                            {c.location === "headquarters" ? "東京本部" : "現地救難隊"}
+                          </span>
+                        </div>
                         {spCard && (
-                          <span className="rounded bg-indigo-900/80 border border-indigo-700 px-1.5 py-0.5 text-[9px] font-bold text-indigo-200">
+                          <span className="text-[10px] font-mono text-slate-400">
                             {spCard.revealDayLabel}
                           </span>
                         )}
                       </div>
-                      <div className="mt-1 font-bold text-sm text-white">{c.name}</div>
-                      <div className="text-xs text-slate-400 truncate">{c.profession}</div>
-                      {spCard && (
-                        <div className="mt-1 text-[10px] text-amber-300/90 truncate">
-                          🃏 特別配布: {spCard.title}
-                        </div>
-                      )}
+                      <div className="mt-1.5 font-bold text-xs text-white">{c.name}</div>
+                      <div className="mt-0.5 text-[11px] text-slate-400 truncate">{c.profession}</div>
                     </button>
                   );
                 })}
@@ -1951,7 +1921,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
               </div>
 
-              {/* A4 4分割カード一覧 vs 個別カード編集 切替 */}
+              {/* A4 4分割カード一覧 vs 個別カード詳細 切替 */}
               <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setEvidenceViewMode("cards_a4")}
@@ -1971,7 +1941,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  📄 個別詳細・編集
+                  📄 個別詳細
                 </button>
               </div>
 
@@ -1991,8 +1961,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   onClick={() => setEvidenceDayFilter("glossary")}
                   className={`rounded px-2 py-1 text-[11px] font-bold transition ${
                     evidenceDayFilter === "glossary"
-                      ? "bg-emerald-600 text-white"
-                      : "text-emerald-400 hover:text-white"
+                      ? "bg-indigo-600 text-white"
+                      : "text-slate-400 hover:text-white"
                   }`}
                   title="初心者向け用語解説（下部余白）が追加された16枚の証拠カードのみに絞り込みます"
                 >
@@ -2028,11 +1998,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }`}
                     >
                       <div className="flex items-center justify-between gap-1">
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center gap-1.5">
                           <span className="text-[10px] font-mono font-bold text-slate-400">
                             EV-{String(globalIdx).padStart(2, "0")}
                           </span>
-                          <span className="rounded bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 text-[10px] font-bold text-amber-300">
+                          <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
                             Day {ev.foundPhase}
                           </span>
                         </div>
@@ -2052,7 +2022,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         {ev.title}
                       </div>
                       {ev.glossaryNote && (
-                        <div className="mt-1 text-[10px] text-emerald-300/90 truncate">
+                        <div className="mt-1 text-[10px] text-slate-400 truncate">
                           📖 下部余白に用語解説あり
                         </div>
                       )}
@@ -2079,9 +2049,29 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
               </div>
 
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                プレイヤー全員に提示・配布する地図・現場写真・解読ワークシートを選択し、注釈や解説文を直接編集できます。
-              </p>
+              {/* 印刷向き・余白設定（証拠資料と同じ2列ボタン形式に統一） */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  onClick={() => setVisualOrientation("landscape_rotated")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    visualOrientation === "landscape_rotated"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🔄 A4縦最大化(90°回転)
+                </button>
+                <button
+                  onClick={() => setVisualOrientation("portrait")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    visualOrientation === "portrait"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📄 通常向き(回転なし)
+                </button>
+              </div>
 
               <div className="space-y-2">
                 {visualBoards.map((vb) => {
@@ -2102,7 +2092,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
                           {vb.dayNumber === 0 ? "全域" : `Day ${vb.dayNumber}`}
                         </span>
                         <span className="text-[10px] text-slate-400">
@@ -2139,41 +2129,35 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           {/* ④ GM進行資料選択リスト */}
           {category === "gm_guides" && (
             <div className="space-y-3">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                GM進行資料（全{project.timeline.length}フェーズ）
-              </h3>
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  GM進行資料（全{project.timeline.length}フェーズ）
+                </h3>
+              </div>
 
-              {/* フローチャート（A4・1枚） vs Day別進行資料 切替ボタン */}
-              <div className="grid grid-cols-1 gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
+              {/* 区分切替（証拠資料と同一の2列グリッド・インディゴ選択で統一） */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   onClick={() => setGmGuideViewMode("flowchart")}
-                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmGuideViewMode === "flowchart"
-                      ? "bg-rose-600 text-white shadow"
-                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  <span>🔀 成功・失敗分岐フローチャート</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">A4・1枚</span>
+                  🔀 分岐チャート(A4)
                 </button>
                 <button
                   onClick={() => setGmGuideViewMode("daily_sheet")}
-                  className={`rounded-md px-2.5 py-2 text-xs font-bold transition text-left flex items-center justify-between ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmGuideViewMode === "daily_sheet"
                       ? "bg-indigo-600 text-white shadow"
-                      : "text-slate-300 hover:bg-slate-900 hover:text-white"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  <span>📄 Day別 GM進行資料</span>
-                  <span className="rounded bg-black/25 px-1.5 py-0.5 text-[10px]">Day 1〜7</span>
+                  📄 Day別 進行資料
                 </button>
               </div>
-
-              <p className="text-[11px] text-slate-400 leading-relaxed">
-                {gmGuideViewMode === "flowchart"
-                  ? "Day 1〜Day 7までの全ての成功・失敗ルートをA4・1枚に凝縮したチャート図です。"
-                  : "各Dayごとの読み上げスクリプト、時間配分、成功・失敗分岐フロー、開示証拠リストを確認できます。"}
-              </p>
 
               <div className="space-y-2">
                 {project.timeline.map((step) => {
@@ -2192,18 +2176,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="rounded bg-rose-500/20 border border-rose-500/40 px-2 py-0.5 text-[10px] font-bold text-rose-300">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
                           Day {step.dayNumber}
                         </span>
-                        {fc?.hasFailureBranch ? (
-                          <span className="rounded bg-amber-500/20 border border-amber-500/40 px-1.5 py-0.5 text-[9.5px] font-bold text-amber-300">
-                            🔀 成否・反論分岐あり
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-mono text-slate-400">
-                            {step.locationName}
-                          </span>
-                        )}
+                        <span className="text-[10px] font-mono text-slate-400">
+                          {fc?.hasFailureBranch ? "🔀 分岐あり" : step.locationName}
+                        </span>
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">
                         {step.situationTitle}
@@ -2216,115 +2194,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
           )}
         </div>
 
-        {/* 右メインキャンバス：A4デザイン資料プレビュー */}
+        {/* 右メインキャンバス：すべてのタブで「証拠資料」と同じ白い用紙コンテナに統一 */}
         <div className="col-span-9 flex-1 overflow-y-auto bg-slate-900/90 p-6 md:p-10">
-          {/* ====================================================================
-              デザイン済みドキュメント用紙本体（A4相当・印刷ターゲット）
-             ==================================================================== */}
           <div
             ref={printableSheetRef}
-            className={`mx-auto transition-all relative ${
-              category === "visuals" ||
-              (category === "gm_guides" && gmGuideViewMode === "flowchart")
-                ? "max-w-4xl bg-transparent p-0 border-0 shadow-none"
-                : category === "handouts"
-                ? `${handoutViewMode === "sheet" ? "max-w-[720px]" : "max-w-4xl"} bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none`
-                : category === "evidences"
-                ? evidenceViewMode === "cards_a4"
-                  ? "max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none"
-                  : "max-w-xl bg-white text-slate-900 border border-slate-300 shadow-md font-sans rounded-md p-6 md:p-8"
-                : `${paper.className} ${fontClass} ${getBorderFrameClasses()} rounded-sm p-8 md:p-12 max-w-4xl`
-            }`}
+            className="mx-auto max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none transition-all relative"
           >
-            {/* ----------------------------------------------------------------
-                共通ドキュメントヘッダー（GM資料のDay別シート表示時のみ表示）
-               ---------------------------------------------------------------- */}
-            {category === "gm_guides" && gmGuideViewMode === "daily_sheet" && (
-              <div className={`mb-6 border-b-2 pb-4 ${accent.borderMain} relative`}>
-                <div className="flex flex-wrap items-start justify-between gap-4">
-                  <div className="flex-1">
-                    {/* 発令機関ヘッダー（直接編集可能） */}
-                    <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest opacity-80">
-                      <Building2 className="h-3.5 w-3.5 shrink-0" />
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={currentDesign.organizationHeader}
-                          onChange={(e) =>
-                            handleUpdateDesign({ organizationHeader: e.target.value })
-                          }
-                          className="w-full max-w-md border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 text-xs font-bold tracking-widest focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                          title="クリックして発令機関・ヘッダー名を直接編集"
-                        />
-                      ) : (
-                        <span>{currentDesign.organizationHeader}</span>
-                      )}
-                    </div>
-
-                    {/* 文書コード・シナリオ名 */}
-                    <div className="mt-1 flex items-center gap-3 text-[11px] font-mono opacity-70">
-                      <span>FILE:</span>
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={currentDesign.documentCode}
-                          onChange={(e) => handleUpdateDesign({ documentCode: e.target.value })}
-                          className="w-40 border-b border-dashed border-slate-400/60 bg-transparent px-1 py-0.5 font-mono text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                          title="文書管理番号を直接編集"
-                        />
-                      ) : (
-                        <span>{currentDesign.documentCode}</span>
-                      )}
-                      <span>｜</span>
-                      <span>PROJECT: {project.title}</span>
-                    </div>
-                  </div>
-
-                  {/* 斜めスタンプ枠（直接編集可能） */}
-                  <div
-                    className={`rotate-[-4deg] border-2 px-3 py-1 text-center font-extrabold tracking-widest uppercase shadow-sm ${accent.stampBorder} ${accent.stampText}`}
-                  >
-                    {isDirectEditMode ? (
-                      <input
-                        type="text"
-                        value={currentDesign.stampText}
-                        onChange={(e) => handleUpdateDesign({ stampText: e.target.value })}
-                        className="w-44 bg-transparent text-center text-xs font-extrabold uppercase tracking-widest focus:bg-white/50 focus:outline-none"
-                        title="スタンプの文言を直接編集"
-                      />
-                    ) : (
-                      <span className="text-xs">{currentDesign.stampText}</span>
-                    )}
-                  </div>
-                </div>
-
-                {/* 公文書テーマの場合の3連承認印欄 */}
-                {currentDesign.themeId === "official_report" && (
-                  <div className="mt-3 flex justify-end">
-                    <div className="grid grid-cols-3 border border-slate-400 text-center text-[10px]">
-                      <div className="border-r border-slate-400 px-3 py-1">
-                        <div className="border-b border-slate-300 pb-0.5 font-bold">最高責任者</div>
-                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                          承認済
-                        </div>
-                      </div>
-                      <div className="border-r border-slate-400 px-3 py-1">
-                        <div className="border-b border-slate-300 pb-0.5 font-bold">情報分析官</div>
-                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                          検印
-                        </div>
-                      </div>
-                      <div className="px-3 py-1">
-                        <div className="border-b border-slate-300 pb-0.5 font-bold">記録担当</div>
-                        <div className="mt-1 inline-flex h-7 w-7 items-center justify-center rounded-full border border-red-600/80 text-[9px] font-bold text-red-600/80">
-                          登録
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
 
             {/* ================================================================
                 ① 個人向けハンドアウト（6項目シンプル本紙 ＆ 別配付カード）
@@ -2335,7 +2210,42 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   /* ------------------------------------------------------------
                      📄 個人ハンドアウト本紙（B5規格特化・無駄な余白ゼロ・高品位レイアウト）
                      ------------------------------------------------------------ */
-                  <div className="space-y-3 print:space-y-2 font-sans">
+                  <div className="space-y-5 print:space-y-2 font-sans">
+                    {/* 証拠資料と同じ形式の画面上部タイトル ＆ 右上印刷ボタン行 */}
+                    <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                          {project.title} ― 個人ハンドアウト本紙（B5規格・全{project.characters.length}名）
+                        </span>
+                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                          個人ハンドアウト本紙（選択中：{activeChar.name}）
+                        </h2>
+                      </div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() =>
+                            printCharacterHandoutsB5(
+                              activeChar ? [activeChar] : project.characters,
+                              project.title
+                            )
+                          }
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                        >
+                          <Printer className="h-3.5 w-3.5" />
+                          このPCをB5印刷 / PDF保存
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handlePrintAllCharactersB5}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                        >
+                          <Printer className="h-3.5 w-3.5" />
+                          全員分を一括B5印刷 / PDF保存
+                        </button>
+                      </div>
+                    </div>
+
                     {/* ① シート最上部ヘッダー（公的機関ブリーフィング見出し） */}
                     <div className="border-b-2 border-slate-900 pb-1.5 flex flex-wrap items-center justify-between gap-2">
                       <div className="flex items-center gap-2">
@@ -2791,73 +2701,23 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                      📋 Day別・朝潮＆長津ブリーフィング指令書（開始時7枚 ＋ 途中追加ミッション5枚 ＝ 全12枚）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
-                    <div className="no-print border-b-2 border-slate-800 pb-3 space-y-3">
-                      <div className="flex flex-wrap items-center justify-between gap-2">
-                        <div>
-                          <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                            {project.title} ― 対策本部・日次ブリーフィング ＆ 途中追加ミッション指令シート（全12枚）
-                          </span>
-                          <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                            危機管理官 朝潮 ＆ 首席通信解析官 長津 専用・Day別＆途中指令シート
-                          </h2>
-                          <p className="text-xs text-slate-600 mt-0.5">
-                            各Day開始時の指令書（7枚）に加え、長津が途中でアナウンスカードを読み上げる場面で朝潮へ渡す「途中追加指令書（5枚：Day 3 途中①〜③、Day 5 途中①、Day 6 途中①）」を収録しています。
-                          </p>
-                        </div>
-                        <div className="flex flex-wrap items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={handlePrintDesignedSheet}
-                            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
-                          >
-                            <Printer className="h-3.5 w-3.5" />
-                            表示中の指令書を印刷 / PDF保存（A4 2枚割付）
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setHandoutViewMode("nagatsu_cards")}
-                            className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
-                          >
-                            🎙️ 長津専用・途中＆達成アナウンスカード（全10枚）を開く
-                          </button>
-                        </div>
+                    <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                          {project.title} ― 対策本部・日次ブリーフィング ＆ 途中追加指令シート（全12枚）
+                        </span>
+                        <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                          Day別＆途中指令シート一覧（朝潮＆長津用）
+                        </h2>
                       </div>
-
-                      {/* 印刷・表示フィルタ切り替えバー */}
-                      <div className="flex flex-wrap items-center gap-2 pt-1">
-                        <span className="text-xs font-bold text-slate-700">表示・印刷対象：</span>
+                      <div className="flex flex-wrap items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => setBriefingFilterMode("all")}
-                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
-                            briefingFilterMode === "all"
-                              ? "bg-slate-900 text-white shadow-sm"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                          }`}
+                          onClick={handlePrintDesignedSheet}
+                          className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
-                          📋 すべて表示（全12枚：開始時7枚＋途中追加5枚）
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setBriefingFilterMode("midday")}
-                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
-                            briefingFilterMode === "midday"
-                              ? "bg-indigo-700 text-white shadow-sm"
-                              : "bg-indigo-50 text-indigo-800 border border-indigo-200 hover:bg-indigo-100"
-                          }`}
-                        >
-                          🆕 途中追加指令書のみ（計5枚：Day 3途中①〜③・Day 5途中①・Day 6途中①）
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setBriefingFilterMode("start")}
-                          className={`rounded-md px-3 py-1 text-xs font-bold transition ${
-                            briefingFilterMode === "start"
-                              ? "bg-slate-800 text-white shadow-sm"
-                              : "bg-slate-100 text-slate-700 hover:bg-slate-200"
-                          }`}
-                        >
-                          🌅 各Day開始時のみ（計7枚：Day 1〜Day 7）
+                          <Printer className="h-3.5 w-3.5" />
+                          表示中の指令書を印刷 / PDF保存
                         </button>
                       </div>
                     </div>
@@ -2997,20 +2857,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
-                        <a
-                          href="/pdfs/nagatsu-announcement-cards.pdf"
-                          download="長津専用_途中および達成アナウンスカード_全10枚.pdf"
-                          className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
-                        >
-                          📥 完成版PDFを直接ダウンロード（全10枚・A4 4分割）
-                        </a>
                         <button
                           type="button"
                           onClick={handlePrintDesignedSheet}
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          ブラウザ印刷 / PDF保存
+                          A4 4分割（均一サイズ）で印刷 / PDF保存
                         </button>
                       </div>
                     </div>
@@ -3122,25 +2975,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <button
-                        type="button"
-                        onClick={() =>
-                          setEvidenceDayFilter(
-                            evidenceDayFilter === "glossary" ? "all" : "glossary"
-                          )
-                        }
-                        className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold transition ${
-                          evidenceDayFilter === "glossary"
-                            ? "border-indigo-600 bg-indigo-50 text-indigo-800"
-                            : "border-emerald-600 bg-emerald-50 text-emerald-800 hover:bg-emerald-100"
-                        }`}
-                      >
-                        {evidenceDayFilter === "glossary"
-                          ? `📚 全証拠カード（${allEvidences.length}枚）を表示`
-                          : `📖 用語解説付きカード（${
-                              allEvidences.filter((e) => Boolean(e.glossaryNote)).length
-                            }枚）のみに絞り込む`}
-                      </button>
                       <button
                         type="button"
                         onClick={handlePrintDesignedSheet}
@@ -3330,7 +3164,29 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   );
 
                   return (
-                    <div className="space-y-4">
+                    <div className="space-y-6">
+                      {/* 証拠資料一覧と同一形式の上部タイトル ＆ 右上印刷ボタン行 */}
+                      <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                          <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                            {project.title} ― 証拠資料カード 個別詳細（Day {activeEvidence.foundPhase} 開示）
+                          </span>
+                          <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                            {activeEvidence.title}
+                          </h2>
+                        </div>
+                        <div className="flex flex-wrap items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={handlePrintDesignedSheet}
+                            className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                          >
+                            <Printer className="h-3.5 w-3.5" />
+                            この証拠カードを印刷 / PDF保存
+                          </button>
+                        </div>
+                      </div>
+
                       {/* B5カード ヘッダー＆メタ情報 */}
                       <div
                         className="rounded-lg border-2 p-4"
@@ -3553,121 +3409,42 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {category === "visuals" && activeVisual && (() => {
               const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
               return (
-                <div className="space-y-4">
-                  {/* 画面専用操作バー（印刷時は除外: no-print） */}
-                  <div className="no-print rounded-xl border border-slate-800 bg-slate-950 p-4 shadow-lg">
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div className="space-y-0.5">
-                        <div className="flex items-center gap-2">
-                          <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-2 py-0.5 text-xs font-bold text-cyan-300">
-                            {activeVisual.dayNumber === 0 ? "全域" : `Day ${activeVisual.dayNumber}`}
-                          </span>
-                          <h2 className="text-base font-bold text-white">{activeVisual.title}</h2>
-                        </div>
-                        <p className="text-xs text-slate-400">{activeVisual.subtitle}</p>
-                      </div>
+                <div className="space-y-6">
+                  {/* 証拠資料と同じ形式の白いシート上部タイトル ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― 全体提示の地図・写真（{activeVisual.dayNumber === 0 ? "全域" : `Day ${activeVisual.dayNumber}`}）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        {activeVisual.title}
+                      </h2>
+                    </div>
 
-                      <div className="flex flex-wrap items-center gap-2">
-                        {/* 印刷向き切り替え（A4縦最大化 vs 通常向き） */}
-                        <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
-                          <button
-                            type="button"
-                            onClick={() => setVisualOrientation("landscape_rotated")}
-                            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
-                              visualOrientation === "landscape_rotated"
-                                ? "bg-indigo-600 text-white shadow"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                            title="横長画像を90度回転し、A4縦用紙の長辺・短辺めいっぱいに配置します"
-                          >
-                            <RotateCw className="h-3.5 w-3.5" />
-                            A4縦最大化（90°回転）
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => setVisualOrientation("portrait")}
-                            className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 font-bold transition ${
-                              visualOrientation === "portrait"
-                                ? "bg-indigo-600 text-white shadow"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                            title="画像を回転させず、そのままA4用紙の中央に配置して印刷します"
-                          >
-                            <Compass className="h-3.5 w-3.5" />
-                            通常向き（回転なし）
-                          </button>
-                        </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      {/* 白い余白切り替えボタン（シンプル統一） */}
+                      <button
+                        type="button"
+                        onClick={() =>
+                          handleUpdateActiveVisual((v) => ({
+                            ...v,
+                            hasWhiteMargin: !isWithMargin,
+                          }))
+                        }
+                        className="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 transition"
+                      >
+                        {isWithMargin ? "🖼️ 現在：白い余白あり" : "🖼️ 現在：全面最大（余白なし）"}
+                      </button>
 
-                        {/* 白い余白切り替えトグル（写真資料の縮小・余白設定） */}
-                        <div className="flex rounded-lg border border-slate-700 bg-slate-900 p-0.5 text-xs">
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateActiveVisual((v) => ({ ...v, hasWhiteMargin: true }))}
-                            className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 font-bold transition ${
-                              isWithMargin
-                                ? "bg-amber-600 text-white shadow"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                            title="用紙の周囲に白い余白を作り、写真を少し縮小して中央に配置します"
-                          >
-                            🖼️ 白い余白あり
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleUpdateActiveVisual((v) => ({ ...v, hasWhiteMargin: false }))}
-                            className={`flex items-center gap-1 rounded-md px-2.5 py-1.5 font-bold transition ${
-                              !isWithMargin
-                                ? "bg-amber-600 text-white shadow"
-                                : "text-slate-400 hover:text-white"
-                            }`}
-                            title="用紙の端めいっぱいに画像を配置します"
-                          >
-                            全面最大（余白なし）
-                          </button>
-                        </div>
-
-                        {/* A4印刷ボタン */}
-                        <button
-                          type="button"
-                          onClick={handlePrintDesignedSheet}
-                          className="flex items-center gap-2 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-4 py-2 text-xs font-bold text-white shadow transition hover:shadow-emerald-500/25"
-                        >
-                          <Printer className="h-4 w-4" />
-                          この図・写真をA4印刷
-                        </button>
-
-                        {/* 原寸表示 / 新規タブで開く */}
-                        {activeVisual.imageUrl && (
-                          <a
-                            href={activeVisual.imageUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-2 text-xs font-bold text-slate-300 hover:bg-slate-800 hover:text-white transition"
-                            title="新しいタブで画像原寸ファイルを開きます"
-                          >
-                            <Maximize2 className="h-3.5 w-3.5" />
-                            原寸表示
-                          </a>
-                        )}
-
-                        {/* 画像差し替えボタン（手持ち画像用） */}
-                        <input
-                          ref={fileInputRef}
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => fileInputRef.current?.click()}
-                          className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 px-2.5 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white"
-                          title="手持ちの画像を読み込んで差し替えます"
-                        >
-                          <Upload className="h-3.5 w-3.5" />
-                          差し替え
-                        </button>
-                      </div>
+                      {/* 証拠資料と同一位置・同一色のA4印刷ボタン */}
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        この図・写真をA4印刷 / PDF保存
+                      </button>
                     </div>
                   </div>
 
@@ -3727,7 +3504,30 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                ================================================================ */}
             {category === "gm_guides" && activeTimelineStep && (
               gmGuideViewMode === "flowchart" ? (
-                <div className="space-y-4">
+                <div className="space-y-6">
+                  {/* 証拠資料と同一形式の上部タイトル ＆ 右上印刷ボタン行（フローチャート用1つ） */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM進行資料（A4・1枚完結 成功・失敗分岐フローチャート）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        Day 1〜Day 7 成功・失敗分岐フローチャート図
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <a
+                        href="/pdfs/gm-branching-flowchart.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        フローチャートを印刷 / PDF保存（A4・1枚）
+                      </a>
+                    </div>
+                  </div>
+
                   {/* A4・1枚完結の視覚的成功・失敗分岐フローチャート図 */}
                   <GmOnePageFlowchart
                     projectTitle={project.title}
@@ -3737,99 +3537,75 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </div>
               ) : (
                 <div className="space-y-6">
+                  {/* 証拠資料と同一形式の上部タイトル ＆ 右上印刷ボタン行（進行資料一括印刷用1つ） */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM進行資料（Day {activeTimelineStep.dayNumber} 進行台本＆管理シート）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        Day {activeTimelineStep.dayNumber}：{activeTimelineStep.situationTitle}
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <a
+                        href="/pdfs/gm-complete-progression-guide.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        進行資料を一括印刷 / PDF保存（Day 1〜7）
+                      </a>
+                    </div>
+                  </div>
+
                   {/* ============================================================
-                      【1ページ目】：GM演出・読み上げ台本シート
+                      【1ページ目】：GM演出・読み上げ台本シート（証拠資料と同じ白・スレート・インディゴ基調）
                      ============================================================ */}
                   <div className="space-y-5">
                     {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
-                    <div className="rounded-md border border-cyan-400/80 bg-white/95 p-3 text-xs text-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-2 border-l-4 border-l-cyan-600">
+                    <div className="rounded-md border border-slate-300 bg-slate-50 p-3 text-xs text-slate-800 flex flex-wrap items-center justify-between gap-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-cyan-900 flex items-center gap-1.5 text-xs">
-                          <Radio className="h-4 w-4 text-cyan-700 shrink-0" />
+                        <span className="font-bold text-slate-900 flex items-center gap-1.5 text-xs">
+                          <Radio className="h-4 w-4 text-indigo-600 shrink-0" />
                           🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
                         </span>
                         <span className="text-[11px] text-slate-600">
-                          ｜ 各Day開始時にGMから朝潮（PC1）（7名時は長津経由）へ『Day別・ブリーフィング＆指揮官ミッションシート』を手渡し、朝潮の指揮で会議を開始させます
+                          ｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
                         </span>
                       </div>
-                      <span className="rounded bg-cyan-100 px-2 py-0.5 text-[10px] font-mono font-bold text-cyan-900 shrink-0">
-                        6-7 PLAYERS READY
-                      </span>
                     </div>
 
-                    {/* GM進行ヘッダー帯（タイトル・観測地点・目標時間を横並び1列に統合） */}
-                    <div className={`rounded-md p-4 ${accent.headerBg} ${accent.headerText} shadow`}>
+                    {/* GM進行ヘッダー帯（スレートダークで統一） */}
+                    <div className="rounded-md p-4 bg-slate-900 text-white shadow">
                       <div className="flex flex-wrap items-end justify-between gap-4">
-                        {/* Day X 状況タイトル */}
                         <div className="flex-1 min-w-[260px]">
-                          <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                          <span className="block text-[10px] uppercase tracking-wider text-slate-300">
                             Day {activeTimelineStep.dayNumber} 状況タイトル
                           </span>
-                          {isDirectEditMode ? (
-                            <input
-                              type="text"
-                              value={activeTimelineStep.situationTitle}
-                              onChange={(e) =>
-                                handleUpdateActiveTimelineStep((s) => ({
-                                  ...s,
-                                  situationTitle: e.target.value,
-                                }))
-                              }
-                              className="mt-0.5 w-full rounded border border-white/30 bg-white/10 px-2.5 py-1 text-lg font-bold text-white focus:bg-white/20 focus:outline-none"
-                            />
-                          ) : (
-                            <h1 className="mt-0.5 text-lg font-bold leading-tight">
-                              {activeTimelineStep.situationTitle}
-                            </h1>
-                          )}
+                          <h1 className="mt-0.5 text-lg font-bold leading-tight">
+                            {activeTimelineStep.situationTitle}
+                          </h1>
                         </div>
 
-                        {/* 観測地点 ＆ 目標進行時間（同じ列に横並び・累積距離枠は削除） */}
                         <div className="flex items-center gap-4 text-xs shrink-0">
                           <div>
-                            <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                            <span className="block text-[10px] uppercase tracking-wider text-slate-300">
                               観測地点
                             </span>
-                            {isDirectEditMode ? (
-                              <input
-                                type="text"
-                                value={activeTimelineStep.locationName}
-                                onChange={(e) =>
-                                  handleUpdateActiveTimelineStep((s) => ({
-                                    ...s,
-                                    locationName: e.target.value,
-                                  }))
-                                }
-                                className="mt-0.5 w-36 rounded border border-white/30 bg-white/10 px-2 py-1 text-sm font-semibold text-white focus:bg-white/20 focus:outline-none"
-                              />
-                            ) : (
-                              <div className="mt-1 text-sm font-semibold">
-                                {activeTimelineStep.locationName}
-                              </div>
-                            )}
+                            <div className="mt-1 text-sm font-semibold">
+                              {activeTimelineStep.locationName}
+                            </div>
                           </div>
 
                           <div className="border-l border-white/25 pl-4">
-                            <span className="block text-[10px] uppercase tracking-wider opacity-75">
+                            <span className="block text-[10px] uppercase tracking-wider text-slate-300">
                               目標進行時間
                             </span>
                             <div className="mt-1 flex items-center gap-1.5 text-sm font-semibold">
-                              <Clock className="h-3.5 w-3.5 text-amber-300" />
-                              {isDirectEditMode ? (
-                                <input
-                                  type="number"
-                                  value={activeGmNote.targetMinutes}
-                                  onChange={(e) =>
-                                    handleUpdateActiveGmNote((n) => ({
-                                      ...n,
-                                      targetMinutes: parseInt(e.target.value, 10) || 20,
-                                    }))
-                                  }
-                                  className="w-14 rounded border border-white/30 bg-white/10 px-1.5 py-0.5 text-center font-mono text-xs font-bold text-white focus:bg-white/20 focus:outline-none"
-                                />
-                              ) : (
-                                <strong>{activeGmNote.targetMinutes}</strong>
-                              )}
+                              <Clock className="h-3.5 w-3.5 text-indigo-300" />
+                              <strong>{activeGmNote.targetMinutes}</strong>
                               <span>分</span>
                             </div>
                           </div>
@@ -3838,116 +3614,44 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     </div>
 
                     {/* BGM・音響演出キュー枠 */}
-                    <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-slate-100 px-4 py-2.5 text-xs text-slate-800">
+                    <div className="flex items-center gap-3 rounded-md border border-slate-300 bg-slate-50 px-4 py-2.5 text-xs text-slate-800">
                       <Volume2 className="h-4 w-4 text-indigo-700 shrink-0" />
                       <span className="font-bold shrink-0">演出・BGMキュー:</span>
-                      {isDirectEditMode ? (
-                        <input
-                          type="text"
-                          value={activeGmNote.bgmCue}
-                          onChange={(e) =>
-                            handleUpdateActiveGmNote((n) => ({ ...n, bgmCue: e.target.value }))
-                          }
-                          className="flex-1 rounded border border-dashed border-slate-400 bg-white px-2 py-0.5 text-xs text-slate-900"
-                        />
-                      ) : (
-                        <span>{activeGmNote.bgmCue}</span>
-                      )}
+                      <span>{activeGmNote.bgmCue}</span>
                     </div>
 
-                    {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本（スクロールなしで全行展開・印刷完全対応） */}
-                    <div
-                      className={`rounded-md border-2 p-5 ${accent.highlightBoxBorder} ${accent.highlightBoxBg}`}
-                    >
+                    {/* 📢 GM演出用ナレーション ＆ NPCセリフ台本 */}
+                    <div className="rounded-md border-2 border-slate-800 bg-slate-50/50 p-5">
                       <div className="mb-2.5 flex items-center justify-between">
-                        <span className="inline-flex items-center gap-1.5 rounded bg-indigo-900 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
+                        <span className="inline-flex items-center gap-1.5 rounded bg-slate-900 px-2.5 py-1 text-xs font-bold text-white shadow-sm">
                           📢 【GM演出用ナレーション ＆ NPCセリフ台本】
                         </span>
-                        <span className="text-[11px] text-slate-600">
-                          ※GM進行コンソールの演出用台本と連動（全行表示・直接編集・印刷対応）
+                        <span className="text-[11px] text-slate-500">
+                          Day {activeTimelineStep.dayNumber} 読み上げスクリプト
                         </span>
                       </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={Math.max(
-                            14,
-                            (activeGmNote.readAloudScript || "").split("\n").length + 2
-                          )}
-                          value={activeGmNote.readAloudScript}
-                          onChange={(e) =>
-                            handleUpdateActiveGmNote((n) => ({
-                              ...n,
-                              readAloudScript: e.target.value,
-                            }))
-                          }
-                          className="w-full rounded border border-dashed border-indigo-400 bg-white p-3.5 text-xs font-semibold leading-relaxed text-slate-900 font-mono shadow-inner focus:outline-none focus:border-indigo-600"
-                        />
-                      ) : (
-                        <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 select-text">
-                          {activeGmNote.readAloudScript}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 1ページ目の末尾フッター（画面プレビュー・印刷用） */}
-                    <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[10px] text-slate-500 font-mono">
-                      <span>Day {activeTimelineStep.dayNumber} GM進行台本 [Page 1/2]</span>
-                      <span>次ページ ➔ 成功・失敗分岐フローチャート ＆ 進行管理</span>
-                    </div>
-                  </div>
-
-                  {/* ============================================================
-                      【改ページ区切り（画面プレビュー境界 ＆ A4印刷自動改ページ）】
-                     ============================================================ */}
-                  <div className="page-break-before my-8 border-t-2 border-dashed border-indigo-400 pt-5 relative">
-                    <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 rounded-full border border-indigo-300 bg-indigo-50 px-3.5 py-0.5 text-[11px] font-bold text-indigo-900 shadow-sm flex items-center gap-1.5 no-print">
-                      <span>📄 【2ページ目】 GM進行管理 ＆ 成功・失敗分岐フローチャート</span>
-                    </div>
-                  </div>
-
-                  {/* ============================================================
-                      【2ページ目】：成功・失敗分岐フローチャート ＆ 進行管理シート
-                     ============================================================ */}
-                  <div className="space-y-5">
-                    {/* 2ページ目ヘッダー帯 */}
-                    <div
-                      className={`rounded-md px-4 py-2.5 ${accent.headerBg} ${accent.headerText} flex items-center justify-between text-xs shadow-sm`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-bold">
-                          Day {activeTimelineStep.dayNumber} {activeTimelineStep.situationTitle}
-                        </span>
-                        <span className="opacity-75">
-                          ｜ 成功・失敗分岐フローチャート ＆ GM進行管理シート
-                        </span>
+                      <div className="whitespace-pre-wrap text-xs font-semibold leading-relaxed font-mono text-slate-900 bg-white p-4 rounded border border-slate-200 select-text">
+                        {activeGmNote.readAloudScript}
                       </div>
-                      <span className="text-[10px] opacity-75 font-mono">[Page 2/2]</span>
                     </div>
 
-                    {/* 🔀 Day別の成功・失敗分岐フローチャート（2ページ目に常設） */}
+                    {/* 🔀 Day別の成功・失敗分岐詳細 */}
                     {(() => {
                       const dayFc = GM_DAY_FLOWCHARTS.find(
                         (f) => f.dayNumber === activeTimelineStep.dayNumber
                       );
                       if (!dayFc) return null;
                       return (
-                        <div className="rounded-lg border-2 border-indigo-900 bg-white p-4 space-y-3 shadow-sm">
+                        <div className="rounded-lg border-2 border-slate-800 bg-white p-4 space-y-3 shadow-sm">
                           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-200 pb-2">
-                            <span className="font-extrabold text-xs text-indigo-950 flex items-center gap-1.5">
+                            <span className="font-extrabold text-xs text-slate-900 flex items-center gap-1.5">
                               <span>🔀</span>
                               <span>
-                                Day {dayFc.dayNumber} 成功・失敗分岐フローチャート（
-                                {dayFc.decisionTaskTitle}）
+                                Day {dayFc.dayNumber} 分岐・対応指針（{dayFc.decisionTaskTitle}）
                               </span>
                             </span>
-                            <span
-                              className={`rounded px-2 py-0.5 text-[10px] font-bold ${
-                                dayFc.hasFailureBranch
-                                  ? "bg-rose-600 text-white"
-                                  : "bg-emerald-700 text-white"
-                              }`}
-                            >
-                              {dayFc.hasFailureBranch ? "分岐・ペナルティ・反論誘導あり" : "失敗要素なし"}
+                            <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 text-[10px] font-bold text-slate-700">
+                              {dayFc.hasFailureBranch ? "分岐・反論誘導あり" : "失敗要素なし"}
                             </span>
                           </div>
 
@@ -3955,17 +3659,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             {dayFc.branches.map((br) => (
                               <div
                                 key={br.id}
-                                className={`rounded border p-2.5 text-xs space-y-1 ${
-                                  br.badgeType === "success"
-                                    ? "border-emerald-400 bg-emerald-50/50"
-                                    : br.badgeType === "retry"
-                                    ? "border-amber-400 bg-amber-50/50"
-                                    : br.badgeType === "failure"
-                                    ? "border-rose-400 bg-rose-50/50"
-                                    : br.badgeType === "counterargument"
-                                    ? "border-purple-400 bg-purple-50/50"
-                                    : "border-slate-300 bg-slate-50"
-                                }`}
+                                className="rounded border border-slate-300 bg-slate-50/60 p-3 text-xs space-y-1"
                               >
                                 <div className="flex flex-wrap items-center justify-between gap-1 font-bold text-slate-900">
                                   <span>{br.conditionLabel}</span>
@@ -3976,7 +3670,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 <div className="text-[11px] font-semibold text-slate-800">
                                   ➔ {br.outcomeTitle}
                                 </div>
-                                <div className="text-[11px] text-slate-700 whitespace-pre-wrap leading-relaxed bg-white/80 rounded p-2 border border-slate-200">
+                                <div className="text-[11px] text-slate-700 whitespace-pre-wrap leading-relaxed bg-white rounded p-2.5 border border-slate-200">
                                   {br.gmActionAndDialogue}
                                 </div>
                                 {br.penaltyOrCarryOver && (
@@ -3991,75 +3685,26 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       );
                     })()}
 
-                    {/* ✅ GM進行チェックポイント（直接追加・編集可能） */}
-                    <div className={`rounded-md border p-4 ${accent.borderSub} bg-white/85`}>
+                    {/* ✅ GM進行チェックポイント */}
+                    <div className="rounded-md border border-slate-300 p-4 bg-white shadow-sm">
                       <div className="mb-2 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-xs font-bold text-slate-900">
-                          <CheckSquare className="h-4 w-4 text-emerald-700" />
+                          <CheckSquare className="h-4 w-4 text-indigo-600" />
                           Day {activeTimelineStep.dayNumber} GM進行チェックリスト
                         </span>
-                        {isDirectEditMode && (
-                          <button
-                            onClick={() =>
-                              handleUpdateActiveGmNote((n) => ({
-                                ...n,
-                                gmCheckpoints: [
-                                  ...(n.gmCheckpoints || []),
-                                  "新規進行チェック項目を入力してください",
-                                ],
-                              }))
-                            }
-                            className="no-print rounded bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-slate-700"
-                          >
-                            ＋ チェック項目追加
-                          </button>
-                        )}
                       </div>
                       <div className="space-y-1.5">
                         {(activeGmNote.gmCheckpoints || []).map((chk, idx) => (
-                          <div key={idx} className="flex items-center gap-2 text-xs">
+                          <div key={idx} className="flex items-center gap-2 text-xs text-slate-800">
                             <span className="inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
-                            {isDirectEditMode ? (
-                              <>
-                                <input
-                                  type="text"
-                                  value={chk}
-                                  onChange={(e) => {
-                                    const next = [...(activeGmNote.gmCheckpoints || [])];
-                                    next[idx] = e.target.value;
-                                    handleUpdateActiveGmNote((n) => ({
-                                      ...n,
-                                      gmCheckpoints: next,
-                                    }));
-                                  }}
-                                  className="flex-1 rounded border border-dashed border-slate-300 bg-white px-2 py-0.5 text-xs text-slate-900"
-                                />
-                                <button
-                                  onClick={() =>
-                                    handleUpdateActiveGmNote((n) => ({
-                                      ...n,
-                                      gmCheckpoints: (n.gmCheckpoints || []).filter(
-                                        (_, i) => i !== idx
-                                      ),
-                                    }))
-                                  }
-                                  className="no-print text-slate-400 hover:text-red-600"
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </button>
-                              </>
-                            ) : (
-                              <span>{chk}</span>
-                            )}
+                            <span>{chk}</span>
                           </div>
                         ))}
                       </div>
                     </div>
 
-                    {/* 📂 このフェーズで開示される証拠資料（タイトルのみコンパクト圧縮表示） */}
-                    <div
-                      className={`rounded-md border p-3.5 ${accent.borderSub} bg-white/85 shadow-sm`}
-                    >
+                    {/* 📂 このフェーズで開示される証拠資料 */}
+                    <div className="rounded-md border border-slate-300 p-3.5 bg-white shadow-sm">
                       <div className="mb-2 flex items-center justify-between text-xs font-bold text-slate-900">
                         <span>
                           📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
@@ -4070,9 +3715,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           }
                           件）
                         </span>
-                        <span className="text-[10px] text-slate-500 font-normal">
-                          ※タイトルのみ一覧
-                        </span>
                       </div>
                       <div className="flex flex-wrap gap-2">
                         {allEvidences
@@ -4080,7 +3722,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           .map((ev) => (
                             <div
                               key={ev.id}
-                              className="flex items-center gap-1.5 rounded border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-800 shadow-sm hover:border-slate-400"
+                              className="flex items-center gap-1.5 rounded border border-slate-300 bg-slate-50 px-3 py-1.5 text-xs font-bold text-slate-800"
                             >
                               <span className="text-indigo-600 font-mono text-xs">📄</span>
                               <span>{ev.title}</span>
@@ -4097,34 +3739,6 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 </div>
               )
-            )}
-
-            {/* ----------------------------------------------------------------
-                共通ドキュメントフッター（管理署名・ページ表記。全体提示の地図・写真は枠不要のため非表示）
-               ---------------------------------------------------------------- */}
-            {category !== "visuals" &&
-              !(category === "handouts" && handoutViewMode !== "sheet") &&
-              !(category === "gm_guides" && gmGuideViewMode !== "daily_sheet") && (
-              <div
-                className={`mt-8 flex flex-wrap items-center justify-between border-t pt-3 text-[11px] opacity-75 ${accent.borderSub}`}
-              >
-                <div className="flex-1">
-                  {isDirectEditMode ? (
-                    <input
-                      type="text"
-                      value={currentDesign.footerNote}
-                      onChange={(e) => handleUpdateDesign({ footerNote: e.target.value })}
-                      className="w-full max-w-md border-b border-dashed border-slate-400 bg-transparent px-1 py-0.5 text-[11px] focus:border-indigo-600 focus:bg-white/60 focus:outline-none"
-                      title="フッターのクレジット・管理注記を直接編集"
-                    />
-                  ) : (
-                    <span>{currentDesign.footerNote}</span>
-                  )}
-                </div>
-                <div className="font-mono">
-                  {currentDesign.documentCode} // UNAUTHORIZED REPRODUCTION PROHIBITED
-                </div>
-              </div>
             )}
           </div>
         </div>
