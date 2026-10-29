@@ -2943,7 +2943,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </div>
 
                                 <div
-                                  className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                  className={`${
+                                    nc.cardCode === "NG-08" ||
+                                    nc.cardCode === "NG-09" ||
+                                    nc.cardCode === "NG-10"
+                                      ? "text-[11px] leading-[1.82]"
+                                      : "text-xs leading-[1.95]"
+                                  } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal`}
                                   dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                                 />
                               </div>
