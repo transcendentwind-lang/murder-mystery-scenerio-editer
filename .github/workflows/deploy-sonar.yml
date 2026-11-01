@@ -1,0 +1,56 @@
+name: Deploy Sonar App to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build static export
+        env:
+          NEXT_PUBLIC_STATIC_EXPORT: "1"
+        run: npm run build
+
+      - name: Lock root index.html to redirect to /sonar/ and add .nojekyll
+        run: |
+          touch out/.nojekyll
+          cat << 'EOF' > out/index.html
+          <!DOCTYPE html>
+          <html lang="ja">
+          <head>
+            <meta charset="utf-8" />
+            <meta name="robots" content="noindex, nofollow" />
+            <meta http-equiv="refresh" content="0;url=/murder-mystery-scenerio-editer/sonar/" />
+            <title>Redirecting...</title>
+            <script>window.location.replace("/murder-mystery-scenerio-editer/sonar/");</script>
+          </head>
+          <body style="background:#020617;color:#38bdf8;font-family:monospace;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;">
+            クジラ音響解読・発信端末へ移動中...
+          </body>
+          </html>
+          EOF
+
+      - name: Deploy to gh-pages branch
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./out
+          force_orphan: true

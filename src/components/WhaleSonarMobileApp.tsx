@@ -2380,17 +2380,17 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3">
                     <img
-                      src="/images/sonar_qr.png?v=20261030"
+                      src="/images/sonar_qr.png?v=permanent"
                       alt="プレイヤー専用画面QRコード"
                       className="h-44 w-44 object-contain"
                     />
                   </div>
                   <div className="text-[11px] text-slate-300 space-y-1">
                     <div>
-                      スマホのカメラで上のQRコードを読み取ると、外部回線（4G/5G）から直接プレイヤー画面が開きます。
+                      スマホのカメラで上のQRコードを読み取ると、PCの電源が切れていても24時間いつでも直接プレイヤー画面が開きます（固定URL）。
                     </div>
                     <div className="rounded bg-slate-950 px-2 py-1 font-mono text-[10px] text-cyan-300 break-all">
-                      https://sensitivity-disposition-tub-choir.trycloudflare.com/sonar
+                      https://transcendentwind-lang.github.io/murder-mystery-scenerio-editer/sonar/
                     </div>
                   </div>
                 </div>
