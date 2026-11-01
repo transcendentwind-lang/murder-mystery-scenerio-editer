@@ -1459,7 +1459,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title></title>
+  <title>&nbsp;</title>
   <style>
     @page {
       size: A4 portrait;
@@ -1690,6 +1690,123 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   // 全キャラクターの個人ハンドアウト（B5規格）を一括印刷
   const handlePrintAllCharactersB5 = () => {
     printCharacterHandoutsB5(project.characters, project.title);
+  };
+
+  // 全19枚の全体提示地図・写真を一括でA4印刷 / PDF保存（タイトル・ファイル名等の一切の文字を入れず純粋な画像のみ出力）
+  const handlePrintAllVisualBoards = () => {
+    const boardsToPrint = visualBoards.filter((b) => Boolean(b.imageUrl));
+    if (boardsToPrint.length === 0) return;
+
+    const pagesHtml = boardsToPrint
+      .map((b) => {
+        const isRotated = (b.orientation || "landscape_rotated") === "landscape_rotated";
+        const isWithMargin = b.hasWhiteMargin ?? (b.id === "vis-day2-aerial");
+        const imgClass = isRotated
+          ? isWithMargin
+            ? "img-rotated-margin"
+            : "img-rotated-full"
+          : isWithMargin
+          ? "img-portrait-margin"
+          : "img-portrait-full";
+        return `<div class="visual-print-page"><img src="${b.imageUrl}" class="${imgClass}" alt="" /></div>`;
+      })
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>&nbsp;</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      box-sizing: border-box;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+    .visual-print-page {
+      position: relative;
+      width: 210mm;
+      height: 297mm;
+      page-break-after: always;
+      break-after: page;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: #ffffff;
+    }
+    .visual-print-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .img-portrait-full {
+      width: 210mm;
+      height: 297mm;
+      object-fit: contain;
+    }
+    .img-portrait-margin {
+      width: 184.8mm;
+      height: 261.36mm;
+      object-fit: contain;
+    }
+    .img-rotated-full {
+      position: absolute;
+      width: 297mm;
+      height: 210mm;
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+      transform: rotate(90deg);
+      transform-origin: center center;
+    }
+    .img-rotated-margin {
+      position: absolute;
+      width: 261.36mm;
+      height: 184.8mm;
+      max-width: none;
+      max-height: none;
+      object-fit: contain;
+      transform: rotate(90deg);
+      transform-origin: center center;
+    }
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 4000);
+      }, 900);
+    }
   };
 
   // 枠線スタイルのクラス計算
@@ -3456,16 +3573,15 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         この図・写真をA4印刷 / PDF保存
                       </button>
 
-                      {/* 全19枚の地図・写真を一括でPDFダウンロード・印刷するボタン */}
-                      <a
-                        href="/pdfs/all-visual-maps-and-photos.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      {/* 全19枚の地図・写真を一括でPDF保存・印刷するボタン（個人向けハンドアウトの一括印刷と同形式） */}
+                      <button
+                        type="button"
+                        onClick={handlePrintAllVisualBoards}
                         className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        全19枚の図・写真を一括PDFダウンロード / 印刷
-                      </a>
+                        全{visualBoards.length}枚の図・写真を一括A4印刷 / PDF保存
+                      </button>
                     </div>
                   </div>
 
