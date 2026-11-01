@@ -1459,7 +1459,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>${activeVisual.title}</title>
+  <title></title>
   <style>
     @page {
       size: A4 portrait;
@@ -3446,7 +3446,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         {isWithMargin ? "🖼️ 現在：白い余白あり" : "🖼️ 現在：全面最大（余白なし）"}
                       </button>
 
-                      {/* 証拠資料と同一位置・同一色のA4印刷ボタン */}
+                      {/* 証拠資料と同一位置・同一色の個別A4印刷ボタン */}
                       <button
                         type="button"
                         onClick={handlePrintDesignedSheet}
@@ -3455,6 +3455,17 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         <Printer className="h-3.5 w-3.5" />
                         この図・写真をA4印刷 / PDF保存
                       </button>
+
+                      {/* 全19枚の地図・写真を一括でPDFダウンロード・印刷するボタン */}
+                      <a
+                        href="/pdfs/all-visual-maps-and-photos.pdf"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        全19枚の図・写真を一括PDFダウンロード / 印刷
+                      </a>
                     </div>
                   </div>
 

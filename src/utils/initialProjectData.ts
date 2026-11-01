@@ -30,7 +30,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
   {
     id: "vis-day1-white",
     title: "【Day 1】小笠原南西海域 航海用海図（白地図・プレイヤー提示用）",
-    subtitle: "CHART NO. W-2704 / SOS発信位置・父島・南島・暗礁記号",
+    subtitle: "CHART NO. W-2704 / SOS発信位置・父島・南島（※暗礁非表示）",
     boardType: "day1_map_white",
     dayNumber: 1,
     imageUrl: "/images/day1_nautical_chart_white.svg",
@@ -550,8 +550,10 @@ export const initialProject: MMProject = {
     {
       id: "ev-reef-chart",
       title: "暗礁海図",
-      description: `　父島南西沖の暗礁・浅瀬の分布海図。
-　遭難地点の【真東および南東側には危険な暗礁群】が連なっており、風や海流によってこの地点まで運ばれてしまうと船は座礁の可能性があり、また救助も困難となる。`,
+      description: `　父島南西沖の暗礁・浅瀬の分布データ。以下の2つの座標を中心とした半径約0.5海里（グリッド半マス分）の範囲には危険な暗礁群が連なっている。
+・① 東暗礁群：【北緯27°04'N・東経142°09'E】周辺（SOS地点の真東・約3海里の海域／最浅水深3.2m）
+・② 南東浅礁群：【北緯27°02.5'N・東経142°08'E】周辺（SOS地点の南東・約2.5海里の海域／最浅水深4.8m）
+　もし遭難船が「海流（真東）」や「南東方向」へ流された場合、この暗礁帯に乗り上げて座礁してしまい、救難艇の接舷も困難となる。`,
       ownerId: "pc-3",
       foundPhase: 1,
       visibility: "shareable",

@@ -168,31 +168,6 @@
     <text x="125" y="130" text-anchor="middle" font-size="10" font-weight="bold" fill="#0369a1">CHART NO. W-2704</text>
   </g>
 
-  <!-- ① 東側の暗礁群 (740, 350) -->
-  <g>
-    <ellipse cx="740" cy="350" rx="42" ry="28" fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2 2" />
-    <g stroke="#475569" stroke-width="1.5">
-      <line x1="720" y1="340" x2="730" y2="340" /><line x1="725" y1="335" x2="725" y2="345" />
-      <line x1="750" y1="345" x2="760" y2="345" /><line x1="755" y1="340" x2="755" y2="350" />
-      <line x1="730" y1="360" x2="740" y2="360" /><line x1="735" y1="355" x2="735" y2="365" />
-      <line x1="745" y1="365" x2="755" y2="365" /><line x1="750" y1="360" x2="750" y2="370" />
-    </g>
-    <text x="740" y="330" text-anchor="middle" font-size="8" fill="#64748b">+ + 東暗礁群 + +</text>
-    <text x="740" y="388" text-anchor="middle" font-size="7.5" fill="#64748b" font-family="monospace">(最浅水深 3.2m)</text>
-  </g>
-
-  <!-- ② 南東側の暗礁群 (660, 480) -->
-  <g>
-    <ellipse cx="660" cy="480" rx="38" ry="25" fill="none" stroke="#94a3b8" stroke-width="0.8" stroke-dasharray="2 2" />
-    <g stroke="#475569" stroke-width="1.5">
-      <line x1="645" y1="470" x2="655" y2="470" /><line x1="650" y1="465" x2="650" y2="475" />
-      <line x1="670" y1="475" x2="680" y2="475" /><line x1="675" y1="470" x2="675" y2="480" />
-      <line x1="655" y1="490" x2="665" y2="490" /><line x1="660" y1="485" x2="660" y2="495" />
-    </g>
-    <text x="660" y="460" text-anchor="middle" font-size="8" fill="#64748b">+ + 南東浅礁群 + +</text>
-    <text x="660" y="515" text-anchor="middle" font-size="7.5" fill="#64748b" font-family="monospace">(最浅水深 4.8m)</text>
-  </g>
-
   <!-- 遭難信号 発信地点（海図中心: 500, 350） -->
   <g transform="translate(500, 350)">
     <circle cx="0" cy="0" r="16" fill="none" stroke="#dc2626" stroke-width="1.5" opacity="0.6" />

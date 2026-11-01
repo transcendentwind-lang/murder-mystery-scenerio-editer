@@ -350,103 +350,106 @@ export const Day1NauticalMap: React.FC<Day1NauticalMapProps> = ({
       </g>
 
       {/* ======================================================== */}
-      {/* 海図本来の暗礁記号（東側 ＆ 南東側 の2箇所に設定） */}
+      {/* 海図の暗礁記号（GM解析図モードの時のみ表示・白地図では非表示） */}
       {/* ======================================================== */}
-
-      {/* ① 東側の暗礁群（発信地点から真東へ約3海里: 740, 350） */}
-      <g>
-        {isGm && showReefDanger && (
-          <ellipse
-            cx="740"
-            cy="350"
-            rx="55"
-            ry="40"
-            fill="url(#d1-reef-pattern)"
-            stroke="#ef4444"
-            strokeWidth="1.8"
-            strokeDasharray="5 3"
-          />
-        )}
-
-        <ellipse
-          cx="740"
-          cy="350"
-          rx="42"
-          ry="28"
-          fill="none"
-          stroke={isGm ? "#ef4444" : "#94a3b8"}
-          strokeWidth="0.8"
-          strokeDasharray="2 2"
-        />
-        <g stroke={isGm ? "#b91c1c" : "#475569"} strokeWidth="1.5">
-          <line x1="720" y1="340" x2="730" y2="340" /><line x1="725" y1="335" x2="725" y2="345" />
-          <line x1="750" y1="345" x2="760" y2="345" /><line x1="755" y1="340" x2="755" y2="350" />
-          <line x1="730" y1="360" x2="740" y2="360" /><line x1="735" y1="355" x2="735" y2="365" />
-          <line x1="745" y1="365" x2="755" y2="365" /><line x1="750" y1="360" x2="750" y2="370" />
-        </g>
-        <text x="740" y="330" textAnchor="middle" fontSize="8" fill={isGm ? "#dc2626" : "#64748b"}>
-          + + 東暗礁群 + +
-        </text>
-        <text x="740" y="388" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
-          (最浅水深 3.2m)
-        </text>
-
-        {isGm && showReefDanger && (
+      {isGm && (
+        <>
+          {/* ① 東側の暗礁群（発信地点から真東へ約3海里: 740, 350） */}
           <g>
-            <rect x="685" y="400" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
-            <text x="740" y="414" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
-              ⚠️ 東側 座礁危険礁
+            {showReefDanger && (
+              <ellipse
+                cx="740"
+                cy="350"
+                rx="55"
+                ry="40"
+                fill="url(#d1-reef-pattern)"
+                stroke="#ef4444"
+                strokeWidth="1.8"
+                strokeDasharray="5 3"
+              />
+            )}
+
+            <ellipse
+              cx="740"
+              cy="350"
+              rx="42"
+              ry="28"
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth="0.8"
+              strokeDasharray="2 2"
+            />
+            <g stroke="#b91c1c" strokeWidth="1.5">
+              <line x1="720" y1="340" x2="730" y2="340" /><line x1="725" y1="335" x2="725" y2="345" />
+              <line x1="750" y1="345" x2="760" y2="345" /><line x1="755" y1="340" x2="755" y2="350" />
+              <line x1="730" y1="360" x2="740" y2="360" /><line x1="735" y1="355" x2="735" y2="365" />
+              <line x1="745" y1="365" x2="755" y2="365" /><line x1="750" y1="360" x2="750" y2="370" />
+            </g>
+            <text x="740" y="330" textAnchor="middle" fontSize="8" fill="#dc2626">
+              + + 東暗礁群 + +
             </text>
+            <text x="740" y="388" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
+              (最浅水深 3.2m)
+            </text>
+
+            {showReefDanger && (
+              <g>
+                <rect x="685" y="400" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
+                <text x="740" y="414" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
+                  ⚠️ 東側 座礁危険礁
+                </text>
+              </g>
+            )}
           </g>
-        )}
-      </g>
 
-      {/* ② 南東側の暗礁群（発信地点から南東へ約2.5海里: 660, 480） */}
-      <g>
-        {isGm && showReefDanger && (
-          <ellipse
-            cx="660"
-            cy="480"
-            rx="50"
-            ry="35"
-            fill="url(#d1-reef-pattern)"
-            stroke="#ef4444"
-            strokeWidth="1.8"
-            strokeDasharray="5 3"
-          />
-        )}
-
-        <ellipse
-          cx="660"
-          cy="480"
-          rx="38"
-          ry="25"
-          fill="none"
-          stroke={isGm ? "#ef4444" : "#94a3b8"}
-          strokeWidth="0.8"
-          strokeDasharray="2 2"
-        />
-        <g stroke={isGm ? "#b91c1c" : "#475569"} strokeWidth="1.5">
-          <line x1="645" y1="470" x2="655" y2="470" /><line x1="650" y1="465" x2="650" y2="475" />
-          <line x1="670" y1="475" x2="680" y2="475" /><line x1="675" y1="470" x2="675" y2="480" />
-          <line x1="655" y1="490" x2="665" y2="490" /><line x1="660" y1="485" x2="660" y2="495" />
-        </g>
-        <text x="660" y="460" textAnchor="middle" fontSize="8" fill={isGm ? "#dc2626" : "#64748b"}>
-          + + 南東浅礁群 + +
-        </text>
-        <text x="660" y="515" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
-          (最浅水深 4.8m)
-        </text>
-
-        {isGm && showReefDanger && (
+          {/* ② 南東側の暗礁群（発信地点から南東へ約2.5海里: 660, 480） */}
           <g>
-            <rect x="605" y="525" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
-            <text x="660" y="539" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
-              ⚠️ 南東 浅礁洗岩域
+            {showReefDanger && (
+              <ellipse
+                cx="660"
+                cy="480"
+                rx="50"
+                ry="35"
+                fill="url(#d1-reef-pattern)"
+                stroke="#ef4444"
+                strokeWidth="1.8"
+                strokeDasharray="5 3"
+              />
+            )}
+
+            <ellipse
+              cx="660"
+              cy="480"
+              rx="38"
+              ry="25"
+              fill="none"
+              stroke="#ef4444"
+              strokeWidth="0.8"
+              strokeDasharray="2 2"
+            />
+            <g stroke="#b91c1c" strokeWidth="1.5">
+              <line x1="645" y1="470" x2="655" y2="470" /><line x1="650" y1="465" x2="650" y2="475" />
+              <line x1="670" y1="475" x2="680" y2="475" /><line x1="675" y1="470" x2="675" y2="480" />
+              <line x1="655" y1="490" x2="665" y2="490" /><line x1="660" y1="485" x2="660" y2="495" />
+            </g>
+            <text x="660" y="460" textAnchor="middle" fontSize="8" fill="#dc2626">
+              + + 南東浅礁群 + +
             </text>
+            <text x="660" y="515" textAnchor="middle" fontSize="7.5" fill="#64748b" fontFamily="monospace">
+              (最浅水深 4.8m)
+            </text>
+
+            {showReefDanger && (
+              <g>
+                <rect x="605" y="525" width="110" height="20" fill="#fef2f2" stroke="#dc2626" rx="3" />
+                <text x="660" y="539" textAnchor="middle" fontSize="9.5" fontWeight="bold" fill="#b91c1c">
+                  ⚠️ 南東 浅礁洗岩域
+                </text>
+              </g>
+            )}
           </g>
-        )}
-      </g>
+        </>
+      )}
 
       {/* ======================================================== */}
       {/* 遭難信号 発信地点（海図の中心: 500, 350） */}
