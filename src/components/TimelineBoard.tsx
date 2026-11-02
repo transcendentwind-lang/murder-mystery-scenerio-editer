@@ -58,7 +58,7 @@ export const DAY3_SECTOR_ROWS = ["A", "B", "C", "D", "E", "F"] as const;
 export const DAY3_SECTOR_COLS = [1, 2, 3, 4, 5, 6] as const;
 
 export const CREATURE_SECTOR = "B-3";
-export const HEAT_CLUTTER_SECTORS = ["D-2", "E-2"];
+export const HEAT_CLUTTER_SECTORS = ["D-2", "C-5", "E-5"];
 
 export interface SectorSonarResult {
   sectorId: string;
@@ -86,27 +86,19 @@ export function evaluateSectorSonar(sectorId: string): SectorSonarResult {
     };
   }
 
-  // 2. 熱水クラッター判定（D-2, E-2 またはその隣接8マス）
-  const isAdjacentToClutter = HEAT_CLUTTER_SECTORS.some((clutter) => {
-    const [cRow, cColStr] = clutter.split("-");
-    const cCol = parseInt(cColStr, 10);
-    const cRowIndex = DAY3_SECTOR_ROWS.indexOf(cRow as any);
-    return Math.abs(rowIndex - cRowIndex) <= 1 && Math.abs(col - cCol) <= 1;
-  });
-
-  if (isAdjacentToClutter) {
-    const isDirectClutter = HEAT_CLUTTER_SECTORS.includes(sectorId);
+  // 2. 熱水・噴火直上クラッター判定（D-2, C-5, E-5）
+  if (HEAT_CLUTTER_SECTORS.includes(sectorId)) {
     return {
       sectorId,
       status: "clutter_hazard",
-      title: isDirectClutter ? "💥【熱水プルーム直撃・測距不能】" : "⚠️【熱水クラッター障害・周囲探知不能】",
-      summary: "投下セクター直下には不在確定。ただし海底熱水の微細気泡散乱により周囲探知は不能！",
+      title: "💥【熱水プルーム直撃・測距不能】",
+      summary: "投下セクター直下には不在確定。ただし海底熱水・噴火の微細気泡散乱により周囲探知は不能！",
       details:
-        "直下には不在。しかし近隣の海底カルデラ（D-2/E-2）から噴出する微細気泡群と急激な水温躍層により、音波が激しく散乱・クラッター化。周囲セクターの生体エコーは完全に掻き消され探知不能。",
+        "直下には不在。しかし海底熱水域・カルデラ（D-2 / C-5 / E-5）から噴出する微細気泡群と急激な水温躍層により、音波が激しく散乱・クラッター化。周囲セクターの生体エコーは完全に掻き消され探知不能。",
     };
   }
 
-  // 3. 巨大生物の隣接マス（B-3の周囲8マス）
+  // 3. 巨大生物の隣接マス（B-3の周囲8マス：A-2〜A-4, B-2, B-4, C-2〜C-4）
   const [bRow, bColStr] = CREATURE_SECTOR.split("-");
   const bCol = parseInt(bColStr, 10);
   const bRowIndex = DAY3_SECTOR_ROWS.indexOf(bRow as any);
@@ -116,14 +108,33 @@ export function evaluateSectorSonar(sectorId: string): SectorSonarResult {
     return {
       sectorId,
       status: "adjacent_detect",
-      title: "📡【至近エコー捕捉・隣接セクター反応】",
-      summary: "直下には不在。ただし約20km先の隣接セクターより極めて強力な生体反響を検知！",
+      title: "📡【隣接セクター反響捕捉（約20km圏）】",
+      summary: "直下には不在。ただし縦・横・斜め1セクター（周囲8マス）以内に巨大な生体反響を確認！",
       details:
-        "投下地点の直下には不在。しかし隣接するマス（約20km先）の方向から、海底地殻を震わせる超低周波の生体パルス反響を受信！ 怪物は隣接セクターのいずれかに潜伏中！",
+        "投下セクター直下には不在だが、アクティブソナーが隣接セクター（縦・横・斜め1区画＝約20km圏内）から極めて強い巨大生体エコーを受信した。他のソノブイ結果と照合することで目標セクターを絞り込める。",
     };
   }
 
-  // 4. 反応なし
+  // 4. 熱水・噴火の隣接マス（D-2, C-5, E-5 の周囲）
+  const isAdjacentToClutter = HEAT_CLUTTER_SECTORS.some((clutter) => {
+    const [cRow, cColStr] = clutter.split("-");
+    const cCol = parseInt(cColStr, 10);
+    const cRowIndex = DAY3_SECTOR_ROWS.indexOf(cRow as any);
+    return Math.abs(rowIndex - cRowIndex) <= 1 && Math.abs(col - cCol) <= 1;
+  });
+
+  if (isAdjacentToClutter) {
+    return {
+      sectorId,
+      status: "clutter_hazard",
+      title: "⚠️【熱水クラッターノイズ混入・反応なし】",
+      summary: "投下セクター直下には不在。近隣の熱水・噴火域からのノイズが混入している。",
+      details:
+        "直下には不在。近隣の海底熱水域・カルデラ（D-2 / C-5 / E-5）から噴出する微細気泡群による音響ノイズが混入しており、有効な生体エコーは検出されなかった。",
+    };
+  }
+
+  // 5. 反応なし
   return {
     sectorId,
     status: "no_return",
@@ -987,7 +998,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     怪物はDay 2朝の鳥島沖から時速約6kmで北上中。全36セクター（ROW-A〜F × COL-1〜6）の中から、ソノブイを投下する海域セクターをクリックして選定してください（最大3機）。<br />
                     <span className="text-slate-400">
-                      ※海底カルデラ（D-2 / E-2）付近は海底熱水の微細気泡散乱（クラッター障害）により周囲探知が不能となります。海図の熱水域を避けて投下してください。
+                      ※海底熱水域・カルデラ（D-2 / C-5 / E-5）付近は微細気泡散乱（クラッター障害）により探知が妨害されます。海図の熱水域を避けて投下してください。
                     </span>
                   </p>
 

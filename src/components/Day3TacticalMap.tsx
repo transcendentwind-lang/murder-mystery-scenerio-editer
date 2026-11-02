@@ -392,16 +392,16 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
                 </text>
               </g>
 
-              {/* ポイント3：セクターE-2（西鳥島海山）の熱水噴出孔群と20km危険円 */}
-              <g transform="translate(310, 577)">
+              {/* ポイント3：セクターD-2（西鳥島海山）の熱水噴出孔群と20km危険円 */}
+              <g transform="translate(310, 482)">
                 <circle cx="0" cy="0" r="52" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1.5" strokeDasharray="4,4" />
                 <circle cx="0" cy="0" r="7" fill="#ea580c" stroke="#fed7aa" strokeWidth="1.5" />
                 <circle cx="0" cy="0" r="2.5" fill="#ffffff" />
                 <text x="-48" y="-12" fill="#fb923c" fontSize="10.5" fontWeight="bold">
-                  ♨ 西鳥島海山 海底熱水域 (E-2)
+                  ♨ 西鳥島海山 海底熱水域 (D-2)
                 </text>
                 <text x="-52" y="68" fill="#f97316" fontSize="9" fontWeight="bold" fontFamily="monospace">
-                  [E-2 熱水クラッター障害圏 R=20km]
+                  [D-2 熱水クラッター障害圏 R=20km]
                 </text>
               </g>
             </g>
@@ -564,7 +564,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             {mode === "gm" && (
               <>
                 <circle cx="22" cy="167" r="5" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
-                <text x="34" y="170" fill="#fb923c" fontSize="8" fontWeight="bold">海底熱水音響障害圏 (R=20km: E-2/C-5/E-5)</text>
+                <text x="34" y="170" fill="#fb923c" fontSize="8" fontWeight="bold">海底熱水音響障害圏 (R=20km: D-2/C-5/E-5)</text>
               </>
             )}
           </g>

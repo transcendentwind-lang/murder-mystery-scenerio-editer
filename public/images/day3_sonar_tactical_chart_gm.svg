@@ -146,13 +146,13 @@
     <text x="633" y="353" fill="#c2410c" opacity="1">C-5 ⚠️熱水</text>
     <text x="760" y="353">C-6</text>
     <text x="126" y="449">D-1</text>
-    <text x="253" y="449">D-2</text>
+    <text x="253" y="449" fill="#c2410c" opacity="1">D-2 ⚠️熱水</text>
     <text x="380" y="449">D-3</text>
     <text x="506" y="449">D-4</text>
     <text x="633" y="449">D-5</text>
     <text x="760" y="449">D-6</text>
     <text x="126" y="544">E-1</text>
-    <text x="253" y="544" fill="#c2410c" opacity="1">E-2 ⚠️熱水</text>
+    <text x="253" y="544">E-2</text>
     <text x="380" y="544">E-3</text>
     <text x="506" y="544">E-4</text>
     <text x="633" y="544" fill="#c2410c" opacity="1">E-5 ⚠️噴火</text>
@@ -195,7 +195,7 @@
   </g>
 
   <!-- ======================================================== -->
-  <!-- GM専用レイヤー①：音響クラッター障害危険圏（E-5 / C-5 / E-2） -->
+  <!-- GM専用レイヤー①：音響クラッター障害危険圏（E-5 / C-5 / D-2） -->
   <!-- ======================================================== -->
   <!-- ポイント1：鳥島沖海底カルデラ（E-5）の20km危険円 -->
   <g transform="translate(639, 613)">
@@ -210,23 +210,23 @@
   </g>
 
   <!-- ポイント2：須美寿東（C-5）の熱水噴出孔群と20km危険円 -->
-  <g transform="translate(700, 392)">
-    <circle cx="0" cy="0" r="46" fill="url(#plume-dots-gm)" stroke="#ea580c" stroke-width="2" stroke-dasharray="4,3" />
+  <g transform="translate(700, 382)">
+    <circle cx="0" cy="0" r="44" fill="url(#plume-dots-gm)" stroke="#ea580c" stroke-width="2" stroke-dasharray="4,3" />
     <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#ffffff" stroke-width="1.5" />
     <circle cx="0" cy="0" r="3" fill="#ffffff" />
-    <rect x="-78" y="-42" width="156" height="26" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2" />
-    <text x="0" y="-29" fill="#c2410c" font-size="9.5" font-weight="bold" text-anchor="middle">♨ 須美寿東 海底熱水域 (C-5)</text>
-    <text x="0" y="-19" fill="#9a3412" font-size="7.5" font-family="monospace" text-anchor="middle">C-5直上=探知不能 / 周囲=ノイズ</text>
+    <rect x="-78" y="12" width="156" height="26" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2" />
+    <text x="0" y="24" fill="#c2410c" font-size="9.5" font-weight="bold" text-anchor="middle">♨ 須美寿東 海底熱水域 (C-5)</text>
+    <text x="0" y="34" fill="#9a3412" font-size="7.5" font-family="monospace" text-anchor="middle">C-5直上=探知不能 / 周囲=ノイズ</text>
   </g>
 
-  <!-- ポイント3：西鳥島海山（E-2）の熱水噴出孔群と20km危険円 -->
-  <g transform="translate(310, 580)">
-    <circle cx="0" cy="0" r="46" fill="url(#plume-dots-gm)" stroke="#ea580c" stroke-width="2" stroke-dasharray="4,3" />
+  <!-- ポイント3：西鳥島海山（D-2）の熱水噴出孔群と20km危険円 -->
+  <g transform="translate(310, 478)">
+    <circle cx="0" cy="0" r="44" fill="url(#plume-dots-gm)" stroke="#ea580c" stroke-width="2" stroke-dasharray="4,3" />
     <circle cx="0" cy="0" r="8" fill="#ea580c" stroke="#ffffff" stroke-width="1.5" />
     <circle cx="0" cy="0" r="3" fill="#ffffff" />
-    <rect x="-82" y="-42" width="164" height="26" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2" />
-    <text x="0" y="-29" fill="#c2410c" font-size="9.5" font-weight="bold" text-anchor="middle">♨ 西鳥島海山 海底熱水域 (E-2)</text>
-    <text x="0" y="-19" fill="#9a3412" font-size="7.5" font-family="monospace" text-anchor="middle">E-2直上=探知不能 / 周囲=ノイズ</text>
+    <rect x="-82" y="12" width="164" height="26" rx="3" fill="#fff7ed" stroke="#ea580c" stroke-width="1.2" />
+    <text x="0" y="24" fill="#c2410c" font-size="9.5" font-weight="bold" text-anchor="middle">♨ 西鳥島海山 海底熱水域 (D-2)</text>
+    <text x="0" y="34" fill="#9a3412" font-size="7.5" font-family="monospace" text-anchor="middle">D-2直上=探知不能 / 周囲=ノイズ</text>
   </g>
 
   <!-- 噴煙柱および降灰域 -->
@@ -262,14 +262,14 @@
     <rect x="8" y="-66" width="176" height="18" rx="3" fill="#ffffff" opacity="0.92" stroke="#dc2626" stroke-width="1" />
     <text x="96" y="-54" fill="#b91c1c" font-size="9" font-weight="bold" text-anchor="middle">北上進行 (時速約6km / 水深400m)</text>
 
-    <!-- GM正解情報ボックス（左側のB-1/C-1/D-1付近に配置してグリッド中心を邪魔しない） -->
-    <g transform="translate(-310, 148)">
-      <rect x="0" y="0" width="295" height="82" rx="5" fill="#fff1f2" stroke="#dc2626" stroke-width="2" />
-      <text x="10" y="18" fill="#be123c" font-size="11" font-weight="bold">🚨 【GM正解】潜航目標の現在位置：セクター B-3</text>
-      <text x="10" y="34" fill="#0f172a" font-size="9.5" font-weight="bold">・直上探知（確定捕捉）：セクター B-3 に投下時</text>
-      <text x="10" y="49" fill="#0369a1" font-size="9" font-weight="bold">・隣接探知（周囲8マス反響）：A-2, A-3, A-4, B-2, B-4, C-2, C-3, C-4</text>
-      <text x="10" y="64" fill="#c2410c" font-size="8.5" font-weight="bold">・熱水/噴火障害（探知不能）：E-2, C-5, E-5（左記の周囲はノイズ混入）</text>
-      <text x="10" y="76" fill="#475569" font-size="8" font-family="monospace">目標スペック：全長300〜400m 超巨大群体 ｜ 31°52'N, 139°48'E (水深400m)</text>
+    <!-- GM正解情報ボックス（E-1〜E-3領域に配置し、D-2熱水域やB-3探知圏と重ならないよう調整） -->
+    <g transform="translate(-310, 257)">
+      <rect x="0" y="0" width="295" height="74" rx="5" fill="#fff1f2" stroke="#dc2626" stroke-width="2" />
+      <text x="10" y="16" fill="#be123c" font-size="10.5" font-weight="bold">🚨 【GM正解】潜航目標の現在位置：セクター B-3</text>
+      <text x="10" y="31" fill="#0f172a" font-size="9" font-weight="bold">・直上探知（確定捕捉）：セクター B-3 に投下時</text>
+      <text x="10" y="45" fill="#0369a1" font-size="8.5" font-weight="bold">・隣接探知（周囲8マス反響）：A-2, A-3, A-4, B-2, B-4, C-2, C-3, C-4</text>
+      <text x="10" y="58" fill="#c2410c" font-size="8.5" font-weight="bold">・熱水/噴火障害（探知不能）：D-2, C-5, E-5（左記の周囲はノイズ混入）</text>
+      <text x="10" y="69" fill="#475569" font-size="7.5" font-family="monospace">目標スペック：全長300〜400m 超巨大群体 ｜ 31°52'N, 139°48'E (水深400m)</text>
     </g>
   </g>
 
@@ -316,7 +316,7 @@
 
     <!-- 熱水音響障害圏 -->
     <circle cx="21.5" cy="56" r="5.5" fill="url(#plume-dots-gm)" stroke="#ea580c" stroke-width="1.2" />
-    <text x="34" y="58" fill="#c2410c" font-size="8.5" font-weight="bold">♨ 熱水・噴火音響障害 (E-2/C-5/E-5)</text>
+    <text x="34" y="58" fill="#c2410c" font-size="8.5" font-weight="bold">♨ 熱水・噴火音響障害 (D-2/C-5/E-5)</text>
     <text x="34" y="68" fill="#475569" font-size="7.5">直上＝探知不能(NO RETURN) / 隣接＝妨害</text>
 
     <!-- 給油巡視船 -->
