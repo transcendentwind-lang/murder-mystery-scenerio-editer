@@ -515,108 +515,180 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
           )}
 
           {/* ======================================================== */}
-          {/* 9. 作戦枠外：海図情報パネル（方位盤 ＆ 凡例 ＆ 仕様欄） */}
+          {/* 9. 作戦枠外：海図情報パネル（方位盤 ＆ 凡例 ＆ 仕様欄 ＆ ソノブイ探知範囲図） */}
           {/* ======================================================== */}
           {/* 方位盤（コンパスローズ：枠外右上） */}
-          <g transform="translate(1035, 115)">
-            <circle cx="0" cy="0" r="28" fill="none" stroke="#334155" strokeWidth="1" />
-            <line x1="0" y1="-28" x2="0" y2="28" stroke="#475569" strokeWidth="1" />
-            <line x1="-28" y1="0" x2="28" y2="0" stroke="#475569" strokeWidth="1" />
-            <polygon points="0,-28 -5,-10 0,-15 5,-10" fill="#38bdf8" />
-            <polygon points="0,28 -5,10 0,15 5,10" fill="#64748b" />
-            <text x="0" y="-32" fill="#38bdf8" fontSize="10" fontWeight="bold" textAnchor="middle">N</text>
-            <text x="0" y="40" fill="#64748b" fontSize="9" textAnchor="middle">S</text>
-            <text x="36" y="3" fill="#64748b" fontSize="9" textAnchor="middle">E</text>
-            <text x="-36" y="3" fill="#64748b" fontSize="9" textAnchor="middle">W</text>
+          <g transform="translate(1037, 84)">
+            <circle cx="0" cy="0" r="22" fill="none" stroke="#334155" strokeWidth="1" />
+            <line x1="0" y1="-22" x2="0" y2="22" stroke="#475569" strokeWidth="1" />
+            <line x1="-22" y1="0" x2="22" y2="0" stroke="#475569" strokeWidth="1" />
+            <polygon points="0,-22 -4,-8 0,-12 4,-8" fill="#38bdf8" />
+            <polygon points="0,22 -4,8 0,12 4,8" fill="#64748b" />
+            <text x="0" y="-26" fill="#38bdf8" fontSize="9.5" fontWeight="bold" textAnchor="middle">N</text>
+            <text x="0" y="33" fill="#64748b" fontSize="8.5" textAnchor="middle">S</text>
+            <text x="30" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">E</text>
+            <text x="-30" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">W</text>
           </g>
 
           {/* 海図凡例（LEGEND：枠外中央右・青い四角の外側） */}
-          <g transform="translate(915, 170)">
-            <rect width="245" height="235" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="14" y="20" fill="#94a3b8" fontSize="11" fontWeight="bold">【海図凡例 / LEGEND】</text>
+          <g transform="translate(915, 124)">
+            <rect width="245" height="176" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="18" fill="#94a3b8" fontSize="10.5" fontWeight="bold">【海図凡例 / LEGEND】</text>
 
             {/* 36作戦セクター */}
-            <rect x="16" y="34" width="12" height="12" fill="none" stroke="#0ea5e9" strokeWidth="1.2" strokeDasharray="2,2" />
-            <text x="36" y="44" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">36作戦セクター (6×6グリッド)</text>
-            <text x="36" y="56" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">1区画: 約20km四方 (東西20km × 南北20km)</text>
+            <rect x="16" y="29" width="11" height="11" fill="none" stroke="#0ea5e9" strokeWidth="1.2" strokeDasharray="2,2" />
+            <text x="34" y="38" fill="#e0f2fe" fontSize="9" fontWeight="bold">36作戦セクター (6×6グリッド)</text>
+            <text x="34" y="49" fill="#7dd3fc" fontSize="8" fontFamily="monospace">1区画: 約20km四方 (東西約20km×南北約20km)</text>
 
             {/* 給油巡視船 */}
-            <polygon points="16,76 28,76 30,70 24,68 18,68" fill="#0284c7" />
-            <text x="36" y="74" fill="#e0f2fe" fontSize="9.5" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
-            <text x="36" y="86" fill="#94a3b8" fontSize="8.5">画面左下 セクターF-1海域 (待機中)</text>
+            <polygon points="16,66 28,66 30,60 24,58 18,58" fill="#0284c7" />
+            <text x="34" y="64" fill="#e0f2fe" fontSize="9" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
+            <text x="34" y="75" fill="#94a3b8" fontSize="8">画面左下 セクターF-1海域 (待機中)</text>
 
             {/* カルデラ */}
-            <circle cx="22" cy="106" r="6" fill="#f43f5e" />
-            <text x="36" y="106" fill="#fda4af" fontSize="9.5" fontWeight="bold">鳥島沖海底カルデラ</text>
-            <text x="36" y="118" fill="#94a3b8" fontSize="8.5">Day 2突発的大爆発 震源地</text>
+            <circle cx="22" cy="91" r="5.5" fill="#f43f5e" />
+            <text x="34" y="91" fill="#fda4af" fontSize="9" fontWeight="bold">鳥島沖海底カルデラ</text>
+            <text x="34" y="102" fill="#94a3b8" fontSize="8">Day 2突発的大爆発 震源地</text>
 
             {/* 噴煙拡散域 */}
-            <ellipse cx="22" cy="138" rx="8" ry="5" fill="#dc2626" opacity="0.75" />
-            <text x="36" y="138" fill="#fca5a5" fontSize="9.5" fontWeight="bold">噴煙柱・降灰拡散域 (8,000m)</text>
-            <text x="36" y="150" fill="#94a3b8" fontSize="8.5">航空危険空域 (NOTAM)</text>
+            <ellipse cx="22" cy="118" rx="7.5" ry="4.5" fill="#dc2626" opacity="0.75" />
+            <text x="34" y="118" fill="#fca5a5" fontSize="9" fontWeight="bold">噴煙柱・降灰拡散域 (8,000m)</text>
+            <text x="34" y="129" fill="#94a3b8" fontSize="8">航空危険空域 (NOTAM)</text>
 
             {/* 火山フロント軸 */}
-            <line x1="16" y1="170" x2="28" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
-            <text x="36" y="170" fill="#cbd5e1" fontSize="9.5" fontWeight="bold">伊豆・小笠原火山フロント軸</text>
-            <text x="36" y="182" fill="#94a3b8" fontSize="8.5">海底海嶺・マグマ上昇帯</text>
+            <line x1="16" y1="145" x2="28" y2="145" stroke="#ef4444" strokeWidth="2" strokeDasharray="3,2" />
+            <text x="34" y="145" fill="#cbd5e1" fontSize="9" fontWeight="bold">伊豆・小笠原火山フロント軸</text>
+            <text x="34" y="156" fill="#94a3b8" fontSize="8">海底海嶺・マグマ上昇帯</text>
 
             {/* GM真相時のみ凡例に熱水クラッターも記載 */}
             {mode === "gm" && (
               <>
-                <circle cx="22" cy="206" r="7" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
-                <text x="36" y="204" fill="#fb923c" fontSize="9.5" fontWeight="bold">海底熱水音響障害圏 (R=20km)</text>
-                <text x="36" y="216" fill="#f97316" fontSize="8.5">セクターE-2 / カルデラ (NO RETURN)</text>
+                <circle cx="22" cy="167" r="5" fill="url(#plume-dots)" stroke="#f97316" strokeWidth="1" />
+                <text x="34" y="170" fill="#fb923c" fontSize="8" fontWeight="bold">海底熱水音響障害圏 (R=20km: E-2/C-5/E-5)</text>
               </>
             )}
           </g>
 
           {/* 作戦海図仕様スペック欄（枠外中央右） */}
-          <g transform="translate(915, 415)">
-            <rect width="245" height="122" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="14" y="20" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
-            <text x="14" y="38" fill="#cbd5e1" fontSize="9">縮尺: 1:200,000 ｜ 漸長緯度図法</text>
-            <text x="14" y="54" fill="#cbd5e1" fontSize="9">測地系: 世界測地系 (WGS-84)</text>
-            <text x="14" y="70" fill="#cbd5e1" fontSize="9">管轄: 海上保安庁・自衛隊 統合本部</text>
-            <text x="14" y="90" fill="#38bdf8" fontSize="9.5" fontWeight="bold">作戦セクター規格:</text>
-            <text x="14" y="104" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
+          <g transform="translate(915, 308)">
+            <rect width="245" height="86" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="18" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
+            <text x="14" y="34" fill="#cbd5e1" fontSize="8.5">縮尺: 1:200,000 ｜ 漸長緯度図法 (WGS-84)</text>
+            <text x="14" y="48" fill="#cbd5e1" fontSize="8.5">管轄: 海上保安庁・自衛隊 統合対策本部</text>
+            <text x="14" y="64" fill="#38bdf8" fontSize="8.5" fontWeight="bold">作戦セクター規格:</text>
+            <text x="14" y="76" fill="#7dd3fc" fontSize="8" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
           </g>
 
-          {/* 1セクター規格サンプル図（青い枠：作戦海図仕様の直下） */}
-          <g transform="translate(915, 547)">
-            <rect width="245" height="172" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
-            <text x="14" y="20" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【1セクター規格サンプル図】</text>
+          {/* 1セクター規格サンプル図（文字の重なりを解消・約20km表記に統一） */}
+          <g transform="translate(915, 402)">
+            <rect width="245" height="146" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="18" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【1セクター規格サンプル図】</text>
 
-            {/* 青い四角枠のサンプルセクター（海図グリッドと同一の青枠・背景） */}
-            <g transform="translate(74, 38)">
+            {/* 青い四角枠のサンプルセクター（タイトルと重ならないようy=46に配置） */}
+            <g transform="translate(82, 46)">
               {/* 青い枠のセクター四角形 */}
               <rect
                 x="0"
                 y="0"
-                width="122"
-                height="92"
+                width="116"
+                height="72"
                 fill="#0284c7"
                 fillOpacity="0.14"
                 stroke="#0ea5e9"
                 strokeWidth="2"
                 rx="2"
               />
-              <text x="8" y="16" fill="#38bdf8" fontSize="9" fontWeight="bold" fontFamily="monospace">SAMPLE</text>
-              <text x="61" y="52" fill="#e0f2fe" fontSize="11" fontWeight="bold" textAnchor="middle">1セクター</text>
+              <text x="8" y="15" fill="#38bdf8" fontSize="8.5" fontWeight="bold" fontFamily="monospace">SAMPLE</text>
+              <text x="58" y="42" fill="#e0f2fe" fontSize="10.5" fontWeight="bold" textAnchor="middle">1セクター</text>
 
-              {/* 横幅寸法線 (横 20 km) */}
-              <line x1="0" y1="-12" x2="122" y2="-12" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
-              <rect x="33" y="-20" width="56" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
-              <text x="61" y="-9" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">横 20 km</text>
+              {/* 横幅寸法線 (横 約20km) */}
+              <line x1="0" y1="-11" x2="116" y2="-11" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+              <rect x="25" y="-19" width="66" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
+              <text x="58" y="-8" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">横 約20km</text>
 
-              {/* 縦高寸法線 (縦 約20 km) */}
-              <line x1="-12" y1="0" x2="-12" y2="92" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
-              <rect x="-44" y="38" width="60" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
-              <text x="-14" y="49" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">縦 約20 km</text>
+              {/* 縦高寸法線 (縦 約20km) */}
+              <line x1="-12" y1="0" x2="-12" y2="72" stroke="#38bdf8" strokeWidth="1.2" markerStart="url(#arrow-dim-rev)" markerEnd="url(#arrow-dim)" />
+              <rect x="-46" y="28" width="64" height="15" rx="3" fill="#082f49" stroke="#0ea5e9" strokeWidth="0.8" />
+              <text x="-14" y="39" fill="#e0f2fe" fontSize="8.5" fontWeight="bold" fontFamily="monospace" textAnchor="middle">縦 約20km</text>
             </g>
 
             {/* 下部説明テキスト */}
-            <text x="122" y="154" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
+            <text x="122.5" y="136" fill="#7dd3fc" fontSize="8.5" fontFamily="monospace" textAnchor="middle">
               東西 約20km × 南北 約20km (全36区画)
+            </text>
+          </g>
+
+          {/* ソノブイ投下時の有効探知範囲（3×3セクター図解） */}
+          <g transform="translate(915, 556)">
+            <rect width="245" height="194" rx="6" fill="#091424" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
+            <text x="14" y="18" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【ソノブイ有効探知範囲（例）】</text>
+            <text x="14" y="32" fill="#cbd5e1" fontSize="8">投下セクターと縦・横・斜め1セクターを同時検出</text>
+
+            {/* 3×3 セクターミニ図解 (左側に配置: 各マス 34×28px = 102×84px) */}
+            <g transform="translate(14, 42)">
+              {/* 1行目 (左上・上・右上) */}
+              <rect x="0" y="0" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="17" y="17" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              <rect x="34" y="0" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="51" y="17" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              <rect x="68" y="0" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="85" y="17" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              {/* 2行目 (左・中心[投下]・右) */}
+              <rect x="0" y="28" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="17" y="45" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              {/* 中心：投下セクター */}
+              <rect x="34" y="28" width="34" height="28" fill="#0284c7" stroke="#38bdf8" strokeWidth="1.8" />
+              <text x="51" y="41" fill="#ffffff" fontSize="8" fontWeight="bold" textAnchor="middle">投下</text>
+              <text x="51" y="51" fill="#bae6fd" fontSize="6.5" textAnchor="middle">(中心)</text>
+
+              <rect x="68" y="28" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="85" y="45" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              {/* 3行目 (左下・下・右下) */}
+              <rect x="0" y="56" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="17" y="73" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              <rect x="34" y="56" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="51" y="73" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              <rect x="68" y="56" width="34" height="28" fill="#0c4a6e" fillOpacity="0.55" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" />
+              <text x="85" y="73" fill="#7dd3fc" fontSize="7.5" fontWeight="bold" textAnchor="middle">探知</text>
+
+              {/* アクティブソナー音波の広がりリング */}
+              <circle cx="51" cy="42" r="24" fill="none" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" opacity="0.7" />
+              <circle cx="51" cy="42" r="44" fill="none" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3,2" opacity="0.85" />
+              {/* 3×3外枠 */}
+              <rect x="0" y="0" width="102" height="84" fill="none" stroke="#0ea5e9" strokeWidth="1.5" rx="2" />
+            </g>
+
+            {/* 右側：凡例・解説 */}
+            <g transform="translate(124, 46)">
+              {/* 投下セクター */}
+              <rect x="0" y="0" width="12" height="12" fill="#0284c7" stroke="#38bdf8" strokeWidth="1.2" rx="1.5" />
+              <text x="16" y="10" fill="#e0f2fe" fontSize="8.5" fontWeight="bold">投下セクター</text>
+              <text x="16" y="21" fill="#94a3b8" fontSize="7.5">直上・至近距離探知</text>
+
+              {/* 周囲8セクター */}
+              <rect x="0" y="32" width="12" height="12" fill="#0c4a6e" stroke="#38bdf8" strokeWidth="1" strokeDasharray="2,2" rx="1.5" />
+              <text x="16" y="42" fill="#7dd3fc" fontSize="8.5" fontWeight="bold">周囲8セクター</text>
+              <text x="16" y="53" fill="#94a3b8" fontSize="7.5">縦・横・斜め1セクター</text>
+              <text x="16" y="64" fill="#38bdf8" fontSize="7.5" fontWeight="bold">アクティブソナー探知</text>
+            </g>
+
+            {/* 下部まとめボックス */}
+            <rect x="12" y="134" width="221" height="50" rx="4" fill="#082f49" opacity="0.8" stroke="#0ea5e9" strokeWidth="1" />
+            <text x="122.5" y="149" fill="#38bdf8" fontSize="8.5" fontWeight="bold" textAnchor="middle">
+              計9セクター（3×3区画）をアクティブ探知
+            </text>
+            <text x="122.5" y="163" fill="#e0f2fe" fontSize="7.5" textAnchor="middle">
+              投下した1区画＋縦・横・斜め1区画（周囲8マス）に
+            </text>
+            <text x="122.5" y="175" fill="#e0f2fe" fontSize="7.5" textAnchor="middle">
+              存在する海中目標の反響を検出可能
             </text>
           </g>
         </svg>

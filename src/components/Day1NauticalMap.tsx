@@ -179,7 +179,7 @@ export const Day1NauticalMap: React.FC<Day1NauticalMapProps> = ({
             <text x="360" y="270">980</text>
             <text x="410" y="520">1150</text>
             <text x="250" y="450">1780</text>
-            <text x="170" y="250">2150</text>
+            <text x="165" y="290">2150</text>
             <text x="140" y="520">2380</text>
             <text x="560" y="580">1420</text>
           </g>
@@ -239,53 +239,27 @@ export const Day1NauticalMap: React.FC<Day1NauticalMapProps> = ({
       </g>
 
       {/* 方位盤（コンパスローズ：Compass Rose）- 左上に配置 */}
-      <g transform="translate(180, 160)">
-        <circle cx="0" cy="0" r="80" fill="none" stroke="#64748b" strokeWidth="1.2" />
-        <circle cx="0" cy="0" r="73" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
+      <g transform="translate(180, 150)">
+        <circle cx="0" cy="0" r="62" fill="none" stroke="#64748b" strokeWidth="1.2" />
+        <circle cx="0" cy="0" r="56" fill="none" stroke="#94a3b8" strokeWidth="0.6" />
 
         {Array.from({ length: 36 }).map((_, i) => (
           <line
             key={i}
             x1="0"
-            y1="-80"
+            y1="-62"
             x2="0"
-            y2={i % 9 === 0 ? "-65" : i % 3 === 0 ? "-70" : "-73"}
+            y2={i % 9 === 0 ? "-48" : i % 3 === 0 ? "-53" : "-56"}
             stroke="#475569"
             strokeWidth={i % 9 === 0 ? "1.5" : "0.7"}
             transform={`rotate(${i * 10} 0 0)`}
           />
         ))}
 
-        <text x="0" y="-84" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">N (0°)</text>
-        <text x="88" y="4" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">E (90°)</text>
-        <text x="0" y="92" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">S (180°)</text>
-        <text x="-88" y="4" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#0f172a">W (270°)</text>
-        <text x="60" y="-58" textAnchor="middle" fontSize="8.5" fill="#475569">NE (45°)</text>
-        <text x="60" y="64" textAnchor="middle" fontSize="8.5" fill="#475569">SE (135°)</text>
-        <text x="-60" y="64" textAnchor="middle" fontSize="8.5" fill="#475569">SW (225°)</text>
-        <text x="-60" y="-58" textAnchor="middle" fontSize="8.5" fill="#475569">NW (315°)</text>
-
-        {/* 磁北偏差の破線矢印 */}
-        <line
-          x1="0"
-          y1="45"
-          x2="0"
-          y2="-70"
-          stroke="#dc2626"
-          strokeWidth="1.2"
-          strokeDasharray="4 2"
-          transform="rotate(-7.1 0 0)"
-        />
-        <text
-          x="-12"
-          y="-58"
-          fontSize="7.5"
-          fontWeight="bold"
-          fill="#dc2626"
-          transform="rotate(-7.1 0 0)"
-        >
-          磁北 7°W
-        </text>
+        <text x="0" y="-70" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#0f172a">N</text>
+        <text x="74" y="4" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#0f172a">E</text>
+        <text x="0" y="78" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#0f172a">S</text>
+        <text x="-74" y="4" textAnchor="middle" fontSize="12" fontWeight="bold" fill="#0f172a">W</text>
 
         {/* 中心スター */}
         <path

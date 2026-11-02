@@ -65,7 +65,7 @@
     <text x="360" y="270">980</text>
     <text x="410" y="520">1150</text>
     <text x="250" y="450">1780</text>
-    <text x="170" y="250">2150</text>
+    <text x="165" y="290">2150</text>
     <text x="140" y="520">2380</text>
     <text x="560" y="580">1420</text>
   </g>
@@ -117,33 +117,25 @@
   </g>
 
   <!-- 方位盤（コンパスローズ） -->
-  <g transform="translate(180, 160)">
-    <circle cx="0" cy="0" r="80" fill="none" stroke="#64748b" stroke-width="1.2" />
-    <circle cx="0" cy="0" r="73" fill="none" stroke="#94a3b8" stroke-width="0.6" />
+  <g transform="translate(180, 150)">
+    <circle cx="0" cy="0" r="62" fill="none" stroke="#64748b" stroke-width="1.2" />
+    <circle cx="0" cy="0" r="56" fill="none" stroke="#94a3b8" stroke-width="0.6" />
 
     <g stroke="#475569">
-      <line x1="0" y1="-80" x2="0" y2="-65" stroke-width="1.5" />
-      <line x1="80" y1="0" x2="65" y2="0" stroke-width="1.5" />
-      <line x1="0" y1="80" x2="0" y2="65" stroke-width="1.5" />
-      <line x1="-80" y1="0" x2="-65" y2="0" stroke-width="1.5" />
-      <line x1="56.5" y1="-56.5" x2="45" y2="-45" stroke-width="1" />
-      <line x1="56.5" y1="56.5" x2="45" y2="45" stroke-width="1" />
-      <line x1="-56.5" y1="56.5" x2="-45" y2="45" stroke-width="1" />
-      <line x1="-56.5" y1="-56.5" x2="-45" y2="-45" stroke-width="1" />
+      <line x1="0" y1="-62" x2="0" y2="-48" stroke-width="1.5" />
+      <line x1="62" y1="0" x2="48" y2="0" stroke-width="1.5" />
+      <line x1="0" y1="62" x2="0" y2="48" stroke-width="1.5" />
+      <line x1="-62" y1="0" x2="-48" y2="0" stroke-width="1.5" />
+      <line x1="43.8" y1="-43.8" x2="35" y2="-35" stroke-width="1" />
+      <line x1="43.8" y1="43.8" x2="35" y2="35" stroke-width="1" />
+      <line x1="-43.8" y1="43.8" x2="-35" y2="35" stroke-width="1" />
+      <line x1="-43.8" y1="-43.8" x2="-35" y2="-35" stroke-width="1" />
     </g>
 
-    <text x="0" y="-84" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">N (0°)</text>
-    <text x="88" y="4" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">E (90°)</text>
-    <text x="0" y="92" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">S (180°)</text>
-    <text x="-88" y="4" text-anchor="middle" font-size="10" font-weight="bold" fill="#0f172a">W (270°)</text>
-    <text x="60" y="-58" text-anchor="middle" font-size="8.5" fill="#475569">NE (45°)</text>
-    <text x="60" y="64" text-anchor="middle" font-size="8.5" fill="#475569">SE (135°)</text>
-    <text x="-60" y="64" text-anchor="middle" font-size="8.5" fill="#475569">SW (225°)</text>
-    <text x="-60" y="-58" text-anchor="middle" font-size="8.5" fill="#475569">NW (315°)</text>
-
-    <!-- 磁北偏差の破線矢印 -->
-    <line x1="0" y1="45" x2="-8.6" y2="-69.5" stroke="#dc2626" stroke-width="1.2" stroke-dasharray="4 2" />
-    <text x="-16" y="-58" font-size="7.5" font-weight="bold" fill="#dc2626">磁北 7°W</text>
+    <text x="0" y="-70" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">N</text>
+    <text x="74" y="4" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">E</text>
+    <text x="0" y="78" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">S</text>
+    <text x="-74" y="4" text-anchor="middle" font-size="12" font-weight="bold" fill="#0f172a">W</text>
 
     <!-- 中心スター -->
     <path d="M 0 -20 L 4 -5 L 18 0 L 4 5 L 0 20 L -4 5 L -18 0 L -4 -5 Z" fill="#0f172a" />
