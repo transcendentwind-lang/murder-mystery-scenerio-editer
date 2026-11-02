@@ -57,11 +57,20 @@ export const initialVisualBoards: VisualBoardItem[] = [
   },
   {
     id: "vis-day3-tactical",
-    title: "【Day 3】鳥島沖 洋上ソナー索敵作戦図（36セクター索敵盤）",
+    title: "【Day 3】鳥島沖 洋上ソナー索敵作戦図（36セクター索敵盤・プレイヤー提示用）",
     subtitle: "CHART NO. W-3100 / A-1〜F-6 セクター別音響索敵ワークシート",
     boardType: "day3_tactical",
     dayNumber: 3,
     imageUrl: "/images/day3_sonar_tactical_chart.svg",
+    orientation: "landscape_rotated",
+  },
+  {
+    id: "vis-day3-tactical-gm",
+    title: "【Day 3】鳥島沖 洋上ソナー索敵作戦図（GM解析図・目標位置＆熱水障害圏入り）",
+    subtitle: "CHART NO. W-3100-GM / 潜航目標現在位置（B-3）＋周囲8マス探知圏 ＆ 音響障害3箇所（E-2・C-5・E-5）",
+    boardType: "day3_tactical_gm",
+    dayNumber: 3,
+    imageUrl: "/images/day3_sonar_tactical_chart_gm.svg",
     orientation: "landscape_rotated",
   },
   {

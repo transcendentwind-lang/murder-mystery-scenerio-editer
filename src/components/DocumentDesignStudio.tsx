@@ -822,7 +822,18 @@ function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
     });
     const merged: VisualBoardItem[] = [];
     for (const initItem of initialVisualBoards) {
-      merged.push(existingMap[initItem.id] || initItem);
+      const existing = existingMap[initItem.id];
+      merged.push(
+        existing
+          ? {
+              ...existing,
+              title: initItem.title,
+              subtitle: initItem.subtitle,
+              imageUrl: initItem.imageUrl,
+              orientation: existing.orientation || initItem.orientation,
+            }
+          : initItem
+      );
       delete existingMap[initItem.id];
     }
     for (const customItem of Object.values(existingMap)) {

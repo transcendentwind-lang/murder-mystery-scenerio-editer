@@ -140,6 +140,7 @@ export interface VisualBoardItem {
     | 'day1_map_gm'
     | 'aerial_photo'
     | 'day3_tactical'
+    | 'day3_tactical_gm'
     | 'day3_photo'
     | 'day3_eruption'
     | 'day4_eruption'
