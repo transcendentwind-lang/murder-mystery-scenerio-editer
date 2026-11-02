@@ -14,9 +14,6 @@ import {
   CheckCircle2,
   AlertCircle,
   Smartphone,
-  Settings,
-  Plus,
-  Trash2,
   ExternalLink,
   Eye,
   Waves,
@@ -534,7 +531,6 @@ export interface RecordedWaveformTrace {
   recordedAt: string;
 }
 
-const STORAGE_KEY_RULES = "mm_workbench_whale_behavior_rules_v3";
 const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v2";
 
 interface AttemptLog {
@@ -559,7 +555,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   words,
   standalone = false,
 }) => {
-  const [rules, setRules] = useState<WhaleBehaviorRule[]>(DEFAULT_BEHAVIOR_RULES);
+  const rules = DEFAULT_BEHAVIOR_RULES;
   const [selectedSequence, setSelectedSequence] = useState<string[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activePlayingIndex, setActivePlayingIndex] = useState<number | null>(null);
@@ -567,9 +563,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [isAmbientOn, setIsAmbientOn] = useState(false);
   const [currentOutcome, setCurrentOutcome] = useState<AttemptLog | null>(null);
   const [attemptLogs, setAttemptLogs] = useState<AttemptLog[]>([]);
-  const [viewMode, setViewMode] = useState<"mobile_player" | "rule_editor">(
-    "mobile_player"
-  );
 
   // ==========================================
   // プレイヤーによる「音への日本語あてはめ」状態管理
@@ -602,13 +595,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [playbackProgressMs, setPlaybackProgressMs] = useState<number | null>(
     null
   );
-
-  // 新規ルール追加用ステート
-  const [newRuleName, setNewRuleName] = useState("");
-  const [newRuleSeq, setNewRuleSeq] = useState<string[]>([]);
-  const [newRuleTitle, setNewRuleTitle] = useState("");
-  const [newRuleText, setNewRuleText] = useState("");
-  const [newRuleBadge, setNewRuleBadge] = useState("🐋 クジラ行動反応");
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const assignCanvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -649,16 +635,9 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     [orderedWords, words, playerAssignedLabels]
   );
 
-  // ローカルストレージからルールとプレイヤーの日本語あてはめ状態を復元
+  // ローカルストレージからプレイヤーの日本語あてはめ状態を復元
   useEffect(() => {
     try {
-      const savedRules = localStorage.getItem(STORAGE_KEY_RULES);
-      if (savedRules) {
-        const parsed = JSON.parse(savedRules);
-        if (Array.isArray(parsed) && parsed.length > 0) {
-          setRules(parsed);
-        }
-      }
       const savedLabels = localStorage.getItem(STORAGE_KEY_PLAYER_LABELS);
       if (savedLabels) {
         const parsedLabels = JSON.parse(savedLabels);
@@ -760,15 +739,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       }, step.delay);
       abyssShakeTimersRef.current.push(tId);
     });
-  };
-
-  const handleSaveRules = (nextRules: WhaleBehaviorRule[]) => {
-    setRules(nextRules);
-    try {
-      localStorage.setItem(STORAGE_KEY_RULES, JSON.stringify(nextRules));
-    } catch {
-      // ignore
-    }
   };
 
   // ==========================================
@@ -1417,38 +1387,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setIsPlaying(false);
   };
 
-  // 新規ルールの追加保存
-  const handleAddCustomRule = () => {
-    if (!newRuleName.trim() || newRuleSeq.length === 0 || !newRuleTitle.trim()) {
-      return;
-    }
-    const created: WhaleBehaviorRule = {
-      id: `custom-${Date.now()}`,
-      name: newRuleName.trim(),
-      sequence: [...newRuleSeq],
-      responseSoundType: "yes_ack",
-      behaviorTitle: newRuleTitle.trim(),
-      behaviorText:
-        newRuleText.trim() ||
-        "クジラたちがクリック音に反応し、行動を開始した！",
-      directionBadge: newRuleBadge.trim() || "🐋 行動観測",
-      category: "other",
-    };
-    handleSaveRules([created, ...rules]);
-    setNewRuleName("");
-    setNewRuleSeq([]);
-    setNewRuleTitle("");
-    setNewRuleText("");
-  };
-
-  const handleDeleteRule = (id: string) => {
-    handleSaveRules(rules.filter((r) => r.id !== id));
-  };
-
-  const handleResetDefaultRules = () => {
-    handleSaveRules(DEFAULT_BEHAVIOR_RULES);
-  };
-
   // 解明済み（あてはめ済み）の語数カウント
   const assignedCount = Object.keys(playerAssignedLabels).filter(
     (k) => Boolean(playerAssignedLabels[k])
@@ -1460,7 +1398,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         standalone ? "min-h-screen w-full" : "h-full w-full overflow-hidden"
       }`}
     >
-      {/* ワークベンチ内表示時のみ：上部モード切替バー */}
+      {/* ワークベンチ内表示時のみ：上部ヘッダーバー */}
       {!standalone && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/90 px-6 py-2.5">
           <div className="flex items-center gap-2.5">
@@ -1481,32 +1419,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* 表示モード切替 */}
-            <div className="flex items-center rounded-lg border border-slate-800 bg-slate-950 p-0.5">
-              <button
-                onClick={() => setViewMode("mobile_player")}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-bold transition ${
-                  viewMode === "mobile_player"
-                    ? "bg-cyan-600 text-white shadow"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <Smartphone className="h-3.5 w-3.5" />
-                📱 アプリ画面で試す
-              </button>
-              <button
-                onClick={() => setViewMode("rule_editor")}
-                className={`flex items-center gap-1.5 rounded-md px-3 py-1 text-xs font-bold transition ${
-                  viewMode === "rule_editor"
-                    ? "bg-indigo-600 text-white shadow"
-                    : "text-slate-400 hover:text-white"
-                }`}
-              >
-                <Settings className="h-3.5 w-3.5" />
-                ⚙️ パターン＆表示文字の編集 ({rules.length}件)
-              </button>
-            </div>
-
             {/* プレイヤー専用URL（/sonar）を別ウィンドウで開く */}
             <a
               href="/sonar"
@@ -1522,226 +1434,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         </div>
       )}
 
-      {/* メインコンテンツ */}
-      {viewMode === "rule_editor" && !standalone ? (
-        /* ==========================================
-           ⚙️ 作者・GM用：パターン＆クジラ行動テキスト編集画面
-           ========================================== */
-        <div className="flex-1 overflow-y-auto p-6">
-          <div className="mx-auto max-w-5xl space-y-6">
-            <div className="flex items-center justify-between rounded-xl border border-indigo-500/30 bg-indigo-950/20 p-4">
-              <div>
-                <h3 className="text-sm font-bold text-white flex items-center gap-2">
-                  <Settings className="h-4 w-4 text-indigo-400" />
-                  クリック音パターンと「表示されるクジラの行動文字」の設定一覧
-                </h3>
-                <p className="mt-1 text-xs text-slate-300">
-                  プレイヤーがどのクリック音の組み合わせを鳴らした時に、どんな行動テキストを表示するかを自由に追加・編集できます。
-                </p>
-              </div>
-              <button
-                onClick={handleResetDefaultRules}
-                className="rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs text-slate-300 hover:bg-slate-800 hover:text-white transition"
-              >
-                初期設定に戻す
-              </button>
-            </div>
-
-            {/* 新しいパターン反応を追加するフォーム */}
-            <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-5 space-y-4">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-cyan-300 flex items-center gap-1.5">
-                <Plus className="h-4 w-4" />
-                新しい「クリック音パターン ➔ クジラの行動テキスト」を追加
-              </h4>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-slate-400 mb-1">
-                    ① パターン名（管理用メモ）
-                  </label>
-                  <input
-                    type="text"
-                    value={newRuleName}
-                    onChange={(e) => setNewRuleName(e.target.value)}
-                    placeholder="例：東へ退避せよ"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-slate-400 mb-1">
-                    ② ステータスバッジ表示
-                  </label>
-                  <input
-                    type="text"
-                    value={newRuleBadge}
-                    onChange={(e) => setNewRuleBadge(e.target.value)}
-                    placeholder="例：➡️ 東へ移動"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-xs text-slate-400 mb-1.5">
-                  ③ 正解となるクリック音の並び順（タップして順番に追加）
-                </label>
-                <div className="flex flex-wrap gap-1.5 mb-2">
-                  {words.map((w) => (
-                    <button
-                      key={w.id}
-                      onClick={() => setNewRuleSeq((prev) => [...prev, w.id])}
-                      className="rounded-md border border-slate-700 bg-slate-950 px-2.5 py-1 text-xs text-slate-200 hover:border-cyan-500 hover:text-cyan-300 transition"
-                    >
-                      ＋ {w.meaning.split("（")[0]} ({w.symbol})
-                    </button>
-                  ))}
-                </div>
-                <div className="min-h-10 rounded-lg border border-slate-800 bg-slate-950 p-2.5 flex items-center justify-between">
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    {newRuleSeq.length === 0 ? (
-                      <span className="text-xs text-slate-500">
-                        上のボタンをクリックして音の順番を並べてください
-                      </span>
-                    ) : (
-                      newRuleSeq.map((wId, idx) => {
-                        const w = words.find((item) => item.id === wId);
-                        return (
-                          <React.Fragment key={`${wId}-${idx}`}>
-                            <span className="rounded bg-cyan-950 border border-cyan-700/60 px-2 py-0.5 text-xs font-bold text-cyan-200">
-                              {idx + 1}. {w?.meaning.split("（")[0]}
-                            </span>
-                            {idx < newRuleSeq.length - 1 && (
-                              <span className="text-slate-500 text-xs">➔</span>
-                            )}
-                          </React.Fragment>
-                        );
-                      })
-                    )}
-                  </div>
-                  {newRuleSeq.length > 0 && (
-                    <button
-                      onClick={() => setNewRuleSeq([])}
-                      className="text-xs text-slate-400 hover:text-white"
-                    >
-                      クリア
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-xs text-slate-400 mb-1">
-                    ④ 画面に大きく表示する行動見出し（文字）
-                  </label>
-                  <input
-                    type="text"
-                    value={newRuleTitle}
-                    onChange={(e) => setNewRuleTitle(e.target.value)}
-                    placeholder="例：🐋 クジラが東の海域へと移動した"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-                <div>
-                  <label className="block text-xs text-slate-400 mb-1">
-                    ⑤ 詳細な行動描写テキスト
-                  </label>
-                  <input
-                    type="text"
-                    value={newRuleText}
-                    onChange={(e) => setNewRuleText(e.target.value)}
-                    placeholder="例：了解のクリック音が返り、群れが一斉に東へと泳ぎ出した。"
-                    className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-xs text-white focus:border-cyan-500 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              <button
-                onClick={handleAddCustomRule}
-                disabled={
-                  !newRuleName.trim() ||
-                  newRuleSeq.length === 0 ||
-                  !newRuleTitle.trim()
-                }
-                className="flex items-center gap-1.5 rounded-lg bg-cyan-600 px-4 py-2 text-xs font-bold text-white hover:bg-cyan-500 disabled:opacity-40 transition"
-              >
-                <Plus className="h-4 w-4" />
-                このパターン反応を追加保存する
-              </button>
-            </div>
-
-            {/* 登録済みルール一覧 */}
-            <div className="space-y-3">
-              {rules.map((rule) => (
-                <div
-                  key={rule.id}
-                  className="rounded-xl border border-slate-800 bg-slate-900/50 p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-slate-700 transition"
-                >
-                  <div className="space-y-1.5 flex-1">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <span className="rounded bg-cyan-950 border border-cyan-700/50 px-2 py-0.5 text-[11px] font-bold text-cyan-300">
-                        {rule.directionBadge || "🐋 行動"}
-                      </span>
-                      <span className="text-xs font-bold text-slate-200">
-                        {rule.name}
-                      </span>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-1.5 pt-1">
-                      {rule.sequence.map((wId, idx) => {
-                        const w = words.find((item) => item.id === wId);
-                        return (
-                          <React.Fragment key={`${rule.id}-${wId}-${idx}`}>
-                            <span className="rounded bg-slate-950 border border-slate-700 px-2 py-0.5 text-[11px] font-mono text-indigo-300">
-                              {w ? `${w.meaning.split("（")[0]} (${w.symbol})` : wId}
-                            </span>
-                            {idx < rule.sequence.length - 1 && (
-                              <span className="text-slate-500 text-xs">＋</span>
-                            )}
-                          </React.Fragment>
-                        );
-                      })}
-                    </div>
-
-                    <div className="mt-2 rounded-lg border border-emerald-500/30 bg-emerald-950/20 p-2.5">
-                      <div className="text-xs font-bold text-emerald-300">
-                        表示見出し：『{rule.behaviorTitle}』
-                      </div>
-                      <p className="mt-0.5 text-[11px] text-slate-300 whitespace-pre-line">
-                        {rule.behaviorText}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 self-end md:self-center">
-                    <button
-                      onClick={() => {
-                        setViewMode("mobile_player");
-                        handleTransmitSequence(rule.sequence);
-                      }}
-                      className="flex items-center gap-1 rounded-lg bg-cyan-600/20 border border-cyan-500/40 px-3 py-1.5 text-xs font-bold text-cyan-300 hover:bg-cyan-600 hover:text-white transition"
-                    >
-                      <Play className="h-3.5 w-3.5" />
-                      アプリで再生テスト
-                    </button>
-                    <button
-                      onClick={() => handleDeleteRule(rule.id)}
-                      className="rounded-lg border border-slate-800 bg-slate-950 p-2 text-slate-500 hover:border-red-500/50 hover:text-red-400 transition"
-                      title="削除"
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      ) : (
-        /* ==========================================
-           📱 プレイヤー用モバイルアプリ画面
-           ========================================== */
-        <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
+      {/* メインコンテンツ：📱 プレイヤー用モバイルアプリ画面 */}
+      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
           {/* 深淵モード発動時の3連シェイク＆赤色脈動アニメーション定義 ＋ iOS Safari 触覚振動トリガー */}
           <style>{`
             @keyframes abyss-quake {
@@ -2480,13 +2174,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       },
                       {
                         label:
-                          "⑥【4語連続】「北＋集まれ」｜「大きい・たくさんの餌＋食べる」",
+                          "⑥【4語連続】「北＋集まれ」｜「大きい・たくさんの餌＋攻撃せよ」",
                         sub: "2語ごとに順番に判定 ➔ 2つのクジラの行動が順番に表示されるテスト",
                         seq: [
                           "word-go-north",
                           "word-gather",
                           "word-giant-prey",
-                          "word-eat",
+                          "word-attack",
                         ],
                         color:
                           "border-purple-500/40 bg-purple-950/30 hover:bg-purple-900/50 text-purple-200",
@@ -2581,7 +2275,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             )}
           </div>
         </div>
-      )}
     </div>
   );
 };

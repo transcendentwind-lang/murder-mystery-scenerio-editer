@@ -11,7 +11,6 @@ import {
 } from "@/utils/projectStorage";
 import { TimelineBoard } from "@/components/TimelineBoard";
 import { CharactersEvidenceManager } from "@/components/CharactersEvidenceManager";
-import { CrypticMatrix } from "@/components/CrypticMatrix";
 import { GmDashboard } from "@/components/GmDashboard";
 import { TextExportView } from "@/components/TextExportView";
 import { DocumentDesignStudio } from "@/components/DocumentDesignStudio";
@@ -24,7 +23,6 @@ import {
   Users,
   Radio,
   FileText,
-  Grid,
   FolderKanban,
   ChevronDown,
   Palette,
@@ -43,7 +41,6 @@ export default function WorkbenchPage() {
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
   const [activeTab, setActiveTab] = useState<ActiveTab>("whale_sonar_app");
-  const [isPuzzleModalOpen, setIsPuzzleModalOpen] = useState<boolean>(false);
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
   const [isProjectManagerOpen, setIsProjectManagerOpen] = useState<boolean>(false);
@@ -306,7 +303,7 @@ export default function WorkbenchPage() {
               onUpdateTimeline={(newTimeline) =>
                 handleUpdateProject((prev) => ({ ...prev, timeline: newTimeline }))
               }
-              onNavigateToPuzzle={() => setIsPuzzleModalOpen(true)}
+              onNavigateToPuzzle={() => setActiveTab("whale_sonar_app")}
             />
           )}
 
@@ -368,20 +365,12 @@ export default function WorkbenchPage() {
                   characters={project.characters}
                   evidences={project.evidences}
                   playerCount={project.playerCount}
-                  crypticWords={project.crypticWords}
-                  crypticGrammar={project.crypticGrammar}
                   onTogglePlayerCount={handleTogglePlayerCount}
                   onUpdateCharacters={(newChars) =>
                     handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
                   }
                   onUpdateEvidences={(newEvs) =>
                     handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
-                  }
-                  onUpdateWords={(newWords) =>
-                    handleUpdateProject((prev) => ({ ...prev, crypticWords: newWords }))
-                  }
-                  onUpdateGrammar={(newGrammar) =>
-                    handleUpdateProject((prev) => ({ ...prev, crypticGrammar: newGrammar }))
                   }
                 />
               </div>
@@ -433,47 +422,6 @@ export default function WorkbenchPage() {
         onSelectProject={handleSelectProject}
         onProjectsChange={setProjects}
       />
-
-      {/* クジラ言語パズルモーダル（Day 6から直接呼び出し可能） */}
-      {isPuzzleModalOpen && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-md p-6"
-          onClick={() => setIsPuzzleModalOpen(false)}
-        >
-          <div
-            className="relative max-w-5xl w-full h-[85vh] rounded-2xl border border-slate-700 bg-slate-950 shadow-2xl overflow-hidden flex flex-col"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between px-6 py-3 border-b border-slate-800 bg-slate-900/80">
-              <div className="flex items-center gap-2">
-                <Grid className="h-4 w-4 text-indigo-400" />
-                <h3 className="font-bold text-sm text-white">
-                  【Day 6 パズル】マッコウクジラ言語マトリクス ＆ 祝詞文法解析
-                </h3>
-              </div>
-              <button
-                onClick={() => setIsPuzzleModalOpen(false)}
-                className="rounded-lg p-1.5 text-slate-400 hover:text-white hover:bg-slate-800 transition"
-              >
-                ✕
-              </button>
-            </div>
-            <div className="flex-1 overflow-hidden p-4">
-              <CrypticMatrix
-                words={project.crypticWords}
-                grammar={project.crypticGrammar}
-                characters={project.characters}
-                onUpdateWords={(newWords) =>
-                  handleUpdateProject((prev) => ({ ...prev, crypticWords: newWords }))
-                }
-                onUpdateGrammar={(newGrammar) =>
-                  handleUpdateProject((prev) => ({ ...prev, crypticGrammar: newGrammar }))
-                }
-              />
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
