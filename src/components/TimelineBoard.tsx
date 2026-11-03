@@ -1716,7 +1716,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-300 italic">
-                      「貝浜リエゾン、海上保安庁法20条に基づく警察官職務執行法の範囲では、全長数百mの潜航物体に対する制圧・強制排除は不可能です。法的に自衛隊の防衛出動、あるいは治安出動・海上警備行動を要請すべきか、防衛庁としての判断を求めます」
+                      「貝浜リエゾン、海上保安庁法20条に基づく警察官職務執行法の範囲では、全長数百mの潜航物体に対する制圧・強制排除は不可能です。法的に自衛隊の防衛出動、あるいは治安出動・海上警備行動を要請すべきか、防衛省としての判断を求めます」
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -1806,11 +1806,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         全体統括・官邸および防衛省との折衝・全責任の受託
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-indigo-300 block">貝浜（PC2: 防衛庁リエゾン）</strong>
+                        <strong className="text-indigo-300 block">貝浜（PC2: 防衛省リエゾン）</strong>
                         軍事力投入の可否・交戦規定（ROE）の策定
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
-                        <strong className="text-teal-300 block">坂凪（PC3: 救難隊長）</strong>
+                        <strong className="text-teal-300 block">坂凪（PC3: 救難担当官）</strong>
                         島民避難・民間船の安全確保・現地海域の危険性
                       </div>
                       <div className="rounded bg-slate-950 p-2 border border-slate-800">
@@ -1828,14 +1828,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                   </div>
 
-                  {/* ステップ3.5：防衛庁・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定 */}
+                  {/* ステップ3.5：防衛省・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定 */}
                   <div className="rounded-xl border border-amber-800/80 bg-amber-950/25 p-4 space-y-3">
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-amber-900/60 pb-2">
                       <div className="flex items-center gap-2">
                         <Radio className="h-4 w-4 text-amber-400" />
                         <div>
                           <span className="font-bold text-xs text-white">
-                            ③.5 【防衛庁・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定】
+                            ③.5 【防衛省・官邸からの緊急諮問：未確認巨大生物の呼称（コードネーム）決定】
                           </span>
                           <span className="ml-2 text-[10px] text-amber-300 font-mono">
                             公式対処記録・部隊動員計画用の呼称を命名
@@ -1849,7 +1849,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     <div className="rounded-lg bg-black/50 border border-amber-900/50 p-2.5 text-[11px] text-slate-200">
                       <p className="italic leading-relaxed font-mono">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する<strong>【ワタツミ】</strong>、もしくは海洋古伝承の異形神に由来する<strong>【クスルフ】</strong>の2案が有力候補として提示されています。どちらを公式コードネームとして採択しますか？（※もちろん、チーム独自の命名でも構いません）」
+                        （🎙️ 首席オペレーター 長津）:「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当対策チームで決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する<strong>【ワタツミ】</strong>、もしくは海洋古伝承の異形神に由来する<strong>【クスルフ】</strong>の2案が有力候補として提示されています。どちらを公式コードネームとして採択しますか？（※もちろん、チーム独自の命名でも構いません）」
                       </p>
                     </div>
 
@@ -2024,7 +2024,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </p>
                         <div className="rounded bg-black/40 border border-emerald-700/60 p-2 text-[11px] text-slate-200">
                           🌊 <strong>これにて【Day 3】の全事象が完結しました。</strong><br />
-                          事態は【<strong>Day 4：明神礁（明神礁海底噴火・内閣不作為と防衛庁意見聴取・八丈島前線情報収集と現地4大真相調査）</strong>】へと繋がります！
+                          事態は【<strong>Day 4：明神礁（明神礁海底噴火・内閣不作為と防衛省意見聴取・八丈島前線情報収集と現地4大真相調査）</strong>】へと繋がります！
                         </div>
                       </div>
                     )}
@@ -2145,7 +2145,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       📢 【海上保安庁東京本部 状況アナウンス】
                     </strong>
                     <p className="text-slate-200 text-xs italic leading-relaxed font-mono">
-                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告です。未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が、火山性微動を断続的に探知しています。防衛庁のパッシブソナーによる潜航物体の位置と、この火山性微動の発生源は完全に一致しており、物体は【日速約150km】のペースで正確に北上を続けています」
+                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告です。未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が、火山性微動を断続的に探知しています。防衛省の水中聴音網（パッシブソナー網）による潜航物体の位置と、この火山性微動の発生源は完全に一致しており、物体は【日速約150km】のペースで正確に北上を続けています」
                     </p>
                   </div>
 
@@ -2203,7 +2203,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         🏛️ 【自衛隊に攻撃（防衛出動）を依頼した場合：内閣見送り通達 ＆ 防衛省からの再説得打診】
                       </div>
                       <p className="text-[11px] text-slate-200 italic leading-relaxed font-mono">
-                        （🎙️ 首席オペレーター 長津）:「――昨日、朝潮危機管理官より上申された防衛出動要請について、官邸危機管理センターおよび内閣総理大臣より公式通達が入電しました。『海底噴火と未確認潜航物体との因果関係が科学的に立証されておらず、外国からの武力攻撃事態にも該当しないため、現段階での自衛隊部隊の出動は見送る。海上保安庁は引き続き警戒および情報収集にあたれ』……内閣による防衛出動は見送りと決定されました。しかし、防衛庁・海上幕僚監部からは『内閣を再説得するためにも、この生物が一体どこへ向かい、何を引き起こす見立てなのか、対策本部の専門的予測を至急提出してほしい』との緊急打診が入っております」
+                        （🎙️ 首席オペレーター 長津）:「――昨日、朝潮危機管理官より上申された防衛出動要請について、官邸危機管理センターおよび内閣総理大臣より公式通達が入電しました。『海底噴火と未確認潜航物体との因果関係が科学的に立証されておらず、外国からの武力攻撃事態にも該当しないため、現段階での自衛隊部隊の出動は見送る。海上保安庁は引き続き警戒および情報収集にあたれ』……内閣による防衛出動は見送りと決定されました。しかし、防衛省・海上幕僚監部からは『内閣を再説得するためにも、この生物が一体どこへ向かい、何を引き起こす見立てなのか、対策本部の専門的予測を至急提出してほしい』との緊急打診が入っております」
                       </p>
                       <div className="rounded bg-rose-900/40 border border-amber-700/60 p-2.5 text-[11px] text-amber-100 space-y-1">
                         <strong className="text-amber-300 block font-bold flex items-center gap-1">
@@ -2214,7 +2214,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         </p>
                       </div>
                       <p className="text-[10px] text-amber-200/90 font-medium">
-                        💡 <strong>戦略的示唆</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛庁から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠の論理性によって、<strong>防衛庁側が内閣を再説得できるかどうかの説得力・今後の部隊動員への働きかけが大きく左右されます</strong>。
+                        💡 <strong>戦略的示唆</strong>: 司令官が必死に出動要請したにもかかわらず内閣は動かない一方、防衛省から『どこへ向かっているのか』の意見聴取が行われます。対策本部（司令官・海洋生物学者・気象観測員ら）が提示する見立てや根拠の論理性によって、<strong>防衛省側が内閣を再説得できるかどうかの説得力・今後の部隊動員への働きかけが大きく左右されます</strong>。
                       </p>
                     </div>
                   ) : (
@@ -2224,10 +2224,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         🛡️ 【自衛隊に攻撃を依頼しなかった場合：防衛省・統合幕僚監部からの緊急照会】
                       </div>
                       <p className="text-[11px] text-slate-200 italic leading-relaxed font-mono">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁運用企画局および海上幕僚監部より、合同対策本部へ緊急照会が入電いたしました。『対策本部が防衛出動の要請を見送った判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体を国家安全保障上の重大な懸念と捉えている。この生物は一体どこへ向かっている見立てなのか？ 最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』との照会です」
+                        （🎙️ 首席オペレーター 長津）:「――防衛省運用企画局および海上幕僚監部より、合同対策本部へ緊急照会が入電いたしました。『対策本部が防衛出動の要請を見送った判断は了解した。しかし、自衛隊としても伊豆諸島の連続噴火と潜航物体を国家安全保障上の重大な懸念と捉えている。この生物は一体どこへ向かっている見立てなのか？ 最終到達予測地点に関する対策本部の専門的意見を至急提出されたし』との照会です」
                       </p>
                       <p className="text-[10px] text-indigo-200/90 font-medium">
-                        💡 <strong>戦略的示唆</strong>: 防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。回答内容によって今後の防衛庁の警戒態勢や協力関係、内閣への働きかけが変わることが示唆されます。
+                        💡 <strong>戦略的示唆</strong>: 防衛出動を求めなかった対策本部に対し、防衛省側から生物の進路と目的についての意見が厳しく問われています。回答内容によって今後の防衛省の警戒態勢や協力関係、内閣への働きかけが変わることが示唆されます。
                       </p>
                     </div>
                   )}
@@ -2465,13 +2465,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ⑤ 【Day 4 最終フェーズ】防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達 */}
+                {/* ⑤ 【Day 4 最終フェーズ】防衛省への最終進路・生態報告 ＆ 「害獣駆除」方針通達 */}
                 <div className="rounded-xl border border-amber-800/80 bg-[#16121a] p-4 shadow-lg space-y-3.5">
                   <div className="flex items-center justify-between border-b border-amber-900/60 pb-2">
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="h-4 w-4 text-amber-400" />
                       <span className="font-bold text-xs text-white">
-                        【Day 4 最終意思決定】防衛庁への最終進路・生態報告 ＆ 「害獣駆除」方針通達
+                        【Day 4 最終意思決定】防衛省への最終進路・生態報告 ＆ 「害獣駆除」方針通達
                       </span>
                     </div>
                     <span className="rounded bg-amber-950 px-2 py-0.5 text-[10px] font-bold text-amber-300 border border-amber-800">
@@ -2526,18 +2526,18 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       🔬 【問2：生物の正体・構造分析の報告】
                     </span>
                     <p className="text-[10px] text-slate-300 leading-relaxed">
-                      写真解析および観測結果に基づき、防衛庁へ<strong>『単一体の巨大生物ではなく、無数の深海生物や触手が絡み合い融合した【超巨大群体（コロニー）】である』</strong>という専門的見解を正式具申しました。
+                      写真解析および観測結果に基づき、防衛省へ<strong>『単一体の巨大生物ではなく、無数の深海生物や触手が絡み合い融合した【超巨大群体（コロニー）】である』</strong>という専門的見解を正式具申しました。
                     </p>
                   </div>
 
-                  {/* 防衛庁からの公式通達 */}
+                  {/* 防衛省からの公式通達 */}
                   <div className="rounded-lg border border-red-700/80 bg-red-950/40 p-3 space-y-1.5 text-xs">
                     <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
                       <ShieldAlert className="h-4 w-4 text-red-400" />
-                      🛡️ 【防衛庁・統合幕僚監部からの公式通達：「害獣駆除」名目での部隊出動決定】
+                      🛡️ 【防衛省・統合幕僚監部からの公式通達：「害獣駆除」名目での部隊出動決定】
                     </div>
                     <p className="text-[11px] text-slate-100 italic leading-relaxed">
-                      「対策本部の進路予測（{day4DestinationDecision === "tokyo" ? "東京湾首都直撃ルート" : "富士山・駿河湾直撃ルート"}）および超巨大群体の報告を受理した。内閣法制局の厳格な法理判断により、外国からの武力攻撃ではない本件に対し「防衛出動」を発令することは依然として不可とされた。しかし、国民の生命・財産に対する切迫した危機を排除するため、防衛庁は内閣の承認を取り付け、<strong>【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、自衛隊の全部隊動員を正式決定</strong>した！」
+                      「対策本部の進路予測（{day4DestinationDecision === "tokyo" ? "東京湾首都直撃ルート" : "富士山・駿河湾直撃ルート"}）および超巨大群体の報告を受理した。内閣法制局の厳格な法理判断により、外国からの武力攻撃ではない本件に対し「防衛出動」を発令することは依然として不可とされた。しかし、国民の生命・財産に対する切迫した危機を排除するため、防衛省は内閣の承認を取り付け、<strong>【防衛出動ではなく、害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、自衛隊の全部隊動員を正式決定</strong>した！」
                     </p>
                     <div className="rounded bg-black/50 border border-red-800/60 p-2 text-[10px] text-slate-200">
                       💥 <strong>作戦方針</strong>: 海上自衛隊の潜水艦・護衛艦部隊を展開し、八丈島〜御蔵島沖（Day 5海域）にて通常兵器（最新鋭魚雷・爆雷）による一斉射撃・駆除作戦を敢行する！<br />
@@ -2633,19 +2633,19 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       ・<strong>八丈島への地震波及（M4.0・震度3）</strong>：御蔵島沖の海底噴火を震源とするマグニチュード4クラスの地震が発生し、八丈島全域で震度3の強い揺れを観測。
                     </p>
                     <p>
-                      ・<strong>富士山直下・深部での火山性微動観測</strong>：最も恐れていた【富士山地下深部からの火山性微動】の発生を気象庁火山監視課が正式確認。物体の北上によって地下マグマ網が連動刺激されており、防衛庁および火山噴火予知連絡会より、駿河湾奥到達・破局噴火に至るまでの猶予時間の至急計算指令が下されました。
+                      ・<strong>富士山直下・深部での火山性微動観測</strong>：最も恐れていた【富士山地下深部からの火山性微動】の発生を気象庁火山監視課が正式確認。物体の北上によって地下マグマ網が連動刺激されており、防衛省および火山噴火予知連絡会より、駿河湾奥到達・破局噴火に至るまでの猶予時間の至急計算指令が下されました。
                     </p>
                   </div>
                 </div>
 
-                {/* ② 【防衛庁・火山噴火予知連絡会からの緊急指令】富士山噴火の猶予時間を計算せよ！ */}
+                {/* ② 【防衛省・火山噴火予知連絡会からの緊急指令】富士山噴火の猶予時間を計算せよ！ */}
                 <div className="rounded-xl border border-rose-800/80 bg-[#1e0f18] p-4 shadow-lg space-y-3">
                   <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/60 pb-2">
                     <div className="flex items-center gap-2">
                       <Clock className="h-4 w-4 text-rose-400 animate-pulse" />
                       <div>
                         <span className="font-bold text-xs text-white">
-                          【防衛庁・火山噴火予知連絡会からの緊急指令】富士山噴火猶予時間の計算
+                          【防衛省・火山噴火予知連絡会からの緊急指令】富士山噴火猶予時間の計算
                         </span>
                         <span className="ml-2 text-[10px] text-rose-300 font-mono">
                           距離と速度から到達猶予時間を割り出せ
@@ -2661,10 +2661,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   <div className="rounded-lg bg-black/60 border border-rose-900/60 p-3 text-xs text-slate-200 space-y-1.5">
                     <strong className="text-rose-300 block font-bold flex items-center gap-1.5">
-                      <Radio className="h-3.5 w-3.5 text-rose-400" /> 長津オペレーター緊急通信（防衛庁・予知連からの電文）:
+                      <Radio className="h-3.5 w-3.5 text-rose-400" /> 長津オペレーター緊急通信（防衛省・予知連からの電文）:
                     </strong>
                     <p className="italic leading-relaxed font-mono text-rose-100">
-                      （🎙️ 首席オペレーター 長津）:「――防衛庁および火山噴火予知連絡会より至急指令が入電いたしました！『駿河湾奥・富士山地下マグマ溜まり直下までの残距離は<strong>【約240km】</strong>。巨大生物の現在の深海巡航速度は<strong>【時速5km】</strong>。もしこのまま直進した場合、富士山噴火の危機に至るまであとどのぐらいの猶予があるのか、おおよその時間を直ちに計算して報告せよ！』とのことです！ みなさん、至急計算をお願いします！」
+                      （🎙️ 首席オペレーター 長津）:「――防衛省および火山噴火予知連絡会より至急指令が入電いたしました！『駿河湾奥・富士山地下マグマ溜まり直下までの残距離は<strong>【約240km】</strong>。巨大生物の現在の深海巡航速度は<strong>【時速5km】</strong>。もしこのまま直進した場合、富士山噴火の危機に至るまであとどのぐらいの猶予があるのか、おおよその時間を直ちに計算して報告せよ！』とのことです！ みなさん、至急計算をお願いします！」
                     </p>
                   </div>
 
@@ -2758,17 +2758,17 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ③ 【防衛庁からの通達】軍事作戦の「機密指定」および情報遮断 ＆ プレイヤー独自行動の開始 */}
+                {/* ③ 【防衛省からの通達】軍事作戦の「機密指定」および情報遮断 ＆ プレイヤー独自行動の開始 */}
                 <div className="rounded-xl border border-blue-900/80 bg-[#0e1626] p-4 shadow-lg space-y-3">
                   <div className="flex items-center justify-between border-b border-blue-900/60 pb-2">
                     <div className="flex items-center gap-2">
                       <Shield className="h-4 w-4 text-blue-400" />
                       <span className="font-bold text-xs text-white">
-                        【防衛庁・統合幕僚監部通達】作戦行動の「極秘指定」および情報遮断
+                        【防衛省・統合幕僚監部通達】作戦行動の「極秘指定」および情報遮断
                       </span>
                     </div>
                     <span className="rounded bg-blue-950 px-2 py-0.5 text-[10px] font-bold text-blue-300 border border-blue-800">
-                      防衛庁リエゾン連絡
+                      防衛省リエゾン連絡
                     </span>
                   </div>
 
@@ -3029,13 +3029,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 </div>
 
-                {/* ⑤ 【Day 5 結末（緊急入電）】防衛庁からの連絡：魚雷直撃・飽和攻撃の是非とPC5への緊急意見照会 */}
+                {/* ⑤ 【Day 5 結末（緊急入電）】防衛省からの連絡：魚雷直撃・飽和攻撃の是非とPC5への緊急意見照会 */}
                 <div className="rounded-xl border border-red-700/90 bg-[#1e0d13] p-4 shadow-xl space-y-3">
                   <div className="flex items-center justify-between border-b border-red-800/70 pb-2">
                     <div className="flex items-center gap-2">
                       <ShieldAlert className="h-5 w-5 text-red-500 animate-pulse" />
                       <span className="font-bold text-sm text-white">
-                        【Day 5 結末：緊急入電】防衛庁より魚雷直撃報告 ＆ 貝浜（PC2）経由での緊急意見照会
+                        【Day 5 結末：緊急入電】防衛省より魚雷直撃報告 ＆ 貝浜（PC2）経由での緊急意見照会
                       </span>
                     </div>
                     <span className="rounded bg-red-950 px-2.5 py-0.5 text-[10px] font-bold text-red-300 border border-red-800 animate-pulse">
@@ -3045,10 +3045,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   <div className="rounded-lg bg-black/70 border border-red-800 p-3.5 space-y-2.5 text-xs text-red-100">
                     <div className="flex items-center gap-1.5 font-bold text-red-300 text-xs">
-                      <span>📡 【八丈島〜御蔵島沖 作戦海域より防衛庁リエゾン 貝浜（PC2）への緊急入電】</span>
+                      <span>📡 【八丈島〜御蔵島沖 作戦海域より防衛省リエゾン 貝浜（PC2）への緊急入電】</span>
                     </div>
                     <p className="italic leading-relaxed text-[11px] text-slate-100">
-                      「――貝浜リエゾン、聞こえるか！ 防衛庁作戦本部だ……！
+                      「――貝浜リエゾン、聞こえるか！ 防衛省作戦本部だ……！
                       潜水艦部隊により、八丈島〜御蔵島沖にて魚雷群の一斉射撃を敢行した……直撃、命中した！
                       しかし……爆砕されたはずの巨大黒影は、無数の触手とダイオウイカが絡み合う超巨大群体であり、まるで泥のように瞬時に再結合した……！
                       軍部上層部は<strong>『命中している以上、さらに大量の魚雷を集中投入（飽和攻撃）すれば破砕できるはずだ』</strong>と主張している。
@@ -3057,7 +3057,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     <div className="rounded-lg bg-red-950/70 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-1.5">
                       <strong className="text-red-300 block font-bold text-xs">
-                        🔬 【防衛庁より海洋生物学者 浪寄（PC5）への至急確認事項】
+                        🔬 【防衛省より海洋生物学者 浪寄（PC5）への至急確認事項】
                       </strong>
                       <p className="leading-relaxed text-slate-200">
                         「貝浜、直ちにあの生物のソナー写真を直接解析した<strong>海洋生物学者 浪寄（PC5）</strong>の所見を確認してくれ！
@@ -3241,7 +3241,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>📡 4. 防衛庁交渉 ＆ 潜水艦SOFAR層放流</span>
+                    <span>📡 4. 防衛省交渉 ＆ 潜水艦SOFAR層放流</span>
                   </button>
                 </div>
 
@@ -3348,7 +3348,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                         <div className="rounded bg-slate-950/80 border border-slate-800 p-2.5 space-y-1">
                           <span className="font-bold text-amber-300 flex items-center gap-1">
-                            ③ 怪異の動機と火山刺激（古文書）
+                            ③ 巨大生物の動機と火山刺激（古文書）
                           </span>
                           <p className="text-slate-300 text-[10px] leading-relaxed">
                             古文書に『巨大生物は地磁気と星の石（隕石）が放つ特殊な物質を追って集め、海底付近で特別な振動を起こして海底火山を目覚めさせる』と記録されていた。
@@ -3572,16 +3572,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ4: 防衛庁運用企画局長・岸部との緊急電話交渉 ＆ 潜水艦SOFAR層深夜放流 --- */}
+                {/* --- タブ4: 防衛省運用企画局長・岸部との緊急電話交渉 ＆ 潜水艦SOFAR層深夜放流 --- */}
                 {day6ActiveTab === "sonar_network" && (
                   <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-cyan-900/60 text-xs">
                     <div className="space-y-1.5">
                       <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400" />
-                        <span>📡 【防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉 ＆ 潜水艦深海SOFAR層事前放流】</span>
+                        <span>📡 【防衛省 運用企画局長・岸部（きしべ）との直接電話交渉 ＆ 潜水艦深海SOFAR層事前放流】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed">
-                        完成した祝詞音声を海中へ届けるため、長津（岸部局長の親戚）の個人的コネクションを通じて朝潮危機管理官（PC1）と貝浜リエゾン（PC2）を中心に合同対策チーム全員が防衛庁運用企画局長・岸部（きしべ）と緊急交渉を敢行。海上自衛隊潜水艦の深海SOFAR層（水深1,000m）潜航放流と、翌朝の「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」を合意させます。
+                        完成した祝詞音声を海中へ届けるため、長津（岸部局長の親戚）の個人的コネクションを通じて朝潮危機管理官（PC1）と貝浜リエゾン（PC2）を中心に合同対策チーム全員が防衛省運用企画局長・岸部（きしべ）と緊急交渉を敢行。海上自衛隊潜水艦の深海SOFAR層（水深1,000m）潜航放流と、翌朝の「直ちに魚雷を撃たずクジラの捕食を見守り、実弾攻撃を抑制・待機（スタンドバイ）させること」を合意させます。
                       </p>
                     </div>
 
@@ -3592,16 +3592,16 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         📢 【長津オペレーターの仲介アナウンス（特別配布カードSP-07）】:
                       </strong>
                       <p className="italic text-cyan-100 leading-relaxed">
-                        （🎙️ 首席オペレーター 長津）:「――防衛庁において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
+                        （🎙️ 首席オペレーター 長津）:「――防衛省において自衛隊部隊の運用を統括する運用企画局長の岸部（きしべ）は、実は私の親戚（叔父）にあたりまして、直通の連絡先があります。この音声を使うには海上自衛隊の協力が必要だと思います。しかし、厳格な岸部局長がこんな作戦を許可してくれるかどうか……。みなさん、私にできることは連絡して回線を繋ぐことだけです。説得を頼みますね」
                       </p>
                     </div>
 
-                    {/* 防衛庁 運用企画局長・岸部との直接電話交渉パネル */}
+                    {/* 防衛省 運用企画局長・岸部との直接電話交渉パネル */}
                     <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-3.5 space-y-3 font-mono text-blue-100">
                       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-900/60 pb-1.5">
                         <span className="font-bold text-amber-300 flex items-center gap-1.5 text-xs">
                           <PhoneCall className="h-4 w-4 text-amber-400" />
-                          <span>📞 【極秘ホットライン：防衛庁 運用企画局長・岸部（きしべ）との直接電話交渉】</span>
+                          <span>📞 【極秘ホットライン：防衛省 運用企画局長・岸部（きしべ）との直接電話交渉】</span>
                         </span>
                         <span className="text-[10px] bg-red-950 text-red-300 px-2 py-0.5 rounded border border-red-800 font-bold">
                           長津の親戚コネクション直通回線
@@ -3613,7 +3613,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           （ツーツーツー……ガチャッ。受話器の向こうから、重苦しく威圧感のある声が響く）
                         </p>
                         <p className="italic text-blue-200">
-                          （🎙️ 防衛庁 運用企画局長・岸部）:「――防衛庁運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
+                          （🎙️ 防衛省 運用企画局長・岸部）:「――防衛省運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
                         </p>
                       </div>
 
@@ -3629,7 +3629,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は完全無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
-                            <p>・<strong>伝達方法A（大出力放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、人工的な音を大出力で響かせる（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
                             <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
@@ -3644,7 +3644,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手:</strong>
                             <p>・小笠原〜伊豆諸島沖の太平洋に散らばるクジラの群れが、音を受け取ってから全速力で泳いで駿河湾へ集結するには<strong>6〜8時間の移動時間</strong>が必要（浪寄の特別配布カードSP-06）。</p>
-                            <p>・怪異は明朝には駿河湾へ到達するため、6〜8時間前である<strong>今夜（前日の深夜）のうちに音の発信を開始しなければ物理的に絶対間に合わない！</strong></p>
+                            <p>・巨大生物は明朝には駿河湾へ到達するため、6〜8時間前である<strong>今夜（前日の深夜）のうちに音の発信を開始しなければ物理的に絶対間に合わない！</strong></p>
                           </div>
                         </div>
                       </div>
@@ -3656,7 +3656,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <span>🤝 【岸部局長の屈服・承認（合意成立）】:</span>
                         </strong>
                         <p className="italic text-cyan-100 leading-relaxed text-[11px]">
-                          （🎙️ 防衛庁 運用企画局長・岸部）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛庁運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、貴官らの祝詞音源を大出力放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
+                          （🎙️ 防衛省 運用企画局長・岸部）:「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海音響の伝達とクジラの遊泳速度（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛省運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、水中スピーカー（水中音響送信機）より貴官らの人工音源（祝詞音源）を大出力で放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」
                         </p>
                       </div>
                     </div>
@@ -3686,7 +3686,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         className="w-full flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 disabled:opacity-50 text-white font-bold py-2.5 text-xs transition shadow-lg"
                       >
                         <Volume2 className="h-4 w-4" />
-                        {day6ReadyStatus === "idle" && "潜水艦ハイドロスピーカー装填信号をテスト試聴する"}
+                        {day6ReadyStatus === "idle" && "潜水艦の水中スピーカー（水中音響送信機）装填信号をテスト試聴する"}
                         {day6ReadyStatus === "testing" && "信号テスト再生中……"}
                         {day6ReadyStatus === "ready" && "装填信号を再テスト試聴（深夜SOFAR放流・Day 7待機完了）"}
                       </button>
@@ -3771,14 +3771,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <div className="rounded bg-black/50 border border-rose-950 p-3 text-[11px] text-slate-200 space-y-2 font-mono leading-relaxed">
                     <p>
-                      怪異が水深600〜1,000mの深海を維持して駿河湾奥へ突入。湾奥の最終防衛ラインに陣取る海上自衛隊の潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも「攻撃抑制」を死守し、固唾を呑んで見守ります。
+                      巨大生物が水深600〜1,000mの深海を維持して駿河湾奥へ突入。湾奥の最終防衛ラインに陣取る海上自衛隊の潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも「攻撃抑制」を死守し、固唾を呑んで見守ります。
                     </p>
                     <p className="text-cyan-200">
-                      直後――深海ソナーに無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！
-                      クジラたちは自らの頭部から放つ<strong>生体ソナー（エコーロケーション）</strong>で怪異を自力探知し、本能のまま深海へ一斉潜航・大捕食を敢行！
+                      直後――水中聴音網（パッシブソナー網）に無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！
+                      クジラたちは自らの頭部から放つ<strong>生体ソナー（エコーロケーション）</strong>で巨大生物を自力探知し、本能のまま深海へ一斉潜航・大捕食を敢行！
                     </p>
                     <p className="text-emerald-300 font-bold">
-                      怪異の超群体は完全にクジラたちの胃袋へ呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず、直前で「発射中止（スタンドダウン）」が下令されました！
+                      巨大生物の超群体は完全にクジラたちの胃袋へ呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず、直前で「発射中止（スタンドダウン）」が下令されました！
                     </p>
                   </div>
                 </div>
@@ -3787,7 +3787,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 <div className="rounded-lg bg-slate-950/90 border border-cyan-800/80 p-3 flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <Volume2 className="h-4 w-4 text-cyan-400" />
-                    <span className="text-xs text-slate-200 font-bold">決戦音響ログ（大出力ソナー祝詞 ＆ クジラたちの呼応クリック音）:</span>
+                    <span className="text-xs text-slate-200 font-bold">決戦音響ログ（人工音源の大出力放流 ＆ クジラたちの呼応クリック音）:</span>
                   </div>
                   <button
                     onClick={handleDay7Broadcast}
@@ -3798,29 +3798,35 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </button>
                 </div>
 
-                {/* ② 長津オペレーターの感涙アナウンス */}
+                {/* ② 長津オペレーターの作戦成功アナウンス（NG-08） */}
                 <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-4 space-y-2.5 shadow-md">
                   <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                     <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                       <Radio className="h-4 w-4 text-cyan-400 animate-pulse" />
-                      <span>② 📢 【首席オペレーター 長津 感涙の作戦成功アナウンス】</span>
+                      <span>② 📢 【首席オペレーター 長津 作戦成功アナウンス（NG-08）】</span>
                     </span>
                   </div>
                   <div className="space-y-2 bg-black/60 p-3.5 rounded border border-cyan-950 text-slate-100 font-mono text-[11px] leading-relaxed">
                     <p className="italic">
-                      （🎙️ 首席オペレーター 長津）:「――各員へ緊急報告！ 海自潜水艦の深海音響探知により、前代未聞の巨大な生体音響反応を探知！ ……クジラです！ 昨夜から放流を続けた祝詞に応え、太平洋沖から夜を徹して泳いできたマッコウクジラの大群が……駿河湾口深海へ到達いたしました！」
+                      （🎙️ 首席オペレーター 長津）:「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。」
                     </p>
                     <p className="italic text-cyan-200">
-                      「クジラたちの頭部から放たれた強力な生体ソナーが、水深800mの暗黒に潜む怪異を完全に捉えました！ 群れが一斉に深海へ突入……捕食行動を開始！ ――信じられません、怪異の細胞間ネットワーク同調音が、クジラたちの音波に呑み込まれ、急速に崩壊・分断されていきます！ クジラたちが……太古の盟約通り、大獲物を喰らい尽くしています！」
+                      「　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。」
+                    </p>
+                    <p className="italic text-cyan-100">
+                      「　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています。」
                     </p>
                     <p className="italic text-emerald-200">
-                      「――気象庁火山監視課より緊急電！ 富士山地下深部における火山性微動、急激に減衰……完全に停止いたしました！ 海底噴火の連鎖も完全に沈静化！ 富士山の破局噴火危機は……完全に回避されました！」
+                      「　――気象庁火山監視課より緊急電！ 富士山地下深部における火山性微動、急激に減衰しており、さきほど完全に停止が確認できました！」
                     </p>
                     <p className="italic text-amber-200">
-                      「防衛省・自衛艦隊司令部より全潜水艦へ通達入電！ 『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』！ 自衛隊の実弾は一発も撃たれることなく、海底火山を刺激するリスクも完全に消滅いたしました！」
+                      「　防衛省・自衛艦隊司令部より全潜水艦へ通達入電、『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』の命令がありました！」
+                    </p>
+                    <p className="italic text-slate-200">
+                      「　このあと引き続き巨大生物が復活してこないかは継続監視を行うようですが、現状クジラたちが、太古からの盟約に従って巨大生物を殲滅。富士山噴火を直前で停止できたと言っていいと考えられます。」
                     </p>
                     <p className="italic text-white font-bold border-t border-cyan-900/60 pt-2 text-xs">
-                      「……勝ったのです。朝潮危機管理官、貝浜リエゾン、坂凪隊長、太刀魚観測員、浪寄准教授、初瀬さん……！ 太古から受け継がれた海の約束と、みなさんが結集した科学と勇気が……この国を、日本を救いました……っ！！」
+                      「　皆さん、やりました。我々と、クジラの勝利です」
                     </p>
                   </div>
                 </div>
@@ -3898,7 +3904,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       （🎙️ ニュースアナウンサー）:「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。<br /><br />
                       伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、<strong>一連の危機事態が完全に沈静化した</strong>と発表しました。<br /><br />
                       政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。<br /><br />
-                      政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同海難対策本部』の特別チームが機転を効かせ、<strong>深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を沈静化・駆除することに成功したため、海上自衛隊による武力攻撃は不要となった</strong>とのことです。<br /><br />
+                      政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせ、<strong>深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を沈静化・駆除することに成功したため、海上自衛隊による武力攻撃は不要となった</strong>とのことです。<br /><br />
                       巨大生物の無力化に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。<br /><br />
                       会見の最後で総理大臣は、『一発の砲火も交えることなく、現場の機転と科学の力で日本を救った合同対策本部のメンバーたちは、まさに我が国の誇りでありヒーローである』と、その功績を最大限に称える声明を発表しています――」
                     </p>
@@ -3915,7 +3921,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <div className="rounded bg-indigo-950/50 border border-indigo-800/60 p-3.5 space-y-2 text-[11px] text-slate-200 font-mono">
                     <p className="italic leading-relaxed">
-                      テレビから流れる臨時ニュースと、日本中を包む安堵のざわめきを背に、合同海難対策本部のメンバーたちは静かにデスクを片付け、それぞれの日常へと戻っていく。
+                      テレビから流れる臨時ニュースと、日本中を包む安堵のざわめきを背に、合同対策本部のメンバーたちは静かにデスクを片付け、それぞれの日常へと戻っていく。
                     </p>
                   </div>
                 </div>
