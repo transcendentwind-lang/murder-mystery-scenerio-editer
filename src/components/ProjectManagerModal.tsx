@@ -44,7 +44,6 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
   // 新規作成フォームの状態
   const [newTitle, setNewTitle] = useState("");
-  const [newSubtitle, setNewSubtitle] = useState("");
   const [newPlayerCount, setNewPlayerCount] = useState<number>(5);
   const [newHasGm, setNewHasGm] = useState<boolean>(true);
   const [newConcept, setNewConcept] = useState("");
@@ -59,7 +58,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
     const created = createEmptyProject({
       title: newTitle.trim(),
-      subtitle: newSubtitle.trim() || "新規シナリオ",
+      subtitle: "",
       playerCount: newPlayerCount,
       hasGm: newHasGm,
       concept: newConcept.trim() || "本作の世界観と舞台設定",
@@ -73,7 +72,6 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
     // リセット
     setNewTitle("");
-    setNewSubtitle("");
     setNewConcept("");
     setNewTargetExperience("");
     onClose();
@@ -264,9 +262,6 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                                 </span>
                               )}
                             </div>
-                            <p className="text-xs text-slate-400 truncate mt-0.5">
-                              {p.subtitle || "（サブタイトル未設定）"}
-                            </p>
                           </div>
                         </div>
 
@@ -376,19 +371,6 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                     value={newTitle}
                     onChange={(e) => setNewTitle(e.target.value)}
                     placeholder="例: 白銀の閉鎖病棟、時計塔の三重奏、宵闇のコロシアム"
-                    className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1.5">
-                    サブタイトル・キャッチコピー
-                  </label>
-                  <input
-                    type="text"
-                    value={newSubtitle}
-                    onChange={(e) => setNewSubtitle(e.target.value)}
-                    placeholder="例: 吹雪に閉ざされた6人の医師たち / 誰も嘘を吐かない殺人事件"
                     className="w-full rounded-xl border border-slate-700 bg-slate-900 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500"
                   />
                 </div>

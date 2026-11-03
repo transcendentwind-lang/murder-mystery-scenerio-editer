@@ -154,7 +154,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
           <div className="grid grid-cols-6 gap-2 text-[11px]">
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-amber-400 mb-1">Day 1: 発端の伏線</span>
-              <p className="text-slate-300">船長証言『クジラじゃない。神社へお参りする』。怪異の存在と神社の信仰が提示される。</p>
+              <p className="text-slate-300">船長証言『クジラじゃない。神社へお参りする』。巨大生物の存在と神社の信仰が提示される。</p>
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-amber-400 mb-1">Day 2: 音響シグネチャー</span>
@@ -174,7 +174,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-emerald-400 mb-1">Day 6: 舌クリック新言語</span>
-              <p className="text-slate-300">祝詞の神髄＝舌クリック音！6人全員の知見で8語新言語祝詞を合成し、海自ソナー網へ装填。</p>
+              <p className="text-slate-300">祝詞の神髄＝舌クリック音！6人全員の知見で8語新言語祝詞を合成し、潜水艦の水中スピーカー（水中音響送信機）へ装填。</p>
             </div>
           </div>
         </div>
@@ -247,10 +247,10 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             </p>
             <div className="rounded bg-slate-900 border border-slate-800 p-2 text-[11px] text-slate-300 space-y-1">
               <p>
-                📜 <strong>太古の前例</strong>: 古文書には『海より現れし巨大な烏賊（イカ）の如き触手の塊りを、鯨を呼び寄せて喰らわせた』とあり、怪異の正体（巨大なイカの群体）と捕食解決の決定打が記されています。
+                📜 <strong>太古の前例</strong>: 古文書には『海より現れし巨大な烏賊（イカ）の如き触手の塊りを、鯨を呼び寄せて喰らわせた』とあり、巨大生物の正体（巨大なイカの群体）と捕食解決の決定打が記されています。
               </p>
               <p className="text-amber-300/90 pt-0.5 border-t border-slate-800">
-                ⚠️ <strong>祝詞の真実</strong>: 祝詞の日本語（文言）自体に力があるのではなく、祝詞を唱える口と舌の動きによって『舌クリック音』を発生させることが本体です。普通に読んだだけでは海面で反射するため、音響パルスとしてソナー網から放流する必要があります。
+                ⚠️ <strong>祝詞の真実</strong>: 祝詞の日本語（文言）自体に力があるのではなく、祝詞を唱える口と舌の動きによって『舌クリック音』を発生させることが本体です。普通に読んだだけでは海面で反射するため、潜水艦の水中スピーカー（水中音響送信機）から人工音源を大出力で放流する必要があります。
               </p>
             </div>
           </div>

@@ -185,7 +185,6 @@ export default function WorkbenchPage() {
                 {project.title}
                 <ChevronDown className="h-3.5 w-3.5 text-slate-400 group-hover:text-indigo-400 transition" />
               </h1>
-              <span className="text-xs font-normal text-slate-400">― {project.subtitle} ―</span>
             </button>
             <p className="text-[11px] text-indigo-400 font-mono">
               MM-Workbench : {project.playerCount}人用 マダミス・LARP制作

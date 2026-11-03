@@ -574,7 +574,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <rect width="245" height="86" rx="6" fill="#0c192c" opacity="0.95" stroke="#1e293b" strokeWidth="1.2" />
             <text x="14" y="18" fill="#38bdf8" fontSize="10.5" fontWeight="bold">【作戦海図仕様 / W-3100】</text>
             <text x="14" y="34" fill="#cbd5e1" fontSize="8.5">縮尺: 1:200,000 ｜ 漸長緯度図法 (WGS-84)</text>
-            <text x="14" y="48" fill="#cbd5e1" fontSize="8.5">管轄: 海上保安庁・自衛隊 統合対策本部</text>
+            <text x="14" y="48" fill="#cbd5e1" fontSize="8.5">管轄: 海上保安庁・関係機関 合同対策本部</text>
             <text x="14" y="64" fill="#38bdf8" fontSize="8.5" fontWeight="bold">作戦セクター規格:</text>
             <text x="14" y="76" fill="#7dd3fc" fontSize="8" fontFamily="monospace">全36セクター (COL-1〜6 × ROW-A〜F)</text>
           </g>

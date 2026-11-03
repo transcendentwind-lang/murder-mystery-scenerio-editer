@@ -162,9 +162,6 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
                 </span>
                 <h3 className="text-lg font-black text-white mt-1">
                   {project.title}
-                  <span className="ml-2 text-sm font-normal text-slate-300">
-                    ― {project.subtitle} ―
-                  </span>
                 </h3>
                 <div className="mt-2 flex items-center gap-4 text-xs text-indigo-200">
                   <span>プレイ人数: <strong>{project.playerCount}名</strong> (GM必須)</span>
@@ -227,18 +224,6 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
                   value={project.title}
                   onChange={(e) =>
                     onUpdateProject((prev) => ({ ...prev, title: e.target.value }))
-                  }
-                  className="w-full rounded border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
-                />
-              </div>
-
-              <div>
-                <label className="font-bold text-slate-300 block mb-1">サブタイトル</label>
-                <input
-                  type="text"
-                  value={project.subtitle}
-                  onChange={(e) =>
-                    onUpdateProject((prev) => ({ ...prev, subtitle: e.target.value }))
                   }
                   className="w-full rounded border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
                 />

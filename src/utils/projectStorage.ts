@@ -180,7 +180,7 @@ export function createEmptyProject(params?: {
     createdAt: now,
     updatedAt: now,
     title: params?.title || "新規マーダーミステリー（仮）",
-    subtitle: params?.subtitle || "サブタイトル・概要",
+    subtitle: params?.subtitle ?? "",
     concept:
       params?.concept ||
       "作品の世界観、舞台背景、物語のテーマをここに記述します。",

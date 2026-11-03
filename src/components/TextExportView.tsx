@@ -262,9 +262,6 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
                 </span>
                 <h3 className="text-xl font-black text-white mt-1">
                   {project.title}
-                  <span className="ml-3 text-sm font-normal text-slate-300">
-                    ― {project.subtitle} ―
-                  </span>
                 </h3>
                 <div className="mt-3 flex flex-wrap items-center gap-6 text-xs text-indigo-200">
                   <span>
@@ -326,40 +323,21 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
           ) : (
             /* 企画概要 直接編集モード */
             <div className="space-y-4 max-w-5xl mx-auto w-full text-xs">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="font-bold text-slate-300 block mb-1">
-                    メインタイトル
-                  </label>
-                  <input
-                    type="text"
-                    value={project.title}
-                    onChange={(e) =>
-                      onUpdateProject?.((prev) => ({
-                        ...prev,
-                        title: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
-
-                <div>
-                  <label className="font-bold text-slate-300 block mb-1">
-                    サブタイトル
-                  </label>
-                  <input
-                    type="text"
-                    value={project.subtitle}
-                    onChange={(e) =>
-                      onUpdateProject?.((prev) => ({
-                        ...prev,
-                        subtitle: e.target.value,
-                      }))
-                    }
-                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
-                  />
-                </div>
+              <div>
+                <label className="font-bold text-slate-300 block mb-1">
+                  メインタイトル
+                </label>
+                <input
+                  type="text"
+                  value={project.title}
+                  onChange={(e) =>
+                    onUpdateProject?.((prev) => ({
+                      ...prev,
+                      title: e.target.value,
+                    }))
+                  }
+                  className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-white focus:outline-none focus:border-indigo-500"
+                />
               </div>
 
               <div>
