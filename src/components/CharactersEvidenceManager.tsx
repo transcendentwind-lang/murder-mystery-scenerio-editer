@@ -206,7 +206,6 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                       {char.profession}
                     </span>
                     <div className="mt-2 flex items-center gap-3 text-[10px] text-slate-500">
-                      <span>固有能力: {char.capabilities.length}個</span>
                       <span>所持証拠: {charEvCount}枚</span>
                     </div>
                   </button>
@@ -215,7 +214,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
             </div>
           </div>
 
-          {/* 右カラム：選択PCの詳細・イントロ・できること */}
+          {/* 右カラム：選択PCの詳細・イントロ */}
           <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
             <div className="mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
               <div>
@@ -231,33 +230,15 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               {/* イントロダクション（導入文） */}
               <div>
                 <label className="mb-1.5 flex items-center justify-between text-xs font-semibold text-indigo-300">
-                  <span>イントロダクション（プレイヤーが最初に読む導入ストーリー）</span>
+                  <span>あなたの記憶（プレイヤーが最初に読む導入ストーリー）</span>
                   <span className="text-[10px] text-slate-500">1ヶ月前の流星雨や初動の背景</span>
                 </label>
                 <textarea
                   value={selectedChar.introduction}
                   onChange={(e) => handleUpdateChar("introduction", e.target.value)}
-                  rows={4}
+                  rows={6}
                   className="w-full rounded-lg border border-slate-800 bg-slate-950 p-3 text-xs leading-relaxed text-slate-200 focus:border-indigo-500 focus:outline-none"
                 />
-              </div>
-
-              {/* 初期所持品 */}
-              <div>
-                <label className="mb-1 flex items-center gap-1.5 text-xs font-semibold text-slate-300">
-                  <Package className="h-3.5 w-3.5 text-indigo-400" />
-                  初期所持品（通信端末・観測データ・遺品など）
-                </label>
-                <div className="flex flex-wrap gap-2 pt-1">
-                  {selectedChar.initialItems.map((item, idx) => (
-                    <span
-                      key={idx}
-                      className="rounded-md border border-slate-700 bg-slate-950 px-2.5 py-1 text-xs text-slate-300"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
               </div>
 
             </div>

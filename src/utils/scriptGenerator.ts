@@ -36,13 +36,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
   chars.forEach((c) => {
     md += `### ${c.name} (${c.profession})\n`;
     md += `- **配置**: ${c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現場"}\n`;
-    md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n`;
-    md += `- **初期所持品**: ${(c.initialItems || []).join("、")}\n`;
-    md += `- **固有能力**:\n`;
-    (c.capabilities || []).forEach((cap) => {
-      md += `  - [Day ${cap.targetPhase}] **${cap.name}**: ${cap.description}\n`;
-    });
-    md += `\n`;
+    md += `- **公開プロフィール**: ${c.handout?.publicProfile || ""}\n\n`;
   });
 
   md += `## 📅 6. 7日間のインシデント進行概要\n`;
@@ -85,9 +79,7 @@ export function generateSynopsisPlainText(project: MMProject): string {
   text += `■ 5. 登場人物（海難救助対策チーム ${playerCount}名: 海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n`;
   chars.forEach((c) => {
     text += `・${c.name} (${c.profession}) [${c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現場"}]\n`;
-    text += `  概要: ${c.handout?.publicProfile || ""}\n`;
-    text += `  初期所持品: ${(c.initialItems || []).join("、")}\n`;
-    text += `  固有能力: ${(c.capabilities || []).map((cap) => `[Day ${cap.targetPhase}] ${cap.name}`).join("、")}\n\n`;
+    text += `  概要: ${c.handout?.publicProfile || ""}\n\n`;
   });
 
   text += `■ 6. 7日間のインシデント進行フロー\n`;
@@ -124,27 +116,7 @@ export function formatCharacterHandoutMarkdown(c: Character): string {
 }
 
 /**
- * 別配付カード（初期所持品・携行アイテム ＆ 固有能力・専門スキル）単体セクション生成ヘルパー
- */
-export function formatCharacterCardsMarkdown(c: Character): string {
-  let md = `### 🃏 ${c.name}（${c.profession}）配布カード\n\n`;
-
-  md += `#### 【初期所持品・携行アイテムカード】\n`;
-  (c.initialItems || []).forEach((item, idx) => {
-    md += `- **[所持品カード ${idx + 1}]** ${item}\n`;
-  });
-  md += `\n`;
-
-  md += `#### 【固有能力・専門スキルカード】\n`;
-  (c.capabilities || []).forEach((cap, idx) => {
-    md += `- **[スキルカード ${idx + 1} / Day ${cap.targetPhase}] ${cap.name}**\n  ${cap.description}\n`;
-  });
-  md += `\n---\n\n`;
-  return md;
-}
-
-/**
- * キャラクターハンドアウト一覧（本紙 ＋ 別配付カード）Markdown 生成
+ * キャラクターハンドアウト一覧（本紙）Markdown 生成
  */
 export function generateHandoutsOnlyMarkdown(project: MMProject): string {
   const chars = project?.characters || [];
@@ -157,30 +129,6 @@ export function generateHandoutsOnlyMarkdown(project: MMProject): string {
 
   chars.forEach((c) => {
     md += formatCharacterHandoutMarkdown(c);
-  });
-
-  md += `# 🃏 別配付カード一覧（初期所持品・携行アイテム ／ 固有能力・専門スキル）\n\n`;
-  md += `※以下の初期所持品および固有能力は、ハンドアウト本紙とは別のカードとして各プレイヤーに配布します。\n\n---\n\n`;
-  chars.forEach((c) => {
-    md += formatCharacterCardsMarkdown(c);
-  });
-
-  return md;
-}
-
-/**
- * 別配付カード（初期所持品・固有能力）のみ Markdown 生成
- */
-export function generateCharacterCardsOnlyMarkdown(project: MMProject): string {
-  const chars = project?.characters || [];
-  const playerCount = project?.playerCount || chars.length || 6;
-
-  let md = `# ${project?.title || "無題のシナリオ"} ― 別配付カード全集（${playerCount}名編成）\n`;
-  md += `- **内容**: 各プレイヤーにハンドアウト本紙とは別で配布する「初期所持品・携行アイテムカード」および「固有能力・専門スキルカード」\n\n`;
-  md += `---\n\n`;
-
-  chars.forEach((c) => {
-    md += formatCharacterCardsMarkdown(c);
   });
 
   return md;
@@ -214,12 +162,6 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `## 👥 第2章：個人ハンドアウト本紙（全${playerCount}名: 海上保安庁東京本部2名 ＋ 小笠原現地${playerCount === 5 ? "3名" : "4名"}）\n\n`;
   chars.forEach((c) => {
     md += formatCharacterHandoutMarkdown(c);
-  });
-
-  // --- 第2章別冊：別配付カード（初期所持品・固有能力） ---
-  md += `## 🃏 第2章別冊：別配付カード一覧（初期所持品・携行アイテム ＆ 固有能力・専門スキル）\n\n`;
-  chars.forEach((c) => {
-    md += formatCharacterCardsMarkdown(c);
   });
 
   // --- 第3章：7日間タイムライン完全進行台本 ---

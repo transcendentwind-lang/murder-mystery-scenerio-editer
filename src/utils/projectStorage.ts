@@ -39,16 +39,8 @@ export function createEmptyProject(params?: {
       isCulpritCandidate: pcNum <= 3, // 上位候補
       location: "headquarters",
       introduction: `PC${pcNum}の人物概要。当事者としての動機や、事件に関わる立場を記述します。`,
-      capabilities: [
-        {
-          id: `cap-pc${pcNum}-1`,
-          name: `固有調査権限・スキル`,
-          description: `フェーズ中に発動可能な固有の調査アクションや権限。`,
-          targetPhase: 1,
-          unlockedEvidenceIds: [`ev-${pcNum}-1`],
-        },
-      ],
-      initialItems: [`PC${pcNum}の所持品・私物`],
+      capabilities: [],
+      initialItems: [],
       handout: {
         publicProfile: `全員に公開されるPC${pcNum}の表向きの経歴・立ち位置。`,
         internalDrama: {
