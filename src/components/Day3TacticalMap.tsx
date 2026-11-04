@@ -424,7 +424,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             {/* ラベル（船の右側にすっきり横並び配置） */}
             <rect x="26" y="-20" width="200" height="40" rx="4" fill="#082f49" opacity="0.95" stroke="#0ea5e9" strokeWidth="1" />
             <text x="34" y="-6" fill="#38bdf8" fontSize="10.5" fontWeight="bold">
-              ⚓ 海上保安庁 PLH-31「あきつしま」
+              ⚓ 大型巡視船 PLH-31「あきつしま」
             </text>
             <text x="34" y="6" fill="#e0f2fe" fontSize="8.5">
               ヘリ洋上給油中継拠点 (FARP) ｜ 待機海域
@@ -542,7 +542,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
 
             {/* 給油巡視船 */}
             <polygon points="16,66 28,66 30,60 24,58 18,58" fill="#0284c7" />
-            <text x="34" y="64" fill="#e0f2fe" fontSize="9" fontWeight="bold">給油巡視船 PLH「あきつしま」</text>
+            <text x="34" y="64" fill="#e0f2fe" fontSize="9" fontWeight="bold">大型巡視船 PLH「あきつしま」</text>
             <text x="34" y="75" fill="#94a3b8" fontSize="8">画面左下 セクターF-1海域 (待機中)</text>
 
             {/* カルデラ */}

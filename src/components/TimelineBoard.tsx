@@ -843,7 +843,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     昨夜、西之島（Day 1）から北へ約380km離れた「鳥島沖海底カルデラ」において突発的な大規模水蒸気爆発が発生しました。24時間で約380km。時速約6km（日速約150km）の一定ペースで深海を北上する巨大物体が海底火山を次々と刺激している可能性が濃厚です。<br />
-                    これを受け、小笠原基地より<strong>大型捜索ヘリ</strong>を緊急発進させ、洋上に展開する巡視船での洋上給油を中継して現場海域へ投入します。<br />
+                    これを受け、小笠原基地より<strong>大型捜索ヘリ</strong>を緊急発進させ、洋上に展開する大型巡視船『あきつしま』での洋上給油を中継して現場海域へ投入します。<br />
                     <strong>任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して相手との距離を割り出し、その姿（映像）を捉えよ！』</strong>
                   </p>
                 </div>
@@ -932,7 +932,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                       <div className="flex items-center justify-between rounded-lg bg-slate-950/80 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
                         <span>
-                          📍 <strong>縮尺 1:200,000</strong> ｜ 給油拠点: 海図左下 PLH-31「あきつしま」(セクターF-1) ｜ 1セクター: 約20km四方
+                          📍 <strong>縮尺 1:200,000</strong> ｜ 給油拠点: 海図左下 大型巡視船「あきつしま」(セクターF-1) ｜ 1セクター: 約20km四方
                         </span>
                         <span className="text-cyan-400 font-mono">
                           全36セクター（6×6グリッド）索敵盤
@@ -2068,7 +2068,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         ⚓ 小笠原現地組（坂凪・太刀魚・浪寄・初瀬）：洋上展開終了・父島本島へ帰還
                       </strong>
                       <p className="text-[10px] text-slate-300 mt-0.5 leading-relaxed">
-                        長距離ヘリ捜索および巡視船給油ミッションを完遂し、父島二見港へ帰還。島民避難の受け入れと、島に残された記録の調査体制へ移行。
+                        長距離ヘリ捜索および大型巡視船給油ミッションを完遂し、父島二見港へ帰還。島民避難の受け入れと、島に残された記録の調査体制へ移行。
                       </p>
                     </div>
                   </div>
@@ -4182,7 +4182,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     全36セクター（1区画 約20km四方）。海況と海底地形を分析し、クリアな海盆平原にソノブイを投下して索敵を実施せよ。
                   </div>
                   <div className="font-mono text-slate-400">
-                    給油拠点: 海図左下 PLH-31「あきつしま」(セクターF-1)
+                    給油拠点: 海図左下 大型巡視船「あきつしま」(セクターF-1)
                   </div>
                 </div>
               ) : (
@@ -4307,7 +4307,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
                     救難信号発信位置（海図中心：27°04.0&apos;N, 142°06.0&apos;E）を中心に、北東に父島・南島、東側（740, 350）および南東側（660, 480）に危険な暗礁群が点在しています。<br />
-                    各PCの専門知識（風向風速15m/s、表層流速2.0kt、現場海域までの到着所要時間40分、船の姿勢）を合成し、救難艇が急行すべき1時間後の漂流予測海域を自力で作図計算してください。
+                    各PCの専門知識（風向風速15m/s、表層流速2.0kt、現場海域までの到着所要時間40分、船の姿勢）を合成し、巡視船が急行すべき1時間後の漂流予測海域を自力で作図計算してください。
                   </p>
                 </div>
               ) : (
