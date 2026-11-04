@@ -2902,9 +2902,16 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           {sc.categoryLabel}
                         </span>
                       </div>
-                      <p className="text-[10.5px] text-slate-300 leading-relaxed whitespace-pre-wrap">
-                        {sc.description}
-                      </p>
+                      {sc.rubyHtml ? (
+                        <div
+                          className="text-[10.5px] text-slate-300 leading-[1.9] [&_ruby]:whitespace-nowrap [&_rt]:text-[6.5px] [&_rt]:leading-none [&_rt]:text-slate-400"
+                          dangerouslySetInnerHTML={{ __html: sc.rubyHtml }}
+                        />
+                      ) : (
+                        <p className="text-[10.5px] text-slate-300 leading-relaxed whitespace-pre-wrap">
+                          {sc.description}
+                        </p>
+                      )}
                       {sc.fivePlayerFallbackNote && (
                         <div className="text-[9.5px] text-amber-400 font-semibold pt-0.5">
                           {sc.fivePlayerFallbackNote}

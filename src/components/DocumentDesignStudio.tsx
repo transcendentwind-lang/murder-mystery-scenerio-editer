@@ -2999,15 +2999,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                         </h3>
                                       </div>
 
-                                      <div
-                                        className={`${
-                                          card.glossaryNote
-                                            ? "text-[11px] leading-[1.48]"
-                                            : "text-xs leading-relaxed"
-                                        } text-slate-800 whitespace-pre-wrap text-justify`}
-                                      >
-                                        {renderColoredCardBody(card.description)}
-                                      </div>
+                                      {card.rubyHtml ? (
+                                        <div
+                                          className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                          dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
+                                        />
+                                      ) : (
+                                        <div
+                                          className={`${
+                                            card.glossaryNote
+                                              ? "text-[11px] leading-[1.48]"
+                                              : "text-xs leading-relaxed"
+                                          } text-slate-800 whitespace-pre-wrap text-justify`}
+                                        >
+                                          {renderColoredCardBody(card.description)}
+                                        </div>
+                                      )}
                                     </div>
 
                                     <div className="mt-2 space-y-1.5">

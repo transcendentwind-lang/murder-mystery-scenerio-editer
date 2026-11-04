@@ -182,6 +182,7 @@ export interface SpecialCharacterCard {
   title: string;               // カードタイトル
   frontTitleHtml?: string;     // オモテ面改行整形用
   description: string;         // カード詳細テキスト
+  rubyHtml?: string;           // ルビ付きHTML本文（SP-05の古語表記など）
   glossaryNote?: string;       // カード下部余白の初心者向け用語解説（「〜とは：…」）
   categoryLabel: string;       // 例: "特別配布カード・所持品", "特別配布カード・専用記憶"
   accentHex: string;           // バッジ背景色
