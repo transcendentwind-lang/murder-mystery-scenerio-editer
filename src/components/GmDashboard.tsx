@@ -2439,7 +2439,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </button>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「――初瀬（PC6）の実家に保管されていた『神社の祝詞の複製』の注釈『言の葉をただ声高に読むのみでは、海面に弾かれ水底へ届かじ』と、東京班が突き止めた元神主の遺族・吉備津の証言『舌を弾いてクリック音を海中筒から放つものだ』が照合された瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
+                      「――初瀬（PC6）の実家に保管されていた『神社の祝詞の複製』の注釈『言の葉（ことのは）をただ声高（こわだか）に唱うるのみでは届かじ。定めの順を違（たが）えず、海の中へと音（ね）を響かせよ』と、東京班が突き止めた元神主の遺族・吉備津の証言『舌を弾いてクリック音を海中筒から放つものだ』が照合された瞬間、戦慄が走ります。古代の祝詞は人間の喉の歌声ではなかった……舌を上顎・歯茎に強く打ち鳴らす鋭い『舌クリック音（吸着破裂音）』だったのだ！」
                     </p>
                     <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2 text-[11px] text-amber-200 space-y-1">
                       <strong>⚠️ GM進行ヒント（プレイヤーが「祝詞を読めばいいのか？」と誤解した時の誘導）:</strong>
