@@ -2532,6 +2532,44 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
+                  {/* フェーズ3.5：『狂気の深淵を覗く』使用時の5分猶予 ＆ 心臓発作・心停止と救命（遠隔指示＋声かけ）ルール */}
+                  <div className="rounded-xl border border-rose-800/80 bg-[#220912] p-3.5 space-y-2.5 shadow-md">
+                    <div className="flex items-center justify-between border-b border-rose-800/40 pb-1.5">
+                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
+                        <span>💔 【『狂気の深淵を覗く』使用時の5分猶予 ＆ 心臓発作・救命（遠隔指示＋声かけ）ルール】</span>
+                      </span>
+                      <span className="text-[10px] bg-rose-950 text-rose-200 px-2 py-0.5 rounded border border-rose-700 font-bold">
+                        演技不要・口頭宣言と声かけのみ（約45秒）
+                      </span>
+                    </div>
+                    <div className="text-[11px] text-slate-200 space-y-2 leading-relaxed font-mono">
+                      <p className="text-rose-200">
+                        ・プレイヤーがアプリ内の『狂気の深淵を覗き込み、クジラの言語をより理解する』ボタンを押した場合、全24語の意味が判明し<strong>【5分間の猶予（解読時間＋5分延長）】</strong>が与えられます。<br />
+                        ・5分経過後（議論の一区切りまたは祝詞完成直後）、覗いたPCが<strong>【心臓発作により心停止】</strong>した旨を宣言します（※身体接触や床に倒れる等の演技は一切させず、口頭宣言と声かけのみで進行します）。
+                      </p>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-[10.5px]">
+                        <div className="rounded bg-black/50 border border-rose-900/70 p-2.5 space-y-1">
+                          <strong className="text-amber-300 block">▼ A. 小笠原（父島）のPCが心停止した場合：</strong>
+                          <p className="italic text-slate-200">
+                            GM：「『狂気の深淵』を覗いた〇〇さんが激しい心臓発作に襲われ、心停止しました！数分以内に処置しなければ絶命します！（※演技不要、口頭で宣言してください）」
+                          </p>
+                          <p className="text-emerald-300">
+                            ➔ <strong>蘇生条件</strong>：①坂凪または初瀬が口頭で「救命処置（心肺蘇生・AED）を行う」と宣言 ＋ ②初瀬の導き（「意識がなくても耳には最後まで声が届く」）で全員が名前を呼び<strong>「戻ってこい」「まだ死ぬな」と声かけ</strong>を行うことで息を吹き返す。
+                          </p>
+                        </div>
+                        <div className="rounded bg-black/50 border border-rose-900/70 p-2.5 space-y-1">
+                          <strong className="text-cyan-300 block">▼ B. 東京本部のPCが心停止した場合（遠隔指示）：</strong>
+                          <p className="italic text-slate-200">
+                            GM：「東京本部で『狂気の深淵』を覗いた〇〇さんが心臓発作に襲われ、心停止しました！東京には救命の専門家はいません。数分以内に絶命します！（※演技不要、口頭で宣言してください）」
+                          </p>
+                          <p className="text-emerald-300">
+                            ➔ <strong>蘇生条件</strong>：①父島の坂凪または初瀬が通信越しに「東京のメンバーへ遠隔で救命処置の指示を出す」と口頭で宣言 ＋ ②初瀬の導きで東京・父島の仲間が名前を呼び<strong>「戻ってこい」「まだ死ぬな」と声かけ</strong>を行うことで息を吹き返す。
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
                   {/* フェーズ4：祝詞完成 ＆ 防衛省運用企画局長・岸部との直接電話交渉（潜水艦SOFAR層放流・攻撃抑制） */}
                   <div className="rounded-xl border border-cyan-800/80 bg-[#091e24] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">

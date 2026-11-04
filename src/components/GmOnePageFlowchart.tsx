@@ -423,10 +423,10 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               </div>
             </div>
             <div className="mt-1 space-y-1">
-              <div className="rounded bg-indigo-900/90 p-1 text-[8.5px] leading-snug text-indigo-100 border border-indigo-400/40">
-                ⏱️ 解読目安15分（『<strong>狂気の深淵を覗く</strong>』使用時は共有・構文作成のため<strong>＋5分延長</strong>）
+              <div className="rounded bg-indigo-900/90 p-1 text-[8px] leading-snug text-indigo-100 border border-indigo-400/40">
+                ⏱️ 解読15分（『<strong>狂気の深淵</strong>』使用時は<strong>5分猶予の後、心停止発生</strong> ➔ 坂凪・初瀬の救命宣言［東京は遠隔指示］＋<strong>名前を呼び「戻ってこい」と声かけ</strong>で蘇生）
               </div>
-              <div className="rounded bg-rose-950/90 p-1 text-[8.5px] leading-snug text-rose-200 border border-rose-500/40">
+              <div className="rounded bg-rose-950/90 p-1 text-[8px] leading-snug text-rose-200 border border-rose-500/40">
                 ※Day 4が「東京湾」だった場合、冒頭で岸部から<strong>嫌味</strong>が入る
               </div>
             </div>

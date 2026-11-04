@@ -657,9 +657,24 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 （🎙️ 首席オペレーター 長津）:
 「――予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
 
-【GM進行メモ：クジラ言語の解読時間と『狂気の深淵を覗く』使用時の5分延長ルール】
+【GM進行メモ：クジラ言語の解読時間と『狂気の深淵を覗く』使用時の5分猶予 ＆ 心停止・救命（声かけ）ルール】
 ※クジラ言語アプリを用いた新言語祝詞（2語×4組）の解読・組み立て時間は【目安15分】です。
-※もし解読の途中でプレイヤーがアプリ内の【狂気の深淵を覗き込み、クジラの言語をより理解する】ボタンを押した場合は、すべての言語（全24語）の意味が判明しますが、それを全員で共有して構文（2語×4組）に組み立てる時間が必要になるため、解読の制限時間を【5分延長】してください。
+※もし解読の途中でプレイヤーがアプリ内の【狂気の深淵を覗き込み、クジラの言語をより理解する】ボタンを押した場合は、全24語の意味が判明し、【5分間の猶予（解読時間＋5分延長）】が与えられます。
+※5分経過後（議論の一区切りまたは祝詞完成直後）、覗いたプレイヤーは【心臓発作により心停止】に陥ります。身体接触や床に倒れる等の演技は一切させず、以下の口頭宣言と「声かけ」のみで進行してください（所要時間目安：約30〜45秒）。
+
+  ├─ ▼ パターンA：小笠原（父島）のメンバーが心停止した場合
+  （🎙️ GM宣言）：
+  「……その時です。『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！このまま数分が経過すれば絶命してしまいます！（※演技は不要です。対応する場合は口頭で宣言してください）」
+  ➔ 【蘇生条件】：①坂凪（PC3）または初瀬（PC6）が口頭で「救命処置（心肺蘇生・AED）を行う」と宣言し、②初瀬の導き（「意識がなくても耳には最後まで声が届く」）により、仲間が名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。
+  （🎙️ GM蘇生宣言）：
+  「初瀬と坂凪の迅速な心肺蘇生・AED処置、そして通信回線を越えて響く皆さんの『戻ってこい』という呼びかけの声が、暗い深淵の底へと沈みかけていた〇〇さんの耳に届きました。……ドクン！！と力強く心臓が再び脈打ち、〇〇さんは大きく息を吸い込んで意識を取り戻します！」
+
+  └─ ▼ パターンB：東京本部のメンバーが心停止した場合（★遠隔指示＋声かけ）
+  （🎙️ GM宣言）：
+  「……その時です。東京本部で『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！東京本部には救命の専門家はいません。このまま数分が経過すれば絶命してしまいます！（※演技は不要です。対応する場合は口頭で宣言してください）」
+  ➔ 【蘇生条件】：①父島の坂凪（PC3）または初瀬（PC6）が通信越しに「東京のメンバーへ救命処置（心肺蘇生・AED）の遠隔指示を出す」と口頭で宣言し、②初瀬の導きにより、東京・父島の仲間が名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。
+  （🎙️ GM蘇生宣言）：
+  「1,000キロ離れた父島からの的確な遠隔指示による救命処置、そして海を渡って届いた皆さんの『戻ってこい』という呼びかけの声が、深淵の底から〇〇さんの意識を現世へと引き戻しました。……ドクン！！と再び心臓が脈打ち、〇〇さんは意識を取り戻します！」
 
 【長津の電話交渉前アナウンス（新言語祝詞の音声完成後・Day 6 途中① 指令書 ＆ SP-07連動）】
 （🎙️ 首席オペレーター 長津）:
@@ -799,7 +814,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   6: [
     "【Day 6 開始時】7名プレイ時は長津（PC7）へ特別配布カード『SP-07：防衛省 運用企画局長とのコネクション』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート（朝8時時点：巨大生物の完全回復・北上再開と火山性微動再開、駿河湾到達まで24時間）』を手渡す（目標時間: 30分）",
     "東京班が徹夜で回収した残りの資料、朝倉教授の音響実録4件（EV-31〜34）と2語成語の構文規則、初瀬の『神社の祝詞の複製』と元神主遺族（吉備津）の証言を統合し、クジラを招集する「新言語祝詞」（【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】の2語×4組）を完成させる（解読時間目安：15分）",
-    "【『狂気の深淵を覗く』使用時の5分延長ルール】プレイヤーがクジラ言語アプリで『狂気の深淵を覗く』を使用した場合は、全24語の意味が判明するため、それを全員で共有して構文（2語×4組）に組み立てる時間として解読の制限時間を【5分延長】する",
+    "【『狂気の深淵を覗く』使用時の5分猶予 ＆ 心停止・救命（声かけ）ルール】アプリで『狂気の深淵を覗く』を使用した場合は【5分の猶予（＋5分延長）】の後、覗いたPCが心臓発作・心停止に陥る。GMが心停止を宣言してから数分以内に、坂凪または初瀬による救命処置の口頭宣言（東京班が倒れた場合は通信越しの遠隔救命指示の宣言）＋初瀬の導きによる『名前を呼んで戻ってこい・まだ死ぬなと声をかける』宣言があれば息を吹き返す（※身体演技や接触は不要）",
     "祝詞音声の完成後、朝潮へ『Day 6 途中① 指令書』を渡し、長津が親戚（叔父）である防衛省運用企画局長・岸部（きしべ）への直通回線を繋いで（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
     "【岸部局長の反論による思考誘導】祝詞の解読ができていれば、もし『水深1,000mのSOFAR層（潜水艦）』や『クジラの移動時間（6〜8時間＝今夜の送信が必要）』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
     "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げ、続けて深夜の潜水艦による深海SOFAR層での水中スピーカー（水中音響送信機）を用いた人工音源の大出力放流開始（NG-07）をアナウンスする",
@@ -891,7 +906,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 3 && (!existing.readAloudScript.includes("NG-02") || !existing.readAloudScript.includes("NG-04"))) ||
       (dayNumber === 4 && (!existing.readAloudScript.includes("即応総力体制") || !existing.readAloudScript.includes("最終目的地の結論分岐"))) ||
       (dayNumber === 5 && (!existing.readAloudScript.includes("時速5km") || !existing.readAloudScript.includes("どうして魚雷の命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.readAloudScript.includes("朝8時") || !existing.readAloudScript.includes("5分延長") || existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
+      (dayNumber === 6 && (!existing.readAloudScript.includes("朝8時") || !existing.readAloudScript.includes("心臓発作") || existing.readAloudScript.includes("作戦名（オペレーション名）"))) ||
       (dayNumber === 7 && (!existing.readAloudScript.includes("NG-08") || !existing.readAloudScript.includes("いずれにしても、君たちが正しかった") || !existing.readAloudScript.includes("クジラと思われる生物が100頭以上")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
@@ -903,7 +918,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
       (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || !existing.gmCheckpoints.some((c) => c.includes("5分延長")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
+      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
@@ -1711,6 +1726,195 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   // 全キャラクターの個人ハンドアウト（B5規格）を一括印刷
   const handlePrintAllCharactersB5 = () => {
     printCharacterHandoutsB5(project.characters, project.title);
+  };
+
+  // Day 1〜Day 7 のGM進行資料すべてを一括でA4印刷 / PDF保存（最新の台本・分岐・チェックリストを反映）
+  const handlePrintAllGmProgressionSheets = () => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const pagesHtml = (project.timeline || [])
+      .map((step, idx) => {
+        const note = getGmNoteForDay(project, step.dayNumber);
+        const dayFc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
+        const stepEvidences = allEvidences.filter((e) => e.foundPhase === step.dayNumber);
+
+        const branchesHtml = dayFc
+          ? `
+          <div class="rounded-lg border-2 border-slate-800 bg-white p-3.5 space-y-2">
+            <div class="flex items-center justify-between border-b border-slate-200 pb-1.5">
+              <span class="font-extrabold text-xs text-slate-900">🔀 Day ${dayFc.dayNumber} 分岐・対応指針（${escapeHtml(
+                dayFc.decisionTaskTitle
+              )}）</span>
+              <span class="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 text-[10px] font-bold text-slate-700">${
+                dayFc.hasFailureBranch ? "分岐・反論誘導あり" : "失敗要素なし"
+              }</span>
+            </div>
+            <div class="space-y-2">
+              ${dayFc.branches
+                .map(
+                  (br) => `
+                <div class="rounded border border-slate-300 bg-slate-50 p-2.5 text-xs space-y-1">
+                  <div class="flex items-center justify-between font-bold text-slate-900">
+                    <span>${escapeHtml(br.conditionLabel)}</span>
+                    <span class="font-mono text-[10px] text-indigo-900">${escapeHtml(
+                      br.nextStepArrow || ""
+                    )}</span>
+                  </div>
+                  <div class="text-[11px] font-semibold text-slate-800">➔ ${escapeHtml(
+                    br.outcomeTitle
+                  )}</div>
+                  <div class="text-[10.5px] text-slate-700 whitespace-pre-wrap leading-relaxed bg-white rounded p-2 border border-slate-200">${escapeHtml(
+                    br.gmActionAndDialogue
+                  )}</div>
+                  ${
+                    br.penaltyOrCarryOver
+                      ? `<div class="text-[10px] font-bold text-rose-800">📌 ${escapeHtml(
+                          br.penaltyOrCarryOver
+                        )}</div>`
+                      : ""
+                  }
+                </div>`
+                )
+                .join("")}
+            </div>
+          </div>`
+          : "";
+
+        return `
+        <div class="${idx > 0 ? "page-break-before" : ""} space-y-4">
+          <div class="rounded-md border border-slate-300 bg-slate-50 p-2.5 text-[11px] text-slate-800 font-bold">
+            🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
+          </div>
+          <div class="rounded-md p-3.5 bg-slate-900 text-white flex items-end justify-between gap-4">
+            <div>
+              <span class="block text-[10px] uppercase tracking-wider text-slate-300">Day ${
+                step.dayNumber
+              } 状況タイトル</span>
+              <h1 class="mt-0.5 text-base font-bold leading-tight">${escapeHtml(
+                step.situationTitle
+              )}</h1>
+            </div>
+            <div class="flex items-center gap-4 text-xs shrink-0">
+              <div>
+                <span class="block text-[10px] text-slate-300">観測地点</span>
+                <div class="font-semibold">${escapeHtml(step.locationName)}</div>
+              </div>
+              <div class="border-l border-white/25 pl-3">
+                <span class="block text-[10px] text-slate-300">目標進行時間</span>
+                <div class="font-semibold">${note.targetMinutes} 分</div>
+              </div>
+            </div>
+          </div>
+          <div class="rounded-md border-2 border-slate-800 bg-slate-50/50 p-4">
+            <div class="mb-2 flex items-center justify-between">
+              <span class="inline-block rounded bg-slate-900 px-2.5 py-1 text-xs font-bold text-white">📢 【GM演出用ナレーション ＆ NPCセリフ台本】</span>
+              <span class="text-[10px] text-slate-500">Day ${step.dayNumber} 読み上げスクリプト</span>
+            </div>
+            <div class="whitespace-pre-wrap text-[11px] font-semibold leading-relaxed font-mono text-slate-900 bg-white p-3.5 rounded border border-slate-200">${escapeHtml(
+              note.readAloudScript
+            )}</div>
+          </div>
+          ${branchesHtml}
+          <div class="rounded-md border border-slate-300 p-3.5 bg-white">
+            <div class="mb-1.5 text-xs font-bold text-slate-900">✅ Day ${
+              step.dayNumber
+            } GM進行チェックリスト</div>
+            <div class="space-y-1">
+              ${(note.gmCheckpoints || [])
+                .map(
+                  (chk) => `
+                <div class="flex items-start gap-2 text-[11px] text-slate-800">
+                  <span class="mt-0.5 inline-block h-3 w-3 rounded border border-slate-500 bg-white shrink-0"></span>
+                  <span>${escapeHtml(chk)}</span>
+                </div>`
+                )
+                .join("")}
+            </div>
+          </div>
+          <div class="rounded-md border border-slate-300 p-3 bg-white">
+            <div class="mb-1.5 text-xs font-bold text-slate-900">📂 Day ${
+              step.dayNumber
+            } 開示証拠資料（${stepEvidences.length}件）</div>
+            <div class="flex flex-wrap gap-1.5">
+              ${
+                stepEvidences.length > 0
+                  ? stepEvidences
+                      .map(
+                        (ev) =>
+                          `<span class="rounded border border-slate-300 bg-slate-50 px-2.5 py-1 text-[11px] font-bold text-slate-800">📄 ${escapeHtml(
+                            ev.title
+                          )}</span>`
+                      )
+                      .join("")
+                  : `<span class="text-[11px] text-slate-500 italic">このフェーズで開示される証拠はありません</span>`
+              }
+            </div>
+          </div>
+        </div>`;
+      })
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - GM進行資料（Day 1〜7 一括印刷）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: sans-serif;
+    }
+    .page-break-before {
+      page-break-before: always !important;
+      break-before: page !important;
+    }
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
   };
 
   // 全19枚の全体提示地図・写真を一括でA4印刷 / PDF保存（タイトル・ファイル名等の一切の文字を入れず純粋な画像のみ出力）
@@ -3674,15 +3878,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <a
-                        href="/pdfs/gm-branching-flowchart.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
                         フローチャートを印刷 / PDF保存（A4・1枚）
-                      </a>
+                      </button>
                     </div>
                   </div>
 
@@ -3706,15 +3909,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
-                      <a
-                        href="/pdfs/gm-complete-progression-guide.pdf"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        このDay {activeTimelineStep.dayNumber} のみを印刷 / PDF保存
+                      </button>
+                      <button
+                        type="button"
+                        onClick={handlePrintAllGmProgressionSheets}
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
                         進行資料を一括印刷 / PDF保存（Day 1〜7）
-                      </a>
+                      </button>
                     </div>
                   </div>
 
