@@ -582,8 +582,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // 狂気の深淵モード（画面全体の枠が赤くなり、日本語を全てあてはめた状態）
   const [isAbyssMode, setIsAbyssMode] = useState(false);
-  // 狂気の深淵を覗いた後の5分間（300秒）猶予カウントダウン（0秒で心臓発作・心停止）
-  const [abyssRemainingSeconds, setAbyssRemainingSeconds] = useState<number>(300);
   // 3回のブラームホーンに合わせて画面を激しく揺らす演出ステート
   const [isAbyssShaking, setIsAbyssShaking] = useState(false);
   const iosHapticLabelRef = useRef<HTMLLabelElement | null>(null);
@@ -668,20 +666,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     }
   };
 
-  // 狂気の深淵モード中の5分（300秒）カウントダウンタイマー
-  useEffect(() => {
-    if (!isAbyssMode) return;
-    const timer = window.setInterval(() => {
-      setAbyssRemainingSeconds((prev) => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [isAbyssMode]);
-
   const handleResetPlayerLabelsToInitial = () => {
     const resetState = { ...LOCKED_INITIAL_MEANINGS };
     setPlayerAssignedLabels(resetState);
     setIsAbyssMode(false);
-    setAbyssRemainingSeconds(300);
     setIsAbyssShaking(false);
     abyssShakeTimersRef.current.forEach((id) => window.clearTimeout(id));
     abyssShakeTimersRef.current = [];
@@ -705,9 +693,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // 「狂気の深淵を覗き込み、クジラの言語をより理解する」ボタンを押した時の処理
   const handleEnterAbyssMode = () => {
-    if (!isAbyssMode) {
-      setAbyssRemainingSeconds(300);
-    }
     setIsAbyssMode(true);
     handleFillAllCorrectLabelsForPreview();
     audioEngine?.playAbyssBraamTriple();
@@ -1555,37 +1540,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                 </div>
               </div>
 
-              {/* 狂気の深淵モード発動時：5分間の猶予カウントダウン ＆ 心臓発作・心停止警告バナー */}
-              {isAbyssMode && (
-                <div
-                  className={`px-3.5 py-2.5 border-b text-[11px] leading-snug transition-colors ${
-                    abyssRemainingSeconds === 0
-                      ? "bg-red-950 border-red-500 text-red-100 animate-pulse"
-                      : "bg-red-950/90 border-red-600/60 text-red-200"
-                  }`}
-                >
-                  <div className="flex items-center justify-between font-extrabold text-xs">
-                    <span>
-                      {abyssRemainingSeconds > 0
-                        ? "⚠️ 狂気の深淵を覗き込みました（5分間の猶予）"
-                        : "💔 5分経過：心臓発作発生・心停止状態"}
-                    </span>
-                    <span className="rounded bg-black/60 border border-red-400/60 px-2 py-0.5 font-mono text-red-300">
-                      {abyssRemainingSeconds > 0
-                        ? `残り ${Math.floor(abyssRemainingSeconds / 60)}:${String(
-                            abyssRemainingSeconds % 60
-                          ).padStart(2, "0")}`
-                        : "0:00（心停止）"}
-                    </span>
-                  </div>
-                  <p className="mt-1 text-[10.5px] text-red-200/90">
-                    {abyssRemainingSeconds > 0
-                      ? "全24語の意味が判明しました（解読時間が＋5分延長されます）。ただし5分経過後、あなたは激しい心臓発作に襲われ【心停止】に至ります。"
-                      : "狂気の深淵の代償によりあなたの心臓が停止しました。GMの宣言に従い、数分以内に救命処置と『声かけ』が行われなければ絶命します。"}
-                  </p>
-                </div>
-              )}
-
               {/* ==========================================
                  画面分岐：
                  A. 「日本語をあてはめる」別画面（assigningTargetWordId が選択されている時）
@@ -2083,7 +2037,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     </div>
 
                     {/* アプリ画面の一番下：狂気の深淵ボタン */}
-                    <div className="pt-3 border-t border-slate-800/80 space-y-2">
+                    <div className="pt-3 border-t border-slate-800/80">
                       <button
                         type="button"
                         onClick={handleEnterAbyssMode}
@@ -2096,25 +2050,6 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         <Eye className="h-4 w-4 shrink-0 text-red-400" />
                         <span>狂気の深淵を覗き込み、クジラの言語をより理解する</span>
                       </button>
-
-                      {isAbyssMode && (
-                        <div className="rounded-xl border border-red-500/80 bg-red-950/90 p-2.5 text-[11px] text-red-100 leading-relaxed">
-                          <div className="flex items-center justify-between font-bold text-red-200">
-                            <span>
-                              {abyssRemainingSeconds > 0
-                                ? "⚠️ 5分間の猶予ののち心臓発作・心停止が発生します"
-                                : "💔 5分経過：心臓発作により心停止しました"}
-                            </span>
-                            <span className="font-mono text-red-300">
-                              {abyssRemainingSeconds > 0
-                                ? `残り ${Math.floor(abyssRemainingSeconds / 60)}:${String(
-                                    abyssRemainingSeconds % 60
-                                  ).padStart(2, "0")}`
-                                : "0:00"}
-                            </span>
-                          </div>
-                        </div>
-                      )}
                     </div>
                   </div>
                 </>
