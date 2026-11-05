@@ -672,9 +672,6 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
             "👉 GMのカード配布処理：プレイヤーが合議して選んだ調査項目の証拠カードを配布し、全員で共有・議論させます。",
         },
       ],
-      gmGuides: [
-        "⚠️ GMネタバレ防止注意：このDay 2の段階では「ダイオウイカの超群体である」という真相は絶対に明かさないでください。「ダイオウイカの触手のはずなのに、なぜ数百mもの巨大な影なのか？」というサイズ矛盾を議論させます。",
-      ],
     },
   ],
 
@@ -829,7 +826,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
   5: [
     {
       phaseNumber: "フェーズ 1",
-      phaseTitle: "御蔵島沖の海底噴火・富士山地下微動 ＆ 到達猶予時間の算出・独自調査",
+      phaseTitle: "御蔵島沖の海底噴火・富士山地下微動（残り48時間） ＆ 独自調査",
       startTrigger: "Day 4が終了し、Day 5へ移行した時点",
       handoutBadges: [
         "SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間（浪寄へ配布）",
@@ -840,18 +837,17 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       nagatsuAnnouncements: [
         {
           sourceLabel: "『DAY 5 指令書（COMMAND-BRIEFING-DAY05）』の長津ブリーフィングと同文",
-          text: "「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より至急指令が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】。危機到達まであと何時間の猶予があるのか直ちに計算して報告せよ！』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」",
+          text: "「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」",
         },
       ],
       gmGuides: [
-        "残距離240km ÷ 時速5km ＝ 【残り48時間】の猶予時間を算出させて報告を受けます（ミッション①）。",
-        "続けてDay 5の調査資料（朝倉教授のクジラ言語・『了解した』以外はすべて2語成語のペアで会話する構文規則など）を精査させます（ミッション②）。",
+        "Day 5の調査資料（朝倉教授のクジラ言語・『了解した』以外はすべて2語成語のペアで会話する構文規則など）を精査させます。",
       ],
     },
     {
       phaseNumber: "フェーズ 2",
       phaseTitle: "魚雷命中後のソナー観測報告 ＆ 防衛省作戦本部からの緊急照会",
-      startTrigger: "猶予時間（48時間）の算出とDay 5調査資料の精査が一通り進んだ時点（Day 5後半）",
+      startTrigger: "Day 5調査資料の精査が一通り進んだ時点（Day 5後半）",
       handoutBadges: [
         "長津カード NG-06（長津へ配布）",
         "DAY 5 途中① 指令書 COMMAND-BRIEFING-DAY05-MID1（朝潮へ配布）",
@@ -1093,8 +1089,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 ■ フェーズ2：優先調査項目の選択（東京1枠・小笠原2枠） ＆ 調査結果の共有
 ⏱️ 開始タイミング・条件：長津のブリーフィング終了後、朝潮（PC1）が調査項目の選定を開始した時点
 【GMからの案内】：
-「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」
-⚠️ GM注意（ネタバレ防止）：このDay 2の段階では「ダイオウイカの超群体である」という正体は絶対に明かさず、「ダイオウイカの触手のはずなのに、なぜ数百mもの巨大な影なのか？」というサイズ矛盾を議論させます。`,
+「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」`,
 
   3: `■ フェーズ1：鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始
 ⏱️ 開始タイミング・条件：Day 2の調査共有が完了し、Day 3へ移行した時点
@@ -1151,16 +1146,16 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊全部隊の動員を正式決定いたしました！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-  5: `■ フェーズ1：御蔵島沖の海底噴火・富士山地下微動 ＆ 到達猶予時間の算出・独自調査
+  5: `■ フェーズ1：御蔵島沖の海底噴火・富士山地下微動（残り48時間） ＆ 独自調査
 ⏱️ 開始タイミング・条件：Day 4が終了し、Day 5へ移行した時点
 📦 配布・提示：浪寄へ『SP-06』、朝潮へ『DAY 5 指令書』配布 ＋ 『Day 5 監視海図』・Day 5調査資料を開示
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 指令書』と同文） ━━┓
-「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より至急指令が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】。危機到達まであと何時間の猶予があるのか直ちに計算して報告せよ！』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」
+「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 ■ フェーズ2：魚雷命中後のソナー観測報告 ＆ 防衛省作戦本部からの緊急照会
-⏱️ 開始タイミング・条件：猶予時間（48時間）の算出とDay 5調査資料の精査が一通り進んだ時点（Day 5後半）
+⏱️ 開始タイミング・条件：Day 5調査資料の精査が一通り進んだ時点（Day 5後半）
 📦 配布：長津へ『NG-06』、朝潮へ『DAY 5 途中① 指令書』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 途中① 指令書』・『NG-06』と同文） ━━┓
@@ -1261,7 +1256,6 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
     "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "東京側（3択中1つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
-    "※GM注意（ネタバレ防止）：この段階では「ダイオウイカの超群体」という真相は絶対に明かさないこと",
   ],
   3: [
     "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
@@ -1281,9 +1275,8 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
     "防衛省が「害獣駆除（災害派遣）」として海自全部隊動員・実弾迎撃作戦を決定した通達（NG-05）を読み上げる",
   ],
   5: [
-    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
-    "残距離240km・時速5kmから、富士山噴火までの猶予時間（48時間）を計算させる",
-    "朝倉教授のクジラ構文規則（EV-30：『了解した』以外のクジラ言語はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
+    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 25分）",
+    "朝倉教授のクジラ構文規則（EV-30：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
     "終盤、防衛省作戦本部から貝浜への直通無線（NG-06 ＆ Day 5 途中①指令書）を演出し、「微動は収まったが、アクティブソナー（ソナー探知）でゆっくり深海に沈み込みながら元の大きさに戻っている傾向が確認できる。どうして魚雷命中後に復活してしまうのか？なぜ富士山を目指すのか？」を浪寄准教授らに確認させる（※Day 4で東京湾と答えていた場合は、より駿河湾に近い位置での遅滞攻撃になった旨を添える）",
   ],
   6: [
@@ -1371,6 +1364,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       !existing.readAloudScript ||
       existing.readAloudScript === step?.incidentOverview ||
       !existing.readAloudScript.includes("┏━━ 📡 オペレーター（長津）のアナウンス") ||
+      existing.readAloudScript.includes("ネタバレ防止") ||
+      existing.readAloudScript.includes("何時間の猶予") ||
       existing.readAloudScript.includes("【NPC 船長") ||
       existing.readAloudScript.includes("防衛庁") ||
       existing.readAloudScript.includes("怪異") ||
@@ -1381,8 +1376,16 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
 
     const isOldCheckpoints =
       !Array.isArray(existing.gmCheckpoints) ||
-      existing.gmCheckpoints.length <= 3 ||
-      existing.gmCheckpoints.some((c) => c.includes("防衛庁") || c.includes("怪異") || c.includes("ハイドロスピーカー") || c.includes("救難艇")) ||
+      existing.gmCheckpoints.length < 3 ||
+      existing.gmCheckpoints.some(
+        (c) =>
+          c.includes("ネタバレ防止") ||
+          c.includes("猶予時間（48時間）を計算") ||
+          c.includes("防衛庁") ||
+          c.includes("怪異") ||
+          c.includes("ハイドロスピーカー") ||
+          c.includes("救難艇")
+      ) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
       (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
@@ -2269,8 +2272,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     printCharacterHandoutsB5(project.characters, project.title);
   };
 
-  // Day 1〜Day 7 のGM進行資料すべてを一括でA4印刷 / PDF保存（フェーズ開始条件・長津アナウンス囲み枠・12px文字サイズ対応）
-  const handlePrintAllGmProgressionSheets = () => {
+  // Day別（単一DayまたはDay 1〜Day 7一括）のGM進行資料をA4印刷 / PDF保存（複数ページまたぎ時に文字切れ・枠切れを起こさないページネーション対応）
+  const handlePrintAllGmProgressionSheets = (targetDayNumber?: number) => {
     const escapeHtml = (str: string) =>
       str
         .replace(/&/g, "&amp;")
@@ -2278,7 +2281,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 
-    const pagesHtml = (project.timeline || [])
+    const targetSteps =
+      typeof targetDayNumber === "number"
+        ? (project.timeline || []).filter((s) => s.dayNumber === targetDayNumber)
+        : project.timeline || [];
+
+    const pagesHtml = targetSteps
       .map((step, idx) => {
         const note = getGmNoteForDay(project, step.dayNumber);
         const structuredPhases = GM_DAY_STRUCTURED_PHASES[step.dayNumber] || [];
@@ -2290,7 +2298,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 .map((ph) => {
                   const badgesHtml =
                     ph.handoutBadges && ph.handoutBadges.length > 0
-                      ? `<div class="flex flex-wrap items-center gap-1.5">
+                      ? `<div class="print-no-split flex flex-wrap items-center gap-1.5">
                           <span class="text-[12px] font-extrabold text-slate-700">📦 配布・提示：</span>
                           ${ph.handoutBadges
                             .map(
@@ -2308,7 +2316,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       ? ph.nagatsuAnnouncements
                           .map(
                             (ng) => `
-                          <div class="rounded-lg border-2 border-indigo-700 bg-indigo-50/80 p-3 space-y-1.5">
+                          <div class="print-no-split rounded-lg border-2 border-indigo-700 bg-indigo-50/80 p-3 space-y-1.5">
                             <div class="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-200 pb-1">
                               <span class="inline-block rounded bg-indigo-800 px-2.5 py-0.5 text-[12px] font-bold text-white">📡 【オペレーター（長津）からの案内】</span>
                               <span class="text-[12px] font-bold text-indigo-950">✅ ${escapeHtml(
@@ -2337,7 +2345,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                   ? "border-rose-600 bg-rose-50/70"
                                   : "border-slate-500 bg-slate-50";
                               return `
-                              <div class="rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
+                              <div class="print-no-split rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
                                 ${
                                   ga.branchBadge
                                     ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
@@ -2366,7 +2374,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                   const guidesHtml =
                     ph.gmGuides && ph.gmGuides.length > 0
-                      ? `<div class="rounded border border-slate-300 bg-slate-50 p-2.5 space-y-1">
+                      ? `<div class="print-no-split rounded border border-slate-300 bg-slate-50 p-2.5 space-y-1">
                           ${ph.gmGuides
                             .map(
                               (g) =>
@@ -2380,18 +2388,20 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                   return `
                   <div class="rounded-lg border-2 border-slate-800 bg-white p-3.5 space-y-2.5">
-                    <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1.5">
-                      <div class="flex items-center gap-2">
-                        <span class="rounded bg-slate-900 px-2.5 py-0.5 text-[12px] font-extrabold text-white">${escapeHtml(
-                          ph.phaseNumber
-                        )}</span>
-                        <span class="text-[13px] font-extrabold text-slate-900">${escapeHtml(
-                          ph.phaseTitle
-                        )}</span>
+                    <div class="print-no-split space-y-2">
+                      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1.5">
+                        <div class="flex items-center gap-2">
+                          <span class="rounded bg-slate-900 px-2.5 py-0.5 text-[12px] font-extrabold text-white">${escapeHtml(
+                            ph.phaseNumber
+                          )}</span>
+                          <span class="text-[13px] font-extrabold text-slate-900">${escapeHtml(
+                            ph.phaseTitle
+                          )}</span>
+                        </div>
                       </div>
-                    </div>
-                    <div class="rounded border border-amber-400 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-950">
-                      ⏱️ 開始タイミング・発生条件：${escapeHtml(ph.startTrigger)}
+                      <div class="rounded border border-amber-400 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-950">
+                        ⏱️ 開始タイミング・発生条件：${escapeHtml(ph.startTrigger)}
+                      </div>
                     </div>
                     ${badgesHtml}
                     ${nagatsuHtml}
@@ -2406,33 +2416,35 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
         return `
         <div class="${idx > 0 ? "page-break-before" : ""} space-y-3 text-[12px]">
-          <div class="rounded-md border border-slate-300 bg-slate-50 p-2.5 text-[12px] text-slate-800 font-bold">
-            🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
-          </div>
-          <div class="rounded-md p-3.5 bg-slate-900 text-white flex items-end justify-between gap-4">
-            <div>
-              <span class="block text-[12px] uppercase tracking-wider text-slate-300">Day ${
-                step.dayNumber
-              } 状況タイトル</span>
-              <h1 class="mt-0.5 text-base font-bold leading-tight">${escapeHtml(
-                step.situationTitle
-              )}</h1>
+          <div class="print-no-split space-y-2.5">
+            <div class="rounded-md border border-slate-300 bg-slate-50 p-2.5 text-[12px] text-slate-800 font-bold">
+              🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
             </div>
-            <div class="flex items-center gap-4 text-[12px] shrink-0">
+            <div class="rounded-md p-3.5 bg-slate-900 text-white flex items-end justify-between gap-4">
               <div>
-                <span class="block text-[12px] text-slate-300">観測地点</span>
-                <div class="font-semibold">${escapeHtml(step.locationName)}</div>
+                <span class="block text-[12px] uppercase tracking-wider text-slate-300">Day ${
+                  step.dayNumber
+                } 状況タイトル</span>
+                <h1 class="mt-0.5 text-base font-bold leading-tight">${escapeHtml(
+                  step.situationTitle
+                )}</h1>
               </div>
-              <div class="border-l border-white/25 pl-3">
-                <span class="block text-[12px] text-slate-300">目標進行時間</span>
-                <div class="font-semibold">${note.targetMinutes} 分</div>
+              <div class="flex items-center gap-4 text-[12px] shrink-0">
+                <div>
+                  <span class="block text-[12px] text-slate-300">観測地点</span>
+                  <div class="font-semibold">${escapeHtml(step.locationName)}</div>
+                </div>
+                <div class="border-l border-white/25 pl-3">
+                  <span class="block text-[12px] text-slate-300">目標進行時間</span>
+                  <div class="font-semibold">${note.targetMinutes} 分</div>
+                </div>
               </div>
             </div>
           </div>
           <div class="space-y-3">
             ${phasesHtml}
           </div>
-          <div class="rounded-md border border-slate-300 p-3.5 bg-white">
+          <div class="print-no-split rounded-md border border-slate-300 p-3.5 bg-white">
             <div class="mb-1.5 text-[12px] font-bold text-slate-900">✅ Day ${
               step.dayNumber
             } GM進行チェックリスト</div>
@@ -2440,7 +2452,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               ${(note.gmCheckpoints || [])
                 .map(
                   (chk) => `
-                <div class="flex items-start gap-2 text-[12px] text-slate-800">
+                <div class="print-no-split flex items-start gap-2 text-[12px] text-slate-800">
                   <span class="mt-1 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0"></span>
                   <span>${escapeHtml(chk)}</span>
                 </div>`
@@ -2448,7 +2460,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 .join("")}
             </div>
           </div>
-          <div class="rounded-md border border-slate-300 p-3 bg-white">
+          <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
             <div class="mb-1.5 text-[12px] font-bold text-slate-900">📂 Day ${
               step.dayNumber
             } 開示証拠資料（${stepEvidences.length}件）</div>
@@ -2487,28 +2499,36 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>${escapeHtml(project.title)} - GM進行資料（Day 1〜7 一括印刷）</title>
+  <title>${escapeHtml(project.title)} - GM進行資料（${
+        typeof targetDayNumber === "number" ? `Day ${targetDayNumber}` : "Day 1〜7 一括印刷"
+      }）</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     @page {
       size: A4 portrait;
-      margin: 10mm;
+      margin: 12mm 10mm;
     }
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       box-sizing: border-box;
     }
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: #ffffff;
       color: #0f172a;
       font-family: sans-serif;
+      overflow: visible !important;
+      height: auto !important;
     }
     .page-break-before {
       page-break-before: always !important;
       break-before: page !important;
+    }
+    .print-no-split {
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
   </style>
 </head>
@@ -3932,10 +3952,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全11枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-01〜NG-10・NG-08は枝番2枚組）
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-02〜NG-10・NG-08は枝番2枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -5177,7 +5197,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     <div className="flex flex-wrap items-center gap-2">
                       <button
                         type="button"
-                        onClick={handlePrintDesignedSheet}
+                        onClick={() => handlePrintAllGmProgressionSheets(activeTimelineStep.dayNumber)}
                         className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
@@ -5185,7 +5205,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       </button>
                       <button
                         type="button"
-                        onClick={handlePrintAllGmProgressionSheets}
+                        onClick={() => handlePrintAllGmProgressionSheets()}
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />

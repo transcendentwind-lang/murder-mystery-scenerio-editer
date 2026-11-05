@@ -1586,13 +1586,6 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         ・<strong className="text-white">③ 噴火の因果関係</strong>: 影の北上移動（時速約6km）が西之島直下を通過した直後に噴火が誘発された（T-2 / F-3 / F-4）。噴火のせいで巨大生物が現れたのではなく、巨大生物の通過が海底火山を刺激して噴火させている！
                       </p>
                     </div>
-
-                    <div className="mt-2.5 rounded bg-red-950/50 p-2.5 border border-red-900/50 text-[11px] text-red-200">
-                      ⚠️ <strong>GM演出上の最重要注意（ネタバレ防止）</strong>:
-                      <p className="mt-0.5 text-slate-300">
-                        このDay 2の段階では、<strong>「ダイオウイカの超群体である」という正体は絶対に明かさないでください</strong>。プレイヤーたちには「ダイオウイカの触手のはずなのに、なぜ数百mもの超巨大な影なのか？」「海底火山を噴火させながら北上しているものは一体何なのか？」という強烈なサイズ矛盾とサスペンスを抱かせ、議論を深めてもらいます。
-                      </p>
-                    </div>
                   </div>
                 </div>
               )}
@@ -2451,30 +2444,23 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ1.5：防衛省・火山噴火予知連絡会からの緊急指令「富士山噴火猶予時間の計算」 */}
+                  {/* フェーズ1.5：防衛省・火山噴火予知連絡会からの連絡「危機到達まで残り48時間」 */}
                   <div className="rounded-xl border border-rose-800/80 bg-[#1f1018] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-rose-400 animate-pulse" />
-                        【フェーズ1.5：防衛省・火山噴火予知連絡会からの緊急指令「富士山噴火猶予時間の計算」】
+                        【フェーズ1.5：防衛省・火山噴火予知連絡会からの連絡「危機到達まで残り48時間」】
                       </span>
                       <span className="text-[10px] text-rose-300 font-mono bg-rose-950 px-2 py-0.5 rounded border border-rose-800">
-                        タイムリミット手計算パズル
+                        タイムリミット共有
                       </span>
                     </div>
                     <div className="rounded-lg bg-black/60 border border-rose-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-rose-300 block font-bold">
-                        📢 【長津の至急指令アナウンス（GM読み上げ用）】:
+                        📢 【長津のアナウンス（『DAY 5 指令書』と同文）】:
                       </strong>
                       <p className="italic leading-relaxed font-mono text-slate-100">
-                        （🎙️ 総合オペレーター 長津）:「――防衛省および火山噴火予知連絡会より至急指令が入電！『駿河湾奥・富士山地下マグマ溜まり直下までの残距離は【約240km】。巨大生物の現在の深海巡航速度は【時速5km】。もしこのまま直進した場合、富士山噴火の危機に至るまであとどのぐらいの猶予があるのか、おおよその時間を直ちに計算して報告せよ！』とのことです！ 各員、至急計算をお願いします！」
-                      </p>
-                    </div>
-                    <div className="rounded bg-rose-950/40 border border-rose-800/60 p-2 text-[11px] text-rose-200 space-y-1">
-                      💡 <strong>GM進行メモ・手計算パズルの回し方</strong>:
-                      <p className="text-slate-300 leading-relaxed">
-                        ・<strong>計算式</strong>: 残距離 240km ÷ 巡航速度 時速5km ＝ <strong>【48時間】（残り丸2日 ➔ Day 7未明に到達！）</strong><br />
-                        ・<strong>演出の狙い</strong>: 答えをそのまま証拠資料（グラフ）で配るのではなく、プレイヤー自身に割り算を計算させることで、「えっ……あと48時間しかない！？ Day 7の未明に到達してしまうぞ！」と自分たちの手で絶望的なタイムリミットを突き止めさせます（※証拠資料「破局噴火タイムリミット算出グラフ」は提示しません）。
+                        （🎙️ 総合オペレーター 長津）:「――防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです！」
                       </p>
                     </div>
                   </div>

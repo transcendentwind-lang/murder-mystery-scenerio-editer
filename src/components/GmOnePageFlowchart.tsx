@@ -371,7 +371,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
-                噴火猶予48時間の算出 ＆
+                危機到達まで残り48時間 ＆
                 <br />
                 海自魚雷命中と深海回復
               </div>
@@ -380,7 +380,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
           <div className="col-span-9 p-2 bg-slate-50/70 flex items-center justify-between gap-2 text-[10.5px]">
             <div className="space-y-0.5">
               <div className="font-bold text-slate-900">
-                🔵【共通進行】残距離240km ÷ 時速5km ＝ 【残り48時間】を算出 ／ 魚雷命中後も深海で元の大きさに戻る傾向（NG-06・Day 5 途中①）
+                🔵【共通進行】長津より残距離240km・時速5kmで【残り48時間】と報告 ／ 魚雷命中後も深海で元の大きさに戻る傾向（NG-06・Day 5 途中①）
               </div>
               <div className="text-[10px] text-rose-900 font-semibold">
                 📌 Day 4「東京湾」結論時の変化：自衛隊の展開が遅れたため、<strong>「より駿河湾に近い位置」で攻撃が行われた描写</strong>になる（以降の進行・数値は共通）
