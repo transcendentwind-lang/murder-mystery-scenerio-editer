@@ -725,7 +725,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「――夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、目標は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および水中聴音網（パッシブソナー網）より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
 「――巨大生物が水深600〜1,000mを維持して駿河湾付近まで接近！ 周辺海域に陣取る海自潜水艦部隊は、昨夜の約束通り魚雷発射管を開きながらも『攻撃抑制』を死守し、固唾を呑んで待機しています。直後――水中聴音網（パッシブソナー網）に無数のクリック音反響！ 昨夜から放流を続けた祝詞に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！ クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で巨大生物を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！ 巨大生物の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止！ 自衛隊の実弾は一発も撃たれず発射中止（スタンドダウン）となりました！」
 
-【フェーズ2：総合オペレーター 長津 作戦成功アナウンス（長津アナウンスカード NG-08）】
+【フェーズ2：総合オペレーター 長津 作戦成功アナウンス（長津アナウンスカード NG-08-1・NG-08-2）】
 （🎙️ 総合オペレーター 長津）:
 「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。
 　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。
@@ -824,7 +824,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   7: [
     "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 30分）",
-    "長津が作戦成功アナウンス（NG-08：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
+    "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
     "防衛省幹部からの直通電話を演出し、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部が機転を効かせて解決したヒーローとして発表し自衛隊の活動を不要にするか」の選択をプレイヤーに委ね、「いずれにしても、君たちが正しかった。感謝する」と結ぶ",
     "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊による撃滅報道 ／ パターンB：合同対策本部が特別な薬剤を撃ち込み自衛隊の活動不要で解決したとするヒーロー報道）を読み上げる",
     "朝潮の指揮で対策本部を解散し、エピローグの情景を読み上げてゲームを終了・感想戦へ移行する",
@@ -1755,6 +1755,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
         padding: 4.2mm !important;
         box-shadow: none !important;
         overflow: hidden !important;
+      }
+      .card-body-12px {
+        font-size: 12px !important;
       }
       .card-empty-slot {
         width: 92mm !important;
@@ -3137,12 +3140,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                               {card.rubyHtml ? (
                                 <div
-                                  className="text-[11px] leading-[1.75] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
+                                  className="card-body-12px text-[12px] leading-[1.8] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                   dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
                                 />
                               ) : (
                                 <div
-                                  className="text-[11px] leading-[1.48] text-slate-800 whitespace-pre-wrap text-justify"
+                                  className={`card-body-12px text-[12px] ${
+                                    card.glossaryNote ? "leading-[1.48]" : "leading-[1.6]"
+                                  } text-slate-800 whitespace-pre-wrap text-justify`}
                                 >
                                   {renderColoredCardBody(card.description)}
                                 </div>
@@ -3382,16 +3387,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : (
                   /* ------------------------------------------------------------
-                     🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全10枚・表紙／内容ページ分離・両面印刷対応）
+                     🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全11枚・表紙／内容ページ分離・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全11枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-01〜NG-10・NG-08は枝番2枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3501,11 +3506,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
                           >
                             <div>
-                              <div
-                                className={`flex items-center justify-between text-xs ${
-                                  nc.cardCode === "NG-08" ? "mb-1" : "mb-2"
-                                }`}
-                              >
+                              <div className="flex items-center justify-between text-xs mb-2">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: nc.accentHex }}
@@ -3517,31 +3518,23 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </span>
                               </div>
 
-                              <div
-                                className={`border-b-2 border-slate-900 ${
-                                  nc.cardCode === "NG-08" ? "pb-1 mb-1.5" : "pb-1.5 mb-2.5"
-                                }`}
-                              >
+                              <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
                                 <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
                                   {nc.title}
                                 </h4>
                               </div>
 
                               <div
-                                className={`text-[11px] ${
-                                  nc.cardCode === "NG-08"
-                                    ? "leading-[1.58]"
+                                className={`card-body-12px text-[12px] ${
+                                  nc.cardCode === "NG-09" || nc.cardCode === "NG-10"
+                                    ? "leading-[1.72]"
                                     : "leading-[1.82]"
                                 } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold`}
                                 dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                               />
                             </div>
 
-                            <div
-                              className={`border-t border-dashed border-slate-300 ${
-                                nc.cardCode === "NG-08" ? "pt-1 mt-1" : "pt-2 mt-3"
-                              } flex items-center justify-end text-xs`}
-                            >
+                            <div className="border-t border-dashed border-slate-300 pt-2 mt-2 flex items-center justify-end text-xs">
                               <span className="font-mono font-bold text-slate-500">
                                 {nc.cardCode} / 10
                               </span>
@@ -3806,10 +3799,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
 
                             <div
-                              className={`${
+                              className={`card-body-12px text-[12px] ${
                                 ev.glossaryNote
-                                  ? "text-[11px] leading-[1.46]"
-                                  : "text-xs leading-relaxed"
+                                  ? "leading-[1.48]"
+                                  : "leading-[1.6]"
                               } text-slate-800 whitespace-pre-wrap text-justify`}
                             >
                               {renderColoredCardBody(ev.description)}

@@ -3018,7 +3018,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex items-center justify-between border-b border-cyan-800/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-cyan-400 animate-pulse" />
-                        <span>📢 【フェーズ2：総合オペレーター 長津 作戦成功アナウンス（NG-08）】</span>
+                        <span>📢 【フェーズ2：総合オペレーター 長津 作戦成功アナウンス（NG-08-1・NG-08-2）】</span>
                       </span>
                     </div>
                     <div className="space-y-2 bg-black/50 p-3 rounded border border-cyan-950 text-slate-100 font-mono text-[11px] leading-relaxed">
