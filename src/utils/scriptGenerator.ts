@@ -1027,24 +1027,26 @@ export function printWhaleSonarGuideA4(): void {
       background: #ffffff;
     }
     .header-banner {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #ffffff;
+      background: #f0f9ff;
+      color: #0f172a;
       border-radius: 8px;
-      padding: 6mm 7mm;
+      padding: 5.5mm 7mm;
       text-align: center;
-      border-bottom: 4px solid #0891b2;
+      border: 2px solid #0284c7;
+      border-bottom: 4px solid #0284c7;
     }
     .header-sub {
       font-size: 9.5pt;
-      font-weight: 700;
+      font-weight: 800;
       letter-spacing: 0.18em;
-      color: #67e8f9;
+      color: #0369a1;
       margin-bottom: 2mm;
     }
     .header-title {
       font-size: 21pt;
       font-weight: 900;
       letter-spacing: 0.06em;
+      color: #0f172a;
       margin: 0;
       line-height: 1.25;
     }
@@ -1197,11 +1199,11 @@ export function printWhaleSonarGuideA4(): void {
       flex-shrink: 0;
     }
 
-    /* スマホ画面サンプル枠（ダークUI再現） */
+    /* スマホ画面サンプル枠（トナー節約・ライトトーン再現） */
     .mock-phone-frame {
-      background: #020617;
-      color: #f8fafc;
-      border: 2.5px solid #1e293b;
+      background: #f8fafc;
+      color: #0f172a;
+      border: 2px solid #475569;
       border-radius: 14px;
       padding: 4.5mm 5mm;
       display: flex;
@@ -1212,29 +1214,29 @@ export function printWhaleSonarGuideA4(): void {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid #1e293b;
+      border-bottom: 1.5px solid #cbd5e1;
       padding-bottom: 2mm;
     }
     .mock-phone-header-title {
       font-size: 9.5pt;
       font-weight: 900;
-      color: #67e8f9;
+      color: #0369a1;
       letter-spacing: 0.04em;
     }
     .mock-phone-header-badge {
       font-size: 8pt;
       font-weight: 700;
-      color: #94a3b8;
-      background: #0f172a;
-      border: 1px solid #334155;
+      color: #334155;
+      background: #ffffff;
+      border: 1px solid #94a3b8;
       border-radius: 4px;
       padding: 0.8mm 2mm;
     }
     .sample-block {
       position: relative;
-      border: 1.5px solid #1e293b;
+      border: 1.5px solid #cbd5e1;
       border-radius: 10px;
-      background: #0f172a;
+      background: #ffffff;
       padding: 3mm 3.5mm;
     }
     .callout-row {
@@ -1247,63 +1249,66 @@ export function printWhaleSonarGuideA4(): void {
       display: inline-flex;
       align-items: center;
       gap: 1.5mm;
-      background: #0891b2;
-      color: #ffffff;
+      background: #e0f2fe;
+      border: 1.5px solid #0284c7;
+      color: #0369a1;
       font-size: 8.5pt;
       font-weight: 900;
-      padding: 0.8mm 2.5mm;
+      padding: 0.6mm 2.5mm;
       border-radius: 999px;
     }
     .callout-desc {
       font-size: 8.5pt;
       font-weight: 700;
-      color: #cbd5e1;
+      color: #334155;
     }
 
     /* ① 波形ログサンプル */
     .waveform-box {
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      background: #020617;
+      border: 1.5px solid #0284c7;
+      background: #f8fafc;
       border-radius: 8px;
       overflow: hidden;
     }
     .waveform-header {
-      background: #0f172a;
-      border-bottom: 1px solid #1e293b;
+      background: #f0f9ff;
+      border-bottom: 1px solid #bae6fd;
       padding: 1.5mm 3mm;
       display: flex;
       align-items: center;
       justify-content: space-between;
       font-size: 8.5pt;
       font-weight: 800;
-      color: #67e8f9;
+      color: #0369a1;
     }
     .waveform-replay {
       font-size: 7.5pt;
-      background: #083344;
-      border: 1px solid #0891b2;
-      color: #a5f3fc;
+      background: #ffffff;
+      border: 1px solid #0284c7;
+      color: #0369a1;
       border-radius: 4px;
       padding: 0.5mm 2mm;
+      font-weight: 800;
     }
 
     /* ② クジラの行動観測モニターサンプル */
     .monitor-box {
-      border: 1.5px solid #334155;
-      background: #020617;
+      border: 1.5px solid #94a3b8;
+      background: #f8fafc;
       border-radius: 8px;
       padding: 3mm 4mm;
       text-align: center;
     }
     .monitor-title {
       font-size: 9.5pt;
-      font-weight: 800;
-      color: #cbd5e1;
+      font-weight: 900;
+      color: #0f172a;
       margin-bottom: 1mm;
     }
     .monitor-sub {
       font-size: 8.5pt;
-      color: #94a3b8;
+      font-weight: 600;
+      color: #334155;
       line-height: 1.45;
     }
 
@@ -1316,25 +1321,25 @@ export function printWhaleSonarGuideA4(): void {
     }
     .seq-bar-label {
       font-size: 8.5pt;
-      font-weight: 800;
-      color: #67e8f9;
+      font-weight: 900;
+      color: #0369a1;
     }
     .seq-ctrl-btns {
       display: flex;
       gap: 1.5mm;
     }
     .seq-ctrl-btn {
-      background: #1e293b;
-      border: 1px solid #475569;
-      color: #e2e8f0;
+      background: #f8fafc;
+      border: 1px solid #64748b;
+      color: #1e293b;
       border-radius: 5px;
       padding: 0.8mm 2.2mm;
       font-size: 8pt;
-      font-weight: 700;
+      font-weight: 800;
     }
     .seq-slot-box {
-      background: #020617;
-      border: 1px solid #1e293b;
+      background: #f8fafc;
+      border: 1.5px solid #cbd5e1;
       border-radius: 7px;
       padding: 2mm 2.5mm;
       display: flex;
@@ -1343,9 +1348,9 @@ export function printWhaleSonarGuideA4(): void {
       margin-bottom: 2mm;
     }
     .seq-chip {
-      background: #1e1b4b;
-      border: 1px solid #6366f1;
-      color: #e0e7ff;
+      background: #eef2ff;
+      border: 1.5px solid #4f46e5;
+      color: #1e1b4b;
       border-radius: 5px;
       padding: 0.8mm 2.2mm;
       font-size: 8.5pt;
@@ -1353,10 +1358,11 @@ export function printWhaleSonarGuideA4(): void {
     }
     .transmit-btn {
       width: 100%;
-      background: linear-gradient(90deg, #0891b2 0%, #14b8a6 50%, #4f46e5 100%);
-      color: #ffffff;
+      background: #e0f2fe;
+      border: 2px solid #0284c7;
+      color: #0f172a;
       border-radius: 8px;
-      padding: 2.5mm 4mm;
+      padding: 2.2mm 4mm;
       text-align: center;
       font-size: 10.5pt;
       font-weight: 900;
@@ -1370,7 +1376,7 @@ export function printWhaleSonarGuideA4(): void {
       gap: 3.5mm;
     }
     .sound-card {
-      background: #020617;
+      background: #f8fafc;
       border-radius: 9px;
       padding: 2.8mm 3mm;
       display: flex;
@@ -1378,10 +1384,10 @@ export function printWhaleSonarGuideA4(): void {
       justify-content: space-between;
     }
     .sound-card-locked {
-      border: 1.5px solid rgba(245, 158, 11, 0.55);
+      border: 1.5px solid #d97706;
     }
     .sound-card-unsolved {
-      border: 1.5px solid #334155;
+      border: 1.5px solid #64748b;
     }
     .sound-card-top {
       display: flex;
@@ -1389,18 +1395,19 @@ export function printWhaleSonarGuideA4(): void {
       justify-content: space-between;
     }
     .sound-code {
-      background: #0f172a;
-      border: 1px solid #334155;
-      color: #67e8f9;
+      background: #ffffff;
+      border: 1px solid #64748b;
+      color: #0369a1;
       font-family: monospace;
       font-size: 8.5pt;
-      font-weight: 800;
+      font-weight: 900;
       padding: 0.5mm 2mm;
       border-radius: 4px;
     }
     .sound-preview-btn {
-      background: #1e293b;
-      color: #67e8f9;
+      background: #e0f2fe;
+      border: 1px solid #0284c7;
+      color: #0369a1;
       font-size: 8pt;
       font-weight: 800;
       padding: 0.6mm 2mm;
@@ -1410,14 +1417,14 @@ export function printWhaleSonarGuideA4(): void {
       margin-top: 1.8mm;
       font-size: 10pt;
       font-weight: 900;
-      color: #fde68a;
+      color: #92400e;
     }
     .sound-meaning-locked {
       margin-top: 1.5mm;
       display: inline-block;
-      background: rgba(245, 158, 11, 0.2);
-      border: 1px solid rgba(245, 158, 11, 0.5);
-      color: #fde68a;
+      background: #fef3c7;
+      border: 1.5px solid #d97706;
+      color: #92400e;
       font-size: 9pt;
       font-weight: 900;
       padding: 0.8mm 2.2mm;
@@ -1427,28 +1434,28 @@ export function printWhaleSonarGuideA4(): void {
       margin-top: 1.5mm;
       font-size: 9pt;
       font-weight: 800;
-      color: #64748b;
+      color: #475569;
     }
     .sound-card-footer {
       margin-top: 2mm;
       padding-top: 1.8mm;
-      border-top: 1px solid #1e293b;
+      border-top: 1px solid #cbd5e1;
     }
     .sound-locked-note {
       font-size: 8pt;
-      font-weight: 700;
-      color: #fbbf24;
+      font-weight: 800;
+      color: #b45309;
     }
     .sound-assign-btn {
       width: 100%;
-      background: rgba(79, 70, 229, 0.35);
-      border: 1px solid rgba(99, 102, 241, 0.6);
-      color: #c7d2fe;
+      background: #eef2ff;
+      border: 1.5px solid #4f46e5;
+      color: #312e81;
       border-radius: 6px;
       padding: 1.2mm 2mm;
       text-align: center;
       font-size: 8.5pt;
-      font-weight: 800;
+      font-weight: 900;
     }
   </style>
 </head>
@@ -1546,19 +1553,19 @@ export function printWhaleSonarGuideA4(): void {
               <span>📈 時間変化・音響波形ログ（再生後も形が残ります）</span>
               <span class="waveform-replay">▶ もう一度再生</span>
             </div>
-            <svg viewBox="0 0 600 92" width="100%" height="68" style="display:block; background:#020617;">
+            <svg viewBox="0 0 600 92" width="100%" height="68" style="display:block; background:#ffffff;">
               <!-- グリッド線 -->
-              <line x1="0" y1="23" x2="600" y2="23" stroke="#0f172a" stroke-width="1" />
-              <line x1="0" y1="46" x2="600" y2="46" stroke="#1e293b" stroke-width="1" stroke-dasharray="4 4" />
-              <line x1="0" y1="69" x2="600" y2="69" stroke="#0f172a" stroke-width="1" />
-              <line x1="300" y1="0" x2="300" y2="92" stroke="#1e293b" stroke-width="1" stroke-dasharray="3 3" />
+              <line x1="0" y1="23" x2="600" y2="23" stroke="#e2e8f0" stroke-width="1" />
+              <line x1="0" y1="46" x2="600" y2="46" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4" />
+              <line x1="0" y1="69" x2="600" y2="69" stroke="#e2e8f0" stroke-width="1" />
+              <line x1="300" y1="0" x2="300" y2="92" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 3" />
               <!-- ラベル -->
-              <text x="12" y="16" fill="#67e8f9" font-size="10" font-family="monospace" font-weight="bold">1. 音 #01『ゴゴゴゴ…』(海の下の火山)</text>
-              <text x="312" y="16" fill="#67e8f9" font-size="10" font-family="monospace" font-weight="bold">2. 音 #03『カ・カ・カカッ！』</text>
+              <text x="12" y="16" fill="#0369a1" font-size="10" font-family="monospace" font-weight="bold">1. 音 #01『ゴゴゴゴ…』(海の下の火山)</text>
+              <text x="312" y="16" fill="#0369a1" font-size="10" font-family="monospace" font-weight="bold">2. 音 #03『カ・カ・カカッ！』</text>
               <!-- 波形1（低周波の連続振動：ゴゴゴゴ…） -->
-              <path d="M 15 46 Q 25 20, 35 46 T 55 46 T 75 46 T 95 46 T 115 46 T 135 46 T 155 46 T 175 46 T 195 46 T 215 46 T 235 46 T 255 46 L 285 46" fill="none" stroke="#f59e0b" stroke-width="2.2" />
+              <path d="M 15 46 Q 25 20, 35 46 T 55 46 T 75 46 T 95 46 T 115 46 T 135 46 T 155 46 T 175 46 T 195 46 T 215 46 T 235 46 T 255 46 L 285 46" fill="none" stroke="#d97706" stroke-width="2.2" />
               <!-- 波形2（鋭いパルス：カ・カ・カカッ！） -->
-              <path d="M 315 46 L 335 46 L 340 14 L 345 78 L 350 46 L 385 46 L 390 14 L 395 78 L 400 46 L 435 46 L 440 12 L 445 80 L 450 20 L 455 74 L 460 46 L 580 46" fill="none" stroke="#22d3ee" stroke-width="2.2" />
+              <path d="M 315 46 L 335 46 L 340 14 L 345 78 L 350 46 L 385 46 L 390 14 L 395 78 L 400 46 L 435 46 L 440 12 L 445 80 L 450 20 L 455 74 L 460 46 L 580 46" fill="none" stroke="#0284c7" stroke-width="2.2" />
             </svg>
           </div>
         </div>
@@ -1588,13 +1595,13 @@ export function printWhaleSonarGuideA4(): void {
             <span class="seq-bar-label">発信するクリック音パターン（2語ごと判定）</span>
             <div class="seq-ctrl-btns">
               <span class="seq-ctrl-btn">⌫ 1つ戻す</span>
-              <span class="seq-ctrl-btn" style="border-color:#fbbf24; color:#fde68a;">↺ クリア</span>
+              <span class="seq-ctrl-btn" style="border-color:#d97706; background:#fef3c7; color:#92400e;">↺ クリア</span>
             </div>
           </div>
           <div class="seq-slot-box">
-            <span class="seq-chip"><span style="color:#67e8f9; font-family:monospace;">1.</span> 海の下の火山</span>
+            <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">1.</span> 海の下の火山</span>
             <span style="color:#64748b; font-weight:bold; font-size:9pt;">＋</span>
-            <span class="seq-chip"><span style="color:#67e8f9; font-family:monospace;">2.</span> 音 #03（カ・カ・カカッ！）</span>
+            <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">2.</span> 音 #03（カ・カ・カカッ！）</span>
           </div>
           <div class="transmit-btn">
             🔊 海中にクリック音を流す（発信）
