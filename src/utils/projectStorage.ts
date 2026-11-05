@@ -330,6 +330,9 @@ export function getStoredProjects(): MMProject[] {
               }
             });
           }
+          // 特別配布カード（SP-01〜SP-07）もマスター最新データと常に同期
+          proj.specialCharacterCards = SPECIAL_CHARACTER_CARDS;
+          proj.nagatsuPhaseCards = NAGATSU_PHASE_CARDS;
         });
 
         localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));

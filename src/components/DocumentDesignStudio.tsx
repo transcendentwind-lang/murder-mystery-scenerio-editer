@@ -1769,9 +1769,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       white-space: nowrap;
     }
     rt {
-      font-size: 6px !important;
+      font-size: 7.5px !important;
       line-height: 1 !important;
-      letter-spacing: -0.03em !important;
+      letter-spacing: -0.02em !important;
     }
   </style>
 </head>
@@ -3136,16 +3136,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                               {card.rubyHtml ? (
                                 <div
-                                  className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                  className="text-[11px] leading-[1.75] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                   dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
                                 />
                               ) : (
                                 <div
-                                  className={`${
-                                    card.glossaryNote
-                                      ? "text-[11px] leading-[1.48]"
-                                      : "text-xs leading-relaxed"
-                                  } text-slate-800 whitespace-pre-wrap text-justify`}
+                                  className="text-[11px] leading-[1.48] text-slate-800 whitespace-pre-wrap text-justify"
                                 >
                                   {renderColoredCardBody(card.description)}
                                 </div>
@@ -3536,7 +3532,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                   nc.cardCode === "NG-08"
                                     ? "leading-[1.58]"
                                     : "leading-[1.82]"
-                                } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal`}
+                                } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold`}
                                 dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                               />
                             </div>
