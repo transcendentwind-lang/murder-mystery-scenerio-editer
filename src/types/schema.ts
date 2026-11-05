@@ -7,6 +7,7 @@ export type RoleType = 'suspect' | 'investigator' | 'neutral' | 'special';
 
 export interface CharacterInternalDrama {
   pride: string;       // 専門職としての誇り・自負
+  guilt?: string;      // 後ろめたさ・過去の過失・保身
   loss: string;        // 喪失体験・トラウマ・後悔
 }
 
@@ -55,14 +56,15 @@ export interface EvidenceItem {
 }
 
 export interface IncidentStep {
-  dayNumber: number;           // Day 1-7
-  locationName: string;        // 地点名
-  distanceKm: number;          // 累積移動距離 (km)
+  dayNumber: number;           // Day / Phase 番号
+  locationName: string;        // 地点名・フェーズ見出し
+  distanceKm: number;          // 累積移動距離または進行指標
+  resourceStatus?: string;     // リソース・カウントダウン状態（残弾数・制限時間等）
   situationTitle: string;      // 状況タイトル
-  incidentOverview: string;    // 発生事象・地質異変
-  hqResponse: string;          // 司令部・公的機関の動き
-  fieldResponse: string;       // 現地救難隊の動き
-  revealedEvidenceIds: string[]; // このDayで開示される証拠
+  incidentOverview: string;    // 発生事象・フェーズ概要
+  hqResponse: string;          // 全体議論・表の調査の動き
+  fieldResponse: string;       // 個別アクション・裏の進行・交代処理の動き
+  revealedEvidenceIds: string[]; // このフェーズで開示される証拠
 }
 
 export interface CrypticWord {

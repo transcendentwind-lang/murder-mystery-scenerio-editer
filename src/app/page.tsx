@@ -5,6 +5,7 @@ import { MMProject } from "@/types/schema";
 import { initialProject, getCharactersForPlayerCount } from "@/utils/initialProjectData";
 import {
   getStoredProjects,
+  syncLocalPresetProjects,
   saveProjectToStorage,
   getActiveProjectId,
   setActiveProjectId,
@@ -40,12 +41,13 @@ type ActiveTab =
 export default function WorkbenchPage() {
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
-  const [activeTab, setActiveTab] = useState<ActiveTab>("whale_sonar_app");
+  const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
-  const [isProjectManagerOpen, setIsProjectManagerOpen] = useState<boolean>(false);
+  // ブラウザ起動時の初期画面として「シナリオ切替・新規作成」画面を開く
+  const [isProjectManagerOpen, setIsProjectManagerOpen] = useState<boolean>(true);
 
-  // 初期ロード：ローカルストレージからプロジェクト一覧とアクティブプロジェクトを復元
+  // 初期ロード：ローカルストレージ＋ローカル専用プリセットを復元
   useEffect(() => {
     const stored = getStoredProjects();
     setProjects(stored);
@@ -54,12 +56,19 @@ export default function WorkbenchPage() {
       const found = stored.find((p) => p.id === activeId);
       if (found) {
         setProject(found);
-        return;
       }
-    }
-    if (stored.length > 0) {
+    } else if (stored.length > 0) {
       setProject(stored[0]);
     }
+
+    syncLocalPresetProjects().then((merged) => {
+      setProjects(merged);
+      const currentActive = getActiveProjectId();
+      if (currentActive) {
+        const matched = merged.find((p) => p.id === currentActive);
+        if (matched) setProject(matched);
+      }
+    });
   }, []);
 
   // プロジェクト更新ヘルパー（state更新＋ストレージ自動保存）
@@ -79,6 +88,9 @@ export default function WorkbenchPage() {
     setProject(newProject);
     if (newProject.id) {
       setActiveProjectId(newProject.id);
+    }
+    if (newProject.id !== "project-deep-sea" && activeTab === "whale_sonar_app") {
+      setActiveTab("timeline");
     }
     // 切り替え時にチャットに案内メッセージを追加
     setMessages((prev) => [
@@ -205,7 +217,7 @@ export default function WorkbenchPage() {
           </button>
 
           <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
-            {/* ① 7日間タイムライン（プレイヤー提供情報・作戦海図を完全内包） */}
+            {/* ① タイムライン・フェーズ進行 */}
             <button
               onClick={() => setActiveTab("timeline")}
               className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
@@ -215,7 +227,9 @@ export default function WorkbenchPage() {
               }`}
             >
               <Compass className="h-4 w-4 text-cyan-400" />
-              ① タイムライン ＆ 海図
+              {project.id === "project-deep-sea"
+                ? "① タイムライン ＆ 海図"
+                : "① フェーズ進行 ＆ タイムライン"}
             </button>
 
             {/* ② 登場人物 ＆ 証拠マスター */}
@@ -226,10 +240,10 @@ export default function WorkbenchPage() {
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
-              title="登場人物のプロフィール・所持品・固有能力と証拠マスターの管理"
+              title="登場人物・内面ドラマ・証拠マスター・情報トランプ・多重ロック検証の管理"
             >
               <Users className="h-4 w-4 text-emerald-400" />
-              ② 登場人物 ＆ 証拠マスター
+              ② 登場人物・証拠・情報トランプ
             </button>
 
             {/* ③ GM進行ダッシュボード */}
@@ -273,19 +287,22 @@ export default function WorkbenchPage() {
               ⑤ 企画書・一括台本
             </button>
 
-            {/* ⑥ クジラ音響モバイルアプリ（プレイヤー操作用クリック音生成＆行動表示） */}
-            <button
-              onClick={() => setActiveTab("whale_sonar_app")}
-              className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
-                activeTab === "whale_sonar_app"
-                  ? "bg-cyan-600 text-white shadow ring-2 ring-cyan-400/50"
-                  : "text-cyan-300 hover:text-white hover:bg-slate-900"
-              }`}
-              title="プレイヤーがスマホでクリック音パターンを鳴らし、クジラの行動テキストを表示するWebアプリ"
-            >
-              <Smartphone className="h-4 w-4 text-cyan-300" />
-              📱 クジラ音響アプリ
-            </button>
+            {/* ⑥ クジラ音響モバイルアプリ（第1作または対応プロジェクト時のみ表示） */}
+            {(project.id === "project-deep-sea" ||
+              (project.crypticWords && project.crypticWords.length > 0)) && (
+              <button
+                onClick={() => setActiveTab("whale_sonar_app")}
+                className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                  activeTab === "whale_sonar_app"
+                    ? "bg-cyan-600 text-white shadow ring-2 ring-cyan-400/50"
+                    : "text-cyan-300 hover:text-white hover:bg-slate-900"
+                }`}
+                title="プレイヤーがスマホでクリック音パターンを鳴らし、クジラの行動テキストを表示するWebアプリ"
+              >
+                <Smartphone className="h-4 w-4 text-cyan-300" />
+                📱 クジラ音響アプリ
+              </button>
+            )}
           </div>
         </div>
       </header>
@@ -319,33 +336,35 @@ export default function WorkbenchPage() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                  {/* 7名（長津PC参加） / 6名（本編・標準） プレイ人数切り替えトグル */}
-                  <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
-                    <button
-                      onClick={() => handleTogglePlayerCount(7)}
-                      className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                        project.playerCount === 7
-                          ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
-                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-                      }`}
-                      title="東京3名（PC1朝潮・PC2貝浜・PC7長津）＋小笠原4名（PC3・PC4・PC5・PC6）の7人プレイ構成"
-                    >
-                      <Users className="h-3.5 w-3.5" />
-                      7人プレイ（長津PC参加）
-                    </button>
-                    <button
-                      onClick={() => handleTogglePlayerCount(6)}
-                      className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                        project.playerCount === 6
-                          ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
-                          : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
-                      }`}
-                      title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名（長津はGM担当）の6人プレイ標準構成"
-                    >
-                      <Users className="h-3.5 w-3.5" />
-                      6人プレイ（標準・長津GM）
-                    </button>
-                  </div>
+                  {/* 7名（長津PC参加） / 6名（本編・標準） プレイ人数切り替えトグル（第1作のみ表示） */}
+                  {project.id === "project-deep-sea" && (
+                    <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                      <button
+                        onClick={() => handleTogglePlayerCount(7)}
+                        className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                          project.playerCount === 7
+                            ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                        }`}
+                        title="東京3名（PC1朝潮・PC2貝浜・PC7長津）＋小笠原4名（PC3・PC4・PC5・PC6）の7人プレイ構成"
+                      >
+                        <Users className="h-3.5 w-3.5" />
+                        7人プレイ（長津PC参加）
+                      </button>
+                      <button
+                        onClick={() => handleTogglePlayerCount(6)}
+                        className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
+                          project.playerCount === 6
+                            ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
+                            : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
+                        }`}
+                        title="小笠原4名（PC3・PC4・PC5・PC6）＋東京2名（長津はGM担当）の6人プレイ標準構成"
+                      >
+                        <Users className="h-3.5 w-3.5" />
+                        6人プレイ（標準・長津GM）
+                      </button>
+                    </div>
+                  )}
 
                   {/* デザイン資料画面（HO・証拠シートの装飾・執筆・印刷）へのダイレクト遷移 */}
                   <button
@@ -361,8 +380,13 @@ export default function WorkbenchPage() {
 
               <div className="flex-1 overflow-hidden">
                 <CharactersEvidenceManager
+                  projectId={project.id}
                   characters={project.characters}
                   evidences={project.evidences}
+                  matrixLinks={project.matrixLinks}
+                  lockCriteria={project.lockCriteria}
+                  candidateStatuses={project.candidateStatuses}
+                  phaseCount={project.timeline?.length || 4}
                   playerCount={project.playerCount}
                   onTogglePlayerCount={handleTogglePlayerCount}
                   onUpdateCharacters={(newChars) =>
@@ -370,6 +394,18 @@ export default function WorkbenchPage() {
                   }
                   onUpdateEvidences={(newEvs) =>
                     handleUpdateProject((prev) => ({ ...prev, evidences: newEvs }))
+                  }
+                  onUpdateMatrixLinks={(newLinks) =>
+                    handleUpdateProject((prev) => ({ ...prev, matrixLinks: newLinks }))
+                  }
+                  onUpdateLockCriteria={(newCriteria) =>
+                    handleUpdateProject((prev) => ({ ...prev, lockCriteria: newCriteria }))
+                  }
+                  onUpdateCandidateStatuses={(newStatuses) =>
+                    handleUpdateProject((prev) => ({
+                      ...prev,
+                      candidateStatuses: newStatuses,
+                    }))
                   }
                 />
               </div>

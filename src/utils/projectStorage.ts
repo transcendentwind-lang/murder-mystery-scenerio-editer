@@ -300,8 +300,9 @@ export function getStoredProjects(): MMProject[] {
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
 
-        // 全プロジェクトを走査し、不要な証拠（古謡・スペクトログラム）の完全除外およびタイトルの最新同期を実施
+        // プリセット初期プロジェクト（initialProject）のみ、不要な旧証拠除外およびタイトルの最新同期を実施
         parsed.forEach((proj: MMProject) => {
+          if (proj.id !== initialProject.id) return;
           if (proj.evidences && Array.isArray(proj.evidences)) {
             proj.evidences = proj.evidences
               .filter(
@@ -348,6 +349,44 @@ export function getStoredProjects(): MMProject[] {
 }
 
 /**
+ * ローカル環境専用の追加プリセット（/local-projects.json）が存在する場合、
+ * ローカルストレージのプロジェクト一覧へ自動マージする
+ */
+export async function syncLocalPresetProjects(): Promise<MMProject[]> {
+  const currentProjects = getStoredProjects();
+  if (typeof window === "undefined") return currentProjects;
+
+  try {
+    const res = await fetch("/local-projects.json", { cache: "no-store" });
+    if (!res.ok) return currentProjects;
+
+    const localPresets = (await res.json()) as MMProject[];
+    if (!Array.isArray(localPresets) || localPresets.length === 0) {
+      return currentProjects;
+    }
+
+    let updated = [...currentProjects];
+    let hasChanges = false;
+
+    for (const preset of localPresets) {
+      if (!preset.id) continue;
+      const existingIdx = updated.findIndex((p) => p.id === preset.id);
+      if (existingIdx < 0) {
+        updated.push(preset);
+        hasChanges = true;
+      }
+    }
+
+    if (hasChanges) {
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(updated));
+    }
+    return updated;
+  } catch {
+    return currentProjects;
+  }
+}
+
+/**
  * プロジェクトを保存
  */
 export function saveProjectToStorage(project: MMProject): void {
@@ -355,37 +394,42 @@ export function saveProjectToStorage(project: MMProject): void {
 
   try {
     const projects = getStoredProjects();
+    const isInitialProj = project.id === initialProject.id;
     const masterEvidenceMap = new Map<string, EvidenceItem>(
       (initialProject.evidences || []).map((e) => [e.id, e])
     );
-    const sanitizedEvidences = (project.evidences || [])
-      .filter(
-        (e) =>
-          e.id !== "ev-coda-spectrogram" &&
-          e.id !== "ev-folk-song-rhythm" &&
-          !e.title.includes("古謡") &&
-          !e.title.includes("スペクトログラム") &&
-          !e.title.includes("スペクロログラム")
-      )
-      .map((e) => {
-        const master = masterEvidenceMap.get(e.id);
-        return master
-          ? {
-              ...e,
-              title: master.title,
-              frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
-              description: master.description,
-              glossaryNote: e.glossaryNote ?? master.glossaryNote,
-            }
-          : e;
-      });
+    const sanitizedEvidences = isInitialProj
+      ? (project.evidences || [])
+          .filter(
+            (e) =>
+              e.id !== "ev-coda-spectrogram" &&
+              e.id !== "ev-folk-song-rhythm" &&
+              !e.title.includes("古謡") &&
+              !e.title.includes("スペクトログラム") &&
+              !e.title.includes("スペクロログラム")
+          )
+          .map((e) => {
+            const master = masterEvidenceMap.get(e.id);
+            return master
+              ? {
+                  ...e,
+                  title: master.title,
+                  frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
+                  description: master.description,
+                  glossaryNote: e.glossaryNote ?? master.glossaryNote,
+                }
+              : e;
+          })
+      : project.evidences || [];
 
-    const sanitizedTimeline = (project.timeline || []).map((step) => ({
-      ...step,
-      revealedEvidenceIds: (step.revealedEvidenceIds || []).filter(
-        (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
-      ),
-    }));
+    const sanitizedTimeline = isInitialProj
+      ? (project.timeline || []).map((step) => ({
+          ...step,
+          revealedEvidenceIds: (step.revealedEvidenceIds || []).filter(
+            (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
+          ),
+        }))
+      : project.timeline || [];
 
     const updatedProject: MMProject = {
       ...project,

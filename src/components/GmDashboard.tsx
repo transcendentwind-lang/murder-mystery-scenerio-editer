@@ -503,7 +503,276 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
     URL.revokeObjectURL(url);
   };
 
-  const currentTimelineStep = project.timeline.find((t) => t.dayNumber === currentDay);
+  const currentTimelineStep = project.timeline.find((t) => t.dayNumber === currentDay) || project.timeline[0];
+
+  // 新規・汎用シナリオプロジェクト用のGM進行コンソール
+  if (project.id && project.id !== "project-deep-sea") {
+    const gmNote = project.gmNotes?.[currentDay];
+    const phaseEvidences = (project.evidences || []).filter(
+      (e) =>
+        (currentTimelineStep?.revealedEvidenceIds || []).includes(e.id) ||
+        e.foundPhase === currentDay
+    );
+    const specialChars = (project.characters || []).filter((c) => c.roleType === "special");
+
+    return (
+      <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
+        {/* 上部：GMステータスバー＆タイマー */}
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg backdrop-blur">
+          <div className="flex flex-wrap items-center gap-4">
+            <div className="flex items-center gap-2">
+              <Radio className="h-5 w-5 text-emerald-400 animate-pulse" />
+              <span className="font-bold text-sm text-white">
+                GM 進行コンソール ― {project.title}
+              </span>
+            </div>
+
+            <div className="flex items-center gap-2 rounded-lg bg-slate-950 px-3 py-1.5 font-mono text-base font-bold text-indigo-400 border border-slate-800">
+              <Clock className="h-4 w-4 text-slate-400" />
+              {formatTime(timerSeconds)}
+            </div>
+
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setIsTimerRunning(!isTimerRunning)}
+                className="rounded bg-indigo-600 p-1.5 text-white hover:bg-indigo-500 transition"
+                title={isTimerRunning ? "一時停止" : "スタート"}
+              >
+                {isTimerRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
+              </button>
+              <button
+                onClick={() => {
+                  setIsTimerRunning(false);
+                  setTimerSeconds(0);
+                }}
+                className="rounded border border-slate-800 bg-slate-900 p-1.5 text-slate-400 hover:text-white transition"
+                title="リセット"
+              >
+                <RotateCcw className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1 text-xs text-slate-300">
+              <Users className="h-3.5 w-3.5 text-indigo-400" />
+              <span className="font-bold text-white">{project.playerCount}名</span>
+              <span className="text-[10px] text-slate-400">
+                (初期{project.playerCount}名 ＋ 途中交代{specialChars.length}枠)
+              </span>
+            </div>
+          </div>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              <button
+                onClick={() => handleCopy("synopsis")}
+                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-semibold text-indigo-300 hover:bg-slate-900 transition"
+              >
+                {copiedType === "synopsis" ? (
+                  <Check className="h-3.5 w-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+                {copiedType === "synopsis" ? "概要コピー完了！" : "企画・プロット概要をコピー"}
+              </button>
+            </div>
+
+            <div className="flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-900 p-1">
+              <button
+                onClick={() => handleCopy("full")}
+                className="flex items-center gap-1.5 rounded px-2.5 py-1 text-xs font-semibold text-slate-200 hover:bg-slate-800 transition"
+              >
+                {copiedType === "full" ? (
+                  <Check className="h-3.5 w-3.5 text-emerald-400" />
+                ) : (
+                  <Copy className="h-3.5 w-3.5" />
+                )}
+                {copiedType === "full" ? "完全台本コピー完了！" : "完全台本をコピー"}
+              </button>
+              <button
+                onClick={() =>
+                  printDocumentText(
+                    `${project.title} - 完全シナリオ台本`,
+                    generateFullScriptMarkdown(project)
+                  )
+                }
+                className="flex items-center gap-1 rounded bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
+              >
+                <Printer className="h-3.5 w-3.5" />
+                🖨️ 印刷
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* メインGM作業エリア */}
+        <div className="grid flex-1 grid-cols-12 gap-6 overflow-hidden">
+          {/* 左カラム（8列）：フェーズ別GM進行ガイド＆読み上げスクリプト */}
+          <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+            <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <div className="flex items-center gap-1.5">
+                {project.timeline.map((step) => (
+                  <button
+                    key={step.dayNumber}
+                    onClick={() => setCurrentDay(step.dayNumber)}
+                    className={`rounded-lg px-3.5 py-1.5 text-xs font-bold transition ${
+                      currentDay === step.dayNumber
+                        ? "bg-indigo-600 text-white shadow"
+                        : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    Phase {step.dayNumber}
+                  </button>
+                ))}
+              </div>
+              {currentTimelineStep?.resourceStatus && (
+                <span className="rounded-full border border-rose-500/40 bg-rose-950/40 px-3 py-0.5 text-xs font-bold text-rose-200">
+                  🎯 {currentTimelineStep.resourceStatus}
+                </span>
+              )}
+            </div>
+
+            {currentTimelineStep && (
+              <div className="space-y-4">
+                <div className="rounded-xl border border-slate-800 bg-slate-950 p-4">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold text-indigo-400 uppercase">
+                      {currentTimelineStep.locationName}
+                    </span>
+                    {gmNote?.targetMinutes && (
+                      <span className="text-xs font-mono text-cyan-300">
+                        ⏱️ 目安進行時間: 約 {gmNote.targetMinutes} 分
+                      </span>
+                    )}
+                  </div>
+                  <h3 className="text-base font-bold text-white mt-1">
+                    {currentTimelineStep.situationTitle}
+                  </h3>
+                  <p className="mt-1.5 text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">
+                    {currentTimelineStep.incidentOverview}
+                  </p>
+                </div>
+
+                {/* GM読み上げスクリプト */}
+                {gmNote?.readAloudScript && (
+                  <div className="rounded-xl border border-amber-500/40 bg-amber-950/15 p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                        <Volume2 className="h-4 w-4 text-amber-400" />
+                        🎙️ Phase {currentDay} GM 導入読み上げスクリプト
+                      </span>
+                      {gmNote.bgmCue && (
+                        <span className="text-[11px] text-amber-200/80 font-mono">
+                          🎵 BGM: {gmNote.bgmCue}
+                        </span>
+                      )}
+                    </div>
+                    <p className="rounded-lg border border-slate-800 bg-slate-950/90 p-3.5 text-xs leading-relaxed text-slate-100 whitespace-pre-wrap">
+                      {gmNote.readAloudScript}
+                    </p>
+                  </div>
+                )}
+
+                {/* GM進行チェックポイント */}
+                {gmNote?.gmCheckpoints && gmNote.gmCheckpoints.length > 0 && (
+                  <div className="rounded-xl border border-indigo-500/40 bg-indigo-950/15 p-4 space-y-2.5">
+                    <span className="text-xs font-bold text-indigo-300 flex items-center gap-1.5">
+                      <Shield className="h-4 w-4 text-indigo-400" />
+                      ✅ Phase {currentDay} GM 必須チェックポイント ＆ 裏アクション手順
+                    </span>
+                    <ul className="space-y-2 text-xs text-slate-200">
+                      {gmNote.gmCheckpoints.map((pt, i) => (
+                        <li
+                          key={i}
+                          className="flex items-start gap-2 rounded-lg border border-slate-800/80 bg-slate-950/80 p-2.5 leading-relaxed"
+                        >
+                          <span className="rounded bg-indigo-600/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-200 flex-shrink-0">
+                            STEP {i + 1}
+                          </span>
+                          <span>{pt}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* 表の進行 ＆ 裏の進行 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                  <div className="rounded-xl border border-blue-900/40 bg-blue-950/20 p-3.5 space-y-1.5">
+                    <div className="font-bold text-blue-300">表の進行（全体公開・議論）</div>
+                    <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+                      {currentTimelineStep.hqResponse}
+                    </p>
+                  </div>
+                  <div className="rounded-xl border border-rose-900/40 bg-rose-950/20 p-3.5 space-y-1.5">
+                    <div className="font-bold text-rose-300">
+                      裏の進行（全員共通GM裏アクション・交代処理）
+                    </div>
+                    <p className="text-slate-300 leading-relaxed whitespace-pre-wrap">
+                      {currentTimelineStep.fieldResponse}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* 右カラム（4列）：このフェーズで全体公開する証拠 ＆ 途中交代キャラ管理 */}
+          <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+            <div>
+              <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-300 mb-2">
+                🌐 Phase {currentDay} で全体公開する証拠 ({phaseEvidences.length}件)
+              </h3>
+              <div className="space-y-2.5">
+                {phaseEvidences.map((ev) => (
+                  <div
+                    key={ev.id}
+                    className="rounded-lg border border-slate-800 bg-slate-950/90 p-3 space-y-1"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-bold text-xs text-white">{ev.title}</span>
+                      <span className="rounded bg-emerald-500/20 px-1.5 py-0.5 text-[10px] font-bold text-emerald-300">
+                        全体公開
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 leading-relaxed whitespace-pre-wrap">
+                      {ev.description}
+                    </p>
+                    {ev.glossaryNote && (
+                      <div className="text-[10px] text-amber-300/90 pt-1 border-t border-slate-800/80">
+                        💡 {ev.glossaryNote}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {specialChars.length > 0 && (
+              <div className="pt-3 border-t border-slate-800">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-amber-300 mb-2">
+                  🔄 途中脱落者への引き継ぎ用 HO シート ({specialChars.length}枠)
+                </h3>
+                <div className="space-y-2.5">
+                  {specialChars.map((sc) => (
+                    <div
+                      key={sc.id}
+                      className="rounded-lg border border-amber-500/30 bg-amber-950/15 p-3 space-y-1.5"
+                    >
+                      <div className="font-bold text-xs text-amber-200">{sc.name}</div>
+                      <div className="text-[10px] text-indigo-300">{sc.profession}</div>
+                      <p className="text-[11px] text-slate-300 leading-snug whitespace-pre-wrap">
+                        {sc.handout?.gmActionGuide || sc.introduction}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">

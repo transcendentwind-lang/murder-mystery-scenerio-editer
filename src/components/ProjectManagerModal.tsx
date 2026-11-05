@@ -272,14 +272,14 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                         <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400 font-mono mt-3">
                           <span className="flex items-center gap-1">
                             <Users className="h-3.5 w-3.5 text-emerald-400" />
-                            {p.playerCount}人
+                            {p.playerCount}人用
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5 text-cyan-400" />
-                            約{p.durationHours}時間
+                            全{p.timeline?.length || 4}フェーズ（約{p.durationHours}h）
                           </span>
                           <span>
-                            {p.hasGm ? "GM要" : "GMレス可"}
+                            証拠 {p.evidences?.length || 0}件 / 解釈 {p.matrixLinks?.length || 0}件
                           </span>
                           <span className="text-slate-500 ml-auto">
                             更新: {formattedDate}
@@ -317,10 +317,14 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
                         {isCurrent ? (
                           <button
-                            onClick={onClose}
-                            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold transition"
+                            onClick={() => {
+                              onSelectProject(p);
+                              onClose();
+                            }}
+                            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold transition shadow"
                           >
-                            このまま編集を続ける
+                            このシナリオで作業開始
+                            <ArrowRight className="h-3.5 w-3.5" />
                           </button>
                         ) : (
                           <button

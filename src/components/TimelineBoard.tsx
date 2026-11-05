@@ -396,6 +396,307 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     return evidences.filter((e) => evidenceIds.includes(e.id));
   };
 
+  // 汎用・新規シナリオプロジェクト用のフェーズ進行＆リソース・裏アクション設計ボード
+  if (project?.id && project.id !== "project-deep-sea") {
+    const phaseEvidences = evidences.filter(
+      (e) =>
+        (currentStep?.revealedEvidenceIds || []).includes(e.id) ||
+        e.foundPhase === selectedDay
+    );
+    const specialChars = (project.characters || []).filter((c) => c.roleType === "special");
+
+    const handleToggleRevealedEvidence = (evId: string) => {
+      if (!currentStep) return;
+      const currentIds = currentStep.revealedEvidenceIds || [];
+      const nextIds = currentIds.includes(evId)
+        ? currentIds.filter((id) => id !== evId)
+        : [...currentIds, evId];
+      handleUpdateCurrentStep("revealedEvidenceIds", nextIds);
+    };
+
+    return (
+      <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-5 text-slate-100">
+        {/* 上部：全フェーズ進行ステップバー */}
+        <div className="mb-4 rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg backdrop-blur">
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <Compass className="h-4 w-4 text-indigo-400" />
+              <h2 className="text-xs font-bold tracking-wider text-white uppercase">
+                {project.title} ― 全{timeline.length}フェーズ進行 ＆ リソース・裏アクション管理
+              </h2>
+            </div>
+            {currentStep?.resourceStatus && (
+              <span className="rounded-full border border-rose-500/40 bg-rose-950/40 px-3 py-0.5 text-xs font-bold text-rose-200">
+                🎯 {currentStep.resourceStatus}
+              </span>
+            )}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
+            {timeline.map((step) => {
+              const isSelected = step.dayNumber === selectedDay;
+              const stepEvCount = evidences.filter(
+                (e) =>
+                  (step.revealedEvidenceIds || []).includes(e.id) ||
+                  e.foundPhase === step.dayNumber
+              ).length;
+              return (
+                <button
+                  key={step.dayNumber}
+                  onClick={() => setSelectedDay(step.dayNumber)}
+                  className={`flex flex-col justify-between rounded-xl border p-3 text-left transition ${
+                    isSelected
+                      ? "border-indigo-500 bg-indigo-950/40 ring-2 ring-indigo-500/30 shadow-lg"
+                      : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-900"
+                  }`}
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span
+                        className={`rounded px-2 py-0.5 text-[10px] font-bold ${
+                          isSelected
+                            ? "bg-indigo-600 text-white"
+                            : "bg-slate-800 text-slate-300"
+                        }`}
+                      >
+                        PHASE {step.dayNumber}
+                      </span>
+                      <span className="text-[10px] font-mono text-emerald-400">
+                        公開証拠 {stepEvCount}件
+                      </span>
+                    </div>
+                    <div className="font-bold text-xs text-white truncate">
+                      {step.locationName}
+                    </div>
+                    <div className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+                      {step.situationTitle}
+                    </div>
+                  </div>
+                  {step.resourceStatus && (
+                    <div className="mt-2 pt-1.5 border-t border-slate-800/80 text-[10px] font-mono text-rose-300 truncate">
+                      {step.resourceStatus}
+                    </div>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* メイン2カラム */}
+        {currentStep && (
+          <div className="grid flex-1 grid-cols-12 gap-5 overflow-hidden">
+            {/* 左カラム（8列）：選択中フェーズの詳細編集 ＆ 公開証拠・情報トランプ */}
+            <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+              {/* フェーズタイトル・リソース設定 */}
+              <div className="grid grid-cols-12 gap-3 border-b border-slate-800 pb-4">
+                <div className="col-span-4">
+                  <label className="block text-[11px] font-bold text-indigo-300 mb-1">
+                    フェーズ見出し
+                  </label>
+                  <input
+                    type="text"
+                    value={currentStep.locationName}
+                    onChange={(e) => handleUpdateCurrentStep("locationName", e.target.value)}
+                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs font-bold text-white focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+                <div className="col-span-4">
+                  <label className="block text-[11px] font-bold text-slate-300 mb-1">
+                    状況サブタイトル
+                  </label>
+                  <input
+                    type="text"
+                    value={currentStep.situationTitle}
+                    onChange={(e) => handleUpdateCurrentStep("situationTitle", e.target.value)}
+                    className="w-full rounded-lg border border-slate-800 bg-slate-950 px-3 py-1.5 text-xs text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+                <div className="col-span-4">
+                  <label className="block text-[11px] font-bold text-rose-300 mb-1">
+                    弾丸・リソース / カウントダウン状態
+                  </label>
+                  <input
+                    type="text"
+                    value={currentStep.resourceStatus || ""}
+                    onChange={(e) => handleUpdateCurrentStep("resourceStatus", e.target.value)}
+                    placeholder="例: 残弾 3/4 → 2/4"
+                    className="w-full rounded-lg border border-rose-900/50 bg-slate-950 px-3 py-1.5 text-xs text-rose-200 focus:border-rose-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* 発生事象・フェーズ概要 */}
+              <div className="rounded-xl border border-slate-800 bg-slate-950/80 p-3.5">
+                <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-amber-400">
+                  <AlertTriangle className="h-3.5 w-3.5" />
+                  ① 発生事象・調査フェーズ概要 (Incident Overview)
+                </label>
+                <textarea
+                  value={currentStep.incidentOverview}
+                  onChange={(e) => handleUpdateCurrentStep("incidentOverview", e.target.value)}
+                  rows={3}
+                  className="w-full rounded-lg border border-slate-800 bg-slate-900 p-2.5 text-xs leading-relaxed text-slate-200 focus:border-amber-500 focus:outline-none"
+                />
+              </div>
+
+              {/* 表の進行 vs 裏の進行（GM裏アクション・途中交代） */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="rounded-xl border border-blue-900/40 bg-blue-950/15 p-3.5">
+                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-blue-300">
+                    <Shield className="h-3.5 w-3.5" />
+                    ② 表の進行：全体公開調査・議論のポイント
+                  </label>
+                  <textarea
+                    value={currentStep.hqResponse}
+                    onChange={(e) => handleUpdateCurrentStep("hqResponse", e.target.value)}
+                    rows={5}
+                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs leading-relaxed text-slate-200 focus:border-blue-500 focus:outline-none"
+                  />
+                </div>
+
+                <div className="rounded-xl border border-rose-900/40 bg-rose-950/15 p-3.5">
+                  <label className="mb-1.5 flex items-center gap-1.5 text-xs font-bold text-rose-300">
+                    <Radio className="h-3.5 w-3.5" />
+                    ③ 裏の進行：全員共通GM裏アクション・脱落＆新キャラ合流・決闘処理
+                  </label>
+                  <textarea
+                    value={currentStep.fieldResponse}
+                    onChange={(e) => handleUpdateCurrentStep("fieldResponse", e.target.value)}
+                    rows={5}
+                    className="w-full rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs leading-relaxed text-slate-200 focus:border-rose-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              {/* このフェーズで全体公開される証拠 ＆ 情報トランプリンク */}
+              <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/10 p-4 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-emerald-300 flex items-center gap-1.5">
+                    <FileText className="h-4 w-4 text-emerald-400" />
+                    Phase {selectedDay} で全体公開される証拠 ＆ 専門知識による解釈差分 ({phaseEvidences.length}件)
+                  </span>
+                  <span className="text-[11px] text-slate-400">
+                    ※カード秘匿なし・すべて場に公開し、各PCのHO知識で真の意味を解読
+                  </span>
+                </div>
+
+                <div className="space-y-2.5">
+                  {phaseEvidences.map((ev) => {
+                    const links = (project.matrixLinks || []).filter(
+                      (l) => l.evidenceId === ev.id
+                    );
+                    return (
+                      <div
+                        key={ev.id}
+                        className="rounded-lg border border-slate-800 bg-slate-950/90 p-3 space-y-2"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300 border border-emerald-500/30">
+                              🌐 全体公開
+                            </span>
+                            <span className="font-bold text-xs text-white">{ev.title}</span>
+                          </div>
+                          <span className="text-[10px] text-slate-400">
+                            {ev.acquisitionCondition}
+                          </span>
+                        </div>
+                        <p className="text-xs text-slate-300 leading-relaxed whitespace-pre-wrap">
+                          {ev.description}
+                        </p>
+                        {links.length > 0 && (
+                          <div className="rounded border border-indigo-500/30 bg-indigo-950/25 p-2.5 space-y-1.5">
+                            <div className="text-[10px] font-bold text-indigo-300">
+                              🃏 この公開証拠に噛み合う「情報トランプ（PCの専門知識・遺品）」:
+                            </div>
+                            {links.map((l) => {
+                              const char = (project.characters || []).find(
+                                (c) => c.id === l.characterId
+                              );
+                              return (
+                                <div
+                                  key={l.id}
+                                  className="text-[11px] text-slate-200 leading-relaxed pl-2 border-l-2 border-indigo-500"
+                                >
+                                  <span className="font-bold text-emerald-300">
+                                    {char?.name || l.characterId}
+                                  </span>
+                                  （{l.specializedKnowledge}）
+                                  <br />➔ <span className="text-amber-200">{l.derivedConclusion}</span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* 右カラム（4列）：途中交代キャラクター枠 ＆ 全体構造ナビ */}
+            <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto space-y-4">
+              {/* 途中脱落＆再参加キャラクター枠 */}
+              <div className="rounded-xl border border-amber-500/30 bg-amber-950/15 p-3.5 space-y-2.5">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
+                  <Users className="h-4 w-4 text-amber-400" />
+                  途中脱落 ＆ 別キャラ再参加（ジョブチェンジ）枠
+                </div>
+                <p className="text-[11px] text-slate-300 leading-relaxed">
+                  Phase 2・Phase 3の裏アクションで殺害されたプレイヤーが、脱落感なく「遺品と重大な使命」を持って再合流するための引き継ぎ枠です。
+                </p>
+                <div className="space-y-2">
+                  {specialChars.map((sc) => (
+                    <div
+                      key={sc.id}
+                      className="rounded-lg border border-slate-800 bg-slate-950/90 p-2.5 space-y-1"
+                    >
+                      <div className="font-bold text-xs text-amber-200">{sc.name}</div>
+                      <div className="text-[10px] text-indigo-300">{sc.profession}</div>
+                      <p className="text-[11px] text-slate-300 leading-snug line-clamp-3">
+                        {sc.introduction}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* 公開証拠のフェーズ割り当てチェック */}
+              <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5 space-y-2">
+                <div className="text-xs font-bold text-slate-200">
+                  Phase {selectedDay} に紐づける証拠の選択
+                </div>
+                <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
+                  {evidences.map((ev) => {
+                    const checked =
+                      (currentStep.revealedEvidenceIds || []).includes(ev.id) ||
+                      ev.foundPhase === selectedDay;
+                    return (
+                      <label
+                        key={ev.id}
+                        className="flex items-center gap-2 rounded border border-slate-800/80 bg-slate-900/60 px-2.5 py-1.5 text-[11px] cursor-pointer hover:border-slate-700"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={checked}
+                          onChange={() => handleToggleRevealedEvidence(ev.id)}
+                          className="rounded border-slate-700 bg-slate-950 text-indigo-600"
+                        />
+                        <span className="text-slate-300 truncate">{ev.title}</span>
+                      </label>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-5 text-slate-100">
       {/* 上部：北上インシデント進捗ライン (小笠原 ➔ 富士山 直下：約950km) */}

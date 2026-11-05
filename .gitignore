@@ -30,3 +30,7 @@ yarn-error.log*
 # TypeScript
 *.tsbuildinfo
 next-env.d.ts
+
+# Local Scenario Data (kept out of public repository per confidentiality rules)
+public/local-projects.json
+.local-projects/
