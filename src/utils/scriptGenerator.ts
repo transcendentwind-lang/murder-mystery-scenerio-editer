@@ -976,16 +976,21 @@ export function printCharacterHandoutsB5(
  *   ④ クリック音ボタンのサンプル（音 #01：『ゴゴゴゴ…』海の下の火山 ／ 音 #03：『カ・カ・カカッ！』【未解明：？？？】）
  * ※GitHubのURLは一切記載しない
  */
-export function printWhaleSonarGuideA4(): void {
+export function printWhaleSonarGuideA4(
+  mode: "both" | "front" | "back" = "both"
+): void {
+  const showFront = mode === "both" || mode === "front";
+  const showBack = mode === "both" || mode === "back";
+
   const fullHtml = `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>マッコウクジラ音響言語解析システム - プレイヤー提示資料（A4・表裏2ページ）</title>
+  <title>マッコウクジラ音響言語解析システム - プレイヤー提示資料</title>
   <style>
     @page {
       size: A4 portrait;
-      margin: 0;
+      margin: 8mm 10mm;
     }
     * {
       box-sizing: border-box;
@@ -1000,153 +1005,157 @@ export function printWhaleSonarGuideA4(): void {
       font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
     }
     .a4-page {
-      width: 210mm;
-      height: 297mm;
-      padding: 14mm 15mm;
+      width: 100%;
+      max-width: 184mm;
       margin: 0 auto;
       background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      overflow: hidden;
-      position: relative;
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
     }
     .page-break {
-      page-break-after: always;
-      break-after: page;
+      page-break-after: always !important;
+      break-after: page !important;
     }
-    .outer-frame {
+    .outer-frame-front {
       width: 100%;
-      height: 100%;
-      border: 2.5px solid #0f172a;
-      border-radius: 10px;
-      padding: 9mm 10mm;
+      border: 2px solid #0f172a;
+      border-radius: 8px;
+      padding: 5mm 6mm;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 4mm;
+      background: #ffffff;
+    }
+    .outer-frame-back {
+      width: 100%;
+      border: 2px solid #0f172a;
+      border-radius: 8px;
+      padding: 4mm 5.5mm;
+      display: flex;
+      flex-direction: column;
+      gap: 2.4mm;
       background: #ffffff;
     }
     .header-banner {
       background: #f0f9ff;
       color: #0f172a;
-      border-radius: 8px;
-      padding: 5.5mm 7mm;
+      border-radius: 7px;
+      padding: 3mm 5mm;
       text-align: center;
-      border: 2px solid #0284c7;
-      border-bottom: 4px solid #0284c7;
+      border: 1.5px solid #0284c7;
+      border-bottom: 3px solid #0284c7;
     }
     .header-sub {
-      font-size: 9.5pt;
+      font-size: 8pt;
       font-weight: 800;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.15em;
       color: #0369a1;
-      margin-bottom: 2mm;
+      margin-bottom: 0.8mm;
     }
     .header-title {
-      font-size: 21pt;
+      font-size: 17pt;
       font-weight: 900;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.05em;
       color: #0f172a;
       margin: 0;
-      line-height: 1.25;
+      line-height: 1.2;
     }
     .qr-section {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      margin: 4mm 0;
+      margin: 1mm 0;
     }
     .qr-card {
-      border: 3px solid #0f172a;
-      border-radius: 14px;
-      padding: 7mm;
+      border: 2.5px solid #0f172a;
+      border-radius: 10px;
+      padding: 4mm 5.5mm;
       background: #ffffff;
-      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.08);
       display: flex;
       flex-direction: column;
       align-items: center;
     }
     .qr-card img {
-      width: 86mm;
-      height: 86mm;
+      width: 60mm;
+      height: 60mm;
       object-fit: contain;
       display: block;
     }
     .qr-caption {
-      margin-top: 3mm;
-      font-size: 10.5pt;
+      margin-top: 1.8mm;
+      font-size: 9pt;
       font-weight: 800;
       color: #0f172a;
-      letter-spacing: 0.05em;
+      letter-spacing: 0.04em;
     }
     .pw-box {
-      border: 3px solid #0891b2;
+      border: 2px solid #0891b2;
       background: #ecfeff;
-      border-radius: 12px;
-      padding: 5.5mm 8mm;
+      border-radius: 9px;
+      padding: 3.2mm 5mm;
       text-align: center;
     }
     .pw-label {
-      font-size: 11pt;
+      font-size: 9pt;
       font-weight: 800;
       color: #0e7490;
-      letter-spacing: 0.1em;
-      margin-bottom: 2mm;
+      letter-spacing: 0.08em;
+      margin-bottom: 1.2mm;
     }
     .pw-value {
       font-family: "Courier New", Consolas, monospace;
-      font-size: 31pt;
+      font-size: 23pt;
       font-weight: 900;
       letter-spacing: 0.08em;
       color: #0f172a;
       background: #ffffff;
       border: 2px solid #06b6d4;
-      border-radius: 8px;
-      padding: 2.5mm 8mm;
+      border-radius: 6px;
+      padding: 1.2mm 5.5mm;
       display: inline-block;
       line-height: 1.1;
     }
     .pw-note {
-      margin-top: 2mm;
-      font-size: 9.5pt;
+      margin-top: 1.2mm;
+      font-size: 8pt;
       font-weight: 700;
       color: #334155;
     }
     .steps-box {
       border: 1.5px solid #cbd5e1;
       background: #f8fafc;
-      border-radius: 10px;
-      padding: 5mm 6mm;
+      border-radius: 8px;
+      padding: 3mm 4.5mm;
     }
     .steps-title {
-      font-size: 11pt;
+      font-size: 9pt;
       font-weight: 900;
       color: #0f172a;
-      margin-bottom: 3mm;
-      border-bottom: 1.5px solid #cbd5e1;
-      padding-bottom: 1.5mm;
+      margin-bottom: 1.8mm;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 0.8mm;
     }
     .step-item {
       display: flex;
       align-items: center;
-      gap: 3.5mm;
-      font-size: 11pt;
+      gap: 2.2mm;
+      font-size: 9pt;
       font-weight: 700;
       color: #1e293b;
-      line-height: 1.5;
-      margin-bottom: 2.5mm;
+      line-height: 1.38;
+      margin-bottom: 1.4mm;
     }
     .step-item:last-child {
       margin-bottom: 0;
     }
     .step-badge {
-      width: 6.5mm;
-      height: 6.5mm;
+      width: 5mm;
+      height: 5mm;
       border-radius: 999px;
       background: #0f172a;
       color: #ffffff;
-      font-size: 10pt;
+      font-size: 8pt;
       font-weight: 900;
       display: inline-flex;
       align-items: center;
@@ -1157,38 +1166,38 @@ export function printWhaleSonarGuideA4(): void {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 8.5pt;
+      font-size: 7.2pt;
       font-weight: 700;
       color: #64748b;
       border-top: 1px solid #cbd5e1;
-      padding-top: 2.5mm;
+      padding-top: 1.2mm;
     }
 
-    /* 裏面（2ページ目：操作ガイド＆画面サンプル） */
+    /* 裏面（2ページ目：操作ガイド＆画面サンプル・1ページ完全収容） */
     .guide-lead-box {
-      border: 2px solid #0891b2;
+      border: 1.5px solid #0891b2;
       background: #f0fdff;
-      border-radius: 10px;
-      padding: 4.5mm 5.5mm;
+      border-radius: 7px;
+      padding: 2.2mm 3.5mm;
     }
     .guide-lead-title {
-      font-size: 11.5pt;
+      font-size: 9pt;
       font-weight: 900;
       color: #0f172a;
-      margin-bottom: 2.5mm;
+      margin-bottom: 1mm;
       display: flex;
       align-items: center;
-      gap: 2mm;
+      gap: 1.5mm;
     }
     .guide-bullet {
       display: flex;
       align-items: flex-start;
-      gap: 2.5mm;
-      font-size: 10.5pt;
+      gap: 1.8mm;
+      font-size: 8.3pt;
       font-weight: 800;
       color: #0f172a;
-      line-height: 1.55;
-      margin-bottom: 2mm;
+      line-height: 1.32;
+      margin-bottom: 0.8mm;
     }
     .guide-bullet:last-child {
       margin-bottom: 0;
@@ -1199,117 +1208,117 @@ export function printWhaleSonarGuideA4(): void {
       flex-shrink: 0;
     }
 
-    /* スマホ画面サンプル枠（トナー節約・ライトトーン再現） */
+    /* スマホ画面サンプル枠（トナー節約・コンパクト1ページ収容） */
     .mock-phone-frame {
       background: #f8fafc;
       color: #0f172a;
-      border: 2px solid #475569;
-      border-radius: 14px;
-      padding: 4.5mm 5mm;
+      border: 1.5px solid #475569;
+      border-radius: 9px;
+      padding: 2.2mm 3mm;
       display: flex;
       flex-direction: column;
-      gap: 3.5mm;
+      gap: 1.8mm;
     }
     .mock-phone-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1.5px solid #cbd5e1;
-      padding-bottom: 2mm;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 1mm;
     }
     .mock-phone-header-title {
-      font-size: 9.5pt;
+      font-size: 8pt;
       font-weight: 900;
       color: #0369a1;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
     .mock-phone-header-badge {
-      font-size: 8pt;
+      font-size: 6.8pt;
       font-weight: 700;
       color: #334155;
       background: #ffffff;
       border: 1px solid #94a3b8;
-      border-radius: 4px;
-      padding: 0.8mm 2mm;
+      border-radius: 3px;
+      padding: 0.3mm 1.5mm;
     }
     .sample-block {
       position: relative;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
       background: #ffffff;
-      padding: 3mm 3.5mm;
+      padding: 1.6mm 2.4mm;
     }
     .callout-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 2mm;
+      margin-bottom: 1mm;
     }
     .callout-tag {
       display: inline-flex;
       align-items: center;
-      gap: 1.5mm;
+      gap: 1mm;
       background: #e0f2fe;
-      border: 1.5px solid #0284c7;
+      border: 1px solid #0284c7;
       color: #0369a1;
-      font-size: 8.5pt;
+      font-size: 7.4pt;
       font-weight: 900;
-      padding: 0.6mm 2.5mm;
+      padding: 0.2mm 1.8mm;
       border-radius: 999px;
     }
     .callout-desc {
-      font-size: 8.5pt;
+      font-size: 7pt;
       font-weight: 700;
       color: #334155;
     }
 
     /* ① 波形ログサンプル */
     .waveform-box {
-      border: 1.5px solid #0284c7;
+      border: 1px solid #0284c7;
       background: #f8fafc;
-      border-radius: 8px;
+      border-radius: 5px;
       overflow: hidden;
     }
     .waveform-header {
       background: #f0f9ff;
       border-bottom: 1px solid #bae6fd;
-      padding: 1.5mm 3mm;
+      padding: 0.8mm 2mm;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      font-size: 8.5pt;
+      font-size: 7.2pt;
       font-weight: 800;
       color: #0369a1;
     }
     .waveform-replay {
-      font-size: 7.5pt;
+      font-size: 6.5pt;
       background: #ffffff;
       border: 1px solid #0284c7;
       color: #0369a1;
-      border-radius: 4px;
-      padding: 0.5mm 2mm;
+      border-radius: 3px;
+      padding: 0.2mm 1.4mm;
       font-weight: 800;
     }
 
     /* ② クジラの行動観測モニターサンプル */
     .monitor-box {
-      border: 1.5px solid #94a3b8;
+      border: 1px solid #94a3b8;
       background: #f8fafc;
-      border-radius: 8px;
-      padding: 3mm 4mm;
+      border-radius: 5px;
+      padding: 1.4mm 2.5mm;
       text-align: center;
     }
     .monitor-title {
-      font-size: 9.5pt;
+      font-size: 7.8pt;
       font-weight: 900;
       color: #0f172a;
-      margin-bottom: 1mm;
+      margin-bottom: 0.4mm;
     }
     .monitor-sub {
-      font-size: 8.5pt;
+      font-size: 7pt;
       font-weight: 600;
       color: #334155;
-      line-height: 1.45;
+      line-height: 1.3;
     }
 
     /* ③ 海中にクリック音を流す（発信）サンプル */
@@ -1317,68 +1326,68 @@ export function printWhaleSonarGuideA4(): void {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 1.5mm;
+      margin-bottom: 0.8mm;
     }
     .seq-bar-label {
-      font-size: 8.5pt;
+      font-size: 7.4pt;
       font-weight: 900;
       color: #0369a1;
     }
     .seq-ctrl-btns {
       display: flex;
-      gap: 1.5mm;
+      gap: 1mm;
     }
     .seq-ctrl-btn {
       background: #f8fafc;
       border: 1px solid #64748b;
       color: #1e293b;
-      border-radius: 5px;
-      padding: 0.8mm 2.2mm;
-      font-size: 8pt;
+      border-radius: 3px;
+      padding: 0.3mm 1.5mm;
+      font-size: 6.8pt;
       font-weight: 800;
     }
     .seq-slot-box {
       background: #f8fafc;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 7px;
-      padding: 2mm 2.5mm;
+      border: 1px solid #cbd5e1;
+      border-radius: 4px;
+      padding: 1mm 1.8mm;
       display: flex;
       align-items: center;
-      gap: 2mm;
-      margin-bottom: 2mm;
+      gap: 1.2mm;
+      margin-bottom: 1mm;
     }
     .seq-chip {
       background: #eef2ff;
-      border: 1.5px solid #4f46e5;
+      border: 1px solid #4f46e5;
       color: #1e1b4b;
-      border-radius: 5px;
-      padding: 0.8mm 2.2mm;
-      font-size: 8.5pt;
+      border-radius: 3px;
+      padding: 0.3mm 1.5mm;
+      font-size: 7.2pt;
       font-weight: 800;
     }
     .transmit-btn {
       width: 100%;
       background: #e0f2fe;
-      border: 2px solid #0284c7;
+      border: 1.5px solid #0284c7;
       color: #0f172a;
-      border-radius: 8px;
-      padding: 2.2mm 4mm;
+      border-radius: 5px;
+      padding: 1.1mm 2.5mm;
       text-align: center;
-      font-size: 10.5pt;
+      font-size: 8.5pt;
       font-weight: 900;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.03em;
     }
 
     /* ④ クリック音ボタンサンプル（音 #01 ＆ 音 #03） */
     .sample-cards-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 3.5mm;
+      gap: 2mm;
     }
     .sound-card {
       background: #f8fafc;
-      border-radius: 9px;
-      padding: 2.8mm 3mm;
+      border-radius: 6px;
+      padding: 1.4mm 2mm;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -1399,72 +1408,74 @@ export function printWhaleSonarGuideA4(): void {
       border: 1px solid #64748b;
       color: #0369a1;
       font-family: monospace;
-      font-size: 8.5pt;
+      font-size: 7.2pt;
       font-weight: 900;
-      padding: 0.5mm 2mm;
-      border-radius: 4px;
+      padding: 0.2mm 1.4mm;
+      border-radius: 3px;
     }
     .sound-preview-btn {
       background: #e0f2fe;
       border: 1px solid #0284c7;
       color: #0369a1;
-      font-size: 8pt;
+      font-size: 6.8pt;
       font-weight: 800;
-      padding: 0.6mm 2mm;
-      border-radius: 5px;
+      padding: 0.2mm 1.4mm;
+      border-radius: 3px;
     }
     .sound-onomatopoeia {
-      margin-top: 1.8mm;
-      font-size: 10pt;
+      margin-top: 0.8mm;
+      font-size: 8.2pt;
       font-weight: 900;
       color: #92400e;
     }
     .sound-meaning-locked {
-      margin-top: 1.5mm;
+      margin-top: 0.6mm;
       display: inline-block;
       background: #fef3c7;
-      border: 1.5px solid #d97706;
+      border: 1px solid #d97706;
       color: #92400e;
-      font-size: 9pt;
+      font-size: 7.5pt;
       font-weight: 900;
-      padding: 0.8mm 2.2mm;
-      border-radius: 5px;
+      padding: 0.3mm 1.5mm;
+      border-radius: 3px;
     }
     .sound-meaning-unsolved {
-      margin-top: 1.5mm;
-      font-size: 9pt;
+      margin-top: 0.6mm;
+      font-size: 7.5pt;
       font-weight: 800;
       color: #475569;
     }
     .sound-card-footer {
-      margin-top: 2mm;
-      padding-top: 1.8mm;
+      margin-top: 1mm;
+      padding-top: 0.8mm;
       border-top: 1px solid #cbd5e1;
     }
     .sound-locked-note {
-      font-size: 8pt;
+      font-size: 6.8pt;
       font-weight: 800;
       color: #b45309;
     }
     .sound-assign-btn {
       width: 100%;
       background: #eef2ff;
-      border: 1.5px solid #4f46e5;
+      border: 1px solid #4f46e5;
       color: #312e81;
-      border-radius: 6px;
-      padding: 1.2mm 2mm;
+      border-radius: 3px;
+      padding: 0.5mm 1.2mm;
       text-align: center;
-      font-size: 8.5pt;
+      font-size: 7.2pt;
       font-weight: 900;
     }
   </style>
 </head>
 <body>
-  <!-- =========================================================================
-       1ページ目（表面）：QRコード ＆ アクセスパスワード提示シート
+  ${
+    showFront
+      ? `<!-- =========================================================================
+       1ページ目（表面）：QRコード ＆ アクセスパスワード提示シート（A4・1ページ完全収容）
        ========================================================================= -->
-  <div class="a4-page page-break">
-    <div class="outer-frame">
+  <div class="a4-page ${showBack ? "page-break" : ""}">
+    <div class="outer-frame-front">
       <div class="header-banner">
         <div class="header-sub">MARINE MAMMAL ACOUSTIC ANALYSIS TERMINAL</div>
         <h1 class="header-title">『マッコウクジラ音響言語解析システム』</h1>
@@ -1497,25 +1508,29 @@ export function printWhaleSonarGuideA4(): void {
         </div>
         <div class="step-item">
           <span class="step-badge">3</span>
-          <span>詳しい画面の見方と操作方法は、<strong>裏面（次ページ）</strong>をご覧ください。</span>
+          <span>詳しい画面の見方と操作方法は、<strong>裏面</strong>をご覧ください。</span>
         </div>
       </div>
 
       <div class="footer-bar">
         <span>マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（表面）</span>
-        <span>1 / 2</span>
+        <span>${mode === "both" ? "1 / 2" : "1 / 1"}</span>
       </div>
     </div>
-  </div>
+  </div>`
+      : ""
+  }
 
-  <!-- =========================================================================
-       2ページ目（裏面）：画面サンプル ＆ 操作説明シート
+  ${
+    showBack
+      ? `<!-- =========================================================================
+       2ページ目（裏面）：画面サンプル ＆ 操作説明シート（A4・1ページ完全収容）
        ========================================================================= -->
   <div class="a4-page">
-    <div class="outer-frame">
-      <div class="header-banner" style="padding: 4.5mm 6mm;">
-        <div class="header-sub" style="font-size: 8.5pt;">SYSTEM OPERATION GUIDE &amp; SCREEN SAMPLES</div>
-        <h1 class="header-title" style="font-size: 17.5pt;">『マッコウクジラ音響言語解析システム』画面説明</h1>
+    <div class="outer-frame-back">
+      <div class="header-banner" style="padding: 2mm 4mm;">
+        <div class="header-sub" style="font-size: 7pt; margin-bottom: 0.4mm;">SYSTEM OPERATION GUIDE &amp; SCREEN SAMPLES</div>
+        <h1 class="header-title" style="font-size: 13.5pt;">『マッコウクジラ音響言語解析システム』画面説明</h1>
       </div>
 
       <!-- プレイヤー向け操作説明（ご指定の3項目） -->
@@ -1553,19 +1568,19 @@ export function printWhaleSonarGuideA4(): void {
               <span>📈 時間変化・音響波形ログ（再生後も形が残ります）</span>
               <span class="waveform-replay">▶ もう一度再生</span>
             </div>
-            <svg viewBox="0 0 600 92" width="100%" height="68" style="display:block; background:#ffffff;">
+            <svg viewBox="0 0 600 64" width="100%" height="36" style="display:block; background:#ffffff;">
               <!-- グリッド線 -->
-              <line x1="0" y1="23" x2="600" y2="23" stroke="#e2e8f0" stroke-width="1" />
-              <line x1="0" y1="46" x2="600" y2="46" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4" />
-              <line x1="0" y1="69" x2="600" y2="69" stroke="#e2e8f0" stroke-width="1" />
-              <line x1="300" y1="0" x2="300" y2="92" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 3" />
+              <line x1="0" y1="16" x2="600" y2="16" stroke="#e2e8f0" stroke-width="1" />
+              <line x1="0" y1="34" x2="600" y2="34" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4" />
+              <line x1="0" y1="52" x2="600" y2="52" stroke="#e2e8f0" stroke-width="1" />
+              <line x1="300" y1="0" x2="300" y2="64" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 3" />
               <!-- ラベル -->
-              <text x="12" y="16" fill="#0369a1" font-size="10" font-family="monospace" font-weight="bold">1. 音 #01『ゴゴゴゴ…』(海の下の火山)</text>
-              <text x="312" y="16" fill="#0369a1" font-size="10" font-family="monospace" font-weight="bold">2. 音 #03『カ・カ・カカッ！』</text>
+              <text x="12" y="12" fill="#0369a1" font-size="9" font-family="monospace" font-weight="bold">1. 音 #01『ゴゴゴゴ…』(海の下の火山)</text>
+              <text x="312" y="12" fill="#0369a1" font-size="9" font-family="monospace" font-weight="bold">2. 音 #03『カ・カ・カカッ！』</text>
               <!-- 波形1（低周波の連続振動：ゴゴゴゴ…） -->
-              <path d="M 15 46 Q 25 20, 35 46 T 55 46 T 75 46 T 95 46 T 115 46 T 135 46 T 155 46 T 175 46 T 195 46 T 215 46 T 235 46 T 255 46 L 285 46" fill="none" stroke="#d97706" stroke-width="2.2" />
+              <path d="M 15 34 Q 25 16, 35 34 T 55 34 T 75 34 T 95 34 T 115 34 T 135 34 T 155 34 T 175 34 T 195 34 T 215 34 T 235 34 T 255 34 L 285 34" fill="none" stroke="#d97706" stroke-width="2" />
               <!-- 波形2（鋭いパルス：カ・カ・カカッ！） -->
-              <path d="M 315 46 L 335 46 L 340 14 L 345 78 L 350 46 L 385 46 L 390 14 L 395 78 L 400 46 L 435 46 L 440 12 L 445 80 L 450 20 L 455 74 L 460 46 L 580 46" fill="none" stroke="#0284c7" stroke-width="2.2" />
+              <path d="M 315 34 L 335 34 L 340 13 L 345 56 L 350 34 L 385 34 L 390 13 L 395 56 L 400 34 L 435 34 L 440 11 L 445 58 L 450 16 L 455 52 L 460 34 L 580 34" fill="none" stroke="#0284c7" stroke-width="2" />
             </svg>
           </div>
         </div>
@@ -1579,8 +1594,7 @@ export function printWhaleSonarGuideA4(): void {
           <div class="monitor-box">
             <div class="monitor-title">【クジラの行動観測モニター】</div>
             <div class="monitor-sub">
-              クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、<br />
-              ここにクジラの行動が文字で表示されます。
+              クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、ここにクジラの行動が文字で表示されます。
             </div>
           </div>
         </div>
@@ -1600,7 +1614,7 @@ export function printWhaleSonarGuideA4(): void {
           </div>
           <div class="seq-slot-box">
             <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">1.</span> 海の下の火山</span>
-            <span style="color:#64748b; font-weight:bold; font-size:9pt;">＋</span>
+            <span style="color:#64748b; font-weight:bold; font-size:7.5pt;">＋</span>
             <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">2.</span> 音 #03（カ・カ・カカッ！）</span>
           </div>
           <div class="transmit-btn">
@@ -1652,10 +1666,12 @@ export function printWhaleSonarGuideA4(): void {
 
       <div class="footer-bar">
         <span>マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（裏面：画面サンプル＆操作案内）</span>
-        <span>2 / 2</span>
+        <span>${mode === "both" ? "2 / 2" : "1 / 1"}</span>
       </div>
     </div>
-  </div>
+  </div>`
+      : ""
+  }
 </body>
 </html>`;
 
