@@ -1195,7 +1195,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     flashTimerRef.current = window.setTimeout(() => {
       setFlashingActionBtn(null);
       flashTimerRef.current = null;
-    }, 350);
+    }, 200);
   };
 
   // 1文字削除・全クリア
@@ -1883,10 +1883,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               flashingActionBtn !== "backspace") ||
                             isPlaying
                           }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] transition-all duration-150 ${
+                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
                             flashingActionBtn === "backspace"
-                              ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.95)] scale-105"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white active:bg-cyan-400 active:text-slate-950 disabled:opacity-40"
+                              ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]"
+                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
                           }`}
                         >
                           <Delete className="h-3 w-3" />
@@ -1899,10 +1899,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               flashingActionBtn !== "clear") ||
                             isPlaying
                           }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] transition-all duration-150 ${
+                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
                             flashingActionBtn === "clear"
-                              ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.95)] scale-105"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white active:bg-amber-400 active:text-slate-950 disabled:opacity-40"
+                              ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.9)]"
+                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
                           }`}
                         >
                           <RotateCcw className="h-3 w-3" />
