@@ -161,7 +161,7 @@ export default function WorkbenchPage() {
       } else if (persona === "drama_director") {
         replyText = `【ドラマ演出視点】\n「${text}」についてドラマツルギーを検討しました！\n・各PCの「誇り・喪失体験」のスロットと連動させ、プレイヤーが自発的に葛藤を抱くハンドアウト展開を構築できます。\n・オープニングからクライマックスに至る緊張曲線の設計を進めましょう。`;
       } else {
-        replyText = `【推敲アシスタント視点】\n「${text}」について文章表現を推敲しました。\n・世界観（${project.concept.slice(0, 30)}...）に即した臨場感ある語彙や、プレイヤーが没入しやすい描写を提案します。`;
+        replyText = `【推敲アシスタント視点】\n「${text}」について文章表現を推敲しました。\n・世界観（${(project.concept || "").slice(0, 30)}...）に即した臨場感ある語彙や、プレイヤーが没入しやすい描写を提案します。`;
       }
 
       const aiMsg: ChatMessage = {

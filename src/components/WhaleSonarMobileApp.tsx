@@ -608,21 +608,22 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const progressTimerRef = useRef<number | null>(null);
 
   // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
+  const safeWords = React.useMemo(() => (Array.isArray(words) ? words : []), [words]);
   const orderedWords = React.useMemo(() => {
     const lockedOrder = ["word-subsea-volcano", "word-alert"];
     const locked = lockedOrder
-      .map((id) => words.find((w) => w.id === id))
+      .map((id) => safeWords.find((w) => w.id === id))
       .filter((w): w is CrypticWord => Boolean(w));
-    const unlocked = words.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
+    const unlocked = safeWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
     return [...locked, ...unlocked];
-  }, [words]);
+  }, [safeWords]);
 
   // 各wordIdに対するボタン番号（例: "音 #01", "音 #02"...）と音響擬音ラベル（Hz表記を除去）を取得
   const getWordButtonMeta = useCallback(
     (wordId: string) => {
       const idx = orderedWords.findIndex((w) => w.id === wordId);
       const numStr = idx >= 0 ? String(idx + 1).padStart(2, "0") : "00";
-      const wordObj = words.find((w) => w.id === wordId);
+      const wordObj = safeWords.find((w) => w.id === wordId);
       const rawOnomatopoeia =
         wordObj?.soundPattern.match(/（(.+?)）/)?.[1] ||
         wordObj?.soundPattern ||
@@ -642,7 +643,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         trueMeaning: wordObj ? wordObj.meaning.split("（")[0] : wordId,
       };
     },
-    [orderedWords, words, playerAssignedLabels]
+    [orderedWords, safeWords, playerAssignedLabels]
   );
 
   // ローカルストレージからプレイヤーの日本語あてはめ状態を復元
@@ -695,7 +696,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   const handleFillAllCorrectLabelsForPreview = () => {
     const allCorrect: Record<string, string> = {};
-    words.forEach((w) => {
+    safeWords.forEach((w) => {
       allCorrect[w.id] = w.meaning.split("（")[0];
     });
     handleSavePlayerLabels(allCorrect);

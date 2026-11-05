@@ -1209,11 +1209,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     return (project.evidences || [])
       .filter(
         (e) =>
+          e &&
           e.id !== "ev-coda-spectrogram" &&
           e.id !== "ev-folk-song-rhythm" &&
-          !e.title.includes("古謡") &&
-          !e.title.includes("スペクトログラム") &&
-          !e.title.includes("スペクロログラム")
+          !(e.title || "").includes("古謡") &&
+          !(e.title || "").includes("スペクトログラム") &&
+          !(e.title || "").includes("スペクロログラム")
       )
       .map((e) => {
         const master = masterEvidenceMap[e.id];
@@ -2181,7 +2182,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <Radio className="h-4 w-4" />
             ④ GM用の進行資料
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              全{project.timeline.length}フェーズ
+              全{(project.timeline || []).length}フェーズ
             </span>
           </button>
         </div>
@@ -2196,7 +2197,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  個人向けハンドアウト ({project.characters.length}名)
+                  個人向けハンドアウト ({(project.characters || []).length}名)
                 </h3>
               </div>
 
@@ -2281,7 +2282,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               )}
 
               <div className="space-y-2">
-                {project.characters.map((c, idx) => {
+                {(project.characters || []).map((c, idx) => {
                   const isSelected = c.id === activeChar?.id;
                   const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
                   return (
@@ -2571,7 +2572,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  GM進行資料（全{project.timeline.length}フェーズ）
+                  GM進行資料（全{(project.timeline || []).length}フェーズ）
                 </h3>
               </div>
 
@@ -2600,7 +2601,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
 
               <div className="space-y-2">
-                {project.timeline.map((step) => {
+                {(project.timeline || []).map((step) => {
                   const isSelected = step.dayNumber === selectedGmDay;
                   const fc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
                   return (
@@ -2655,7 +2656,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 個人ハンドアウト本紙（B5規格・全{project.characters.length}名）
+                          {project.title} ― 個人ハンドアウト本紙（B5規格・全{(project.characters || []).length}名）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
                           個人ハンドアウト本紙（選択中：{activeChar.name}）
@@ -2666,7 +2667,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           type="button"
                           onClick={() =>
                             printCharacterHandoutsB5(
-                              activeChar ? [activeChar] : project.characters,
+                              activeChar ? [activeChar] : project.characters || [],
                               project.title
                             )
                           }
@@ -2751,7 +2752,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                       <div className="flex items-center">
                         <span className="rounded border border-slate-500 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold text-white tracking-widest">
-                          PC-{project.characters.findIndex((c) => c.id === activeChar.id) + 1}
+                          PC-{(project.characters || []).findIndex((c) => c.id === activeChar.id) + 1}
                         </span>
                       </div>
                     </div>
@@ -2771,7 +2772,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {isDirectEditMode ? (
                             <textarea
                               rows={3}
-                              value={activeChar.handout.publicProfile}
+                              value={activeChar.handout?.publicProfile || ""}
                               onChange={(e) =>
                                 handleUpdateActiveChar((c) => ({
                                   ...c,
@@ -2782,7 +2783,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <p className="text-[11.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {activeChar.handout.publicProfile}
+                              {activeChar.handout?.publicProfile || ""}
                             </p>
                           )}
                         </div>
@@ -2800,7 +2801,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                               <button
                                 onClick={() =>
                                   onSendAiPrompt(
-                                    `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout.handoutBody}`
+                                    `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout?.handoutBody || ""}`
                                   )
                                 }
                                 className="no-print flex items-center gap-1 rounded bg-indigo-700 px-2 py-0.5 text-[9.5px] font-bold text-white hover:bg-indigo-600 shadow-sm"
@@ -2813,7 +2814,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {isDirectEditMode ? (
                             <textarea
                               rows={3}
-                              value={activeChar.handout.handoutBody}
+                              value={activeChar.handout?.handoutBody || ""}
                               onChange={(e) =>
                                 handleUpdateActiveChar((c) => ({
                                   ...c,
@@ -2824,7 +2825,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <blockquote className="border-l-2 border-indigo-500 pl-2 text-[11.5px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout.handoutBody)}
+                              {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
                             </blockquote>
                           )}
                         </div>
@@ -2853,14 +2854,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {isDirectEditMode ? (
                             <textarea
                               rows={3}
-                              value={activeChar.handout.internalDrama.pride}
+                              value={activeChar.handout?.internalDrama?.pride || ""}
                               onChange={(e) =>
                                 handleUpdateActiveChar((c) => ({
                                   ...c,
                                   handout: {
                                     ...c.handout,
                                     internalDrama: {
-                                      ...c.handout.internalDrama,
+                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
                                       pride: e.target.value,
                                     },
                                   },
@@ -2870,7 +2871,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.pride)}
+                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
                             </p>
                           )}
                         </div>
@@ -2884,14 +2885,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           {isDirectEditMode ? (
                             <textarea
                               rows={3}
-                              value={activeChar.handout.internalDrama.loss}
+                              value={activeChar.handout?.internalDrama?.loss || ""}
                               onChange={(e) =>
                                 handleUpdateActiveChar((c) => ({
                                   ...c,
                                   handout: {
                                     ...c.handout,
                                     internalDrama: {
-                                      ...c.handout.internalDrama,
+                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
                                       loss: e.target.value,
                                     },
                                   },
@@ -2901,7 +2902,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             />
                           ) : (
                             <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout.internalDrama.loss)}
+                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
                             </p>
                           )}
                         </div>

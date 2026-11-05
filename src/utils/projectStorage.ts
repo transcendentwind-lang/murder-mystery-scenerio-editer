@@ -232,9 +232,10 @@ export function getStoredProjects(): MMProject[] {
       // プリセット初期プロジェクト（project-deep-sea）のハンドアウト・設定を最新コードと確実に同期
       const initialIdx = parsed.findIndex(
         (p: MMProject) =>
-          p.id === initialProject.id ||
-          p.title === initialProject.title ||
-          p.title === "深海からの呼び声"
+          p &&
+          (p.id === initialProject.id ||
+            p.title === initialProject.title ||
+            p.title === "深海からの呼び声")
       );
       if (initialIdx >= 0) {
         const storedInit = parsed[initialIdx] || {};
@@ -297,16 +298,21 @@ export function getStoredProjects(): MMProject[] {
 
         // プリセット初期プロジェクト（initialProject）のみ、不要な旧証拠除外およびタイトルの最新同期を実施
         parsed.forEach((proj: MMProject) => {
+          if (!proj) return;
+          if (!Array.isArray(proj.characters)) proj.characters = [];
+          if (!Array.isArray(proj.evidences)) proj.evidences = [];
+          if (!Array.isArray(proj.timeline)) proj.timeline = [];
           if (proj.id !== initialProject.id) return;
           if (proj.evidences && Array.isArray(proj.evidences)) {
             proj.evidences = proj.evidences
               .filter(
                 (e) =>
+                  e &&
                   e.id !== "ev-coda-spectrogram" &&
                   e.id !== "ev-folk-song-rhythm" &&
-                  !e.title.includes("古謡") &&
-                  !e.title.includes("スペクトログラム") &&
-                  !e.title.includes("スペクロログラム")
+                  !(e.title || "").includes("古謡") &&
+                  !(e.title || "").includes("スペクトログラム") &&
+                  !(e.title || "").includes("スペクロログラム")
               )
               .map((e) => {
                 const master = masterEvidenceMap.get(e.id);
@@ -367,11 +373,40 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
     let hasChanges = false;
 
     for (const preset of localPresets) {
-      if (!preset.id) continue;
-      const existingIdx = updated.findIndex((p) => p.id === preset.id);
+      if (!preset || !preset.id) continue;
+      const normalizedPreset: MMProject = {
+        ...preset,
+        characters: Array.isArray(preset.characters) ? preset.characters : [],
+        evidences: Array.isArray(preset.evidences) ? preset.evidences : [],
+        timeline: Array.isArray(preset.timeline) ? preset.timeline : [],
+      };
+      const existingIdx = updated.findIndex((p) => p && p.id === preset.id);
       if (existingIdx < 0) {
-        updated.push(preset);
+        updated.push(normalizedPreset);
         hasChanges = true;
+      } else {
+        // 既存データに配列フィールドの欠損がある場合は安全に補完
+        const existing = updated[existingIdx];
+        if (
+          !Array.isArray(existing.characters) ||
+          !Array.isArray(existing.evidences) ||
+          !Array.isArray(existing.timeline)
+        ) {
+          updated[existingIdx] = {
+            ...normalizedPreset,
+            ...existing,
+            characters: Array.isArray(existing.characters)
+              ? existing.characters
+              : normalizedPreset.characters,
+            evidences: Array.isArray(existing.evidences)
+              ? existing.evidences
+              : normalizedPreset.evidences,
+            timeline: Array.isArray(existing.timeline)
+              ? existing.timeline
+              : normalizedPreset.timeline,
+          };
+          hasChanges = true;
+        }
       }
     }
 
@@ -400,11 +435,12 @@ export function saveProjectToStorage(project: MMProject): void {
       ? (project.evidences || [])
           .filter(
             (e) =>
+              e &&
               e.id !== "ev-coda-spectrogram" &&
               e.id !== "ev-folk-song-rhythm" &&
-              !e.title.includes("古謡") &&
-              !e.title.includes("スペクトログラム") &&
-              !e.title.includes("スペクロログラム")
+              !(e.title || "").includes("古謡") &&
+              !(e.title || "").includes("スペクトログラム") &&
+              !(e.title || "").includes("スペクロログラム")
           )
           .map((e) => {
             const master = masterEvidenceMap.get(e.id);
