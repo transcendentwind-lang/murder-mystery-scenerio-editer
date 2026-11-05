@@ -276,10 +276,14 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                           </span>
                           <span className="flex items-center gap-1">
                             <Clock className="h-3.5 w-3.5 text-cyan-400" />
-                            全{p.timeline?.length || 4}フェーズ（約{p.durationHours}h）
+                            {p.id === "project-deep-sea"
+                              ? `全${p.timeline?.length || 7}日間（約${p.durationHours}h）`
+                              : `全${p.timeline?.length || 4}フェーズ（約${p.durationHours}h）`}
                           </span>
                           <span>
-                            証拠 {p.evidences?.length || 0}件 / 解釈 {p.matrixLinks?.length || 0}件
+                            {p.id === "project-deep-sea"
+                              ? `証拠 ${p.evidences?.length || 0}件`
+                              : `証拠 ${p.evidences?.length || 0}件 / 解釈 ${p.matrixLinks?.length || 0}件`}
                           </span>
                           <span className="text-slate-500 ml-auto">
                             更新: {formattedDate}

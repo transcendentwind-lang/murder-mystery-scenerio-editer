@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { IncidentStep, EvidenceItem, MMProject } from "@/types/schema";
+import { initialProject } from "@/utils/initialProjectData";
 import {
   Compass,
   MapPin,
@@ -161,7 +162,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   onNavigateToPuzzle,
 }) => {
   const [selectedDay, setSelectedDay] = useState<number>(1);
-  const currentStep = timeline.find((t) => t.dayNumber === selectedDay) || timeline[0];
+  const safeTimeline =
+    Array.isArray(timeline) && timeline.length > 0 ? timeline : initialProject.timeline;
+  const currentStep =
+    safeTimeline.find((t) => t.dayNumber === selectedDay) || safeTimeline[0];
 
   // モーダル状態
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
@@ -392,8 +396,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     onUpdateTimeline(updated);
   };
 
-  const getRevealedEvidences = (evidenceIds: string[]) => {
-    return evidences.filter((e) => evidenceIds.includes(e.id));
+  const getRevealedEvidences = (evidenceIds?: string[]) => {
+    const ids = evidenceIds || [];
+    return (evidences || []).filter((e) => ids.includes(e.id));
   };
 
   // 汎用・新規シナリオプロジェクト用のフェーズ進行＆リソース・裏アクション設計ボード
@@ -718,10 +723,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
           <div className="absolute top-1/2 left-4 right-4 h-1 -translate-y-1/2 bg-slate-800" />
           <div
             className="absolute top-1/2 left-4 h-1 -translate-y-1/2 bg-indigo-600 transition-all duration-300"
-            style={{ width: `${((selectedDay - 1) / (timeline.length - 1)) * 95}%` }}
+            style={{ width: `${((selectedDay - 1) / Math.max(1, safeTimeline.length - 1)) * 95}%` }}
           />
 
-          {timeline.map((step) => {
+          {safeTimeline.map((step) => {
             const isSelected = step.dayNumber === selectedDay;
             const isPast = step.dayNumber <= selectedDay;
             return (
@@ -746,7 +751,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     isSelected ? "text-indigo-300 font-bold" : "text-slate-400"
                   }`}
                 >
-                  {step.locationName.split(" ")[0]}
+                  {(step.locationName || "").split(" ")[0]}
                 </span>
                 <span className="text-[10px] font-mono text-slate-500">
                   {step.distanceKm} km
@@ -4237,18 +4242,18 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             <div className="flex items-center gap-1.5">
               <FileText className="h-4 w-4 text-indigo-400" />
               <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider">
-                DAY {currentStep.dayNumber} 解禁エビデンス ({currentStep.revealedEvidenceIds.length}件)
+                DAY {currentStep?.dayNumber} 解禁エビデンス ({(currentStep?.revealedEvidenceIds || []).length}件)
               </h4>
             </div>
           </div>
 
           <div className="flex-1 space-y-2.5 overflow-y-auto pr-0.5">
-            {getRevealedEvidences(currentStep.revealedEvidenceIds).length === 0 ? (
+            {getRevealedEvidences(currentStep?.revealedEvidenceIds).length === 0 ? (
               <div className="rounded-lg border border-dashed border-slate-800 p-6 text-center text-xs text-slate-500">
                 このDayに新たに解禁される直接証拠はありません（会議・意思決定フェーズ）
               </div>
             ) : (
-              getRevealedEvidences(currentStep.revealedEvidenceIds).map((ev) => (
+              getRevealedEvidences(currentStep?.revealedEvidenceIds).map((ev) => (
                 <div
                   key={ev.id}
                   className="rounded-lg border border-slate-800 bg-slate-950 p-3 shadow-sm hover:border-slate-700 transition"

@@ -329,6 +329,455 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
     return lockCriteria.every((crit) => !!status.locks[crit.id]);
   });
 
+  if (isDeepSeaProject) {
+    const deepSeaSubView =
+      subView === "evidences" || subView === "matrix" ? subView : "characters";
+
+    return (
+      <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
+        {/* サブタブバー */}
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-2 rounded-lg border border-slate-800 bg-slate-900 p-1">
+              <button
+                onClick={() => setSubView("characters")}
+                className={`flex items-center gap-2 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                  deepSeaSubView === "characters"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <Users className="h-3.5 w-3.5" />
+                キャラクター設定
+              </button>
+              <button
+                onClick={() => setSubView("evidences")}
+                className={`flex items-center gap-2 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                  deepSeaSubView === "evidences"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <FileText className="h-3.5 w-3.5" />
+                全証拠（エビデンス）マスター一覧 ({evidences.length})
+              </button>
+              <button
+                onClick={() => setSubView("matrix")}
+                className={`flex items-center gap-2 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
+                  deepSeaSubView === "matrix"
+                    ? "bg-indigo-600 text-white shadow"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                <Grid className="h-3.5 w-3.5" />
+                証拠配分マトリクス (PC × Day)
+              </button>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-3">
+            {onTogglePlayerCount && (
+              <div className="flex items-center gap-1 rounded-lg border border-indigo-500/40 bg-indigo-950/40 p-1">
+                <button
+                  onClick={() => onTogglePlayerCount(6)}
+                  className={`rounded px-2.5 py-1 text-xs font-bold transition ${
+                    playerCount !== 7
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  6名モード（標準・長津GM）
+                </button>
+                <button
+                  onClick={() => onTogglePlayerCount(7)}
+                  className={`rounded px-2.5 py-1 text-xs font-bold transition ${
+                    playerCount === 7
+                      ? "bg-amber-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  7名モード（長津PC参加）
+                </button>
+              </div>
+            )}
+            <div className="text-xs text-slate-400">
+              登録PC: <span className="font-bold text-indigo-400">{characters.length}名</span> ｜
+              総証拠数: <span className="font-bold text-emerald-400">{evidences.length}件</span>
+            </div>
+          </div>
+        </div>
+
+        {/* 1. キャラクター＆ハンドアウト設定 */}
+        {deepSeaSubView === "characters" && selectedChar && (
+          <div className="grid flex-1 grid-cols-1 gap-6 overflow-hidden lg:grid-cols-12">
+            {/* 左：PC一覧 */}
+            <div className="flex flex-col gap-2 overflow-y-auto pr-1 lg:col-span-4">
+              <div className="mb-1 flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-400">
+                  海難救助対策チーム ({characters.length}名)
+                </span>
+                <span className="rounded bg-indigo-500/20 px-2 py-0.5 text-[10px] font-bold text-indigo-300">
+                  {playerCount === 7 ? "7名編成（長津PC参加）" : "6名編成（標準・長津GM）"}
+                </span>
+              </div>
+              {characters.map((char, idx) => {
+                const isSelected = char.id === currentSelectedCharId;
+                const charEvCount = evidences.filter((e) => e.ownerId === char.id).length;
+                return (
+                  <button
+                    key={char.id}
+                    onClick={() => setSelectedCharId(char.id)}
+                    className={`flex flex-col items-start rounded-xl border p-3.5 text-left transition ${
+                      isSelected
+                        ? "border-indigo-500 bg-indigo-950/30 shadow-md"
+                        : "border-slate-800 bg-slate-900/60 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex w-full items-center justify-between">
+                      <span className="text-xs font-bold text-indigo-400">PC{idx + 1}</span>
+                      <span
+                        className={`rounded px-2 py-0.5 text-[10px] font-bold ${
+                          char.location === "headquarters"
+                            ? "bg-blue-500/20 text-blue-300"
+                            : "bg-teal-500/20 text-teal-300"
+                        }`}
+                      >
+                        {char.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現地"}
+                      </span>
+                    </div>
+                    <div className="mt-1 text-sm font-bold text-white">{char.name}</div>
+                    <div className="text-xs text-slate-400">{char.profession}</div>
+                    <div className="mt-2 flex w-full items-center justify-between border-t border-slate-800/80 pt-2 text-[11px] text-slate-400">
+                      <span>所持証拠: {charEvCount}枚</span>
+                      <span>能力: {(char.capabilities || []).length}種</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* 右：選択中PCの詳細エディタ */}
+            <div className="flex flex-col gap-5 overflow-y-auto pr-2 lg:col-span-8">
+              <div className="rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+                <div className="mb-4 flex items-center justify-between border-b border-slate-800 pb-3">
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-indigo-400">
+                      Character & Handout Editor
+                    </span>
+                    <h3 className="text-lg font-bold text-white">{selectedChar.name}</h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs text-slate-300">
+                      配置:{" "}
+                      {selectedChar.location === "headquarters"
+                        ? "海上保安庁東京本部"
+                        : "小笠原現場"}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-slate-400">
+                      キャラクター名
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedChar.name}
+                      onChange={(e) => handleUpdateChar("name", e.target.value)}
+                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-slate-400">
+                      職業・肩書
+                    </label>
+                    <input
+                      type="text"
+                      value={selectedChar.profession}
+                      onChange={(e) => handleUpdateChar("profession", e.target.value)}
+                      className="w-full rounded-lg border border-slate-700 bg-slate-950 px-3 py-2 text-sm text-white focus:border-indigo-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* 全員に公開される表向きのプロフィール */}
+                <div className="mt-4">
+                  <label className="mb-1 block text-xs font-bold text-cyan-400">
+                    全員に公開される表向きのプロフィール
+                  </label>
+                  <textarea
+                    rows={2}
+                    value={selectedChar.handout?.publicProfile || ""}
+                    onChange={(e) => handleUpdateHandoutField("publicProfile", e.target.value)}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-xs leading-relaxed text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+
+                {/* 内面の誇り・喪失（2カラム・後ろめたさ無し） */}
+                <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-amber-400">
+                      誇り・信条・行動指針
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={selectedChar.handout?.internalDrama?.pride || ""}
+                      onChange={(e) => handleUpdateDramaField("pride", e.target.value)}
+                      className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-xs leading-relaxed text-slate-200 focus:border-amber-500 focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="mb-1 block text-xs font-bold text-rose-400">
+                      過去の喪失・悔恨
+                    </label>
+                    <textarea
+                      rows={3}
+                      value={selectedChar.handout?.internalDrama?.loss || ""}
+                      onChange={(e) => handleUpdateDramaField("loss", e.target.value)}
+                      className="w-full rounded-lg border border-slate-700 bg-slate-950 p-2.5 text-xs leading-relaxed text-slate-200 focus:border-rose-500 focus:outline-none"
+                    />
+                  </div>
+                </div>
+
+                {/* あなたの記憶（導入ストーリー） */}
+                <div className="mt-4">
+                  <label className="mb-1 block text-xs font-bold text-emerald-400">
+                    あなたの記憶（プレイヤーが最初に読む導入ストーリー）
+                  </label>
+                  <textarea
+                    rows={10}
+                    value={selectedChar.introduction || ""}
+                    onChange={(e) => handleUpdateChar("introduction", e.target.value)}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 text-xs leading-relaxed text-slate-200 focus:border-emerald-500 focus:outline-none"
+                  />
+                </div>
+
+                {/* 自己紹介（ハンドアウト本文） */}
+                <div className="mt-4">
+                  <label className="mb-1 block text-xs font-bold text-indigo-400">
+                    自己紹介（ハンドアウト本文）
+                  </label>
+                  <textarea
+                    rows={8}
+                    value={selectedChar.handout?.handoutBody || ""}
+                    onChange={(e) => handleUpdateHandoutField("handoutBody", e.target.value)}
+                    className="w-full rounded-lg border border-slate-700 bg-slate-950 p-3 font-mono text-xs leading-relaxed text-slate-200 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 2. 全証拠（エビデンス）マスター一覧 */}
+        {deepSeaSubView === "evidences" && (
+          <div className="flex flex-1 flex-col gap-4 overflow-hidden">
+            {/* フィルター＆追加バー */}
+            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/60 p-3">
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-400">所持者:</span>
+                  <select
+                    value={evidenceFilterChar}
+                    onChange={(e) => setEvidenceFilterChar(e.target.value)}
+                    className="rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200"
+                  >
+                    <option value="all">全員 ({evidences.length}件)</option>
+                    {characters.map((c, idx) => (
+                      <option key={c.id} value={c.id}>
+                        PC{idx + 1}: {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-bold text-slate-400">日付:</span>
+                  <select
+                    value={evidenceFilterDay}
+                    onChange={(e) => setEvidenceFilterDay(e.target.value)}
+                    className="rounded-lg border border-slate-700 bg-slate-950 px-2.5 py-1.5 text-xs text-slate-200"
+                  >
+                    <option value="all">全日程 (Day 1〜7)</option>
+                    {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+                      <option key={d} value={String(d)}>
+                        Day {d}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              <button
+                onClick={handleAddEvidence}
+                className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-emerald-500"
+              >
+                <Plus className="h-3.5 w-3.5" />
+                新しい証拠カードを追加
+              </button>
+            </div>
+
+            {/* 証拠リスト */}
+            <div className="grid flex-1 grid-cols-1 gap-4 overflow-y-auto pr-1 md:grid-cols-2 xl:grid-cols-3">
+              {filteredEvidences.map((ev) => {
+                return (
+                  <div
+                    key={ev.id}
+                    className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-900/60 p-4 transition hover:border-slate-700"
+                  >
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="rounded bg-indigo-500/20 px-2 py-0.5 text-[10px] font-bold text-indigo-300">
+                            DAY {ev.foundPhase}
+                          </span>
+                          <span className="rounded bg-slate-800 px-2 py-0.5 text-[10px] text-slate-300">
+                            {ev.category}
+                          </span>
+                        </div>
+                        <button
+                          onClick={() => handleDeleteEvidence(ev.id)}
+                          className="text-slate-500 transition hover:text-rose-400"
+                          title="この証拠を削除"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      </div>
+
+                      <input
+                        type="text"
+                        value={ev.title}
+                        onChange={(e) => handleUpdateEvidence(ev.id, "title", e.target.value)}
+                        className="mb-2 w-full rounded border border-transparent bg-transparent px-1 py-0.5 text-sm font-bold text-white hover:border-slate-700 focus:border-indigo-500 focus:bg-slate-950 focus:outline-none"
+                      />
+
+                      <textarea
+                        rows={4}
+                        value={ev.description}
+                        onChange={(e) => handleUpdateEvidence(ev.id, "description", e.target.value)}
+                        className="w-full rounded-lg border border-slate-800 bg-slate-950/90 p-2.5 text-xs leading-relaxed text-slate-300 focus:border-indigo-500 focus:outline-none"
+                      />
+
+                      {ev.glossaryNote && (
+                        <div className="mt-2 rounded-lg border border-amber-500/30 bg-amber-950/20 p-2 text-[11px] leading-relaxed text-amber-200/90">
+                          {ev.glossaryNote}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800 pt-2.5 text-[11px]">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-slate-400">所持:</span>
+                        <select
+                          value={ev.ownerId}
+                          onChange={(e) => handleUpdateEvidence(ev.id, "ownerId", e.target.value)}
+                          className="rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 text-[11px] text-indigo-300"
+                        >
+                          {characters.map((c, idx) => (
+                            <option key={c.id} value={c.id}>
+                              PC{idx + 1}: {c.name.split("（")[0]}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-slate-400">公開区分:</span>
+                        <select
+                          value={ev.visibility}
+                          onChange={(e) =>
+                            handleUpdateEvidence(
+                              ev.id,
+                              "visibility",
+                              e.target.value as EvidenceVisibility
+                            )
+                          }
+                          className="rounded border border-slate-700 bg-slate-950 px-1.5 py-0.5 text-[11px] text-emerald-300"
+                        >
+                          <option value="shareable">共有可能</option>
+                          <option value="private">個人秘匿</option>
+                          <option value="public">全体公開</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="mt-1.5 flex items-center justify-between text-[10px] text-slate-400">
+                      <span>条件: {ev.acquisitionCondition}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        {/* 3. 証拠配分マトリクス (PC × Day) */}
+        {deepSeaSubView === "matrix" && (
+          <div className="flex-1 overflow-auto rounded-xl border border-slate-800 bg-slate-900/60 p-5">
+            <h3 className="mb-2 text-sm font-bold text-white">
+              日程別 × キャラクター別 証拠配分バランス表
+            </h3>
+            <p className="mb-4 text-xs text-slate-400">
+              特定のプレイヤーや特定の日程に証拠が偏っていないかを俯瞰チェックできます。
+            </p>
+
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left text-xs">
+                <thead>
+                  <tr className="border-b border-slate-800 bg-slate-950 text-slate-300">
+                    <th className="p-3 font-bold">日程 (Day)</th>
+                    {characters.map((c, i) => (
+                      <th key={c.id} className="p-3 font-bold">
+                        <div className="text-indigo-400">PC{i + 1}</div>
+                        <div>{c.name.split("（")[0]}</div>
+                      </th>
+                    ))}
+                    <th className="p-3 font-bold text-emerald-400">合計</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[1, 2, 3, 4, 5, 6, 7].map((day) => {
+                    const dayTotal = evidences.filter((e) => e.foundPhase === day).length;
+                    return (
+                      <tr key={day} className="border-b border-slate-800/70 hover:bg-slate-900/80">
+                        <td className="p-3 font-bold text-white">Day {day}</td>
+                        {characters.map((c) => {
+                          const cellEvs = evidences.filter(
+                            (e) => e.foundPhase === day && e.ownerId === c.id
+                          );
+                          return (
+                            <td key={c.id} className="p-3 align-top">
+                              {cellEvs.length === 0 ? (
+                                <span className="text-slate-600">-</span>
+                              ) : (
+                                <div className="flex flex-col gap-1">
+                                  {cellEvs.map((ev) => (
+                                    <span
+                                      key={ev.id}
+                                      className="rounded border border-indigo-500/30 bg-indigo-950/40 px-2 py-1 text-[11px] text-indigo-200"
+                                    >
+                                      {ev.title}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                            </td>
+                          );
+                        })}
+                        <td className="p-3 font-bold text-emerald-400">{dayTotal}件</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
       {/* サブタブバー */}

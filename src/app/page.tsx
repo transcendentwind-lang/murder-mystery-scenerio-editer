@@ -240,10 +240,16 @@ export default function WorkbenchPage() {
                   ? "bg-indigo-600 text-white shadow ring-2 ring-indigo-400/50"
                   : "text-slate-300 hover:text-white hover:bg-slate-900"
               }`}
-              title="登場人物・内面ドラマ・証拠マスター・情報トランプ・多重ロック検証の管理"
+              title={
+                project.id === "project-deep-sea"
+                  ? "登場人物のプロフィール・記憶・内面・自己紹介、および全証拠一覧の管理"
+                  : "登場人物・内面ドラマ・証拠マスター・情報トランプ・多重ロック検証の管理"
+              }
             >
               <Users className="h-4 w-4 text-emerald-400" />
-              ② 登場人物・証拠・情報トランプ
+              {project.id === "project-deep-sea"
+                ? "② 登場人物 ＆ 証拠マスター"
+                : "② 登場人物・証拠・情報トランプ"}
             </button>
 
             {/* ③ GM進行ダッシュボード */}
@@ -313,6 +319,7 @@ export default function WorkbenchPage() {
           {/* ① 7日間タイムライン（各Dayに海図・空撮・アクション・証拠を完全配置） */}
           {activeTab === "timeline" && (
             <TimelineBoard
+              key={project.id || project.title}
               timeline={project.timeline}
               evidences={project.evidences}
               project={project}
@@ -380,6 +387,7 @@ export default function WorkbenchPage() {
 
               <div className="flex-1 overflow-hidden">
                 <CharactersEvidenceManager
+                  key={project.id || project.title}
                   projectId={project.id}
                   characters={project.characters}
                   evidences={project.evidences}
@@ -415,6 +423,7 @@ export default function WorkbenchPage() {
           {/* ③ GM進行ダッシュボード */}
           {activeTab === "gm_dashboard" && (
             <GmDashboard
+              key={project.id || project.title}
               project={project}
               onNavigateToChart={() => setActiveTab("timeline")}
             />
@@ -423,6 +432,7 @@ export default function WorkbenchPage() {
           {/* ④ 配布・進行デザイン資料スタジオ */}
           {activeTab === "design_studio" && (
             <DocumentDesignStudio
+              key={project.id || project.title}
               project={project}
               onUpdateProject={handleUpdateProject}
               onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
@@ -432,6 +442,7 @@ export default function WorkbenchPage() {
           {/* ⑤ 企画書・プロット紹介 ＆ 台本出力 */}
           {activeTab === "export_synopsis" && (
             <TextExportView
+              key={project.id || project.title}
               project={project}
               onNavigateToDesignStudio={() => setActiveTab("design_studio")}
               onUpdateProject={handleUpdateProject}

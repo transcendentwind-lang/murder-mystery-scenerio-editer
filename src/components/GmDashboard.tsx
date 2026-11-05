@@ -503,7 +503,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
     URL.revokeObjectURL(url);
   };
 
-  const currentTimelineStep = project.timeline.find((t) => t.dayNumber === currentDay) || project.timeline[0];
+  const safeTimeline = Array.isArray(project.timeline) ? project.timeline : [];
+  const currentTimelineStep =
+    safeTimeline.find((t) => t.dayNumber === currentDay) || safeTimeline[0];
 
   // 新規・汎用シナリオプロジェクト用のGM進行コンソール
   if (project.id && project.id !== "project-deep-sea") {

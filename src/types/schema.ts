@@ -221,9 +221,9 @@ export interface MMProject {
   timeline: IncidentStep[];
   crypticWords: CrypticWord[];
   crypticGrammar: CrypticGrammar;
-  matrixLinks: InterpretationLink[];
-  lockCriteria: LockCriterion[];
-  candidateStatuses: CandidateLockStatus[];
+  matrixLinks?: InterpretationLink[];
+  lockCriteria?: LockCriterion[];
+  candidateStatuses?: CandidateLockStatus[];
   documentDesigns?: Record<string, DocumentDesignOverride>;
   visualBoards?: VisualBoardItem[];
   gmNotes?: Record<number, GmProgressionNote>;

@@ -230,50 +230,41 @@ export function getStoredProjects(): MMProject[] {
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
       // プリセット初期プロジェクト（project-deep-sea）のハンドアウト・設定を最新コードと確実に同期
-      const initialIdx = parsed.findIndex((p: MMProject) => p.id === initialProject.id);
+      const initialIdx = parsed.findIndex(
+        (p: MMProject) =>
+          p.id === initialProject.id ||
+          p.title === initialProject.title ||
+          p.title === "深海からの呼び声"
+      );
       if (initialIdx >= 0) {
-        const storedInit = parsed[initialIdx];
+        const storedInit = parsed[initialIdx] || {};
         const pCount = storedInit.playerCount === 7 ? 7 : 6;
         const masterCharacters = getCharactersForPlayerCount(pCount);
-        const masterCharMap = new Map<string, Character>(
-          masterCharacters.map((c) => [c.id, c as Character])
+        const storedCharMap = new Map<string, Character>(
+          (Array.isArray(storedInit.characters) ? storedInit.characters : [])
+            .filter((c: Character) => c && c.id)
+            .map((c: Character) => [c.id, c])
         );
 
-        // 既存の characters に含まれる各PCのプロフィール・記憶・内面・自己紹介を最新マスターと強制同期
-        const updatedCharacters = (storedInit.characters || []).map((sc: Character) => {
-          const master = masterCharMap.get(sc.id);
-          if (master) {
-            return {
-              ...sc,
-              name: master.name,
-              profession: master.profession,
-              introduction: master.introduction,
-              initialItems: master.initialItems,
-              capabilities: master.capabilities,
-              handout: {
-                ...sc.handout,
-                publicProfile: master.handout.publicProfile,
-                internalDrama: {
-                  ...master.handout.internalDrama,
-                },
-                handoutBody: master.handout.handoutBody,
-                backgroundTimeline: master.handout.backgroundTimeline ?? sc.handout.backgroundTimeline,
-                gmActionGuide: master.handout.gmActionGuide ?? sc.handout.gmActionGuide,
+        // マスターキャラクター定義（6名または7名）をベースに、不要な「後ろめたさ(guilt)」等を完全排除して同期
+        const filteredCharacters: Character[] = masterCharacters.map((master) => {
+          const sc = storedCharMap.get(master.id);
+          return {
+            ...(sc || {}),
+            ...master,
+            handout: {
+              ...(sc?.handout || {}),
+              publicProfile: master.handout.publicProfile,
+              internalDrama: {
+                pride: master.handout.internalDrama.pride,
+                loss: master.handout.internalDrama.loss,
               },
-            };
-          }
-          return sc;
+              handoutBody: master.handout.handoutBody,
+              backgroundTimeline:
+                master.handout.backgroundTimeline ?? sc?.handout?.backgroundTimeline ?? "",
+            },
+          };
         });
-
-        // PC6 が未登録ならマスターから追加
-        if (!updatedCharacters.some((c: Character) => c.id === "pc-6")) {
-          const pc6 = masterCharMap.get("pc-6");
-          if (pc6) {
-            updatedCharacters.push(pc6);
-          }
-        }
-
-        const filteredCharacters = updatedCharacters;
 
         // マスター証拠のマップ（最新の簡易タイトルと説明文）
         const masterEvidenceMap = new Map<string, EvidenceItem>(
@@ -282,6 +273,7 @@ export function getStoredProjects(): MMProject[] {
 
         parsed[initialIdx] = {
           ...storedInit,
+          id: initialProject.id,
           playerCount: pCount,
           title: initialProject.title,
           subtitle: initialProject.subtitle,
@@ -297,6 +289,9 @@ export function getStoredProjects(): MMProject[] {
           crypticGrammar: initialProject.crypticGrammar,
           specialCharacterCards: SPECIAL_CHARACTER_CARDS,
           nagatsuPhaseCards: NAGATSU_PHASE_CARDS,
+          matrixLinks: undefined,
+          lockCriteria: undefined,
+          candidateStatuses: undefined,
           updatedAt: initialProject.updatedAt || new Date().toISOString(),
         };
 
@@ -431,10 +426,27 @@ export function saveProjectToStorage(project: MMProject): void {
         }))
       : project.timeline || [];
 
+    const sanitizedCharacters = isInitialProj
+      ? (project.characters || []).map((c) => ({
+          ...c,
+          handout: {
+            ...c.handout,
+            internalDrama: {
+              pride: c.handout?.internalDrama?.pride || "",
+              loss: c.handout?.internalDrama?.loss || "",
+            },
+          },
+        }))
+      : project.characters || [];
+
     const updatedProject: MMProject = {
       ...project,
+      characters: sanitizedCharacters,
       evidences: sanitizedEvidences,
       timeline: sanitizedTimeline,
+      matrixLinks: isInitialProj ? undefined : project.matrixLinks,
+      lockCriteria: isInitialProj ? undefined : project.lockCriteria,
+      candidateStatuses: isInitialProj ? undefined : project.candidateStatuses,
       updatedAt: new Date().toISOString(),
     };
     const index = projects.findIndex((p) => p.id === project.id);
