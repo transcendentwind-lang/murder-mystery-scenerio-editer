@@ -1642,6 +1642,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const isB5HandoutSheet = category === "handouts" && handoutViewMode === "sheet";
     const isSingleEvidenceSheet = category === "evidences" && evidenceViewMode === "single";
+    const isDuplexCardSheet =
+      (category === "handouts" &&
+        (handoutViewMode === "cards" || handoutViewMode === "nagatsu_cards")) ||
+      (category === "evidences" && evidenceViewMode === "cards_a4");
     const doc = printWin.contentWindow?.document;
     if (doc) {
       doc.open();
@@ -1654,14 +1658,22 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   <style>
     @page {
       size: ${isSingleEvidenceSheet || isB5HandoutSheet ? "B5 portrait" : "A4 portrait"};
-      margin: ${isB5HandoutSheet ? "8mm 9mm" : isSingleEvidenceSheet ? "12mm" : "8mm"};
+      margin: ${
+        isDuplexCardSheet
+          ? "0"
+          : isB5HandoutSheet
+          ? "8mm 9mm"
+          : isSingleEvidenceSheet
+          ? "12mm"
+          : "8mm"
+      };
     }
     * {
       -webkit-print-color-adjust: exact !important;
       print-color-adjust: exact !important;
       box-sizing: border-box;
     }
-    body {
+    html, body {
       margin: 0;
       padding: 0;
       background: #ffffff;
@@ -1673,26 +1685,75 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       break-before: page !important;
     }
     @media print {
-      .card-pair-row {
+      .duplex-a4-page {
+        position: relative !important;
+        width: 210mm !important;
+        height: 297mm !important;
+        padding: 12mm 10mm !important;
+        margin: 0 auto !important;
         border: none !important;
-        background: transparent !important;
-        padding: 0 !important;
-        margin-bottom: 8mm !important;
+        background: #ffffff !important;
         box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        overflow: hidden !important;
       }
-      .card-pair-grid {
+      .duplex-a4-page:last-child {
+        page-break-after: auto !important;
+        break-after: auto !important;
+      }
+      .duplex-cut-guide-h {
+        position: absolute !important;
+        top: 148.5mm !important;
+        left: 3mm !important;
+        right: 3mm !important;
+        height: 0 !important;
+        border-top: 0.25mm dashed #cbd5e1 !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+      }
+      .duplex-cut-guide-v {
+        position: absolute !important;
+        left: 105mm !important;
+        top: 3mm !important;
+        bottom: 3mm !important;
+        width: 0 !important;
+        border-left: 0.25mm dashed #cbd5e1 !important;
+        pointer-events: none !important;
+        z-index: 0 !important;
+      }
+      .duplex-card-grid {
+        position: relative !important;
+        z-index: 1 !important;
         display: grid !important;
-        grid-template-columns: 1fr 1fr !important;
-        gap: 8mm !important;
+        grid-template-columns: 92mm 92mm !important;
+        grid-template-rows: 133mm 133mm !important;
+        column-gap: 6mm !important;
+        row-gap: 7mm !important;
+        width: 190mm !important;
+        height: 273mm !important;
+        margin: 0 auto !important;
       }
       .card-face-134mm {
-        height: 134mm !important;
-        min-height: 134mm !important;
-        max-height: 134mm !important;
+        position: relative !important;
+        z-index: 1 !important;
+        width: 92mm !important;
+        height: 133mm !important;
+        min-height: 133mm !important;
+        max-height: 133mm !important;
+        padding: 4.2mm !important;
         box-shadow: none !important;
         overflow: hidden !important;
+      }
+      .card-empty-slot {
+        width: 92mm !important;
+        height: 133mm !important;
+        min-height: 133mm !important;
+        max-height: 133mm !important;
+        border: none !important;
+        background: transparent !important;
       }
     }
     ruby {
@@ -2847,16 +2908,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 特別配布カード（全7枚・各カードの表面＋本文面ペア表示・A4 1/4サイズ固定）
+                     🃏 特別配布カード（全7枚・表紙のみページ＆内容のみページ交互・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 特別配布カード（全7枚・A4 1/4サイズ固定）
+                          {project.title} ― 特別配布カード（全7枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          特別配布カード一覧（全7枚・証拠カード同一サイズ）
+                          特別配布カード一覧（表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -2866,9 +2927,14 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          A4 4分割（均一サイズ）で印刷 / PDF保存
+                          A4 両面印刷用（表紙／内容ページ）で印刷・PDF保存
                         </button>
                       </div>
+                    </div>
+
+                    <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
+                      <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
+                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します。
                     </div>
 
                     {(() => {
@@ -2877,170 +2943,258 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           ? project.specialCharacterCards
                           : SPECIAL_CHARACTER_CARDS;
 
+                      const sheets: ((typeof cardsSource)[number] | null)[][] = [];
+                      for (let i = 0; i < cardsSource.length; i += 4) {
+                        sheets.push([
+                          cardsSource[i] ?? null,
+                          cardsSource[i + 1] ?? null,
+                          cardsSource[i + 2] ?? null,
+                          cardsSource[i + 3] ?? null,
+                        ]);
+                      }
+
+                      const renderFrontFace = (
+                        card: (typeof cardsSource)[number] | null,
+                        slotKey: string
+                      ) => {
+                        if (!card) {
+                          return (
+                            <div
+                              key={slotKey}
+                              className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                            >
+                              <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                            </div>
+                          );
+                        }
+                        const charShort = card.characterName.split("（")[0];
+                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const isSelected = card.characterId === activeChar.id;
+                        return (
+                          <div
+                            key={slotKey}
+                            onClick={() => setSelectedCharId(card.characterId)}
+                            className={`card-face-134mm cursor-pointer rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                              isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
+                            }`}
+                            style={{
+                              borderColor: card.accentHex,
+                              backgroundColor: "#f8fafc",
+                            }}
+                          >
+                            <div className="flex items-center justify-between text-xs">
+                              <span
+                                className="rounded border px-2 py-0.5 font-bold"
+                                style={{
+                                  backgroundColor: "#eff6ff",
+                                  borderColor: "#93c5fd",
+                                  color: "#1e40af",
+                                }}
+                              >
+                                {card.revealDayLabel}
+                              </span>
+                              <span
+                                className="rounded px-2.5 py-0.5 font-bold text-white"
+                                style={{ backgroundColor: card.accentHex }}
+                              >
+                                {cardLabel}
+                              </span>
+                            </div>
+
+                            <div className="my-auto py-5 text-center space-y-2">
+                              <div
+                                className="text-[11px] font-bold tracking-widest"
+                                style={{ color: card.accentHex }}
+                              >
+                                海上保安庁・合同対策本部
+                              </div>
+                              {card.frontTitleHtml ? (
+                                <div
+                                  className="text-xl font-black text-slate-900 leading-snug"
+                                  dangerouslySetInnerHTML={{ __html: card.frontTitleHtml }}
+                                />
+                              ) : (
+                                <div className="text-xl font-black text-slate-900 leading-snug">
+                                  {card.title}
+                                </div>
+                              )}
+                              <div
+                                className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
+                                style={{
+                                  borderColor: card.accentHex,
+                                  color: card.accentHex,
+                                }}
+                              >
+                                {cardLabel}
+                              </div>
+                            </div>
+
+                            <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                              <span
+                                className="font-mono text-xs font-bold"
+                                style={{ color: card.accentHex }}
+                              >
+                                {card.cardCode} / 07
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      };
+
+                      const renderBackFace = (
+                        card: (typeof cardsSource)[number] | null,
+                        slotKey: string
+                      ) => {
+                        if (!card) {
+                          return (
+                            <div
+                              key={slotKey}
+                              className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                            >
+                              <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                            </div>
+                          );
+                        }
+                        const charShort = card.characterName.split("（")[0];
+                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const isSelected = card.characterId === activeChar.id;
+                        return (
+                          <div
+                            key={slotKey}
+                            onClick={() => setSelectedCharId(card.characterId)}
+                            className={`card-face-134mm cursor-pointer rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                              isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
+                            }`}
+                            style={{ borderColor: card.accentHex }}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between text-xs mb-1.5">
+                                <span
+                                  className="rounded px-2.5 py-0.5 font-bold text-white"
+                                  style={{ backgroundColor: card.accentHex }}
+                                >
+                                  {cardLabel}
+                                </span>
+                                <span
+                                  className="rounded border px-2 py-0.5 font-bold"
+                                  style={{
+                                    backgroundColor: "#eff6ff",
+                                    borderColor: "#93c5fd",
+                                    color: "#1e40af",
+                                  }}
+                                >
+                                  {card.revealDayLabel}
+                                </span>
+                              </div>
+
+                              <div
+                                className="border-b-2 pb-1.5 mb-2"
+                                style={{ borderColor: card.accentHex }}
+                              >
+                                <h3
+                                  className="text-base font-extrabold"
+                                  style={{ color: "#0f172a" }}
+                                >
+                                  {card.title}
+                                </h3>
+                              </div>
+
+                              {card.rubyHtml ? (
+                                <div
+                                  className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                  dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
+                                />
+                              ) : (
+                                <div
+                                  className={`${
+                                    card.glossaryNote
+                                      ? "text-[11px] leading-[1.48]"
+                                      : "text-xs leading-relaxed"
+                                  } text-slate-800 whitespace-pre-wrap text-justify`}
+                                >
+                                  {renderColoredCardBody(card.description)}
+                                </div>
+                              )}
+                            </div>
+
+                            <div className="mt-2 space-y-1.5">
+                              {card.glossaryNote && (
+                                <div
+                                  className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                  style={{
+                                    backgroundColor: "#f0f9ff",
+                                    borderColor: "#7dd3fc",
+                                  }}
+                                >
+                                  {renderColoredGlossaryNote(card.glossaryNote)}
+                                </div>
+                              )}
+                              <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
+                                <span
+                                  className="font-mono font-bold"
+                                  style={{ color: card.accentHex }}
+                                >
+                                  {card.cardCode} / 07
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      };
+
                       return (
-                        <div className="space-y-6 print:space-y-0">
-                          {cardsSource.map((card, idx) => {
-                            const charShort = card.characterName.split("（")[0];
-                            const cardLabel = `特別配布カード（${charShort}）`;
-                            const isSelected = card.characterId === activeChar.id;
+                        <div className="space-y-8 print:space-y-0">
+                          {sheets.map((quad, sheetIdx) => {
+                            const frontOrder = [quad[0], quad[1], quad[2], quad[3]];
+                            // 長辺とじ両面印刷用：裏面は左右列を入れ替え（[左上=1, 右上=0, 左下=3, 右下=2]）
+                            const backOrder = [quad[1], quad[0], quad[3], quad[2]];
+                            const frontPageNum = sheetIdx * 2 + 1;
+                            const backPageNum = sheetIdx * 2 + 2;
 
                             return (
-                              <div
-                                key={card.id}
-                                onClick={() => setSelectedCharId(card.characterId)}
-                                className={`card-pair-row cursor-pointer rounded-lg border p-4 transition print:border-0 print:bg-transparent print:p-0 print:ring-0 print:mb-[8mm] break-inside-avoid ${
-                                  idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
-                                } ${
-                                  isSelected
-                                    ? "border-indigo-500 bg-indigo-50/30 ring-1 ring-indigo-500/30"
-                                    : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
-                                }`}
-                              >
-                                <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
-                                  {/* 左：表面（A4 1/4サイズ固定・カラー） */}
-                                  <div
-                                    className="card-face-134mm rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
-                                    style={{
-                                      borderColor: card.accentHex,
-                                      backgroundColor: "#f8fafc",
-                                    }}
-                                  >
-                                    <div className="flex items-center justify-between text-xs">
-                                      <span
-                                        className="rounded border px-2 py-0.5 font-bold"
-                                        style={{
-                                          backgroundColor: "#eff6ff",
-                                          borderColor: "#93c5fd",
-                                          color: "#1e40af",
-                                        }}
-                                      >
-                                        {card.revealDayLabel}
-                                      </span>
-                                      <span
-                                        className="rounded px-2.5 py-0.5 font-bold text-white"
-                                        style={{ backgroundColor: card.accentHex }}
-                                      >
-                                        {cardLabel}
-                                      </span>
-                                    </div>
-
-                                    <div className="my-auto py-5 text-center space-y-2">
-                                      <div
-                                        className="text-[11px] font-bold tracking-widest"
-                                        style={{ color: card.accentHex }}
-                                      >
-                                        海上保安庁・合同対策本部
-                                      </div>
-                                      {card.frontTitleHtml ? (
-                                        <div
-                                          className="text-xl font-black text-slate-900 leading-snug"
-                                          dangerouslySetInnerHTML={{ __html: card.frontTitleHtml }}
-                                        />
-                                      ) : (
-                                        <div className="text-xl font-black text-slate-900 leading-snug">
-                                          {card.title}
-                                        </div>
-                                      )}
-                                      <div
-                                        className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
-                                        style={{
-                                          borderColor: card.accentHex,
-                                          color: card.accentHex,
-                                        }}
-                                      >
-                                        {cardLabel}
-                                      </div>
-                                    </div>
-
-                                    <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
-                                      <span
-                                        className="font-mono text-xs font-bold"
-                                        style={{ color: card.accentHex }}
-                                      >
-                                        {card.cardCode} / 07
-                                      </span>
-                                    </div>
+                              <React.Fragment key={`sp-sheet-${sheetIdx}`}>
+                                {/* 奇数ページ：表紙のみ 4枚 */}
+                                <div className="space-y-2 print:space-y-0">
+                                  <div className="no-print flex items-center justify-between rounded bg-slate-800 px-3 py-1.5 text-xs font-bold text-white">
+                                    <span>
+                                      📄 第{sheetIdx + 1}シート 表面（{frontPageNum}ページ目）：【表紙のみ】4枚配置
+                                    </span>
+                                    <span className="font-mono text-[11px] text-slate-300">
+                                      配置順：左上 ➔ 右上 ➔ 左下 ➔ 右下
+                                    </span>
                                   </div>
-
-                                  {/* 右：本文面（A4 1/4サイズ固定・カラー） */}
-                                  <div
-                                    className="card-face-134mm rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
-                                    style={{ borderColor: card.accentHex }}
-                                  >
-                                    <div>
-                                      <div className="flex items-center justify-between text-xs mb-1.5">
-                                        <span
-                                          className="rounded px-2.5 py-0.5 font-bold text-white"
-                                          style={{ backgroundColor: card.accentHex }}
-                                        >
-                                          {cardLabel}
-                                        </span>
-                                        <span
-                                          className="rounded border px-2 py-0.5 font-bold"
-                                          style={{
-                                            backgroundColor: "#eff6ff",
-                                            borderColor: "#93c5fd",
-                                            color: "#1e40af",
-                                          }}
-                                        >
-                                          {card.revealDayLabel}
-                                        </span>
-                                      </div>
-
-                                      <div
-                                        className="border-b-2 pb-1.5 mb-2"
-                                        style={{ borderColor: card.accentHex }}
-                                      >
-                                        <h3
-                                          className="text-base font-extrabold"
-                                          style={{ color: "#0f172a" }}
-                                        >
-                                          {card.title}
-                                        </h3>
-                                      </div>
-
-                                      {card.rubyHtml ? (
-                                        <div
-                                          className="text-xs leading-[1.95] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
-                                          dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
-                                        />
-                                      ) : (
-                                        <div
-                                          className={`${
-                                            card.glossaryNote
-                                              ? "text-[11px] leading-[1.48]"
-                                              : "text-xs leading-relaxed"
-                                          } text-slate-800 whitespace-pre-wrap text-justify`}
-                                        >
-                                          {renderColoredCardBody(card.description)}
-                                        </div>
+                                  <div className="duplex-a4-page rounded-lg border border-slate-200 bg-slate-50/40 p-4 relative">
+                                    <div className="duplex-cut-guide-h hidden print:block" />
+                                    <div className="duplex-cut-guide-v hidden print:block" />
+                                    <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                      {frontOrder.map((c, slotIdx) =>
+                                        renderFrontFace(c, `sp-f-${sheetIdx}-${slotIdx}`)
                                       )}
-                                    </div>
-
-                                    <div className="mt-2 space-y-1.5">
-                                      {card.glossaryNote && (
-                                        <div
-                                          className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
-                                          style={{
-                                            backgroundColor: "#f0f9ff",
-                                            borderColor: "#7dd3fc",
-                                          }}
-                                        >
-                                          {renderColoredGlossaryNote(card.glossaryNote)}
-                                        </div>
-                                      )}
-                                      <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                                        <span
-                                          className="font-mono font-bold"
-                                          style={{ color: card.accentHex }}
-                                        >
-                                          {card.cardCode} / 07
-                                        </span>
-                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
+
+                                {/* 偶数ページ：内容のみ 4枚（長辺とじ裏面合わせ左右反転） */}
+                                <div className="space-y-2 print:space-y-0">
+                                  <div className="no-print flex items-center justify-between rounded bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white">
+                                    <span>
+                                      📄 第{sheetIdx + 1}シート 裏面（{backPageNum}ページ目）：【内容のみ】4枚配置
+                                    </span>
+                                    <span className="font-mono text-[11px] text-indigo-200">
+                                      ※両面印刷（長辺とじ）で表紙と一致するよう左右列を反転配置済み
+                                    </span>
+                                  </div>
+                                  <div className="duplex-a4-page rounded-lg border border-indigo-200 bg-indigo-50/20 p-4 relative">
+                                    <div className="duplex-cut-guide-h hidden print:block" />
+                                    <div className="duplex-cut-guide-v hidden print:block" />
+                                    <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                      {backOrder.map((c, slotIdx) =>
+                                        renderBackFace(c, `sp-b-${sheetIdx}-${slotIdx}`)
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </React.Fragment>
                             );
                           })}
                         </div>
@@ -3197,16 +3351,16 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : (
                   /* ------------------------------------------------------------
-                     🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全10枚）
+                     🎙️ 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード一覧（全10枚・表紙／内容ページ分離・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 1/4サイズ固定）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-01〜NG-10）
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3216,103 +3370,202 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          A4 4分割（均一サイズ）で印刷 / PDF保存
+                          A4 両面印刷用（表紙／内容ページ）で印刷・PDF保存
                         </button>
                       </div>
                     </div>
 
-                    <div className="space-y-6 print:space-y-0">
-                      {NAGATSU_PHASE_CARDS.map((nc, idx) => (
-                        <div
-                          key={nc.id}
-                          className={`card-pair-row rounded-lg border border-slate-200 bg-slate-50/40 p-4 print:border-0 print:bg-transparent print:p-0 print:mb-[8mm] break-inside-avoid ${
-                            idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
-                          }`}
-                        >
-                          <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
-                            {/* 左：表面（A4 1/4サイズ固定） */}
-                            <div className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
-                              <div className="flex items-center justify-between text-xs">
-                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                  {nc.timingBadge}
-                                </span>
+                    <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
+                      <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
+                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します。
+                    </div>
+
+                    {(() => {
+                      const sheets: ((typeof NAGATSU_PHASE_CARDS)[number] | null)[][] = [];
+                      for (let i = 0; i < NAGATSU_PHASE_CARDS.length; i += 4) {
+                        sheets.push([
+                          NAGATSU_PHASE_CARDS[i] ?? null,
+                          NAGATSU_PHASE_CARDS[i + 1] ?? null,
+                          NAGATSU_PHASE_CARDS[i + 2] ?? null,
+                          NAGATSU_PHASE_CARDS[i + 3] ?? null,
+                        ]);
+                      }
+
+                      const renderNagatsuFront = (
+                        nc: (typeof NAGATSU_PHASE_CARDS)[number] | null,
+                        slotKey: string
+                      ) => {
+                        if (!nc) {
+                          return (
+                            <div
+                              key={slotKey}
+                              className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                            >
+                              <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div
+                            key={slotKey}
+                            className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
+                          >
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                {nc.timingBadge}
+                              </span>
+                              <span
+                                className="rounded px-2.5 py-0.5 font-bold text-white"
+                                style={{ backgroundColor: nc.accentHex }}
+                              >
+                                長津アナウンスカード
+                              </span>
+                            </div>
+
+                            <div className="my-auto py-5 text-center space-y-2">
+                              <div className="text-[11px] font-bold tracking-widest text-slate-500">
+                                海上保安庁・合同対策本部
+                              </div>
+                              {nc.frontTitleHtml ? (
+                                <div
+                                  className="text-xl font-black text-slate-900 leading-snug"
+                                  dangerouslySetInnerHTML={{ __html: nc.frontTitleHtml }}
+                                />
+                              ) : (
+                                <div className="text-xl font-black text-slate-900 leading-snug">
+                                  {nc.title}
+                                </div>
+                              )}
+                              <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
+                                長津アナウンスカード
+                              </div>
+                            </div>
+
+                            <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                              <span className="font-mono text-xs font-bold text-slate-500">
+                                {nc.cardCode} / 10
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      };
+
+                      const renderNagatsuBack = (
+                        nc: (typeof NAGATSU_PHASE_CARDS)[number] | null,
+                        slotKey: string
+                      ) => {
+                        if (!nc) {
+                          return (
+                            <div
+                              key={slotKey}
+                              className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                            >
+                              <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                            </div>
+                          );
+                        }
+                        return (
+                          <div
+                            key={slotKey}
+                            className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
+                          >
+                            <div>
+                              <div className="flex items-center justify-between text-xs mb-2">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: nc.accentHex }}
                                 >
                                   長津アナウンスカード
                                 </span>
-                              </div>
-
-                              <div className="my-auto py-5 text-center space-y-2">
-                                <div className="text-[11px] font-bold tracking-widest text-slate-500">
-                                  海上保安庁・合同対策本部
-                                </div>
-                                {nc.frontTitleHtml ? (
-                                  <div
-                                    className="text-xl font-black text-slate-900 leading-snug"
-                                    dangerouslySetInnerHTML={{ __html: nc.frontTitleHtml }}
-                                  />
-                                ) : (
-                                  <div className="text-xl font-black text-slate-900 leading-snug">
-                                    {nc.title}
-                                  </div>
-                                )}
-                                <div className="mx-auto w-4/5 border-t border-slate-300 pt-2 text-xs font-bold text-slate-600">
-                                  長津アナウンスカード
-                                </div>
-                              </div>
-
-                              <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
-                                <span className="font-mono text-xs font-bold text-slate-500">
-                                  {nc.cardCode} / 10
+                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                  {nc.timingBadge}
                                 </span>
                               </div>
+
+                              <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                                <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                                  {nc.title}
+                                </h4>
+                              </div>
+
+                              <div
+                                className={`${
+                                  nc.cardCode === "NG-08" ||
+                                  nc.cardCode === "NG-09" ||
+                                  nc.cardCode === "NG-10"
+                                    ? "text-[11px] leading-[1.82]"
+                                    : "text-xs leading-[1.95]"
+                                } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal`}
+                                dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
+                              />
                             </div>
 
-                            {/* 右：本文面（A4 1/4サイズ固定） */}
-                            <div className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none">
-                              <div>
-                                <div className="flex items-center justify-between text-xs mb-2">
-                                  <span
-                                    className="rounded px-2.5 py-0.5 font-bold text-white"
-                                    style={{ backgroundColor: nc.accentHex }}
-                                  >
-                                    長津アナウンスカード
-                                  </span>
-                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                    {nc.timingBadge}
-                                  </span>
-                                </div>
-
-                                <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
-                                  <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
-                                    {nc.title}
-                                  </h4>
-                                </div>
-
-                                <div
-                                  className={`${
-                                    nc.cardCode === "NG-08" ||
-                                    nc.cardCode === "NG-09" ||
-                                    nc.cardCode === "NG-10"
-                                      ? "text-[11px] leading-[1.82]"
-                                      : "text-xs leading-[1.95]"
-                                  } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal`}
-                                  dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
-                                />
-                              </div>
-
-                              <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
-                                <span className="font-mono font-bold text-slate-500">
-                                  {nc.cardCode} / 10
-                                </span>
-                              </div>
+                            <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
+                              <span className="font-mono font-bold text-slate-500">
+                                {nc.cardCode} / 10
+                              </span>
                             </div>
                           </div>
+                        );
+                      };
+
+                      return (
+                        <div className="space-y-8 print:space-y-0">
+                          {sheets.map((quad, sheetIdx) => {
+                            const frontOrder = [quad[0], quad[1], quad[2], quad[3]];
+                            const backOrder = [quad[1], quad[0], quad[3], quad[2]];
+                            const frontPageNum = sheetIdx * 2 + 1;
+                            const backPageNum = sheetIdx * 2 + 2;
+
+                            return (
+                              <React.Fragment key={`ng-sheet-${sheetIdx}`}>
+                                {/* 奇数ページ：表紙のみ 4枚 */}
+                                <div className="space-y-2 print:space-y-0">
+                                  <div className="no-print flex items-center justify-between rounded bg-slate-800 px-3 py-1.5 text-xs font-bold text-white">
+                                    <span>
+                                      📄 第{sheetIdx + 1}シート 表面（{frontPageNum}ページ目）：【表紙のみ】4枚配置
+                                    </span>
+                                    <span className="font-mono text-[11px] text-slate-300">
+                                      配置順：左上 ➔ 右上 ➔ 左下 ➔ 右下
+                                    </span>
+                                  </div>
+                                  <div className="duplex-a4-page rounded-lg border border-slate-200 bg-slate-50/40 p-4 relative">
+                                    <div className="duplex-cut-guide-h hidden print:block" />
+                                    <div className="duplex-cut-guide-v hidden print:block" />
+                                    <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                      {frontOrder.map((c, slotIdx) =>
+                                        renderNagatsuFront(c, `ng-f-${sheetIdx}-${slotIdx}`)
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+
+                                {/* 偶数ページ：内容のみ 4枚（長辺とじ裏面合わせ左右反転） */}
+                                <div className="space-y-2 print:space-y-0">
+                                  <div className="no-print flex items-center justify-between rounded bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white">
+                                    <span>
+                                      📄 第{sheetIdx + 1}シート 裏面（{backPageNum}ページ目）：【内容のみ】4枚配置
+                                    </span>
+                                    <span className="font-mono text-[11px] text-indigo-200">
+                                      ※両面印刷（長辺とじ）で表紙と一致するよう左右列を反転配置済み
+                                    </span>
+                                  </div>
+                                  <div className="duplex-a4-page rounded-lg border border-indigo-200 bg-indigo-50/20 p-4 relative">
+                                    <div className="duplex-cut-guide-h hidden print:block" />
+                                    <div className="duplex-cut-guide-v hidden print:block" />
+                                    <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                      {backOrder.map((c, slotIdx) =>
+                                        renderNagatsuBack(c, `ng-b-${sheetIdx}-${slotIdx}`)
+                                      )}
+                                    </div>
+                                  </div>
+                                </div>
+                              </React.Fragment>
+                            );
+                          })}
                         </div>
-                      ))}
-                    </div>
+                      );
+                    })()}
                   </div>
                 )}
               </div>
@@ -3327,10 +3580,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― 証拠資料カード一覧（A4 1/4サイズ固定・下部余白の用語解説付き）
+                        {project.title} ― 証拠資料カード一覧（A4 4分割 両面印刷レイアウト・下部余白の用語解説付き）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                        証拠カード一覧（表示中：{filteredEvidences.length}枚 ／ 全{allEvidences.length}枚・特別配布カード同一サイズ）
+                        証拠カード一覧（表示中：{filteredEvidences.length}枚 ／ 全{allEvidences.length}枚・表紙ページ／内容ページ分離）
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -3340,13 +3593,38 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        A4 4分割（均一サイズ）で印刷 / PDF保存
+                        A4 両面印刷用（表紙／内容ページ）で印刷・PDF保存
                       </button>
                     </div>
                   </div>
 
-                  <div className="space-y-6 print:space-y-0">
-                    {filteredEvidences.map((ev, idx) => {
+                  <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
+                    <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
+                    奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します。
+                  </div>
+
+                  {(() => {
+                    const sheets: (EvidenceItem | null)[][] = [];
+                    for (let i = 0; i < filteredEvidences.length; i += 4) {
+                      sheets.push([
+                        filteredEvidences[i] ?? null,
+                        filteredEvidences[i + 1] ?? null,
+                        filteredEvidences[i + 2] ?? null,
+                        filteredEvidences[i + 3] ?? null,
+                      ]);
+                    }
+
+                    const renderEvidenceFront = (ev: EvidenceItem | null, slotKey: string) => {
+                      if (!ev) {
+                        return (
+                          <div
+                            key={slotKey}
+                            className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                          >
+                            <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                          </div>
+                        );
+                      }
                       const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
                       const evCode = `EV-${String(globalIdx).padStart(2, "0")}`;
                       const ownerChar = project.characters.find((c) => c.id === ev.ownerId);
@@ -3362,151 +3640,223 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
                       return (
                         <div
-                          key={ev.id}
+                          key={slotKey}
                           onClick={() => setSelectedEvidenceId(ev.id)}
-                          className={`card-pair-row cursor-pointer rounded-lg border p-4 transition print:border-0 print:bg-transparent print:p-0 print:ring-0 print:mb-[8mm] break-inside-avoid ${
-                            idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
-                          } ${
-                            isSelected
-                              ? "border-indigo-500 bg-indigo-50/30 ring-1 ring-indigo-500/30"
-                              : "border-slate-200 bg-slate-50/40 hover:border-slate-300"
+                          className={`card-face-134mm cursor-pointer rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                            isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
                           }`}
+                          style={{
+                            borderColor: cardColor.borderHex,
+                            backgroundColor: cardColor.frontBgHex,
+                          }}
                         >
-                          <div className="card-pair-grid grid grid-cols-1 md:grid-cols-2 print:grid-cols-2 gap-5 print:gap-[8mm]">
-                            {/* 左：表面（A4 1/4サイズ固定・カラー＆意味区切り改行） */}
-                            <div
-                              className="card-face-134mm rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                          <div className="flex items-center justify-between text-xs">
+                            <span
+                              className="rounded border px-2 py-0.5 font-bold"
                               style={{
-                                borderColor: cardColor.borderHex,
-                                backgroundColor: cardColor.frontBgHex,
+                                backgroundColor: cardColor.dayBg,
+                                borderColor: cardColor.dayBorder,
+                                color: cardColor.dayText,
                               }}
                             >
-                              <div className="flex items-center justify-between text-xs">
-                                <span
-                                  className="rounded border px-2 py-0.5 font-bold"
-                                  style={{
-                                    backgroundColor: cardColor.dayBg,
-                                    borderColor: cardColor.dayBorder,
-                                    color: cardColor.dayText,
-                                  }}
-                                >
-                                  Day {ev.foundPhase} 開示
-                                </span>
-                                <span
-                                  className="rounded px-2.5 py-0.5 font-bold text-white"
-                                  style={{ backgroundColor: cardColor.badgeBg }}
-                                >
-                                  証拠資料カード（{ownerShort}）
-                                </span>
-                              </div>
+                              Day {ev.foundPhase} 開示
+                            </span>
+                            <span
+                              className="rounded px-2.5 py-0.5 font-bold text-white"
+                              style={{ backgroundColor: cardColor.badgeBg }}
+                            >
+                              証拠資料カード（{ownerShort}）
+                            </span>
+                          </div>
 
-                              <div className="my-auto py-5 text-center space-y-2">
-                                <div
-                                  className="text-[11px] font-bold tracking-widest"
-                                  style={{ color: cardColor.headerHex }}
-                                >
-                                  海上保安庁・合同対策本部
-                                </div>
-                                <div
-                                  className="text-xl font-black text-slate-900 leading-snug px-2"
-                                  dangerouslySetInnerHTML={{ __html: formattedFrontTitleHtml }}
-                                />
-                                <div
-                                  className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
-                                  style={{
-                                    borderColor: cardColor.dividerHex,
-                                    color: cardColor.headerHex,
-                                  }}
-                                >
-                                  証拠資料カード（{ownerShort}）
-                                </div>
-                              </div>
+                          <div className="my-auto py-5 text-center space-y-2">
+                            <div
+                              className="text-[11px] font-bold tracking-widest"
+                              style={{ color: cardColor.headerHex }}
+                            >
+                              海上保安庁・合同対策本部
+                            </div>
+                            <div
+                              className="text-xl font-black text-slate-900 leading-snug px-2"
+                              dangerouslySetInnerHTML={{ __html: formattedFrontTitleHtml }}
+                            />
+                            <div
+                              className="mx-auto w-4/5 border-t-2 pt-2 text-xs font-bold"
+                              style={{
+                                borderColor: cardColor.dividerHex,
+                                color: cardColor.headerHex,
+                              }}
+                            >
+                              証拠資料カード（{ownerShort}）
+                            </div>
+                          </div>
 
-                              <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
-                                <span
-                                  className="font-mono text-xs font-bold"
-                                  style={{ color: cardColor.headerHex }}
-                                >
-                                  {evCode} / {String(allEvidences.length).padStart(2, "0")}
-                                </span>
-                              </div>
+                          <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                            <span
+                              className="font-mono text-xs font-bold"
+                              style={{ color: cardColor.headerHex }}
+                            >
+                              {evCode} / {String(allEvidences.length).padStart(2, "0")}
+                            </span>
+                          </div>
+                        </div>
+                      );
+                    };
+
+                    const renderEvidenceBack = (ev: EvidenceItem | null, slotKey: string) => {
+                      if (!ev) {
+                        return (
+                          <div
+                            key={slotKey}
+                            className="card-empty-slot hidden md:flex print:block items-center justify-center rounded-md border border-dashed border-slate-200 min-h-[380px] text-xs text-slate-400"
+                          >
+                            <span className="no-print">（空白枠：両面位置合わせ用）</span>
+                          </div>
+                        );
+                      }
+                      const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
+                      const evCode = `EV-${String(globalIdx).padStart(2, "0")}`;
+                      const ownerChar = project.characters.find((c) => c.id === ev.ownerId);
+                      const ownerShort = ownerChar
+                        ? ownerChar.name.split("（")[0]
+                        : "全体公開";
+                      const isSelected = ev.id === activeEvidence?.id;
+                      const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);
+
+                      return (
+                        <div
+                          key={slotKey}
+                          onClick={() => setSelectedEvidenceId(ev.id)}
+                          className={`card-face-134mm cursor-pointer rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                            isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
+                          }`}
+                          style={{ borderColor: cardColor.borderHex }}
+                        >
+                          <div>
+                            <div className="flex items-center justify-between text-xs mb-1.5">
+                              <span
+                                className="rounded px-2.5 py-0.5 font-bold text-white"
+                                style={{ backgroundColor: cardColor.badgeBg }}
+                              >
+                                証拠資料カード（{ownerShort}）
+                              </span>
+                              <span
+                                className="rounded border px-2 py-0.5 font-bold"
+                                style={{
+                                  backgroundColor: cardColor.dayBg,
+                                  borderColor: cardColor.dayBorder,
+                                  color: cardColor.dayText,
+                                }}
+                              >
+                                Day {ev.foundPhase} 開示
+                              </span>
                             </div>
 
-                            {/* 右：本文面＋下部余白の用語解説（A4 1/4サイズ固定・カラー） */}
                             <div
-                              className="card-face-134mm rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] print:h-[134mm] shadow-sm print:shadow-none"
+                              className="border-b-2 pb-1.5 mb-2"
                               style={{ borderColor: cardColor.borderHex }}
                             >
-                              <div>
-                                <div className="flex items-center justify-between text-xs mb-1.5">
-                                  <span
-                                    className="rounded px-2.5 py-0.5 font-bold text-white"
-                                    style={{ backgroundColor: cardColor.badgeBg }}
-                                  >
-                                    証拠資料カード（{ownerShort}）
-                                  </span>
-                                  <span
-                                    className="rounded border px-2 py-0.5 font-bold"
-                                    style={{
-                                      backgroundColor: cardColor.dayBg,
-                                      borderColor: cardColor.dayBorder,
-                                      color: cardColor.dayText,
-                                    }}
-                                  >
-                                    Day {ev.foundPhase} 開示
-                                  </span>
-                                </div>
+                              <h3
+                                className="text-base font-extrabold"
+                                style={{ color: "#0f172a" }}
+                              >
+                                {ev.title}
+                              </h3>
+                            </div>
 
-                                <div
-                                  className="border-b-2 pb-1.5 mb-2"
-                                  style={{ borderColor: cardColor.borderHex }}
-                                >
-                                  <h3
-                                    className="text-base font-extrabold"
-                                    style={{ color: "#0f172a" }}
-                                  >
-                                    {ev.title}
-                                  </h3>
-                                </div>
+                            <div
+                              className={`${
+                                ev.glossaryNote
+                                  ? "text-[11px] leading-[1.46]"
+                                  : "text-xs leading-relaxed"
+                              } text-slate-800 whitespace-pre-wrap text-justify`}
+                            >
+                              {renderColoredCardBody(ev.description)}
+                            </div>
+                          </div>
 
-                                <div
-                                  className={`${
-                                    ev.glossaryNote
-                                      ? "text-[11px] leading-[1.46]"
-                                      : "text-xs leading-relaxed"
-                                  } text-slate-800 whitespace-pre-wrap text-justify`}
-                                >
-                                  {renderColoredCardBody(ev.description)}
-                                </div>
+                          <div className="mt-2 space-y-1.5">
+                            {ev.glossaryNote && (
+                              <div
+                                className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                style={{
+                                  backgroundColor: "#f0f9ff",
+                                  borderColor: "#7dd3fc",
+                                }}
+                              >
+                                {renderColoredGlossaryNote(ev.glossaryNote)}
                               </div>
-
-                              <div className="mt-2 space-y-1.5">
-                                {ev.glossaryNote && (
-                                  <div
-                                    className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
-                                    style={{
-                                      backgroundColor: "#f0f9ff",
-                                      borderColor: "#7dd3fc",
-                                    }}
-                                  >
-                                    {renderColoredGlossaryNote(ev.glossaryNote)}
-                                  </div>
-                                )}
-                                <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                                  <span
-                                    className="font-mono font-bold"
-                                    style={{ color: cardColor.headerHex }}
-                                  >
-                                    {evCode} / {String(allEvidences.length).padStart(2, "0")}
-                                  </span>
-                                </div>
-                              </div>
+                            )}
+                            <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
+                              <span
+                                className="font-mono font-bold"
+                                style={{ color: cardColor.headerHex }}
+                              >
+                                {evCode} / {String(allEvidences.length).padStart(2, "0")}
+                              </span>
                             </div>
                           </div>
                         </div>
                       );
-                    })}
-                  </div>
+                    };
+
+                    return (
+                      <div className="space-y-8 print:space-y-0">
+                        {sheets.map((quad, sheetIdx) => {
+                          const frontOrder = [quad[0], quad[1], quad[2], quad[3]];
+                          const backOrder = [quad[1], quad[0], quad[3], quad[2]];
+                          const frontPageNum = sheetIdx * 2 + 1;
+                          const backPageNum = sheetIdx * 2 + 2;
+
+                          return (
+                            <React.Fragment key={`ev-sheet-${sheetIdx}`}>
+                              {/* 奇数ページ：表紙のみ 4枚 */}
+                              <div className="space-y-2 print:space-y-0">
+                                <div className="no-print flex items-center justify-between rounded bg-slate-800 px-3 py-1.5 text-xs font-bold text-white">
+                                  <span>
+                                    📄 第{sheetIdx + 1}シート 表面（{frontPageNum}ページ目）：【表紙のみ】4枚配置
+                                  </span>
+                                  <span className="font-mono text-[11px] text-slate-300">
+                                    配置順：左上 ➔ 右上 ➔ 左下 ➔ 右下
+                                  </span>
+                                </div>
+                                <div className="duplex-a4-page rounded-lg border border-slate-200 bg-slate-50/40 p-4 relative">
+                                  <div className="duplex-cut-guide-h hidden print:block" />
+                                  <div className="duplex-cut-guide-v hidden print:block" />
+                                  <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    {frontOrder.map((evItem, slotIdx) =>
+                                      renderEvidenceFront(evItem, `ev-f-${sheetIdx}-${slotIdx}`)
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* 偶数ページ：内容のみ 4枚（長辺とじ裏面合わせ左右反転） */}
+                              <div className="space-y-2 print:space-y-0">
+                                <div className="no-print flex items-center justify-between rounded bg-indigo-900 px-3 py-1.5 text-xs font-bold text-white">
+                                  <span>
+                                    📄 第{sheetIdx + 1}シート 裏面（{backPageNum}ページ目）：【内容のみ】4枚配置
+                                  </span>
+                                  <span className="font-mono text-[11px] text-indigo-200">
+                                    ※両面印刷（長辺とじ）で表紙と一致するよう左右列を反転配置済み
+                                  </span>
+                                </div>
+                                <div className="duplex-a4-page rounded-lg border border-indigo-200 bg-indigo-50/20 p-4 relative">
+                                  <div className="duplex-cut-guide-h hidden print:block" />
+                                  <div className="duplex-cut-guide-v hidden print:block" />
+                                  <div className="duplex-card-grid grid grid-cols-1 md:grid-cols-2 gap-5">
+                                    {backOrder.map((evItem, slotIdx) =>
+                                      renderEvidenceBack(evItem, `ev-b-${sheetIdx}-${slotIdx}`)
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </React.Fragment>
+                          );
+                        })}
+                      </div>
+                    );
+                  })()}
                 </div>
               ) : (
                 activeEvidence && (() => {
