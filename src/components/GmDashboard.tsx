@@ -1088,16 +1088,33 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 1 && (
                 <div className="space-y-3 text-xs leading-relaxed">
-                  <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-3">
-                    <span className="font-bold text-indigo-300">【フェーズ1：緊急回線接続 ＆ 各員自己紹介】</span>
-                    <p className="text-slate-300 mt-1 italic">
-                      （🎙️ 総合オペレーター 長津）:「――東京本部および小笠原現地チームへ緊急入信。当回線は海上保安庁・関係機関合同の緊急対策回線です。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します。朝潮危機管理官をはじめ各員、氏名・所属・現場で担える専門役割の点呼および自己紹介をお願いいたします」
+                  <div className="rounded-lg border-2 border-indigo-600/80 bg-indigo-950/40 p-3 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-bold text-indigo-300">
+                        【フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介】
+                      </span>
+                      <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
+                        ⏱️ 開始条件：ゲーム開始時（全員がハンドアウトを読み終えた時点）
+                      </span>
+                    </div>
+                    <div className="rounded border-2 border-indigo-500/80 bg-slate-950/90 p-2.5">
+                      <div className="text-[11px] font-bold text-indigo-300 mb-1">
+                        📡 【オペレーター（長津）からの案内】（※『DAY 1 指令書』と同文）
+                      </div>
+                      <p className="text-slate-200 font-semibold">
+                        「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します」
+                      </p>
+                    </div>
+                    <p className="text-[11px] text-slate-300">
+                      ・朝潮（PC1）へ『SP-01：黒い小さな隕石のかけら』と『DAY 1 指令書』を渡し、朝潮の進行で全員の点呼・自己紹介を行わせます。
                     </p>
                   </div>
 
                   <div className="rounded border border-amber-900/60 bg-amber-950/20 p-3 space-y-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-bold text-amber-300">【フェーズ2：遭難海図展開 ＆ 漂流捜索方針の決定】</span>
+                      <span className="font-bold text-amber-300">
+                        【フェーズ2：漂流海図の展開 ＆ 初期証拠カードの開示・捜索海域の決定】
+                      </span>
                       <div className="flex items-center gap-1.5 text-xs">
                         <button
                           type="button"
@@ -1130,26 +1147,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         )}
                       </div>
                     </div>
-                    <p className="text-slate-300 italic">
-                      （🎙️ 総合オペレーター 長津）:「――救難信号の発信から現在20分が経過しております。大型スクリーンに【漂流海図】を展開いたしました。朝潮危機管理官（PC1）、坂凪救難担当官（PC3）、太刀魚観測員（PC4）、浪寄准教授（PC5）をはじめ各員、巡視船が現場海域に到着するまでの所要時間や暗礁群の配置、風・海流を考慮し、到着時点での漂流位置を推測して急行させるべき捜索海域の決定をお願いいたします」
-                    </p>
-                  </div>
-
-                  <div className="rounded border border-emerald-900/60 bg-emerald-950/20 p-3 space-y-2.5">
-                    <span className="font-bold text-emerald-300">【フェーズ3：漂流予測パズル・情報共有（合議・推理枠）】</span>
-                    <div className="rounded bg-slate-900/90 p-2.5 text-[11px] text-slate-300 border border-slate-800">
-                      <span className="font-bold text-cyan-400">🛡️ 貝浜（PC2: 防衛省リエゾン）からの開示情報（なぜ衛星が使えないのか）:</span>
-                      <p className="mt-0.5 leading-relaxed">
-                        「気象衛星ひまわりは解像度不足で40tの小型船を捕捉不可。低軌道偵察衛星は軌道通過まで4時間＋現場の雨雲で光学視界ゼロ。全電源喪失でAISも途絶。衛星画像頼みの捜索は不可能です！現場の海流と風から計算するしかありません！」
-                      </p>
+                    <div className="text-[11px] font-bold text-amber-200">
+                      ⏱️ 開始条件：全員の自己紹介が完了した直後
                     </div>
-                    <div className="space-y-1 text-[11px] text-slate-300">
+                    <div className="space-y-1 text-[11px] text-slate-300 bg-slate-950/70 rounded p-2.5 border border-slate-800">
                       <p className="font-bold text-slate-200">🔍 各員の開示情報と漂流ベクトル（GM用正解メモ）:</p>
                       <p>・<strong className="text-white">朝潮 / PC1 (風圧流)</strong>: 40t船体は風速の5%の速度で風下に流される（南西30kt × 5% ＝ 北東へ約1.5ノット）</p>
+                      <p>・<strong className="text-white">貝浜 / PC2 (衛星死角)</strong>: 気象衛星は解像度不足、偵察衛星は4時間後、AISも停波のため、海流と風圧流のベクトル合成で位置を割り出す</p>
                       <p>・<strong className="text-white">太刀魚 / PC4 (海流・風速)</strong>: 黒潮支流の表層流は真東へ2.0ノット、現場海域の風は南西から約30ノット（15m/s）</p>
                       <p>・<strong className="text-white">浪寄 / PC5 (到着所要時間)</strong>: 巡視船が現場海域に到着するまで約40分かかる（長津アナウンスの『現在20分経過』と合わせて合計1時間後の到着地点を推測）</p>
                       <p>・<strong className="text-white">初瀬 / PC6 (遭難無線)</strong>: 船長の悲鳴『真横から波を受けている』＝風と海流双方の横波</p>
-                      <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。風浪の三角波で座礁沈没する前に、1時間後の北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
+                      <p>・<strong className="text-white">坂凪 / PC3 (海難救助)</strong>: 東側や南東側には危険な暗礁群。1時間後の北東×真東の合成ベクトルである【東北東の漂流予測海域】へ急行して救出！</p>
                     </div>
                   </div>
 
@@ -1158,11 +1166,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-2">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <AlertTriangle className="h-4 w-4 text-amber-400" />
-                        【フェーズ4：救助地点指定の成否 ＆ NPC証言ペナルティ管理】
+                        【フェーズ3：救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布】
                       </span>
-                      <span className="text-[10px] font-mono text-slate-400">
-                        最大2回まで地点指定可能（2回目も失敗時は自動成功）
+                      <span className="text-[11px] font-bold text-amber-200">
+                        ⏱️ 開始条件：プレイヤーが捜索海域をGMへ宣言した時点（最大2回まで指定可能）
                       </span>
+                    </div>
+
+                    <div className="rounded bg-slate-950/80 border border-slate-800 px-3 py-2 text-[11px] text-slate-300">
+                      ※Day 1の救助結果は、どの条件に分岐しても長津のアナウンスではなく<strong className="text-white">【GMからのアナウンス】</strong>として伝えます。NPC（船長・謎のダイバーグループ）のセリフ読み上げは不要で、GMが該当する証拠カード（EV-08・EV-07）を渡せば完了です。
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -1177,7 +1189,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       >
                         <div className="font-bold text-xs text-emerald-300">🟢 1発成功（失敗0回）</div>
                         <div className="mt-1 text-[10.5px] text-slate-200">
-                          Day 1でNPC証言を<strong>【2つとも】</strong>取得（ペナルティなし）
+                          Day 1で証言カードを<strong>【2枚とも】</strong>配布（ペナルティなし）
                         </div>
                       </button>
 
@@ -1192,7 +1204,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       >
                         <div className="font-bold text-xs text-amber-300">🟡 1回失敗 ➔ 2回目で成功</div>
                         <div className="mt-1 text-[10.5px] text-slate-200">
-                          Day 1では証言を<strong>【1つだけ】</strong>取得。残り1つは<strong>Day 2以降の調査枠</strong>へ
+                          Day 1では証言カードを<strong>【1枚だけ】</strong>配布。残り1枚は<strong>Day 2以降の調査枠</strong>へ
                         </div>
                       </button>
 
@@ -1207,7 +1219,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       >
                         <div className="font-bold text-xs text-rose-300">🔴 2回とも失敗（自動成功）</div>
                         <div className="mt-1 text-[10.5px] text-slate-200">
-                          Day 1での証言取得は<strong>【0個】</strong>。2つとも<strong>Day 2以降の調査枠</strong>へ
+                          Day 1での証言カード配布は<strong>【0枚】</strong>。2枚とも<strong>Day 2以降の調査枠</strong>へ
                         </div>
                       </button>
                     </div>
@@ -1215,7 +1227,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     {day1FailureCount === 1 && (
                       <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2.5 flex flex-wrap items-center justify-between gap-2 text-[11px]">
                         <span className="font-bold text-amber-200">
-                          🟡 1回失敗ペナルティ：Day 1で取得する1枚を選択（もう1枚はDay 2以降へ繰り越し）：
+                          🟡 1回失敗ペナルティ：Day 1で配布する1枚を選択（もう1枚はDay 2以降へ繰り越し）：
                         </span>
                         <div className="flex items-center gap-2">
                           <button
@@ -1227,7 +1239,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                                 : "bg-slate-800 text-slate-300"
                             }`}
                           >
-                            EV-08：船長の証言を取得
+                            EV-08：船長の証言を配布
                           </button>
                           <button
                             type="button"
@@ -1238,75 +1250,54 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                                 : "bg-slate-800 text-slate-300"
                             }`}
                           >
-                            EV-07：大型冷凍ボックスを取得
+                            EV-07：大型冷凍ボックスを配布
                           </button>
                         </div>
                       </div>
                     )}
 
-                    {/* 成否に応じた長津アナウンス */}
-                    <div className="rounded border border-slate-800 bg-slate-950/90 p-3">
-                      <span className="font-bold text-slate-300">
+                    {/* 成否に応じたGMからのアナウンス（NPC読み上げなし・カード配布のみ） */}
+                    <div className="rounded border border-slate-800 bg-slate-950/90 p-3 space-y-2">
+                      <span className="font-bold text-emerald-300 block">
                         {day1FailureCount === 0
-                          ? "【フェーズ4：1発救助成功アナウンス（証言2つとも取得）】"
+                          ? "📢 【GMからのアナウンス：1発救助成功（証言カード2枚とも配布）】"
                           : day1FailureCount === 1
-                          ? "【フェーズ4：リトライ後の救助成功アナウンス（証言1つのみ取得・残り1つはDay 2以降へ）】"
-                          : "【フェーズ4：2回失敗後の自動救助アナウンス（証言0個・2つともDay 2以降へ）】"}
+                          ? "📢 【GMからのアナウンス：リトライ後の救助成功（証言カード1枚のみ配布・残り1枚はDay 2以降へ）】"
+                          : "📢 【GMからのアナウンス：2回失敗後の自動救助（証言カード0枚・2枚ともDay 2以降へ）】"}
                       </span>
                       {day1FailureCount === 0 ? (
-                        <p className="text-slate-300 mt-1 italic">
-                          （🎙️ 総合オペレーター 長津）:「――坂凪救難担当官率いる巡視船より入電！東北東の漂流予測海域へ全速到達、暗礁群をすり抜け激しく漂流する遭難船を捕捉・接舷！初瀬救護担当（PC6）も収容準備願います。荒波の中で間一髪、船長とダイバーたちの救出に成功いたしました！」
-                        </p>
+                        <div className="space-y-1.5 text-slate-200">
+                          <p>
+                            「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 荒波のなか間一髪で船長とダイバーたちの全員救出に成功しました。救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」
+                          </p>
+                          <p className="text-emerald-300 font-bold text-[11px]">
+                            👉 GM対応：『EV-08：船長の証言』と『EV-07：大型冷凍ボックス』の【2枚とも】その場でプレイヤーへ渡します（NPCのセリフ読み上げは不要です）。
+                          </p>
+                        </div>
                       ) : day1FailureCount === 1 ? (
-                        <div className="space-y-1.5 mt-1 text-slate-300 italic">
+                        <div className="space-y-1.5 text-slate-200">
                           <p className="text-amber-300">
-                            （1回目失敗時・長津）:「――巡視船より緊急入電！指定された海域へ到着しましたが、波浪と視界不良のなか船影を発見できません！もう一度だけ、海流と風圧流、そして救難信号からの経過時間（20分＋航行40分＝1時間）を再計算し、急行すべき海域を再指定してください！」
+                            （1回目失敗時・GMからのアナウンス）：「指定された海域へ巡視船が急行しましたが、波浪と視界不良のなか船影を発見できません！ もう一度だけ、海流（真東2.0kt）と風圧流（北東1.5kt）、そして救難信号からの経過時間（現在20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」
                           </p>
                           <p>
-                            （2回目成功時・長津）:「――巡視船より入電！再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ただし捜索に時間を要したため、本日中に聴取・確認できるのは【船長の証言（EV-08）】または【ダイバーの大型冷凍ボックス（EV-07）】のどちらか1つだけとなります！（残る1つは明日Day 2以降の調査カードとして取得可能になります）」
+                            （2回目成功時・GMからのアナウンス）：「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります（残る1枚は明日Day 2以降の調査枠として選択可能になります）」
+                          </p>
+                          <p className="text-amber-300 font-bold text-[11px]">
+                            👉 GM対応：プレイヤーが選んだ【1枚のみ】をその場で渡し、もう1枚はDay 2以降の現地調査枠へ繰り越します（NPCのセリフ読み上げは不要です）。
                           </p>
                         </div>
                       ) : (
-                        <div className="space-y-1.5 mt-1 text-slate-300 italic">
+                        <div className="space-y-1.5 text-slate-200">
                           <p className="text-rose-300">
-                            （2回目も失敗時・長津）:「――巡視船より入電！指定海域からは外れておりましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功いたしました！しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。船長およびダイバーに関する2つの証言記録（EV-08・EV-07）は、明日Day 2以降の調査カードとして取得可能になります！」
+                            （2回目も失敗時・GMからのアナウンス）：「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」
+                          </p>
+                          <p className="text-rose-300 font-bold text-[11px]">
+                            👉 GM対応：Day 1ではカードを渡さず、【2枚とも】Day 2以降の現地調査枠へ繰り越します（NPCのセリフ読み上げは不要です）。
                           </p>
                         </div>
                       )}
                     </div>
                   </div>
-
-                  {(day1FailureCount === 0 ||
-                    (day1FailureCount === 1 && day1SingleTestimonyId === "ev-captain-testimony")) && (
-                    <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
-                      <span className="font-bold text-amber-400">【NPC 船長（救助直後・EV-08「船長の証言」）】:</span>
-                      <p className="text-slate-400 text-[11px] italic">
-                        民間チャーター船「パパズドルフィン」の船長からの事情聴取調書。船長は荒波で不安定な足場でもしっかりとした足取りで巡視船へと乗り込んできた。
-                      </p>
-                      <p className="text-slate-200 mt-1 leading-relaxed">
-                        「お世話をかけますが、船は二見港まで曳航いただけますか。お客さんが怪我なくて、とにかく助かってよかった。船はスクリューが何かに巻き付かれたように故障して、計器類も電源も壊れてお手上げになっちゃったんだ。船の下に何かいたみたいだけど、あれはクジラなんかじゃないと思うねぇ。クジラなら潮吹きや潜水の際の尾が見えたりという行動があるもんだけど、そんな様子はなかったんでね」
-                      </p>
-                      <p className="text-slate-200 mt-1 leading-relaxed">
-                        「今日乗せたダイバーたちはこの1ヶ月前ぐらいから頻繁にダイブを繰り返していて、だいぶ手慣れた様子だった。あのあとすぐに帰ると言っていたよ。海は怖いねぇ、あとでちょっと神社にお参りしてくるようにするよ」
-                      </p>
-                    </div>
-                  )}
-
-                  {(day1FailureCount === 0 ||
-                    (day1FailureCount === 1 && day1SingleTestimonyId === "ev-diver-box-photo")) && (
-                    <div className="rounded border border-slate-800 bg-slate-950/80 p-3 space-y-1.5">
-                      <span className="font-bold text-blue-400">【NPC 謎のダイバーグループ（救助直後・EV-07「大型冷凍ボックス」）】:</span>
-                      <p className="text-slate-400 text-[11px] italic">
-                        救助された謎のダイバーグループは、酸素ボンベなどの装備は船に残したまま、魚釣り用の少し大型のプラスチック製冷凍ボックス（クーラーボックス）を抱えて巡視船に乗り込んできた。海から引き揚げて箱に入れられるサイズだが、重さ約30kgほどのずっしりとした異常な重量感があった。
-                      </p>
-                      <p className="text-slate-200 mt-1 leading-relaxed">
-                        「助かりました。船の下に何かいたみたいですね、ただの大型クジラですよ。この箱ですか？ 近辺での魚の生態調査で採集した魚が入っているんです。大変でしたがこれで目的のものが無事に収集できましたので、これ以上皆様にご迷惑をおかけすることはありません。この便を逃すとしばらく戻れないですからね」
-                      </p>
-                      <p className="text-slate-400 text-[11px] italic">
-                        そう言い残し、彼らは直後に出港した定期船「おがさわら丸」で箱と共に小笠原諸島を去っていった。
-                      </p>
-                    </div>
-                  )}
                 </div>
               )}
 
