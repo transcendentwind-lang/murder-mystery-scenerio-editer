@@ -600,9 +600,12 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const assignCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressTimerRef = useRef<number | null>(null);
 
-  // クリック音ボタンの表示順（確定済みの2語を先頭に配置し、残りを番号順に配置）
+  // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
   const orderedWords = React.useMemo(() => {
-    const locked = words.filter((w) => LOCKED_INITIAL_MEANINGS[w.id]);
+    const lockedOrder = ["word-subsea-volcano", "word-alert"];
+    const locked = lockedOrder
+      .map((id) => words.find((w) => w.id === id))
+      .filter((w): w is CrypticWord => Boolean(w));
     const unlocked = words.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
     return [...locked, ...unlocked];
   }, [words]);
@@ -1822,7 +1825,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                             【クジラの行動観測モニター】
                           </div>
                           <p className="text-[11px] text-slate-500 leading-relaxed">
-                            クリック音ボタンを組み合わせて「海中に鳴らす」を押すと、
+                            クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、
                             <br />
                             ここにクジラの行動が文字で表示されます。
                           </p>
@@ -1918,8 +1921,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
                       />
                       {isPlaying
-                        ? "クリック音パターンを海中に放流中..."
-                        : "🔊 海中にパターンを鳴らす（発信）"}
+                        ? "クリック音を海中に放流中..."
+                        : "🔊 海中にクリック音を流す（発信）"}
                     </button>
                   </div>
 
