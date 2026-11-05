@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
 import { audioEngine } from "@/utils/audioSynth";
+import { printWhaleSonarGuideA4 } from "@/utils/scriptGenerator";
 import {
   Volume2,
   VolumeX,
@@ -24,6 +25,7 @@ import {
   ArrowLeft,
   Check,
   Activity,
+  Printer,
 } from "lucide-react";
 
 export interface WhaleBehaviorRule {
@@ -584,6 +586,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const [isAbyssMode, setIsAbyssMode] = useState(false);
   // 3回のブラームホーンに合わせて画面を激しく揺らす演出ステート
   const [isAbyssShaking, setIsAbyssShaking] = useState(false);
+  // 「1つ戻す」「クリア」ボタンを押した瞬間の発光ステート
+  const [flashingActionBtn, setFlashingActionBtn] = useState<
+    "backspace" | "clear" | null
+  >(null);
+  const flashTimerRef = useRef<number | null>(null);
   const iosHapticLabelRef = useRef<HTMLLabelElement | null>(null);
   const abyssShakeTimersRef = useRef<number[]>([]);
 
@@ -1180,14 +1187,27 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     setAssigningTargetWordId(null); // メイン画面に戻る
   };
 
+  const triggerButtonFlash = (type: "backspace" | "clear") => {
+    if (flashTimerRef.current) {
+      window.clearTimeout(flashTimerRef.current);
+    }
+    setFlashingActionBtn(type);
+    flashTimerRef.current = window.setTimeout(() => {
+      setFlashingActionBtn(null);
+      flashTimerRef.current = null;
+    }, 350);
+  };
+
   // 1文字削除・全クリア
   const handleBackspace = () => {
     if (isPlaying) return;
+    triggerButtonFlash("backspace");
     setSelectedSequence((prev) => prev.slice(0, -1));
   };
 
   const handleClear = () => {
     if (isPlaying) return;
+    triggerButtonFlash("clear");
     setSelectedSequence([]);
     setCurrentOutcome(null);
   };
@@ -1422,6 +1442,17 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
+            {/* プレイヤー提示用シート（A4・表裏2ページ）印刷／PDF保存ボタン */}
+            <button
+              type="button"
+              onClick={printWhaleSonarGuideA4}
+              className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+              title="『マッコウクジラ音響言語解析システム』のプレイヤー提示用シート（表面：QRコード＆パスワード ／ 裏面：画面サンプル＆操作説明）をA4・2ページで印刷・PDF保存します"
+            >
+              <Printer className="h-3.5 w-3.5" />
+              プレイヤー提示用シート（A4・表裏2ページ）を印刷 / PDF保存
+            </button>
+
             {/* プレイヤー専用URL（/sonar）を別ウィンドウで開く */}
             <a
               href="/sonar"
@@ -1847,16 +1878,32 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       <div className="flex items-center gap-1.5">
                         <button
                           onClick={handleBackspace}
-                          disabled={selectedSequence.length === 0 || isPlaying}
-                          className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
+                          disabled={
+                            (selectedSequence.length === 0 &&
+                              flashingActionBtn !== "backspace") ||
+                            isPlaying
+                          }
+                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] transition-all duration-150 ${
+                            flashingActionBtn === "backspace"
+                              ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.95)] scale-105"
+                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white active:bg-cyan-400 active:text-slate-950 disabled:opacity-40"
+                          }`}
                         >
                           <Delete className="h-3 w-3" />
                           1つ戻す
                         </button>
                         <button
                           onClick={handleClear}
-                          disabled={selectedSequence.length === 0 || isPlaying}
-                          className="flex items-center gap-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-[11px] text-slate-300 hover:text-white disabled:opacity-40 transition"
+                          disabled={
+                            (selectedSequence.length === 0 &&
+                              flashingActionBtn !== "clear") ||
+                            isPlaying
+                          }
+                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] transition-all duration-150 ${
+                            flashingActionBtn === "clear"
+                              ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_18px_rgba(251,191,36,0.95)] scale-105"
+                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white active:bg-amber-400 active:text-slate-950 disabled:opacity-40"
+                          }`}
                         >
                           <RotateCcw className="h-3 w-3" />
                           クリア
@@ -2062,13 +2109,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             {/* 右側パネル（作者・テスト用）：プレイヤー専用画面（standalone）では非表示 */}
             {!standalone && (
               <div className="w-full lg:w-96 space-y-4">
-                {/* スマホ読み取り用QRコード（外部アクセス用） */}
+                {/* スマホ読み取り用QRコード（プレイヤー提示用） */}
                 <div className="rounded-2xl border border-cyan-500/40 bg-slate-900/90 p-4 space-y-3 shadow-lg">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Smartphone className="h-4 w-4 text-cyan-400" />
                       <h3 className="text-xs font-bold text-white">
-                        スマホ読み取り用QRコード（外部公開URL）
+                        『マッコウクジラ音響言語解析システム』QR
                       </h3>
                     </div>
                     <span className="rounded bg-cyan-950 border border-cyan-700/60 px-2 py-0.5 text-[10px] font-mono text-cyan-300">
@@ -2077,18 +2124,23 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3">
                     <img
-                      src="/images/sonar_qr.png?v=permanent"
-                      alt="プレイヤー専用画面QRコード"
+                      src="/images/sonar_qr.png"
+                      alt="マッコウクジラ音響言語解析システム QRコード"
                       className="h-44 w-44 object-contain"
                     />
                   </div>
-                  <div className="text-[11px] text-slate-300 space-y-1">
+                  <div className="text-[11px] text-slate-300 space-y-2">
                     <div>
-                      スマホのカメラで上のQRコードを読み取ると、PCの電源が切れていても24時間いつでも直接プレイヤー画面が開きます（固定URL）。
+                      スマートフォンのカメラでQRコードを読み取り、アクセスパスワード <strong className="font-mono text-cyan-300">whale-study</strong> を入力するとプレイヤー画面が開きます。
                     </div>
-                    <div className="rounded bg-slate-950 px-2 py-1 font-mono text-[10px] text-cyan-300 break-all">
-                      https://transcendentwind-lang.github.io/murder-mystery-scenerio-editer/sonar/
-                    </div>
+                    <button
+                      type="button"
+                      onClick={printWhaleSonarGuideA4}
+                      className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500 transition"
+                    >
+                      <Printer className="h-4 w-4 shrink-0" />
+                      <span>プレイヤー提示用シート（A4・表裏2ページ）を印刷 / PDF保存</span>
+                    </button>
                   </div>
                 </div>
 
