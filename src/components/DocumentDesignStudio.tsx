@@ -3340,11 +3340,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
                             {b.nagatsuBriefingRubyHtml ? (
                               <p
-                                className="text-xs leading-[2.05] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[6.8px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal"
+                                className="text-[11px] leading-[1.82] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                 dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
                               />
                             ) : (
-                              <p className="text-xs leading-relaxed text-slate-800 font-medium whitespace-pre-wrap">
+                              <p className="text-[11px] leading-[1.82] text-slate-800 font-medium whitespace-pre-wrap">
                                 {b.nagatsuBriefingText}
                               </p>
                             )}
@@ -3362,7 +3362,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 ? "🧭 危機管理官 朝潮がこの局面で指揮・達成すべき追加ミッション"
                                 : "🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション"}
                             </div>
-                            <ul className="space-y-1.5 text-xs leading-relaxed text-slate-800 list-none">
+                            <ul className="space-y-1.5 text-[11px] leading-[1.75] text-slate-800 list-none">
                               {b.asashioMissions.map((m, mIdx) => (
                                 <li key={mIdx} className="flex items-start gap-2">
                                   <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
@@ -3372,8 +3372,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </ul>
                           </div>
 
-                          <div className="text-[10px] text-slate-500 flex items-center justify-between pt-1 border-t border-dashed border-slate-200">
-                            <span>{b.gmHandoutNote}</span>
+                          <div className="text-[10px] text-slate-500 flex items-center justify-end pt-1 border-t border-dashed border-slate-200">
                             <span className="font-mono font-bold">{b.sheetCode}</span>
                           </div>
                         </div>
@@ -4172,27 +4171,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="flex flex-wrap items-center gap-2">
                     <button
                       type="button"
-                      onClick={() => printWhaleSonarGuideA4("front")}
-                      className="flex items-center gap-1.5 rounded-lg border border-emerald-600 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 shadow-sm hover:bg-emerald-100 transition"
-                    >
-                      <Printer className="h-3.5 w-3.5" />
-                      表面のみ（QR・1ページ）を印刷 / PDF保存
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => printWhaleSonarGuideA4("back")}
-                      className="flex items-center gap-1.5 rounded-lg border border-emerald-600 bg-emerald-50 px-3 py-2 text-xs font-bold text-emerald-800 shadow-sm hover:bg-emerald-100 transition"
-                    >
-                      <Printer className="h-3.5 w-3.5" />
-                      裏面のみ（画面説明・1ページ）を印刷 / PDF保存
-                    </button>
-                    <button
-                      type="button"
                       onClick={() => printWhaleSonarGuideA4("both")}
                       className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                     >
                       <Printer className="h-3.5 w-3.5" />
-                      表裏セット（各1P・計2ページ）を印刷 / PDF保存
+                      この提示資料（A4・表裏2ページ）を印刷 / PDF保存
                     </button>
                   </div>
                 </div>

@@ -1442,33 +1442,15 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            {/* プレイヤー提示用シート（表面1ページ／裏面1ページ／表裏2ページ）印刷・PDF保存ボタン */}
-            <button
-              type="button"
-              onClick={() => printWhaleSonarGuideA4("front")}
-              className="flex items-center gap-1.5 rounded-lg border border-emerald-500/50 bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-emerald-200 hover:bg-emerald-900/70 transition"
-              title="表面（QRコード＆パスワード）をA4・1ページに収めて印刷・PDF保存します"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              表面（QR・1P）印刷
-            </button>
-            <button
-              type="button"
-              onClick={() => printWhaleSonarGuideA4("back")}
-              className="flex items-center gap-1.5 rounded-lg border border-emerald-500/50 bg-emerald-950/60 px-3 py-1.5 text-xs font-bold text-emerald-200 hover:bg-emerald-900/70 transition"
-              title="裏面（画面サンプル＆操作説明）をA4・1ページに収めて印刷・PDF保存します"
-            >
-              <Printer className="h-3.5 w-3.5" />
-              裏面（画面説明・1P）印刷
-            </button>
+            {/* プレイヤー提示用シート（A4・表裏2ページ）印刷／PDF保存ボタン */}
             <button
               type="button"
               onClick={() => printWhaleSonarGuideA4("both")}
               className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-1.5 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
-              title="『マッコウクジラ音響言語解析システム』のプレイヤー提示用シート（表面1ページ＋裏面1ページ＝計2ページ）を一括で印刷・PDF保存します"
+              title="『マッコウクジラ音響言語解析システム』のプレイヤー提示用シート（表面1ページ＋裏面1ページ＝計2ページ）を印刷・PDF保存します"
             >
               <Printer className="h-3.5 w-3.5" />
-              表裏セット（各1P・計2P）を印刷 / PDF保存
+              プレイヤー提示用シート（A4・表裏2ページ）を印刷 / PDF保存
             </button>
 
             {/* プレイヤー専用URL（/sonar）を別ウィンドウで開く */}
@@ -2151,31 +2133,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     <div>
                       スマートフォンのカメラでQRコードを読み取り、アクセスパスワード <strong className="font-mono text-cyan-300">whale-study</strong> を入力するとプレイヤー画面が開きます。
                     </div>
-                    <div className="grid grid-cols-2 gap-1.5">
-                      <button
-                        type="button"
-                        onClick={() => printWhaleSonarGuideA4("front")}
-                        className="flex items-center justify-center gap-1 rounded-lg border border-emerald-500/50 bg-emerald-950/60 px-2 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-900/70 transition"
-                      >
-                        <Printer className="h-3.5 w-3.5 shrink-0" />
-                        <span>表面（QR・1P）</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => printWhaleSonarGuideA4("back")}
-                        className="flex items-center justify-center gap-1 rounded-lg border border-emerald-500/50 bg-emerald-950/60 px-2 py-2 text-[11px] font-bold text-emerald-200 hover:bg-emerald-900/70 transition"
-                      >
-                        <Printer className="h-3.5 w-3.5 shrink-0" />
-                        <span>裏面（説明・1P）</span>
-                      </button>
-                    </div>
                     <button
                       type="button"
                       onClick={() => printWhaleSonarGuideA4("both")}
                       className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-emerald-600 px-3 py-2.5 text-xs font-bold text-white shadow-md hover:bg-emerald-500 transition"
                     >
                       <Printer className="h-4 w-4 shrink-0" />
-                      <span>表裏セット（各1ページ・計2P）を印刷 / PDF保存</span>
+                      <span>プレイヤー提示用シート（A4・表裏2ページ）を印刷 / PDF保存</span>
                     </button>
                   </div>
                 </div>
