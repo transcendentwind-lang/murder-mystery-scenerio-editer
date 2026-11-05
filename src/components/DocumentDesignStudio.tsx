@@ -732,7 +732,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています。
 　――気象庁火山監視課より緊急入電！ 富士山地下深部における火山性微動、急激に減衰しており、さきほど完全に停止が確認できました！
 　防衛省・自衛艦隊司令部より全潜水艦へ通達入電、『目標の完全消滅を確認。魚雷発射管閉鎖、全部隊攻撃中止（スタンドダウン）』の命令がありました！
-　このあと引き続き巨大生物が復活してこないかは継続監視を行うようですが、現状クジラたちが、太古からの盟約に従って巨大生物を殲滅。富士山噴火を直前で停止できたと言っていいと考えられます。
+　このあと引き続き巨大生物が復活してこないか継続監視を行うようですが、現状クジラたちが、太古からの盟約に従って巨大生物を殲滅。富士山噴火を直前で停止できたと考えられます。
 　皆さん、やりました。我々と、クジラの勝利です」
 
 【フェーズ3：海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示）】
@@ -1676,7 +1676,12 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       print-color-adjust: exact !important;
       box-sizing: border-box;
     }
-    html, body {
+    html {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+    }
+    body {
       margin: 0;
       padding: 0;
       background: #ffffff;
@@ -3500,7 +3505,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs mb-2">
+                              <div
+                                className={`flex items-center justify-between text-xs ${
+                                  nc.cardCode === "NG-08" ? "mb-1" : "mb-2"
+                                }`}
+                              >
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: nc.accentHex }}
@@ -3512,25 +3521,31 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </span>
                               </div>
 
-                              <div className="border-b-2 border-slate-900 pb-1.5 mb-2.5">
+                              <div
+                                className={`border-b-2 border-slate-900 ${
+                                  nc.cardCode === "NG-08" ? "pb-1 mb-1.5" : "pb-1.5 mb-2.5"
+                                }`}
+                              >
                                 <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
                                   {nc.title}
                                 </h4>
                               </div>
 
                               <div
-                                className={`${
-                                  nc.cardCode === "NG-08" ||
-                                  nc.cardCode === "NG-09" ||
-                                  nc.cardCode === "NG-10"
-                                    ? "text-[11px] leading-[1.82]"
-                                    : "text-xs leading-[1.95]"
+                                className={`text-[11px] ${
+                                  nc.cardCode === "NG-08"
+                                    ? "leading-[1.58]"
+                                    : "leading-[1.82]"
                                 } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[6.2px] [&_rt]:leading-none [&_rt]:tracking-tighter [&_rt]:text-slate-600 [&_rt]:font-normal`}
                                 dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                               />
                             </div>
 
-                            <div className="border-t border-dashed border-slate-300 pt-2 mt-3 flex items-center justify-end text-xs">
+                            <div
+                              className={`border-t border-dashed border-slate-300 ${
+                                nc.cardCode === "NG-08" ? "pt-1 mt-1" : "pt-2 mt-3"
+                              } flex items-center justify-end text-xs`}
+                            >
                               <span className="font-mono font-bold text-slate-500">
                                 {nc.cardCode} / 10
                               </span>
