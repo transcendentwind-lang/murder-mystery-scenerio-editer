@@ -25,7 +25,10 @@ import {
 } from "@/utils/initialProjectData";
 import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
 import { GmOnePageFlowchart } from "@/components/GmOnePageFlowchart";
-import { printCharacterHandoutsB5 } from "@/utils/scriptGenerator";
+import {
+  printCharacterHandoutsB5,
+  printWhaleSonarGuideA4,
+} from "@/utils/scriptGenerator";
 import {
   Sparkles,
   Printer,
@@ -2479,8 +2482,35 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
 
               <div className="space-y-2">
+                {/* 📱 マッコウクジラ音響言語解析システム（QR＆画面説明・A4表裏2ページ） */}
+                <button
+                  onClick={() => setSelectedVisualId("vis-whale-sonar-qr-guide")}
+                  className={`w-full rounded-xl border p-3 text-left transition ${
+                    selectedVisualId === "vis-whale-sonar-qr-guide"
+                      ? "border-cyan-400 bg-cyan-950/70 shadow-md ring-1 ring-cyan-400/50"
+                      : "border-cyan-800/60 bg-slate-950/90 hover:border-cyan-600"
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="rounded bg-cyan-500/20 border border-cyan-500/40 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                      Day 6 / 全体提示
+                    </span>
+                    <span className="text-[10px] font-bold text-emerald-300">
+                      📱 QR＆画面説明（A4・2P）
+                    </span>
+                  </div>
+                  <div className="mt-1.5 font-bold text-xs text-white">
+                    『マッコウクジラ音響言語解析システム』
+                  </div>
+                  <div className="mt-0.5 text-[11px] text-slate-300 truncate">
+                    表面：QR＆PW（whale-study）／裏面：画面サンプル＆操作説明
+                  </div>
+                </button>
+
                 {visualBoards.map((vb) => {
-                  const isSelected = vb.id === activeVisual?.id;
+                  const isSelected =
+                    selectedVisualId !== "vis-whale-sonar-qr-guide" &&
+                    vb.id === activeVisual?.id;
                   return (
                     <button
                       key={vb.id}
@@ -4115,7 +4145,345 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
             {/* ================================================================
                 ③ 全体提示される地図や写真（ビジュアル提示ボード）のA4印刷最大化ビュー
                ================================================================ */}
-            {category === "visuals" && activeVisual && (() => {
+            {category === "visuals" && selectedVisualId === "vis-whale-sonar-qr-guide" && (
+              <div className="space-y-8">
+                {/* 画面上部タイトル ＆ 右上印刷ボタン行 */}
+                <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                      {project.title} ― プレイヤー提示用シート（A4縦・表裏2ページ）
+                    </span>
+                    <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                      『マッコウクジラ音響言語解析システム』（表面：QRコード＆PW ／ 裏面：画面サンプル＆操作説明）
+                    </h2>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={printWhaleSonarGuideA4}
+                      className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-4 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                    >
+                      <Printer className="h-3.5 w-3.5" />
+                      この提示資料（A4・表裏2ページ）を印刷 / PDF保存
+                    </button>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------
+                    【1ページ目（表面）プレビュー】：メインタイトル・QRコード・パスワード
+                   ------------------------------------------------------------ */}
+                <div className="mx-auto max-w-[720px] rounded-xl border-2 border-slate-900 bg-white p-7 shadow-xl space-y-6">
+                  <div className="rounded-lg bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-5 text-center text-white border-b-4 border-cyan-600">
+                    <div className="text-[11px] font-bold tracking-[0.2em] text-cyan-300 mb-1">
+                      MARINE MAMMAL ACOUSTIC ANALYSIS TERMINAL
+                    </div>
+                    <h1 className="text-2xl font-black tracking-wider">
+                      『マッコウクジラ音響言語解析システム』
+                    </h1>
+                  </div>
+
+                  <div className="flex flex-col items-center justify-center py-2">
+                    <div className="rounded-2xl border-[3px] border-slate-900 bg-white p-6 shadow-md flex flex-col items-center">
+                      <img
+                        src="/images/sonar_qr.png"
+                        alt="マッコウクジラ音響言語解析システム QRコード"
+                        className="h-64 w-64 object-contain"
+                      />
+                      <div className="mt-3 text-sm font-extrabold text-slate-900 tracking-wide">
+                        📱 スマートフォンのカメラで読み取ってください
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border-[3px] border-cyan-600 bg-cyan-50/80 p-5 text-center space-y-2">
+                    <div className="text-xs font-extrabold tracking-widest text-cyan-900">
+                      🔑 アクセスパスワード（半角英数字・ハイフンあり）
+                    </div>
+                    <div>
+                      <span className="inline-block rounded-lg border-2 border-cyan-500 bg-white px-8 py-2 font-mono text-4xl font-black tracking-wider text-slate-900 shadow-sm">
+                        whale-study
+                      </span>
+                    </div>
+                    <div className="text-xs font-bold text-slate-700">
+                      ※上記のパスワードを入力して「ロック解除」を押すとシステムが起動します
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl border border-slate-300 bg-slate-50 p-5 space-y-2.5">
+                    <div className="text-xs font-black text-slate-900 border-b border-slate-300 pb-1.5">
+                      【システムへの接続手順と使い方】
+                    </div>
+                    <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
+                      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">
+                        1
+                      </span>
+                      <span>
+                        スマートフォンのカメラで上のQRコードを読み取り、専用画面を開いてください。
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
+                      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">
+                        2
+                      </span>
+                      <span>
+                        パスワード欄に <strong className="font-mono text-base underline">whale-study</strong> と入力してロックを解除してください。
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-3 text-sm font-bold text-slate-800">
+                      <span className="inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-slate-900 text-xs font-black text-white">
+                        3
+                      </span>
+                      <span>
+                        詳しい画面の見方と操作方法は、<strong>裏面（次ページ）</strong>をご覧ください。
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[11px] font-bold text-slate-500">
+                    <span>マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（表面）</span>
+                    <span>1 / 2</span>
+                  </div>
+                </div>
+
+                {/* ------------------------------------------------------------
+                    【2ページ目（裏面）プレビュー】：操作説明3項目 ＆ 画面サンプル4パート
+                   ------------------------------------------------------------ */}
+                <div className="mx-auto max-w-[720px] rounded-xl border-2 border-slate-900 bg-white p-7 shadow-xl space-y-5">
+                  <div className="rounded-lg bg-gradient-to-br from-slate-900 to-slate-800 px-6 py-4 text-center text-white border-b-4 border-cyan-600">
+                    <div className="text-[10px] font-bold tracking-[0.2em] text-cyan-300 mb-0.5">
+                      SYSTEM OPERATION GUIDE &amp; SCREEN SAMPLES
+                    </div>
+                    <h2 className="text-xl font-black tracking-wider">
+                      『マッコウクジラ音響言語解析システム』画面説明
+                    </h2>
+                  </div>
+
+                  {/* ご指定のプレイヤー向け説明文（3項目） */}
+                  <div className="rounded-xl border-2 border-cyan-600 bg-cyan-50/70 p-4 space-y-2">
+                    <div className="text-sm font-black text-slate-900 flex items-center gap-1.5">
+                      <span>💡 システムの操作方法</span>
+                    </div>
+                    <div className="space-y-1.5 text-xs font-extrabold text-slate-900 leading-relaxed">
+                      <div className="flex items-start gap-2">
+                        <span className="text-cyan-700 font-black">●</span>
+                        <span>
+                          クリック音ボタンを押して海中にクリック音を鳴らすと、それに対するクジラの行動が観察できます。
+                        </span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-cyan-700 font-black">●</span>
+                        <span>
+                          別の内容を流すときは、一度流したクリック音をクリアすることをお勧めします。
+                        </span>
+                      </div>
+                      <div className="flex items-start gap-2">
+                        <span className="text-cyan-700 font-black">●</span>
+                        <span>
+                          言語について想定できたら、日本語を当てはめるボタンを押すことでクリック音を解析していくことができます。
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* スマートフォン画面サンプル枠（4つの主要パーツ） */}
+                  <div className="rounded-2xl border-2 border-slate-800 bg-slate-950 p-4 text-slate-100 space-y-3.5">
+                    <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                      <span className="text-xs font-extrabold text-cyan-300">
+                        📱 スマートフォン画面サンプル（主要4パート）
+                      </span>
+                      <span className="rounded border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] font-bold text-slate-400">
+                        実際の操作画面イメージ
+                      </span>
+                    </div>
+
+                    {/* ① 時間変化・音響波形ログ */}
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-3 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-1">
+                        <span className="rounded-full bg-cyan-600 px-2.5 py-0.5 text-[11px] font-black text-white">
+                          ① 時間変化・音響波形ログ
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-300">
+                          鳴らしたクリック音の波形が時間変化で記録され、再生後も形が残ります
+                        </span>
+                      </div>
+                      <div className="rounded-lg border border-cyan-500/30 bg-slate-950 overflow-hidden">
+                        <div className="flex items-center justify-between px-3 py-1.5 border-b border-slate-800 bg-slate-900 text-[11px] font-bold text-cyan-300">
+                          <span>📈 時間変化・音響波形ログ（再生後も形が残ります）</span>
+                          <span className="rounded bg-cyan-950 border border-cyan-600/50 px-2 py-0.5 text-[10px] text-cyan-200">
+                            ▶ もう一度再生
+                          </span>
+                        </div>
+                        <svg
+                          viewBox="0 0 600 92"
+                          className="w-full h-20 block bg-slate-950"
+                        >
+                          <line x1="0" y1="23" x2="600" y2="23" stroke="#0f172a" strokeWidth="1" />
+                          <line x1="0" y1="46" x2="600" y2="46" stroke="#1e293b" strokeWidth="1" strokeDasharray="4 4" />
+                          <line x1="0" y1="69" x2="600" y2="69" stroke="#0f172a" strokeWidth="1" />
+                          <line x1="300" y1="0" x2="300" y2="92" stroke="#1e293b" strokeWidth="1" strokeDasharray="3 3" />
+                          <text x="12" y="16" fill="#67e8f9" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                            1. 音 #01『ゴゴゴゴ…』(海の下の火山)
+                          </text>
+                          <text x="312" y="16" fill="#67e8f9" fontSize="10" fontFamily="monospace" fontWeight="bold">
+                            2. 音 #03『カ・カ・カカッ！』
+                          </text>
+                          <path
+                            d="M 15 46 Q 25 20, 35 46 T 55 46 T 75 46 T 95 46 T 115 46 T 135 46 T 155 46 T 175 46 T 195 46 T 215 46 T 235 46 T 255 46 L 285 46"
+                            fill="none"
+                            stroke="#f59e0b"
+                            strokeWidth="2.2"
+                          />
+                          <path
+                            d="M 315 46 L 335 46 L 340 14 L 345 78 L 350 46 L 385 46 L 390 14 L 395 78 L 400 46 L 435 46 L 440 12 L 445 80 L 450 20 L 455 74 L 460 46 L 580 46"
+                            fill="none"
+                            stroke="#22d3ee"
+                            strokeWidth="2.2"
+                          />
+                        </svg>
+                      </div>
+                    </div>
+
+                    {/* ② クジラの行動観測モニター */}
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-3 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-1">
+                        <span className="rounded-full bg-cyan-600 px-2.5 py-0.5 text-[11px] font-black text-white">
+                          ② クジラの行動観測モニター
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-300">
+                          海中にクリック音を流した結果、クジラがどう動いたかが文字で表示されます
+                        </span>
+                      </div>
+                      <div className="rounded-xl border border-slate-700 bg-slate-950 p-3.5 text-center space-y-1">
+                        <div className="text-xs font-bold text-slate-300">
+                          【クジラの行動観測モニター】
+                        </div>
+                        <p className="text-[11px] text-slate-400 leading-relaxed">
+                          クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、
+                          <br />
+                          ここにクジラの行動が文字で表示されます。
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* ③ 海中にクリック音を流す（発信）のボタン ＆ クリアボタン */}
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-3 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-1">
+                        <span className="rounded-full bg-cyan-600 px-2.5 py-0.5 text-[11px] font-black text-white">
+                          ③ 発信ボタン ＆ クリア操作
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-300">
+                          選んだ音を海中に流します（別の内容を流す時は「クリア」を押します）
+                        </span>
+                      </div>
+                      <div className="space-y-2 rounded-xl border border-slate-800 bg-slate-950 p-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-cyan-300">
+                            発信するクリック音パターン（2語ごと判定）
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="rounded border border-slate-700 bg-slate-900 px-2 py-0.5 text-[10px] font-bold text-slate-300">
+                              ⌫ 1つ戻す
+                            </span>
+                            <span className="rounded border border-amber-400/80 bg-slate-900 px-2 py-0.5 text-[10px] font-bold text-amber-200">
+                              ↺ クリア
+                            </span>
+                          </div>
+                        </div>
+                        <div className="rounded-lg border border-slate-800 bg-slate-900/90 p-2 flex flex-wrap items-center gap-1.5">
+                          <span className="rounded-md bg-indigo-950 border border-indigo-500/50 px-2 py-0.5 text-xs font-bold text-indigo-100">
+                            <span className="text-[10px] font-mono text-cyan-300 mr-1">1.</span>
+                            海の下の火山
+                          </span>
+                          <span className="text-xs font-bold text-slate-500">＋</span>
+                          <span className="rounded-md bg-indigo-950 border border-indigo-500/50 px-2 py-0.5 text-xs font-bold text-indigo-100">
+                            <span className="text-[10px] font-mono text-cyan-300 mr-1">2.</span>
+                            音 #03（カ・カ・カカッ！）
+                          </span>
+                        </div>
+                        <div className="w-full rounded-xl bg-gradient-to-r from-cyan-600 via-teal-500 to-indigo-600 py-2.5 px-4 text-center text-xs font-extrabold text-white shadow">
+                          🔊 海中にクリック音を流す（発信）
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* ④ クリック音ボタンのサンプル（音 #01 と 音 #03） */}
+                    <div className="rounded-xl border border-slate-800 bg-slate-900/90 p-3 space-y-2">
+                      <div className="flex flex-wrap items-center justify-between gap-1">
+                        <span className="rounded-full bg-cyan-600 px-2.5 py-0.5 text-[11px] font-black text-white">
+                          ④ クリック音ボタンのサンプル
+                        </span>
+                        <span className="text-[11px] font-bold text-slate-300">
+                          左：最初から意味が判明している音 ／ 右：未解明の音（日本語をあてはめ可能）
+                        </span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        {/* 音 #01：ゴゴゴゴ…（海の下の火山） */}
+                        <div className="rounded-xl border border-amber-500/50 bg-slate-950 p-3 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <span className="rounded bg-slate-900 border border-slate-700 px-1.5 py-0.5 font-mono text-[10px] font-bold text-cyan-300">
+                                音 #01
+                              </span>
+                              <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                                🔊 試聴
+                              </span>
+                            </div>
+                            <div className="mt-1.5 text-xs font-extrabold text-amber-200">
+                              『ゴゴゴゴ…』
+                            </div>
+                            <div className="mt-1">
+                              <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/20 border border-amber-500/40 px-2 py-0.5 text-xs font-extrabold text-amber-200">
+                                🔒 海の下の火山
+                              </span>
+                            </div>
+                          </div>
+                          <div className="mt-2 pt-1.5 border-t border-slate-800 text-[10px] font-semibold text-amber-400">
+                            ✔ 朝倉教授記録により確定
+                          </div>
+                        </div>
+
+                        {/* 音 #03：カ・カ・カカッ！（未解明） */}
+                        <div className="rounded-xl border border-slate-700 bg-slate-950 p-3 flex flex-col justify-between">
+                          <div>
+                            <div className="flex items-center justify-between">
+                              <span className="rounded bg-slate-900 border border-slate-700 px-1.5 py-0.5 font-mono text-[10px] font-bold text-cyan-300">
+                                音 #03
+                              </span>
+                              <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-bold text-cyan-300">
+                                🔊 試聴
+                              </span>
+                            </div>
+                            <div className="mt-1.5 text-xs font-extrabold text-amber-200">
+                              『カ・カ・カカッ！』
+                            </div>
+                            <div className="mt-1 text-[11px] font-bold text-slate-500">
+                              【未解明：？？？】
+                            </div>
+                          </div>
+                          <div className="mt-2 pt-1.5 border-t border-slate-800">
+                            <div className="w-full rounded-lg bg-indigo-600/30 border border-indigo-500/40 py-1 px-2 text-center text-[10px] font-bold text-indigo-200">
+                              🏷️ 日本語をあてはめる
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between border-t border-slate-300 pt-2 text-[11px] font-bold text-slate-500">
+                    <span>
+                      マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（裏面：画面サンプル＆操作案内）
+                    </span>
+                    <span>2 / 2</span>
+                  </div>
+                </div>
+              </div>
+            )}
+            {category === "visuals" &&
+              selectedVisualId !== "vis-whale-sonar-qr-guide" &&
+              activeVisual &&
+              (() => {
               const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
               return (
                 <div className="space-y-6">
