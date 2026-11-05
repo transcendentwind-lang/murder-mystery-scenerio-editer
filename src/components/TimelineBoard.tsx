@@ -164,6 +164,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [selectedDay, setSelectedDay] = useState<number>(1);
   const safeTimeline =
     Array.isArray(timeline) && timeline.length > 0 ? timeline : initialProject.timeline;
+  const safeEvidences = Array.isArray(evidences) ? evidences : [];
   const currentStep =
     safeTimeline.find((t) => t.dayNumber === selectedDay) || safeTimeline[0];
 
@@ -390,7 +391,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   };
 
   const handleUpdateCurrentStep = (field: keyof IncidentStep, value: any) => {
-    const updated = timeline.map((step) =>
+    const updated = safeTimeline.map((step) =>
       step.dayNumber === selectedDay ? { ...step, [field]: value } : step
     );
     onUpdateTimeline(updated);
@@ -398,12 +399,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
   const getRevealedEvidences = (evidenceIds?: string[]) => {
     const ids = evidenceIds || [];
-    return (evidences || []).filter((e) => ids.includes(e.id));
+    return safeEvidences.filter((e) => ids.includes(e.id));
   };
 
   // 汎用・新規シナリオプロジェクト用のフェーズ進行＆リソース・裏アクション設計ボード
   if (project?.id && project.id !== "project-deep-sea") {
-    const phaseEvidences = evidences.filter(
+    const phaseEvidences = safeEvidences.filter(
       (e) =>
         (currentStep?.revealedEvidenceIds || []).includes(e.id) ||
         e.foundPhase === selectedDay
@@ -427,7 +428,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             <div className="flex items-center gap-2">
               <Compass className="h-4 w-4 text-indigo-400" />
               <h2 className="text-xs font-bold tracking-wider text-white uppercase">
-                {project.title} ― 全{timeline.length}フェーズ進行 ＆ リソース・裏アクション管理
+                {project.title} ― 全{safeTimeline.length}フェーズ進行 ＆ リソース・裏アクション管理
               </h2>
             </div>
             {currentStep?.resourceStatus && (
@@ -438,9 +439,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
-            {timeline.map((step) => {
+            {safeTimeline.map((step) => {
               const isSelected = step.dayNumber === selectedDay;
-              const stepEvCount = evidences.filter(
+              const stepEvCount = safeEvidences.filter(
                 (e) =>
                   (step.revealedEvidenceIds || []).includes(e.id) ||
                   e.foundPhase === step.dayNumber
@@ -674,7 +675,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   Phase {selectedDay} に紐づける証拠の選択
                 </div>
                 <div className="space-y-1.5 max-h-64 overflow-y-auto pr-1">
-                  {evidences.map((ev) => {
+                  {safeEvidences.map((ev) => {
                     const checked =
                       (currentStep.revealedEvidenceIds || []).includes(ev.id) ||
                       ev.foundPhase === selectedDay;

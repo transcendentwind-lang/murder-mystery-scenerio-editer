@@ -1244,7 +1244,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const activeVisual =
     visualBoards.find((v) => v.id === selectedVisualId) || visualBoards[0];
 
-  const timelineList = project.timeline || [];
+  const timelineList =
+    Array.isArray(project.timeline) && project.timeline.length > 0
+      ? project.timeline
+      : initialProject.timeline;
   const activeTimelineStep =
     timelineList.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
 
@@ -1359,7 +1362,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     if (!activeChar) return;
     onUpdateProject((prev) => ({
       ...prev,
-      characters: prev.characters.map((c) => (c.id === activeChar.id ? updater(c) : c)),
+      characters: (prev.characters || []).map((c) => (c.id === activeChar.id ? updater(c) : c)),
     }));
     triggerSaveFeedback();
   };
@@ -1369,7 +1372,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     if (!activeEvidence) return;
     onUpdateProject((prev) => ({
       ...prev,
-      evidences: prev.evidences.map((e) => (e.id === activeEvidence.id ? updater(e) : e)),
+      evidences: (prev.evidences || []).map((e) => (e.id === activeEvidence.id ? updater(e) : e)),
     }));
     triggerSaveFeedback();
   };
@@ -1389,7 +1392,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     };
     onUpdateProject((prev) => ({
       ...prev,
-      evidences: [...prev.evidences, newEv],
+      evidences: [...(prev.evidences || []), newEv],
     }));
     setSelectedEvidenceId(newId);
     triggerSaveFeedback();
@@ -1455,7 +1458,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     if (!activeTimelineStep) return;
     onUpdateProject((prev) => ({
       ...prev,
-      timeline: prev.timeline.map((t) =>
+      timeline: (prev.timeline || []).map((t) =>
         t.dayNumber === activeTimelineStep.dayNumber ? updater(t) : t
       ),
     }));
@@ -3006,9 +3009,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
                           );
                         }
-                        const charShort = card.characterName.split("（")[0];
+                        const charShort = (card.characterName || "").split("（")[0];
                         const cardLabel = `特別配布カード（${charShort}）`;
-                        const isSelected = card.characterId === activeChar.id;
+                        const isSelected = card.characterId === activeChar?.id;
                         return (
                           <div
                             key={slotKey}
@@ -3094,9 +3097,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
                           );
                         }
-                        const charShort = card.characterName.split("（")[0];
+                        const charShort = (card.characterName || "").split("（")[0];
                         const cardLabel = `特別配布カード（${charShort}）`;
-                        const isSelected = card.characterId === activeChar.id;
+                        const isSelected = card.characterId === activeChar?.id;
                         return (
                           <div
                             key={slotKey}
@@ -3661,9 +3664,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }
                       const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
                       const evCode = `EV-${String(globalIdx).padStart(2, "0")}`;
-                      const ownerChar = project.characters.find((c) => c.id === ev.ownerId);
+                      const ownerChar = (project.characters || []).find((c) => c.id === ev.ownerId);
                       const ownerShort = ownerChar
-                        ? ownerChar.name.split("（")[0]
+                        ? (ownerChar.name || "").split("（")[0]
                         : "全体公開";
                       const isSelected = ev.id === activeEvidence?.id;
                       const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);
@@ -3750,9 +3753,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                       }
                       const globalIdx = allEvidences.findIndex((e) => e.id === ev.id) + 1;
                       const evCode = `EV-${String(globalIdx).padStart(2, "0")}`;
-                      const ownerChar = project.characters.find((c) => c.id === ev.ownerId);
+                      const ownerChar = (project.characters || []).find((c) => c.id === ev.ownerId);
                       const ownerShort = ownerChar
-                        ? ownerChar.name.split("（")[0]
+                        ? (ownerChar.name || "").split("（")[0]
                         : "全体公開";
                       const isSelected = ev.id === activeEvidence?.id;
                       const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);
@@ -3894,7 +3897,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                 </div>
               ) : (
                 activeEvidence && (() => {
-                  const ownerChar = project.characters.find((c) => c.id === activeEvidence.ownerId);
+                  const ownerChar = (project.characters || []).find((c) => c.id === activeEvidence.ownerId);
                   const ownerName =
                     activeEvidence.ownerId === "all" || !activeEvidence.ownerId
                       ? "全体公開 / 現場資料"
@@ -3993,7 +3996,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
                                   className="rounded border border-slate-300 bg-white px-2 py-1 text-xs text-slate-800"
                                 >
                                   <option value="all">🌐 全体公開 / 現場</option>
-                                  {project.characters.map((c) => (
+                                  {(project.characters || []).map((c) => (
                                     <option key={c.id} value={c.id}>
                                       👤 {c.name}
                                     </option>

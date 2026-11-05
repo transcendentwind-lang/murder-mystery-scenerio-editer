@@ -612,7 +612,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
               <div className="flex items-center gap-1.5">
-                {project.timeline.map((step) => (
+                {safeTimeline.map((step) => (
                   <button
                     key={step.dayNumber}
                     onClick={() => setCurrentDay(step.dayNumber)}
@@ -3208,8 +3208,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
           <div className="space-y-2.5">
             {(() => {
+              const safeEvidences = project.evidences || [];
+              const safeCharacters = project.characters || [];
               // Dayごとに表示する証拠を計算
-              let displayedEvidences = project.evidences.filter((e) => e.foundPhase === currentDay);
+              let displayedEvidences = safeEvidences.filter((e) => e.foundPhase === currentDay);
 
               if (currentDay === 4) {
                 // Day 4で選択されたアクション（Day 3繰り越し含む）の証拠を追加
@@ -3217,7 +3219,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 const day4ChosenEvIds = ALL_ACTION_DEFS
                   .filter((a) => day4ChosenActionIds.includes(a.id))
                   .map((a) => a.evidenceId);
-                const extraEvidences = project.evidences.filter(
+                const extraEvidences = safeEvidences.filter(
                   (e) => day4ChosenEvIds.includes(e.id) && !displayedEvidences.some((de) => de.id === e.id)
                 );
                 displayedEvidences = [...displayedEvidences, ...extraEvidences];
@@ -3227,7 +3229,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 const day5ChosenEvIds = ALL_ACTION_DEFS
                   .filter((a) => day5ChosenActionIds.includes(a.id))
                   .map((a) => a.evidenceId);
-                const extraEvidences = project.evidences.filter(
+                const extraEvidences = safeEvidences.filter(
                   (e) => day5ChosenEvIds.includes(e.id) && !displayedEvidences.some((de) => de.id === e.id)
                 );
                 displayedEvidences = [...displayedEvidences, ...extraEvidences];
@@ -3242,7 +3244,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               }
 
               return displayedEvidences.map((ev) => {
-                const owner = project.characters.find((c) => c.id === ev.ownerId);
+                const owner = safeCharacters.find((c) => c.id === ev.ownerId);
 
                 // アクション連動チェック
                 let isActionSelected = false;
@@ -3348,7 +3350,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               });
             })()}
 
-            {project.evidences.filter((e) => e.foundPhase === currentDay).length === 0 && (
+            {(project.evidences || []).filter((e) => e.foundPhase === currentDay).length === 0 && (
               <div className="rounded border border-dashed border-slate-800 p-4 text-center text-xs text-slate-500">
                 このDayに新たに配る直接カードはありません
               </div>

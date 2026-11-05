@@ -212,6 +212,104 @@ export function createEmptyProject(params?: {
 }
 
 /**
+ * 任意のプロジェクトデータの欠損・未定義フィールドを安全に補完して正規化するヘルパー
+ */
+export function normalizeProject(proj: any): MMProject {
+  if (!proj || typeof proj !== "object") {
+    return initialProject;
+  }
+  const safeCharacters: Character[] = (Array.isArray(proj.characters) ? proj.characters : [])
+    .filter((c: any) => c && typeof c === "object")
+    .map((c: any, idx: number) => ({
+      id: c.id || `pc-${idx + 1}`,
+      name: c.name || `PC${idx + 1}`,
+      profession: c.profession || "",
+      roleType: c.roleType || "suspect",
+      isCulpritCandidate: c.isCulpritCandidate ?? false,
+      location: c.location || "headquarters",
+      introduction: c.introduction || "",
+      capabilities: Array.isArray(c.capabilities) ? c.capabilities : [],
+      initialItems: Array.isArray(c.initialItems) ? c.initialItems : [],
+      handout: {
+        ...(c.handout || {}),
+        publicProfile: c.handout?.publicProfile || "",
+        internalDrama: {
+          pride: c.handout?.internalDrama?.pride || "",
+          guilt: c.handout?.internalDrama?.guilt,
+          loss: c.handout?.internalDrama?.loss || "",
+        },
+        backgroundTimeline: c.handout?.backgroundTimeline || "",
+        handoutBody: c.handout?.handoutBody || "",
+        gmActionGuide: c.handout?.gmActionGuide || "",
+      },
+    }));
+
+  const safeEvidences: EvidenceItem[] = (Array.isArray(proj.evidences) ? proj.evidences : [])
+    .filter((e: any) => e && typeof e === "object")
+    .map((e: any, idx: number) => ({
+      ...e,
+      id: e.id || `ev-${idx + 1}`,
+      title: e.title || "",
+      description: e.description || "",
+      ownerId: e.ownerId || "all",
+      foundPhase: typeof e.foundPhase === "number" ? e.foundPhase : 1,
+      visibility: e.visibility || "public",
+      category: e.category || "document",
+    }));
+
+  const safeTimeline: IncidentStep[] = (Array.isArray(proj.timeline) ? proj.timeline : [])
+    .filter((t: any) => t && typeof t === "object")
+    .map((t: any, idx: number) => ({
+      ...t,
+      dayNumber: typeof t.dayNumber === "number" ? t.dayNumber : idx + 1,
+      locationName: t.locationName || `Phase ${idx + 1}`,
+      distanceKm: typeof t.distanceKm === "number" ? t.distanceKm : 0,
+      situationTitle: t.situationTitle || "",
+      incidentOverview: t.incidentOverview || "",
+      hqResponse: t.hqResponse || "",
+      fieldResponse: t.fieldResponse || "",
+      revealedEvidenceIds: Array.isArray(t.revealedEvidenceIds) ? t.revealedEvidenceIds : [],
+    }));
+
+  return {
+    ...proj,
+    id: proj.id || `proj_${Date.now()}`,
+    title: proj.title || "無題のシナリオ",
+    subtitle: proj.subtitle ?? "",
+    concept: proj.concept ?? "",
+    targetExperience: proj.targetExperience ?? "",
+    plotSummary: proj.plotSummary ?? "",
+    gimmickOverview: proj.gimmickOverview ?? "",
+    playerCount: typeof proj.playerCount === "number" ? proj.playerCount : safeCharacters.length || 6,
+    durationHours: typeof proj.durationHours === "number" ? proj.durationHours : 2.5,
+    hasGm: proj.hasGm ?? true,
+    characters: safeCharacters,
+    evidences: safeEvidences,
+    timeline: safeTimeline,
+    crypticWords: Array.isArray(proj.crypticWords) ? proj.crypticWords : [],
+    crypticGrammar:
+      proj.crypticGrammar && typeof proj.crypticGrammar === "object"
+        ? {
+            ruleDescription: proj.crypticGrammar.ruleDescription || "",
+            correctSequence: Array.isArray(proj.crypticGrammar.correctSequence)
+              ? proj.crypticGrammar.correctSequence
+              : [],
+            combinedMessage: proj.crypticGrammar.combinedMessage || "",
+            holderCharId: proj.crypticGrammar.holderCharId || safeCharacters[0]?.id || "pc-1",
+          }
+        : {
+            ruleDescription: "",
+            correctSequence: [],
+            combinedMessage: "",
+            holderCharId: safeCharacters[0]?.id || "pc-1",
+          },
+    matrixLinks: Array.isArray(proj.matrixLinks) ? proj.matrixLinks : undefined,
+    lockCriteria: Array.isArray(proj.lockCriteria) ? proj.lockCriteria : undefined,
+    candidateStatuses: Array.isArray(proj.candidateStatuses) ? proj.candidateStatuses : undefined,
+  };
+}
+
+/**
  * ローカルストレージから保存済みプロジェクト一覧を取得
  */
 export function getStoredProjects(): MMProject[] {
@@ -340,10 +438,12 @@ export function getStoredProjects(): MMProject[] {
           proj.specialCharacterCards = SPECIAL_CHARACTER_CARDS;
           proj.nagatsuPhaseCards = NAGATSU_PHASE_CARDS;
         });
-
-        localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(parsed));
       }
-      return parsed;
+      const normalizedList = parsed
+        .filter((p: any) => p && typeof p === "object")
+        .map((p: any) => normalizeProject(p));
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(normalizedList));
+      return normalizedList.length > 0 ? normalizedList : [initialProject];
     }
     return [initialProject];
   } catch (err) {
@@ -374,12 +474,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
 
     for (const preset of localPresets) {
       if (!preset || !preset.id) continue;
-      const normalizedPreset: MMProject = {
-        ...preset,
-        characters: Array.isArray(preset.characters) ? preset.characters : [],
-        evidences: Array.isArray(preset.evidences) ? preset.evidences : [],
-        timeline: Array.isArray(preset.timeline) ? preset.timeline : [],
-      };
+      const normalizedPreset = normalizeProject(preset);
       const existingIdx = updated.findIndex((p) => p && p.id === preset.id);
       if (existingIdx < 0) {
         updated.push(normalizedPreset);
@@ -392,7 +487,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
           !Array.isArray(existing.evidences) ||
           !Array.isArray(existing.timeline)
         ) {
-          updated[existingIdx] = {
+          updated[existingIdx] = normalizeProject({
             ...normalizedPreset,
             ...existing,
             characters: Array.isArray(existing.characters)
@@ -404,7 +499,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
             timeline: Array.isArray(existing.timeline)
               ? existing.timeline
               : normalizedPreset.timeline,
-          };
+          });
           hasChanges = true;
         }
       }

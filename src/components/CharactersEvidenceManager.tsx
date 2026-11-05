@@ -45,11 +45,11 @@ interface CharactersEvidenceManagerProps {
 
 export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps> = ({
   projectId,
-  characters,
-  evidences,
-  matrixLinks = [],
-  lockCriteria = [],
-  candidateStatuses = [],
+  characters: rawCharacters,
+  evidences: rawEvidences,
+  matrixLinks: rawMatrixLinks = [],
+  lockCriteria: rawLockCriteria = [],
+  candidateStatuses: rawCandidateStatuses = [],
   phaseCount = 4,
   playerCount = 6,
   onUpdateCharacters,
@@ -59,11 +59,17 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   onUpdateCandidateStatuses,
   onTogglePlayerCount,
 }) => {
+  const characters = Array.isArray(rawCharacters) ? rawCharacters : [];
+  const evidences = Array.isArray(rawEvidences) ? rawEvidences : [];
+  const matrixLinks = Array.isArray(rawMatrixLinks) ? rawMatrixLinks : [];
+  const lockCriteria = Array.isArray(rawLockCriteria) ? rawLockCriteria : [];
+  const candidateStatuses = Array.isArray(rawCandidateStatuses) ? rawCandidateStatuses : [];
+
   const isDeepSeaProject = !projectId || projectId === "project-deep-sea";
   const phaseLabelPrefix = isDeepSeaProject ? "Day" : "Phase";
   const totalPhases = Math.max(
     phaseCount,
-    ...evidences.map((e) => e.foundPhase || 1),
+    ...evidences.map((e) => e?.foundPhase || 1),
     isDeepSeaProject ? 7 : 4
   );
   const phaseNumbers = Array.from({ length: totalPhases }, (_, i) => i + 1);
@@ -100,7 +106,12 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
         ? {
             ...c,
             handout: {
-              ...c.handout,
+              ...(c.handout || {
+                publicProfile: "",
+                internalDrama: { pride: "", loss: "" },
+                backgroundTimeline: "",
+                handoutBody: "",
+              }),
               [field]: value,
             },
           }
@@ -118,9 +129,14 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
         ? {
             ...c,
             handout: {
-              ...c.handout,
+              ...(c.handout || {
+                publicProfile: "",
+                internalDrama: { pride: "", loss: "" },
+                backgroundTimeline: "",
+                handoutBody: "",
+              }),
               internalDrama: {
-                ...c.handout.internalDrama,
+                ...(c.handout?.internalDrama || { pride: "", loss: "" }),
                 [dramaKey]: value,
               },
             },
@@ -226,8 +242,8 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
           ? {
               ...s,
               locks: {
-                ...s.locks,
-                [critId]: !s.locks[critId],
+                ...(s.locks || {}),
+                [critId]: !s.locks?.[critId],
               },
             }
           : s
@@ -325,8 +341,8 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
   const fullyLockedCharacters = characters.filter((char) => {
     if (lockCriteria.length === 0) return false;
     const status = candidateStatuses.find((s) => s.characterId === char.id);
-    if (!status) return false;
-    return lockCriteria.every((crit) => !!status.locks[crit.id]);
+    if (!status || !status.locks) return false;
+    return lockCriteria.every((crit) => !!status.locks?.[crit.id]);
   });
 
   if (isDeepSeaProject) {
@@ -1250,7 +1266,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                           return (
                             <div key={link.id} className="text-[10px] text-slate-300 leading-snug">
                               ・<strong className="text-white">{c?.name || link.characterId}</strong>:{" "}
-                              {link.derivedConclusion.slice(0, 55)}...
+                              {(link.derivedConclusion || "").slice(0, 55)}...
                             </div>
                           );
                         })}
@@ -1388,7 +1404,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                         >
                           {characters.map((c) => (
                             <option key={c.id} value={c.id}>
-                              {c.name}（{c.profession.slice(0, 18)}）
+                              {c.name}（{(c.profession || "").slice(0, 18)}）
                             </option>
                           ))}
                         </select>
@@ -1662,7 +1678,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                   </th>
                   {characters.map((c) => (
                     <th key={c.id} className="p-2.5 font-semibold text-slate-300">
-                      {c.name.split("：")[0].split(":")[0]}
+                      {(c.name || "").split("：")[0].split(":")[0]}
                     </th>
                   ))}
                   <th className="p-2.5 font-semibold text-indigo-400">フェーズ合計</th>
