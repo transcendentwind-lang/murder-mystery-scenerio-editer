@@ -503,27 +503,22 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               </div>
             </div>
           </div>
-          <div className="col-span-9 p-2 bg-slate-50/70 space-y-1 text-[10px]">
-            <div className="grid grid-cols-2 gap-2">
-              <div className="rounded border-2 border-indigo-600 bg-indigo-50/70 px-2.5 py-1 flex flex-col justify-center">
-                <div className="font-black text-indigo-950">
-                  🟦【A案：自衛隊の戦果として発表（NG-09）】
-                </div>
-                <div className="text-[9.5px] text-slate-700">
-                  海自の実弾掃討で駆除と発表（※「ド・ドーン・カッカッ」「チ・トン・チ」「ポ・ポポン(南)」「タタ・タト・トン(逃げろ)」等でクジラ退避も可能）
-                </div>
+          <div className="col-span-9 p-2 bg-slate-50/70 grid grid-cols-2 gap-2 text-[10px]">
+            <div className="rounded border-2 border-indigo-600 bg-indigo-50/70 px-2.5 py-1 flex flex-col justify-center">
+              <div className="font-black text-indigo-950">
+                🟦【A案：自衛隊の戦果として発表（NG-09）】
               </div>
-              <div className="rounded border-2 border-amber-600 bg-amber-50/70 px-2.5 py-1 flex flex-col justify-center">
-                <div className="font-black text-amber-950">
-                  🟧【B案：合同対策本部のヒーロー功績として発表（NG-10）】
-                </div>
-                <div className="text-[9.5px] text-slate-700">
-                  祝詞の詳細は伏せつつ、対策本部が特別な薬で無力化した英雄として発表する結末
-                </div>
+              <div className="text-[9.5px] text-slate-700">
+                功績を国家防衛機密とし、海上自衛隊の実弾掃討で駆除したと発表する結末
               </div>
             </div>
-            <div className="rounded border border-purple-500 bg-purple-50/80 px-2 py-0.5 text-[9.5px] text-purple-950">
-              <strong>🟣【第3の選択（GM裁量交渉）】：</strong>「爆雷を投下させず自衛隊も立てる」提案時は『現場も無意味な攻撃を望んではいない。だが総理の指示と違う行動になる。総理に嘘を吐くことはできない』と返しGM裁量で交渉（参考案：自衛隊の深海音響作戦が奏功、国民の生命と国土を守ることを優先等）
+            <div className="rounded border-2 border-amber-600 bg-amber-50/70 px-2.5 py-1 flex flex-col justify-center">
+              <div className="font-black text-amber-950">
+                🟧【B案：合同対策本部のヒーロー功績として発表（NG-10）】
+              </div>
+              <div className="text-[9.5px] text-slate-700">
+                祝詞の詳細は伏せつつ、対策本部が特別な薬で無力化した英雄として発表する結末
+              </div>
             </div>
           </div>
         </div>
