@@ -54,7 +54,7 @@ npm run build
 
 ## ローカル追加作品
 
-`public/local-projects.json` に `MMProject[]` を配置すると、アプリ起動時に読込を試みる。このファイルと `.local-projects/` はGit管理対象外。共通文書や公開ソースへ作品本文を転載しない。
+`public/local-projects.json` は任意のローカル追加作品ファイル。`MMProject[]` を配置すると、アプリ起動時に読込を試みる。`npm run dev`・`npm run build`・`npm run start` の事前処理で、ファイルがない場合だけ空配列 `[]` を自動生成し、追加作品がない環境でも404を出さない。既存ファイルは内容を検査・書換えせず保持する。同時実行でも上書きしないよう排他的に作成する。このファイルと `.local-projects/` はGit管理対象外。共通文書や公開ソースへ作品本文を転載しない。
 
 Git管理対象外という設定は配信制御ではない。参加者向け静的ビルドでは完了処理が `out/local-projects.json` を除外する。`public/local-projects.json` の原本は保持する。他の公開ファイルについても、意図しない作品データがないことを確認する。
 

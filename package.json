@@ -10,9 +10,10 @@
     "test": "playwright test",
     "assets:prepare": "node scripts/prepare-scenario-assets.mjs",
     "assets:check": "node scripts/prepare-scenario-assets.mjs --check",
-    "predev": "npm run assets:prepare",
-    "prebuild": "npm run assets:prepare",
-    "prestart": "npm run assets:prepare",
+    "local-projects:prepare": "node scripts/prepare-local-projects.mjs",
+    "predev": "npm run local-projects:prepare && npm run assets:prepare",
+    "prebuild": "npm run local-projects:prepare && npm run assets:prepare",
+    "prestart": "npm run local-projects:prepare && npm run assets:prepare",
     "postbuild": "node scripts/finalize-participant-export.mjs"
   },
   "dependencies": {

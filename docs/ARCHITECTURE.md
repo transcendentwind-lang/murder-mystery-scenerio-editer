@@ -37,7 +37,7 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 1. 作品更新をReactの状態へ反映し、`saveProjectToStorage` でブラウザのlocalStorageへ保存する。
 2. 一覧は `mm_workbench_projects_v1`、選択中のIDは `mm_workbench_active_project_id_v1` に保存する。
 3. `getStoredProjects` は保存データを読み、組み込み作品の同期と `normalizeProject` による不足項目の補完を行う。
-4. 起動時に `/local-projects.json` の読込を試み、ローカル追加作品があれば一覧へ統合する。通常の新規作品は同じIDの追加プリセットで毎回全面更新する構成ではない。
+4. 起動・ビルドの事前処理 `prepare-local-projects.mjs` で、任意の `public/local-projects.json` がない場合だけ空配列を作成する。既存ファイルは上書きしない。画面起動時に `/local-projects.json` の読込を試み、ローカル追加作品があれば一覧へ統合する。通常の新規作品は同じIDの追加プリセットで毎回全面更新する構成ではない。
 5. JSON書き出しは渡された作品オブジェクトをファイル化する。共有データベースや端末間の自動同期はない。
 
 `saveProjectToStorage` は保存成功をbooleanで返す。成功後に保存完了を表示し、失敗時は警告と再保存の操作を出す。未保存の画面データと失敗状態は作品切り替え後もメモリ内に保持する。保存場所はブラウザ・プロファイル・接続先ごとに分かれる。
