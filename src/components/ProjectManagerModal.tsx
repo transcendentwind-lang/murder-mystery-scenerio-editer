@@ -30,7 +30,7 @@ const updateDateFormatter = new Intl.DateTimeFormat("en-GB", {
   month: "2-digit",
   day: "2-digit",
   hour: "2-digit",
-  second: "2-digit",
+  minute: "2-digit",
   hourCycle: "h23",
 });
 
@@ -259,7 +259,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                     ? Object.fromEntries(updateDateFormatter.formatToParts(new Date(p.updatedAt)).map(({ type, value }) => [type, value]))
                     : null;
                   const formattedDate = dateParts
-                    ? `${dateParts.month}/${dateParts.day} ${dateParts.hour}:${dateParts.second.padStart(2, "0")}`
+                    ? `${dateParts.month}/${dateParts.day} ${dateParts.hour}:${dateParts.minute}`
                     : "―";
 
                   return (
@@ -291,25 +291,27 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                           {p.concept || "コンセプト未入力"}
                         </p>
 
-                        <div className="flex flex-wrap items-center gap-3 text-[11px] text-slate-400 font-mono mt-3">
-                          <span className="flex items-center gap-1">
-                            <Users className="h-3.5 w-3.5 text-emerald-400" />
-                            {p.playerCount}人用
+                        <div className="flex flex-wrap min-[930px]:flex-nowrap items-baseline gap-x-2 gap-y-2 text-[11px] text-slate-400 font-mono mt-3">
+                          <div className="flex min-w-[180px] min-[930px]:min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
+                            <span className="flex items-center gap-1 whitespace-nowrap">
+                              <Users className="h-3.5 w-3.5 text-emerald-400" />
+                              {p.playerCount}人用
+                            </span>
+                            <span className="flex items-center gap-1 whitespace-nowrap">
+                              <Clock className="h-3.5 w-3.5 text-cyan-400" />
+                              {p.id === "project-deep-sea"
+                                ? `全${p.timeline?.length || 7}日間（約${p.durationHours}h）`
+                                : `全${p.timeline?.length || 4}フェーズ（約${p.durationHours}h）`}
+                            </span>
+                            <span className="whitespace-nowrap">
+                              {p.id === "project-deep-sea"
+                                ? `証拠 ${p.evidences?.length || 0}件`
+                                : `証拠 ${p.evidences?.length || 0}件 / 解釈 ${p.matrixLinks?.length || 0}件`}
+                            </span>
+                          </div>
+                          <span className="ml-auto shrink-0 whitespace-nowrap text-right text-[10px] text-slate-500">
+                            更新: {formattedDate}
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="h-3.5 w-3.5 text-cyan-400" />
-                            {p.id === "project-deep-sea"
-                              ? `全${p.timeline?.length || 7}日間（約${p.durationHours}h）`
-                              : `全${p.timeline?.length || 4}フェーズ（約${p.durationHours}h）`}
-                          </span>
-                          <span>
-                            {p.id === "project-deep-sea"
-                              ? `証拠 ${p.evidences?.length || 0}件`
-                              : `証拠 ${p.evidences?.length || 0}件 / 解釈 ${p.matrixLinks?.length || 0}件`}
-                          </span>
-                        </div>
-                        <div className="mt-2 text-right text-[10px] text-slate-500 font-mono">
-                          更新: {formattedDate}
                         </div>
                       </div>
 

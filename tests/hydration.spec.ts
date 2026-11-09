@@ -4,7 +4,7 @@ import { initialProject } from '../src/utils/initialProjectData';
 // サーバーは設定でUTC。ブラウザーだけを変えて、日付が前後する時刻も照合する。
 const tokyoDate = new Date(new Date(initialProject.updatedAt!).valueOf() + 9 * 60 * 60 * 1000);
 const pad = (value: number) => String(value).padStart(2, '0');
-const expectedDate = `${pad(tokyoDate.getUTCMonth() + 1)}/${pad(tokyoDate.getUTCDate())} ${pad(tokyoDate.getUTCHours())}:${pad(tokyoDate.getUTCSeconds())}`;
+const expectedDate = `${pad(tokyoDate.getUTCMonth() + 1)}/${pad(tokyoDate.getUTCDate())} ${pad(tokyoDate.getUTCHours())}:${pad(tokyoDate.getUTCMinutes())}`;
 for (const timezoneId of ['Asia/Tokyo', 'UTC', 'America/Los_Angeles']) {
   test.describe(timezoneId, () => {
     test.use({ timezoneId });
