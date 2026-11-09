@@ -417,9 +417,9 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-black leading-tight">
-                朝8時北上再開・祝詞解読
+                朝8時北上再開・音響解析
                 <br />
-                ＆ 岸部局長との緊急交渉
+                ＆ 撃退作戦立案・岸部交渉
               </div>
             </div>
             <div className="mt-1 space-y-1">
