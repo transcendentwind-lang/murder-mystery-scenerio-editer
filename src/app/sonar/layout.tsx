@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "クジラ音響解読・発信端末",
+  title: "マッコウクジラ音響言語解析システム - MARINE MAMMAL ACOUSTIC ANALYSIS TERMINAL",
 };
 
 export default function SonarLayout({
