@@ -248,6 +248,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                   const isCurrent = p.id === currentProject.id;
                   const formattedDate = p.updatedAt
                     ? new Date(p.updatedAt).toLocaleDateString("ja-JP", {
+                        timeZone: "Asia/Tokyo",
                         month: "short",
                         day: "numeric",
                         hour: "2-digit",
