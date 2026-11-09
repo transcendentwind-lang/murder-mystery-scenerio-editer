@@ -28,6 +28,8 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 
 `AiChatPanel.tsx` とチャット状態は残るが、メイン画面にチャットを描画していない。`handleSendMessage` は遅延後に定型文を追加する処理で、モデル推論ではない。資料画面の「推敲」もプロンプト用の状態更新に留まり、現在の画面からAI回答や本文反映へつながらない。APIキーの入力・保持・送信方法は実装済み仕様として扱わない。
 
+現在表示されるAI関連文言と非表示の旧コードは[Web画面の文言調査](UI_TEXT_AUDIT.md)を参照。
+
 ## 保存と読込
 
 1. 作品更新をReactの状態へ反映し、`saveProjectToStorage` でブラウザのlocalStorageへ保存する。

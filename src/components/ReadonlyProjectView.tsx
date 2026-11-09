@@ -8,7 +8,7 @@ export function ReadonlyProjectView({ project }: { project: MMProject }) {
   const character = project.characters.find((item) => item.id === selectedId) || project.characters[0];
   const block = (label: string, body?: string) => <section className="rounded-lg border border-slate-700 bg-slate-900 p-4"><h3 className="mb-2 font-bold text-indigo-200">{label}</h3><p className="whitespace-pre-wrap text-sm leading-relaxed">{body || '未設定'}</p></section>;
   return <div className="h-full overflow-auto p-6 text-slate-100">
-    <p className="mb-4 rounded border border-cyan-700 bg-cyan-950 p-3 text-sm">組み込み作品・閲覧専用。本文や資料の変更はAI経由で原本を更新。</p>
+    <p className="mb-4 rounded border border-cyan-700 bg-cyan-950 p-3 text-sm">組み込み作品は閲覧専用です</p>
     <nav className="mb-4 flex gap-3" aria-label="閲覧対象">
       <button className="rounded bg-slate-800 px-4 py-2" onClick={() => setTab('characters')}>登場人物・HO</button>
       <button className="rounded bg-slate-800 px-4 py-2" onClick={() => setTab('evidences')}>証拠一覧</button>
