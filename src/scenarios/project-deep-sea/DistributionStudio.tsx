@@ -1635,6 +1635,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [briefingFilterMode, setBriefingFilterMode] = useState<
     "all" | "midday" | "start"
   >("all");
+  const [selectedBriefingId, setSelectedBriefingId] = useState(DAILY_COMMANDER_BRIEFINGS[0]?.id ?? "");
+  const [selectedPhaseCardId, setSelectedPhaseCardId] = useState(NAGATSU_PHASE_CARDS[0]?.id ?? "");
+  const filteredBriefings = useMemo(
+    () => DAILY_COMMANDER_BRIEFINGS.filter((briefing) =>
+      briefingFilterMode === "all" || Boolean(briefing.isMidDayAddition) === (briefingFilterMode === "midday")
+    ),
+    [briefingFilterMode]
+  );
+  const activeBriefingId = filteredBriefings.find((briefing) => briefing.id === selectedBriefingId)?.id
+    ?? filteredBriefings[0]?.id;
+  const activePhaseCardId = NAGATSU_PHASE_CARDS.find((card) => card.id === selectedPhaseCardId)?.id
+    ?? NAGATSU_PHASE_CARDS[0]?.id;
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
@@ -1661,6 +1673,35 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
   // 印刷対象領域のRef
   const printableSheetRef = useRef<HTMLDivElement | null>(null);
+  const previewCanvasRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollHandoutDocument = React.useCallback((id: string, kind: "briefing" | "phase-card") => {
+    const canvas = previewCanvasRef.current;
+    const target = printableSheetRef.current?.querySelector<HTMLElement>(
+      `[data-handout-id="${CSS.escape(id)}"]${kind === "phase-card" ? '[data-handout-face="back"]' : ""}`
+    );
+    if (canvas && target) {
+      canvas.scrollTo({ top: canvas.scrollTop + target.getBoundingClientRect().top - canvas.getBoundingClientRect().top - 16 });
+    }
+  }, []);
+
+  useEffect(() => {
+    if (category !== "handouts") return;
+    if (handoutViewMode === "daily_briefings" && activeBriefingId) {
+      scrollHandoutDocument(activeBriefingId, "briefing");
+    } else if (handoutViewMode === "nagatsu_cards" && activePhaseCardId) {
+      scrollHandoutDocument(activePhaseCardId, "phase-card");
+    } else {
+      previewCanvasRef.current?.scrollTo({ top: 0 });
+    }
+  }, [category, handoutViewMode, briefingFilterMode, activeBriefingId, activePhaseCardId, scrollHandoutDocument]);
+
+  const selectHandoutDocument = (id: string, kind: "briefing" | "phase-card") => {
+    if (kind === "briefing") setSelectedBriefingId(id);
+    else setSelectedPhaseCardId(id);
+    scrollHandoutDocument(id, kind);
+  };
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // 視覚ボード一覧（プロジェクトに未保存の場合は初期ボードを使用）
@@ -2754,13 +2795,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  個人向けハンドアウト ({(project.characters || []).length}名)
+                  {handoutViewMode === "daily_briefings"
+                    ? `指令書 (${filteredBriefings.length}枚)`
+                    : handoutViewMode === "nagatsu_cards"
+                    ? `アナウンスカード (${NAGATSU_PHASE_CARDS.length}枚)`
+                    : `個人向けハンドアウト (${charactersList.length}名)`}
                 </h3>
               </div>
 
               {/* 区分切替（2列グリッド・インディゴ選択で統一） */}
               <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
+                  data-handout-mode="sheet"
+                  aria-pressed={handoutViewMode === "sheet"}
                   onClick={() => setHandoutViewMode("sheet")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "sheet"
@@ -2771,6 +2818,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   📄 本紙（B5）
                 </button>
                 <button
+                  data-handout-mode="cards"
+                  aria-pressed={handoutViewMode === "cards"}
                   onClick={() => setHandoutViewMode("cards")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "cards"
@@ -2781,6 +2830,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   🃏 特別カード
                 </button>
                 <button
+                  data-handout-mode="daily_briefings"
+                  aria-pressed={handoutViewMode === "daily_briefings"}
                   onClick={() => setHandoutViewMode("daily_briefings")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "daily_briefings"
@@ -2791,6 +2842,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   📋 Day別指令
                 </button>
                 <button
+                  data-handout-mode="nagatsu_cards"
+                  aria-pressed={handoutViewMode === "nagatsu_cards"}
                   onClick={() => setHandoutViewMode("nagatsu_cards")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     handoutViewMode === "nagatsu_cards"
@@ -2813,7 +2866,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
-                    全て(12)
+                    全て({DAILY_COMMANDER_BRIEFINGS.length})
                   </button>
                   <button
                     onClick={() => setBriefingFilterMode("start")}
@@ -2823,7 +2876,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
-                    各Day開始時(7)
+                    各Day開始時({DAILY_COMMANDER_BRIEFINGS.filter((briefing) => !briefing.isMidDayAddition).length})
                   </button>
                   <button
                     onClick={() => setBriefingFilterMode("midday")}
@@ -2833,46 +2886,83 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         : "text-slate-400 hover:text-white"
                     }`}
                   >
-                    途中追加(5)
+                    途中追加({DAILY_COMMANDER_BRIEFINGS.filter((briefing) => briefing.isMidDayAddition).length})
                   </button>
                 </div>
               )}
 
-              <div className="space-y-2">
-                {(project.characters || []).map((c, idx) => {
-                  const isSelected = c.id === activeChar?.id;
-                  const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
-                  return (
+              {handoutViewMode === "daily_briefings" ? (
+                <div className="space-y-2" role="group" aria-label="指令書一覧">
+                  {filteredBriefings.map((briefing) => (
                     <button
-                      key={c.id}
-                      onClick={() => setSelectedCharId(c.id)}
-                      className={`w-full rounded-xl border p-3 text-left transition ${
-                        isSelected
-                          ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
-                          : "border-slate-800 bg-slate-950/80 hover:border-slate-700"
-                      }`}
+                      key={briefing.id}
+                      data-handout-list-id={briefing.id}
+                      aria-pressed={briefing.id === activeBriefingId}
+                      onClick={() => selectHandoutDocument(briefing.id, "briefing")}
+                      className={`w-full rounded-xl border p-3 text-left transition ${briefing.id === activeBriefingId
+                        ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                        : "border-slate-800 bg-slate-950/80 hover:border-slate-700"}`}
                     >
-                      <div className="flex items-center justify-between gap-1">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-[10px] font-mono font-bold text-slate-400">
-                            PC-{idx + 1}
-                          </span>
-                          <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
-                            {c.location === "headquarters" ? "東京本部" : "現地救難隊"}
-                          </span>
-                        </div>
-                        {spCard && (
-                          <span className="text-[10px] font-mono text-slate-400">
-                            {spCard.revealDayLabel}
-                          </span>
-                        )}
-                      </div>
-                      <div className="mt-1.5 font-bold text-xs text-white">{c.name}</div>
-                      <div className="mt-0.5 text-[11px] text-slate-400 truncate">{c.profession}</div>
+                      <div className="text-[10px] font-mono font-bold text-indigo-300">{briefing.sheetCode} ｜ {briefing.badgeLabel}</div>
+                      <div className="mt-1.5 text-xs font-bold text-white">{briefing.title}</div>
+                      {briefing.timingNote && <div className="mt-1 text-[11px] text-slate-400">{briefing.timingNote}</div>}
                     </button>
-                  );
-                })}
-              </div>
+                  ))}
+                </div>
+              ) : handoutViewMode === "nagatsu_cards" ? (
+                <div className="space-y-2" role="group" aria-label="アナウンスカード一覧">
+                  {NAGATSU_PHASE_CARDS.map((card) => (
+                    <button
+                      key={card.id}
+                      data-handout-list-id={card.id}
+                      aria-pressed={card.id === activePhaseCardId}
+                      onClick={() => selectHandoutDocument(card.id, "phase-card")}
+                      className={`w-full rounded-xl border p-3 text-left transition ${card.id === activePhaseCardId
+                        ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                        : "border-slate-800 bg-slate-950/80 hover:border-slate-700"}`}
+                    >
+                      <div className="text-[10px] font-mono font-bold text-indigo-300">{card.cardCode} ｜ {card.timingBadge}</div>
+                      <div className="mt-1.5 text-xs font-bold text-white">{card.title}</div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2">
+                  {(project.characters || []).map((c, idx) => {
+                    const isSelected = c.id === activeChar?.id;
+                    const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
+                    return (
+                      <button
+                        key={c.id}
+                        onClick={() => setSelectedCharId(c.id)}
+                        className={`w-full rounded-xl border p-3 text-left transition ${
+                          isSelected
+                            ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                            : "border-slate-800 bg-slate-950/80 hover:border-slate-700"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between gap-1">
+                          <div className="flex items-center gap-1.5">
+                            <span className="text-[10px] font-mono font-bold text-slate-400">
+                              PC-{idx + 1}
+                            </span>
+                            <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                              {c.location === "headquarters" ? "東京本部" : "現地救難隊"}
+                            </span>
+                          </div>
+                          {spCard && (
+                            <span className="text-[10px] font-mono text-slate-400">
+                              {spCard.revealDayLabel}
+                            </span>
+                          )}
+                        </div>
+                        <div className="mt-1.5 font-bold text-xs text-white">{c.name}</div>
+                        <div className="mt-0.5 text-[11px] text-slate-400 truncate">{c.profession}</div>
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
 
@@ -3181,7 +3271,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         </div>
 
         {/* 右メインキャンバス：すべてのタブで「証拠資料」と同じ白い用紙コンテナに統一 */}
-        <div className="col-span-9 flex-1 overflow-y-auto bg-slate-900/90 p-6 md:p-10">
+        <div ref={previewCanvasRef} data-handout-canvas className="col-span-9 flex-1 overflow-y-auto bg-slate-900/90 p-6 md:p-10">
           <div
             ref={printableSheetRef}
             className="mx-auto max-w-4xl bg-white text-slate-900 border border-slate-300 shadow-xl font-sans rounded-sm p-6 sm:p-7 print:p-0 print:border-0 print:shadow-none print:max-w-none transition-all relative"
@@ -3807,16 +3897,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     </div>
 
                     <div className="space-y-5 print:space-y-4">
-                      {DAILY_COMMANDER_BRIEFINGS.filter((b) =>
-                        briefingFilterMode === "all"
-                          ? true
-                          : briefingFilterMode === "midday"
-                          ? Boolean(b.isMidDayAddition)
-                          : !b.isMidDayAddition
-                      ).map((b, idx) => (
+                      {filteredBriefings.map((b, idx) => (
                         <div
                           key={b.id}
-                          className={`rounded-md border-2 bg-white p-4 shadow-sm space-y-2.5 break-inside-avoid ${
+                          data-handout-id={b.id}
+                          data-selected={b.id === activeBriefingId}
+                          className={`rounded-md border-2 bg-white p-4 shadow-sm space-y-2.5 break-inside-avoid ${b.id === activeBriefingId ? "ring-2 ring-indigo-500 print:ring-0" : ""} ${
                             idx % 2 === 0 && idx > 0 ? "page-break-before" : ""
                           }`}
                           style={{
@@ -3986,7 +4072,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         return (
                           <div
                             key={slotKey}
-                            className="card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
+                            data-handout-id={nc.id}
+                            data-handout-face="front"
+                            data-selected={nc.id === activePhaseCardId}
+                            className={`card-face-134mm rounded-md border-2 border-slate-800 bg-[#fafaf9] p-5 flex flex-col justify-between min-h-[380px] shadow-sm ${nc.id === activePhaseCardId ? "ring-2 ring-indigo-500 print:ring-0" : ""}`}
                           >
                             <div className="flex items-center justify-between text-xs">
                               <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
@@ -4045,7 +4134,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         return (
                           <div
                             key={slotKey}
-                            className="card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm"
+                            data-handout-id={nc.id}
+                            data-handout-face="back"
+                            data-selected={nc.id === activePhaseCardId}
+                            className={`card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm ${nc.id === activePhaseCardId ? "ring-2 ring-indigo-500 print:ring-0" : ""}`}
                           >
                             <div>
                               <div className="flex items-center justify-between text-xs mb-2">
