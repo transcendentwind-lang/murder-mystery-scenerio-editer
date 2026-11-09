@@ -1628,21 +1628,21 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <span className="font-bold text-[10px] text-indigo-300 block">太刀魚（PC4／気象庁）</span>
                         <span className="font-semibold text-white text-[11px] block mt-0.5">西之島〜鳥島沖 距離観測データ</span>
                         <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          西之島（0km地点）から鳥島沖海底カルデラまでの伊豆・小笠原海嶺沿いの直線距離: <strong>336 km</strong>
+                          西之島から鳥島沖海底カルデラまでの直線距離: <strong>約350 km</strong>
                         </p>
                       </div>
                       <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/30 p-2.5">
                         <span className="font-bold text-[10px] text-cyan-300 block">貝浜（PC3／海上保安庁）</span>
                         <span className="font-semibold text-white text-[11px] block mt-0.5">鳥島沖 ソノブイ探知記録</span>
                         <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          鳥島沖海域にて巨大生物の音響反射を捉え、水深10〜20mへの急浮上を目視・確認した時刻: <strong>Day 3 16:00</strong>
+                          鳥島沖海域にて巨大生物の音響反射を捉えた時刻: <strong>Day 3 17:00</strong>
                         </p>
                       </div>
                       <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/30 p-2.5">
                         <span className="font-bold text-[10px] text-emerald-300 block">浪寄（PC5／大学准教授）</span>
                         <span className="font-semibold text-white text-[11px] block mt-0.5">遭難船救助・目撃時刻調書</span>
                         <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          Day 1に西之島近海で漂流する遭難船を救助した際、船長らが巨大な黒い影に襲撃された正確な目撃時刻: <strong>Day 1 08:00</strong>
+                          Day 1に西之島近海で遭難船がスクリューに巻き付かれた最初の異常遭遇時刻: <strong>Day 1 09:00</strong>
                         </p>
                       </div>
                     </div>

@@ -1738,17 +1738,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-2">
                           <span className="font-bold text-indigo-300 block text-[10px]">太刀魚（PC4／気象庁）</span>
                           <span className="font-semibold text-white text-[11px]">西之島〜鳥島沖 距離観測データ</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">西之島（0km地点）〜鳥島沖カルデラ間の距離: <strong>336 km</strong></p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">西之島〜鳥島沖カルデラ間の直線距離: <strong>約350 km</strong></p>
                         </div>
                         <div className="rounded border border-cyan-900/60 bg-cyan-950/30 p-2">
                           <span className="font-bold text-cyan-300 block text-[10px]">貝浜（PC3／海上保安庁）</span>
                           <span className="font-semibold text-white text-[11px]">鳥島沖 ソノブイ探知記録</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">鳥島沖での巨大生物探知・急浮上確認時刻: <strong>Day 3 16:00</strong></p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">鳥島沖での巨大生物探知・確認時刻: <strong>Day 3 17:00</strong></p>
                         </div>
                         <div className="rounded border border-emerald-900/60 bg-emerald-950/30 p-2">
                           <span className="font-bold text-emerald-300 block text-[10px]">浪寄（PC5／大学准教授）</span>
                           <span className="font-semibold text-white text-[11px]">遭難船救助・目撃時刻調書</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">Day 1遭難船救助および巨大影の襲撃目撃時刻: <strong>Day 1 08:00</strong></p>
+                          <p className="text-[10px] text-slate-400 mt-0.5">Day 1西之島近海での異常遭遇時刻: <strong>Day 1 09:00</strong></p>
                         </div>
                       </div>
                     </div>
@@ -1759,13 +1759,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         💡 【GM用正解メモ・計算アシスト（プレイヤーへの誘導用）】
                       </span>
                       <p>
-                        ・<strong>経過時間の計算</strong>: Day 1 08:00 ➔ Day 3 16:00 ＝ <strong>56 時間</strong>（48時間 ＋ 8時間）
+                        ・<strong>経過時間の計算</strong>: Day 1 09:00 ➔ Day 3 17:00 ＝ <strong>56 時間</strong>（48時間 ＋ 8時間）
                       </p>
                       <p>
-                        ・<strong>移動速度の計算</strong>: 336 km ÷ 56 時間 ＝ <strong className="text-white">時速 6.0 km</strong>（日速 約144 km）
+                        ・<strong>移動速度の計算</strong>: 約350 km ÷ 56 時間 ＝ <strong className="text-white">時速 6.25 km</strong>（日速 約150 km）
                       </p>
                       <p>
-                        ・<strong>翌日（Day 4）の北上予想</strong>: 明日（Day 4）にはさらに約144km北上するため、海図上で<strong className="text-white">須美寿島〜明神礁付近</strong>に到達する見込み。
+                        ・<strong>翌日（Day 4）の北上予想</strong>: 明日（Day 4）にはさらに約150km北上するため、海図上で<strong className="text-white">須美寿島〜明神礁付近</strong>に到達する見込み。
                       </p>
                       <p className="text-[10px] text-slate-400">
                         ※プレイヤー同士が情報を持ち寄って「時速6km」「明日は明神礁のあたり」と推測できたら大成功です！
