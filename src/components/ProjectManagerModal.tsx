@@ -25,6 +25,15 @@ import {
   X,
 } from "lucide-react";
 
+const updateDateFormatter = new Intl.DateTimeFormat("en-GB", {
+  timeZone: "Asia/Tokyo",
+  month: "2-digit",
+  day: "2-digit",
+  hour: "2-digit",
+  second: "2-digit",
+  hourCycle: "h23",
+});
+
 interface ProjectManagerModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -246,14 +255,11 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projects.map((p) => {
                   const isCurrent = p.id === currentProject.id;
-                  const formattedDate = p.updatedAt
-                    ? new Date(p.updatedAt).toLocaleDateString("ja-JP", {
-                        timeZone: "Asia/Tokyo",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
+                  const dateParts = p.updatedAt
+                    ? Object.fromEntries(updateDateFormatter.formatToParts(new Date(p.updatedAt)).map(({ type, value }) => [type, value]))
+                    : null;
+                  const formattedDate = dateParts
+                    ? `${dateParts.month}/${dateParts.day} ${dateParts.hour}:${dateParts.second.padStart(2, "0")}`
                     : "―";
 
                   return (
@@ -301,9 +307,9 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                               ? `証拠 ${p.evidences?.length || 0}件`
                               : `証拠 ${p.evidences?.length || 0}件 / 解釈 ${p.matrixLinks?.length || 0}件`}
                           </span>
-                          <span className="text-slate-500 ml-auto">
-                            更新: {formattedDate}
-                          </span>
+                        </div>
+                        <div className="mt-2 text-right text-[10px] text-slate-500 font-mono">
+                          更新: {formattedDate}
                         </div>
                       </div>
 

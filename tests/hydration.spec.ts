@@ -2,9 +2,9 @@ import { test, expect } from '@playwright/test';
 import { initialProject } from '../src/utils/initialProjectData';
 
 // サーバーは設定でUTC。ブラウザーだけを変えて、日付が前後する時刻も照合する。
-const expectedDate = new Date(initialProject.updatedAt!).toLocaleDateString('ja-JP', {
-  timeZone: 'Asia/Tokyo', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-});
+const tokyoDate = new Date(new Date(initialProject.updatedAt!).valueOf() + 9 * 60 * 60 * 1000);
+const pad = (value: number) => String(value).padStart(2, '0');
+const expectedDate = `${pad(tokyoDate.getUTCMonth() + 1)}/${pad(tokyoDate.getUTCDate())} ${pad(tokyoDate.getUTCHours())}:${pad(tokyoDate.getUTCSeconds())}`;
 for (const timezoneId of ['Asia/Tokyo', 'UTC', 'America/Los_Angeles']) {
   test.describe(timezoneId, () => {
     test.use({ timezoneId });
