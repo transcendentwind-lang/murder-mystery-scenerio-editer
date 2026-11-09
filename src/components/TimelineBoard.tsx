@@ -558,7 +558,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     Phase {selectedDay} で全体公開される証拠 ＆ 専門知識による解釈差分 ({phaseEvidences.length}件)
                   </span>
                   <span className="text-[11px] text-slate-400">
-                    ※カード秘匿なし・すべて場に公開し、各PCのHO知識で真の意味を解読
+                    ※カードはすべて場に公開し、各PCのHO知識で真の意味を解読します。
                   </span>
                 </div>
 
@@ -884,7 +884,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       📍 {day1ViewMode === "investigation" ? "【白地図】SOS発信位置・父島・南島・暗礁記号" : "【GM解析図】風圧流1.5kt ＋ 黒潮支流2.0kt ＝ 東北東2.5kt"}
                     </span>
                     <span className="rounded bg-cyan-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
-                      <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
+                      <Maximize2 className="h-3 w-3" /> クリックすると大画面で表示します。
                     </span>
                   </div>
                 </div>
@@ -1233,7 +1233,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2) ｜ 北上速度: 時速約6km (日速約150km)
                           </span>
                           <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                            クリックして大画面拡大
+                            クリックすると大画面で表示します。
                           </span>
                         </div>
                       </div>
@@ -1524,7 +1524,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             🎯 セクター特定成功：深度10〜20m浮上中・後方撮影
                           </span>
                           <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-white backdrop-blur flex items-center gap-1">
-                            <Maximize2 className="h-3 w-3" /> クリックで拡大
+                            <Maximize2 className="h-3 w-3" /> クリックすると拡大します。
                           </span>
                         </div>
                       </div>
@@ -1587,7 +1587,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             ⚠️ セクター特定失敗：約21km彼方に航跡波のみ確認
                           </span>
                           <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-white backdrop-blur flex items-center gap-1">
-                            <Maximize2 className="h-3 w-3" /> クリックで拡大
+                            <Maximize2 className="h-3 w-3" /> クリックすると拡大します。
                           </span>
                         </div>
                       </div>
@@ -2415,7 +2415,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         🔴 【Day 3 噴火】明神礁 連動大噴火 ｜ ⚡ 八丈島・青ヶ島 地震観測
                       </span>
                       <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
-                        <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
+                        <Maximize2 className="h-3 w-3" /> クリックすると大画面で表示します。
                       </span>
                     </div>
                   </div>
@@ -2901,7 +2901,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         🔴 御蔵島沖海底噴火 ｜ ⚡ 八丈島 M4/震度3地震 ｜ ⚠️ 富士山地下 深部微動観測
                       </span>
                       <span className="rounded bg-rose-600 px-2 py-0.5 text-[10px] font-bold text-white backdrop-blur flex items-center gap-1">
-                        <Maximize2 className="h-3 w-3" /> クリックで大画面拡大
+                        <Maximize2 className="h-3 w-3" /> クリックすると大画面で表示します。
                       </span>
                     </div>
                   </div>

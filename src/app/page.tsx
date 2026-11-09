@@ -335,11 +335,11 @@ export default function WorkbenchPage() {
       </header>
 
       {progressSaveError && (
-        <div role="alert" className="bg-red-950 px-6 py-3 text-sm text-red-100">進行状態をブラウザーに保存できなかった。現在の画面内には保持されるが、再読込すると失われる。</div>
+        <div role="alert" className="bg-red-950 px-6 py-3 text-sm text-red-100">進行状態をブラウザーに保存できませんでした。現在の画面内には保持されていますが、再読み込みすると変更が失われる場合があります。</div>
       )}
       {saveError && (
         <div role="alert" className="flex items-center justify-between gap-3 bg-red-950 px-6 py-3 text-sm text-red-100">
-          <span>保存できていない変更がある。画面を閉じずに再保存するか、シナリオ管理からJSONを書き出して保管。</span>
+          <span>保存できていない変更があります。画面を閉じずに再保存するか、シナリオ管理からJSONを書き出して保管してください。</span>
           <button className="shrink-0 rounded border border-red-300 px-3 py-1" onClick={() => handleUpdateProject((prev) => prev)}>再保存</button>
         </div>
       )}

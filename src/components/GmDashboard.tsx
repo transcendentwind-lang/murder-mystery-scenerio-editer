@@ -49,6 +49,7 @@ import { generateSynopsisMarkdown, generateFullScriptMarkdown, printDocumentText
 import { EruptionMonitoringChart } from "./EruptionMonitoringChart";
 import { Day3TacticalMap } from "./Day3TacticalMap";
 import { Day1NauticalMap } from "./Day1NauticalMap";
+import { ResetProgressButton } from "./ResetProgressButton";
 
 export interface Day2ActionOption {
   id: string;
@@ -504,11 +505,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               <button
                 onClick={resetTimer}
                 className="rounded border border-slate-800 bg-slate-900 p-1.5 text-slate-400 hover:text-white transition"
-                title="リセット"
+                title="タイマーをリセット"
               >
                 <RotateCcw className="h-4 w-4" />
               </button>
             </div>
+            <ResetProgressButton projectId={project.id} projectTitle={project.title} />
 
             <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1 text-xs text-slate-300">
               <Users className="h-3.5 w-3.5 text-indigo-400" />
@@ -735,8 +737,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 p-6 text-slate-100">
       {/* 上部：GMステータスバー＆タイマー */}
-      <div className="mb-6 flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg backdrop-blur">
-        <div className="flex items-center gap-4">
+      <div className="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-slate-800 bg-slate-900/80 p-4 shadow-lg backdrop-blur">
+        <div className="flex flex-wrap items-center gap-4">
           <div className="flex items-center gap-2">
             <Radio className="h-5 w-5 text-emerald-400 animate-pulse" />
             <span className="font-bold text-sm text-white">GM 進行コンソール</span>
@@ -758,11 +760,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
             <button
               onClick={resetTimer}
               className="rounded border border-slate-800 bg-slate-900 p-1.5 text-slate-400 hover:text-white transition"
-              title="リセット"
+              title="タイマーをリセット"
             >
               <RotateCcw className="h-4 w-4" />
             </button>
           </div>
+          <ResetProgressButton projectId={project.id} projectTitle={project.title} />
 
           {/* プレイ人数バッジ */}
           <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 px-2.5 py-1 text-xs text-slate-300">
@@ -1617,7 +1620,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           🔴 西之島 ➔ 鳥島沖 連動噴火軸 ｜ 北上速度: 時速約6km (日速約150km)
                         </span>
                         <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                          クリックで拡大
+                          クリックすると拡大します。
                         </span>
                       </div>
                     </div>
@@ -2054,7 +2057,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           🔴 Day 3 明神礁 連動大噴火 ｜ ⚡ 青ヶ島・八丈島 火山性軽度地震（震度1〜2）
                         </span>
                         <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                          クリックで拡大
+                          クリックすると拡大します。
                         </span>
                       </div>
                     </div>

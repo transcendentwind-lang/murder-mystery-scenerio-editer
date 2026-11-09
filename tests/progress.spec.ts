@@ -67,15 +67,15 @@ test("保存失敗を表示し、再保存成功後に失敗表示を解除す�
     };
   });
   await page.keyboard.press("ControlOrMeta+s");
-  await expect(page.getByText("保存失敗：変更は未保存", { exact: true })).toBeVisible();
+  await expect(page.getByText("保存に失敗しました。変更は未保存です。", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "再保存", exact: true })).toBeVisible();
   await switchProject(page, second.title);
   await expect(page.getByRole("button", { name: "再保存", exact: true })).toHaveCount(0);
   await switchProject(page, first.title);
-  await expect(page.getByText("保存失敗：変更は未保存", { exact: true })).toBeVisible();
+  await expect(page.getByText("保存に失敗しました。変更は未保存です。", { exact: true })).toBeVisible();
   await page.evaluate(() => (window as any).restoreStorage());
   await page.getByRole("button", { name: "再保存", exact: true }).click();
-  await expect(page.getByText("保存失敗：変更は未保存", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("保存に失敗しました。変更は未保存です。", { exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "再保存", exact: true })).toHaveCount(0);
 });
 
@@ -119,4 +119,72 @@ test("複数日の無効な選択だけ解除し、有効な選択を残す", ()
   expect(result.clearedDays).toEqual([4, 5]);
   expect(result.selections[4]).toEqual({ tokyo: "", field: ["clue-c"] });
   expect(result.selections[5]).toEqual({ tokyo: "action-b", field: ["clue-d"] });
+});
+
+for (const builtin of [false, true]) {
+  test(`${builtin ? "組み込み" : "編集用"}作品の進行リセットは取消・再読込・作品切替でも整合する`, async ({ page }) => {
+    const target = builtin ? initialProject : first;
+    const key = (field: string) => progressKey(target.id, field);
+    const otherKey = progressKey(second.id, "gm.currentDay");
+    await page.addInitScript(({ keys, otherKey }) => {
+      if (localStorage.getItem("reset-test-seeded")) return;
+      const values = [3, { elapsedMs: 123000, startedAt: Date.now() }, 3, "custom", 7];
+      keys.forEach((key, index) => localStorage.setItem(key, JSON.stringify(values[index])));
+      localStorage.setItem(otherKey, "2");
+      localStorage.setItem("reset-test-seeded", "1");
+    }, { keys: [key("gm.currentDay"), key("timer"), key("timeline.selectedDay"), key("shared.operationName"), key("playerCount")], otherKey });
+    await openProject(page, [target, second]);
+    const projectBefore = await page.evaluate(() => localStorage.getItem("mm_workbench_projects_v1"));
+    await page.getByRole("button", { name: /③ GM進行/ }).click();
+    const phase = (day: number) => page.getByRole("button", { name: builtin ? `Day ${day}` : `Phase ${day}`, exact: true });
+    await expect(phase(3)).toHaveClass(/bg-indigo-600/);
+    await expect(page.getByTitle("一時停止", { exact: true })).toBeVisible();
+    const reset = page.getByRole("button", { name: "進行をリセット", exact: true });
+    await reset.click();
+    const dialog = page.getByRole("dialog", { name: "進行をリセットしますか？" });
+    await expect(dialog.getByRole("button", { name: "キャンセル", exact: true })).toBeFocused();
+    await dialog.getByRole("button", { name: "キャンセル", exact: true }).click();
+    await expect(phase(3)).toHaveClass(/bg-indigo-600/);
+    await expect(page.getByTitle("一時停止", { exact: true })).toBeVisible();
+    await reset.click();
+    await page.keyboard.press("Escape");
+    await expect(dialog).not.toBeVisible();
+    await expect(reset).toBeFocused();
+    await reset.click();
+    await dialog.getByRole("button", { name: "リセットする", exact: true }).click();
+    await expect(dialog).not.toBeVisible();
+    await expect(phase(1)).toHaveClass(/bg-indigo-600/);
+    await expect(page.getByTitle("スタート", { exact: true })).toBeVisible();
+    await expect(page.getByText("00:00:00", { exact: true })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: "進行をリセットしました。" })).toBeVisible();
+    const remaining = await page.evaluate((prefix) => Object.keys(localStorage).filter((key) => key.startsWith(prefix)), progressKey(target.id, ""));
+    expect(remaining).toEqual([key("playerCount")]);
+    expect(await page.evaluate(() => localStorage.getItem("mm_workbench_projects_v1"))).toBe(projectBefore);
+    await switchProject(page, second.title);
+    await expect(page.getByRole("button", { name: "Phase 2", exact: true })).toHaveClass(/bg-indigo-600/);
+    await switchProject(page, target.title);
+    await expect(phase(1)).toHaveClass(/bg-indigo-600/);
+    await page.reload();
+    await page.getByRole("button", { name: "このシナリオで作業開始" }).click();
+    await page.getByRole("button", { name: /③ GM進行/ }).click();
+    await expect(phase(1)).toHaveClass(/bg-indigo-600/);
+    await expect(page.getByText("00:00:00", { exact: true })).toBeVisible();
+  });
+}
+
+test("進行リセットの保存失敗を通知し、画面内のタイマーは停止する", async ({ page }) => {
+  await openProject(page);
+  await page.getByRole("button", { name: "③ GM進行", exact: true }).click();
+  await page.getByRole("button", { name: "Phase 3", exact: true }).click();
+  await page.getByTitle("スタート", { exact: true }).click();
+  await page.evaluate(() => {
+    Storage.prototype.removeItem = function () { throw new DOMException("Denied", "SecurityError"); };
+  });
+  await page.getByRole("button", { name: "進行をリセット", exact: true }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "リセットする", exact: true }).click();
+  await expect(page.getByRole("status").filter({ hasText: "保存に失敗しました" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Phase 1", exact: true })).toHaveClass(/bg-indigo-600/);
+  await expect(page.getByTitle("スタート", { exact: true })).toBeVisible();
+  await page.waitForTimeout(1100);
+  await expect(page.getByText("00:00:00", { exact: true })).toBeVisible();
 });

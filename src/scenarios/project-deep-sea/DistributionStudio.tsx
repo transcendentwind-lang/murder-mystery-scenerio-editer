@@ -2679,7 +2679,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 text-slate-100">
-      <p className="no-print border-b border-cyan-900 px-6 py-2 text-sm text-cyan-200">組み込み作品・閲覧専用。資料の選択・印刷を利用できる。</p>
+      <p className="no-print border-b border-cyan-900 px-6 py-2 text-sm text-cyan-200">組み込み作品は閲覧専用です。資料の選択・印刷を利用できます。</p>
       {/* 1. 最上部ヘッダー：4大資料カテゴリー切替（色・配置を完全統一） */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/95 px-6 py-3">
         <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-1">

@@ -1795,7 +1795,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         クリック音ボタン（タップで音を鳴らして追加）
                       </span>
                       <span className="text-[10px] text-amber-300">
-                        「日本語をあてはめる」で意味を記録
+                        「日本語をあてはめる」で意味を記録できます。
                       </span>
                     </div>
 

@@ -60,10 +60,10 @@ export function GenericDocumentStudio({ project, onUpdateProject, saveError = fa
   };
   const upload = (file?: File) => {
     if (!file || !visual) return;
-    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) { setError('画像はPNG・JPEG・WebPを選択。'); return; }
+    if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) { setError('画像はPNG・JPEG・WebPを選択してください。'); return; }
     const reader = new FileReader();
     reader.onload = () => { updateVisual({ imageUrl: String(reader.result) }); setError(''); };
-    reader.onerror = () => setError('画像を読み込めなかった。');
+    reader.onerror = () => setError('画像を読み込めませんでした。');
     reader.readAsDataURL(file);
   };
   return <div className="flex h-full flex-col overflow-hidden text-slate-100">
@@ -72,13 +72,13 @@ export function GenericDocumentStudio({ project, onUpdateProject, saveError = fa
       <button className="rounded border border-slate-500 px-4 py-2" onClick={() => setEditing(!editing)}>{editing ? 'プレビューに切替' : '編集に切替'}</button>
       <button disabled={!text} className="rounded bg-emerald-700 px-4 py-2 disabled:opacity-50" onClick={() => printDocumentText(project.title, text, category === 'visuals' ? visual?.imageUrl : undefined)}>表示資料を印刷・PDF保存</button>
       <button className="rounded bg-indigo-700 px-4 py-2" onClick={() => update((previous) => previous)}>保存</button>
-      <span role={saveError || error ? 'alert' : 'status'} className="text-sm">{error || (saveError ? '保存失敗：変更は未保存' : saved ? '保存完了' : '変更は自動保存')}</span>
+      <span role={saveError || error ? 'alert' : 'status'} className="text-sm">{error || (saveError ? '保存に失敗しました。変更は未保存です。' : saved ? '保存しました。' : '変更は自動保存されます。')}</span>
     </div>
     <div className="grid min-h-0 flex-1 grid-cols-4 gap-4 p-4">
       <aside className="overflow-auto space-y-2">
         {(category === 'evidences' || category === 'visuals') && <button className="w-full rounded bg-indigo-700 p-3" onClick={add}>資料を追加</button>}
         {items.map((item) => <button key={item.id} aria-pressed={activeId === item.id} className={`w-full rounded border p-3 text-left text-sm ${activeId === item.id ? 'border-indigo-400 bg-indigo-950' : 'border-slate-700'}`} onClick={() => setSelectedId(item.id)}>{item.title}</button>)}
-        {items.length === 0 && <p className="p-3 text-sm text-slate-400">資料は未作成。追加して作成。</p>}
+        {items.length === 0 && <p className="p-3 text-sm text-slate-400">資料は未作成です。追加して作成してください。</p>}
       </aside>
       <div className="col-span-3 overflow-auto rounded border border-slate-700 p-5 space-y-5">
         {editing ? <>
@@ -93,7 +93,7 @@ export function GenericDocumentStudio({ project, onUpdateProject, saveError = fa
           {category === 'evidences' && evidence && <><TextField short label="証拠の題名" value={evidence.title} change={(title) => updateEvidence({ title })} /><TextField label="証拠本文" value={evidence.description} change={(description) => updateEvidence({ description })} /><TextField label="用語解説" value={evidence.glossaryNote} change={(glossaryNote) => updateEvidence({ glossaryNote })} /></>}
           {category === 'visuals' && visual && <><TextField short label="画像資料の題名" value={visual.title} change={(title) => updateVisual({ title })} /><TextField label="説明" value={visual.captionBody} change={(captionBody) => updateVisual({ captionBody })} /><label className="block">画像を選択<input className="mt-2 block" type="file" accept="image/png,image/jpeg,image/webp" onChange={(event) => upload(event.target.files?.[0])} /></label>{visual.imageUrl && <><img className="max-w-full bg-white" src={visual.imageUrl} alt={visual.title} /><a className="text-cyan-300 underline" href={visual.imageUrl} download={`${visual.title}.png`}>画像をダウンロード</a></>}</>}
           {category === 'gm' && step && <><h2 className="font-bold">{step.situationTitle}</h2><TextField label="読み上げ文" value={note?.readAloudScript} change={(readAloudScript) => updateNote({ readAloudScript })} /><TextField label="確認事項（1行に1項目）" value={note?.gmCheckpoints.join('\n')} change={(value) => updateNote({ gmCheckpoints: value.split('\n') })} /><TextField short label="音楽・演出メモ" value={note?.bgmCue} change={(bgmCue) => updateNote({ bgmCue })} /></>}
-        </> : <article className="bg-white p-6 text-slate-950"><pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">{text || '資料は未作成'}</pre>{category === 'visuals' && visual?.imageUrl && <img src={visual.imageUrl} alt={visual.title} className="max-w-full" />}</article>}
+        </> : <article className="bg-white p-6 text-slate-950"><pre className="whitespace-pre-wrap font-sans text-base leading-relaxed">{text || '資料は未作成です。'}</pre>{category === 'visuals' && visual?.imageUrl && <img src={visual.imageUrl} alt={visual.title} className="max-w-full" />}</article>}
       </div>
     </div>
   </div>;

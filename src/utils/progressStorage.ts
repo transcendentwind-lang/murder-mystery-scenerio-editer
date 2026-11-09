@@ -1,6 +1,6 @@
 export const PROGRESS_STORAGE_PREFIX = "mm_workbench_progress_v1:";
 
-type Entry = { value: unknown; listeners: Set<() => void> };
+type Entry = { value: unknown; initial: unknown; listeners: Set<() => void> };
 const entries = new Map<string, Entry>();
 
 export function progressKey(projectId: string | undefined, field: string) {
@@ -15,7 +15,7 @@ function entryFor<T>(key: string, initial: T): Entry {
       const raw = localStorage.getItem(key);
       if (raw !== null) value = JSON.parse(raw);
     } catch { /* 保存できない環境でも画面内の状態は保持する。 */ }
-    entry = { value, listeners: new Set() };
+    entry = { value, initial, listeners: new Set() };
     entries.set(key, entry);
   }
   return entry;
@@ -44,5 +44,24 @@ export function writeProgress<T>(key: string, value: T): boolean {
     }
   }
   entry.listeners.forEach((listener) => listener());
+  return saved;
+}
+
+// 人数構成は設定として保持し、未表示の画面に保存された進行も初期化する。
+export function resetProjectProgress(projectId: string | undefined): boolean {
+  const prefix = progressKey(projectId, "");
+  const isTarget = (key: string) => key.startsWith(prefix) && key !== progressKey(projectId, "playerCount");
+  let saved = true;
+  try {
+    const keys = Array.from({ length: localStorage.length }, (_, index) => localStorage.key(index));
+    for (const key of keys) if (key && isTarget(key)) localStorage.removeItem(key);
+  } catch {
+    saved = false;
+    window.dispatchEvent(new Event("progress-save-error"));
+  }
+  const changed = Array.from(entries).filter(([key]) => isTarget(key)).map(([, entry]) => entry);
+  // 全値の更新後に通知し、共有する画面で新旧の進行が混在しないようにする。
+  changed.forEach((entry) => { entry.value = entry.initial; });
+  changed.forEach((entry) => entry.listeners.forEach((listener) => listener()));
   return saved;
 }

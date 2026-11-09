@@ -1023,7 +1023,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                   キャラクター内面ドラマ 3スロット（誇り × 後ろめたさ × 喪失体験）
                 </span>
                 <span className="text-[11px] text-slate-400">
-                  ※犯人特定のミスリード調整とロールプレイの深みを生み出す核
+                  ※犯人特定のミスリード調整とロールプレイの深みを生み出す核です。
                 </span>
               </div>
 
@@ -1107,7 +1107,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               <label className="mb-1.5 flex items-center justify-between text-xs font-semibold text-amber-300">
                 <span>ハンドアウト本文（専門知識による解読指針・ロールプレイ目標）</span>
                 <span className="text-[10px] text-slate-400">
-                  ※公開証拠をどう読み解くか、何を達成すべきかを記述
+                  ※公開証拠をどう読み解くか、何を達成すべきかを記述してください。
                 </span>
               </label>
               <textarea

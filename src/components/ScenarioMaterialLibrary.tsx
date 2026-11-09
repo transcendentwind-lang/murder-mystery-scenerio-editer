@@ -24,7 +24,7 @@ export function ScenarioMaterialLibrary() {
       anchor.click();
       anchor.remove();
       window.setTimeout(() => URL.revokeObjectURL(url), 30_000);
-    } catch { setDownloadError('ダウンロードできなかった。別画面で参照するか、再度ダウンロード。'); }
+    } catch { setDownloadError('ダウンロードできませんでした。別画面で参照するか、再度ダウンロードしてください。'); }
   };
   const [previewText, setPreviewText] = useState('');
   const [filter, setFilter] = useState("all");
@@ -39,12 +39,12 @@ export function ScenarioMaterialLibrary() {
     fetch(scenarioAssetUrl(selected.path), { signal: controller.signal })
       .then((response) => { if (!response.ok) throw new Error(String(response.status)); return response.text(); })
       .then(setPreviewText)
-      .catch((error) => { if (error.name !== 'AbortError') setPreviewText('プレビューを取得できなかった。別画面で参照またはダウンロードで確認。'); });
+      .catch((error) => { if (error.name !== 'AbortError') setPreviewText('プレビューを取得できませんでした。別画面で参照するか、ダウンロードして確認してください。'); });
     return () => controller.abort();
   }, [selected]);
   return <section className="flex h-full flex-col overflow-hidden bg-slate-950 p-5 text-slate-100" aria-label="作品資料ファイル一覧">
     <h2 className="text-lg font-bold">作品資料ファイル一覧</h2>
-    <p className="my-2 text-sm text-slate-300">現行の配布物・編集原本・比較用保管資料をすべて確認できる。比較用資料は現行版とは限らない。</p>
+    <p className="my-2 text-sm text-slate-300">現行の配布物・編集原本・比較用保管資料をすべて確認できます。比較用資料は現行版とは限りません。</p>
     {recovery && <button className="mb-3 w-fit rounded border border-slate-500 p-2 text-sm" onClick={() => downloadTextFile('previous-builtin-data.json', recovery)}>旧ブラウザー保存データを書き出す</button>}
     {downloadError && <p role="alert" className="mb-2 text-red-300">{downloadError}</p>}
     <div className="mb-4 flex flex-wrap items-end gap-4">
@@ -69,7 +69,7 @@ export function ScenarioMaterialLibrary() {
         {selected ? <><h3 className="mb-3 font-bold">{selected.title}</h3>{['svg', 'jpg', 'png'].includes(selected.format)
           ? <img src={scenarioAssetUrl(selected.path)} alt={selected.title} className="h-auto w-full" />
           : ['md', 'json'].includes(selected.format) ? <pre data-material-text className="whitespace-pre-wrap break-words text-sm leading-relaxed">{previewText}</pre> : <iframe title={`資料プレビュー：${selected.title}`} src={scenarioAssetUrl(selected.path)} className="h-[65vh] w-full" />}</>
-          : <p>資料の「プレビュー」で内容を表示。</p>}
+          : <p>資料の「プレビュー」を押すと内容を表示します。</p>}
       </div>
     </div>
   </section>;
