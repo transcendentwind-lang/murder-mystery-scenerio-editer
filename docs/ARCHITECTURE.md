@@ -17,7 +17,7 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 | 進行状態 | [`useProjectProgress.ts`](../src/hooks/useProjectProgress.ts)、[`progressStorage.ts`](../src/utils/progressStorage.ts)、[`useInvestigationSelections.ts`](../src/hooks/useInvestigationSelections.ts) | 作品別の進行・タイマー保持、調査選択の確認と共通化 |
 | 音声と波形 | [`wordAudio.ts`](../src/utils/wordAudio.ts)、[`audioSynth.ts`](../src/utils/audioSynth.ts) | 共通の発音定義・予定表、Web Audio出力時計による同期 |
 | データ定義 | [`schema.ts`](../src/types/schema.ts) | 保存データのTypeScript型 |
-| 参加者画面 | [`src/app/sonar/page.tsx`](../src/app/sonar/page.tsx) | 組み込みデータによる独立した音響操作画面 |
+| 参加者画面 | [`src/app/sonar/page.tsx`](../src/app/sonar/page.tsx)、[`src/app/sonar/layout.tsx`](../src/app/sonar/layout.tsx) | 組み込みデータによる独立した音響操作画面、参加者画面専用のページタイトル |
 
 ## 画面とAI機能
 
