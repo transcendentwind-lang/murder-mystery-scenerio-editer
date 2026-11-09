@@ -327,7 +327,7 @@ export default function WorkbenchPage() {
                 title="プレイヤーがスマホでクリック音パターンを鳴らし、クジラの行動テキストを表示するWebアプリ"
               >
                 <Smartphone className="h-4 w-4 text-cyan-300" />
-                📱 クジラ音響アプリ
+                クジラ音響アプリ
               </button>
             )}
           </div>
@@ -407,10 +407,10 @@ export default function WorkbenchPage() {
                   <button
                     onClick={() => setActiveTab("design_studio")}
                     className="flex items-center gap-1.5 rounded-lg border border-pink-500/40 bg-pink-950/40 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/60 hover:text-white transition shadow-sm"
-                    title="個人ハンドアウトや配布カード、証拠シートの執筆・装飾・印刷はデザイン資料画面で行います"
+                    title={readonly ? "個人ハンドアウトや配布カード、証拠シートの閲覧・印刷を行います" : "個人ハンドアウトや配布カード、証拠シートの執筆・装飾・印刷はデザイン資料画面で行います"}
                   >
                     <Palette className="h-3.5 w-3.5 text-pink-400" />
-                    {readonly ? "🎨 配布資料の閲覧・印刷はこちら" : "🎨 個人ハンドアウト・資料の編集はこちら"}
+                    {readonly ? "配布資料・印刷画面へ" : "個人ハンドアウト・資料の編集はこちら"}
                   </button>
                 </div>
               </div>

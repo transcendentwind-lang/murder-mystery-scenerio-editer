@@ -556,7 +556,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 className="flex items-center gap-1 rounded bg-emerald-600 px-2.5 py-1 text-xs font-bold text-white hover:bg-emerald-500 transition shadow"
               >
                 <Printer className="h-3.5 w-3.5" />
-                🖨️ 印刷
+                印刷
               </button>
             </div>
           </div>
@@ -849,7 +849,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               title="完全台本をA4白背景で印刷・PDF保存"
             >
               <Printer className="h-3.5 w-3.5" />
-              🖨️ 印刷
+              印刷
             </button>
           </div>
         </div>
@@ -3654,7 +3654,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
                 >
                   <Printer className="h-3.5 w-3.5" />
-                  🖨️ GM進行資料一括PDF（図＋全7日）
+                  GM進行資料一括PDF（図＋全7日）
                 </a>
                 <a
                   href={scenarioAssetUrl("releases/pdfs/gm-branching-flowchart.pdf")}

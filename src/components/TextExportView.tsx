@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
-import { hasBuiltinScenarioFeatures } from "@/scenarios/catalog";
+import { hasBuiltinScenarioFeatures, isBuiltinProject } from "@/scenarios/catalog";
 import { MMProject } from "@/types/schema";
 import {
   Copy,
@@ -120,7 +120,7 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
               className="flex items-center gap-1.5 rounded-lg border border-pink-500/50 bg-pink-950/50 px-3 py-1.5 text-xs font-bold text-pink-200 hover:bg-pink-900/70 hover:text-white transition shadow"
             >
               <Palette className="h-3.5 w-3.5 text-pink-400" />
-              🎨 デザイン資料作成・編集画面へ
+              {isBuiltinProject(project) ? "配布資料・印刷画面へ" : "デザイン資料作成・編集画面へ"}
             </button>
           )}
           {/* 出力・表示モード切り替え */}
@@ -178,7 +178,7 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
             title="A4白背景で見やすく整形してプリンター印刷・PDF保存します"
           >
             <Printer className="h-4 w-4" />
-            🖨️ この内容を印刷する
+            この内容を印刷する
           </button>
 
           {/* テキストモード時のみ全選択ボタンを表示 */}
@@ -426,7 +426,7 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
               </strong>
             </span>
             <span className="text-[11px] text-slate-500">
-              ※「🖨️ この内容を印刷する」を押すと、白背景の読みやすいA4レイアウトで印刷・PDF保存できます
+              ※「この内容を印刷する」を押すと、白背景の読みやすいA4レイアウトで印刷・PDF保存できます
             </span>
           </div>
 

@@ -102,7 +102,7 @@ export const HandoutEditor: React.FC<HandoutEditorProps> = ({
             title="全キャラクターの個人ハンドアウトを美しいB5規格で一括印刷・PDF保存（各PC1ページ）"
           >
             <Printer className="h-3.5 w-3.5" />
-            🖨️ 全員分のHOを一括B5印刷
+            全員分のHOを一括B5印刷
           </button>
         </div>
       </div>

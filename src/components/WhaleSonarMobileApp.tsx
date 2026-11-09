@@ -1784,7 +1784,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       />
                       {isPlaying
                         ? "クリック音を海中に放流中..."
-                        : "🔊 海中にクリック音を流す（発信）"}
+                        : "海中にクリック音を流す（発信）"}
                     </button>
                   </div>
 

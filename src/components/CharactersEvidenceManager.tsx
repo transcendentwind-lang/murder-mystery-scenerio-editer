@@ -844,7 +844,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
               title="複数の推理軸（動機・物理機会・特殊ルール等）の交点で犯人ただ1人に収束するかを検証します"
             >
               <Lock className="h-3.5 w-3.5 text-amber-400" />
-              🔐 多重ロック検証ボード ({lockCriteria.length}軸)
+              多重ロック検証ボード ({lockCriteria.length}軸)
             </button>
             <button
               onClick={() => setSubView("matrix")}

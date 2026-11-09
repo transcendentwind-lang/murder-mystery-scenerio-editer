@@ -102,7 +102,7 @@ export const SynopsisModal: React.FC<SynopsisModalProps> = ({
               title="A4白背景で印刷・PDF保存"
             >
               <Printer className="h-3.5 w-3.5" />
-              🖨️ 印刷する
+              印刷する
             </button>
 
             <button
