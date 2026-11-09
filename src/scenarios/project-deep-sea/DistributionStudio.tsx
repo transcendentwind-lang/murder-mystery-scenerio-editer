@@ -1999,7 +1999,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     if (category === "visuals" && activeVisual?.imageUrl) {
       const imgUrl = activeVisual.imageUrl;
       const isRotated = visualOrientation === "landscape_rotated";
-      const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
+      const isWithMargin =
+        visualMarginOverrides[activeVisual.id] ??
+        activeVisual.hasWhiteMargin ??
+        (activeVisual.id === "vis-day2-aerial");
 
       const printWin = document.createElement("iframe");
       printWin.style.position = "fixed";
@@ -2604,7 +2607,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     const pagesHtml = boardsToPrint
       .map((b) => {
         const isRotated = (b.orientation || "landscape_rotated") === "landscape_rotated";
-        const isWithMargin = b.hasWhiteMargin ?? (b.id === "vis-day2-aerial");
+        const isWithMargin =
+          visualMarginOverrides[b.id] ?? b.hasWhiteMargin ?? (b.id === "vis-day2-aerial");
         const imgClass = isRotated
           ? isWithMargin
             ? "img-rotated-margin"
@@ -3137,7 +3141,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               <div className="space-y-2">
                 {/* 📱 マッコウクジラ音響言語解析システム（QR＆画面説明・A4表裏2ページ） */}
                 <button
-                  onClick={() => setSelectedVisualId("vis-whale-sonar-qr-guide")}
+                  onClick={() => {
+                    setSelectedVisualId("vis-whale-sonar-qr-guide");
+                    previewCanvasRef.current?.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
                   className={`w-full rounded-xl border p-3 text-left transition ${
                     selectedVisualId === "vis-whale-sonar-qr-guide"
                       ? "border-cyan-400 bg-cyan-950/70 shadow-md ring-1 ring-cyan-400/50"
@@ -3172,6 +3179,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         if (vb.orientation) {
                           setVisualOrientation(vb.orientation);
                         }
+                        previewCanvasRef.current?.scrollTo({ top: 0, behavior: "smooth" });
                       }}
                       className={`w-full rounded-xl border p-3 text-left transition ${
                         isSelected
@@ -5132,7 +5140,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               selectedVisualId !== "vis-whale-sonar-qr-guide" &&
               activeVisual &&
               (() => {
-              const isWithMargin = activeVisual.hasWhiteMargin ?? (activeVisual.id === "vis-day2-aerial");
+              const isWithMargin =
+                visualMarginOverrides[activeVisual.id] ??
+                activeVisual.hasWhiteMargin ??
+                (activeVisual.id === "vis-day2-aerial");
               return (
                 <div className="space-y-6">
                   {/* 証拠資料と同じ形式の白いシート上部タイトル ＆ 右上印刷ボタン行 */}
@@ -5150,12 +5161,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       {/* 白い余白切り替えボタン（シンプル統一） */}
                       <button
                         type="button"
-                        onClick={() =>
+                        onClick={() => {
+                          const nextMargin = !isWithMargin;
+                          setVisualMarginOverrides((prev) => ({
+                            ...prev,
+                            [activeVisual.id]: nextMargin,
+                          }));
                           handleUpdateActiveVisual((v) => ({
                             ...v,
-                            hasWhiteMargin: !isWithMargin,
-                          }))
-                        }
+                            hasWhiteMargin: nextMargin,
+                          }));
+                        }}
                         className="rounded-lg border border-slate-300 bg-slate-100 px-3 py-2 text-xs font-bold text-slate-700 hover:bg-slate-200 transition"
                       >
                         {isWithMargin ? "🖼️ 現在：白い余白あり" : "🖼️ 現在：全面最大（余白なし）"}
@@ -5185,7 +5201,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                   {/* A4プレビューキャンバス（デザイン枠や余計な文字を完全排除し、画像のみをA4比率で最大表示） */}
                   <div className="flex justify-center py-2">
-                    <div className="relative w-full max-w-[700px] aspect-[210/297] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center border border-slate-300">
+                    <div
+                      className="relative w-full max-w-[700px] aspect-[210/297] bg-white shadow-2xl rounded-sm overflow-hidden flex items-center justify-center border border-slate-300"
+                      style={{ aspectRatio: "210 / 297" }}
+                    >
                       {activeVisual.imageUrl ? (
                         visualOrientation === "landscape_rotated" ? (
                           /* 横長画像を90度回転させてA4縦（210mm × 297mm）にプレビュー（余白あり時は88%に縮小） */
@@ -5193,7 +5212,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             className="absolute flex items-center justify-center overflow-hidden"
                             style={{
                               width: isWithMargin ? "calc(88% * 297 / 210)" : "calc(100% * 297 / 210)",
-                              height: isWithMargin ? "88%" : "100%",
+                              height: isWithMargin ? "calc(88% * 210 / 297)" : "calc(100% * 210 / 297)",
                               transform: "rotate(90deg)",
                               transformOrigin: "center center",
                             }}
@@ -5201,7 +5220,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             <img
                               src={activeVisual.imageUrl}
                               alt={activeVisual.title}
-                              className={`max-w-full max-h-full w-auto h-auto object-contain select-none pointer-events-none ${
+                              className={`max-w-full max-h-full w-full h-full object-contain select-none pointer-events-none ${
                                 isWithMargin ? "shadow-md" : ""
                               }`}
                             />
@@ -5220,7 +5239,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 isWithMargin
                                   ? "max-w-[88%] max-h-[88%] shadow-md"
                                   : "max-w-full max-h-full"
-                              } w-auto h-auto object-contain select-none pointer-events-none`}
+                              } w-full h-full object-contain select-none pointer-events-none`}
                             />
                           </div>
                         )
