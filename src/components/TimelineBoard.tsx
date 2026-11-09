@@ -468,7 +468,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         {currentStep && (
           <div className="grid flex-1 grid-cols-12 gap-5 overflow-hidden">
             {/* 左カラム（8列）：選択中フェーズの詳細編集 ＆ 公開証拠・情報トランプ */}
-            <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+            <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
               {/* フェーズタイトル・リソース設定 */}
               <div className="grid grid-cols-12 gap-3 border-b border-slate-800 pb-4">
                 <div className="col-span-4">
@@ -618,7 +618,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
 
             {/* 右カラム（4列）：途中交代キャラクター枠 ＆ 全体構造ナビ */}
-            <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto space-y-4">
+            <div className="col-span-4 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto space-y-4">
               {/* 途中脱落＆再参加キャラクター枠 */}
               <div className="rounded-xl border border-amber-500/30 bg-amber-950/15 p-3.5 space-y-2.5">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
@@ -741,7 +741,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
       {/* メイングリッド */}
       <div className="grid flex-1 grid-cols-12 gap-5 overflow-hidden">
         {/* 左側：このDayの状況 ＆ プレイヤー提供情報・作戦画面 */}
-        <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto">
+        <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto">
           {/* Dayヘッダー */}
           <div className="mb-3 flex items-center justify-between border-b border-slate-800 pb-2.5">
             <div className="flex items-center gap-2">
@@ -1109,12 +1109,6 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </span>
                     </div>
                   </div>
-                  <button
-                    onClick={() => setIsTheaterModalOpen(true)}
-                    className="flex items-center gap-1 rounded bg-rose-700 px-2 py-0.5 text-[10px] font-bold text-white hover:bg-rose-600 transition shadow"
-                  >
-                    <Maximize2 className="h-3 w-3" /> 海図を全画面拡大
-                  </button>
                 </div>
 
                 {/* ① GMオープニングアナウンス */}
@@ -1164,31 +1158,6 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                     {/* アクションボタン群 */}
                     <div className="flex items-center gap-2">
-                      <a
-                        href={
-                          day3MapTab === "tactical"
-                            ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg")
-                            : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")
-                        }
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-[11px] text-slate-300 transition border border-slate-700"
-                        title="別タブで原寸SVGを開く"
-                      >
-                        <ExternalLink className="h-3 w-3" /> 別タブで開く
-                      </a>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          setDay3MapTab("tactical");
-                          setDay3MapMode("gm");
-                          setIsTheaterModalOpen(true);
-                        }}
-                        className="flex items-center gap-1 rounded bg-rose-800 hover:bg-rose-700 px-2.5 py-1 text-[11px] font-bold text-white transition shadow border border-rose-700"
-                        title="GM用マップ（真相・怪物の位置）を大画面で開く"
-                      >
-                        <ShieldAlert className="h-3 w-3 text-amber-300" /> GM用大画面
-                      </button>
                       <button
                         type="button"
                         onClick={() => setIsTheaterModalOpen(true)}
@@ -1198,7 +1167,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             : "bg-rose-700 hover:bg-rose-600"
                         }`}
                       >
-                        <Maximize2 className="h-3 w-3" /> 大画面で開く
+                        <Maximize2 className="h-3 w-3" /> 拡大
                       </button>
                     </div>
                   </div>
@@ -1206,9 +1175,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   {/* タブに応じたメイン表示部 */}
                   {day3MapTab === "tactical" ? (
                     <div className="space-y-2">
-                      <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
+                      <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl">
                         <Day3TacticalMap
-                          defaultMode={day3MapMode}
+                          mode={day3MapMode}
+                          onModeChange={setDay3MapMode}
                           onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
                         />
                       </div>
@@ -1225,17 +1195,10 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="space-y-2">
                       <div
                         onClick={() => setIsTheaterModalOpen(true)}
-                        className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-video max-h-80 flex items-center justify-center shadow-lg"
+                        className="group relative cursor-pointer overflow-hidden rounded-xl border border-slate-700 bg-[#081325] aspect-[3/2] flex items-center justify-center shadow-lg"
                       >
                         <EruptionMonitoringChart day={3} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
-                        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-3 pointer-events-none">
-                          <span className="text-[11px] font-semibold text-slate-200">
-                            🔴 広域噴火観測記録: 西之島(Day 1) ➔ 鳥島沖(Day 2) ｜ 北上速度: 時速約6km (日速約150km)
-                          </span>
-                          <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                            クリックすると大画面で表示します。
-                          </span>
-                        </div>
+
                       </div>
                       <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
                         <p>
@@ -1508,16 +1471,17 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                   {/* タブに応じた写真カード */}
                   {day3ActivePhotoTab === "success" ? (
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-stretch">
+                    <div className="grid min-w-0 grid-cols-1 2xl:grid-cols-12 gap-3.5 items-start">
                       {/* 写真プレビュー（左側 7カラム） */}
                       <div
+                        data-investigation-photo
                         onClick={() => setDay3PhotoModal("success")}
-                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-emerald-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
+                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-emerald-800 bg-black min-w-0 w-full 2xl:col-span-7 aspect-video flex items-center justify-center shadow-lg"
                       >
                         <img
                           src={scenarioAssetUrl("releases/images/day3_sonar_success_photo.jpg")}
                           alt="巨大生物 後方空撮写真（特定成功）"
-                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                          className="absolute inset-0 h-full w-full max-w-full object-cover transition duration-300 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                           <span className="text-[11px] font-semibold text-emerald-200">
@@ -1530,7 +1494,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
 
                       {/* 観測所見・テレメトリ（右側 5カラム） */}
-                      <div className="md:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
+                      <div className="min-w-0 2xl:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
                         <div>
                           <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
                             <span className="font-bold text-emerald-300 text-xs">
@@ -1571,16 +1535,17 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-1 md:grid-cols-12 gap-3.5 items-stretch">
+                    <div className="grid min-w-0 grid-cols-1 2xl:grid-cols-12 gap-3.5 items-start">
                       {/* 写真プレビュー（左側 7カラム） */}
                       <div
+                        data-investigation-photo
                         onClick={() => setDay3PhotoModal("failure")}
-                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-amber-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
+                        className="group relative cursor-pointer overflow-hidden rounded-lg border border-amber-800 bg-black min-w-0 w-full 2xl:col-span-7 aspect-video flex items-center justify-center shadow-lg"
                       >
                         <img
                           src={scenarioAssetUrl("releases/images/day3_sonar_failure_photo.jpg")}
                           alt="20km彼方 航跡波写真（特定失敗）"
-                          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+                          className="absolute inset-0 h-full w-full max-w-full object-cover transition duration-300 group-hover:scale-105"
                         />
                         <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
                           <span className="text-[11px] font-semibold text-amber-200">
@@ -1593,7 +1558,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
 
                       {/* 観測所見・テレメトリ（右側 5カラム） */}
-                      <div className="md:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
+                      <div className="min-w-0 2xl:col-span-5 flex flex-col justify-between rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2 text-xs">
                         <div>
                           <div className="flex items-center justify-between border-b border-slate-800 pb-1.5 mb-2">
                             <span className="font-bold text-amber-300 text-xs">
@@ -4213,7 +4178,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
         </div>
 
         {/* 右側：このDayに解禁・関係するエビデンスカード */}
-        <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto">
+        <div className="col-span-4 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-4 overflow-y-auto">
           <div className="mb-3 flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-1.5">
               <FileText className="h-4 w-4 text-indigo-400" />
@@ -4345,11 +4310,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
           onClick={() => setIsTheaterModalOpen(false)}
         >
           <div
-            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            role="dialog" aria-modal="true" aria-label="海図の拡大表示"
+            className="relative max-w-6xl w-full h-[94dvh] rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-y-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
             {/* モーダルヘッダー */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-cyan-950 border border-cyan-800 text-cyan-400">
                   <Navigation className="h-5 w-5" />
@@ -4367,7 +4333,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
 
               {/* タブ切り替え ＆ アクションボタン */}
-              <div className="flex items-center gap-2">
+              <div className="flex flex-wrap items-center gap-2">
                 <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
                   <button
                     type="button"
@@ -4398,6 +4364,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="flex items-center gap-1 bg-slate-900 p-1 rounded-lg border border-slate-800 text-xs">
                     <button
                       type="button"
+                      aria-pressed={day3MapMode === "player"}
                       onClick={() => setDay3MapMode("player")}
                       className={`px-2.5 py-1 rounded font-semibold transition ${
                         day3MapMode === "player"
@@ -4409,6 +4376,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </button>
                     <button
                       type="button"
+                      aria-pressed={day3MapMode === "gm"}
                       onClick={() => setDay3MapMode("gm")}
                       className={`px-2.5 py-1 rounded font-semibold transition ${
                         day3MapMode === "gm"
@@ -4428,7 +4396,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
                   title="原寸ベクターSVGを別タブで表示"
                 >
-                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                  <ExternalLink className="h-3.5 w-3.5" /> 画像を別タブで開く
                 </a>
                 <button
                   type="button"
@@ -4442,10 +4410,14 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
 
             {/* モーダルメイン表示部 */}
-            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px]">
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[300px]">
               {day3MapTab === "tactical" ? (
                 <Day3TacticalMap
-                  defaultMode={day3MapMode}
+                  mode={day3MapMode}
+                  onModeChange={setDay3MapMode}
+                  showModeControls={false}
+                  fitToContainer
+                  className="w-full h-full min-h-0"
                   onSelectDropPoint={(id) => handleToggleDay3SonarDrop(id)}
                 />
               ) : (
@@ -4456,7 +4428,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             </div>
 
             {/* モーダル下部解説 */}
-            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
+            <div className="mt-3 shrink-0 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
               {day3MapTab === "tactical" ? (
                 <div className="flex items-center justify-between text-[11px] leading-relaxed">
                   <div>

@@ -567,7 +567,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         {/* メインGM作業エリア */}
         <div className="grid flex-1 grid-cols-12 gap-6 overflow-hidden">
           {/* 左カラム（8列）：フェーズ別GM進行ガイド＆読み上げスクリプト */}
-          <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+          <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
             <div className="flex flex-wrap items-center justify-between gap-2 border-b border-slate-800 pb-3">
               <div className="flex items-center gap-1.5">
                 {safeTimeline.map((step) => (
@@ -677,7 +677,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           </div>
 
           {/* 右カラム（4列）：このフェーズで全体公開する証拠 ＆ 途中交代キャラ管理 */}
-          <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
+          <div className="col-span-4 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto space-y-4">
             <div>
               <h3 className="text-xs font-bold uppercase tracking-wider text-emerald-300 mb-2">
                 🌐 Phase {currentDay} で全体公開する証拠 ({phaseEvidences.length}件)
@@ -862,7 +862,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
       {/* メインGM作業エリア */}
       <div className="grid flex-1 grid-cols-12 gap-6 overflow-hidden">
         {/* 左側：Day切り替えと演出台詞スクリプト */}
-        <div className="col-span-8 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
+        <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           {/* Dayタブ */}
           <div className="mb-4 flex items-center gap-1.5 border-b border-slate-800 pb-3">
             {[1, 2, 3, 4, 5, 6, 7].map((d) => (
@@ -1586,22 +1586,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       </div>
                       <div className="flex items-center gap-2">
-                        <a
-                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
-                        >
-                          <ExternalLink className="h-3 w-3" /> 別タブで開く
-                        </a>
                         <button
                           onClick={() => {
                             setChartModalDay(3);
                             setIsChartModalOpen(true);
                           }}
-                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                          className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
                         >
-                          <Maximize2 className="h-3 w-3" /> 大画面で開く
+                          <Maximize2 className="h-3 w-3" /> 拡大
                         </button>
                       </div>
                     </div>
@@ -1612,17 +1604,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         setChartModalDay(3);
                         setIsChartModalOpen(true);
                       }}
-                      className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-video max-h-64 flex items-center justify-center shadow-inner"
+                      data-chart-preview
+                      className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-[#081325] aspect-[3/2] flex items-center justify-center shadow-inner"
                     >
                       <EruptionMonitoringChart day={3} className="h-full w-full object-contain transition duration-300 group-hover:scale-102 select-none" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end justify-between p-2.5 pointer-events-none">
-                        <span className="text-[11px] font-semibold text-slate-200">
-                          🔴 西之島 ➔ 鳥島沖 連動噴火軸 ｜ 北上速度: 時速約6km (日速約150km)
-                        </span>
-                        <span className="rounded bg-black/70 px-2 py-0.5 text-[10px] text-rose-300 backdrop-blur">
-                          クリックすると拡大します。
-                        </span>
-                      </div>
+
                     </div>
 
                     {/* GM用 火山フロント観測解説ノート */}
@@ -1661,14 +1647,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <button
                           type="button"
                           onClick={() => setIsTacticalModalOpen(true)}
-                          className="flex items-center gap-1 rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                          className="flex shrink-0 items-center gap-1 whitespace-nowrap rounded bg-rose-700 hover:bg-rose-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
                         >
-                          <Maximize2 className="h-3 w-3" /> 大画面で開く（GM全画面）
+                          <Maximize2 className="h-3 w-3" /> 拡大
                         </button>
                       </div>
                     </div>
 
-                    <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl aspect-[16/10] max-h-96">
+                    <div className="rounded-xl overflow-hidden border border-slate-800 shadow-xl">
                       <Day3TacticalMap defaultMode="gm" />
                     </div>
 
@@ -3074,7 +3060,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         </div>
 
         {/* 右側：このフェーズで公開すべき証拠とプレイヤー管理 */}
-        <div className="col-span-4 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
+        <div className="col-span-4 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           {/* 各キャラクターへの特別配布カード（このDayに開示されるカード） */}
           {(() => {
             const daySpecialCards = SPECIAL_CHARACTER_CARDS.filter(
@@ -3450,10 +3436,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           onClick={() => setIsTacticalModalOpen(false)}
         >
           <div
-            className="relative max-w-6xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            role="dialog" aria-modal="true" aria-label="海図の拡大表示"
+            className="relative max-w-6xl w-full h-[94dvh] rounded-2xl border border-slate-700 bg-slate-950 p-5 shadow-2xl overflow-y-auto flex flex-col"
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div className="flex shrink-0 flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
               <div className="flex items-center gap-3">
                 <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-rose-950 border border-rose-700 text-rose-400">
                   <ShieldAlert className="h-5 w-5 animate-pulse" />
@@ -3475,7 +3462,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
                   title="原寸ベクターSVGを別タブで表示"
                 >
-                  <ExternalLink className="h-3.5 w-3.5" /> 別タブで開く
+                  <ExternalLink className="h-3.5 w-3.5" /> 画像を別タブで開く
                 </a>
                 <button
                   type="button"
@@ -3488,11 +3475,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
             </div>
 
-            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[460px]">
-              <Day3TacticalMap defaultMode="gm" />
+            <div className="mt-3 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-[#07111e] flex items-center justify-center min-h-[300px]">
+              <Day3TacticalMap defaultMode="gm" fitToContainer className="w-full h-full min-h-0" />
             </div>
 
-            <div className="mt-3 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
+            <div className="mt-3 shrink-0 rounded-lg bg-slate-900/90 border border-slate-800 p-2.5 text-xs text-slate-300">
               <div className="flex items-center justify-between text-[11px] leading-relaxed">
                 <div>
                   <span className="font-bold text-rose-300">【GM真相情報】</span>

@@ -32,6 +32,8 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 
 現在表示されるAI関連文言と非表示の旧コードは[Web画面の文言調査](UI_TEXT_AUDIT.md)を参照。
 
+`Day3TacticalMap.tsx` は単独利用時に内部の表示モードを使い、タイムラインでは親から `mode` と `onModeChange` を渡して通常・拡大表示の状態を共有する。拡大表示では内部の切り替えボタンを隠し、外側の操作へ統一する。通常プレビューは図の縦横比と操作欄に必要な高さを確保し、拡大表示のみ `fitToContainer` で表示枠へ収める。写真は固有の画像寸法に依存せず枠幅に追従し、狭い画面では観測所見と縦に並ぶ。
+
 ## 保存と読込
 
 1. 作品更新をReactの状態へ反映し、`saveProjectToStorage` でブラウザのlocalStorageへ保存する。

@@ -6,22 +6,35 @@ import { Eye, ShieldAlert, Crosshair, Anchor, Flame, Wind, Navigation, AlertTria
 interface Day3TacticalMapProps {
   className?: string;
   defaultMode?: "player" | "gm";
+  mode?: "player" | "gm";
+  onModeChange?: (mode: "player" | "gm") => void;
+  showModeControls?: boolean;
+  fitToContainer?: boolean;
   selectedDropPointId?: string | null;
   onSelectDropPoint?: (id: string) => void;
 }
 
 export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
-  className = "w-full h-full",
+  className = "w-full",
   defaultMode = "player",
+  mode: controlledMode,
+  onModeChange,
+  showModeControls = true,
+  fitToContainer = false,
   selectedDropPointId = null,
   onSelectDropPoint,
 }) => {
-  const [mode, setMode] = useState<"player" | "gm">(defaultMode);
+  const [localMode, setLocalMode] = useState<"player" | "gm">(defaultMode);
+  const mode = controlledMode ?? localMode;
+  const setMode = (nextMode: "player" | "gm") => {
+    setLocalMode(nextMode);
+    onModeChange?.(nextMode);
+  };
 
   return (
-    <div className="relative flex flex-col w-full h-full bg-[#07111e] rounded-xl overflow-hidden border border-slate-800 shadow-2xl select-none">
+    <div data-tactical-map data-mode={mode} className={`relative flex min-w-0 flex-col bg-[#07111e] rounded-xl overflow-hidden border border-slate-800 shadow-2xl select-none ${className}`}>
       {/* 上部マップコントロールバー */}
-      <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/95 border-b border-slate-800 backdrop-blur z-20">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 px-4 py-2.5 bg-slate-900/95 border-b border-slate-800 backdrop-blur z-20">
         <div className="flex items-center gap-2.5">
           <Navigation className="h-4 w-4 text-cyan-400" />
           <div>
@@ -40,8 +53,9 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
         </div>
 
         {/* プレイヤー用 / GM用 切り替えトグル */}
-        <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
+        {showModeControls && <div className="flex flex-wrap items-center gap-1.5 bg-slate-950 p-1 rounded-lg border border-slate-800">
           <button
+            aria-pressed={mode === "player"}
             onClick={() => setMode("player")}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
               mode === "player"
@@ -53,6 +67,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             プレイヤー用マップ
           </button>
           <button
+            aria-pressed={mode === "gm"}
             onClick={() => setMode("gm")}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold transition ${
               mode === "gm"
@@ -63,15 +78,15 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <ShieldAlert className="h-3.5 w-3.5" />
             GM用マップ（真相・怪物の位置）
           </button>
-        </div>
+        </div>}
       </div>
 
       {/* SVG メイン海図 */}
-      <div className="relative flex-1 w-full h-full min-h-[520px] bg-[#07111e] flex items-center justify-center p-1">
+      <div className={`relative w-full bg-[#07111e] flex items-center justify-center p-1 ${fitToContainer ? "flex-1 min-h-0" : "min-h-[520px]"}`}>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 1180 800"
-          className="w-full h-full max-h-[75vh] object-contain"
+          className={fitToContainer ? "block w-full h-full min-h-0" : "block w-full h-auto"}
           style={{
             background: "#07111e",
             fontFamily: "'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif",
@@ -695,7 +710,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
       </div>
 
       {/* 下部ステータスバー */}
-      <div className="flex items-center justify-between px-4 py-2 bg-slate-950 border-t border-slate-800 text-[11px] text-slate-400">
+      <div className="flex shrink-0 flex-wrap items-center justify-between gap-2 px-4 py-2 bg-slate-950 border-t border-slate-800 text-[11px] text-slate-400">
         <div className="flex items-center gap-2">
           {mode === "player" ? (
             <span className="flex items-center gap-1 text-cyan-400 font-semibold">
@@ -707,7 +722,7 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             </span>
           )}
         </div>
-        <div className="flex items-center gap-3 font-mono text-[10px]">
+        <div className="flex flex-wrap items-center gap-3 font-mono text-[10px]">
           <span>給油中継: PLH-31（海図左下・セクターF-1）</span>
           <span>1セクター: 約20km四方</span>
           {mode === "gm" && <span className="text-amber-400">熱水判定: 直上=探知不能 / 隣接=直下不在確定＆周囲妨害</span>}
