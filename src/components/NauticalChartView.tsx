@@ -1,5 +1,7 @@
 "use client";
 
+import { scenarioAssetUrl } from "@/scenarios/catalog";
+
 import React, { useState, useRef } from "react";
 import {
   Compass,
@@ -248,7 +250,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
               className="group relative cursor-pointer overflow-hidden rounded-lg border border-slate-700 bg-black aspect-video flex items-center justify-center shadow-2xl"
             >
               <img
-                src="/images/theater_map_wide.jpg"
+                src={scenarioAssetUrl("releases/images/theater_map_wide.jpg")}
                 alt="小笠原〜富士山 縦断作戦海図"
                 className="h-full w-full object-contain transition duration-300 group-hover:scale-102"
               />
@@ -1164,7 +1166,7 @@ export const NauticalChartView: React.FC<NauticalChartViewProps> = ({ onBackToDa
 
             <div className="mt-4 flex-1 overflow-hidden rounded-xl border border-slate-800 bg-black flex items-center justify-center">
               <img
-                src="/images/theater_map_wide.jpg"
+                src={scenarioAssetUrl("releases/images/theater_map_wide.jpg")}
                 alt="小笠原〜富士山 縦断作戦海図"
                 className="w-full h-auto max-h-[70vh] object-contain"
               />

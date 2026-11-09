@@ -10,7 +10,7 @@
 - 利用者の作業の流れ: [USER_GUIDE.md](docs/USER_GUIDE.md)。
 - データ構造: [src/types/schema.ts](src/types/schema.ts)を正本とし、項目の意味は[DATA_SCHEMA.md](docs/DATA_SCHEMA.md)を参照する。
 - 起動・確認・公開: [SETUP.md](docs/SETUP.md)。目的・将来構想は[PRODUCT_VISION.md](docs/PRODUCT_VISION.md)、判断の経緯は[DECISIONS.md](docs/DECISIONS.md)。
-- 配布画像の原本・再生成: [assets/source-images/README.md](assets/source-images/README.md)。
+- 配布画像の原本・再生成: [資料パッケージの案内](assets/scenarios/project-deep-sea/README.md)と、その配下の原本・目録。
 
 ここには詳細な動作仕様を重複記載しない。実装は対象コードで確認し、ナビゲーションは参照先や担当範囲が変わったときに更新する。
 

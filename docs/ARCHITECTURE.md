@@ -13,6 +13,9 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 | 制作 | [`TimelineBoard.tsx`](../src/components/TimelineBoard.tsx)、[`CharactersEvidenceManager.tsx`](../src/components/CharactersEvidenceManager.tsx) | フェーズ・人物・証拠・情報対応表・条件表 |
 | 当日の進行 | [`GmDashboard.tsx`](../src/components/GmDashboard.tsx) | フェーズ別進行、証拠確認、タイマー |
 | 資料と出力 | [`DocumentDesignStudio.tsx`](../src/components/DocumentDesignStudio.tsx)、[`TextExportView.tsx`](../src/components/TextExportView.tsx)、[`scriptGenerator.ts`](../src/utils/scriptGenerator.ts) | プレビュー・印刷・テキスト生成 |
+| 作品パッケージ | [`catalog.ts`](../src/scenarios/catalog.ts)、`src/scenarios/<作品ID>/`、`assets/scenarios/<作品ID>/` | 編集権限・専用機能の判定、作品本文・専用資料・正本の分離 |
+| 汎用資料編集 | [`GenericDocumentStudio.tsx`](../src/components/GenericDocumentStudio.tsx)、[`genericScriptGenerator.ts`](../src/utils/genericScriptGenerator.ts) | 選択作品のデータだけで編集・プレビュー・出力 |
+| 資料一覧 | [`ScenarioMaterialLibrary.tsx`](../src/components/ScenarioMaterialLibrary.tsx) | 目録の全資料を参照・プレビュー・ダウンロード |
 | 保存 | [`projectStorage.ts`](../src/utils/projectStorage.ts) | localStorage、初期化、補完、JSON書き出し |
 | 進行状態 | [`useProjectProgress.ts`](../src/hooks/useProjectProgress.ts)、[`progressStorage.ts`](../src/utils/progressStorage.ts)、[`useInvestigationSelections.ts`](../src/hooks/useInvestigationSelections.ts) | 作品別の進行・タイマー保持、調査選択の確認と共通化 |
 | 音声と波形 | [`wordAudio.ts`](../src/utils/wordAudio.ts)、[`audioSynth.ts`](../src/utils/audioSynth.ts) | 共通の発音定義・予定表、Web Audio出力時計による同期 |
@@ -35,17 +38,21 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 
 `saveProjectToStorage` は保存成功をbooleanで返す。成功後に保存完了を表示し、失敗時は警告と再保存の操作を出す。未保存の画面データと失敗状態は作品切り替え後もメモリ内に保持する。保存場所はブラウザ・プロファイル・接続先ごとに分かれる。
 
-### 組み込み作品の同期という制約
+### 組み込み作品の正本と編集権限
 
-現在の分岐は作品種別の設定ではなく固定の作品IDを基準とする。組み込み作品では、人物・HO、作品概要、証拠、タイムライン、図版、専用カードなどをコード側の定義で再設定する。保存時にも既存証拠の題名・本文などをコード側へ合わせる。情報トランプ・ロック条件・候補状態は除去する。
+組み込み作品の原稿は `src/scenarios/<作品ID>/data.ts` 等に置く。`catalog.ts` の登録作品IDで読み取り専用と判定し、画面の編集入口と `handleUpdateProject`、保存・削除処理の両方で変更を防ぐ。ブラウザ内の旧作品データは初回に `mm_workbench_builtin_recovery_v1` へ退避し、資料一覧から書き出せる。正本の読込に旧編集を混ぜない。題名の一致では組み込み作品と判定しない。
 
-このため、組み込み作品と新規作品では編集の保持範囲が異なる。組み込み作品のHO本文、証拠本文、進行概要が再読込後に戻ること、新規作品では保持されることを、実処理とメモリ内のlocalStorageで確認した。これは現状の制約であり、恒久的な仕様として承認したものではない。
+人数構成は作品本文の `playerCount` を更新せず、進行ストアの `playerCount` に保持する。表示時に原本から対応構成を選ぶ。新規作品・意図的に複製した編集用作品は書込可能。`scenarioPackId` は専用機能の明示的な参照であり、編集権限とは独立する。
 
 ## 汎用機能と作品専用処理
 
-新規作品では汎用のフェーズ編集、人物・証拠管理、情報トランプ、多重ロック表、GM進行コンソールを利用する。組み込み作品では専用の進行・図・演出と6人／7人切替を使用し、犯人特定向けの情報トランプ・多重ロック画面は出さない。
+資料画面の入口で、組み込み作品の専用閲覧・印刷と編集用作品の汎用エディタを分岐する。汎用画面は当該作品の人物・証拠・図版・GMメモだけを参照する。未設定は空欄・未作成として扱い、他作品の図版・台本・カードで補わない。企画書・台本の出力も、専用機能の明示的な参照がない作品では汎用生成器を使う。
 
-分離は未完了。資料画面の既定図版・進行文・カードや、台本生成の一部には組み込み作品向け処理が残る。資料画面の本文直接編集は `isDirectEditMode = false` で無効。画面名や残存コードを、そのまま利用可能な機能の根拠にしない。
+作品資料の正本は `assets/scenarios/<作品ID>/` に集約し、`manifest.json` で全ファイルを登録する。`sources` は編集原本、`releases` は現行配布物、`archive` は比較用保管資料。トップディレクトリにあったPDFは現行ファイルと一致しないため内容を改変せず保管する。資料一覧はこの目録を直接参照する。
+
+`prepare-scenario-assets.mjs` は目録とファイル・ハッシュを照合し、作者環境では全資料を、参加者向け静的ビルドでは許可された資料だけを `public/scenarios` へ配置する。旧 `/images`・`/pdfs` URLも公開対象だけ同じ正本から互換コピーを生成する。生成フォルダはGit管理しない。静的ビルド後は `finalize-participant-export.mjs` で対象外資料とローカル追加作品データの混入を検査・除外する。ローカル追加作品の原本自体は削除しない。
+
+公開対象の絞り込みは配布ファイルの管理であり、アプリ全体の認証やソース秘匿を保証するものではない。
 
 ## 検証機能の範囲
 

@@ -1,3 +1,6 @@
+import { hasBuiltinScenarioFeatures } from "@/scenarios/catalog";
+import { genericSynopsis, genericHandouts, genericFullScript } from "./genericScriptGenerator";
+import { scenarioAssetUrl } from "@/scenarios/catalog";
 import { MMProject, Character } from "@/types/schema";
 import {
   TOKYO_ACTIONS,
@@ -15,6 +18,7 @@ import { GM_DAY_FLOWCHARTS } from "@/utils/gmFlowchartData";
  * 企画概要・プロット紹介 Markdown 生成
  */
 export function generateSynopsisMarkdown(project: MMProject): string {
+  if (!hasBuiltinScenarioFeatures(project)) return genericSynopsis(project);
   const chars = project?.characters || [];
   const timeline = project?.timeline || [];
   const playerCount = project?.playerCount || chars.length || 6;
@@ -54,6 +58,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
  * 企画概要 プレーンテキスト生成 (.txt用)
  */
 export function generateSynopsisPlainText(project: MMProject): string {
+  if (!hasBuiltinScenarioFeatures(project)) return genericSynopsis(project);
   const chars = project?.characters || [];
   const timeline = project?.timeline || [];
   const playerCount = project?.playerCount || chars.length || 6;
@@ -119,6 +124,7 @@ export function formatCharacterHandoutMarkdown(c: Character): string {
  * キャラクターハンドアウト一覧（本紙）Markdown 生成
  */
 export function generateHandoutsOnlyMarkdown(project: MMProject): string {
+  if (!hasBuiltinScenarioFeatures(project)) return genericHandouts(project);
   const chars = project?.characters || [];
   const playerCount = project?.playerCount || chars.length || 6;
 
@@ -139,6 +145,7 @@ export function generateHandoutsOnlyMarkdown(project: MMProject): string {
  * 全設定・全HO・全Day進行台本（プレイヤーができること・資料・結果・GMセリフ）・全エビデンス・暗号パズルを完全網羅
  */
 export function generateFullScriptMarkdown(project: MMProject): string {
+  if (!hasBuiltinScenarioFeatures(project)) return genericFullScript(project);
   const chars = project?.characters || [];
   const evidences = project?.evidences || [];
   const crypticWords = project?.crypticWords || [];
@@ -351,7 +358,7 @@ function escapeHtml(str: string): string {
  * ブラウザ標準の印刷ダイアログ（A4白背景・インク節約・改ページ対応）を起動するユーティリティ
  * ポップアップブロックに邪魔されないよう隠しiframe方式で即座に印刷プレビューを開きます
  */
-export function printDocumentText(title: string, markdownOrText: string): void {
+export function printDocumentText(title: string, markdownOrText: string, imageUrl?: string): void {
   if (typeof window === "undefined") return;
 
   // Markdownテキストを見やすいHTML構造へ簡易変換
@@ -396,6 +403,10 @@ export function printDocumentText(title: string, markdownOrText: string): void {
   }
   if (inList) {
     htmlBody += "</ul>";
+  }
+
+  if (imageUrl && (/^https?:\/\//.test(imageUrl) || imageUrl.startsWith('/') || /^data:image\/(png|jpeg|webp);base64,/.test(imageUrl))) {
+    htmlBody += `<img src="${escapeHtml(imageUrl)}" alt="${escapeHtml(title)}" style="display:block;max-width:100%;height:auto;margin:12px auto;" />`;
   }
 
   const fullHtml = `<!DOCTYPE html>
@@ -1483,7 +1494,7 @@ export function printWhaleSonarGuideA4(
 
       <div class="qr-section">
         <div class="qr-card">
-          <img src="/images/sonar_qr.png" alt="マッコウクジラ音響言語解析システム QRコード" />
+          <img src="${scenarioAssetUrl("releases/images/sonar_qr.png")}" alt="マッコウクジラ音響言語解析システム QRコード" />
           <div class="qr-caption">📱 スマートフォンのカメラで読み取ってください</div>
         </div>
       </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import { scenarioAssetUrl } from "@/scenarios/catalog";
+
 import React, { useState } from "react";
 import { useProjectProgress } from "@/hooks/useProjectProgress";
 import { useInvestigationSelections } from "@/hooks/useInvestigationSelections";
@@ -165,7 +167,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 }) => {
   const [selectedDay, setSelectedDay] = useProjectProgress<number>(project?.id, "timeline.selectedDay", 1);
   const safeTimeline =
-    Array.isArray(timeline) && timeline.length > 0 ? timeline : initialProject.timeline;
+    Array.isArray(timeline) ? timeline : project?.id === "project-deep-sea" ? initialProject.timeline : [];
   const safeEvidences = Array.isArray(evidences) ? evidences : [];
   const currentStep =
     safeTimeline.find((t) => t.dayNumber === selectedDay) || safeTimeline[0];
@@ -846,8 +848,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <a
                       href={
                         day1ViewMode === "investigation"
-                          ? "/images/day1_nautical_chart_white.svg"
-                          : "/images/day1_nautical_chart_gm.svg"
+                          ? scenarioAssetUrl("releases/images/day1_nautical_chart_white.svg")
+                          : scenarioAssetUrl("releases/images/day1_nautical_chart_gm.svg")
                       }
                       target="_blank"
                       rel="noreferrer"
@@ -1050,7 +1052,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-black aspect-video max-h-40 flex items-center justify-center shadow"
                               >
                                 <img
-                                  src="/images/aerial_recon_wide.jpg"
+                                  src={scenarioAssetUrl("releases/images/aerial_recon_wide.jpg")}
                                   alt="西之島北西海域 空撮写真"
                                   className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                 />
@@ -1165,8 +1167,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <a
                         href={
                           day3MapTab === "tactical"
-                            ? "/images/day3_sonar_tactical_chart.svg"
-                            : "/images/eruption_monitoring_chart.svg"
+                            ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg")
+                            : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")
                         }
                         target="_blank"
                         rel="noreferrer"
@@ -1513,7 +1515,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         className="group relative cursor-pointer overflow-hidden rounded-lg border border-emerald-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
                       >
                         <img
-                          src="/images/day3_sonar_success_photo.jpg"
+                          src={scenarioAssetUrl("releases/images/day3_sonar_success_photo.jpg")}
                           alt="巨大生物 後方空撮写真（特定成功）"
                           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                         />
@@ -1576,7 +1578,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         className="group relative cursor-pointer overflow-hidden rounded-lg border border-amber-800 bg-black md:col-span-7 aspect-video flex items-center justify-center shadow-lg"
                       >
                         <img
-                          src="/images/day3_sonar_failure_photo.jpg"
+                          src={scenarioAssetUrl("releases/images/day3_sonar_failure_photo.jpg")}
                           alt="20km彼方 航跡波写真（特定失敗）"
                           className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                         />
@@ -2382,7 +2384,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href="/images/eruption_monitoring_chart_day4.svg"
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -2727,7 +2729,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 className="group relative cursor-pointer overflow-hidden rounded border border-amber-900/60 bg-[#1c1813] aspect-[16/9] flex items-center justify-center shadow"
                               >
                                 <img
-                                  src="/images/day4_shrine_chronicle.svg"
+                                  src={scenarioAssetUrl("releases/images/day4_shrine_chronicle.svg")}
                                   alt="小笠原社記（抄）原本"
                                   className="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-105"
                                 />
@@ -2868,7 +2870,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href="/images/eruption_monitoring_chart_day5.svg"
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -3291,7 +3293,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 className="group relative cursor-pointer overflow-hidden rounded border border-amber-900/60 bg-[#1c1813] aspect-[16/9] flex items-center justify-center shadow"
                               >
                                 <img
-                                  src="/images/day4_shrine_chronicle.svg"
+                                  src={scenarioAssetUrl("releases/images/day4_shrine_chronicle.svg")}
                                   alt="小笠原社記（抄）原本"
                                   className="h-full w-full object-contain p-1 transition duration-300 group-hover:scale-105"
                                 />
@@ -4314,7 +4316,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
             <div className="mt-4 relative rounded-xl overflow-hidden border border-slate-800 bg-black flex items-center justify-center max-h-[60vh]">
               <img
-                src="/images/aerial_recon_wide.jpg"
+                src={scenarioAssetUrl("releases/images/aerial_recon_wide.jpg")}
                 alt="西之島北西海域 空撮写真"
                 className="w-full h-auto max-h-[60vh] object-contain"
               />
@@ -4420,7 +4422,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 )}
 
                 <a
-                  href={day3MapTab === "tactical" ? "/images/day3_sonar_tactical_chart.svg" : "/images/eruption_monitoring_chart.svg"}
+                  href={day3MapTab === "tactical" ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4540,8 +4542,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 <a
                   href={
                     day1ViewMode === "investigation"
-                      ? "/images/day1_nautical_chart_white.svg"
-                      : "/images/day1_nautical_chart_gm.svg"
+                      ? scenarioAssetUrl("releases/images/day1_nautical_chart_white.svg")
+                      : scenarioAssetUrl("releases/images/day1_nautical_chart_gm.svg")
                   }
                   target="_blank"
                   rel="noreferrer"
@@ -4792,8 +4794,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               <img
                 src={
                   day3PhotoModal === "success"
-                    ? "/images/day3_sonar_success_photo.jpg"
-                    : "/images/day3_sonar_failure_photo.jpg"
+                    ? scenarioAssetUrl("releases/images/day3_sonar_success_photo.jpg")
+                    : scenarioAssetUrl("releases/images/day3_sonar_failure_photo.jpg")
                 }
                 alt={day3PhotoModal === "success" ? "巨大生物 後方空撮写真" : "20km彼方 航跡波写真"}
                 className="w-full h-auto max-h-[62vh] object-contain select-none"
@@ -4867,7 +4869,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href="/images/eruption_monitoring_chart_day4.svg"
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4929,7 +4931,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href="/images/eruption_monitoring_chart_day5.svg"
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4990,7 +4992,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="/images/day4_shrine_chronicle.svg"
+                  href={scenarioAssetUrl("releases/images/day4_shrine_chronicle.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-amber-950 hover:bg-amber-900 px-2.5 py-1 text-xs text-amber-200 transition border border-amber-800/70"
@@ -5010,7 +5012,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
             {/* モーダル画像表示部 */}
             <div className="mt-3 flex-1 overflow-auto rounded-xl border border-amber-900/40 bg-[#0d0a07] flex items-center justify-center min-h-[460px] p-3">
               <img
-                src="/images/day4_shrine_chronicle.svg"
+                src={scenarioAssetUrl("releases/images/day4_shrine_chronicle.svg")}
                 alt="小笠原社記（抄）"
                 className="w-full h-auto max-h-[74vh] object-contain rounded shadow-lg"
               />

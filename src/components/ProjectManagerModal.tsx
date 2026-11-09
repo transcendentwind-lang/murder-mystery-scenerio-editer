@@ -1,3 +1,4 @@
+import { isBuiltinProject, BUILTIN_SCENARIO_ID } from "@/scenarios/catalog";
 import React, { useState } from "react";
 import { MMProject } from "@/types/schema";
 import {
@@ -5,6 +6,7 @@ import {
   saveProjectToStorage,
   deleteProjectFromStorage,
   exportProjectToJsonFile,
+  normalizeProject,
 } from "@/utils/projectStorage";
 import {
   FolderKanban,
@@ -84,6 +86,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
   const handleDuplicate = (target: MMProject) => {
     const duplicated: MMProject = {
       ...target,
+      scenarioPackId: isBuiltinProject(target) ? BUILTIN_SCENARIO_ID : target.scenarioPackId,
       id: `proj_${Date.now()}_copy`,
       title: `${target.title}（コピー）`,
       createdAt: new Date().toISOString(),
@@ -99,6 +102,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
   // プロジェクトの削除
   const handleDelete = (targetId: string, title: string) => {
+    if (isBuiltinProject({ id: targetId })) return;
     if (projects.length <= 1) {
       alert("最後の1つのプロジェクトは削除できません。");
       return;
@@ -122,7 +126,9 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
     reader.onload = (event) => {
       try {
         const text = event.target?.result as string;
-        const imported = JSON.parse(text) as MMProject;
+        const raw = JSON.parse(text);
+        if (!raw || typeof raw !== "object" || !raw.title || !Array.isArray(raw.characters)) { alert("有効なシナリオデータ形式ではありません。"); return; }
+        const imported = normalizeProject(raw);
         if (!imported.title || !imported.characters) {
           alert("有効なシナリオデータ形式ではありません。");
           return;
@@ -317,7 +323,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                           >
                             <Download className="h-3.5 w-3.5" />
                           </button>
-                          {projects.length > 1 && (
+                          {projects.length > 1 && !isBuiltinProject(p) && (
                             <button
                               onClick={() => handleDelete(p.id || "", p.title)}
                               className="p-1.5 rounded-lg border border-rose-900/60 bg-rose-950/30 hover:bg-rose-900/50 text-rose-400 hover:text-rose-200 transition"

@@ -1,6 +1,6 @@
 # 編集用SVG原本
 
-このディレクトリのSVGは文字を編集できる原本。対応する `public/images/` の同名SVGは、配布・印刷時にフォント環境で崩れないよう、日本語を輪郭の図形へ変換した生成物。
+このディレクトリのSVGは文字を編集できる原本。対応する `assets/scenarios/project-deep-sea/releases/images/` の同名SVGは、配布・印刷時にフォント環境で崩れないよう、日本語を輪郭の図形へ変換した生成物。
 
 文章や配置を変更するときは原本を編集し、次の手順で生成物を更新する。生成物を直接編集しない。原本のプレビューには下記フォントを使用する。
 
@@ -12,7 +12,7 @@
 
 ```sh
 python3 scripts/outline_svg_text.py \
-  assets/source-images/INPUT.svg public/images/INPUT.svg \
+  assets/scenarios/project-deep-sea/sources/INPUT.svg assets/scenarios/project-deep-sea/releases/images/INPUT.svg \
   --regular /path/to/NotoSerifCJKjp-Regular.otf \
   --bold /path/to/NotoSerifCJKjp-Bold.otf
 ```

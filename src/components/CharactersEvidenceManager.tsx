@@ -458,7 +458,7 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                             : "bg-teal-500/20 text-teal-300"
                         }`}
                       >
-                        {char.location === "headquarters" ? "海上保安庁東京本部" : "小笠原現地"}
+                        {char.location === "headquarters" ? (isDeepSeaProject ? "海上保安庁東京本部" : "本拠地") : (isDeepSeaProject ? "小笠原現地" : "現場")}
                       </span>
                     </div>
                     <div className="mt-1 text-sm font-bold text-white">{char.name}</div>
@@ -486,8 +486,8 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                     <span className="rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-xs text-slate-300">
                       配置:{" "}
                       {selectedChar.location === "headquarters"
-                        ? "海上保安庁東京本部"
-                        : "小笠原現場"}
+                        ? (isDeepSeaProject ? "海上保安庁東京本部" : "本拠地")
+                        : (isDeepSeaProject ? "小笠原現場" : "現場")}
                     </span>
                   </div>
                 </div>
@@ -942,8 +942,8 @@ export const CharactersEvidenceManager: React.FC<CharactersEvidenceManagerProps>
                       >
                         {isDeepSeaProject
                           ? char.location === "headquarters"
-                            ? "海上保安庁東京本部"
-                            : "小笠原現地"
+                            ? (isDeepSeaProject ? "海上保安庁東京本部" : "本拠地")
+                            : (isDeepSeaProject ? "小笠原現地" : "現場")
                           : badge.label}
                       </span>
                     </div>

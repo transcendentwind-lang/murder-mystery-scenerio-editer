@@ -1,5 +1,7 @@
 "use client";
 
+import { scenarioAssetUrl } from "@/scenarios/catalog";
+
 import React, { useState, useEffect } from "react";
 import { useProjectProgress, useProjectTimer } from "@/hooks/useProjectProgress";
 import { useInvestigationSelections } from "@/hooks/useInvestigationSelections";
@@ -268,7 +270,7 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
     summary: "小笠原神社に保管されていた古い年代記（過去の異変記録）の精査。倉庫から盗難された「盟約の祝詞」の本文そのものは記載されていないものの、江戸時代中期の記録に、過去の海底噴火と海鳴り、そして海中筒から祈りを響かせると太古の契りに応ずるが如く【数多の鯨（勇魚）が集まり来たりて深海へ突入し、事態が沈静化】した記録が確認された。",
     detail: "小笠原神社に保管されていた古い年代記（過去の異変記録）の精査。倉庫から盗難された「盟約の祝詞」の本文そのものは記載されていないものの、江戸時代中期の記録に、過去の海底噴火と海鳴り、そして海中筒から祈りを響かせると太古の契りに応ずるが如く【数多の鯨（勇魚）が集まり来たりて深海へ突入し、事態が沈静化】した記録が確認された。",
     hasDocument: true,
-    documentUrl: "/images/day4_shrine_chronicle.svg",
+    documentUrl: scenarioAssetUrl("releases/images/day4_shrine_chronicle.svg"),
   },
 ];
 
@@ -789,7 +791,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           </button>
 
           <a
-            href="/pdfs/gm-branching-flowchart.pdf"
+            href={scenarioAssetUrl("releases/pdfs/gm-branching-flowchart.pdf")}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 rounded-lg border border-rose-500/50 bg-rose-950/60 px-2.5 py-1.5 text-xs font-bold text-rose-200 hover:bg-rose-900/70 transition"
@@ -1475,7 +1477,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                                 className="group relative cursor-pointer overflow-hidden rounded border border-slate-700 bg-black aspect-video max-h-48 flex items-center justify-center"
                               >
                                 <img
-                                  src="/images/aerial_recon_wide.jpg"
+                                  src={scenarioAssetUrl("releases/images/aerial_recon_wide.jpg")}
                                   alt="西之島北西海域 空撮写真"
                                   className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                                 />
@@ -1582,7 +1584,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                       <div className="flex items-center gap-2">
                         <a
-                          href="/images/eruption_monitoring_chart.svg"
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -2019,7 +2021,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                       <div className="flex items-center gap-2">
                         <a
-                          href="/images/eruption_monitoring_chart_day4.svg"
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -2351,7 +2353,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </span>
                       <div className="flex items-center gap-1.5">
                         <a
-                          href="/images/eruption_monitoring_chart_day5.svg"
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -3321,7 +3323,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
             <div className="mt-4 relative rounded-xl overflow-hidden border border-slate-800 bg-black flex items-center justify-center max-h-[60vh]">
               <img
-                src="/images/aerial_recon_wide.jpg"
+                src={scenarioAssetUrl("releases/images/aerial_recon_wide.jpg")}
                 alt="西之島北西海域 空撮写真"
                 className="w-full h-auto max-h-[60vh] object-contain"
               />
@@ -3373,7 +3375,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href={chartModalDay === 5 ? "/images/eruption_monitoring_chart_day5.svg" : chartModalDay === 4 ? "/images/eruption_monitoring_chart_day4.svg" : "/images/eruption_monitoring_chart.svg"}
+                  href={chartModalDay === 5 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg") : chartModalDay === 4 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -3464,7 +3466,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href="/images/day3_sonar_tactical_chart.svg"
+                  href={scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -3561,8 +3563,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 <a
                   href={
                     day1ViewMode === "investigation"
-                      ? "/images/day1_nautical_chart_white.svg"
-                      : "/images/day1_nautical_chart_gm.svg"
+                      ? scenarioAssetUrl("releases/images/day1_nautical_chart_white.svg")
+                      : scenarioAssetUrl("releases/images/day1_nautical_chart_gm.svg")
                   }
                   target="_blank"
                   rel="noreferrer"
@@ -3646,7 +3648,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <a
-                  href="/pdfs/gm-complete-progression-guide.pdf"
+                  href={scenarioAssetUrl("releases/pdfs/gm-complete-progression-guide.pdf")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
@@ -3655,7 +3657,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   🖨️ GM進行資料一括PDF（図＋全7日）
                 </a>
                 <a
-                  href="/pdfs/gm-branching-flowchart.pdf"
+                  href={scenarioAssetUrl("releases/pdfs/gm-branching-flowchart.pdf")}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"

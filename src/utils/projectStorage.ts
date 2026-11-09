@@ -1,13 +1,6 @@
+import { isBuiltinProject } from "@/scenarios/catalog";
 import { MMProject, Character, IncidentStep, EvidenceItem, LockCriterion, CandidateLockStatus } from "@/types/schema";
-import {
-  initialProject,
-  initialVisualBoards,
-  pc4For6Players,
-  pc6Character,
-  getCharactersForPlayerCount,
-  SPECIAL_CHARACTER_CARDS,
-  NAGATSU_PHASE_CARDS,
-} from "./initialProjectData";
+import { initialProject } from "./initialProjectData";
 
 const STORAGE_KEY_PROJECTS = "mm_workbench_projects_v1";
 const STORAGE_KEY_ACTIVE_ID = "mm_workbench_active_project_id_v1";
@@ -327,117 +320,13 @@ export function getStoredProjects(): MMProject[] {
     }
     const parsed = JSON.parse(raw);
     if (Array.isArray(parsed) && parsed.length > 0) {
-      // プリセット初期プロジェクト（project-deep-sea）のハンドアウト・設定を最新コードと確実に同期
-      const initialIdx = parsed.findIndex(
-        (p: MMProject) =>
-          p &&
-          (p.id === initialProject.id ||
-            p.title === initialProject.title ||
-            p.title === "深海からの呼び声")
-      );
+      const initialIdx = parsed.findIndex((item: MMProject) => item && isBuiltinProject(item));
       if (initialIdx >= 0) {
-        const storedInit = parsed[initialIdx] || {};
-        const pCount = storedInit.playerCount === 7 ? 7 : 6;
-        const masterCharacters = getCharactersForPlayerCount(pCount);
-        const storedCharMap = new Map<string, Character>(
-          (Array.isArray(storedInit.characters) ? storedInit.characters : [])
-            .filter((c: Character) => c && c.id)
-            .map((c: Character) => [c.id, c])
-        );
-
-        // マスターキャラクター定義（6名または7名）をベースに、不要な「後ろめたさ(guilt)」等を完全排除して同期
-        const filteredCharacters: Character[] = masterCharacters.map((master) => {
-          const sc = storedCharMap.get(master.id);
-          return {
-            ...(sc || {}),
-            ...master,
-            handout: {
-              ...(sc?.handout || {}),
-              publicProfile: master.handout.publicProfile,
-              internalDrama: {
-                pride: master.handout.internalDrama.pride,
-                loss: master.handout.internalDrama.loss,
-              },
-              handoutBody: master.handout.handoutBody,
-              backgroundTimeline:
-                master.handout.backgroundTimeline ?? sc?.handout?.backgroundTimeline ?? "",
-            },
-          };
-        });
-
-        // マスター証拠のマップ（最新の簡易タイトルと説明文）
-        const masterEvidenceMap = new Map<string, EvidenceItem>(
-          (initialProject.evidences || []).map((e) => [e.id, e])
-        );
-
-        parsed[initialIdx] = {
-          ...storedInit,
-          id: initialProject.id,
-          playerCount: pCount,
-          title: initialProject.title,
-          subtitle: initialProject.subtitle,
-          concept: initialProject.concept,
-          targetExperience: initialProject.targetExperience,
-          plotSummary: initialProject.plotSummary,
-          gimmickOverview: initialProject.gimmickOverview,
-          characters: filteredCharacters,
-          evidences: initialProject.evidences,
-          timeline: initialProject.timeline,
-          visualBoards: initialVisualBoards,
-          crypticWords: initialProject.crypticWords,
-          crypticGrammar: initialProject.crypticGrammar,
-          specialCharacterCards: SPECIAL_CHARACTER_CARDS,
-          nagatsuPhaseCards: NAGATSU_PHASE_CARDS,
-          matrixLinks: undefined,
-          lockCriteria: undefined,
-          candidateStatuses: undefined,
-          updatedAt: initialProject.updatedAt || new Date().toISOString(),
-        };
-
-        // プリセット初期プロジェクト（initialProject）のみ、不要な旧証拠除外およびタイトルの最新同期を実施
-        parsed.forEach((proj: MMProject) => {
-          if (!proj) return;
-          if (!Array.isArray(proj.characters)) proj.characters = [];
-          if (!Array.isArray(proj.evidences)) proj.evidences = [];
-          if (!Array.isArray(proj.timeline)) proj.timeline = [];
-          if (proj.id !== initialProject.id) return;
-          if (proj.evidences && Array.isArray(proj.evidences)) {
-            proj.evidences = proj.evidences
-              .filter(
-                (e) =>
-                  e &&
-                  e.id !== "ev-coda-spectrogram" &&
-                  e.id !== "ev-folk-song-rhythm" &&
-                  !(e.title || "").includes("古謡") &&
-                  !(e.title || "").includes("スペクトログラム") &&
-                  !(e.title || "").includes("スペクロログラム")
-              )
-              .map((e) => {
-                const master = masterEvidenceMap.get(e.id);
-                return master
-                  ? {
-                      ...e,
-                      title: master.title,
-                      frontTitleHtml: master.frontTitleHtml,
-                      description: master.description,
-                      glossaryNote: master.glossaryNote,
-                    }
-                  : e;
-              });
-          }
-          if (proj.timeline && Array.isArray(proj.timeline)) {
-            proj.timeline.forEach((step) => {
-              if (step.revealedEvidenceIds) {
-                step.revealedEvidenceIds = step.revealedEvidenceIds.filter(
-                  (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
-                );
-              }
-            });
-          }
-          // 特別配布カード（SP-01〜SP-07）もマスター最新データと常に同期
-          proj.specialCharacterCards = SPECIAL_CHARACTER_CARDS;
-          proj.nagatsuPhaseCards = NAGATSU_PHASE_CARDS;
-        });
+        // 旧画面データは一度だけ退避。正本へ混ぜず、必要なら別作品として取り出す。
+        if (!localStorage.getItem("mm_workbench_builtin_recovery_v1")) {
+          localStorage.setItem("mm_workbench_builtin_recovery_v1", JSON.stringify(parsed[initialIdx]));
+        }
+        parsed[initialIdx] = initialProject;
       }
       const normalizedList = parsed
         .filter((p: any) => p && typeof p === "object")
@@ -518,81 +407,17 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
  * プロジェクトを保存
  */
 export function saveProjectToStorage(project: MMProject): boolean {
-  if (typeof window === "undefined") return false;
-
+  if (typeof window === "undefined" || isBuiltinProject(project)) return false;
   try {
     const projects = getStoredProjects();
-    const isInitialProj = project.id === initialProject.id;
-    const masterEvidenceMap = new Map<string, EvidenceItem>(
-      (initialProject.evidences || []).map((e) => [e.id, e])
-    );
-    const sanitizedEvidences = isInitialProj
-      ? (project.evidences || [])
-          .filter(
-            (e) =>
-              e &&
-              e.id !== "ev-coda-spectrogram" &&
-              e.id !== "ev-folk-song-rhythm" &&
-              !(e.title || "").includes("古謡") &&
-              !(e.title || "").includes("スペクトログラム") &&
-              !(e.title || "").includes("スペクロログラム")
-          )
-          .map((e) => {
-            const master = masterEvidenceMap.get(e.id);
-            return master
-              ? {
-                  ...e,
-                  title: master.title,
-                  frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
-                  description: master.description,
-                  glossaryNote: e.glossaryNote ?? master.glossaryNote,
-                }
-              : e;
-          })
-      : project.evidences || [];
-
-    const sanitizedTimeline = isInitialProj
-      ? (project.timeline || []).map((step) => ({
-          ...step,
-          revealedEvidenceIds: (step.revealedEvidenceIds || []).filter(
-            (id) => id !== "ev-coda-spectrogram" && id !== "ev-folk-song-rhythm"
-          ),
-        }))
-      : project.timeline || [];
-
-    const sanitizedCharacters = isInitialProj
-      ? (project.characters || []).map((c) => ({
-          ...c,
-          handout: {
-            ...c.handout,
-            internalDrama: {
-              pride: c.handout?.internalDrama?.pride || "",
-              loss: c.handout?.internalDrama?.loss || "",
-            },
-          },
-        }))
-      : project.characters || [];
-
-    const updatedProject: MMProject = {
-      ...project,
-      characters: sanitizedCharacters,
-      evidences: sanitizedEvidences,
-      timeline: sanitizedTimeline,
-      matrixLinks: isInitialProj ? undefined : project.matrixLinks,
-      lockCriteria: isInitialProj ? undefined : project.lockCriteria,
-      candidateStatuses: isInitialProj ? undefined : project.candidateStatuses,
-      updatedAt: new Date().toISOString(),
-    };
-    const index = projects.findIndex((p) => p.id === project.id);
-    if (index >= 0) {
-      projects[index] = updatedProject;
-    } else {
-      projects.unshift(updatedProject);
-    }
+    const updatedProject = { ...project, updatedAt: new Date().toISOString() };
+    const index = projects.findIndex((item) => item.id === project.id);
+    if (index >= 0) projects[index] = updatedProject;
+    else projects.unshift(updatedProject);
     localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
     return true;
-  } catch (err) {
-    console.error("Failed to save project:", err);
+  } catch (error) {
+    console.error("Failed to save project:", error);
     return false;
   }
 }
@@ -602,6 +427,7 @@ export function saveProjectToStorage(project: MMProject): boolean {
  */
 export function deleteProjectFromStorage(projectId: string): MMProject[] {
   if (typeof window === "undefined") return [];
+  if (isBuiltinProject({ id: projectId })) return getStoredProjects();
 
   try {
     let projects = getStoredProjects();

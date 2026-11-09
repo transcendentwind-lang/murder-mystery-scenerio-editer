@@ -1,6 +1,10 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { isBuiltinProject, hasBuiltinScenarioFeatures } from "@/scenarios/catalog";
+import { ReadonlyProjectView } from "@/components/ReadonlyProjectView";
+import { ScenarioMaterialLibrary } from "@/components/ScenarioMaterialLibrary";
+import { useProjectProgress } from "@/hooks/useProjectProgress";
 import { MMProject } from "@/types/schema";
 import { initialProject, getCharactersForPlayerCount } from "@/utils/initialProjectData";
 import {
@@ -36,9 +40,11 @@ type ActiveTab =
   | "gm_dashboard"
   | "design_studio"
   | "export_synopsis"
-  | "whale_sonar_app";
+  | "whale_sonar_app"
+  | "materials";
 
 export default function WorkbenchPage() {
+  const [playCount, setPlayCount] = useProjectProgress<number | null>("project-deep-sea", "playerCount", null);
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
   const projectRef = useRef(project);
@@ -84,9 +90,14 @@ export default function WorkbenchPage() {
     });
   }, []);
 
+  const readonly = isBuiltinProject(project);
+  const displayProject = readonly && playCount && playCount !== project.playerCount
+    ? { ...project, playerCount: playCount, characters: getCharactersForPlayerCount(playCount) } : project;
+
   // プロジェクト更新ヘルパー（state更新＋ストレージ自動保存）
   const handleUpdateProject = (updater: MMProject | ((prev: MMProject) => MMProject)) => {
     const previous = projectRef.current;
+    if (isBuiltinProject(previous)) return false;
     const next = typeof updater === "function" ? updater(previous) : updater;
     // 遅れて完了した別作品の処理で、現在の作品を更新しない。
     if (project.id !== previous.id) return false;
@@ -106,7 +117,7 @@ export default function WorkbenchPage() {
     if (newProject.id) {
       setActiveProjectId(newProject.id);
     }
-    if (newProject.id !== "project-deep-sea" && activeTab === "whale_sonar_app") {
+    if (!hasBuiltinScenarioFeatures(newProject) && (activeTab === "whale_sonar_app" || activeTab === "materials")) {
       setActiveTab("timeline");
     }
     // 切り替え時にチャットに案内メッセージを追加
@@ -124,6 +135,7 @@ export default function WorkbenchPage() {
 
   // プレイ人数切り替えハンドラー（6名 / 7名）
   const handleTogglePlayerCount = (newCount: number) => {
+    if (isBuiltinProject(project)) { setPlayCount(newCount); return; }
     const updatedChars = getCharactersForPlayerCount(newCount);
     handleUpdateProject((prev) => ({
       ...prev,
@@ -195,8 +207,8 @@ export default function WorkbenchPage() {
   return (
     <div className="flex h-screen w-screen flex-col overflow-hidden bg-slate-950 font-sans text-slate-100">
       {/* グローバル・トップヘッダー */}
-      <header className="flex h-14 items-center justify-between border-b border-slate-800 bg-slate-900/90 px-6 backdrop-blur z-20">
-        <div className="flex items-center gap-3">
+      <header className="flex min-h-14 shrink-0 flex-wrap items-center justify-between gap-2 border-b border-slate-800 bg-slate-900/90 px-6 backdrop-blur z-20">
+        <div className="flex flex-wrap items-center gap-3">
           <button
             onClick={() => setIsProjectManagerOpen(true)}
             className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-600 font-bold text-white shadow-lg shadow-indigo-500/30 hover:bg-indigo-500 transition"
@@ -216,13 +228,13 @@ export default function WorkbenchPage() {
               </h1>
             </button>
             <p className="text-[11px] text-indigo-400 font-mono">
-              MM-Workbench : {project.playerCount}人用 マダミス・LARP制作
+              MM-Workbench : {displayProject.playerCount}人用 マダミス・LARP制作
             </p>
           </div>
         </div>
 
         {/* グローバルナビゲーション（4大分類） ＆ アクション */}
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           {/* シナリオ切り替え・新規作成ボタン */}
           <button
             onClick={() => setIsProjectManagerOpen(true)}
@@ -233,7 +245,7 @@ export default function WorkbenchPage() {
             シナリオ切替・新規作成
           </button>
 
-          <div className="flex items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
+          <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
             {/* ① タイムライン・フェーズ進行 */}
             <button
               onClick={() => setActiveTab("timeline")}
@@ -293,7 +305,7 @@ export default function WorkbenchPage() {
               title="個人HO・証拠資料・全体提示の地図や写真・GM進行資料をデザイン枠付きで直接編集・保存・印刷します"
             >
               <Palette className="h-4 w-4 text-pink-400" />
-              ④ デザイン資料作成・編集
+              {readonly ? "④ 配布資料・印刷" : "④ デザイン資料作成・編集"}
             </button>
 
             {/* ⑤ 企画書・プロット紹介 ＆ テキスト出力 */}
@@ -310,9 +322,11 @@ export default function WorkbenchPage() {
               ⑤ 企画書・一括台本
             </button>
 
-            {/* ⑥ クジラ音響モバイルアプリ（第1作または対応プロジェクト時のみ表示） */}
-            {(project.id === "project-deep-sea" ||
-              (project.crypticWords && project.crypticWords.length > 0)) && (
+            {hasBuiltinScenarioFeatures(project) && <button onClick={() => setActiveTab("materials")} className={`rounded-md px-3 py-1.5 text-xs font-bold ${activeTab === "materials" ? "bg-indigo-600 text-white" : "text-slate-300"}`}>⑦ 資料ファイル一覧</button>}
+
+
+          {/* ⑥ クジラ音響モバイルアプリ（第1作または対応プロジェクト時のみ表示） */}
+            {hasBuiltinScenarioFeatures(project) && (
               <button
                 onClick={() => setActiveTab("whale_sonar_app")}
                 className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition ${
@@ -348,7 +362,7 @@ export default function WorkbenchPage() {
               key={project.id || project.title}
               timeline={project.timeline}
               evidences={project.evidences}
-              project={project}
+              project={displayProject}
               onUpdateTimeline={(newTimeline) =>
                 handleUpdateProject((prev) => ({ ...prev, timeline: newTimeline }))
               }
@@ -368,14 +382,14 @@ export default function WorkbenchPage() {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3">
+                <div className="flex flex-wrap items-center gap-3">
                   {/* 7名（長津PC参加） / 6名（本編・標準） プレイ人数切り替えトグル（第1作のみ表示） */}
                   {project.id === "project-deep-sea" && (
                     <div className="flex items-center gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                       <button
                         onClick={() => handleTogglePlayerCount(7)}
                         className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                          project.playerCount === 7
+                          displayProject.playerCount === 7
                             ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
                             : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                         }`}
@@ -387,7 +401,7 @@ export default function WorkbenchPage() {
                       <button
                         onClick={() => handleTogglePlayerCount(6)}
                         className={`flex items-center gap-1.5 rounded-md px-2.5 py-1 text-xs font-bold transition ${
-                          project.playerCount === 6
+                          displayProject.playerCount === 6
                             ? "bg-indigo-600 text-white shadow ring-1 ring-indigo-400/50"
                             : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                         }`}
@@ -406,22 +420,22 @@ export default function WorkbenchPage() {
                     title="個人ハンドアウトや配布カード、証拠シートの執筆・装飾・印刷はデザイン資料画面で行います"
                   >
                     <Palette className="h-3.5 w-3.5 text-pink-400" />
-                    🎨 個人ハンドアウト・資料の編集はこちら（デザイン資料画面へ）
+                    {readonly ? "🎨 配布資料の閲覧・印刷はこちら" : "🎨 個人ハンドアウト・資料の編集はこちら"}
                   </button>
                 </div>
               </div>
 
               <div className="flex-1 overflow-hidden">
-                <CharactersEvidenceManager
+                {readonly ? <ReadonlyProjectView project={displayProject} /> : <CharactersEvidenceManager
                   key={project.id || project.title}
                   projectId={project.id}
-                  characters={project.characters}
+                  characters={displayProject.characters}
                   evidences={project.evidences}
                   matrixLinks={project.matrixLinks}
                   lockCriteria={project.lockCriteria}
                   candidateStatuses={project.candidateStatuses}
                   phaseCount={project.timeline?.length || 4}
-                  playerCount={project.playerCount}
+                  playerCount={displayProject.playerCount}
                   onTogglePlayerCount={handleTogglePlayerCount}
                   onUpdateCharacters={(newChars) =>
                     handleUpdateProject((prev) => ({ ...prev, characters: newChars }))
@@ -441,7 +455,7 @@ export default function WorkbenchPage() {
                       candidateStatuses: newStatuses,
                     }))
                   }
-                />
+                />}
               </div>
             </div>
           )}
@@ -450,7 +464,7 @@ export default function WorkbenchPage() {
           {activeTab === "gm_dashboard" && (
             <GmDashboard
               key={project.id || project.title}
-              project={project}
+              project={displayProject}
               onNavigateToChart={() => setActiveTab("timeline")}
             />
           )}
@@ -459,7 +473,7 @@ export default function WorkbenchPage() {
           {activeTab === "design_studio" && (
             <DocumentDesignStudio
               key={project.id || project.title}
-              project={project}
+              project={displayProject}
               onUpdateProject={handleUpdateProject}
               saveError={saveError}
               onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
@@ -470,11 +484,13 @@ export default function WorkbenchPage() {
           {activeTab === "export_synopsis" && (
             <TextExportView
               key={project.id || project.title}
-              project={project}
+              project={displayProject}
               onNavigateToDesignStudio={() => setActiveTab("design_studio")}
-              onUpdateProject={handleUpdateProject}
+              onUpdateProject={readonly ? undefined : handleUpdateProject}
             />
           )}
+
+          {activeTab === "materials" && hasBuiltinScenarioFeatures(project) && <ScenarioMaterialLibrary />}
 
           {/* ⑥ クジラ音響モバイルアプリ（クリック音パターン生成 ＆ クジラ行動表示） */}
           {activeTab === "whale_sonar_app" && (

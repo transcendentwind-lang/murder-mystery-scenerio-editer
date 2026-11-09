@@ -38,3 +38,8 @@ public/local-projects.json
 # Browser test artifacts
 playwright-report/
 test-results/
+
+# Generated delivery assets (canonical files live under assets/scenarios)
+/public/scenarios/
+/public/images/
+/public/pdfs/

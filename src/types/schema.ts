@@ -204,6 +204,7 @@ export interface NagatsuPhaseCard {
 }
 
 export interface MMProject {
+  scenarioPackId?: string; // 明示的に選択した作品専用機能。編集権限とは独立。
   id?: string;
   createdAt?: string;
   updatedAt?: string;

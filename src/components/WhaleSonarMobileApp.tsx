@@ -1,5 +1,7 @@
 "use client";
 
+import { scenarioAssetUrl } from "@/scenarios/catalog";
+
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
 import { AcousticPulsePoint, buildAudioTimeline } from "@/utils/wordAudio";
@@ -1937,7 +1939,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
                   <div className="flex flex-col items-center gap-2 rounded-xl bg-white p-3">
                     <img
-                      src="/images/sonar_qr.png"
+                      src={scenarioAssetUrl("releases/images/sonar_qr.png")}
                       alt="マッコウクジラ音響言語解析システム QRコード"
                       className="h-44 w-44 object-contain"
                     />

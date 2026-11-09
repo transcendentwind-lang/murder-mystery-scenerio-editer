@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef } from "react";
+import { hasBuiltinScenarioFeatures } from "@/scenarios/catalog";
 import { MMProject } from "@/types/schema";
 import {
   Copy,
@@ -133,7 +134,7 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
               }`}
             >
               <BookOpen className="h-3.5 w-3.5" />
-              企画概要（閲覧・編集）
+              {onUpdateProject ? "企画概要（閲覧・編集）" : "企画概要（閲覧）"}
             </button>
             <button
               onClick={() => setExportMode("synopsis")}
@@ -265,13 +266,13 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
                 </h3>
                 <div className="mt-3 flex flex-wrap items-center gap-6 text-xs text-indigo-200">
                   <span>
-                    プレイ人数: <strong>{project.playerCount}名</strong> (GM必須)
+                    プレイ人数: <strong>{project.playerCount}名</strong> ({project.hasGm ? "GMあり" : "GMなし"})
                   </span>
                   <span>
                     想定時間: <strong>約{project.durationHours}時間</strong>
                   </span>
                   <span>
-                    ジャンル: 現代クトゥルフ × 災害対策本部 協力型LARP/マダミス
+                    {hasBuiltinScenarioFeatures(project) ? "ジャンル: 現代クトゥルフ × 災害対策本部 協力型LARP/マダミス" : "シナリオ企画書"}
                   </span>
                 </div>
               </div>
@@ -421,7 +422,7 @@ export const TextExportView: React.FC<TextExportViewProps> = ({
                   ? "企画書テキスト形式 (タイトル・コンセプト・プロット・ギミック・登場人物)"
                   : exportMode === "handouts"
                   ? `キャラクターハンドアウト全集 (${project.playerCount}名編成)`
-                  : "完全シナリオ台本形式 (全HO・7日間タイムライン・全アクション詳細・全証拠・暗号パズル)"}
+                  : `完全シナリオ台本形式（全HO・${project.timeline.length}フェーズ・証拠・進行メモ）`}
               </strong>
             </span>
             <span className="text-[11px] text-slate-500">

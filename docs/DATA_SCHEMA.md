@@ -88,7 +88,7 @@
 - 条件状態は条件ID、GMメモはフェーズ番号、外観設定は文書キーで関連付ける。
 - 参照先の存在や全項目の型を厳密に検査するJSONスキーマ検証はない。`normalizeProject` の不足項目補完は、互換性の保証ではない。
 - JSONインポート時の入口の確認は題名・人物データの有無が中心。新しい作品IDを割り当てて追加し、既存作品を上書きしない。
-- 保存処理には組み込み作品の置換・削除がある。保持範囲は[ARCHITECTURE.md](ARCHITECTURE.md#組み込み作品の同期という制約)を参照。
+- 登録された組み込み作品は読み取り専用。原稿への保存・削除を拒否する。旧ブラウザデータは別キーへ退避する。
 
 旧文書の `ProjectMeta` とルートの `meta`、`PublicEvidence`、`PhaseStep`、`ResourceCounter`、`phases`、`resources`、`secretObjective` は現在の正本にない。旧形式を現行のJSON契約として使わない。分単位の旧想定時間と `durationHours` も同じ単位ではない。
 
@@ -103,3 +103,10 @@
 - `shared.*`: 両画面で共用する調査選択・命名入力。`gm.*`、`timeline.*`: 各画面の判断・入力・結果。
 
 表示用モーダルや音声の再生途中の状態は保存しない。
+
+
+## 作品専用機能と資料目録
+
+`MMProject.scenarioPackId?: string` は専用機能の参照。新規作成では未設定。登録された組み込み作品の複製時のみ元パッケージを明示的に引き継ぐ。作品IDに基づく原稿編集権限とは別に判定する。
+
+資料の目録は `assets/scenarios/<作品ID>/manifest.json`。`scenarioId` と `files[]` を持ち、各項目に `id`, `path`, `title`, `kind`, `format`, `participantApp`, `legacyUrl` を記録する。通常ファイルには `bytes`, `sha256` も記録し、自己参照になる目録自身だけはハッシュを省略する。`kind` は現行資料・原本・比較用保管資料・案内を区別する。`participantApp` は参加者向け配信への採用で、セッション中に配布可能かどうかとは別。
