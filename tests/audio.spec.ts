@@ -5,6 +5,43 @@ import { initialProject } from "../src/utils/initialProjectData";
 // 現行語彙を参照し、作品本文をテストへ複製しない。
 const wordIds = initialProject.crypticWords.map((word) => word.id);
 
+test("単音の試聴ではクリックした位置だけ、連続再生では再生順にボタンが光る", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("mm_sonar_player_auth_v1", "whale-study"));
+  await page.goto("/sonar");
+  const slots = page.getByTitle("タップしてこの音と波形を確認", { exact: true });
+  const replay = page.getByRole("button", { name: "もう一度再生", exact: true });
+  const sound = page.getByRole("button").filter({ has: page.getByRole("button", { name: "試聴", exact: true }) }).first();
+  // 同じ音を繰り返し追加し、語IDでは位置を区別できない場合も確認する。
+  for (let index = 0; index < 3; index++) {
+    await sound.click();
+    await expect(slots).toHaveCount(index + 1);
+    await expect(slots.nth(index)).toHaveClass(/bg-cyan-400/);
+    if (index > 0) await expect(slots.first()).not.toHaveClass(/bg-cyan-400/);
+    await expect(replay).toBeEnabled();
+  }
+  for (const index of [1, 2]) {
+    await slots.nth(index).click();
+    await expect(slots.nth(index)).toHaveClass(/bg-cyan-400/);
+    await expect(slots.first()).not.toHaveClass(/bg-cyan-400/);
+    await expect(slots.nth(3 - index)).not.toHaveClass(/bg-cyan-400/);
+    await expect(replay).toBeEnabled();
+    await expect(slots.nth(index)).not.toHaveClass(/bg-cyan-400/);
+  }
+  await replay.click();
+  await expect(slots.nth(2)).toHaveClass(/bg-cyan-400/);
+  await expect(slots.first()).not.toHaveClass(/bg-cyan-400/);
+  await expect(replay).toBeEnabled();
+  await page.getByRole("button", { name: "試聴", exact: true }).first().click();
+  await expect(replay).toBeDisabled();
+  for (let index = 0; index < 3; index++) await expect(slots.nth(index)).not.toHaveClass(/bg-cyan-400/);
+  await expect(replay).toBeEnabled();
+  await page.getByRole("button", { name: /海中にクリック音を流す/ }).click();
+  for (let index = 0; index < 3; index++) {
+    await expect(slots.nth(index)).toHaveClass(/bg-cyan-400/);
+  }
+  await expect(slots.nth(2)).not.toHaveClass(/bg-cyan-400/);
+});
+
 test("全語彙・1〜8語・再生速度ごとに全発音が波形の時間内へ収まる", () => {
   for (const wordId of wordIds) {
     for (const count of [1, 2, 4, 8]) {

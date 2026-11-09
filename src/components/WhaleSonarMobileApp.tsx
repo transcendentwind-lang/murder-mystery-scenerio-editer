@@ -440,6 +440,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const progressTimerRef = useRef<number | null>(null);
   const playbackControllerRef = useRef<AbortController | null>(null);
   const playbackBusyRef = useRef(false);
+  const waveformSequenceIndicesRef = useRef<number[]>([]);
   const mountedRef = useRef(true);
   const [playbackError, setPlaybackError] = useState("");
   useEffect(() => {
@@ -936,18 +937,19 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     );
   }, [waveformTrace, playbackProgressMs, drawPersistentWaveform, assigningTargetWordId]);
 
-  const playTrace = async (trace: RecordedWaveformTrace) => {
+  const playTrace = async (trace: RecordedWaveformTrace, sequenceIndices: number[] = []) => {
     if (!audioEngine) throw new Error("音声を利用できない");
     const controller = new AbortController();
     playbackControllerRef.current = controller;
     const playback = await audioEngine.startTimeline(trace, controller.signal);
     if (!mountedRef.current) { playback.cancel(); return false; }
     setWaveformTrace(trace);
+    waveformSequenceIndicesRef.current = sequenceIndices;
     const drawPlayhead = () => {
       const elapsed = playback.elapsedMs();
       setPlaybackProgressMs(Math.min(elapsed, trace.totalDurationMs));
       const index = trace.segments.findIndex((segment) => elapsed >= segment.startOffsetMs && elapsed < segment.startOffsetMs + segment.durationMs);
-      setActivePlayingIndex(index < 0 ? null : index);
+      setActivePlayingIndex(index < 0 ? null : sequenceIndices[index] ?? null);
       setActiveWordId(index < 0 ? null : trace.segments[index].wordId);
       progressTimerRef.current = requestAnimationFrame(drawPlayhead);
     };
@@ -985,12 +987,14 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   const handleAddWordAndPlay = (wordId: string) => withPlayback(async () => {
     setSelectedSequence((previous) => previous.length < 8 ? [...previous, wordId] : previous);
-    await playTrace(buildWaveformTrace([wordId]));
+    await playTrace(buildWaveformTrace([wordId]), selectedSequence.length < 8 ? [selectedSequence.length] : []);
   });
 
-  const handlePreviewWordOnly = (e: React.MouseEvent, wordId: string) => {
+  const handlePreviewWordOnly = (e: React.MouseEvent, wordId: string, sequenceIndex?: number) => {
     e.stopPropagation();
-    return withPlayback(async () => { await playTrace(buildWaveformTrace([wordId])); });
+    return withPlayback(async () => {
+      await playTrace(buildWaveformTrace([wordId]), sequenceIndex === undefined ? [] : [sequenceIndex]);
+    });
   };
 
   // 「日本語をあてはめる」別画面を開く（開いた時にその音の波形も表示）
@@ -999,6 +1003,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     if (LOCKED_INITIAL_MEANINGS[wordId] || playbackBusyRef.current) return;
     const trace = buildWaveformTrace([wordId]);
     setWaveformTrace(trace);
+    waveformSequenceIndicesRef.current = [];
     setPlaybackProgressMs(null);
     setAssigningTargetWordId(wordId);
   };
@@ -1168,7 +1173,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
     setCurrentOutcome(null);
 
-    if (!await playTrace(buildWaveformTrace(targetSeq))) return;
+    if (!await playTrace(buildWaveformTrace(targetSeq), targetSeq.map((_, index) => index))) return;
 
     // 2語ごとの判定
     const outcome = evaluatePatternOutcome(targetSeq);
@@ -1207,7 +1212,12 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // 保存した波形も同じ予定表・時計で再生する。
   const handleReplayLastWaveform = () => withPlayback(async () => {
-    if (waveformTrace && waveformTrace.wordIds.length > 0) await playTrace(waveformTrace);
+    if (waveformTrace && waveformTrace.wordIds.length > 0) {
+      const sequenceIndices = waveformSequenceIndicesRef.current.map((index, segmentIndex) =>
+        selectedSequence[index] === waveformTrace.wordIds[segmentIndex] ? index : -1
+      );
+      await playTrace(waveformTrace, sequenceIndices);
+    }
   });
 
   // 解明済み（あてはめ済み）の語数カウント
@@ -1727,7 +1737,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                           return (
                             <React.Fragment key={`${wId}-${index}`}>
                               <button
-                                onClick={(e) => handlePreviewWordOnly(e, wId)}
+                                onClick={(e) => handlePreviewWordOnly(e, wId, index)}
                                 className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
                                   isCurrentStep
                                     ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
