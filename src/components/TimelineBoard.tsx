@@ -3343,7 +3343,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       onClick={onNavigateToPuzzle}
                       className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-indigo-500 transition shadow-md"
                     >
-                      <ExternalLink className="h-4 w-4" /> 祝詞解読マトリクスへ
+                      <ExternalLink className="h-4 w-4" /> クジラ音響アプリへ
                     </button>
                   )}
                 </div>
