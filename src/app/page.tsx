@@ -235,16 +235,6 @@ export default function WorkbenchPage() {
 
         {/* グローバルナビゲーション（4大分類） ＆ アクション */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* シナリオ切り替え・新規作成ボタン */}
-          <button
-            onClick={() => setIsProjectManagerOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg border border-indigo-500/50 bg-indigo-600/20 px-3 py-1.5 text-xs font-bold text-indigo-200 hover:bg-indigo-600/30 hover:text-white transition shadow"
-            title="別シナリオの新規立ち上げ・切り替え・保存管理"
-          >
-            <FolderKanban className="h-3.5 w-3.5 text-indigo-400" />
-            シナリオ切替・新規作成
-          </button>
-
           <div className="flex flex-wrap items-center gap-1.5 rounded-lg border border-slate-800 bg-slate-950 p-1">
             {/* ① タイムライン・フェーズ進行 */}
             <button

@@ -23,7 +23,7 @@ async function openProject(page: Page, projects: MMProject[] = [first, second]) 
 }
 
 async function switchProject(page: Page, title: string) {
-  await page.getByRole("button", { name: "シナリオ切替・新規作成", exact: true }).click();
+  await page.getByRole("button", { name: "シナリオ・プロジェクト一覧を開く", exact: true }).click();
   const heading = page.getByRole("heading", { name: title, exact: true });
   await heading.locator("xpath=ancestor::div[contains(@class, 'group relative rounded-xl')]").getByRole("button", { name: "このシナリオを開く", exact: true }).click();
 }
