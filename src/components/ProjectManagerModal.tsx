@@ -198,7 +198,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                 }`}
               >
                 <PlusCircle className="h-3.5 w-3.5 text-emerald-400" />
-                ＋ 新規立ち上げ
+                新規立ち上げ
               </button>
             </div>
 
@@ -219,20 +219,20 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
             <div className="space-y-4">
               <div className="flex items-center justify-between pb-2 border-b border-slate-800/80">
                 <div className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  制作中のプロジェクト一覧
+                  プロジェクト一覧
                 </div>
                 <div className="flex items-center gap-2 text-xs">
                   <button
                     onClick={() => exportProjectToJsonFile(currentProject)}
                     className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-slate-200 hover:bg-slate-700 hover:text-white transition"
-                    title="現在開いているシナリオのデータをJSONファイルとしてダウンロード保存"
+                    title="選択中のシナリオのデータをJSONファイルとしてダウンロード保存"
                   >
                     <Download className="h-3.5 w-3.5 text-indigo-400" />
-                    現在のシナリオを書き出し
+                    選択中のシナリオを書き出し
                   </button>
                   <label className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-800 px-3 py-1 text-slate-200 hover:bg-slate-700 hover:text-white cursor-pointer transition">
                     <Upload className="h-3.5 w-3.5 text-emerald-400" />
-                    JSON読み込み
+                    シナリオを読み込み
                     <input
                       type="file"
                       accept=".json"
@@ -259,7 +259,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                   return (
                     <div
                       key={p.id || p.title}
-                      className={`group relative rounded-xl border p-4.5 transition flex flex-col justify-between ${
+                      className={`group relative rounded-xl border p-5 transition flex flex-col justify-between ${
                         isCurrent
                           ? "border-indigo-500 bg-indigo-950/25 ring-1 ring-indigo-500/40 shadow-lg shadow-indigo-950/40"
                           : "border-slate-800 bg-slate-900/70 hover:border-slate-700 hover:bg-slate-900"
