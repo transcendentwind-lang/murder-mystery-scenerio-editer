@@ -291,7 +291,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                           {p.concept || "コンセプト未入力"}
                         </p>
 
-                        <div className="flex flex-wrap min-[930px]:flex-nowrap items-baseline gap-x-2 gap-y-2 text-[11px] text-slate-400 font-mono mt-3">
+                        <div className="flex flex-wrap min-[930px]:flex-nowrap items-center gap-x-2 gap-y-2 text-[11px] text-slate-400 font-mono mt-3">
                           <div className="flex min-w-[180px] min-[930px]:min-w-0 flex-1 flex-wrap items-center gap-x-2 gap-y-1">
                             <span className="flex items-center gap-1 whitespace-nowrap">
                               <Users className="h-3.5 w-3.5 text-emerald-400" />
