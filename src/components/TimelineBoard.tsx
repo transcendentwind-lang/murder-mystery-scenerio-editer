@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
+import { useProjectProgress } from "@/hooks/useProjectProgress";
+import { useInvestigationSelections } from "@/hooks/useInvestigationSelections";
 import { IncidentStep, EvidenceItem, MMProject } from "@/types/schema";
 import { initialProject } from "@/utils/initialProjectData";
 import {
@@ -161,7 +163,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   onUpdateTimeline,
   onNavigateToPuzzle,
 }) => {
-  const [selectedDay, setSelectedDay] = useState<number>(1);
+  const [selectedDay, setSelectedDay] = useProjectProgress<number>(project?.id, "timeline.selectedDay", 1);
   const safeTimeline =
     Array.isArray(timeline) && timeline.length > 0 ? timeline : initialProject.timeline;
   const safeEvidences = Array.isArray(evidences) ? evidences : [];
@@ -180,84 +182,55 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
 
   // Day 2 アクション選択状態
-  const [day2TokyoAction, setDay2TokyoAction] = useState<string>("T-3");
-  const [day2FieldActions, setDay2FieldActions] = useState<string[]>(["F-1", "F-3"]);
+  const [day2TokyoAction, setDay2TokyoAction] = useProjectProgress<string>(project?.id, "shared.day2TokyoAction", "T-3");
+  const [day2FieldActions, setDay2FieldActions] = useProjectProgress<string[]>(project?.id, "shared.day2FieldActions", ["F-1", "F-3"]);
 
   // Day 3 ソナー投下パズル & 写真観測状態
-  const [day3DroppedPoints, setDay3DroppedPoints] = useState<string[]>([]);
-  const [day3TargetSector, setDay3TargetSector] = useState<string>("B-3");
-  const [day3SearchOutcome, setDay3SearchOutcome] = useState<"none" | "success" | "failure">("none");
+  const [day3DroppedPoints, setDay3DroppedPoints] = useProjectProgress<string[]>(project?.id, "timeline.day3DroppedPoints", []);
+  const [day3TargetSector, setDay3TargetSector] = useProjectProgress<string>(project?.id, "timeline.day3TargetSector", "B-3");
+  const [day3SearchOutcome, setDay3SearchOutcome] = useProjectProgress<"none" | "success" | "failure">(project?.id, "timeline.day3SearchOutcome", "none");
   const [day3ActivePhotoTab, setDay3ActivePhotoTab] = useState<"success" | "failure">("success");
   const [day3PhotoModal, setDay3PhotoModal] = useState<"success" | "failure" | null>(null);
-  const [day3IsReportUnlocked, setDay3IsReportUnlocked] = useState<boolean>(false);
+  const [day3IsReportUnlocked, setDay3IsReportUnlocked] = useProjectProgress<boolean>(project?.id, "timeline.day3IsReportUnlocked", false);
   const [day3IsPC6ModalOpen, setDay3IsPC6ModalOpen] = useState<boolean>(false);
   const [day3MapTab, setDay3MapTab] = useState<"tactical" | "overview">("tactical");
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
-  // Day 3 アクション選択状態（東京1枠、現地2枠）
-  const [day3TokyoAction, setDay3TokyoAction] = useState<string>("T-3A");
-  const [day3FieldActions, setDay3FieldActions] = useState<string[]>(["F-3A", "F-3B"]);
-
+  const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project?.id, {
+    3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
+    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+  });
+  const day3TokyoAction = investigationSelections[3].tokyo;
+  const setDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
+  const day3FieldActions = investigationSelections[3].field;
+  const day4TokyoAction = investigationSelections[4].tokyo;
+  const setDay4TokyoAction = (id: string) => changeInvestigation(4, "tokyo", id);
+  const day4FieldActions = investigationSelections[4].field;
+  const day5TokyoAction = investigationSelections[5].tokyo;
+  const setDay5TokyoAction = (id: string) => changeInvestigation(5, "tokyo", id);
+  const day5FieldActions = investigationSelections[5].field;
   // Day 3 終盤合議 ＆ 司令官意思決定状態
-  const [day3Pc5Opinion, setDay3Pc5Opinion] = useState<string>("colony_theory");
-  const [day3Pc2Decision, setDay3Pc2Decision] = useState<string>("defense_action");
-  const [day3HqFinalDecision, setDay3HqFinalDecision] = useState<string | null>(null);
+  const [day3Pc5Opinion, setDay3Pc5Opinion] = useProjectProgress<string>(project?.id, "timeline.day3Pc5Opinion", "colony_theory");
+  const [day3Pc2Decision, setDay3Pc2Decision] = useProjectProgress<string>(project?.id, "timeline.day3Pc2Decision", "defense_action");
+  const [day3HqFinalDecision, setDay3HqFinalDecision] = useProjectProgress<string | null>(project?.id, "timeline.day3HqFinalDecision", null);
   // Day 3 巨大生物の公式呼称（ワタツミ / クスルフ / 自由入力）
-  const [creatureCodename, setCreatureCodename] = useState<string>("ワタツミ");
+  const [creatureCodename, setCreatureCodename] = useProjectProgress<string>(project?.id, "shared.creatureCodename", "ワタツミ");
 
-  // Day 4 アクション選択状態（東京1枠、現地2枠 / Day 3繰り越し含む）
-  const [day4TokyoAction, setDay4TokyoAction] = useState<string>("T-4B");
-  const [day4FieldActions, setDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
-  const [day4DestinationDecision, setDay4DestinationDecision] = useState<"tokyo" | "fuji">("fuji");
+  const [day4DestinationDecision, setDay4DestinationDecision] = useProjectProgress<"tokyo" | "fuji">(project?.id, "timeline.day4DestinationDecision", "fuji");
 
-  // Day 5 アクション選択状態（東京1枠、現地2枠 / 未選択プールから選択）
-  const [day5TokyoAction, setDay5TokyoAction] = useState<string>("T-3B");
-  const [day5FieldActions, setDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
   // Day 5 富士山噴火猶予時間の手計算パズル状態
-  const [day5CalcInput, setDay5CalcInput] = useState<string>("");
-  const [day5CalcResult, setDay5CalcResult] = useState<"none" | "correct" | "incorrect">("none");
+  const [day5CalcInput, setDay5CalcInput] = useProjectProgress<string>(project?.id, "timeline.day5CalcInput", "");
+  const [day5CalcResult, setDay5CalcResult] = useProjectProgress<"none" | "correct" | "incorrect">(project?.id, "timeline.day5CalcResult", "none");
 
   // Day 6 作戦命名（オペレーション名）
-  const [operationName, setOperationName] = useState<string>("オペレーション・ワタツミ");
+  const [operationName, setOperationName] = useProjectProgress<string>(project?.id, "shared.operationName", "オペレーション・ワタツミ");
 
-  const handleToggleDay3FieldAction = (id: string) => {
-    setDay3FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay3FieldAction = (id: string) => changeInvestigation(3, "field", id);
 
-  const handleToggleDay4FieldAction = (id: string) => {
-    setDay4FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay4FieldAction = (id: string) => changeInvestigation(4, "field", id);
 
-  const handleToggleDay5FieldAction = (id: string) => {
-    setDay5FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
   const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
@@ -290,7 +263,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   // Day 6 クジラ言語 ＆ 新言語合成・海自ソナー網装填準備状態
   const [day6ActiveTab, setDay6ActiveTab] = useState<"tongue_click" | "sea_tube" | "coda_grammar" | "sonar_network">("tongue_click");
   const [day6ReadyStatus, setDay6ReadyStatus] = useState<"idle" | "testing" | "ready">("idle");
-  const [day6SelectedWords, setDay6SelectedWords] = useState<string[]>([
+  const [day6SelectedWords, setDay6SelectedWords] = useProjectProgress<string[]>(project?.id, "timeline.day6SelectedWords", [
     "word-human",
     "word-whale",
     "word-promise",

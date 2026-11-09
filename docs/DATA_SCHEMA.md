@@ -91,3 +91,15 @@
 - 保存処理には組み込み作品の置換・削除がある。保持範囲は[ARCHITECTURE.md](ARCHITECTURE.md#組み込み作品の同期という制約)を参照。
 
 旧文書の `ProjectMeta` とルートの `meta`、`PublicEvidence`、`PhaseStep`、`ResourceCounter`、`phases`、`resources`、`secretObjective` は現在の正本にない。旧形式を現行のJSON契約として使わない。分単位の旧想定時間と `durationHours` も同じ単位ではない。
+
+
+## 作品本文と別に保持する当日進行
+
+`mm_workbench_progress_v1:<URLエンコードした作品ID>:<項目名>` をブラウザ内の保存キーとする。これは `MMProject` の項目ではなく、作品JSONの対象外。
+
+- `gm.currentDay` と `timeline.selectedDay`: 各画面で選択中のフェーズ番号。
+- `investigations`: 日番号ごとの `{ tokyo: string, field: string[] }`。調査IDを保持し、GM・タイムラインで共用。
+- `timer`: `{ elapsedMs: number, startedAt: number | null }`。停止中は `startedAt` が `null`。計測中は開始からの経過時間を加算。
+- `shared.*`: 両画面で共用する調査選択・命名入力。`gm.*`、`timeline.*`: 各画面の判断・入力・結果。
+
+表示用モーダルや音声の再生途中の状態は保存しない。

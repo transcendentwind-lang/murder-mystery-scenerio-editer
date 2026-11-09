@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useProjectProgress, useProjectTimer } from "@/hooks/useProjectProgress";
+import { useInvestigationSelections } from "@/hooks/useInvestigationSelections";
 import { MMProject } from "@/types/schema";
 import {
   Play,
@@ -292,36 +294,37 @@ interface GmDashboardProps {
 }
 
 export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToChart }) => {
-  const [currentDay, setCurrentDay] = useState(1);
-  const [timerSeconds, setTimerSeconds] = useState(0);
-  const [isTimerRunning, setIsTimerRunning] = useState(false);
+  const [currentDay, setCurrentDay] = useProjectProgress(project.id, "gm.currentDay", 1);
+  const { timerSeconds, isTimerRunning, toggleTimer, resetTimer } = useProjectTimer(project.id);
   const [copied, setCopied] = useState(false);
 
   // Day 2 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
-  const [selectedTokyoAction, setSelectedTokyoAction] = useState<string>("T-3");
-  const [selectedFieldActions, setSelectedFieldActions] = useState<string[]>(["F-1", "F-3"]);
+  const [selectedTokyoAction, setSelectedTokyoAction] = useProjectProgress<string>(project.id, "shared.day2TokyoAction", "T-3");
+  const [selectedFieldActions, setSelectedFieldActions] = useProjectProgress<string[]>(project.id, "shared.day2FieldActions", ["F-1", "F-3"]);
 
-  // Day 3 合議制アクションの選択状態（東京: 1枠, 現地: 2枠）
-  const [selectedDay3TokyoAction, setSelectedDay3TokyoAction] = useState<string>("T-3A");
-  const [selectedDay3FieldActions, setSelectedDay3FieldActions] = useState<string[]>(["F-3A", "F-3B"]);
-
-  // Day 4 合議制アクションの選択状態（東京: 1枠, 現地: 2枠 / Day 3繰り越し含む）
-  const [selectedDay4TokyoAction, setSelectedDay4TokyoAction] = useState<string>("T-4B");
-  const [selectedDay4FieldActions, setSelectedDay4FieldActions] = useState<string[]>(["F-4A", "F-4D"]);
-
-  // Day 5 総力調査アクションの選択状態（東京: 1枠, 現地: 2枠 / 未選択プールから選択）
-  const [selectedDay5TokyoAction, setSelectedDay5TokyoAction] = useState<string>("T-3B");
-  const [selectedDay5FieldActions, setSelectedDay5FieldActions] = useState<string[]>(["F-5A", "F-3C"]);
-
+  const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project.id, {
+    3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
+    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+  });
+  const selectedDay3TokyoAction = investigationSelections[3].tokyo;
+  const setSelectedDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
+  const selectedDay3FieldActions = investigationSelections[3].field;
+  const selectedDay4TokyoAction = investigationSelections[4].tokyo;
+  const setSelectedDay4TokyoAction = (id: string) => changeInvestigation(4, "tokyo", id);
+  const selectedDay4FieldActions = investigationSelections[4].field;
+  const selectedDay5TokyoAction = investigationSelections[5].tokyo;
+  const setSelectedDay5TokyoAction = (id: string) => changeInvestigation(5, "tokyo", id);
+  const selectedDay5FieldActions = investigationSelections[5].field;
   // Day 3 巨大生物の呼称コードネーム（ワタツミ / クスルフ / 自由入力）
-  const [creatureCodename, setCreatureCodename] = useState<string>("ワタツミ");
+  const [creatureCodename, setCreatureCodename] = useProjectProgress<string>(project.id, "shared.creatureCodename", "ワタツミ");
   // Day 6 作戦命名（オペレーション名）
-  const [operationName, setOperationName] = useState<string>("オペレーション・ワタツミ");
+  const [operationName, setOperationName] = useProjectProgress<string>(project.id, "shared.operationName", "オペレーション・ワタツミ");
 
   // Day 3 司令官決定の反映（防衛出動要請あり vs なし）
-  const [day3GmHqDecision, setDay3GmHqDecision] = useState<"defense_dispatch" | "no_dispatch">("defense_dispatch");
+  const [day3GmHqDecision, setDay3GmHqDecision] = useProjectProgress<"defense_dispatch" | "no_dispatch">(project.id, "gm.day3GmHqDecision", "defense_dispatch");
   // Day 4 終盤意思決定：進路予測（東京ルート vs 富士山ルート）
-  const [day4GmDestinationDecision, setDay4GmDestinationDecision] = useState<"tokyo" | "fuji">("fuji");
+  const [day4GmDestinationDecision, setDay4GmDestinationDecision] = useProjectProgress<"tokyo" | "fuji">(project.id, "gm.day4GmDestinationDecision", "fuji");
 
   const [isPhotoModalOpen, setIsPhotoModalOpen] = useState(false);
   const [isChartModalOpen, setIsChartModalOpen] = useState(false);
@@ -331,8 +334,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
   const [isFlowchartModalOpen, setIsFlowchartModalOpen] = useState(false);
   // Day 1 漂流予測の失敗回数（0: 1発成功［証言2個］, 1: 1回失敗➔2回目成功［証言1個・1個Day2以降へ］, 2: 2回失敗➔自動成功［証言0個・2個ともDay2以降へ］）
-  const [day1FailureCount, setDay1FailureCount] = useState<0 | 1 | 2>(0);
-  const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useState<"ev-captain-testimony" | "ev-diver-box-photo">("ev-captain-testimony");
+  const [day1FailureCount, setDay1FailureCount] = useProjectProgress<0 | 1 | 2>(project.id, "gm.day1FailureCount", 0);
+  const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useProjectProgress<"ev-captain-testimony" | "ev-diver-box-photo">(project.id, "gm.day1SingleTestimonyId", "ev-captain-testimony");
 
   // ESCキーでモーダルを閉じる
   useEffect(() => {
@@ -362,48 +365,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
     });
   };
 
-  const handleToggleDay3FieldAction = (id: string) => {
-    setSelectedDay3FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay3FieldAction = (id: string) => changeInvestigation(3, "field", id);
 
-  const handleToggleDay4FieldAction = (id: string) => {
-    setSelectedDay4FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay4FieldAction = (id: string) => changeInvestigation(4, "field", id);
 
-  const handleToggleDay5FieldAction = (id: string) => {
-    setSelectedDay5FieldActions((prev) => {
-      if (prev.includes(id)) {
-        return prev.filter((item) => item !== id);
-      } else {
-        if (prev.length >= 2) {
-          return [prev[1], id];
-        }
-        return [...prev, id];
-      }
-    });
-  };
+  const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
   const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
-  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS];
+  const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 
   const day3TokyoChosen = selectedDay3TokyoAction ? [selectedDay3TokyoAction] : [];
@@ -428,19 +398,6 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const day5AvailableTokyoActions = ALL_TOKYO_ACTIONS.filter((a) => !pastChosenTokyo.includes(a.id));
   const day5AvailableFieldActions = ALL_FIELD_ACTIONS.filter((a) => !pastChosenField.includes(a.id));
-
-  // タイマー
-  useEffect(() => {
-    let interval: NodeJS.Timeout | null = null;
-    if (isTimerRunning) {
-      interval = setInterval(() => {
-        setTimerSeconds((prev) => prev + 1);
-      }, 1000);
-    }
-    return () => {
-      if (interval) clearInterval(interval);
-    };
-  }, [isTimerRunning]);
 
   const formatTime = (secs: number) => {
     const h = Math.floor(secs / 3600);
@@ -536,17 +493,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setIsTimerRunning(!isTimerRunning)}
+                onClick={toggleTimer}
                 className="rounded bg-indigo-600 p-1.5 text-white hover:bg-indigo-500 transition"
                 title={isTimerRunning ? "一時停止" : "スタート"}
               >
                 {isTimerRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </button>
               <button
-                onClick={() => {
-                  setIsTimerRunning(false);
-                  setTimerSeconds(0);
-                }}
+                onClick={resetTimer}
                 className="rounded border border-slate-800 bg-slate-900 p-1.5 text-slate-400 hover:text-white transition"
                 title="リセット"
               >
@@ -793,17 +747,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
           <div className="flex items-center gap-1">
             <button
-              onClick={() => setIsTimerRunning(!isTimerRunning)}
+              onClick={toggleTimer}
               className="rounded bg-indigo-600 p-1.5 text-white hover:bg-indigo-500 transition"
               title={isTimerRunning ? "一時停止" : "スタート"}
             >
               {isTimerRunning ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
             </button>
             <button
-              onClick={() => {
-                setIsTimerRunning(false);
-                setTimerSeconds(0);
-              }}
+              onClick={resetTimer}
               className="rounded border border-slate-800 bg-slate-900 p-1.5 text-slate-400 hover:text-white transition"
               title="リセット"
             >

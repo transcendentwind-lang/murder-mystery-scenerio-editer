@@ -65,7 +65,10 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
       targetExperience: newTargetExperience.trim() || "プレイヤーが味わう緊迫感と推理の醍醐味",
     });
 
-    saveProjectToStorage(created);
+    if (!saveProjectToStorage(created)) {
+      alert("保存できませんでした。ブラウザーの保存領域を確認し、もう一度保存してください。");
+      return;
+    }
     const updatedList = [created, ...projects.filter((p) => p.id !== created.id)];
     onProjectsChange(updatedList);
     onSelectProject(created);
@@ -86,7 +89,10 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };
-    saveProjectToStorage(duplicated);
+    if (!saveProjectToStorage(duplicated)) {
+      alert("保存できませんでした。ブラウザーの保存領域を確認し、もう一度保存してください。");
+      return;
+    }
     const updatedList = [duplicated, ...projects];
     onProjectsChange(updatedList);
   };
@@ -123,7 +129,10 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
         }
         imported.id = `proj_imported_${Date.now()}`;
         imported.updatedAt = new Date().toISOString();
-        saveProjectToStorage(imported);
+        if (!saveProjectToStorage(imported)) {
+          alert("保存できませんでした。ブラウザーの保存領域を確認し、もう一度保存してください。");
+          return;
+        }
         const updatedList = [imported, ...projects];
         onProjectsChange(updatedList);
         onSelectProject(imported);

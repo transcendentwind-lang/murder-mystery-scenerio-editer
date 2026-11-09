@@ -14,6 +14,8 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 | 当日の進行 | [`GmDashboard.tsx`](../src/components/GmDashboard.tsx) | フェーズ別進行、証拠確認、タイマー |
 | 資料と出力 | [`DocumentDesignStudio.tsx`](../src/components/DocumentDesignStudio.tsx)、[`TextExportView.tsx`](../src/components/TextExportView.tsx)、[`scriptGenerator.ts`](../src/utils/scriptGenerator.ts) | プレビュー・印刷・テキスト生成 |
 | 保存 | [`projectStorage.ts`](../src/utils/projectStorage.ts) | localStorage、初期化、補完、JSON書き出し |
+| 進行状態 | [`useProjectProgress.ts`](../src/hooks/useProjectProgress.ts)、[`progressStorage.ts`](../src/utils/progressStorage.ts)、[`useInvestigationSelections.ts`](../src/hooks/useInvestigationSelections.ts) | 作品別の進行・タイマー保持、調査選択の確認と共通化 |
+| 音声と波形 | [`wordAudio.ts`](../src/utils/wordAudio.ts)、[`audioSynth.ts`](../src/utils/audioSynth.ts) | 共通の発音定義・予定表、Web Audio出力時計による同期 |
 | データ定義 | [`schema.ts`](../src/types/schema.ts) | 保存データのTypeScript型 |
 | 参加者画面 | [`src/app/sonar/page.tsx`](../src/app/sonar/page.tsx) | 組み込みデータによる独立した音響操作画面 |
 
@@ -31,7 +33,7 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 4. 起動時に `/local-projects.json` の読込を試み、ローカル追加作品があれば一覧へ統合する。通常の新規作品は同じIDの追加プリセットで毎回全面更新する構成ではない。
 5. JSON書き出しは渡された作品オブジェクトをファイル化する。共有データベースや端末間の自動同期はない。
 
-保存失敗はコンソールへ記録する処理で、画面表示だけでは永続化成功を保証できない。保存場所はブラウザ・プロファイル・接続先ごとに分かれる。
+`saveProjectToStorage` は保存成功をbooleanで返す。成功後に保存完了を表示し、失敗時は警告と再保存の操作を出す。未保存の画面データと失敗状態は作品切り替え後もメモリ内に保持する。保存場所はブラウザ・プロファイル・接続先ごとに分かれる。
 
 ### 組み込み作品の同期という制約
 
@@ -58,3 +60,10 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 通常サーバーでは [`src/middleware.ts`](../src/middleware.ts) がlocalhost・127.0.0.1以外のホスト名による `/` アクセスを `/sonar` へ誘導する。これは画面誘導であり、編集機能全体のアクセス制御ではない。
 
 GitHub Actionsはmainへのpushを契機に静的出力し、ルートページを参加者画面への転送に差し替えて `gh-pages` へ配信する。静的配信ではmiddlewareは動作しない。参加者画面のパスワード照合もブラウザ内の実装であり、サーバー認証ではない。構築・公開の詳細は[SETUP.md](SETUP.md)を参照。
+
+
+## 進行状態と再生の寿命
+
+`progressStorage.ts` は作品IDと項目名から独立したlocalStorageキーを作り、`useSyncExternalStore` で画面へ通知する。GMとタイムラインの調査選択は一つの値として保持し、後日の無効な選択の解除を承認後にまとめて反映する。タイマーは経過ミリ秒と計測開始時刻を保持するため、画面を離れた間も経過時間を算出できる。進行状態は作品JSONの外にあり、複製・JSON書き出しには含めない。保存失敗時は画面内の状態を保持して警告する。
+
+音声語彙の発音定義は `wordAudio.ts` に集約する。波形と音声へ同じ予定表を渡し、全発音をWeb Audioへ事前予約する。描画は出力タイムスタンプを優先し、未対応時は音声時計から出力遅延を引いた値を使う。波形付き再生は同時に一件だけ実行し、画面破棄時に予約音と描画ループを中止する。

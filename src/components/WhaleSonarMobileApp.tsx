@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
+import { AcousticPulsePoint, buildAudioTimeline } from "@/utils/wordAudio";
+export { getWordAcousticPulses } from "@/utils/wordAudio";
 import { audioEngine } from "@/utils/audioSynth";
 import { printWhaleSonarGuideA4 } from "@/utils/scriptGenerator";
 import {
@@ -346,176 +348,6 @@ export const JAPANESE_MEANING_CANDIDATES: {
 // ==========================================
 // 時間軸波形描画用の各クリック音パルス定義（全24語：横軸＝時間ms、縦軸＝周波数Hz・振幅）
 // ==========================================
-export interface AcousticPulsePoint {
-  delayMs: number;
-  freqHz: number;
-  durationMs: number;
-  amplitude: number;
-}
-
-export function getWordAcousticPulses(wordId: string): AcousticPulsePoint[] {
-  switch (wordId) {
-    case "word-gather": // 01. カ・カ・カカッ！（集まれ）
-      return [
-        { delayMs: 0, freqHz: 2800, durationMs: 55, amplitude: 0.85 },
-        { delayMs: 260, freqHz: 2850, durationMs: 50, amplitude: 0.88 },
-        { delayMs: 440, freqHz: 2920, durationMs: 45, amplitude: 0.92 },
-        { delayMs: 530, freqHz: 3050, durationMs: 50, amplitude: 0.98 },
-      ];
-    case "word-alert": // 02. ドォン…ドォン…（周囲を警戒せよ）
-      return [
-        { delayMs: 0, freqHz: 1300, durationMs: 180, amplitude: 0.98 },
-        { delayMs: 520, freqHz: 1200, durationMs: 200, amplitude: 0.95 },
-      ];
-    case "word-enemy": // 03. タタ・タズズズ（敵がいる）
-      return [
-        { delayMs: 0, freqHz: 2600, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 90, freqHz: 2600, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 260, freqHz: 2550, durationMs: 45, amplitude: 0.9 },
-        { delayMs: 360, freqHz: 1550, durationMs: 85, amplitude: 0.92 },
-        { delayMs: 460, freqHz: 1450, durationMs: 85, amplitude: 0.94 },
-        { delayMs: 560, freqHz: 1350, durationMs: 95, amplitude: 0.96 },
-      ];
-    case "word-flee": // 04. タタ・タト・トン（逃げろ）
-      return [
-        { delayMs: 0, freqHz: 2700, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 90, freqHz: 2700, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 250, freqHz: 2650, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 340, freqHz: 2050, durationMs: 65, amplitude: 0.9 },
-        { delayMs: 510, freqHz: 1700, durationMs: 90, amplitude: 0.95 },
-      ];
-    case "word-child-feed": // 05. チューン（（子ども）餌をくれ）
-      return [
-        { delayMs: 0, freqHz: 3450, durationMs: 90, amplitude: 0.92 },
-        { delayMs: 140, freqHz: 2950, durationMs: 100, amplitude: 0.88 },
-        { delayMs: 280, freqHz: 2450, durationMs: 110, amplitude: 0.85 },
-      ];
-    case "word-child-here": // 06. ロポ・ポポポ（（子ども）自分の場所はここだ）
-      return [
-        { delayMs: 0, freqHz: 2550, durationMs: 55, amplitude: 0.85 },
-        { delayMs: 110, freqHz: 2800, durationMs: 50, amplitude: 0.88 },
-        { delayMs: 290, freqHz: 2800, durationMs: 50, amplitude: 0.88 },
-        { delayMs: 400, freqHz: 2800, durationMs: 50, amplitude: 0.9 },
-        { delayMs: 510, freqHz: 2850, durationMs: 55, amplitude: 0.92 },
-      ];
-    case "word-adult-here": // 07. ゴポ・ポポポ（（大人）自分の場所はここだ）
-      return [
-        { delayMs: 0, freqHz: 1400, durationMs: 80, amplitude: 0.9 },
-        { delayMs: 120, freqHz: 1850, durationMs: 65, amplitude: 0.88 },
-        { delayMs: 300, freqHz: 1850, durationMs: 65, amplitude: 0.88 },
-        { delayMs: 420, freqHz: 1850, durationMs: 65, amplitude: 0.9 },
-        { delayMs: 540, freqHz: 1900, durationMs: 70, amplitude: 0.92 },
-      ];
-    case "word-human": // 08. カッカッ（人間）
-      return [
-        { delayMs: 0, freqHz: 2350, durationMs: 55, amplitude: 0.88 },
-        { delayMs: 190, freqHz: 2350, durationMs: 55, amplitude: 0.9 },
-      ];
-    case "word-whale": // 09. ド・ドーン（我ら・自分（クジラ））
-      return [
-        { delayMs: 0, freqHz: 1650, durationMs: 90, amplitude: 0.85 },
-        { delayMs: 380, freqHz: 1350, durationMs: 170, amplitude: 0.96 },
-      ];
-    case "word-you": // 10. ドド・ツツツ（あなたたち・あなた）
-      return [
-        { delayMs: 0, freqHz: 1550, durationMs: 75, amplitude: 0.88 },
-        { delayMs: 110, freqHz: 1550, durationMs: 75, amplitude: 0.88 },
-        { delayMs: 290, freqHz: 3050, durationMs: 45, amplitude: 0.9 },
-        { delayMs: 390, freqHz: 3050, durationMs: 45, amplitude: 0.9 },
-        { delayMs: 490, freqHz: 3100, durationMs: 45, amplitude: 0.92 },
-      ];
-    case "word-promise": // 11. チ・トン・チ（約束）
-      return [
-        { delayMs: 0, freqHz: 2950, durationMs: 50, amplitude: 0.85 },
-        { delayMs: 190, freqHz: 1750, durationMs: 85, amplitude: 0.9 },
-        { delayMs: 380, freqHz: 2950, durationMs: 50, amplitude: 0.85 },
-      ];
-    case "word-go-east": // 12. ツ・ピィッ！（東）
-      return [
-        { delayMs: 0, freqHz: 1800, durationMs: 70, amplitude: 0.82 },
-        { delayMs: 240, freqHz: 3250, durationMs: 50, amplitude: 0.95 },
-      ];
-    case "word-go-west": // 13. ピ・ポ・ポン（西）
-      return [
-        { delayMs: 0, freqHz: 3200, durationMs: 50, amplitude: 0.88 },
-        { delayMs: 200, freqHz: 2250, durationMs: 65, amplitude: 0.85 },
-        { delayMs: 330, freqHz: 1550, durationMs: 95, amplitude: 0.9 },
-      ];
-    case "word-go-south": // 14. ポ・ポポン（南）
-      return [
-        { delayMs: 0, freqHz: 2100, durationMs: 65, amplitude: 0.82 },
-        { delayMs: 220, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
-        { delayMs: 360, freqHz: 1450, durationMs: 95, amplitude: 0.92 },
-      ];
-    case "word-go-north": // 15. ピ・ピピッ（北）
-      return [
-        { delayMs: 0, freqHz: 2400, durationMs: 50, amplitude: 0.8 },
-        { delayMs: 180, freqHz: 2850, durationMs: 45, amplitude: 0.88 },
-        { delayMs: 290, freqHz: 3300, durationMs: 45, amplitude: 0.95 },
-      ];
-    case "word-greet": // 16. ズジーズ・ズ（挨拶／こんにちは）
-      return [
-        { delayMs: 0, freqHz: 1700, durationMs: 80, amplitude: 0.88 },
-        { delayMs: 120, freqHz: 2150, durationMs: 110, amplitude: 0.94 },
-        { delayMs: 280, freqHz: 1750, durationMs: 75, amplitude: 0.88 },
-        { delayMs: 450, freqHz: 1650, durationMs: 85, amplitude: 0.9 },
-      ];
-    case "word-subsea-volcano": // 17. ゴゴゴゴ…（海の下の火山）
-      return [
-        { delayMs: 0, freqHz: 1250, durationMs: 130, amplitude: 0.92 },
-        { delayMs: 180, freqHz: 1200, durationMs: 130, amplitude: 0.92 },
-        { delayMs: 360, freqHz: 1180, durationMs: 140, amplitude: 0.95 },
-        { delayMs: 540, freqHz: 1150, durationMs: 150, amplitude: 0.98 },
-      ];
-    case "word-calf": // 18. ト・トーン（クジラの子ども）
-      return [
-        { delayMs: 0, freqHz: 2450, durationMs: 65, amplitude: 0.85 },
-        { delayMs: 320, freqHz: 2150, durationMs: 140, amplitude: 0.94 },
-      ];
-    case "word-giant-prey": // 19. チチチチチチッ！（大きい・たくさんの餌）
-      return [0, 60, 120, 180, 240, 300, 360].map((d, i) => ({
-        delayMs: d,
-        freqHz: 3500 + (i % 2) * 150,
-        durationMs: 35,
-        amplitude: 0.86 + (i / 7) * 0.12,
-      }));
-    case "word-normal-prey": // 20. チチチ・チ（普通の餌）
-      return [
-        { delayMs: 0, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
-        { delayMs: 90, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
-        { delayMs: 180, freqHz: 3300, durationMs: 45, amplitude: 0.85 },
-        { delayMs: 360, freqHz: 3350, durationMs: 50, amplitude: 0.92 },
-      ];
-    case "word-attack": // 21. ババババババッ！（攻撃せよ）
-      return [0, 65, 130, 195, 260, 325].map((d, i) => ({
-        delayMs: d,
-        freqHz: 1950 + (i % 2) * 200,
-        durationMs: 50,
-        amplitude: 0.95,
-      }));
-    case "word-search": // 22. タン・タン・タン（探せ）
-      return [
-        { delayMs: 0, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
-        { delayMs: 250, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
-        { delayMs: 500, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
-      ];
-    case "word-ack": // 23. カッ（了解した）
-      return [{ delayMs: 0, freqHz: 2950, durationMs: 60, amplitude: 0.96 }];
-    case "word-human-whale": // 24. ド・ドーン・カッカッ（人間とクジラ）
-      return [
-        { delayMs: 0, freqHz: 1650, durationMs: 85, amplitude: 0.88 },
-        { delayMs: 260, freqHz: 1350, durationMs: 145, amplitude: 0.95 },
-        { delayMs: 560, freqHz: 2350, durationMs: 55, amplitude: 0.88 },
-        { delayMs: 720, freqHz: 2350, durationMs: 55, amplitude: 0.92 },
-      ];
-    default:
-      return [
-        { delayMs: 0, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
-        { delayMs: 200, freqHz: 2400, durationMs: 60, amplitude: 0.85 },
-      ];
-  }
-}
-
 export interface TimelineWaveformSegment {
   wordId: string;
   buttonCode: string;
@@ -606,6 +438,20 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const assignCanvasRef = useRef<HTMLCanvasElement | null>(null);
   const progressTimerRef = useRef<number | null>(null);
+  const playbackControllerRef = useRef<AbortController | null>(null);
+  const playbackBusyRef = useRef(false);
+  const mountedRef = useRef(true);
+  const [playbackError, setPlaybackError] = useState("");
+  useEffect(() => {
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      playbackControllerRef.current?.abort();
+      if (progressTimerRef.current !== null) cancelAnimationFrame(progressTimerRef.current);
+      if (flashTimerRef.current !== null) clearTimeout(flashTimerRef.current);
+      abyssShakeTimersRef.current.forEach(clearTimeout);
+    };
+  }, []);
 
   // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
   const safeWords = React.useMemo(() => (Array.isArray(words) ? words : []), [words]);
@@ -757,30 +603,12 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   // ==========================================
   const buildWaveformTrace = useCallback(
     (targetWordIds: string[], customTitle?: string): RecordedWaveformTrace => {
-      let cursorMs = 80; // 左端の余白時間
-      const segments: TimelineWaveformSegment[] = [];
-
-      targetWordIds.forEach((wId) => {
-        const pulses = getWordAcousticPulses(wId);
-        const meta = getWordButtonMeta(wId);
-        const lastPulse = pulses[pulses.length - 1];
-        const wordSpanMs = lastPulse
-          ? lastPulse.delayMs + lastPulse.durationMs + 140
-          : 500;
-
-        segments.push({
-          wordId: wId,
-          buttonCode: meta.code,
-          assignedLabel: meta.assignedJapanese || "未解明（？？？）",
-          startOffsetMs: cursorMs,
-          durationMs: wordSpanMs,
-          pulses,
-        });
-
-        cursorMs += wordSpanMs + 220; // 単語間のインターバル
+      const timeline = buildAudioTimeline(targetWordIds);
+      const segments: TimelineWaveformSegment[] = timeline.segments.map((segment) => {
+        const meta = getWordButtonMeta(segment.wordId);
+        return { ...segment, buttonCode: meta.code, assignedLabel: meta.assignedJapanese || "未解明（？？？）" };
       });
-
-      const totalDurationMs = Math.max(850, cursorMs - 100);
+      const totalDurationMs = timeline.totalDurationMs;
       return {
         title:
           customTitle ||
@@ -1108,67 +936,67 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     );
   }, [waveformTrace, playbackProgressMs, drawPersistentWaveform, assigningTargetWordId]);
 
-  // 単一または複数の音を再生しながら、プレイヘッドを時間軸に沿って走らせ、完了後も波形を残すヘルパー
-  const startWaveformPlayheadAnimation = (totalMs: number) => {
-    if (progressTimerRef.current) {
-      window.clearInterval(progressTimerRef.current);
-    }
-    const startTime = performance.now();
-    setPlaybackProgressMs(0);
+  const playTrace = async (trace: RecordedWaveformTrace) => {
+    if (!audioEngine) throw new Error("音声を利用できない");
+    const controller = new AbortController();
+    playbackControllerRef.current = controller;
+    const playback = await audioEngine.startTimeline(trace, controller.signal);
+    if (!mountedRef.current) { playback.cancel(); return false; }
+    setWaveformTrace(trace);
+    const drawPlayhead = () => {
+      const elapsed = playback.elapsedMs();
+      setPlaybackProgressMs(Math.min(elapsed, trace.totalDurationMs));
+      const index = trace.segments.findIndex((segment) => elapsed >= segment.startOffsetMs && elapsed < segment.startOffsetMs + segment.durationMs);
+      setActivePlayingIndex(index < 0 ? null : index);
+      setActiveWordId(index < 0 ? null : trace.segments[index].wordId);
+      progressTimerRef.current = requestAnimationFrame(drawPlayhead);
+    };
+    drawPlayhead();
+    await playback.finished;
+    if (progressTimerRef.current !== null) cancelAnimationFrame(progressTimerRef.current);
+    progressTimerRef.current = null;
+    if (controller.signal.aborted || !mountedRef.current) return false;
+    setActivePlayingIndex(null);
+    setActiveWordId(null);
+    setPlaybackProgressMs(null);
+    return true;
+  };
 
-    progressTimerRef.current = window.setInterval(() => {
-      const elapsed = performance.now() - startTime;
-      if (elapsed >= totalMs) {
-        if (progressTimerRef.current) {
-          window.clearInterval(progressTimerRef.current);
-          progressTimerRef.current = null;
-        }
-        // null にすると全パルスが100%くっきり残った状態で固定表示される
-        setPlaybackProgressMs(null);
-      } else {
-        setPlaybackProgressMs(elapsed);
+  // 同時再生を防ぎ、失敗時も操作可能な状態に戻す。
+  const withPlayback = async (action: () => Promise<void>) => {
+    if (playbackBusyRef.current) return;
+    playbackBusyRef.current = true;
+    setIsPlaying(true);
+    setPlaybackError("");
+    try { await action(); }
+    catch (error) {
+      if (mountedRef.current && !(error instanceof DOMException && error.name === "AbortError")) {
+        setPlaybackError("音声を再生できなかった。もう一度再生を押して確認。");
       }
-    }, 25);
-  };
-
-  // 単語ボタンを押した時（最大8語までパターン末尾に追加 ＋ クリック音と波形を記録して残す）
-  const handleAddWordAndPlay = async (wordId: string) => {
-    if (isPlaying) return;
-    if (selectedSequence.length < 8) {
-      setSelectedSequence([...selectedSequence, wordId]);
+    } finally {
+      playbackBusyRef.current = false;
+      if (mountedRef.current) {
+        setIsPlaying(false);
+        setActivePlayingIndex(null);
+        setActiveWordId(null);
+      }
     }
-    setActiveWordId(wordId);
-
-    // 今押した単音の波形を即座に描画して残す
-    const trace = buildWaveformTrace([wordId]);
-    setWaveformTrace(trace);
-    startWaveformPlayheadAnimation(trace.totalDurationMs);
-
-    await audioEngine?.playWordSound(wordId, 1.0);
-    setActiveWordId(null);
   };
 
-  // 試聴のみ（パターンには追加せず、その音の波形を画面に残す）
-  const handlePreviewWordOnly = async (
-    e: React.MouseEvent,
-    wordId: string
-  ) => {
+  const handleAddWordAndPlay = (wordId: string) => withPlayback(async () => {
+    setSelectedSequence((previous) => previous.length < 8 ? [...previous, wordId] : previous);
+    await playTrace(buildWaveformTrace([wordId]));
+  });
+
+  const handlePreviewWordOnly = (e: React.MouseEvent, wordId: string) => {
     e.stopPropagation();
-    if (isPlaying) return;
-    setActiveWordId(wordId);
-
-    const trace = buildWaveformTrace([wordId]);
-    setWaveformTrace(trace);
-    startWaveformPlayheadAnimation(trace.totalDurationMs);
-
-    await audioEngine?.playWordSound(wordId, 1.0);
-    setActiveWordId(null);
+    return withPlayback(async () => { await playTrace(buildWaveformTrace([wordId])); });
   };
 
   // 「日本語をあてはめる」別画面を開く（開いた時にその音の波形も表示）
   const handleOpenAssignScreen = (e: React.MouseEvent, wordId: string) => {
     e.stopPropagation();
-    if (LOCKED_INITIAL_MEANINGS[wordId]) return;
+    if (LOCKED_INITIAL_MEANINGS[wordId] || playbackBusyRef.current) return;
     const trace = buildWaveformTrace([wordId]);
     setWaveformTrace(trace);
     setPlaybackProgressMs(null);
@@ -1329,33 +1157,18 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   };
 
   // パターンを海中に放流（再生＆時間軸波形の記録＆2語ごとの判定＆行動表示）
-  const handleTransmitSequence = async (overrideSeq?: string[]) => {
+  const handleTransmitSequence = (overrideSeq?: string[]) => withPlayback(async () => {
     const rawSeq = overrideSeq || selectedSequence;
     const targetSeq = rawSeq.slice(0, 8);
-    if (targetSeq.length === 0 || isPlaying) return;
+    if (targetSeq.length === 0) return;
 
     if (overrideSeq) {
       setSelectedSequence(targetSeq);
     }
 
-    setIsPlaying(true);
     setCurrentOutcome(null);
 
-    // 連結シーケンス全体の波形Traceを作成して時間軸アニメーション開始（再生後も画面に残る）
-    const seqTrace = buildWaveformTrace(targetSeq);
-    setWaveformTrace(seqTrace);
-    startWaveformPlayheadAnimation(seqTrace.totalDurationMs);
-
-    // 1語ずつハイライトしながらクリック音を順番に再生
-    for (let i = 0; i < targetSeq.length; i++) {
-      setActivePlayingIndex(i);
-      setActiveWordId(targetSeq[i]);
-      await audioEngine?.playWordSound(targetSeq[i], 1.0);
-      await new Promise((r) => setTimeout(r, 280));
-    }
-    setActivePlayingIndex(null);
-    setActiveWordId(null);
-    setPlaybackProgressMs(null); // 波形全体を100%確定表示した状態でホールド
+    if (!await playTrace(buildWaveformTrace(targetSeq))) return;
 
     // 2語ごとの判定
     const outcome = evaluatePatternOutcome(targetSeq);
@@ -1366,12 +1179,14 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     // 少し余韻を置いてから結果表示＆正解ファンファーレ（⑤太古の深海共鳴ファンファーレ）を再生
     await new Promise((r) => setTimeout(r, 300));
 
+    if (!mountedRef.current) return;
     setCurrentOutcome(outcome);
     setAttemptLogs((prev) => [outcome, ...prev]);
 
     if (matchedList.length > 0) {
       await audioEngine?.playSuccessFanfare();
       for (const mRule of matchedList) {
+        if (!mountedRef.current) return;
         if (mRule.responseSoundType === "greet_you_echo") {
           await new Promise((r) => setTimeout(r, 200));
           await audioEngine?.playWordSound("word-greet", 1.0);
@@ -1388,28 +1203,12 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       await audioEngine?.playWordSound("word-ack", 1.0);
     }
 
-    setIsPlaying(false);
-  };
+  });
 
-  // 現在残っている波形をもう一度再生して確認する
-  const handleReplayLastWaveform = async () => {
-    if (!waveformTrace || waveformTrace.wordIds.length === 0 || isPlaying) {
-      return;
-    }
-    setIsPlaying(true);
-    startWaveformPlayheadAnimation(waveformTrace.totalDurationMs);
-    for (let i = 0; i < waveformTrace.wordIds.length; i++) {
-      const wId = waveformTrace.wordIds[i];
-      setActiveWordId(wId);
-      await audioEngine?.playWordSound(wId, 1.0);
-      if (waveformTrace.wordIds.length > 1) {
-        await new Promise((r) => setTimeout(r, 280));
-      }
-    }
-    setActiveWordId(null);
-    setPlaybackProgressMs(null);
-    setIsPlaying(false);
-  };
+  // 保存した波形も同じ予定表・時計で再生する。
+  const handleReplayLastWaveform = () => withPlayback(async () => {
+    if (waveformTrace && waveformTrace.wordIds.length > 0) await playTrace(waveformTrace);
+  });
 
   // 解明済み（あてはめ済み）の語数カウント
   const assignedCount = Object.keys(playerAssignedLabels).filter(
@@ -1422,6 +1221,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         standalone ? "min-h-screen w-full" : "h-full w-full overflow-hidden"
       }`}
     >
+      {playbackError && <div role="alert" className="bg-red-950 p-3 text-sm text-red-100">{playbackError}</div>}
       {/* ワークベンチ内表示時のみ：上部ヘッダーバー */}
       {!standalone && (
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/90 px-6 py-2.5">
@@ -1771,6 +1571,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
                       <canvas
                         ref={canvasRef}
+                        data-playback-ms={playbackProgressMs ?? ""}
+                        data-duration-ms={waveformTrace?.totalDurationMs ?? 0}
                         width={400}
                         height={
                           waveformTrace && waveformTrace.segments.length >= 4

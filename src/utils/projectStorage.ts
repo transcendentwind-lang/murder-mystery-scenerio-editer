@@ -517,8 +517,8 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
 /**
  * プロジェクトを保存
  */
-export function saveProjectToStorage(project: MMProject): void {
-  if (typeof window === "undefined") return;
+export function saveProjectToStorage(project: MMProject): boolean {
+  if (typeof window === "undefined") return false;
 
   try {
     const projects = getStoredProjects();
@@ -590,8 +590,10 @@ export function saveProjectToStorage(project: MMProject): void {
       projects.unshift(updatedProject);
     }
     localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
+    return true;
   } catch (err) {
     console.error("Failed to save project:", err);
+    return false;
   }
 }
 

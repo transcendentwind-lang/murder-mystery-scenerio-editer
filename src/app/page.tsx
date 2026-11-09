@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MMProject } from "@/types/schema";
 import { initialProject, getCharactersForPlayerCount } from "@/utils/initialProjectData";
 import {
@@ -41,6 +41,19 @@ type ActiveTab =
 export default function WorkbenchPage() {
   const [projects, setProjects] = useState<MMProject[]>([initialProject]);
   const [project, setProject] = useState<MMProject>(initialProject);
+  const projectRef = useRef(project);
+  const [saveError, setSaveError] = useState(false);
+  const unsavedProjectsRef = useRef(new Set<string | undefined>());
+  const [progressSaveError, setProgressSaveError] = useState(false);
+  useEffect(() => {
+    const onError = () => setProgressSaveError(true);
+    window.addEventListener("progress-save-error", onError);
+    return () => window.removeEventListener("progress-save-error", onError);
+  }, []);
+  const applyProject = (next: MMProject) => {
+    projectRef.current = next;
+    setProject(next);
+  };
   const [activeTab, setActiveTab] = useState<ActiveTab>("timeline");
   const [externalPrompt, setExternalPrompt] = useState<string>("");
   const [isSynopsisOpen, setIsSynopsisOpen] = useState<boolean>(false);
@@ -55,10 +68,10 @@ export default function WorkbenchPage() {
     if (activeId) {
       const found = stored.find((p) => p.id === activeId);
       if (found) {
-        setProject(found);
+        applyProject(found);
       }
     } else if (stored.length > 0) {
-      setProject(stored[0]);
+      applyProject(stored[0]);
     }
 
     syncLocalPresetProjects().then((merged) => {
@@ -66,26 +79,30 @@ export default function WorkbenchPage() {
       const currentActive = getActiveProjectId();
       if (currentActive) {
         const matched = merged.find((p) => p.id === currentActive);
-        if (matched) setProject(matched);
+        if (matched) applyProject(matched);
       }
     });
   }, []);
 
   // プロジェクト更新ヘルパー（state更新＋ストレージ自動保存）
   const handleUpdateProject = (updater: MMProject | ((prev: MMProject) => MMProject)) => {
-    setProject((prev) => {
-      const next = typeof updater === "function" ? updater(prev) : updater;
-      saveProjectToStorage(next);
-      setProjects((currentList) =>
-        currentList.map((p) => (p.id === next.id ? next : p))
-      );
-      return next;
-    });
+    const previous = projectRef.current;
+    const next = typeof updater === "function" ? updater(previous) : updater;
+    // 遅れて完了した別作品の処理で、現在の作品を更新しない。
+    if (project.id !== previous.id) return false;
+    applyProject(next);
+    setProjects((list) => list.map((p) => (p.id === next.id ? next : p)));
+    const saved = saveProjectToStorage(next);
+    if (saved) unsavedProjectsRef.current.delete(next.id);
+    else unsavedProjectsRef.current.add(next.id);
+    setSaveError(!saved);
+    return saved;
   };
 
   // プロジェクト切り替えハンドラー
   const handleSelectProject = (newProject: MMProject) => {
-    setProject(newProject);
+    applyProject(newProject);
+    setSaveError(unsavedProjectsRef.current.has(newProject.id));
     if (newProject.id) {
       setActiveProjectId(newProject.id);
     }
@@ -313,6 +330,15 @@ export default function WorkbenchPage() {
         </div>
       </header>
 
+      {progressSaveError && (
+        <div role="alert" className="bg-red-950 px-6 py-3 text-sm text-red-100">進行状態をブラウザーに保存できなかった。現在の画面内には保持されるが、再読込すると失われる。</div>
+      )}
+      {saveError && (
+        <div role="alert" className="flex items-center justify-between gap-3 bg-red-950 px-6 py-3 text-sm text-red-100">
+          <span>保存できていない変更がある。画面を閉じずに再保存するか、シナリオ管理からJSONを書き出して保管。</span>
+          <button className="shrink-0 rounded border border-red-300 px-3 py-1" onClick={() => handleUpdateProject((prev) => prev)}>再保存</button>
+        </div>
+      )}
       {/* メインレイアウト：作業画面（全幅表示） */}
       <div className="flex flex-1 overflow-hidden">
         <main className="flex-1 overflow-hidden bg-slate-950">
@@ -435,6 +461,7 @@ export default function WorkbenchPage() {
               key={project.id || project.title}
               project={project}
               onUpdateProject={handleUpdateProject}
+              saveError={saveError}
               onSendAiPrompt={(prompt) => setExternalPrompt(prompt)}
             />
           )}

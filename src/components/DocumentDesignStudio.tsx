@@ -69,7 +69,8 @@ import {
 
 interface DocumentDesignStudioProps {
   project: MMProject;
-  onUpdateProject: (updater: MMProject | ((prev: MMProject) => MMProject)) => void;
+  onUpdateProject: (updater: MMProject | ((prev: MMProject) => MMProject)) => boolean;
+  saveError?: boolean;
   onSendAiPrompt?: (prompt: string) => void;
 }
 
@@ -1622,6 +1623,7 @@ function generateDesignFromAiPrompt(
 export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   project,
   onUpdateProject,
+  saveError = false,
   onSendAiPrompt,
 }) => {
   const [category, setCategory] = useState<StudioCategory>("handouts");
@@ -1651,7 +1653,8 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   const [isDesignCustomizerOpen, setIsDesignCustomizerOpen] = useState<boolean>(false);
 
   // 保存フィードバック表示
-  const [saveStatus, setSaveStatus] = useState<"saved" | "dirty" | "just_saved">("saved");
+  const [saveStatus, setSaveStatus] = useState<"saved" | "error" | "just_saved">("saved");
+  useEffect(() => { setSaveStatus(saveError ? "error" : "saved"); }, [saveError]);
   const [lastSavedTime, setLastSavedTime] = useState<string>("自動同期中");
 
   // 印刷対象領域のRef
@@ -1749,24 +1752,28 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       ? "font-mono"
       : "font-sans";
 
-  // 変更通知＆保存ヘルパー
-  const triggerSaveFeedback = () => {
-    setSaveStatus("just_saved");
-    setLastSavedTime(
-      new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })
-    );
-    setTimeout(() => {
-      setSaveStatus("saved");
-    }, 2500);
+  const saveFeedbackTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => () => {
+    if (saveFeedbackTimer.current) clearTimeout(saveFeedbackTimer.current);
+  }, []);
+
+  const updateProjectAndNotify = (updater: MMProject | ((prev: MMProject) => MMProject)) => {
+    if (saveFeedbackTimer.current) clearTimeout(saveFeedbackTimer.current);
+    const saved = onUpdateProject(updater);
+    setSaveStatus(saved ? "just_saved" : "error");
+    if (saved) {
+      setLastSavedTime(new Date().toLocaleTimeString());
+      saveFeedbackTimer.current = setTimeout(() => setSaveStatus("saved"), 2500);
+    }
+    return saved;
   };
 
   // 明示的な「保存」ボタン押下処理（キーボードショートカット Cmd/Ctrl+S 対応）
   const handleManualSave = () => {
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       updatedAt: new Date().toISOString(),
     }));
-    triggerSaveFeedback();
   };
 
   useEffect(() => {
@@ -1778,7 +1785,7 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  });
 
   // デザイン設定の更新
   const handleUpdateDesign = (partial: Partial<DocumentDesignOverride>) => {
@@ -1786,14 +1793,13 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       ...currentDesign,
       ...partial,
     };
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       documentDesigns: {
         ...(prev.documentDesigns || {}),
         [currentDocKey]: nextDesign,
       },
     }));
-    triggerSaveFeedback();
   };
 
   // テーマプリセットの一括適用
@@ -1830,21 +1836,19 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   // ① キャラクター＆ハンドアウトの直接更新ヘルパー
   const handleUpdateActiveChar = (updater: (c: Character) => Character) => {
     if (!activeChar) return;
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       characters: (prev.characters || []).map((c) => (c.id === activeChar.id ? updater(c) : c)),
     }));
-    triggerSaveFeedback();
   };
 
   // ② 証拠資料の直接更新ヘルパー
   const handleUpdateActiveEvidence = (updater: (ev: EvidenceItem) => EvidenceItem) => {
     if (!activeEvidence) return;
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       evidences: (prev.evidences || []).map((e) => (e.id === activeEvidence.id ? updater(e) : e)),
     }));
-    triggerSaveFeedback();
   };
 
   const handleAddNewEvidence = () => {
@@ -1860,12 +1864,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       category: "document",
       acquisitionCondition: "調査アクションまたはフェーズ進行により開示",
     };
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       evidences: [...(prev.evidences || []), newEv],
     }));
     setSelectedEvidenceId(newId);
-    triggerSaveFeedback();
   };
 
   // ③ 全体提示ビジュアルボードの更新ヘルパー
@@ -1875,11 +1878,10 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
     const updatedBoards = currentBoards.map((b) =>
       b.id === activeVisual.id ? updater(b) : b
     );
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       visualBoards: updatedBoards,
     }));
-    triggerSaveFeedback();
   };
 
   const handleAddCustomVisualBoard = () => {
@@ -1900,12 +1902,11 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
       showGmSecrets: false,
     };
     const currentBoards = getDefaultVisualBoards(project);
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       visualBoards: [...currentBoards, newBoard],
     }));
     setSelectedVisualId(newId);
-    triggerSaveFeedback();
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1926,26 +1927,24 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
   // ④ GM進行資料（タイムライン＆GMノート）の更新ヘルパー
   const handleUpdateActiveTimelineStep = (updater: (step: IncidentStep) => IncidentStep) => {
     if (!activeTimelineStep) return;
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       timeline: (prev.timeline || []).map((t) =>
         t.dayNumber === activeTimelineStep.dayNumber ? updater(t) : t
       ),
     }));
-    triggerSaveFeedback();
   };
 
   const handleUpdateActiveGmNote = (updater: (note: GmProgressionNote) => GmProgressionNote) => {
     const currentNote = getGmNoteForDay(project, selectedGmDay);
     const updatedNote = updater(currentNote);
-    onUpdateProject((prev) => ({
+    updateProjectAndNotify((prev) => ({
       ...prev,
       gmNotes: {
         ...(prev.gmNotes || {}),
         [selectedGmDay]: updatedNote,
       },
     }));
-    triggerSaveFeedback();
   };
 
   // デザインされたシートをそのままA4/PDF印刷する関数
@@ -2687,6 +2686,9 @@ export const DocumentDesignStudio: React.FC<DocumentDesignStudioProps> = ({
 
   return (
     <div className="flex h-full flex-col overflow-hidden bg-slate-950 text-slate-100">
+      <div role={saveStatus === "error" ? "alert" : "status"} className={`no-print px-6 py-1 text-xs ${saveStatus === "error" ? "bg-red-950 text-red-200" : "text-slate-400"}`}>
+        {saveStatus === "error" ? "保存失敗：変更は未保存" : saveStatus === "just_saved" ? `保存完了 ${lastSavedTime}` : `保存状態：${lastSavedTime}`}
+      </div>
       {/* 1. 最上部ヘッダー：4大資料カテゴリー切替（色・配置を完全統一） */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 bg-slate-900/95 px-6 py-3">
         <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-800 bg-slate-950 p-1">
