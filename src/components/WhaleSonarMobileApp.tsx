@@ -489,7 +489,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         symbol: wordObj?.symbol || "●●",
         isLocked,
         assignedJapanese,
-        trueMeaning: wordObj ? wordObj.meaning.split("（")[0] : wordId,
+        trueMeaning: wordObj ? wordObj.meaning : wordId,
       };
     },
     [orderedWords, safeWords, playerAssignedLabels]
@@ -546,7 +546,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const handleFillAllCorrectLabelsForPreview = () => {
     const allCorrect: Record<string, string> = {};
     safeWords.forEach((w) => {
-      allCorrect[w.id] = w.meaning.split("（")[0];
+      allCorrect[w.id] = w.meaning;
     });
     handleSavePlayerLabels(allCorrect);
   };
