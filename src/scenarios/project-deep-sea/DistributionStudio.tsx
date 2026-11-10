@@ -889,14 +889,14 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       phaseTitle: "朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安15分）",
       startTrigger: "フェーズ1の資料開示直後、プレイヤーが『マッコウクジラ音響言語解析システム（/sonar）』にアクセスし、実録音響データの分析と撃退作戦の立案を開始した時点",
       gmGuides: [
-        "【ミッション②・③の進行】伝統の祝詞（『人と勇魚の契り、大獲物ぞ、集ひ来よ』・4語）だけでは移動する巨大生物を追跡・迎撃するための位置や行動を伝えきれないため、システム上は最大8語（2語×4組）まで許容されています（8語すべてを固定枠として埋めることが必須なのではなく、クジラを駿河湾へ呼び寄せて巨大生物を捕食させる意図が成立していれば柔軟に正解として扱えます。標準的な構成例：【①人間とクジラ＋約束】【②海の下の火山＋探せ】【③北＋集まれ】【④大きい・たくさんの餌＋攻撃せよ】）。あわせて、24時間後の駿河湾到達までにどうやって巨大生物を撃退するか（深海SOFAR層での音響放流・クジラの移動時間6〜8時間）の作戦をまとめさせます。",
+        "【ミッション②・③の進行】伝統の祝詞（4語）だけでは移動する巨大生物を追跡・迎撃する情報を伝えきれないため最大8語（2語×4組）まで許容（標準構成例：【①人間とクジラ＋約束】【②海の下の火山＋探せ】【③北＋集まれ】【④大きい・たくさんの餌＋攻撃せよ】）。あわせて24時間以内に巨大生物を撃退する作戦（深海SOFAR層での音響放流・クジラの移動時間6〜8時間）をまとめさせます。",
       ],
       gmAnnouncements: [
         {
           branchBadge: "⚠️ 条件分岐：プレイヤーがアプリ内の『狂気の深淵を覗く』ボタンを押した場合（押さなかった場合は発生しません）",
           tone: "rose",
           speakerLabel: "📢 GMからの心停止宣言 ＆ 救命（声かけ）処理（ボタン押下から5分間の猶予経過後に発生）",
-          text: "【1. 心停止の宣言（ボタン押下から5分後・議論の一区切りまたは祝詞完成直後）】\n「……その時です。『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！ このまま数分が経過すれば絶命してしまいます！」\n\n【2. 蘇生条件（数分以内／身体接触や床に倒れる演技は不要・口頭宣言のみ）】\n① 坂凪（PC3）または初瀬（PC6）が「救命処置（心肺蘇生・AED）を行う（※東京本部のメンバーが倒れた場合は、通信越しに遠隔で救命処置を指示する）」と宣言する。\n② 初瀬（PC6）の直観（「意識がなくても耳には声が作用する」）に基づき、名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。\n\n【3. 蘇生成功の宣言】\n「救命処置、そして皆さんの『戻ってこい』という呼びかけの声が、暗い深淵の底へと沈みかけていた〇〇さんの耳に届きました。……ドクン！！と力強く心臓が再び脈打ち、〇〇さんは息を吹き返します！」",
+          text: "【1. 心停止の宣言（ボタン押下から5分後・議論の一区切りまたは祝詞完成直後）】\n「……その時です。『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！ このまま数分が経過すれば絶命してしまいます！」\n【2. 蘇生条件（数分以内／身体接触や床に倒れる演技は不要・口頭宣言のみ）】\n① 坂凪（PC3）または初瀬（PC6）が「救命処置（心肺蘇生・AED）を行う（※東京本部のメンバーが倒れた場合は、通信越しに遠隔で救命処置を指示する）」と宣言する。\n② 初瀬（PC6）の直観（「意識がなくても耳には声が作用する」）に基づき、名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。\n【3. 蘇生成功の宣言】\n「救命処置、そして皆さんの『戻ってこい』という呼びかけの声が、暗い深淵の底へと沈みかけていた〇〇さんの耳に届きました。……ドクン！！と力強く心臓が再び脈打ち、〇〇さんは息を吹き返します！」",
         },
       ],
     },
@@ -935,7 +935,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
           branchBadge: "⚠️ 岸部局長の反論による思考誘導（プレイヤーの説明に不足がある場合、反論してその場で答えを導き出させる）",
           tone: "slate",
           speakerLabel: "🎙️ NPC：防衛省 運用企画局長・岸部（GM）",
-          text: "①【なぜ魚雷の飽和攻撃ではなくクジラなのか？が曖昧な場合】\n「海自の魚雷で仕留めきれなかったのは事実だ。だが、なぜ大量の魚雷による飽和攻撃ではなく、クジラでなければならんのだ？！」\n➔ 『単一生物ではなく多数のダイオウイカの超巨大群体（コロニー）であるため、魚雷では深海で再結合して復活してしまうこと』『ダイオウイカの天敵はマッコウクジラであること』を引き出す。\n\n②【音響層（水深1,000mのSOFAR層／潜水艦の水中スピーカー）が抜けていた場合】\n「海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラへ音を届ける具体的な『海の層』と『手段』を示せ！」\n➔ 『水深1,000mのSOFAR層（深海音響チャネル）まで海自の潜水艦で潜航し、水中スピーカーで大出力放流する』解答を引き出す。\n\n③【移動時間（クジラが集結するのに6〜8時間＝今夜の発信が必要）が抜けていた場合】\n「なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？！」\n➔ 『太平洋のクジラが泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには今夜のうちに発信しなければならない』解答を引き出す。",
+          text: "①【なぜ魚雷の飽和攻撃ではなくクジラなのか？が曖昧な場合】\n「海自の魚雷で仕留めきれなかったのは事実だ。だが、なぜ大量の魚雷による飽和攻撃ではなく、クジラでなければならんのだ？！」\n➔ 『単一生物ではなく多数のダイオウイカの超巨大群体（コロニー）であるため、魚雷では深海で再結合して復活してしまうこと』『ダイオウイカの天敵はマッコウクジラであること』を引き出す。\n②【音響層（水深1,000mのSOFAR層／潜水艦の水中スピーカー）が抜けていた場合】\n「海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラへ音を届ける具体的な『海の層』と『手段』を示せ！」\n➔ 『水深1,000mのSOFAR層（深海音響チャネル）まで海自の潜水艦で潜航し、水中スピーカーで大出力放流する』解答を引き出す。\n③【移動時間（クジラが集結するのに6〜8時間＝今夜の発信が必要）が抜けていた場合】\n「なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？！」\n➔ 『太平洋のクジラが泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには今夜のうちに発信しなければならない』解答を引き出す。",
         },
         {
           branchBadge: "✅ 3つの根拠が揃った時点：交渉成立・岸部局長の決断",
@@ -2452,9 +2452,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "";
 
                   return `
-                  <div class="print-no-split rounded-lg border-2 border-slate-800 bg-white p-3 space-y-2">
+                  <div class="rounded-lg border-2 border-slate-800 bg-white p-2.5 space-y-2">
                     <div class="print-no-split space-y-1.5">
-                      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1.5">
+                      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1">
                         <div class="flex items-center gap-2">
                           <span class="rounded bg-slate-900 px-2.5 py-0.5 text-[12px] font-extrabold text-white">${escapeHtml(
                             ph.phaseNumber
@@ -2464,7 +2464,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           )}</span>
                         </div>
                       </div>
-                      <div class="rounded border border-amber-400 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-950">
+                      <div class="rounded border border-amber-400 bg-amber-50 px-2.5 py-1 text-[12px] font-bold text-amber-950">
                         ⏱️ 開始タイミング・発生条件：${escapeHtml(ph.startTrigger)}
                       </div>
                     </div>
@@ -2480,12 +2480,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               )}</div>`;
 
         return `
-        <div class="${idx > 0 ? "page-break-before" : ""} space-y-3 text-[12px]">
-          <div class="print-no-split space-y-2.5">
-            <div class="rounded-md border border-slate-300 bg-slate-50 p-2.5 text-[12px] text-slate-800 font-bold">
-              🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
-            </div>
-            <div class="rounded-md p-3.5 bg-slate-900 text-white flex items-end justify-between gap-4">
+        <div class="${idx > 0 ? "page-break-before" : ""} space-y-2.5 text-[12px]">
+          <div class="print-no-split">
+            <div class="rounded-md p-3 bg-slate-900 text-white flex items-end justify-between gap-4">
               <div>
                 <span class="block text-[12px] uppercase tracking-wider text-slate-300">Day ${
                   step.dayNumber
@@ -2506,11 +2503,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
             </div>
           </div>
-          <div class="space-y-3">
+          <div class="space-y-2.5">
             ${phasesHtml}
           </div>
-          <div class="print-no-split rounded-md border border-slate-300 p-3.5 bg-white">
-            <div class="mb-1.5 text-[12px] font-bold text-slate-900">✅ Day ${
+          <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
+            <div class="mb-1 text-[12px] font-bold text-slate-900">✅ Day ${
               step.dayNumber
             } GM進行チェックリスト</div>
             <div class="space-y-1">
@@ -2552,7 +2549,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   <style>
     @page {
       size: A4 portrait;
-      margin: 12mm 10mm;
+      margin: 10mm 10mm;
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -5333,19 +5330,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       【GM進行資料】：フェーズ開始条件・長津アナウンス囲み枠・12px文字サイズ対応
                      ============================================================ */}
                   <div className="space-y-4 text-[12px]">
-                    {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
-                    <div className="rounded-md border border-slate-300 bg-slate-50 p-3 text-[12px] text-slate-800 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-slate-900 flex items-center gap-1.5 text-[12px]">
-                          <Radio className="h-4 w-4 text-indigo-600 shrink-0" />
-                          🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
-                        </span>
-                        <span className="text-[12px] text-slate-700">
-                          ｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
-                        </span>
-                      </div>
-                    </div>
-
                     {/* GM進行ヘッダー帯（スレートダークで統一） */}
                     <div className="rounded-md p-4 bg-slate-900 text-white shadow">
                       <div className="flex flex-wrap items-end justify-between gap-4">
