@@ -2280,6 +2280,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       .card-body-12px {
         font-size: 12px !important;
       }
+      .card-front-title-20px {
+        font-size: 20px !important;
+        line-height: 1.375 !important;
+      }
       .card-empty-slot {
         width: 92mm !important;
         height: 133mm !important;
@@ -3629,10 +3633,23 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     </div>
 
                     {(() => {
-                      const cardsSource =
+                      const rawCardsSource =
                         project.specialCharacterCards && project.specialCharacterCards.length === 7
                           ? project.specialCharacterCards
                           : SPECIAL_CHARACTER_CARDS;
+                      const cardsSource = rawCardsSource.map((c) => {
+                        const master = SPECIAL_CHARACTER_CARDS.find((m) => m.id === c.id);
+                        return master
+                          ? {
+                              ...c,
+                              title: master.title,
+                              frontTitleHtml: master.frontTitleHtml,
+                              description: master.description,
+                              rubyHtml: master.rubyHtml,
+                              glossaryNote: master.glossaryNote,
+                            }
+                          : c;
+                      });
 
                       const sheets: ((typeof cardsSource)[number] | null)[][] = [];
                       for (let i = 0; i < cardsSource.length; i += 4) {
@@ -3701,11 +3718,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </div>
                               {card.frontTitleHtml ? (
                                 <div
-                                  className="text-xl font-black text-slate-900 leading-snug"
+                                  className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2"
                                   dangerouslySetInnerHTML={{ __html: card.frontTitleHtml }}
                                 />
                               ) : (
-                                <div className="text-xl font-black text-slate-900 leading-snug">
+                                <div className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2">
                                   {card.title}
                                 </div>
                               )}
@@ -4115,11 +4132,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </div>
                               {nc.frontTitleHtml ? (
                                 <div
-                                  className="text-xl font-black text-slate-900 leading-snug"
+                                  className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2"
                                   dangerouslySetInnerHTML={{ __html: nc.frontTitleHtml }}
                                 />
                               ) : (
-                                <div className="text-xl font-black text-slate-900 leading-snug">
+                                <div className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2">
                                   {nc.title}
                                 </div>
                               )}
@@ -4365,7 +4382,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               海上保安庁・合同対策本部
                             </div>
                             <div
-                              className="text-xl font-black text-slate-900 leading-snug px-2"
+                              className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2"
                               dangerouslySetInnerHTML={{ __html: formattedFrontTitleHtml }}
                             />
                             <div
