@@ -241,7 +241,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               </div>
               <div className="mt-1 flex items-center gap-1 text-[9.5px]">
                 <span className="rounded bg-emerald-50 border border-emerald-400 px-1.5 py-0.5 font-bold text-emerald-900">
-                  正解（6ノット・明神礁）
+                  正解（時速6.25km［日速約150km］・明神礁）
                 </span>
                 <span>／</span>
                 <span className="rounded bg-amber-50 border border-amber-400 px-1.5 py-0.5 font-bold text-amber-900">

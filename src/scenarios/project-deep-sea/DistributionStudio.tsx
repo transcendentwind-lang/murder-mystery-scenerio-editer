@@ -704,9 +704,9 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       handoutBadges: [
         "長津カード NG-02（長津へ配布）",
         "DAY 3 途中① 指令書 COMMAND-BRIEFING-DAY03-MID1（朝潮へ配布）",
-        "太刀魚へ配布：西之島〜鳥島沖 距離観測データ",
-        "貝浜へ配布：鳥島沖 ソノブイ探知記録（17:00捕捉）",
-        "浪寄へ配布：遭難船救助・目撃時刻調書（Day 1 09:00）",
+        "太刀魚へ配布：西之島〜鳥島沖 距離観測データ（約350km）",
+        "貝浜へ配布：鳥島沖 ソノブイ探知記録（Day 3 17:00）",
+        "浪寄へ配布：遭難船救助・目撃時刻調書（Day 1 09:00 西之島近海）",
       ],
       nagatsuAnnouncements: [
         {
@@ -715,7 +715,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         },
       ],
       gmGuides: [
-        "太刀魚・貝浜・浪寄の3名へ距離・時刻データを配布し、経過56時間・距離約350kmから移動スピード（時速約6.25km＝日速約150km）と明日（Day 4）の北上予測地点（明神礁周辺）を算出・報告させます。",
+        "太刀魚・貝浜・浪寄の3名へ距離・時刻データを配布し、【Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）】と明日（Day 4）の北上予測地点（明神礁周辺）を算出・報告させます。",
         "※もし計算や予測地点をミスしても機械的なペナルティはありません（翌Day 4冒頭の明神礁噴火の事実によって自然に軌道修正されます）。",
       ],
     },
@@ -1108,14 +1108,15 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 ■ フェーズ2：目標捕捉 ＆ 北上速度・明日（Day 4）の到達位置予測
 ⏱️ 開始タイミング・条件：ソノブイ索敵で鳥島沖の巨大生物の現在位置（B-3）を特定した直後
-📦 配布：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、太刀魚・貝浜・浪寄へ距離・時刻証拠3枚を配布
+📦 配布：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、太刀魚（約350km）・貝浜（Day 3 17:00）・浪寄（Day 1 09:00 西之島近海）へ距離・時刻証拠3枚を配布
+💡 正解メモ：Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』と同文） ━━┓
 「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 ■ フェーズ3：深海写真の受信 ＆ 専門家2名（浪寄・貝浜）への緊急諮問
-⏱️ 開始タイミング・条件：移動スピード（日速約150km）とDay 4北上予測（明神礁周辺）を算出し終えた直後
+⏱️ 開始タイミング・条件：移動スピード（時速6.25km＝日速約150km）とDay 4北上予測（明神礁周辺）を算出し終えた直後
 📦 配布・提示：長津へ『NG-03』、朝潮へ『DAY 3 途中② 指令書』、全体へ『深海写真』、浪寄へ『群体写真解析』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中② 指令書』・『NG-03』と同文） ━━┓
@@ -1272,8 +1273,8 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   3: [
     "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
     "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
-    "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 17:00）、浪寄（EV-18: Day1救助時間 09:00）の3名へ証拠を配布する",
-    "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる（※計算ミスがあってもペナルティはなく、翌朝の明神礁噴火で自然に軌道修正される）",
+    "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離約350km）、貝浜（EV-17: ソノブイ探知時刻 Day 3 17:00）、浪寄（EV-18: 西之島近海での異常遭遇時刻 Day 1 09:00）の3名へ証拠を配布する",
+    "【Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）】と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる（※計算ミスがあってもペナルティはなく、翌朝の明神礁噴火で自然に軌道修正される）",
     "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（特別配布カード『文民統制の仕組み』に基づく法的判断）へ諮問する",
     "防衛省・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
@@ -1385,7 +1386,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("防衛庁") ||
       existing.readAloudScript.includes("怪異") ||
       existing.readAloudScript.includes("ハイドロスピーカー") ||
-      existing.readAloudScript.includes("救難艇");
+      existing.readAloudScript.includes("救難艇") ||
+      (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km"));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -1400,10 +1402,13 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
           c.includes("防衛庁") ||
           c.includes("怪異") ||
           c.includes("ハイドロスピーカー") ||
-          c.includes("救難艇")
+          c.includes("救難艇") ||
+          c.includes("16:00") ||
+          c.includes("08:00")
       ) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
+      (dayNumber === 3 && !existing.gmCheckpoints.some((c) => c.includes("時速6.25km"))) ||
       (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));

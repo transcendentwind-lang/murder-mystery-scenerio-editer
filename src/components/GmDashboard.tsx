@@ -1558,10 +1558,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                     <div className="mt-2 rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
                       <p className="font-semibold text-white">
-                        🚨 緊急速報：鳥島沖海底カルデラが連動大爆発（Day 2未明）
+                        🚨 緊急速報：鳥島沖海底カルデラが連動大爆発
                       </p>
                       <p className="mt-0.5 text-slate-300">
-                        西之島から北へ約380km。時速約6km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
+                        西之島から北へ約350km。時速6.25km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
                       </p>
                     </div>
                     <p className="text-slate-300 mt-2.5 italic whitespace-pre-line">
@@ -1618,7 +1618,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <span className="font-mono text-cyan-400">タイムリミット: 残り4日（Day 7駿河湾到達）</span>
                       </div>
                       <p>
-                        ・<strong>連動噴火のドミノ倒し</strong>：Day 1（西之島）➔ Day 2（鳥島沖海底カルデラ）。距離約380kmを24時間で正確に到達しており、深海800mを時速約6kmで北上する物体が、通過した先々のマグマ溜まりを刺激して噴火させている動かぬ証拠。
+                        ・<strong>連動噴火のドミノ倒し</strong>：Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖海底カルデラ）。距離約350kmを56時間で到達しており、深海を時速6.25km（日速約150km）で北上する物体が、通過した先々のマグマ溜まりを刺激して噴火させている動かぬ証拠。
                       </p>
                       <p>
                         ・<strong>未噴火海域（北方）</strong>：須美寿島、青ヶ島、八丈島、三宅島、伊豆諸島、駿河湾・富士山直下は現時点で未噴火。このペースで直進すると4日後に本土直下へ到達。
@@ -3423,12 +3423,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 <>
                   <div className="flex items-center justify-between font-semibold text-rose-300">
                     <span>【噴火日程および連動性観測所見】</span>
-                    <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
+                    <span className="font-mono text-cyan-400">移動速度: 時速6.25km (日速約150km)</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
-                    ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
-                    ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
+                    ・<strong>西之島（Day 2 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
+                    ・<strong>鳥島沖（Day 3 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
+                    ・<strong>北上ベクトル</strong>：西之島から鳥島沖までの距離は約350km。Day 1 09:00（西之島近海）からDay 3 17:00（鳥島沖）までの56時間で到達しており、時速6.25km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
                     ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
                   </p>
                 </>
