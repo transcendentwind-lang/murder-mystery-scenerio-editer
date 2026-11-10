@@ -1706,8 +1706,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         セクターB-3（水深約400m）。
                       </p>
                       <p>
-                        📋 <strong className="text-white">位置特定・浮上撮影成功時</strong>：
-                        プレイヤーがB-3または隣接セクターにソノブイを展開して位置を絞り込んだ場合、潜航していた巨大生物が海面近く（水深10〜20m）へ浮上。急行した捜索ヘリが上空後方から目視確認し、海面下にうごめく巨大な触手と胴体を捉えた写真の撮影に成功します（特定失敗時は約20km彼方に波紋のみを確認）。
+                        📋 <strong className="text-white">位置特定成功時 ＆ 失敗時の処理</strong>：
+                        プレイヤーがB-3を特定できた場合は<strong>成功時の撮影写真（近接浮上）</strong>のみを提示します。B-3の特定に失敗した場合は成功時の写真は提示せず、<strong>失敗時の撮影写真（約20km彼方の航跡波）</strong>を提示し、小笠原現地の調査枠（2枠）のうち1枠を自動的に<strong>『F-3D：撮影した画像の分析（EV-25）』</strong>へ充当して公開（浪寄へ配布）してください。
                       </p>
                     </div>
                   </div>
@@ -1806,7 +1806,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     <p className="text-[11px] text-slate-400">
-                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です。
+                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です（※ソノブイ索敵に失敗した場合は、現地調査2枠のうち1枠を『F-3D：撮影した画像の分析（EV-25）』に自動充当し、残り1枠を選択させます）。
                     </p>
 
                     {/* 海上保安庁東京本部アクション */}

@@ -222,8 +222,8 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 <span className="rounded bg-slate-200 px-1.5 py-0.5 font-mono text-[10px] font-black text-slate-900">
                   DAY 3
                 </span>
-                <span className="rounded bg-emerald-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
-                  🟢 物語影響なし
+                <span className="rounded bg-amber-600 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                  🔀 索敵分岐あり
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
@@ -237,19 +237,19 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
             {/* 前半：ソノブイ・速度予測 */}
             <div className="rounded border border-slate-300 bg-white p-1.5 flex flex-col justify-between">
               <div className="font-bold text-slate-900">
-                ① ソノブイ投下（C-3・D-2・E-3）＆ 移動速度・到達予測
+                ① ソノブイ投下（B-3特定）＆ 速度予測（時速6.25km・明神礁）
               </div>
               <div className="mt-1 flex items-center gap-1 text-[9.5px]">
                 <span className="rounded bg-emerald-50 border border-emerald-400 px-1.5 py-0.5 font-bold text-emerald-900">
-                  正解（時速6.25km［日速約150km］・明神礁）
+                  🟢 B-3特定：成功写真を提示
                 </span>
                 <span>／</span>
                 <span className="rounded bg-amber-50 border border-amber-400 px-1.5 py-0.5 font-bold text-amber-900">
-                  速度・到達地点ミス
+                  🟡 特定失敗：失敗写真を提示
                 </span>
               </div>
               <div className="mt-1 text-[9.5px] text-slate-700 font-medium">
-                ➔ <strong>ミスしても物語上大きな影響なし</strong>（翌朝の明神礁噴火で自然収束）
+                ➔ <strong>特定失敗時は現地調査2枠のうち1枠を『EV-25：撮影した画像の分析』に自動充当</strong>（速度ミスは翌朝自然収束）
               </div>
             </div>
 

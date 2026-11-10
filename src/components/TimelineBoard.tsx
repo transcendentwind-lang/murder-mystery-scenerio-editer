@@ -362,6 +362,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     setDay3SearchOutcome(isSuccess ? "success" : "failure");
     setDay3ActivePhotoTab(isSuccess ? "success" : "failure");
     setDay3IsReportUnlocked(true);
+    if (!isSuccess && !day3FieldActions.includes("F-3D")) {
+      changeInvestigation(3, "field", "F-3D");
+    }
     audioEngine?.playWordSound(isSuccess ? "word-enemy" : "word-alert");
   };
 
@@ -1415,7 +1418,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             ⚠️【セクター特定 失敗（捜索空振り）】（セクター {day3TargetSector}）
                           </strong>
                           <p className="mt-0.5 text-[11px] text-amber-300">
-                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました。
+                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました（不鮮明な遠方写真を解析するため、小笠原現地調査2枠のうち1枠が『F-3D：撮影した画像の分析（EV-25）』に自動充当されます）。
                           </p>
                           <span className="text-[10px] text-slate-300 mt-1 inline-block">
                             👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された遠方波紋写真と捜索失敗ログを確認できます。
@@ -1514,13 +1517,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">深海に溶け込む巨大な質量</strong>: 本体の輪郭線は特定の生物の形としては定まらず、<strong>海面下に潜む広大な深海シャドウ（漆黒の巨大質量）</strong>としてぼんやりと認識されるのみ。
+                              ・<strong className="text-white">深海に溶け込む巨大な生物</strong>: 本体の輪郭線は特定の生物の形としては定まらず、<strong>海面下に潜む広大な深海シャドウ（漆黒の巨大生物）</strong>としてぼんやりと認識されるのみ。
                             </p>
                             <p>
                               ・<strong className="text-white">目視される無数の触手群</strong>: ぼやけた本体の後背部から、<strong>20本を超える無数の触手・触腕だけが海中を長く直線的にたなびく姿</strong>が鮮明に確認できる。
                             </p>
                             <p>
-                              ・<strong className="text-white">繊細なケルビン波（航跡波）</strong>: 前進遊泳に伴い、海面にはごく控えめな薄い白波がV字型に広がり、巨大な質量が深海を時速約6kmで着実に北上している様子を捉えている。
+                              ・<strong className="text-white">繊細なケルビン波（航跡波）</strong>: 前進遊泳に伴い、海面にはごく控えめな薄い白波がV字型に広がり、巨大な生物が深海を時速約6kmで着実に北上している様子を捉えている。
                             </p>
                           </div>
                         </div>
@@ -1584,7 +1587,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                               ・<strong className="text-white">ヘリ急行後</strong>: ヘリが現場へ到達したときには、怪物は接近を察知してすでに深海800m以深へ急速潜航してしまっており捉えられない。
                             </p>
                             <p>
-                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時はこの写真を提示し、「20km以上先で大波を目視したが、急行した時にはすでに潜航してしまっていた」と説明してください。
+                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時は成功時の写真は提示せず、この失敗時写真のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-25）』へ自動充当して浪寄へ公開してください（超高感度強調処理により20本以上の触手と超群体構造が判明）。
                             </p>
                           </div>
                         </div>
