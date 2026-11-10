@@ -2356,7 +2356,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       .map((step, idx) => {
         const note = getGmNoteForDay(project, step.dayNumber);
         const structuredPhases = GM_DAY_STRUCTURED_PHASES[step.dayNumber] || [];
-        const stepEvidences = allEvidences.filter((e) => e.foundPhase === step.dayNumber);
 
         const phasesHtml =
           structuredPhases.length > 0
@@ -2524,25 +2523,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </div>`
                 )
                 .join("")}
-            </div>
-          </div>
-          <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
-            <div class="mb-1.5 text-[12px] font-bold text-slate-900">📂 Day ${
-              step.dayNumber
-            } 開示証拠資料（${stepEvidences.length}件）</div>
-            <div class="flex flex-wrap gap-1.5">
-              ${
-                stepEvidences.length > 0
-                  ? stepEvidences
-                      .map(
-                        (ev) =>
-                          `<span class="rounded border border-slate-300 bg-slate-50 px-2.5 py-1 text-[12px] font-bold text-slate-800">📄 ${escapeHtml(
-                            ev.title
-                          )}</span>`
-                      )
-                      .join("")
-                  : `<span class="text-[12px] text-slate-500 italic">このフェーズで開示される証拠はありません</span>`
-              }
             </div>
           </div>
         </div>`;
@@ -5557,40 +5537,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             <span>{chk}</span>
                           </div>
                         ))}
-                      </div>
-                    </div>
-
-                    {/* 📂 このフェーズで開示される証拠資料 */}
-                    <div className="rounded-md border border-slate-300 p-3.5 bg-white shadow-sm">
-                      <div className="mb-2 flex items-center justify-between text-[12px] font-bold text-slate-900">
-                        <span>
-                          📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
-                          {
-                            allEvidences.filter(
-                              (e) => e.foundPhase === activeTimelineStep.dayNumber
-                            ).length
-                          }
-                          件）
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {allEvidences
-                          .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
-                          .map((ev) => (
-                            <div
-                              key={ev.id}
-                              className="flex items-center gap-1.5 rounded border border-slate-300 bg-slate-50 px-3 py-1.5 text-[12px] font-bold text-slate-800"
-                            >
-                              <span className="text-indigo-600 font-mono text-[12px]">📄</span>
-                              <span>{ev.title}</span>
-                            </div>
-                          ))}
-                        {allEvidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
-                          .length === 0 && (
-                          <span className="text-[12px] text-slate-500 italic">
-                            このフェーズで開示される証拠はありません
-                          </span>
-                        )}
                       </div>
                     </div>
                   </div>
