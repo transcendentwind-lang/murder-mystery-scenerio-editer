@@ -316,11 +316,11 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               <div>
                 <span className="font-black text-emerald-900">🟢【正解：「富士山（駿河湾）」と結論】</span>
                 <span className="ml-1.5 font-medium text-slate-800">
-                  自衛隊が早期に駿河湾沖へ展開（通常位置で迎撃へ）
+                  Day 6の岸部局長との交渉が通常の第一声で進行
                 </span>
               </div>
               <span className="font-mono text-[9.5px] font-bold text-emerald-900 shrink-0">
-                ──▶ Day 5（通常）へ
+                ──▶ Day 5へ
               </span>
             </div>
 
@@ -329,18 +329,14 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               <div>
                 <span className="font-black text-rose-900">🔴【誤答：「東京湾」と結論】</span>
                 <span className="ml-1.5 text-slate-800">
-                  ペナルティなし ／ ⚠️{" "}
+                  ペナルティなし（Day 4・Day 5の進行は共通） ／ ⚠️{" "}
                   <strong className="text-rose-900 underline">
-                    ① Day 5で自衛隊の攻撃が遅れ、より駿河湾に近い位置で攻撃
-                  </strong>{" "}
-                  ＋{" "}
-                  <strong className="text-rose-900 underline">
-                    ② Day 6の岸部局長との交渉で嫌味を言われる
+                    Day 6の岸部局長との交渉で嫌味を言われる
                   </strong>
                 </span>
               </div>
               <span className="font-mono text-[9.5px] font-bold text-rose-900 shrink-0">
-                ──▶ Day 5（遅延）へ
+                ──▶ Day 5へ
               </span>
             </div>
           </div>
@@ -381,9 +377,6 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
             <div className="space-y-0.5">
               <div className="font-bold text-slate-900">
                 🔵【共通進行】長津より残距離240km・時速5kmで【残り48時間】と報告 ／ 魚雷命中後も深海で元の大きさに戻る傾向（NG-06・Day 5 途中①）
-              </div>
-              <div className="text-[10px] text-rose-900 font-semibold">
-                📌 Day 4「東京湾」結論時の変化：自衛隊の展開が遅れたため、<strong>「より駿河湾に近い位置」で攻撃が行われた描写</strong>になる（以降の進行・数値は共通）
               </div>
             </div>
             <span className="font-mono text-[9.5px] font-bold text-slate-700 shrink-0">
