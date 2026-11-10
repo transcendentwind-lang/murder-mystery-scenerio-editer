@@ -1,6 +1,6 @@
 # 起動・確認・公開手順
 
-対象: AI・開発担当。確認日: 2026-11-09。利用者向けの画面操作は[USER_GUIDE.md](USER_GUIDE.md)を参照。
+対象: AI・開発担当。確認日: 2026-11-10。利用者向けの画面操作は[USER_GUIDE.md](USER_GUIDE.md)を参照。
 
 ## 操作の担当
 
@@ -12,7 +12,7 @@
 
 ### Dockerを使う場合
 
-DockerfileはNode.js 20 Alpineを使う。Docker Composeはソースを共有し、依存関係とNext.jsの生成物をコンテナ側に置く。
+DockerfileはNode.js 24 Alpineを使う。Docker Composeはソースを共有し、依存関係とNext.jsの生成物をコンテナ側に置く。
 
 ```bash
 docker compose up -d --build
@@ -27,7 +27,7 @@ docker compose down
 
 ### ローカルのNode.jsを使う場合
 
-Node.js 20系はDocker・CIと合わせる基準。実際の環境と既存プロセスを確認して選ぶ。
+Node.js 24系をDocker・CI・`.nvmrc`・型定義で共通の基準とする。実際の環境と既存プロセスを確認して選ぶ。
 
 ```bash
 npm ci
@@ -42,13 +42,13 @@ npm run dev
 
 ```bash
 git diff --check
-npx tsc --noEmit
+npm run typecheck
 npm run build
 ```
 
-後者2つは依存関係の導入後に実行する。通常ビルドは型エラーも確認する。静的公開用ビルドは設定上、TypeScript・ESLintエラーを無視するため、それだけで正常性を判定しない。
+後者2つは依存関係の導入後に実行する。`typecheck` はNext.jsのルート型を生成してからTypeScriptを検査する。通常・静的公開用ビルドとも型エラーを無視しない。開発・ビルドは既存のWebpack設定を維持するため、`--webpack` を指定する。
 
-`npm run lint` は `next lint` を実行するが、現状はESLint依存関係・設定が揃っていないため、無人の必須チェックとしてそのまま使用しない。回帰テストは `npm test`（Playwright）で実行する。初回は `npx playwright install chromium` で検証用ブラウザを導入する。テストは専用ポート3107のサーバーと隔離ブラウザを使い、利用者のブラウザデータには触れない。未実行・失敗の確認を「合格」と記録しない。
+Next.js 16で削除された `next lint` のスクリプトは廃止した。ESLintは未導入で、型検査と回帰テストを必須チェックにする。回帰テストは `npm test`（Playwright）で実行する。初回は `npx playwright install chromium` で検証用ブラウザを導入する。テストは専用ポート3107のサーバーと隔離ブラウザを使い、利用者のブラウザデータには触れない。未実行・失敗の確認を「合格」と記録しない。
 
 通常の本番サーバーを確認する場合は、通常ビルド後に `npm run start` を使う。利用者のブラウザデータへ試験データを書かず、保存試験には隔離したデータを使う。
 
@@ -62,8 +62,8 @@ Git管理対象外という設定は配信制御ではない。参加者向け�
 
 [`next.config.mjs`](../next.config.mjs) と [GitHub Actions](../.github/workflows/deploy-sonar.yml) が構築方法を定義する。ワークフローのファイル名は実ファイルを正本とする。
 
-1. mainへのpushでワークフローを開始する。
-2. Node.js 20で `npm ci` を実行する。
+1. mainへのpushで検証ワークフローを開始し、成功したコミットだけ公開ワークフローへ渡す。
+2. Node.js 24で `npm ci` を実行する。
 3. `NEXT_PUBLIC_STATIC_EXPORT=1` でビルドし、`out/` に静的出力する。
 4. ルートのHTMLを参加者用 `/sonar/` への転送に置き換え、`.nojekyll` を追加する。
 5. `out/` を `gh-pages` ブランチへ配信する。
@@ -76,7 +76,7 @@ NEXT_PUBLIC_STATIC_EXPORT=1 npm run build
 
 通常構成と静的構成は異なるため、既存サーバーと生成物の競合に注意して実行する。公開先のbasePathは `next.config.mjs` とワークフロー内の転送先に依存する。画面誘導と認証の限界は[ARCHITECTURE.md](ARCHITECTURE.md#実行と公開)を参照。
 
-mainへのpushは文書だけの変更でも現在のワークフローを起動する。公開成功はpush成功とは別に確認する。リポジトリの設定と実行結果を確認せず、配信済みと報告しない。
+mainへのpushは文書だけの変更でも検証ワークフローを起動する。検証成功後、同じコミットをチェックアウトして公開する。公開成功はpush成功とは別に確認する。リポジトリの設定と実行結果を確認せず、配信済みと報告しない。
 
 ## コミット・プッシュ
 
@@ -103,3 +103,13 @@ npm run assets:prepare
 前者は資料目録の網羅・欠損・ハッシュを検査する。後者は作者用の全資料と旧URL互換コピーを生成する。`dev`・`build`・`start` の前処理でも自動実行する。参加者向け静的ビルドでは目録で許可したファイルだけ配置し、完了処理で公開対象外ファイルが残っていないか検査する。生成した `public/scenarios`、`public/images`、`public/pdfs` を直接編集しない。
 
 原本の再生成は[資料パッケージ](../assets/scenarios/project-deep-sea/README.md)と `sources/README.md` を参照する。正本のファイル更新時は目録のハッシュも更新する。静的ビルド後に作者用サーバーへ戻すときは `npm run assets:prepare` で全資料を再配置する。
+
+## 依存関係の更新
+
+[Dependabot設定](../.github/dependabot.yml)で、npm・GitHub Actions・Dockerの更新を毎週月曜09:00（日本時間）に確認する。設定追加時にも初回の確認が実行される。npmの通常更新は公開後7日待ち、minor・patchをまとめて提案する。majorは別のPRで扱い、React本体・DOM・型定義など相互依存する更新はまとめて検証する。Node.jsは24系に揃えるため、DockerとNode.js型定義のmajor更新は対象外とし、実行環境を変える際にAIが `.nvmrc`・Dockerfile・`engines`・型定義を同時に更新する。
+
+[検証ワークフロー](../.github/workflows/ci.yml)はmain宛てのPR・mainへのpush・手動実行で、ロックファイルからのインストール、high以上の脆弱性検査、資料照合、型検査、Playwright、通常ビルド、参加者用静的ビルド、Dockerイメージのビルドを実行する。PR内のコードは読み取り専用の権限で実行し、公開はmainの検証成功後だけ行う。
+
+更新提案と検証を自動化し、自動マージは行わない。AIが検証結果と変更内容を確認して取り込む。セキュリティ更新のグループ設定はGitHub側のDependabot security updatesが有効な場合に適用され、通常更新の7日待機はセキュリティ更新に適用されない。
+
+Tailwind CSSは印刷・画面レイアウトへの影響を抑えるため3系の最新を維持する。4系以降への移行は資料の見た目も確認する別作業とする。検証失敗時に型エラー無視や脆弱性の一括除外で回避しない。

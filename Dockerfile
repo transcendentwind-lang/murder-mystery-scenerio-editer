@@ -1,4 +1,4 @@
-FROM node:20-alpine
+FROM node:24-alpine
 
 WORKDIR /app
 
@@ -9,7 +9,7 @@ RUN apk add --no-cache libc6-compat git
 COPY package.json package-lock.json* ./
 
 # Install project dependencies
-RUN npm install
+RUN npm ci
 
 # Copy application source
 COPY . .

@@ -1,0 +1,61 @@
+name: Dependency and application checks
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: checks-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  checks:
+    name: Verify application
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: "1"
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Check dependency vulnerabilities
+        run: npm audit --audit-level=high
+
+      - name: Check canonical assets
+        run: npm run assets:check
+
+      - name: Check types
+        run: npm run typecheck
+
+      - name: Install test browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Test application behavior
+        run: npm test
+
+      - name: Build application
+        run: npm run build
+
+      - name: Build participant export
+        env:
+          NEXT_PUBLIC_STATIC_EXPORT: "1"
+        run: npm run build
+
+      - name: Check container build
+        run: docker build --tag mm-workbench:ci .

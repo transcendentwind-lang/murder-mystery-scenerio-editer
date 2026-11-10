@@ -11,12 +11,6 @@ const nextConfig = isStaticExport
       images: {
         unoptimized: true,
       },
-      eslint: {
-        ignoreDuringBuilds: true,
-      },
-      typescript: {
-        ignoreBuildErrors: true,
-      },
     }
   : {
       webpack: (config, { dev }) => {

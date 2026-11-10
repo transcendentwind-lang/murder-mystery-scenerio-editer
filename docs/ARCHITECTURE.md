@@ -1,10 +1,10 @@
 # 現在の構成
 
-確認日: 2026-11-09。現在の実装を説明する文書。目指す体験は[PRODUCT_VISION.md](PRODUCT_VISION.md)、利用手順は[USER_GUIDE.md](USER_GUIDE.md)を参照。
+確認日: 2026-11-10。現在の実装を説明する文書。目指す体験は[PRODUCT_VISION.md](PRODUCT_VISION.md)、利用手順は[USER_GUIDE.md](USER_GUIDE.md)を参照。
 
 ## 実装の構成
 
-Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Reactで構成する。依存関係と実行コマンドの正本は [`package.json`](../package.json)。外部AI用SDK・API接続は現在実装されていない。
+Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Reactで構成する。依存関係と実行コマンドの正本は [`package.json`](../package.json)。外部AI用SDK・API接続は現在実装されていない。
 
 | 層 | 主なファイル | 役割 |
 |---|---|---|
@@ -72,9 +72,9 @@ Next.js 14系のApp Router、React 18系、TypeScript、Tailwind CSS、Lucide Re
 
 作者・GM向けはローカルの `/`、参加者用の独立画面は `/sonar`。独立画面は常に組み込みデータを参照し、作者が選択・編集した作品とは同期しない。
 
-通常サーバーでは [`src/middleware.ts`](../src/middleware.ts) がlocalhost・127.0.0.1以外のホスト名による `/` アクセスを `/sonar` へ誘導する。これは画面誘導であり、編集機能全体のアクセス制御ではない。
+通常サーバーでは [`src/proxy.ts`](../src/proxy.ts) がlocalhost・127.0.0.1以外のホスト名による `/` アクセスを `/sonar` へ誘導する。これは画面誘導であり、編集機能全体のアクセス制御ではない。
 
-GitHub Actionsはmainへのpushを契機に静的出力し、ルートページを参加者画面への転送に差し替えて `gh-pages` へ配信する。静的配信ではmiddlewareは動作しない。参加者画面のパスワード照合もブラウザ内の実装であり、サーバー認証ではない。構築・公開の詳細は[SETUP.md](SETUP.md)を参照。
+GitHub Actionsはmainへのpush後の自動検証成功を契機に静的出力し、ルートページを参加者画面への転送に差し替えて `gh-pages` へ配信する。静的配信ではproxyは動作しない。参加者画面のパスワード照合もブラウザ内の実装であり、サーバー認証ではない。構築・公開の詳細は[SETUP.md](SETUP.md)を参照。
 
 
 ## 進行状態と再生の寿命
