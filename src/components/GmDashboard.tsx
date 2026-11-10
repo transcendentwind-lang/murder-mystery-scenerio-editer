@@ -1891,7 +1891,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           📢 GM進行ナレーション:
                         </strong>
                         <p className="italic text-slate-200">
-                          （🎙️ 総合オペレーター 長津）:「――洋上捜索ヘリより緊急入電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております」
+                          （🎙️ 総合オペレーター 長津）:「――洋上捜索ヘリより緊急入電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！」
                         </p>
                       </div>
 
@@ -1899,10 +1899,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         {/* PC5への相談 */}
                         <div className="rounded border border-teal-900/80 bg-teal-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-teal-300 text-xs flex items-center gap-1">
-                            <Users className="h-3.5 w-3.5" /> ① 海上保安庁 ➔ 浪寄准教授（PC5: 海洋生物学者）への相談:
+                            <Users className="h-3.5 w-3.5" /> ① 浪寄准教授（PC5: 海洋生物学者）への相談:
                           </span>
                           <p className="italic text-slate-200">
-                            「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                            「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大生物。専門家としての所見を提示してください」
                           </p>
                           <div className="mt-1 text-[10px] text-teal-200/90 bg-teal-950/60 rounded p-1.5 border border-teal-800/60">
                             💡 <strong>GMメモ</strong>: 浪寄准教授（PC5）から「超群体（コロニー）仮説」「変異体仮説」「火山熱源誘引説」のいずれか（特に群体の疑い）を提示させます。
@@ -1912,7 +1912,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         {/* PC2への要請 */}
                         <div className="rounded border border-indigo-900/80 bg-indigo-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-indigo-300 text-xs flex items-center gap-1">
-                            <ShieldAlert className="h-3.5 w-3.5" /> ② 海上保安庁 ➔ 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
+                            <ShieldAlert className="h-3.5 w-3.5" /> ② 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
                           </span>
                           <p className="italic text-slate-200">
                             「貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」

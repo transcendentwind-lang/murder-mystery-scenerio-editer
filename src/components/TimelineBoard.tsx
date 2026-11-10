@@ -1854,12 +1854,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="rounded-lg bg-amber-950/30 border border-amber-800/40 p-3 text-xs text-amber-200 space-y-1">
                     <div className="flex items-center gap-1.5 font-bold text-amber-300">
                       <Radio className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
-                      【海上保安庁 警備救難部からの緊急諮問】
+                      【深海写真の受信と専門家2名への緊急諮問】
                     </div>
                     <p className="text-[11px] text-slate-300 leading-relaxed">
-                      洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）を受け、現場の海上保安庁は緊迫しています。<br />
-                      「全長数百mの潜航物体……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
-                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者 浪寄（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛省リエゾン 貝浜（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>海上保安庁東京本部の危機管理官 朝潮（PC1）</strong>が最終意思決定を下します。
+                      洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大生物と20本以上の無数の触手群）を受け、合同対策本部は緊迫しています。<br />
+                      「全長数百mの巨大生物……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
+                      合同対策本部では直ちに、<strong>【海洋生物学者 浪寄（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛省リエゾン 貝浜（PC2）への自衛隊出動判断の要請】</strong>を行います。全員で合議した上で、<strong>危機管理官 朝潮（PC1）</strong>が最終意思決定を下します。
                     </p>
                   </div>
 
@@ -1869,7 +1869,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <div className="flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-teal-400" />
                         <span className="font-bold text-xs text-teal-200">
-                          ① 海上保安庁 ➔ 浪寄（PC5: 海洋生物学者）への相談: 写真の生物学的解釈
+                          ① 浪寄（PC5: 海洋生物学者）への相談: 写真の生物学的解釈
                         </span>
                       </div>
                       <span className="text-[10px] text-teal-300 font-mono bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
@@ -1877,7 +1877,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-300 italic">
-                      「浪寄准教授、この写真（海面下の巨大影と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                      「浪寄准教授、この写真（海面下の巨大生物と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大生物。専門家としての所見を提示してください」
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
