@@ -174,8 +174,8 @@
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_day5.svg",
-      "bytes": 21619,
-      "sha256": "1b30b9b5145cc4fc5e968cef0a104a9c88fc3f29a97dc06b6f1442d7535c5fa1"
+      "bytes": 21616,
+      "sha256": "1beb22edb20ba7f2882f258b6326ac30d6d15e3a210f4f78831f8c0f8dc9c38b"
     },
     {
       "id": "material-17",
@@ -185,8 +185,8 @@
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_day6.svg",
-      "bytes": 22275,
-      "sha256": "7ac6fe2640fbc61ab3f36be2d5516f547c086c651bbd4c198045601bcf318a49"
+      "bytes": 22272,
+      "sha256": "2dd5ff476e90ea737eb8b1a3800e42e0a217b8366031cffd3598ef84b9bbf7f9"
     },
     {
       "id": "material-18",
@@ -196,8 +196,8 @@
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_day7.svg",
-      "bytes": 23037,
-      "sha256": "1f231727b6b2454c90cb0b68aa5e9ad28a532b0fd4dc79f6db41cde1a8477ddc"
+      "bytes": 23034,
+      "sha256": "6c0a58023f2041049b74032f073470ff6dc9939c4b5de3275f496cba646cd4ce"
     },
     {
       "id": "material-19",
