@@ -550,6 +550,13 @@ interface GmStructuredPhase {
     tone?: "emerald" | "amber" | "rose" | "slate";
     speakerLabel: string;
     text: string;
+    handoutBadges?: string[];
+    subAnnouncements?: {
+      subBadge?: string;
+      speakerLabel: string;
+      text: string;
+      handoutBadges?: string[];
+    }[];
     cardActionNote?: string;
   }[];
   gmGuides?: string[];
@@ -591,43 +598,39 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
     {
       phaseNumber: "DAY 1 フェーズ 3",
       phaseTitle: "救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布",
-      startTrigger: "プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点（※最大2回まで地点指定可能）",
-      handoutBadges: [
-        "EV-08：船長の証言（成否に応じて配布）",
-        "EV-07：大型冷凍ボックス（成否に応じて配布）",
-      ],
+      startTrigger: "プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点",
       gmAnnouncements: [
         {
           branchBadge: "🟢 分岐1：1回目の指定で【東北東の漂流予測海域】を正解した場合（失敗0回 ➔ 証言カード2枚とも配布）",
           tone: "emerald",
           speakerLabel: "📢 GMからのアナウンス",
           text: "「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 荒波のなか間一髪で船長とダイバーたちの全員救出に成功しました。救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」",
-          cardActionNote:
-            "👉 GMのカード配布処理：『EV-08：船長の証言』と『EV-07：大型冷凍ボックス』の【2枚とも】その場でプレイヤーへ渡します。",
+          handoutBadges: [
+            "EV-07：大型冷凍ボックス",
+            "EV-08：船長の証言",
+          ],
         },
         {
           branchBadge: "🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ再指定［リトライ］を促す）",
           tone: "amber",
           speakerLabel: "📢 GMからのアナウンス",
           text: "「指定された海域へ巡視船が急行しましたが、波浪と視界不良のなか船影を発見できません！ もう一度だけ、海流（真東2.0kt）と風圧流（北東1.5kt）、そして救難信号からの経過時間（現在20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」",
-          cardActionNote:
-            "👉 GMの進行処理：プレイヤーにもう一度だけ合議させ、2回目の捜索海域を指定させます。",
-        },
-        {
-          branchBadge: "🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）",
-          tone: "amber",
-          speakerLabel: "📢 GMからのアナウンス",
-          text: "「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります（残る1枚は明日Day 2以降の調査枠として選択可能になります）」",
-          cardActionNote:
-            "👉 GMのカード配布処理：プレイヤーが選んだ【1枚のみ】をその場で渡します（残る1枚はDay 2以降の現地調査枠へ繰り越します）。",
+          subAnnouncements: [
+            {
+              subBadge: "🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）",
+              speakerLabel: "📢 GMからのアナウンス",
+              text: "「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります」",
+              handoutBadges: [
+                "EV-07：大型冷凍ボックス または EV-08：船長の証言",
+              ],
+            },
+          ],
         },
         {
           branchBadge: "🔴 分岐3：2回目の再指定も外れた場合（失敗2回 ➔ 自動救助成功・Day 1での証言カード配布は0枚）",
           tone: "rose",
           speakerLabel: "📢 GMからのアナウンス",
           text: "「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」",
-          cardActionNote:
-            "👉 GMのカード配布処理：Day 1ではカードを渡さず、【2枚とも】Day 2以降の現地調査枠へ繰り越します。",
         },
       ],
     },
@@ -1062,26 +1065,24 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 ・朝潮の指揮（ミッション②・③）のもと、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分＋航行40分＝合計1時間後）を合成し、巡視船を急行させる捜索海域（正解：【東北東の漂流予測海域】）を決定させます。
 
 ■ DAY 1 フェーズ3：救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布
-⏱️ 開始タイミング・条件：プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点（最大2回まで指定可能）
+⏱️ 開始タイミング・条件：プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点
 
 ▼ 🟢 分岐1：1回目の指定で【東北東の漂流予測海域】を正解した場合（失敗0回 ➔ 証言カード2枚とも配布）
 【GMからのアナウンス】：
 「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 荒波のなか間一髪で船長とダイバーたちの全員救出に成功しました。救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」
-👉 GM対応：『EV-08：船長の証言』と『EV-07：大型冷凍ボックス』の【2枚とも】その場で渡します。
+📦 配布・提示：EV-07：大型冷凍ボックス ／ EV-08：船長の証言
 
-▼ 🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ地点の再指定［リトライ］を促す）
+▼ 🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ再指定［リトライ］を促す）
 【GMからのアナウンス】：
 「指定された海域へ巡視船が急行しましたが、波浪と視界不良のなか船影を発見できません！ もう一度だけ、海流（真東2.0kt）と風圧流（北東1.5kt）、そして救難信号からの経過時間（現在20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」
-
-▼ 🟡 分岐2-B：2回目の再指定で正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）
+▼ 🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）
 【GMからのアナウンス】：
-「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります（残る1枚は明日Day 2以降の調査枠として選択可能になります）」
-👉 GM対応：プレイヤーが選んだ【1枚のみ】をその場で渡します（残る1枚はDay 2以降の調査枠へ繰り越し）。
+「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります」
+📦 配布・提示：EV-07：大型冷凍ボックス または EV-08：船長の証言
 
 ▼ 🔴 分岐3：2回目の再指定も外れた場合（失敗2回 ➔ 自動救助成功・Day 1での証言カード配布は0枚）
 【GMからのアナウンス】：
-「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」
-👉 GM対応：Day 1ではカードを渡さず、【2枚とも】Day 2以降の調査枠へ繰り越します。`,
+「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」`,
 
   2: `■ DAY 2 フェーズ1：西之島沖の突発海底噴火 ＆ 即応体制維持の通達
 ⏱️ 開始タイミング・条件：Day 1の救助・証言カード確認が終わり、Day 2へ移行した時点
@@ -2409,29 +2410,83 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   : ga.tone === "rose"
                                   ? "border-rose-600 bg-rose-50/70"
                                   : "border-slate-500 bg-slate-50";
-                              return `
-                              <div class="print-no-split rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
-                                ${
-                                  ga.branchBadge
-                                    ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
-                                        ga.branchBadge
-                                      )}</div>`
-                                    : ""
-                                }
-                                <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
-                                  ga.speakerLabel
-                                )}</div>
-                                <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
-                                  ga.text
-                                )}</div>
-                                ${
-                                  ga.cardActionNote
-                                    ? `<div class="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-2.5 py-1.5">${escapeHtml(
-                                        ga.cardActionNote
-                                      )}</div>`
-                                    : ""
-                                }
-                              </div>`;
+                                const gaBadgesHtml =
+                                  ga.handoutBadges && ga.handoutBadges.length > 0
+                                    ? `<div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                        <span class="text-[12px] font-extrabold text-slate-700">📦 配布・提示：</span>
+                                        ${ga.handoutBadges
+                                          .map(
+                                            (b) =>
+                                              `<span class="rounded border border-slate-300 bg-white px-2 py-0.5 text-[12px] font-bold text-slate-900">${escapeHtml(
+                                                b
+                                              )}</span>`
+                                          )
+                                          .join("")}
+                                      </div>`
+                                    : "";
+                                const subAnnounceHtml =
+                                  ga.subAnnouncements && ga.subAnnouncements.length > 0
+                                    ? ga.subAnnouncements
+                                        .map((sub) => {
+                                          const subBadges =
+                                            sub.handoutBadges && sub.handoutBadges.length > 0
+                                              ? `<div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                  <span class="text-[12px] font-extrabold text-slate-700">📦 配布・提示：</span>
+                                                  ${sub.handoutBadges
+                                                    .map(
+                                                      (b) =>
+                                                        `<span class="rounded border border-slate-300 bg-white px-2 py-0.5 text-[12px] font-bold text-slate-900">${escapeHtml(
+                                                          b
+                                                        )}</span>`
+                                                    )
+                                                    .join("")}
+                                                </div>`
+                                              : "";
+                                          return `
+                                          <div class="border-t border-amber-300 pt-2 mt-2 space-y-1.5">
+                                            ${
+                                              sub.subBadge
+                                                ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
+                                                    sub.subBadge
+                                                  )}</div>`
+                                                : ""
+                                            }
+                                            <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
+                                              sub.speakerLabel
+                                            )}</div>
+                                            <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
+                                              sub.text
+                                            )}</div>
+                                            ${subBadges}
+                                          </div>`;
+                                        })
+                                        .join("")
+                                    : "";
+                                return `
+                                <div class="print-no-split rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
+                                  ${
+                                    ga.branchBadge
+                                      ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
+                                          ga.branchBadge
+                                        )}</div>`
+                                      : ""
+                                  }
+                                  <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
+                                    ga.speakerLabel
+                                  )}</div>
+                                  <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
+                                    ga.text
+                                  )}</div>
+                                  ${gaBadgesHtml}
+                                  ${subAnnounceHtml}
+                                  ${
+                                    ga.cardActionNote
+                                      ? `<div class="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-2.5 py-1.5">${escapeHtml(
+                                          ga.cardActionNote
+                                        )}</div>`
+                                      : ""
+                                  }
+                                </div>`;
                             })
                             .join("")}
                         </div>`
@@ -5476,6 +5531,55 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                         <div className="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-3 rounded border border-slate-300 select-text">
                                           {ga.text}
                                         </div>
+                                        {ga.handoutBadges && ga.handoutBadges.length > 0 && (
+                                          <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                            <span className="text-[12px] font-extrabold text-slate-700">
+                                              📦 配布・提示：
+                                            </span>
+                                            {ga.handoutBadges.map((badge, bIdx) => (
+                                              <span
+                                                key={bIdx}
+                                                className="rounded border border-slate-300 bg-white px-2.5 py-0.5 text-[12px] font-bold text-slate-900"
+                                              >
+                                                {badge}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        )}
+                                        {ga.subAnnouncements &&
+                                          ga.subAnnouncements.map((sub, sIdx) => (
+                                            <div
+                                              key={sIdx}
+                                              className="border-t border-amber-300 pt-2.5 mt-2 space-y-1.5"
+                                            >
+                                              {sub.subBadge && (
+                                                <div className="text-[12px] font-extrabold text-slate-900">
+                                                  {sub.subBadge}
+                                                </div>
+                                              )}
+                                              <div className="text-[12px] font-bold text-slate-800">
+                                                {sub.speakerLabel}
+                                              </div>
+                                              <div className="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-3 rounded border border-slate-300 select-text">
+                                                {sub.text}
+                                              </div>
+                                              {sub.handoutBadges && sub.handoutBadges.length > 0 && (
+                                                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                  <span className="text-[12px] font-extrabold text-slate-700">
+                                                    📦 配布・提示：
+                                                  </span>
+                                                  {sub.handoutBadges.map((badge, bIdx) => (
+                                                    <span
+                                                      key={bIdx}
+                                                      className="rounded border border-slate-300 bg-white px-2.5 py-0.5 text-[12px] font-bold text-slate-900"
+                                                    >
+                                                      {badge}
+                                                    </span>
+                                                  ))}
+                                                </div>
+                                              )}
+                                            </div>
+                                          ))}
                                         {ga.cardActionNote && (
                                           <div className="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-3 py-1.5">
                                             {ga.cardActionNote}
