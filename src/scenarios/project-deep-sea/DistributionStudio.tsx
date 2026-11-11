@@ -2297,6 +2297,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         font-size: 20px !important;
         line-height: 1.375 !important;
       }
+      .briefing-title-15px {
+        font-size: 15.5px !important;
+      }
+      .briefing-subhead-13px {
+        font-size: 13.5px !important;
+      }
+      .briefing-body-13px {
+        font-size: 13px !important;
+      }
       .card-empty-slot {
         width: 92mm !important;
         height: 133mm !important;
@@ -4005,7 +4014,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               >
                                 {b.badgeLabel}
                               </span>
-                              <h3 className="text-sm font-black text-slate-900">{b.title}</h3>
+                              <h3 className="briefing-title-15px text-[15.5px] font-black text-slate-900">
+                                {b.title}
+                              </h3>
                             </div>
                             <div className="flex items-center gap-2">
                               {b.linkedNagatsuCardCode && (
@@ -4032,7 +4043,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                           {/* 上段：長津からの緊急通信ブリーフィング / 途中アナウンス */}
                           <div
-                            className="rounded border p-3 space-y-1"
+                            className="rounded border p-3 space-y-1.5"
                             style={{
                               backgroundColor: b.isMidDayAddition ? "#f5f7ff" : "#f8fafc",
                               borderColor: b.isMidDayAddition ? "#c7d2fe" : "#cbd5e1",
@@ -4040,7 +4051,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           >
                             <div className="flex flex-wrap items-center justify-between gap-1">
                               <span
-                                className="text-xs font-extrabold"
+                                className="briefing-subhead-13px text-[13.5px] font-extrabold"
                                 style={{
                                   color: b.isMidDayAddition ? "#312e81" : "#1e293b",
                                 }}
@@ -4048,18 +4059,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 {b.nagatsuBriefingTitle}
                               </span>
                               {b.timingNote && (
-                                <span className="text-[10.5px] font-semibold text-slate-500">
+                                <span className="text-[11px] font-semibold text-slate-500">
                                   配布タイミング：{b.timingNote}
                                 </span>
                               )}
                             </div>
                             {b.nagatsuBriefingRubyHtml ? (
                               <p
-                                className="text-[11px] leading-[1.82] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
+                                className="briefing-body-13px text-[13px] leading-[1.78] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                 dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
                               />
                             ) : (
-                              <p className="text-[11px] leading-[1.82] text-slate-800 font-medium whitespace-pre-wrap">
+                              <p className="briefing-body-13px text-[13px] leading-[1.78] text-slate-800 font-medium whitespace-pre-wrap">
                                 {b.nagatsuBriefingText}
                               </p>
                             )}
@@ -4068,7 +4079,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
                           <div className="rounded border border-slate-300 bg-white p-3 space-y-1.5">
                             <div
-                              className="text-xs font-extrabold border-b border-slate-200 pb-1"
+                              className="briefing-subhead-13px text-[13.5px] font-extrabold border-b border-slate-200 pb-1"
                               style={{
                                 color: b.isMidDayAddition ? "#1e3a8a" : "#0f172a",
                               }}
@@ -4077,10 +4088,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 ? "🧭 危機管理官 朝潮がこの局面で指揮・達成すべき追加ミッション"
                                 : "🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション"}
                             </div>
-                            <ul className="space-y-1.5 text-[11px] leading-[1.75] text-slate-800 list-none">
+                            <ul className="briefing-body-13px space-y-1.5 text-[13px] leading-[1.72] text-slate-800 list-none">
                               {b.asashioMissions.map((m, mIdx) => (
                                 <li key={mIdx} className="flex items-start gap-2">
-                                  <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
+                                  <span className="mt-1 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
                                   <span>{renderColoredCardBody(m)}</span>
                                 </li>
                               ))}
