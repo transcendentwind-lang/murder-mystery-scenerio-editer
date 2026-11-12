@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { initialProject } from "@/utils/initialProjectData";
+import { sonarWords } from "@/scenarios/project-deep-sea/sonarWords";
 import { WhaleSonarMobileApp } from "@/components/WhaleSonarMobileApp";
 import { Lock, Waves, KeyRound, AlertCircle, LogOut } from "lucide-react";
 
@@ -119,8 +119,7 @@ export default function SonarStandalonePage() {
   return (
     <div className="relative min-h-screen w-full bg-slate-950">
       <WhaleSonarMobileApp
-        words={initialProject.crypticWords}
-        grammar={initialProject.crypticGrammar}
+        words={sonarWords}
         standalone={true}
       />
       <div className="pb-6 flex justify-center bg-slate-950">

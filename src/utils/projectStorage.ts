@@ -1,9 +1,26 @@
 import { isBuiltinProject } from "@/scenarios/catalog";
 import { MMProject, Character, IncidentStep, EvidenceItem, LockCriterion, CandidateLockStatus } from "@/types/schema";
 import { initialProject } from "./initialProjectData";
+import { isProjectJson } from "./projectJson";
 
 const STORAGE_KEY_PROJECTS = "mm_workbench_projects_v1";
 const STORAGE_KEY_ACTIVE_ID = "mm_workbench_active_project_id_v1";
+
+export function getUnreadableStoredProjects(): unknown[] {
+  if (typeof window === "undefined") return [];
+  try {
+    const rows: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY_PROJECTS) ?? "[]");
+    return Array.isArray(rows) ? rows.filter((row) => !isProjectJson(row)) : [];
+  } catch {
+    return [];
+  }
+}
+
+function writeStoredProjects(projects: MMProject[]) {
+  // 開けない作品の原本も、他作品の保存・削除で消さずに保持する。
+  const unreadable = getUnreadableStoredProjects();
+  localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify([...projects, ...unreadable]));
+}
 
 /**
  * 新規シナリオプロジェクト用の汎用スターターテンプレート作成
@@ -328,11 +345,11 @@ export function getStoredProjects(): MMProject[] {
         }
         parsed[initialIdx] = initialProject;
       }
-      const normalizedList = parsed
-        .filter((p: any) => p && typeof p === "object")
-        .map((p: any) => normalizeProject(p));
-      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(normalizedList));
-      return normalizedList.length > 0 ? normalizedList : [initialProject];
+      const normalizedList = parsed.filter(isProjectJson).map(normalizeProject);
+      const readableProjects = normalizedList.length > 0 ? normalizedList : [initialProject];
+      const unreadable = parsed.filter((row) => !isProjectJson(row));
+      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify([...readableProjects, ...unreadable]));
+      return readableProjects;
     }
     return [initialProject];
   } catch (err) {
@@ -353,7 +370,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
     const res = await fetch("/local-projects.json", { cache: "no-store" });
     if (!res.ok) return currentProjects;
 
-    const localPresets = (await res.json()) as MMProject[];
+    const localPresets: unknown = await res.json();
     if (!Array.isArray(localPresets) || localPresets.length === 0) {
       return currentProjects;
     }
@@ -362,7 +379,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
     let hasChanges = false;
 
     for (const preset of localPresets) {
-      if (!preset || !preset.id) continue;
+      if (!isProjectJson(preset) || !preset.id) continue;
       const normalizedPreset = normalizeProject(preset);
       const existingIdx = updated.findIndex((p) => p && p.id === preset.id);
       if (existingIdx < 0) {
@@ -395,7 +412,7 @@ export async function syncLocalPresetProjects(): Promise<MMProject[]> {
     }
 
     if (hasChanges) {
-      localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(updated));
+      writeStoredProjects(updated);
     }
     return updated;
   } catch {
@@ -414,7 +431,7 @@ export function saveProjectToStorage(project: MMProject): boolean {
     const index = projects.findIndex((item) => item.id === project.id);
     if (index >= 0) projects[index] = updatedProject;
     else projects.unshift(updatedProject);
-    localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
+    writeStoredProjects(projects);
     return true;
   } catch (error) {
     console.error("Failed to save project:", error);
@@ -436,7 +453,7 @@ export function deleteProjectFromStorage(projectId: string): MMProject[] {
       return projects;
     }
     projects = projects.filter((p) => p.id !== projectId);
-    localStorage.setItem(STORAGE_KEY_PROJECTS, JSON.stringify(projects));
+    writeStoredProjects(projects);
     return projects;
   } catch (err) {
     console.error("Failed to delete project:", err);
@@ -465,7 +482,15 @@ export function setActiveProjectId(id: string): void {
  */
 export function exportProjectToJsonFile(project: MMProject): void {
   const fileName = `${project.title.replace(/[\\/:*?"<>|]/g, "_")}_data.json`;
-  const jsonStr = JSON.stringify(project, null, 2);
+  downloadJson(fileName, project);
+}
+
+export function exportUnreadableProjectsToJsonFile(projects: unknown[]): void {
+  downloadJson("unreadable_scenarios.json", projects);
+}
+
+function downloadJson(fileName: string, data: unknown): void {
+  const jsonStr = JSON.stringify(data, null, 2);
   const blob = new Blob([jsonStr], { type: "application/json" });
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");

@@ -1,0 +1,148 @@
+import type { CrypticWord } from "@/types/schema";
+
+export const sonarWords = [
+  {
+    id: "word-gather",
+    symbol: "●●●●↑",
+    meaning: "集まれ",
+    soundPattern: "加速する4連打（カ・カ・カカッ！）",
+  },
+  {
+    id: "word-alert",
+    symbol: "⚠⚠",
+    meaning: "周囲を警戒せよ",
+    soundPattern: "重低音の警告パルス（ドォン…ドォン…）",
+  },
+  {
+    id: "word-enemy",
+    symbol: "⚡⚡⚡",
+    meaning: "敵がいる",
+    soundPattern: "高音連打から低音振動（タタ・タズズズ）",
+  },
+  {
+    id: "word-flee",
+    symbol: "💨💨",
+    meaning: "逃げろ",
+    soundPattern: "急迫する5連パルス（タタ・タト・トン）",
+  },
+  {
+    id: "word-child-feed",
+    symbol: "🍼",
+    meaning: "（子ども）餌をくれ",
+    soundPattern: "高音スイープ音（チューン）",
+  },
+  {
+    id: "word-child-here",
+    symbol: "📍👶",
+    meaning: "（子ども）自分の場所はここだ",
+    soundPattern: "高音5連パルス（ロポ・ポポポ）",
+  },
+  {
+    id: "word-adult-here",
+    symbol: "📍🐋",
+    meaning: "（大人）自分の場所はここだ",
+    soundPattern: "中低音5連パルス（ゴポ・ポポポ）",
+  },
+  {
+    id: "word-human",
+    symbol: "▲▲",
+    meaning: "人間",
+    soundPattern: "均等2連打（カッカッ）",
+  },
+  {
+    id: "word-whale",
+    symbol: "▼━",
+    meaning: "我ら・自分（クジラ）",
+    soundPattern: "重厚な低音長打（ド・ドーン）",
+  },
+  {
+    id: "word-you",
+    symbol: "▼▼▲▲▲",
+    meaning: "あなたたち・あなた",
+    soundPattern: "低音2打＋高音3打（ドド・ツツツ）",
+  },
+  {
+    id: "word-promise",
+    symbol: "◆◆◆",
+    meaning: "約束",
+    soundPattern: "高低交差3連打（チ・トン・チ）",
+  },
+  {
+    id: "word-go-east",
+    symbol: "→→",
+    meaning: "東",
+    soundPattern: "急上昇の2点打（ツ・ピィッ！）",
+  },
+  {
+    id: "word-go-west",
+    symbol: "←←",
+    meaning: "西",
+    soundPattern: "階段状下降の3点打（ピ・ポ・ポン）",
+  },
+  {
+    id: "word-go-south",
+    symbol: "↓↓",
+    meaning: "南",
+    soundPattern: "低音下降パルス（ポ・ポポン）",
+  },
+  {
+    id: "word-go-north",
+    symbol: "↑↑",
+    meaning: "北",
+    soundPattern: "上昇テンポ・高音パルス（ピ・ピピッ）",
+  },
+  {
+    id: "word-greet",
+    symbol: "👋",
+    meaning: "挨拶／こんにちは",
+    soundPattern: "共鳴4連コーダ（ズジーズ・ズ）",
+  },
+  {
+    id: "word-subsea-volcano",
+    symbol: "▲🌋▲",
+    meaning: "海の下の火山",
+    soundPattern: "重低音の連続地鳴りパルス（ゴゴゴゴ…）",
+  },
+  {
+    id: "word-calf",
+    symbol: "🐋👶",
+    meaning: "クジラの子ども",
+    soundPattern: "中音2連長打（ト・トーン）",
+  },
+  {
+    id: "word-giant-prey",
+    symbol: "●●●●●●●",
+    meaning: "大きい・たくさんの餌",
+    soundPattern: "高音超高速ロングバースト（チチチチチチッ！）",
+  },
+  {
+    id: "word-normal-prey",
+    symbol: "●●●●",
+    meaning: "普通の餌",
+    soundPattern: "高音4連クリック（チチチ・チ）",
+  },
+  {
+    id: "word-attack",
+    symbol: "⚔️",
+    meaning: "攻撃せよ",
+    soundPattern: "激しい6連打パルス（ババババババッ！）",
+  },
+  {
+    id: "word-search",
+    symbol: "◎◎",
+    meaning: "探せ",
+    soundPattern: "等間隔の探査パルス（タン・タン・タン）",
+  },
+  {
+    id: "word-ack",
+    symbol: "●",
+    meaning: "了解した",
+    soundPattern: "単発クリック（カッ）",
+  },
+  {
+    id: "word-human-whale",
+    symbol: "▼━▲▲",
+    meaning: "人間とクジラ",
+    soundPattern: "低音長打＋均等2連打（ド・ドーン・カッカッ）",
+  },
+] as const satisfies readonly Pick<CrypticWord, "id" | "symbol" | "meaning" | "soundPattern">[];

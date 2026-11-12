@@ -8,7 +8,7 @@ Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Re
 
 | 層 | 主なファイル | 役割 |
 |---|---|---|
-| 画面の統合 | [`src/app/page.tsx`](../src/app/page.tsx) | 選択作品、タブ、更新と保存の連携 |
+| 画面の統合 | [`src/app/page.editor.tsx`](../src/app/page.editor.tsx) | 選択作品、タブ、更新と保存の連携 |
 | 作品管理 | [`ProjectManagerModal.tsx`](../src/components/ProjectManagerModal.tsx) | 作成・切り替え・複製・削除・JSON入出力 |
 | 制作 | [`TimelineBoard.tsx`](../src/components/TimelineBoard.tsx)、[`CharactersEvidenceManager.tsx`](../src/components/CharactersEvidenceManager.tsx) | フェーズ・人物・証拠・情報対応表・条件表 |
 | 当日の進行 | [`GmDashboard.tsx`](../src/components/GmDashboard.tsx) | フェーズ別進行、証拠確認、タイマー |
@@ -70,7 +70,7 @@ Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Re
 
 ## 実行と公開
 
-作者・GM向けはローカルの `/`、参加者用の独立画面は `/sonar`。独立画面は常に組み込みデータを参照し、作者が選択・編集した作品とは同期しない。
+作者・GM向けはローカルの `/`、参加者用の独立画面は `/sonar`。独立画面は組み込みの音響語彙を参照し、作者が選択・編集した作品とは同期しない。参加者向けビルドは編集画面の入口を除外し、参加者画面に必要なソースだけを許可する。
 
 通常サーバーでは [`src/proxy.ts`](../src/proxy.ts) がlocalhost・127.0.0.1以外のホスト名による `/` アクセスを `/sonar` へ誘導する。これは画面誘導であり、編集機能全体のアクセス制御ではない。
 

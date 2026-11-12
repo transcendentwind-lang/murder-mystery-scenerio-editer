@@ -7,7 +7,7 @@ import { CrypticWord, CrypticGrammar } from "@/types/schema";
 import { AcousticPulsePoint, buildAudioTimeline } from "@/utils/wordAudio";
 export { getWordAcousticPulses } from "@/utils/wordAudio";
 import { audioEngine } from "@/utils/audioSynth";
-import { printWhaleSonarGuideA4 } from "@/utils/scriptGenerator";
+import { printWhaleSonarGuideA4 } from "@/utils/sonarGuide";
 import {
   Volume2,
   VolumeX,
@@ -382,7 +382,7 @@ interface AttemptLog {
 }
 
 interface WhaleSonarMobileAppProps {
-  words: CrypticWord[];
+  words: readonly Pick<CrypticWord, "id" | "symbol" | "meaning" | "soundPattern">[];
   grammar?: CrypticGrammar;
   standalone?: boolean;
 }
