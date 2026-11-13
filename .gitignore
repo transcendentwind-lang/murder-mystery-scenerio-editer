@@ -8,6 +8,7 @@ coverage
 
 # Next.js
 .next/
+/next-env.d.ts
 out/
 build
 dist
@@ -29,7 +30,6 @@ yarn-error.log*
 
 # TypeScript
 *.tsbuildinfo
-next-env.d.ts
 
 # Local Scenario Data (kept out of public repository per confidentiality rules)
 public/local-projects.json
