@@ -999,15 +999,20 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
     },
     {
       phaseNumber: "DAY 7 フェーズ 3",
-      phaseTitle: "防衛省・自衛艦隊幹部からの直通電話（公表方法の最終選択）",
+      phaseTitle: "防衛省・自衛艦隊幹部からの直通電話 ＆ Day 7 秘匿カード配布（公表方法の最終選択）",
       startTrigger: "長津の作戦成功アナウンス（NG-08-2）が完了し、対策本部に安堵が広がった直後",
+      handoutBadges: [
+        "SP-08〜SP-10：組織の論理と岸部局長の窮地（朝潮・貝浜・長津へ配布）",
+        "SP-11：現場指揮官の葛藤（坂凪へ配布 ※両方の事情・板挟み）",
+        "SP-12・SP-13：百頭に一頭のリーダー鯨と盟約断絶の危機（太刀魚・初瀬へ配布）",
+      ],
       gmAnnouncements: [
         {
           tone: "slate",
           speakerLabel: "🎙️ NPC：防衛省・自衛艦隊幹部（GM）",
           text: "「――朝潮君、貝浜君、聞こえるかね。\n……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。\nだがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。\nこのあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。そもそも、クジラの攻撃で相手が完全に消滅したという確固たる証拠があるわけでもないだろう？\n世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。\n君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」",
           cardActionNote:
-            "👉 GM進行処理：プレイヤー全員で合議させ、【選択肢A：功績を出さず、海上自衛隊の戦果として処理する】か【選択肢B：合同対策本部の功績として発表し、自衛隊の武力攻撃は不要とする】を決断させます。\n💡【A案でもクジラを逃がせるガイド】：仮に選択肢Aを選んだ場合でも、プレイヤーがクジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。",
+            "👉 GM進行処理：ここでDay 7秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪・SP-12太刀魚・SP-13初瀬）を配布します（6名プレイ時はGMが長津としてSP-10の立場を発言）。\n・東京本部組（朝潮・貝浜・長津）：「上位の命令や、独断で潜水艦を動かしてくれた岸部局長の顔を立てるべき（クジラを巻き込んでの発砲やむなし＝A案）」\n・小笠原現地組（太刀魚・初瀬・浪寄）：「駿河湾の100頭の中にいる『人間とコーダで意思疎通できる100頭に1頭のリーダー個体』が死ねば盟約が途切れるため、クジラへの発砲など絶対にありえない（B案）」\n・坂凪（海保船長）：「両方の事情を知り板挟みとなる立場」として議論を白熱させます。\n💡【A案でもクジラを逃がせるガイド】：仮に選択肢Aを選んだ場合でも、プレイヤーがクジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。",
         },
         {
           branchBadge: "🟣 条件分岐：プレイヤーが「爆雷を投下させず、かつ自衛隊も立てる第3の選択」を交渉してきた場合",
@@ -1234,10 +1239,15 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 　皆さん、やりました。我々と、クジラの勝利です」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ DAY 7 フェーズ3：防衛省・自衛艦隊幹部からの直通電話（公表方法の最終選択）
+■ DAY 7 フェーズ3：防衛省・自衛艦隊幹部からの直通電話 ＆ Day 7 秘匿カード配布（公表方法の最終選択）
 ⏱️ 開始タイミング・条件：長津の作戦成功アナウンス（NG-08-2）が完了した直後
+📦 配布：Day 7 秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪・SP-12太刀魚・SP-13初瀬）
 【🎙️ NPC：防衛省・自衛艦隊幹部（GM）】：
 「――朝潮君、貝浜君、聞こえるかね。……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。だがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。このあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。……君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」
+・🔥【Day 7 秘匿カードによる対立構図】：
+  - 東京本部組（朝潮・貝浜・長津）：上位からの命令や独断で潜水艦を動かしてくれた岸部局長の顔を立てるため、クジラを巻き込んでの発砲もやむなし（A案）
+  - 小笠原現地組（太刀魚・初瀬・浪寄）：駿河湾の100頭の中にいる「人間とコーダで意思疎通できる100頭に1頭のリーダー個体」が死ねば盟約が途切れるため、クジラへの発砲などありえない（B案）
+  - 坂凪（巡視船船長）：海保としての組織の恩義と、リーダー鯨・盟約保護の両方の理由を知り板挟みとなる
 ・💡【A案でもクジラを逃がせるガイド】：仮にA案を選んだ場合でも、クジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、魚雷・爆雷を回避してもらうことができます。
 ・🟣【第3の選択（爆雷を投下させず、自衛隊を立てる選択）を交渉してきた場合】：
   幹部（岸部）：「現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない」
@@ -1315,7 +1325,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   7: [
     "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 15分）",
     "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
-    "防衛省幹部からの直通電話を演出し、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部が機転を効かせて解決したヒーローとして発表し自衛隊の活動を不要にするか」の選択をプレイヤーに委ねる。もし「第3の選択」を交渉してきた場合は、その場のGM裁量で交渉を行う。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
+    "防衛省幹部からの直通電話を演出し、Day 7秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪［両方の理由］・SP-12太刀魚・SP-13初瀬）を配布する。「①岸部局長の顔を立てて自衛隊が掃討したことにするか（東京側：発砲やむなし）」「②100頭に1頭のリーダー鯨と盟約を守るため発砲に反対し対策本部の功績とするか（現地側：発砲反対）」を対立・議論させる（A案＋クジラへの退避メッセージ送信や、第3の選択の交渉も可能）。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
     "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊による撃滅報道 ／ パターンB：合同対策本部が特別な薬剤を撃ち込み自衛隊の活動不要で解決したとするヒーロー報道）を読み上げる",
     "朝潮の指揮で対策本部を解散し、エピローグの情景を読み上げてゲームを終了・感想戦へ移行する",
   ],
@@ -1402,7 +1412,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
       (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km")) ||
-      (dayNumber === 6 && existing.readAloudScript.includes("目安15分"));
+      (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
+      (dayNumber === 7 && !existing.readAloudScript.includes("SP-08"));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -1432,7 +1443,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
-      (dayNumber === 7 && existing.gmCheckpoints[0].includes("目標時間: 30分")) ||
+      (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-08")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
@@ -1676,6 +1687,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   >("sheet");
   const [briefingFilterMode, setBriefingFilterMode] = useState<
     "all" | "midday" | "start"
+  >("all");
+  const [specialCardFilterMode, setSpecialCardFilterMode] = useState<
+    "all" | "day1to6" | "day7"
   >("all");
   const [selectedBriefingId, setSelectedBriefingId] = useState(DAILY_COMMANDER_BRIEFINGS[0]?.id ?? "");
   const [selectedPhaseCardId, setSelectedPhaseCardId] = useState(NAGATSU_PHASE_CARDS[0]?.id ?? "");
@@ -2946,6 +2960,42 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
               </div>
 
+              {/* 特別カードモード時はDay 1〜6 / Day 7秘匿の絞り込みチップを表示 */}
+              {handoutViewMode === "cards" && (
+                <div className="flex flex-wrap gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
+                  <button
+                    onClick={() => setSpecialCardFilterMode("all")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "all"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    全て({SPECIAL_CHARACTER_CARDS.length})
+                  </button>
+                  <button
+                    onClick={() => setSpecialCardFilterMode("day1to6")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "day1to6"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    Day 1〜6({SPECIAL_CHARACTER_CARDS.filter((c) => c.revealDayNumber <= 6).length})
+                  </button>
+                  <button
+                    onClick={() => setSpecialCardFilterMode("day7")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "day7"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    Day 7 秘匿({SPECIAL_CHARACTER_CARDS.filter((c) => c.revealDayNumber === 7).length})
+                  </button>
+                </div>
+              )}
+
               {/* Day別指令モード時は証拠資料と同じ形式で絞り込みチップを表示 */}
               {handoutViewMode === "daily_briefings" && (
                 <div className="flex flex-wrap gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
@@ -3021,7 +3071,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 <div className="space-y-2">
                   {(project.characters || []).map((c, idx) => {
                     const isSelected = c.id === activeChar?.id;
-                    const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
+                    const spCards = SPECIAL_CHARACTER_CARDS.filter((sc) => sc.characterId === c.id);
                     return (
                       <button
                         key={c.id}
@@ -3041,9 +3091,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               {c.location === "headquarters" ? "東京本部" : "現地救難隊"}
                             </span>
                           </div>
-                          {spCard && (
+                          {spCards.length > 0 && (
                             <span className="text-[10px] font-mono text-slate-400">
-                              {spCard.revealDayLabel}
+                              {spCards.map((sc) => sc.revealDayLabel).join(" / ")}
                             </span>
                           )}
                         </div>
@@ -3674,16 +3724,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 特別配布カード（全7枚・表紙のみページ＆内容のみページ交互・両面印刷対応）
+                     🃏 特別配布カード（全13枚：Day 1〜6 特別配布7枚 ＋ Day 7 秘匿カード6枚・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 特別配布カード（全7枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 特別配布カード ＆ Day 7 秘匿カード（全{SPECIAL_CHARACTER_CARDS.length}枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          特別配布カード一覧（表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）
+                          {specialCardFilterMode === "day7"
+                            ? "Day 7 秘匿カード一覧（全6枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"
+                            : specialCardFilterMode === "day1to6"
+                            ? "Day 1〜6 特別配布カード一覧（全7枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"
+                            : "特別配布 ＆ Day 7 秘匿カード一覧（全13枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"}
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3700,15 +3754,16 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                     <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
                       <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
-                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します。
+                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します（※左メニューで「Day 7 秘匿(6)」を選ぶと、追加されたDay 7秘匿カード6枚だけを印刷できます）。
                     </div>
 
                     {(() => {
                       const rawCardsSource =
-                        project.specialCharacterCards && project.specialCharacterCards.length === 7
+                        project.specialCharacterCards &&
+                        project.specialCharacterCards.length === SPECIAL_CHARACTER_CARDS.length
                           ? project.specialCharacterCards
                           : SPECIAL_CHARACTER_CARDS;
-                      const cardsSource = rawCardsSource.map((c) => {
+                      const mergedCards = rawCardsSource.map((c) => {
                         const master = SPECIAL_CHARACTER_CARDS.find((m) => m.id === c.id);
                         return master
                           ? {
@@ -3718,9 +3773,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               description: master.description,
                               rubyHtml: master.rubyHtml,
                               glossaryNote: master.glossaryNote,
+                              categoryLabel: master.categoryLabel,
                             }
                           : c;
                       });
+                      const cardsSource = mergedCards.filter((c) =>
+                        specialCardFilterMode === "day7"
+                          ? c.revealDayNumber === 7
+                          : specialCardFilterMode === "day1to6"
+                          ? c.revealDayNumber <= 6
+                          : true
+                      );
 
                       const sheets: ((typeof cardsSource)[number] | null)[][] = [];
                       for (let i = 0; i < cardsSource.length; i += 4) {
@@ -3747,7 +3810,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           );
                         }
                         const charShort = (card.characterName || "").split("（")[0];
-                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
                         return (
                           <div
@@ -3813,7 +3876,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 className="font-mono text-xs font-bold"
                                 style={{ color: card.accentHex }}
                               >
-                                {card.cardCode} / 07
+                                {card.cardCode} / {String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
                               </span>
                             </div>
                           </div>
@@ -3835,7 +3898,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           );
                         }
                         const charShort = (card.characterName || "").split("（")[0];
-                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
                         return (
                           <div
@@ -3911,7 +3974,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   className="font-mono font-bold"
                                   style={{ color: card.accentHex }}
                                 >
-                                  {card.cardCode} / 07
+                                  {card.cardCode} / {String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
                                 </span>
                               </div>
                             </div>
