@@ -659,17 +659,17 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
     },
     {
       phaseNumber: "DAY 2 フェーズ 2",
-      phaseTitle: "優先調査項目の選択（東京1枠・小笠原2枠） ＆ 調査結果の共有",
+      phaseTitle: "優先調査項目の選択（東京2枠・小笠原2枠） ＆ 調査結果の共有",
       startTrigger: "長津のブリーフィング終了後、朝潮（PC1）が調査項目の選定（ミッション①）を開始した時点",
       handoutBadges: [
-        "東京本部の調査カード（3択から1枚配布）",
+        "東京本部の調査カード（3択から2枚配布）",
         "小笠原現地の調査カード（4択［＋Day 1未取得証言カード］から2枚配布）",
       ],
       gmAnnouncements: [
         {
           tone: "slate",
           speakerLabel: "📢 GMからのアナウンス（調査枠の案内）",
-          text: "「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」",
+          text: "「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」",
           cardActionNote:
             "👉 GMのカード配布処理：プレイヤーが合議して選んだ調査項目の証拠カードを配布し、全員で共有・議論させます。",
         },
@@ -697,7 +697,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       ],
       gmGuides: [
         "朝潮（PC1）の指揮（ミッション①）で作戦海図（W-3100）上にソノブイ3基の投下ポイントを決定させ、巨大生物の現在位置（セクターB-3）を特定させます。",
-        "あわせてDay 3の優先調査枠（東京1枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。※もしソノブイ索敵でB-3の特定に失敗した場合は、不鮮明な遠方写真を解析するため、小笠原現地の調査枠（2枠）のうち1枠を自動的に『F-3D：撮影した画像の分析（EV-25）』へ充当します（残り1枠を他から選択）。",
+        "あわせてDay 3の優先調査枠（東京2枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。※もしソノブイ索敵でB-3の特定に失敗した場合は、不鮮明な遠方写真を解析するため、小笠原現地の調査枠（2枠）のうち1枠を自動的に『F-3D：撮影した画像の分析（EV-25）』へ充当します（残り1枠を他から選択）。",
       ],
     },
     {
@@ -989,7 +989,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       nagatsuAnnouncements: [
         {
           sourceLabel: "『長津カード NG-08-1（Day 7 達成時①）』と同文",
-          text: "「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。\n　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。\n　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」",
+          text: "「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー・光学探知から、一頭の白いクジラに続いて、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。\n　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。\n　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」",
         },
         {
           sourceLabel: "『長津カード NG-08-2（Day 7 達成時②）』と同文",
@@ -1002,9 +1002,10 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       phaseTitle: "防衛省・自衛艦隊幹部からの直通電話 ＆ Day 7 秘匿カード配布（公表方法の最終選択）",
       startTrigger: "長津の作戦成功アナウンス（NG-08-2）が完了し、対策本部に安堵が広がった直後",
       handoutBadges: [
-        "SP-08〜SP-10：組織の論理と岸部局長の窮地（朝潮・貝浜・長津へ配布）",
-        "SP-11：現場指揮官の葛藤（坂凪へ配布 ※両方の事情・板挟み）",
-        "SP-12・SP-13：百頭に一頭のリーダー鯨と盟約断絶の危機（太刀魚・初瀬へ配布）",
+        "🟦 SP-08〜SP-10：組織の論理（朝潮・貝浜・長津へ配布）",
+        "🟪 SP-11：組織と現場の狭間（坂凪へ配布）",
+        "🟥 SP-12・SP-13：盟約断絶の危機（太刀魚・初瀬へ配布）",
+        "🟥 SP-14：朝倉研究の危険性（浪寄へ配布）",
       ],
       gmAnnouncements: [
         {
@@ -1012,7 +1013,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
           speakerLabel: "🎙️ NPC：防衛省・自衛艦隊幹部（GM）",
           text: "「――朝潮君、貝浜君、聞こえるかね。\n……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。\nだがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。\nこのあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。そもそも、クジラの攻撃で相手が完全に消滅したという確固たる証拠があるわけでもないだろう？\n世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。\n君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」",
           cardActionNote:
-            "👉 GM進行処理：ここでDay 7秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪・SP-12太刀魚・SP-13初瀬）を配布します（6名プレイ時はGMが長津としてSP-10の立場を発言）。\n・東京本部組（朝潮・貝浜・長津）：「上位の命令や、独断で潜水艦を動かしてくれた岸部局長の顔を立てるべき（クジラを巻き込んでの発砲やむなし＝A案）」\n・小笠原現地組（太刀魚・初瀬・浪寄）：「駿河湾の100頭の中にいる『人間とコーダで意思疎通できる100頭に1頭のリーダー個体』が死ねば盟約が途切れるため、クジラへの発砲など絶対にありえない（B案）」\n・坂凪（海保船長）：「両方の事情を知り板挟みとなる立場」として議論を白熱させます。\n💡【A案でもクジラを逃がせるガイド】：仮に選択肢Aを選んだ場合でも、プレイヤーがクジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。",
+            "👉 GM進行処理：ここでDay 7秘匿カード全7枚（🟦青：SP-08朝潮・SP-09貝浜・SP-10長津 ／ 🟪紫：SP-11坂凪 ／ 🟥赤：SP-12太刀魚・SP-13初瀬・SP-14浪寄）を配布します（6名プレイ時はGMが長津としてSP-10の立場を発言）。\n・🟦東京本部組（朝潮・貝浜・長津）『組織の論理』：「上位の命令や、協力してくれた岸部局長の顔を立てるべき（クジラを巻き込んでの発砲もやむなし＝海自の戦果案）」\n・🟪坂凪（海保船長）『組織と現場の狭間』：「組織の論理も理解できるが、先頭の白いクジラ（姉と挨拶を交わし朝倉教授が『あの白いクジラがコーダだったんだ』と言い残した100頭に1頭のリーダー個体）が死ねば盟約が途切れる可能性があり板挟みとなる」\n・🟥太刀魚・初瀬『盟約断絶の危機』：「先頭の白いクジラは100頭に1頭のリーダー個体・コーダ（通訳者）であり、死ねば人間とクジラの盟約が途切れるため、クジラへの発砲など絶対にありえない」\n・🟥浪寄『朝倉研究の危険性』：「クジラ言語研究の公開は『クジラが高度な知的生物である』と証明し捕鯨推進派に不都合なため、朝倉教授があなたを守ろうとした真意を悟り、自分がヒーローになることを望まない」\n💡【海自の戦果案でもクジラを逃がせるガイド】：仮に選択肢Aを選んだ場合でも、プレイヤーがクジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。",
         },
         {
           branchBadge: "🟣 条件分岐：プレイヤーが「爆雷を投下させず、かつ自衛隊も立てる第3の選択」を交渉してきた場合",
@@ -1097,10 +1098,10 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ DAY 2 フェーズ2：優先調査項目の選択（東京1枠・小笠原2枠） ＆ 調査結果の共有
+■ DAY 2 フェーズ2：優先調査項目の選択（東京2枠・小笠原2枠） ＆ 調査結果の共有
 ⏱️ 開始タイミング・条件：長津のブリーフィング終了後、朝潮（PC1）が調査項目の選定を開始した時点
 【GMからの案内】：
-「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」`,
+「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」`,
 
   3: `■ DAY 3 フェーズ1：鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始
 ⏱️ 開始タイミング・条件：Day 2の調査共有が完了し、Day 3へ移行した時点
@@ -1227,7 +1228,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 📦 配布：長津へ『NG-08-1』『NG-08-2』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス①（『長津カード NG-08-1』と同文） ━━┓
-「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。
+「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー・光学探知から、一頭の白いクジラに続いて、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。
 　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。
 　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -1241,13 +1242,14 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 ■ DAY 7 フェーズ3：防衛省・自衛艦隊幹部からの直通電話 ＆ Day 7 秘匿カード配布（公表方法の最終選択）
 ⏱️ 開始タイミング・条件：長津の作戦成功アナウンス（NG-08-2）が完了した直後
-📦 配布：Day 7 秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪・SP-12太刀魚・SP-13初瀬）
+📦 配布：Day 7 秘匿カード全7枚（🟦SP-08朝潮・SP-09貝浜・SP-10長津 ／ 🟪SP-11坂凪 ／ 🟥SP-12太刀魚・SP-13初瀬・SP-14浪寄）
 【🎙️ NPC：防衛省・自衛艦隊幹部（GM）】：
 「――朝潮君、貝浜君、聞こえるかね。……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。だがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。このあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。……君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」
-・🔥【Day 7 秘匿カードによる対立構図】：
-  - 東京本部組（朝潮・貝浜・長津）：上位からの命令や独断で潜水艦を動かしてくれた岸部局長の顔を立てるため、クジラを巻き込んでの発砲もやむなし（A案）
-  - 小笠原現地組（太刀魚・初瀬・浪寄）：駿河湾の100頭の中にいる「人間とコーダで意思疎通できる100頭に1頭のリーダー個体」が死ねば盟約が途切れるため、クジラへの発砲などありえない（B案）
-  - 坂凪（巡視船船長）：海保としての組織の恩義と、リーダー鯨・盟約保護の両方の理由を知り板挟みとなる
+・🔥【Day 7 秘匿カード（全7枚）による対立構図】：
+  - 🟦東京本部組（朝潮・貝浜・長津）『組織の論理』：上位からの命令や、協力してくれた岸部局長の顔を立てるため、クジラを巻き込んでの発砲もやむなしとして海上自衛隊の戦果として処理する案を選ぶべきだ
+  - 🟪坂凪（巡視船船長）『組織と現場の狭間』：海保として組織の論理も理解できるが、先頭の白いクジラ（姉と挨拶を交わし朝倉教授が『あの白いクジラがコーダだったんだ』と言い残した100頭に1頭のリーダー個体）が死ねば盟約が途切れる可能性があり板挟みとなる
+  - 🟥太刀魚・初瀬『盟約断絶の危機』：先頭の白いクジラは100頭に1頭のリーダー個体・コーダ（通訳者）であり、死ねば人間とクジラの盟約が途切れるため、クジラへの発砲など絶対にありえない
+  - 🟥浪寄『朝倉研究の危険性』：クジラ言語研究の公開は「クジラが高度な知的生物である」と証明し捕鯨推進派に不都合となるため、朝倉教授があなたを守ろうとした真意を悟り、自分がヒーローになることを望まない`,Target:
 ・💡【A案でもクジラを逃がせるガイド】：仮にA案を選んだ場合でも、クジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、魚雷・爆雷を回避してもらうことができます。
 ・🟣【第3の選択（爆雷を投下させず、自衛隊を立てる選択）を交渉してきた場合】：
   幹部（岸部）：「現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない」
@@ -1289,7 +1291,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   2: [
     "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 10分）",
-    "東京側（3択中1つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
+    "東京側（3択中2つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
   ],
   3: [
@@ -1300,7 +1302,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
     "【写真提示と失敗時処理】索敵成功時は『成功時の写真（近接浮上）』のみを提示。索敵失敗時は『失敗時の写真（遠距離・航跡波）』のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-25）』へ自動充当して浪寄へ公開する。その上で浪寄准教授（生物所見）と貝浜リエゾン（法的判断）へ諮問する",
     "防衛省・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
-    "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠 ※ソノブイ失敗時は現地1枠をEV-25で消費したため残り1枠）を選択させ、証拠資料を開示する",
+    "合同対策本部の調査枠（東京側2枠、小笠原現地側2枠 ※ソノブイ失敗時は現地1枠をEV-25で消費したため残り1枠）を選択させ、証拠資料を開示する",
   ],
   4: [
     "【Day 4 開始時】初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
@@ -1324,8 +1326,8 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   7: [
     "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 15分）",
-    "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
-    "防衛省幹部からの直通電話を演出し、Day 7秘匿カード6枚（SP-08朝潮・SP-09貝浜・SP-10長津・SP-11坂凪［両方の理由］・SP-12太刀魚・SP-13初瀬）を配布する。「①岸部局長の顔を立てて自衛隊が掃討したことにするか（東京側：発砲やむなし）」「②100頭に1頭のリーダー鯨と盟約を守るため発砲に反対し対策本部の功績とするか（現地側：発砲反対）」を対立・議論させる（A案＋クジラへの退避メッセージ送信や、第3の選択の交渉も可能）。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
+    "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー・光学探知による一頭の白いクジラに続くクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
+    "防衛省幹部からの直通電話を演出し、Day 7秘匿カード全7枚（🟦青：SP-08朝潮・SP-09貝浜・SP-10長津『組織の論理』 ／ 🟪紫：SP-11坂凪『組織と現場の狭間』 ／ 🟥赤：SP-12太刀魚・SP-13初瀬『盟約断絶の危機』・SP-14浪寄『朝倉研究の危険性』）を配布する。「①岸部局長の顔を立てて自衛隊の戦果として処理するか（東京側：発砲やむなし）」「②先頭の白いクジラ（100頭に1頭のリーダー個体・コーダ）と盟約を守るため発砲に反対するか（太刀魚・初瀬・坂凪）」「③朝倉研究の危険性からヒーローになることを望まない（浪寄）」を対立・議論させる（海自戦果案＋クジラへの退避メッセージ送信や、第3の選択の交渉も可能）。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
     "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊による撃滅報道 ／ パターンB：合同対策本部が特別な薬剤を撃ち込み自衛隊の活動不要で解決したとするヒーロー報道）を読み上げる",
     "朝潮の指揮で対策本部を解散し、エピローグの情景を読み上げてゲームを終了・感想戦へ移行する",
   ],
@@ -1411,9 +1413,10 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("救難艇") ||
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
+      (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
       (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km")) ||
       (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
-      (dayNumber === 7 && !existing.readAloudScript.includes("SP-08"));
+      (dayNumber === 7 && !existing.readAloudScript.includes("SP-14"));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -1439,11 +1442,11 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       ) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
-      (dayNumber === 2 && existing.gmCheckpoints[0].includes("目標時間: 25分")) ||
-      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
+      (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")))) ||
+      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
-      (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-08")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-14")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
@@ -1795,7 +1798,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
           ? {
               ...e,
               title: master.title,
-              frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
+              frontTitleHtml: master.frontTitleHtml ?? e.frontTitleHtml,
               description: master.description,
               glossaryNote: e.glossaryNote ?? master.glossaryNote,
             }
@@ -3724,7 +3727,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 特別配布カード（全13枚：Day 1〜6 特別配布7枚 ＋ Day 7 秘匿カード6枚・両面印刷対応）
+                     🃏 特別配布カード（全14枚：Day 1〜6 特別配布7枚 ＋ Day 7 秘匿カード7枚・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
@@ -3734,10 +3737,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
                           {specialCardFilterMode === "day7"
-                            ? "Day 7 秘匿カード一覧（全6枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"
+                            ? "Day 7 秘匿カード一覧（全7枚：東京＝青・坂凪＝紫・小笠原＝赤 ／ 両面印刷対応）"
                             : specialCardFilterMode === "day1to6"
                             ? "Day 1〜6 特別配布カード一覧（全7枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"
-                            : "特別配布 ＆ Day 7 秘匿カード一覧（全13枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"}
+                            : `特別配布 ＆ Day 7 秘匿カード一覧（全${SPECIAL_CHARACTER_CARDS.length}枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）`}
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3754,7 +3757,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                     <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
                       <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
-                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します（※左メニューで「Day 7 秘匿(6)」を選ぶと、追加されたDay 7秘匿カード6枚だけを印刷できます）。
+                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します（※左メニューで「Day 7 秘匿(7)」を選ぶと、Day 7秘匿カード7枚［東京＝青・坂凪＝紫・小笠原＝赤］だけを印刷できます）。
                     </div>
 
                     {(() => {
@@ -3774,6 +3777,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               rubyHtml: master.rubyHtml,
                               glossaryNote: master.glossaryNote,
                               categoryLabel: master.categoryLabel,
+                              accentHex: master.accentHex,
                             }
                           : c;
                       });
@@ -3795,6 +3799,31 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         ]);
                       }
 
+                      const getSecretCardTheme = (accentHex: string) =>
+                        accentHex === "#7e22ce"
+                          ? {
+                              frontBg: "#faf5ff",
+                              backBg: "#fdfaff",
+                              badgeBg: "#f3e8ff",
+                              badgeBorder: "#c084fc",
+                              badgeText: "#581c87",
+                            }
+                          : accentHex === "#dc2626"
+                          ? {
+                              frontBg: "#fef2f2",
+                              backBg: "#fffafa",
+                              badgeBg: "#fee2e2",
+                              badgeBorder: "#f87171",
+                              badgeText: "#991b1b",
+                            }
+                          : {
+                              frontBg: "#eff6ff",
+                              backBg: "#f8fbff",
+                              badgeBg: "#dbeafe",
+                              badgeBorder: "#60a5fa",
+                              badgeText: "#1e3a8a",
+                            };
+
                       const renderFrontFace = (
                         card: (typeof cardsSource)[number] | null,
                         slotKey: string
@@ -3812,6 +3841,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         const charShort = (card.characterName || "").split("（")[0];
                         const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
+                        const isSecretCard = card.revealDayNumber === 7;
+                        const secretTheme = getSecretCardTheme(card.accentHex);
+
                         return (
                           <div
                             key={slotKey}
@@ -3821,19 +3853,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             }`}
                             style={{
                               borderColor: card.accentHex,
-                              backgroundColor: "#f8fafc",
+                              backgroundColor: isSecretCard ? secretTheme.frontBg : "#f8fafc",
                             }}
                           >
                             <div className="flex items-center justify-between text-xs">
                               <span
                                 className="rounded border px-2 py-0.5 font-bold"
                                 style={{
-                                  backgroundColor: "#eff6ff",
-                                  borderColor: "#93c5fd",
-                                  color: "#1e40af",
+                                  backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
+                                  borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
+                                  color: isSecretCard ? secretTheme.badgeText : "#1e40af",
                                 }}
                               >
-                                {card.revealDayLabel}
+                                {isSecretCard ? `🔒 ${card.revealDayLabel}` : card.revealDayLabel}
                               </span>
                               <span
                                 className="rounded px-2.5 py-0.5 font-bold text-white"
@@ -3843,13 +3875,26 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </span>
                             </div>
 
-                            <div className="my-auto py-5 text-center space-y-2">
-                              <div
-                                className="text-[11px] font-bold tracking-widest"
-                                style={{ color: card.accentHex }}
-                              >
-                                海上保安庁・合同対策本部
-                              </div>
+                            <div className="my-auto py-5 text-center space-y-2.5">
+                              {isSecretCard ? (
+                                <div
+                                  className="mx-auto inline-block rounded-full border px-3 py-0.5 text-[10.5px] font-black tracking-wide"
+                                  style={{
+                                    backgroundColor: secretTheme.badgeBg,
+                                    borderColor: card.accentHex,
+                                    color: secretTheme.badgeText,
+                                  }}
+                                >
+                                  🔒 秘匿情報（他プレイヤーへのカード提示不可）
+                                </div>
+                              ) : (
+                                <div
+                                  className="text-[11px] font-bold tracking-widest"
+                                  style={{ color: card.accentHex }}
+                                >
+                                  海上保安庁・合同対策本部
+                                </div>
+                              )}
                               {card.frontTitleHtml ? (
                                 <div
                                   className="card-front-title-20px text-[20px] text-xl font-black text-slate-900 leading-snug px-2"
@@ -3871,7 +3916,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </div>
                             </div>
 
-                            <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                            <div
+                              className="border-t border-dashed pt-2 flex items-center justify-between"
+                              style={{
+                                borderColor: isSecretCard ? secretTheme.badgeBorder : "#cbd5e1",
+                              }}
+                            >
+                              <span
+                                className="text-[10.5px] font-bold"
+                                style={{ color: card.accentHex }}
+                              >
+                                {isSecretCard ? "🔒 SECRET // 非公開" : ""}
+                              </span>
                               <span
                                 className="font-mono text-xs font-bold"
                                 style={{ color: card.accentHex }}
@@ -3900,14 +3956,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         const charShort = (card.characterName || "").split("（")[0];
                         const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
+                        const isSecretCard = card.revealDayNumber === 7;
+                        const secretTheme = getSecretCardTheme(card.accentHex);
+
                         return (
                           <div
                             key={slotKey}
                             onClick={() => setSelectedCharId(card.characterId)}
-                            className={`card-face-134mm cursor-pointer rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                            className={`card-face-134mm cursor-pointer rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
                               isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
                             }`}
-                            style={{ borderColor: card.accentHex }}
+                            style={{
+                              borderColor: card.accentHex,
+                              backgroundColor: isSecretCard ? secretTheme.backBg : "#ffffff",
+                            }}
                           >
                             <div>
                               <div className="flex items-center justify-between text-xs mb-1.5">
@@ -3920,12 +3982,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 <span
                                   className="rounded border px-2 py-0.5 font-bold"
                                   style={{
-                                    backgroundColor: "#eff6ff",
-                                    borderColor: "#93c5fd",
-                                    color: "#1e40af",
+                                    backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
+                                    borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
+                                    color: isSecretCard ? secretTheme.badgeText : "#1e40af",
                                   }}
                                 >
-                                  {card.revealDayLabel}
+                                  {isSecretCard ? "🔒 他PCへ提示不可" : card.revealDayLabel}
                                 </span>
                               </div>
 
@@ -3935,7 +3997,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               >
                                 <h3
                                   className="text-base font-extrabold"
-                                  style={{ color: "#0f172a" }}
+                                  style={{ color: isSecretCard ? secretTheme.badgeText : "#0f172a" }}
                                 >
                                   {card.title}
                                 </h3>
@@ -3969,7 +4031,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   {renderColoredGlossaryNote(card.glossaryNote)}
                                 </div>
                               )}
-                              <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
+                              <div
+                                className="border-t border-dashed pt-1.5 flex items-center justify-between text-xs"
+                                style={{
+                                  borderColor: isSecretCard ? secretTheme.badgeBorder : "#cbd5e1",
+                                }}
+                              >
+                                <span
+                                  className="text-[10.5px] font-bold"
+                                  style={{ color: card.accentHex }}
+                                >
+                                  {isSecretCard ? "🔒 SECRET（秘匿情報）" : ""}
+                                </span>
                                 <span
                                   className="font-mono font-bold"
                                   style={{ color: card.accentHex }}
