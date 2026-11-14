@@ -281,7 +281,7 @@ export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-alert": "周囲を警戒せよ",
 };
 
-// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全23語）
+// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全24候補：「南」を含む）
 export const JAPANESE_MEANING_CANDIDATES: {
   label: string;
   subHint: string;
@@ -310,6 +310,7 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "約束", subHint: "交わされた盟約・契り" },
   { label: "東", subHint: "方角（東）" },
   { label: "西", subHint: "方角（西）" },
+  { label: "南", subHint: "方角（南）" },
   { label: "北", subHint: "方角（北）" },
   { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
