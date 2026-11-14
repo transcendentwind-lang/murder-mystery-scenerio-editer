@@ -240,7 +240,7 @@ export const initialProject: MMProject = {
   gimmickOverview:
     "① 生態系の天敵（マッコウクジラ vs ダイオウイカ）を巨大生物撃退に転用する生物学的逆転の発想。\n② 巨大生物が海底火山を刺激する理由（海底付近で海底地震を起こすような特別な振動を発生させる）と、長距離を北上できる理由（①地磁気 ＋ ②小笠原・八丈島・三宅島の神社から組織的に盗まれ、青ヶ島沖・八丈島・三宅島付近に落とされた複数の隕石が放つ特殊な物質、および富士山麓へ運ばれた荷物）の論理的な解明。\n③ 自衛隊との極限交渉（潜水艦SOFAR層潜航・実弾攻撃抑制）× 深夜事前放流に応えたクジラ大群の深海完全捕食。\n④ 動物言語学（2語成語ペア連結モデル）に基づき、祝詞の吸着破裂音（舌クリック音）とマッコウクジラのコーダを融合させた祝詞クリック音列パズル（参考例：【人間とクジラ・約束】【海の下の火山・探せ】【北・集まれ】【大きい・たくさんの餌・攻撃せよ】）。\n⑤ 竹の海中筒による音響インピーダンス整合の歴史的伝承を、現代の海上自衛隊潜水艦による深海SOFAR層からの水中スピーカー（水中音響送信機）大出力放流へと昇華させる科学的スケール感。\n⑥ 政治的落としどころと名もなき英雄（アンサング・ヒーロー）：自衛隊による事後攻撃と政府の英雄報道を背に、真実を胸に日常へ帰還する6人の誇り高きエピローグ。",
   playerCount: 6,
-  durationHours: 3.5,
+  durationHours: 3,
   hasGm: true,
 
   characters: [
@@ -1055,7 +1055,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY01",
     timingNote: "Day 1 開始時配布",
     title: "【Day 1】民間チャーター船の全電源喪失・漂流救難作戦",
-    targetMinutes: 30,
+    targetMinutes: 15,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       "「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します」",
@@ -1076,7 +1076,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY02",
     timingNote: "Day 2 開始時配布",
     title: "【Day 2】西之島沖の突発海底噴火と巨大潜航影の優先調査",
-    targetMinutes: 25,
+    targetMinutes: 10,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       "「気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」",
@@ -1096,7 +1096,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY03",
     timingNote: "Day 3 開始時配布",
     title: "【Day 3】鳥島沖の海底噴火と洋上ソノブイ索敵作戦",
-    targetMinutes: 25,
+    targetMinutes: 30,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       `「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
@@ -1202,7 +1202,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY05",
     timingNote: "Day 5 開始時配布",
     title: "【Day 5】御蔵島沖の海底噴火・危機到達まで残り48時間と独自調査の継続",
-    targetMinutes: 25,
+    targetMinutes: 15,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       "「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」",
@@ -1242,7 +1242,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY06",
     timingNote: "Day 6 開始時配布",
     title: "【Day 6】巨大生物の完全回復・北上再開と打開策の確立",
-    targetMinutes: 30,
+    targetMinutes: 20,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       "「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」",
@@ -1284,7 +1284,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY07",
     timingNote: "Day 7 開始時配布",
     title: "【Day 7】最終決戦の観測と合同対策本部の幕引き",
-    targetMinutes: 30,
+    targetMinutes: 15,
     nagatsuBriefingTitle: "📡 長津からの緊急通信ブリーフィング（状況報告）",
     nagatsuBriefingText:
       "「夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、巨大生物は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および水中聴音網（パッシブソナー網）より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」",

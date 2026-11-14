@@ -24,7 +24,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
   const playerCount = project?.playerCount || chars.length || 6;
 
   let md = `# ${project?.title || "無題のシナリオ"}\n\n`;
-  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3.5}時間\n`;
+  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3}時間\n`;
   md += `- **プレイヤー人数**: ${playerCount}名（GM必須）\n`;
   md += `- **ジャンル**: 協力型インシデント・ミステリー / パニックサスペンス\n\n`;
 
@@ -66,7 +66,7 @@ export function generateSynopsisPlainText(project: MMProject): string {
   let text = `=================================================================\n`;
   text += `【シナリオ企画概要書】\n`;
   text += `タイトル: ${project?.title || "無題のシナリオ"}\n`;
-  text += `プレイ人数: ${playerCount}名（GM必須） ｜ 想定時間: 約${project?.durationHours ?? 3.5}時間\n`;
+  text += `プレイ人数: ${playerCount}名（GM必須） ｜ 想定時間: 約${project?.durationHours ?? 3}時間\n`;
   text += `=================================================================\n\n`;
 
   text += `■ 1. 作品コンセプト・世界観\n`;
@@ -152,7 +152,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   const playerCount = project?.playerCount || chars.length || 6;
 
   let md = `# ${project?.title || "無題のシナリオ"}\n\n`;
-  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3.5}時間\n`;
+  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3}時間\n`;
   md += `- **プレイヤー人数**: ${playerCount}名（GM必須）\n`;
   md += `- **ジャンル**: 協力型インシデント・ミステリー / パニックサスペンス\n\n`;
   md += `---\n\n`;

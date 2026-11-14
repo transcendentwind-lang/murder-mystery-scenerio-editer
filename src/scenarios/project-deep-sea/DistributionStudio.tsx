@@ -864,7 +864,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         },
       ],
       gmGuides: [
-        "対策本部として「①多数のダイオウイカの超群体（コロニー）であるため魚雷で一部を砕いても深海で再結合して元の大きさに戻ってしまうこと」「②富士山麓の民家へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること」を整理・回答させてDay 5を終了します。",
+        "対策本部として「①多数のダイオウイカの超群体（コロニー）であるため魚雷で一部を砕いても深海で再結合して元の大きさに戻ってしまうこと」「②富士山麓の民家へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること」を整理・回答させてDay 5を終了します（※Day 5終了後、Day 6に入る前に10分程度の休憩を入れることを推奨します）。",
       ],
     },
   ],
@@ -889,7 +889,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
     },
     {
       phaseNumber: "DAY 6 フェーズ 2",
-      phaseTitle: "朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安15分）",
+      phaseTitle: "朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安20分・延長の可能性あり）",
       startTrigger: "フェーズ1の資料開示直後、プレイヤーが『マッコウクジラ音響言語解析システム（/sonar）』にアクセスし、実録音響データの分析と撃退作戦の立案を開始した時点",
       gmGuides: [
         "【ミッション②・③の進行】伝統の祝詞（4語）だけでは移動する巨大生物を追跡・迎撃する情報を伝えきれないため最大8語（2語×4組）まで許容（標準構成例：【①人間とクジラ＋約束】【②海の下の火山＋探せ】【③北＋集まれ】【④大きい・たくさんの餌＋攻撃せよ】）。あわせて24時間以内に巨大生物を撃退する作戦（深海SOFAR層での音響放流・クジラの移動時間6〜8時間）をまとめさせます。",
@@ -1179,7 +1179,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ DAY 6 フェーズ2：朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安15分）
+■ DAY 6 フェーズ2：朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安20分・延長の可能性あり）
 ⏱️ 開始タイミング・条件：フェーズ1の資料開示直後、プレイヤーが『マッコウクジラ音響言語解析システム（/sonar）』にアクセスして分析・作戦立案を開始した時点
 💡【クジラ言語の柔軟な判定】伝統の4語祝詞だけでは移動する巨大生物を追跡・迎撃する情報を伝えきれないため最大8語（2語×4組）まで許容されています。8語の穴埋めを強制する必要はなく、クジラを駿河湾へ呼び寄せて巨大生物を撃退する作戦がまとまればOKです（標準構成例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】）。
 ⚠️【条件分岐：アプリで『狂気の深淵を覗く』ボタンを押した場合（5分間の猶予経過後に発生）】
@@ -1258,21 +1258,32 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 };
 
+// 各Dayの目標進行時間（分）デフォルト値
+const DEFAULT_DAY_TARGET_MINUTES: Record<number, number> = {
+  1: 15,
+  2: 10,
+  3: 30,
+  4: 25,
+  5: 15,
+  6: 20,
+  7: 15,
+};
+
 // GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   1: [
-    "【Day 1 開始時】朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』を渡し、あわせて『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 30分）",
+    "【Day 1 開始時】朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』を渡し、あわせて『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 15分）",
     "遭難海図を展開し、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分経過＋航行40分＝1時間後）を整理させ、巡視船を急行させるべき海域を指定させる",
     "【失敗時の処理】1回目の指定で外れた場合は「もう一度だけ再指定（リトライ）」を許可し、2回目も外れた場合は自動的に救助成功として進行する",
     "【証言カードのペナルティ処理】1発成功時は『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の両方をDay 1で取得。1回失敗時は1枚のみ取得（残り1枚はDay 2以降の調査枠へ）。2回失敗時は0枚（2枚ともDay 2以降の調査枠へ繰り越し）",
   ],
   2: [
-    "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
+    "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 10分）",
     "東京側（3択中1つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
   ],
   3: [
-    "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
+    "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 30分）",
     "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
     "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16）、貝浜（EV-17）、浪寄（EV-18）の3名へ証拠を配布する",
     "【Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）】と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
@@ -1289,20 +1300,20 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
     "防衛省が「害獣駆除（災害派遣）」として海上自衛隊動員・実弾迎撃作戦を決定した通達（NG-05）を読み上げる",
   ],
   5: [
-    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 25分）",
+    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 15分 ※Day 5終了後に10分程度の休憩を入れる）",
     "朝倉教授のクジラ構文規則（EV-30：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
     "終盤、防衛省作戦本部から貝浜への直通無線（NG-06 ＆ Day 5 途中①指令書）を演出し、「微動は収まったが、アクティブソナー（ソナー探知）でゆっくり深海に沈み込みながら元の大きさに戻っている傾向が確認できる。どうして魚雷命中後に復活してしまうのか？なぜ富士山を目指すのか？」を浪寄准教授らに確認させる",
   ],
   6: [
-    "【Day 6 開始時】長津（PC7）へ特別配布カード『SP-07』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 30分）",
-    "【ミッション①・②・③】未回収資料と『小笠原社記』『神社の祝詞の複製』から太古の解決策（マッコウクジラによる捕食）を特定させ、QRコードを提示してアプリへアクセスさせる。そのうえで、海上自衛隊の魚雷以外の方法で24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめさせる（※クジラ言語は4語では追跡・迎撃情報を伝えきれないため最大8語まで許容。解読・作戦立案目安：15分）",
+    "【Day 6 開始時】長津（PC7）へ特別配布カード『SP-07』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: クジラ音響言語の説明後20分 ※延長の可能性あり）",
+    "【ミッション①・②・③】未回収資料と『小笠原社記』『神社の祝詞の複製』から太古の解決策（マッコウクジラによる捕食）を特定させ、QRコードを提示してアプリへアクセスさせる。そのうえで、海上自衛隊の魚雷以外の方法で24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめさせる（※クジラ言語は4語では追跡・迎撃情報を伝えきれないため最大8語まで許容。解読・作戦立案目安：20分［延長の可能性あり］）",
     "アプリで『狂気の深淵を覗く』を使用した場合は【5分の猶予（＋5分延長）】の後、覗いたPCが心臓発作・心停止をアナウンス。GMが心停止を宣言してから数分以内に、坂凪または初瀬による救命処置の口頭宣言（東京班が倒れた場合は通信越しの遠隔救命指示の宣言）＋初瀬の導きによる『名前を呼んで戻ってこい・まだ死ぬなと声をかける』宣言があれば息を吹き返す（※身体演技や接触は不要）",
     "朝潮へ『Day 6 途中① 指令書』を渡し、長津が防衛省運用企画局長・岸部（きしべ）への直通回線を繋いで（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
     "【岸部局長の反論による思考誘導】もし『水深1,000mのSOFAR層』や『クジラの移動時間』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
     "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げ、続けて深夜の潜水艦による深海SOFAR層での水中スピーカー（水中音響送信機）を用いた人工音源の大出力放流開始（NG-07）をアナウンスする",
   ],
   7: [
-    "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 30分）",
+    "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 15分）",
     "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
     "防衛省幹部からの直通電話を演出し、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部が機転を効かせて解決したヒーローとして発表し自衛隊の活動を不要にするか」の選択をプレイヤーに委ねる。もし「第3の選択」を交渉してきた場合は、その場のGM裁量で交渉を行う。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
     "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊による撃滅報道 ／ パターンB：合同対策本部が特別な薬剤を撃ち込み自衛隊の活動不要で解決したとするヒーロー報道）を読み上げる",
@@ -1356,11 +1367,11 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
   const timeline = project.timeline || [];
   const step = timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
 
+  const defaultTargetMinutes = DEFAULT_DAY_TARGET_MINUTES[dayNumber] || 20;
+
   const defaultCheckpoints =
     DEFAULT_GM_CHECKPOINTS[dayNumber] || [
-      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
-        dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
-      }分）をタイマーセットする`,
+      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${defaultTargetMinutes}分）をタイマーセットする`,
       `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
       `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
     ];
@@ -1390,7 +1401,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("救難艇") ||
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
-      (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km"));
+      (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km")) ||
+      (dayNumber === 6 && existing.readAloudScript.includes("目安15分"));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -1415,13 +1427,21 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
           c.includes("EV-16:")
       ) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
-      (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
-      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")))) ||
-      (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
+      (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber === 2 && existing.gmCheckpoints[0].includes("目標時間: 25分")) ||
+      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
+      (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
+      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber === 7 && existing.gmCheckpoints[0].includes("目標時間: 30分")) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
+
+    const oldDefaultTarget = dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25;
+    const targetMinutes =
+      !existing.targetMinutes || existing.targetMinutes === oldDefaultTarget
+        ? defaultTargetMinutes
+        : existing.targetMinutes;
 
     return {
       ...existing,
@@ -1429,15 +1449,13 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       readAloudScript: script,
       gmCheckpoints: checkpoints,
       bgmCue: existing.bgmCue || defaultBgm,
-      targetMinutes:
-        existing.targetMinutes ||
-        (dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25),
+      targetMinutes,
     };
   }
 
   return {
     dayNumber,
-    targetMinutes: dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25,
+    targetMinutes: defaultTargetMinutes,
     readAloudScript: defaultNarration,
     gmCheckpoints: defaultCheckpoints,
     bgmCue: defaultBgm,
