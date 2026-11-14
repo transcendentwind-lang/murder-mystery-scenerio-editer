@@ -212,16 +212,6 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     category: "movement",
   },
   {
-    id: "rule-17-south-gather",
-    name: "南 ＋ 集まれ",
-    sequence: ["word-go-south", "word-gather"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "付近のクジラが発声地点に対して南に集まり始めた",
-    behaviorText: "付近のクジラが発声地点に対して南に集まり始めた",
-    directionBadge: "⬇️ 南に集まり始めた",
-    category: "movement",
-  },
-  {
     id: "rule-18-north-gather",
     name: "北 ＋ 集まれ",
     sequence: ["word-go-north", "word-gather"],
@@ -249,16 +239,6 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     behaviorTitle: "付近のクジラが発声地点に対して西を探し始めた",
     behaviorText: "付近のクジラが発声地点に対して西を探し始めた",
     directionBadge: "⬅️ 西を探し始めた",
-    category: "movement",
-  },
-  {
-    id: "rule-21-south-search",
-    name: "南 ＋ 探せ",
-    sequence: ["word-go-south", "word-search"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "付近のクジラが発声地点に対して南を探し始めた",
-    behaviorText: "付近のクジラが発声地点に対して南を探し始めた",
-    directionBadge: "⬇️ 南を探し始めた",
     category: "movement",
   },
   {
@@ -301,7 +281,7 @@ export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-alert": "周囲を警戒せよ",
 };
 
-// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全24語）
+// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全23語）
 export const JAPANESE_MEANING_CANDIDATES: {
   label: string;
   subHint: string;
@@ -330,7 +310,6 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "約束", subHint: "交わされた盟約・契り" },
   { label: "東", subHint: "方角（東）" },
   { label: "西", subHint: "方角（西）" },
-  { label: "南", subHint: "方角（南）" },
   { label: "北", subHint: "方角（北）" },
   { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
@@ -457,7 +436,20 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   }, []);
 
   // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
-  const safeWords = React.useMemo(() => (Array.isArray(words) ? words : []), [words]);
+  const safeWords = React.useMemo(
+    () =>
+      (Array.isArray(words) ? words : [])
+        .filter((w) => w.id !== "word-go-south")
+        .map((w) =>
+          w.id === "word-human-whale"
+            ? {
+                ...w,
+                soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
+              }
+            : w
+        ),
+    [words]
+  );
   const orderedWords = React.useMemo(() => {
     const lockedOrder = ["word-subsea-volcano", "word-alert"];
     const locked = lockedOrder
@@ -1223,8 +1215,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   });
 
   // 解明済み（あてはめ済み）の語数カウント
-  const assignedCount = Object.keys(playerAssignedLabels).filter(
-    (k) => Boolean(playerAssignedLabels[k])
+  const assignedCount = orderedWords.filter((w) =>
+    Boolean(LOCKED_INITIAL_MEANINGS[w.id] || playerAssignedLabels[w.id])
   ).length;
 
   return (
@@ -2037,7 +2029,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       },
                       {
                         label: "⑤「人間とクジラ」＋「約束」",
-                        sub: "ド・ドーン・カッカッ ＋ チ・トン・チ ➔『ズジーズ・ズ/カッカッというコーダが返ってきた』",
+                        sub: "ド・ドーッカッカッ ＋ チ・トン・チ ➔『ズジーズ・ズ/カッカッというコーダが返ってきた』",
                         seq: ["word-human-whale", "word-promise"],
                         color:
                           "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",

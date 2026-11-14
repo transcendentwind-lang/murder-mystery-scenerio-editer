@@ -80,12 +80,6 @@ export const sonarWords = [
     soundPattern: "階段状下降の3点打（ピ・ポ・ポン）",
   },
   {
-    id: "word-go-south",
-    symbol: "↓↓",
-    meaning: "南",
-    soundPattern: "低音下降パルス（ポ・ポポン）",
-  },
-  {
     id: "word-go-north",
     symbol: "↑↑",
     meaning: "北",
@@ -143,6 +137,6 @@ export const sonarWords = [
     id: "word-human-whale",
     symbol: "▼━▲▲",
     meaning: "人間とクジラ",
-    soundPattern: "低音長打＋均等2連打（ド・ドーン・カッカッ）",
+    soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
   },
 ] as const satisfies readonly Pick<CrypticWord, "id" | "symbol" | "meaning" | "soundPattern">[];

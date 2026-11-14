@@ -119,14 +119,7 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
             { delayMs: 200, freq: 2250, duration: 0.018, volume: 0.85 },
             { delayMs: 330, freq: 1550, duration: 0.025, volume: 0.9 },
           ]);
-      case "word-go-south": // 14. ポ・ポポン（南）
-        return melodic(
-          [
-            { delayMs: 0, freq: 2100, duration: 0.018, volume: 0.82 },
-            { delayMs: 220, freq: 1750, duration: 0.02, volume: 0.86 },
-            { delayMs: 360, freq: 1450, duration: 0.026, volume: 0.92 },
-          ]);
-      case "word-go-north": // 15. ピ・ピピッ（北）
+      case "word-go-north": // 14. ピ・ピピッ（北）
         return melodic(
           [
             { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
@@ -178,13 +171,13 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
       case "word-ack": // 23. カッ（了解した）
       case "word-yes":
         return { pulses: [{ delayMs: 0, freqHz: 2950, durationMs: 18, amplitude: 0.95 }], durationMs: 260 };
-      case "word-human-whale": // 24. ド・ドーン・カッカッ（人間とクジラ）
+      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ）
         return melodic(
           [
-            { delayMs: 0, freq: 1650, duration: 0.025, volume: 0.88 },
-            { delayMs: 260, freq: 1350, duration: 0.038, volume: 0.94 },
-            { delayMs: 560, freq: 2350, duration: 0.016, volume: 0.88 },
-            { delayMs: 720, freq: 2350, duration: 0.016, volume: 0.92 },
+            { delayMs: 0, freq: 1650, duration: 0.024, volume: 0.88 },
+            { delayMs: 170, freq: 1350, duration: 0.045, volume: 0.95 },
+            { delayMs: 250, freq: 2350, duration: 0.016, volume: 0.9 },
+            { delayMs: 330, freq: 2350, duration: 0.016, volume: 0.94 },
           ]);
       default:
         return clicks([0, 200, 400], 2400);}
