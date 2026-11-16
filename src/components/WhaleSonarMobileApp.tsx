@@ -414,6 +414,15 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   const selectWordFlashTimerRef = useRef<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const topMonitorRef = useRef<HTMLDivElement | null>(null);
+  const sequenceSentinelRef = useRef<HTMLDivElement | null>(null);
+  const phoneCardRef = useRef<HTMLDivElement | null>(null);
+  // 画面をスクロールして元の「発信するクリック音パターン」バーが上へ隠れたかどうか（iOS Safari / Android Chrome 全ブラウザ対応の fixed フローティング表示用）
+  const [isSequenceFloating, setIsSequenceFloating] = useState(false);
+  const [floatingBounds, setFloatingBounds] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
   const iosHapticLabelRef = useRef<HTMLLabelElement | null>(null);
   const abyssShakeTimersRef = useRef<number[]>([]);
 
@@ -1032,6 +1041,52 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
   };
+
+  // iOS Safari / Android Chrome / PC すべてのブラウザで確実にフローティングバナーを表示するためのスクロール位置監視
+  useEffect(() => {
+    const updateFloatingState = () => {
+      if (assigningTargetWordId) {
+        setIsSequenceFloating(false);
+        return;
+      }
+      const sentinel = sequenceSentinelRef.current;
+      const card = phoneCardRef.current;
+      if (!sentinel || !card) {
+        setIsSequenceFloating(false);
+        return;
+      }
+      const container = scrollContainerRef.current;
+      const topThreshold =
+        !standalone && container
+          ? Math.max(0, container.getBoundingClientRect().top)
+          : 0;
+      const sentinelRect = sentinel.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      if (sentinelRect.top < topThreshold + 4) {
+        setIsSequenceFloating(true);
+        setFloatingBounds({
+          top: topThreshold,
+          left: cardRect.left,
+          width: cardRect.width,
+        });
+      } else {
+        setIsSequenceFloating(false);
+      }
+    };
+
+    updateFloatingState();
+    const container = scrollContainerRef.current;
+    window.addEventListener("scroll", updateFloatingState, { passive: true });
+    window.addEventListener("resize", updateFloatingState);
+    container?.addEventListener("scroll", updateFloatingState, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateFloatingState);
+      window.removeEventListener("resize", updateFloatingState);
+      container?.removeEventListener("scroll", updateFloatingState);
+    };
+  }, [assigningTargetWordId, standalone]);
 
   const handlePreviewWordOnly = (e: React.MouseEvent, wordId: string, sequenceIndex?: number) => {
     e.stopPropagation();

@@ -4215,10 +4215,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全{NAGATSU_PHASE_CARDS.length}枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-02〜NG-10・NG-08は枝番2枚組）
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（全{NAGATSU_PHASE_CARDS.length}枚・NG-08は枝番2枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -4304,7 +4304,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                             <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
                               <span className="font-mono text-xs font-bold text-slate-500">
-                                {nc.cardCode} / 10
+                                {nc.cardCode} / {String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
                               </span>
                             </div>
                           </div>
@@ -4364,7 +4364,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                             <div className="border-t border-dashed border-slate-300 pt-2 mt-2 flex items-center justify-end text-xs">
                               <span className="font-mono font-bold text-slate-500">
-                                {nc.cardCode} / 10
+                                {nc.cardCode} / {String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
                               </span>
                             </div>
                           </div>

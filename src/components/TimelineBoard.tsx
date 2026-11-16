@@ -1587,7 +1587,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                               ・<strong className="text-white">ヘリ急行後</strong>: ヘリが現場へ到達したときには、怪物は接近を察知してすでに深海800m以深へ急速潜航してしまっており捉えられない。
                             </p>
                             <p>
-                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時は成功時の写真は提示せず、この失敗時写真のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-25）』へ自動充当して浪寄へ公開してください（超高感度強調処理により20本以上の触手と超群体構造が判明）。
+                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時は成功時の写真は提示せず、この失敗時写真のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-22）』へ自動充当して浪寄へ公開してください（超高感度強調処理により20本以上の触手と超群体構造が判明）。
                             </p>
                           </div>
                         </div>
@@ -1604,51 +1604,22 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ④ 【Day 3 ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出）】 */}
+                {/* ④ 【Day 3 ソノブイ索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達）】 */}
                 <div className="rounded-xl border border-amber-900/60 bg-gradient-to-r from-slate-950 via-[#181308] to-slate-950 p-4 shadow-md space-y-3">
                   <div className="flex items-center gap-2 border-b border-amber-900/40 pb-2">
                     <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                     <span className="font-bold text-xs text-amber-300">
-                      【索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示】
+                      【索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想）】
                     </span>
                   </div>
 
                   <div className="rounded border border-amber-800/40 bg-slate-950/80 p-3 text-[11px] text-amber-200">
                     <span className="font-semibold text-white block mb-1">
-                      🎙️ 総合オペレーター 長津からのアナウンス:
+                      🎙️ 総合オペレーター 長津からのアナウンス（NG-02 ／ Day 3 途中①指令書）:
                     </span>
                     <p className="italic text-slate-200 leading-relaxed pl-2 border-l-2 border-amber-500">
-                      「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                      「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！」
                     </p>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-slate-300 block">
-                      🧩 3名の手元に配備された情報断片（各自のデータを持ち寄って計算してください）:
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-indigo-300 block">太刀魚（PC4／気象庁）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">西之島〜鳥島沖 距離観測データ</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          西之島から鳥島沖海底カルデラまでの直線距離: <strong>約350 km</strong>
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-cyan-300 block">貝浜（PC3／海上保安庁）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">鳥島沖 ソノブイ探知記録</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          鳥島沖海域にて巨大生物の音響反射を捉えた時刻: <strong>Day 3 17:00</strong>
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-emerald-300 block">浪寄（PC5／大学准教授）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">遭難船救助・目撃時刻調書</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          Day 1に西之島近海で遭難船がスクリューに巻き付かれた最初の異常遭遇時刻: <strong>Day 1 09:00</strong>
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
