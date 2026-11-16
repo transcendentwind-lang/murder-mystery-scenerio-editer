@@ -662,15 +662,15 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       phaseTitle: "目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問",
       startTrigger: "ソノブイ索敵によって鳥島沖の巨大生物の現在位置（セクターB-3）を特定（または失敗時に広域残響から位置を捕捉）した直後",
       handoutBadges: [
-        "長津カード NG-02",
+        "長津カード NG-02・NG-03",
         "DAY 3 途中① 指令書（朝潮へ配布）",
         "全体提示（索敵成功時）：洋上ソナー索敵撮影写真（近接浮上・索敵成功時）",
         "全体提示（索敵失敗時）：洋上ソナー索敵撮影写真（遠距離・索敵失敗時）＋ 浪寄へ『EV-22：撮影した画像の分析』を自動公開（現地調査1枠を消費）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 3 途中① 指令書』および『長津カード NG-02（Day 3 途中①）』と同文",
-          text: "「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！\n　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
+          sourceLabel: "『DAY 3 途中① 指令書』および『長津カード NG-02・NG-03』と同文",
+          text: "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！\n　続けて洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
         },
       ],
       gmGuides: [
@@ -1052,11 +1052,11 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
 ■ DAY 3 フェーズ2：目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問
 ⏱️ 開始タイミング・条件：ソノブイ索敵で鳥島沖の巨大生物の現在位置（B-3）を特定した直後
-📦 配布・提示：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、全体へ『成功時写真（失敗時は失敗時写真＋現地調査1枠を自動充当して浪寄へEV-22）』
+📦 配布・提示：長津へ『NG-02』『NG-03』、朝潮へ『DAY 3 途中① 指令書』、全体へ『成功時写真（失敗時は失敗時写真＋現地調査1枠を自動充当して浪寄へEV-22）』
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』と同文） ━━┓
-「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！
-　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』『NG-03』と同文） ━━┓
+「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！
+　続けて洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
 ① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。
 ② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -2269,11 +2269,14 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         height: 133mm !important;
         min-height: 133mm !important;
         max-height: 133mm !important;
-        padding: 4.2mm !important;
+        padding: 3.6mm !important;
         box-shadow: none !important;
         overflow: hidden !important;
       }
       .card-body-12px {
+        font-size: 14px !important;
+      }
+      .card-glossary-12px {
         font-size: 12px !important;
       }
       .card-front-title-20px {
@@ -3920,27 +3923,35 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             }}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs mb-1.5">
+                              <div className="flex items-center justify-between text-xs mb-1">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: card.accentHex }}
                                 >
                                   {cardLabel}
                                 </span>
-                                <span
-                                  className="rounded border px-2 py-0.5 font-bold"
-                                  style={{
-                                    backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
-                                    borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
-                                    color: isSecretCard ? secretTheme.badgeText : "#1e40af",
-                                  }}
-                                >
-                                  {isSecretCard ? "🔒 他PCへ提示不可" : card.revealDayLabel}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span
+                                    className="rounded border px-2 py-0.5 font-bold"
+                                    style={{
+                                      backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
+                                      borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
+                                      color: isSecretCard ? secretTheme.badgeText : "#1e40af",
+                                    }}
+                                  >
+                                    {isSecretCard ? "🔒 他PCへ提示不可" : card.revealDayLabel}
+                                  </span>
+                                  <span
+                                    className="font-mono text-[11px] font-bold"
+                                    style={{ color: card.accentHex }}
+                                  >
+                                    {card.cardCode}/{String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
+                                  </span>
+                                </div>
                               </div>
 
                               <div
-                                className="border-b-2 pb-1.5 mb-2"
+                                className="border-b-2 pb-1 mb-1.5"
                                 style={{ borderColor: card.accentHex }}
                               >
                                 <h3
@@ -3953,13 +3964,13 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                               {card.rubyHtml ? (
                                 <div
-                                  className="card-body-12px text-[12px] leading-[1.8] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
+                                  className="card-body-12px text-[14px] leading-[1.68] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                   dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
                                 />
                               ) : (
                                 <div
-                                  className={`card-body-12px text-[12px] ${
-                                    card.glossaryNote ? "leading-[1.48]" : "leading-[1.6]"
+                                  className={`card-body-12px text-[14px] ${
+                                    card.glossaryNote ? "leading-[1.42]" : "leading-[1.52]"
                                   } text-slate-800 whitespace-pre-wrap text-justify`}
                                 >
                                   {renderColoredCardBody(card.description)}
@@ -3967,10 +3978,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               )}
                             </div>
 
-                            <div className="mt-2 space-y-1.5">
-                              {card.glossaryNote && (
+                            {card.glossaryNote && (
+                              <div className="mt-1.5">
                                 <div
-                                  className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                  className="card-glossary-12px rounded border px-2.5 py-1.5 text-[12px] leading-[1.35] whitespace-pre-wrap"
                                   style={{
                                     backgroundColor: "#f0f9ff",
                                     borderColor: "#7dd3fc",
@@ -3978,27 +3989,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 >
                                   {renderColoredGlossaryNote(card.glossaryNote)}
                                 </div>
-                              )}
-                              <div
-                                className="border-t border-dashed pt-1.5 flex items-center justify-between text-xs"
-                                style={{
-                                  borderColor: isSecretCard ? secretTheme.badgeBorder : "#cbd5e1",
-                                }}
-                              >
-                                <span
-                                  className="text-[10.5px] font-bold"
-                                  style={{ color: card.accentHex }}
-                                >
-                                  {isSecretCard ? "🔒 SECRET（秘匿情報）" : ""}
-                                </span>
-                                <span
-                                  className="font-mono font-bold"
-                                  style={{ color: card.accentHex }}
-                                >
-                                  {card.cardCode} / {String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
-                                </span>
                               </div>
-                            </div>
+                            )}
                           </div>
                         );
                       };
@@ -4334,38 +4326,37 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             className={`card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm ${nc.id === activePhaseCardId ? "ring-2 ring-indigo-500 print:ring-0" : ""}`}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs mb-2">
+                              <div className="flex items-center justify-between text-xs mb-1">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: nc.accentHex }}
                                 >
                                   長津アナウンスカード
                                 </span>
-                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                  {nc.timingBadge}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                    {nc.timingBadge}
+                                  </span>
+                                  <span className="font-mono text-[11px] font-bold text-slate-500">
+                                    {nc.cardCode}/{String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
+                                  </span>
+                                </div>
                               </div>
 
-                              <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
-                                <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                              <div className="border-b-2 border-slate-900 pb-1 mb-1.5">
+                                <h4 className="text-base font-extrabold text-slate-900 tracking-tight">
                                   {nc.title}
                                 </h4>
                               </div>
 
                               <div
-                                className={`card-body-12px text-[12px] ${
+                                className={`card-body-12px text-[14px] ${
                                   nc.cardCode === "NG-09" || nc.cardCode === "NG-10"
-                                    ? "leading-[1.72]"
-                                    : "leading-[1.82]"
+                                    ? "leading-[1.52]"
+                                    : "leading-[1.65]"
                                 } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold`}
                                 dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                               />
-                            </div>
-
-                            <div className="border-t border-dashed border-slate-300 pt-2 mt-2 flex items-center justify-end text-xs">
-                              <span className="font-mono font-bold text-slate-500">
-                                {nc.cardCode} / {String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
-                              </span>
                             </div>
                           </div>
                         );
@@ -4595,27 +4586,35 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           style={{ borderColor: cardColor.borderHex }}
                         >
                           <div>
-                            <div className="flex items-center justify-between text-xs mb-1.5">
+                            <div className="flex items-center justify-between text-xs mb-1">
                               <span
                                 className="rounded px-2.5 py-0.5 font-bold text-white"
                                 style={{ backgroundColor: cardColor.badgeBg }}
                               >
                                 証拠資料カード（{ownerShort}）
                               </span>
-                              <span
-                                className="rounded border px-2 py-0.5 font-bold"
-                                style={{
-                                  backgroundColor: cardColor.dayBg,
-                                  borderColor: cardColor.dayBorder,
-                                  color: cardColor.dayText,
-                                }}
-                              >
-                                Day {ev.foundPhase} 開示
-                              </span>
+                              <div className="flex items-center gap-1.5">
+                                <span
+                                  className="rounded border px-2 py-0.5 font-bold"
+                                  style={{
+                                    backgroundColor: cardColor.dayBg,
+                                    borderColor: cardColor.dayBorder,
+                                    color: cardColor.dayText,
+                                  }}
+                                >
+                                  Day {ev.foundPhase} 開示
+                                </span>
+                                <span
+                                  className="font-mono text-[11px] font-bold"
+                                  style={{ color: cardColor.headerHex }}
+                                >
+                                  {evCode}/{String(allEvidences.length).padStart(2, "0")}
+                                </span>
+                              </div>
                             </div>
 
                             <div
-                              className="border-b-2 pb-1.5 mb-2"
+                              className="border-b-2 pb-1 mb-1.5"
                               style={{ borderColor: cardColor.borderHex }}
                             >
                               <h3
@@ -4627,20 +4626,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
 
                             <div
-                              className={`card-body-12px text-[12px] ${
+                              className={`card-body-12px text-[14px] ${
                                 ev.glossaryNote
-                                  ? "leading-[1.48]"
-                                  : "leading-[1.6]"
+                                  ? "leading-[1.42]"
+                                  : "leading-[1.52]"
                               } text-slate-800 whitespace-pre-wrap text-justify`}
                             >
                               {renderColoredCardBody(ev.description)}
                             </div>
                           </div>
 
-                          <div className="mt-2 space-y-1.5">
-                            {ev.glossaryNote && (
+                          {ev.glossaryNote && (
+                            <div className="mt-1.5">
                               <div
-                                className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                className="card-glossary-12px rounded border px-2.5 py-1.5 text-[12px] leading-[1.35] whitespace-pre-wrap"
                                 style={{
                                   backgroundColor: "#f0f9ff",
                                   borderColor: "#7dd3fc",
@@ -4648,16 +4647,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               >
                                 {renderColoredGlossaryNote(ev.glossaryNote)}
                               </div>
-                            )}
-                            <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                              <span
-                                className="font-mono font-bold"
-                                style={{ color: cardColor.headerHex }}
-                              >
-                                {evCode} / {String(allEvidences.length).padStart(2, "0")}
-                              </span>
                             </div>
-                          </div>
+                          )}
                         </div>
                       );
                     };
