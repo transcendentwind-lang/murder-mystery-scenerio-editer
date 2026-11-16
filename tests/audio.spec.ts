@@ -111,3 +111,16 @@ test("実ブラウザーで発音予定時刻と波形再生位置を同じ音�
   await expect(page.locator("canvas[data-playback-ms]")).toHaveCount(0);
   expect(await page.evaluate(() => (window as any).audioCancelled)).toBeGreaterThan(0);
 });
+
+test("スマホ画面のスクロール時に発信するクリック音パターンのフローティングバナーが画面上部へ固定表示される", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.addInitScript(() => localStorage.setItem("mm_sonar_player_auth_v1", "whale-study"));
+  await page.goto("/sonar");
+  await expect(page.getByTestId("sequence-banner-floating")).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo({ top: 520, behavior: "instant" }));
+  const floating = page.getByTestId("sequence-banner-floating");
+  await expect(floating).toBeVisible();
+  const box = await floating.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeCloseTo(0, 0);
+});

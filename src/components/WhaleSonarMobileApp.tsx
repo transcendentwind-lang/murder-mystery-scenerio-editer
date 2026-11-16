@@ -1416,6 +1416,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           <div className="mx-auto flex max-w-6xl flex-col lg:flex-row items-start justify-center gap-6">
             {/* 左（メイン）：スマホ実機サイズの音響解読＆行動観測アプリ */}
             <div
+              ref={phoneCardRef}
               className={`w-full max-w-md mx-auto rounded-[28px] bg-slate-950 flex flex-col transition-all duration-500 ${
                 isAbyssMode
                   ? "border-4 border-red-600 ring-4 ring-red-500/40 shadow-[0_0_50px_rgba(220,38,38,0.65)]"
@@ -1795,107 +1796,150 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                   </div>
 
                   {/* ② 常時見えるフローティングバナー：発信するクリック音パターン（シーケンスバー） ＆ TOPへ戻るボタン */}
-                  <div className="sticky top-0 z-30 p-3 bg-slate-950/95 backdrop-blur-md border-b border-cyan-500/40 shadow-[0_8px_24px_rgba(2,6,23,0.85)] space-y-2">
-                    <div className="flex flex-wrap items-center justify-between gap-1.5">
-                      <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
-                        <span>発信するクリック音パターン</span>
-                        <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
-                          {selectedSequence.length} / 8語（2語ごと判定）
-                        </span>
-                      </span>
+                  {(() => {
+                    const renderSequenceBannerContent = (isOverlay: boolean) => (
+                      <>
+                        <div className="flex flex-wrap items-center justify-between gap-1.5">
+                          <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
+                            <span>発信するクリック音パターン</span>
+                            <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
+                              {selectedSequence.length} / 8語（2語ごと判定）
+                            </span>
+                          </span>
 
-                      <div className="flex items-center gap-1">
-                        <button
-                          onClick={handleBackspace}
-                          disabled={
-                            (selectedSequence.length === 0 &&
-                              flashingActionBtn !== "backspace") ||
-                            isPlaying
-                          }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
-                            flashingActionBtn === "backspace"
-                              ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
-                          }`}
-                        >
-                          <Delete className="h-3 w-3" />
-                          1つ戻す
-                        </button>
-                        <button
-                          onClick={handleClear}
-                          disabled={
-                            (selectedSequence.length === 0 &&
-                              flashingActionBtn !== "clear") ||
-                            isPlaying
-                          }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
-                            flashingActionBtn === "clear"
-                              ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.9)]"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
-                          }`}
-                        >
-                          <RotateCcw className="h-3 w-3" />
-                          クリア
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleScrollToTopMonitor}
-                          className="flex items-center gap-1 rounded-md border border-cyan-500/60 bg-cyan-950/90 px-2 py-1 text-[11px] font-bold text-cyan-200 hover:bg-cyan-800 hover:text-white transition"
-                          title="波形モニター・クジラ行動観測・発信ボタンがある画面上部へ戻ります"
-                        >
-                          <ArrowUp className="h-3 w-3 text-cyan-300" />
-                          TOPへ戻る
-                        </button>
-                      </div>
-                    </div>
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={handleBackspace}
+                              disabled={
+                                (selectedSequence.length === 0 &&
+                                  flashingActionBtn !== "backspace") ||
+                                isPlaying
+                              }
+                              className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
+                                flashingActionBtn === "backspace"
+                                  ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]"
+                                  : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
+                              }`}
+                            >
+                              <Delete className="h-3 w-3" />
+                              1つ戻す
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleClear}
+                              disabled={
+                                (selectedSequence.length === 0 &&
+                                  flashingActionBtn !== "clear") ||
+                                isPlaying
+                              }
+                              className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
+                                flashingActionBtn === "clear"
+                                  ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.9)]"
+                                  : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
+                              }`}
+                            >
+                              <RotateCcw className="h-3 w-3" />
+                              クリア
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleScrollToTopMonitor}
+                              className="flex items-center gap-1 rounded-md border border-cyan-500/60 bg-cyan-950/90 px-2 py-1 text-[11px] font-bold text-cyan-200 hover:bg-cyan-800 hover:text-white transition"
+                              title="波形モニター・クジラ行動観測・発信ボタンがある画面上部へ戻ります"
+                            >
+                              <ArrowUp className="h-3 w-3 text-cyan-300" />
+                              TOPへ戻る
+                            </button>
+                          </div>
+                        </div>
 
-                    {/* 選択された音のスロット表示（あてはめた日本語があればそれを表示） */}
-                    <div className="min-h-[44px] rounded-xl border border-slate-800 bg-slate-900/90 p-2 flex flex-wrap items-center gap-1.5">
-                      {selectedSequence.length === 0 ? (
-                        <span className="text-xs text-slate-500 px-1">
-                          下の「この音を選択する」を押してパターンを作ってください
-                        </span>
-                      ) : (
-                        selectedSequence.map((wId, index) => {
-                          const meta = getWordButtonMeta(wId);
-                          const isCurrentStep = activePlayingIndex === index;
-                          return (
-                            <React.Fragment key={`${wId}-${index}`}>
-                              <button
-                                onClick={(e) => handlePreviewWordOnly(e, wId, index)}
-                                className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
-                                  isCurrentStep
-                                    ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
-                                    : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
-                                }`}
-                                title="タップしてこの音と波形を確認"
-                              >
-                                <span className="text-[10px] font-mono text-cyan-300">
-                                  {index + 1}.
-                                </span>
-                                <span>
-                                  {meta.assignedJapanese
-                                    ? `${meta.assignedJapanese}`
-                                    : `${meta.code}（${meta.onomatopoeia}）`}
-                                </span>
-                              </button>
-                              {index < selectedSequence.length - 1 && (
-                                <span
-                                  className={`text-xs font-bold ${
-                                    index % 2 === 1
-                                      ? "text-cyan-400 px-1"
-                                      : "text-slate-500"
-                                  }`}
-                                >
-                                  {index % 2 === 1 ? "｜" : "＋"}
-                                </span>
-                              )}
-                            </React.Fragment>
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
+                        {/* 選択された音のスロット表示（あてはめた日本語があればそれを表示） */}
+                        <div className="min-h-[44px] rounded-xl border border-slate-800 bg-slate-900/90 p-2 flex flex-wrap items-center gap-1.5">
+                          {selectedSequence.length === 0 ? (
+                            <span className="text-xs text-slate-500 px-1">
+                              下の「この音を選択する」を押してパターンを作ってください
+                            </span>
+                          ) : (
+                            selectedSequence.map((wId, index) => {
+                              const meta = getWordButtonMeta(wId);
+                              const isCurrentStep = activePlayingIndex === index;
+                              return (
+                                <React.Fragment key={`${wId}-${index}`}>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => handlePreviewWordOnly(e, wId, index)}
+                                    className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
+                                      isCurrentStep
+                                        ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
+                                        : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
+                                    }`}
+                                    title={
+                                      isOverlay
+                                        ? "フローティングバナー：タップしてこの音と波形を確認"
+                                        : "タップしてこの音と波形を確認"
+                                    }
+                                  >
+                                    <span className="text-[10px] font-mono text-cyan-300">
+                                      {index + 1}.
+                                    </span>
+                                    <span>
+                                      {meta.assignedJapanese
+                                        ? `${meta.assignedJapanese}`
+                                        : `${meta.code}（${meta.onomatopoeia}）`}
+                                    </span>
+                                  </button>
+                                  {index < selectedSequence.length - 1 && (
+                                    <span
+                                      className={`text-xs font-bold ${
+                                        index % 2 === 1
+                                          ? "text-cyan-400 px-1"
+                                          : "text-slate-500"
+                                      }`}
+                                    >
+                                      {index % 2 === 1 ? "｜" : "＋"}
+                                    </span>
+                                  )}
+                                </React.Fragment>
+                              );
+                            })
+                          )}
+                        </div>
+                      </>
+                    );
+
+                    return (
+                      <>
+                        {/* 元の位置のバー（ここを通り過ぎてスクロールすると fixed フローティングバナーが出現） */}
+                        <div
+                          ref={sequenceSentinelRef}
+                          data-testid="sequence-banner-inline"
+                          className="p-3 bg-slate-950 border-b border-cyan-500/40 space-y-2"
+                        >
+                          {renderSequenceBannerContent(false)}
+                        </div>
+
+                        {/* iOS Safari / Android Chrome / PC 全ブラウザ対応：スクロール時に画面最上部へ完全固定されるフローティングバナー */}
+                        {isSequenceFloating && (
+                          <div
+                            data-testid="sequence-banner-floating"
+                            style={
+                              floatingBounds
+                                ? {
+                                    top: `${floatingBounds.top}px`,
+                                    left: `${floatingBounds.left}px`,
+                                    width: `${floatingBounds.width}px`,
+                                  }
+                                : { top: 0, left: 0, right: 0 }
+                            }
+                            className="fixed z-50 p-3 bg-slate-950/95 backdrop-blur-md border-b-2 border-x border-cyan-400/70 rounded-b-2xl shadow-[0_12px_32px_rgba(2,6,23,0.95)] space-y-2"
+                          >
+                            {renderSequenceBannerContent(true)}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
 
                   {/* ③ クリック音ボタン一覧（「この音を選択する」ボタン ＆ 「日本語をあてはめる」ボタン） */}
                   <div className="p-3.5 space-y-2.5 bg-slate-950 rounded-b-[24px]">
