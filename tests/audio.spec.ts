@@ -10,7 +10,7 @@ test("単音の試聴ではクリックした位置だけ、連続再生では�
   await page.goto("/sonar");
   const slots = page.getByTitle("タップしてこの音と波形を確認", { exact: true });
   const replay = page.getByRole("button", { name: "もう一度再生", exact: true });
-  const sound = page.getByRole("button").filter({ has: page.getByRole("button", { name: "試聴", exact: true }) }).first();
+  const sound = page.getByRole("button", { name: "この音を選択する", exact: true }).first();
   // 同じ音を繰り返し追加し、語IDでは位置を区別できない場合も確認する。
   for (let index = 0; index < 3; index++) {
     await sound.click();
