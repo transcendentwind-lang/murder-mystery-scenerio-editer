@@ -209,17 +209,17 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
-                ソノブイ索敵・速度予測
+                ソノブイ索敵・速度報告
                 <br />
                 ＆ 法的根拠の選択
               </div>
             </div>
           </div>
           <div className="col-span-9 p-2 bg-slate-50/70 grid grid-cols-2 gap-2 text-[10px]">
-            {/* 前半：ソノブイ・速度予測 */}
+            {/* 前半：ソノブイ・速度報告 */}
             <div className="rounded border border-slate-300 bg-white p-1.5 flex flex-col justify-between">
               <div className="font-bold text-slate-900">
-                ① ソノブイ投下（B-3特定）＆ 速度予測（時速6.25km・明神礁）
+                ① ソノブイ投下（B-3特定）＆ 長津より速度・到達予測報告（時速約6km・明神礁）
               </div>
               <div className="mt-1 flex items-center gap-1 text-[9.5px]">
                 <span className="rounded bg-emerald-50 border border-emerald-400 px-1.5 py-0.5 font-bold text-emerald-900">
@@ -231,7 +231,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[9.5px] text-slate-700 font-medium">
-                ➔ <strong>特定失敗時は現地調査2枠のうち1枠を『EV-25：撮影した画像の分析』に自動充当</strong>（速度ミスは翌朝自然収束）
+                ➔ <strong>特定失敗時は現地調査2枠のうち1枠を『EV-22：撮影した画像の分析』に自動充当</strong>
               </div>
             </div>
 

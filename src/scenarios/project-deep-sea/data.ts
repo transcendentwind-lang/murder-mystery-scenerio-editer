@@ -39,21 +39,12 @@ const sonarWordSources = {
 export const initialVisualBoards: VisualBoardItem[] = [
   {
     id: "vis-day0-eruption-portrait",
-    title: "【Day 0・縦長真縮尺版】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
+    title: "【Day 0】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
     subtitle: "CHART NO. V-2024-PORTRAIT / A3・A4縦置き想定（上：本州・富士山 ／ 右下：父島・西に西之島）",
     boardType: "day0_eruption_portrait",
     dayNumber: 0,
     imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day0.svg"),
     orientation: "portrait",
-  },
-  {
-    id: "vis-day0-eruption-landscape",
-    title: "【Day 0・横長版】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
-    subtitle: "CHART NO. V-2024-BLANK / 横置き白地図（観測事項・予測位置・時刻プロット用）",
-    boardType: "day0_eruption_landscape",
-    dayNumber: 0,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_day0.svg"),
-    orientation: "landscape_rotated",
   },
   {
     id: "vis-day1-white",
@@ -123,7 +114,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
   },
   {
     id: "vis-day3-eruption-portrait",
-    title: "【Day 3・縦長真縮尺版】伊豆・小笠原火山弧 全域火山活動監視図",
+    title: "【Day 3】伊豆・小笠原火山弧 全域火山活動監視図",
     subtitle: "CHART NO. V-2024-P3 / A3・A4縦置き（西之島〜鳥島沖海底カルデラ噴火フロント）",
     boardType: "day3_eruption_portrait",
     dayNumber: 3,
@@ -131,31 +122,13 @@ export const initialVisualBoards: VisualBoardItem[] = [
     orientation: "portrait",
   },
   {
-    id: "vis-day3-eruption",
-    title: "【Day 3・横長版】伊豆・小笠原火山弧 全域火山活動監視図",
-    subtitle: "CHART NO. V-2024 / 西之島〜鳥島沖海底カルデラ噴火フロント",
-    boardType: "day3_eruption",
-    dayNumber: 3,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg"),
-    orientation: "landscape_rotated",
-  },
-  {
     id: "vis-day4-eruption-portrait",
-    title: "【Day 4・縦長真縮尺版】明神礁 連動大噴火 ＆ 地震観測図",
+    title: "【Day 4】明神礁 連動大噴火 ＆ 地震観測図",
     subtitle: "CHART NO. V-2024-P4 / A3・A4縦置き（噴火ドミノ北上・八丈島群発微動）",
     boardType: "day4_eruption_portrait",
     dayNumber: 4,
     imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg"),
     orientation: "portrait",
-  },
-  {
-    id: "vis-day4-eruption",
-    title: "【Day 4・横長版】明神礁 連動大噴火 ＆ 地震観測図",
-    subtitle: "CHART NO. V-2024 / 噴火ドミノ北上・八丈島群発微動",
-    boardType: "day4_eruption",
-    dayNumber: 4,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg"),
-    orientation: "landscape_rotated",
   },
   {
     id: "vis-day4-shrine-chronicle",
@@ -169,7 +142,7 @@ export const initialVisualBoards: VisualBoardItem[] = [
   },
   {
     id: "vis-day5-eruption-portrait",
-    title: "【Day 5・縦長真縮尺版】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
+    title: "【Day 5】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
     subtitle: "CHART NO. V-2024-P5 / A3・A4縦置き（破局噴火まで残り48時間・伊豆大島微動観測）",
     boardType: "day5_eruption_portrait",
     dayNumber: 5,
@@ -177,17 +150,8 @@ export const initialVisualBoards: VisualBoardItem[] = [
     orientation: "portrait",
   },
   {
-    id: "vis-day5-eruption",
-    title: "【Day 5・横長版】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
-    subtitle: "CHART NO. V-2024 / 破局噴火まで残り48時間・伊豆大島微動観測",
-    boardType: "day5_eruption",
-    dayNumber: 5,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg"),
-    orientation: "landscape_rotated",
-  },
-  {
     id: "vis-day6-eruption-portrait",
-    title: "【Day 6・縦長真縮尺版】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
+    title: "【Day 6】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
     subtitle: "CHART NO. V-2024-P6 / A3・A4縦置き（朝8時回復・駿河トラフ境界へ北上再開・駿河湾到達まで24時間）",
     boardType: "day6_eruption_portrait",
     dayNumber: 6,
@@ -195,31 +159,13 @@ export const initialVisualBoards: VisualBoardItem[] = [
     orientation: "portrait",
   },
   {
-    id: "vis-day6-eruption",
-    title: "【Day 6・横長版】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
-    subtitle: "CHART NO. V-2024 / 朝8時回復・駿河トラフ境界へ北上再開・駿河湾到達まで24時間",
-    boardType: "day6_eruption",
-    dayNumber: 6,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_day6.svg"),
-    orientation: "landscape_rotated",
-  },
-  {
     id: "vis-day7-eruption-portrait",
-    title: "【Day 7・縦長真縮尺版】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
+    title: "【Day 7】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
     subtitle: "CHART NO. V-2024-P7 / A3・A4縦置き（駿河湾付近接近・水深600〜1,000m・マッコウクジラ大群集結）",
     boardType: "day7_eruption_portrait",
     dayNumber: 7,
     imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day7.svg"),
     orientation: "portrait",
-  },
-  {
-    id: "vis-day7-eruption",
-    title: "【Day 7・横長版】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
-    subtitle: "CHART NO. V-2024 / 駿河湾付近接近・水深600〜1,000m・マッコウクジラ大群集結",
-    boardType: "day7_eruption",
-    dayNumber: 7,
-    imageUrl: scenarioAssetUrl("releases/images/eruption_monitoring_chart_day7.svg"),
-    orientation: "landscape_rotated",
   },
 ];
 
@@ -582,45 +528,6 @@ export const initialProject: MMProject = {
       visibility: "shareable",
       category: "data",
       acquisitionCondition: "Day 2: 小笠原側アクション【F-4】実行時",
-    },
-    {
-      id: "ev-volcano-chain-log",
-      title: "西之島〜鳥島沖 距離観測データ",
-      frontTitleHtml: "西之島〜鳥島沖<br>距離観測データ",
-      description: `　小笠原〜伊豆諸島間の海底火山活動および距離データ。
-　西之島（北緯27°15′）から鳥島沖（北緯30°29′）までの【直線距離は約350km】。
-　噴火発生時刻と連動微動の伝播時間を照合することで、謎の巨大生物の正確な移動速度が算出可能となる。`,
-      ownerId: "pc-4",
-      foundPhase: 3,
-      visibility: "shareable",
-      category: "data",
-      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、太刀魚（PC4）へ配備",
-    },
-    {
-      id: "ev-torishima-sonar-time",
-      title: "鳥島沖 ソノブイ探知記録",
-      frontTitleHtml: "鳥島沖<br>ソノブイ探知記録",
-      description: `　【Day 3の17:00】、鳥島沖へ展開した洋上捜索ヘリが投下したアクティブソノブイの探知記録。
-　鳥島南西沖合の水深750m地点において、巨大な音響反射目標を明確に捉えた時刻（17:00）が記録されている。
-　この時刻とDay 1の救難時刻を比較することで、移動速度の検証が行える。`,
-      glossaryNote: `※ソノブイ（アクティブソノブイ）とは：ヘリコプターなどから海に落とす筒状の音波探知機。水中に音波を発射し、目標に当たって跳ね返ってくる反響音から、深海にいる物体の正確な位置や深さを特定する。`,
-      ownerId: "pc-3",
-      foundPhase: 3,
-      visibility: "shareable",
-      category: "data",
-      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、貝浜（PC3）へ配備",
-    },
-    {
-      id: "ev-day1-rescue-time",
-      title: "遭難船救助・目撃時刻調書",
-      frontTitleHtml: "遭難船救助・<br>目撃時刻調書",
-      description: `　【Day 1の朝09:00】、西之島近海において民間チャーター船が救難信号を発信・遭遇した際の公式行動調書。
-　遭難船がスクリューに巻き付かれた西之島近海での最初の異常遭遇時刻（09:00）が確定記録として記載されており、巨大生物の速度を計算するための起点データとなる。`,
-      ownerId: "pc-5",
-      foundPhase: 3,
-      visibility: "shareable",
-      category: "testimony",
-      acquisitionCondition: "Day 3: アクティブソノブイ作戦終了時、浪寄（PC5）へ配備",
     },
     {
       id: "ev-tokyo-meteorite-analysis",
@@ -1117,19 +1024,19 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     sheetCode: "COMMAND-BRIEFING-DAY03-MID1",
     isMidDayAddition: true,
     linkedNagatsuCardCode: "NG-02",
-    timingNote: "ソノブイ索敵で目標捕捉直後に配布（長津カード NG-02 と同時）",
-    title: "【Day 3 途中①】目標捕捉と北上速度・位置予測の要請",
+    timingNote: "ソノブイ索敵完了・深海写真提示時に配布（長津カード NG-02 と同時）",
+    title: "【Day 3 途中①】目標捕捉・北上速度報告と深海写真の受信・専門家2名への緊急諮問",
     nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-02）",
     nagatsuBriefingText:
-      "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+      "「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！\n　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
     nagatsuBriefingRubyHtml:
-      "「――洋上捜索ヘリより<ruby>入電<rt>にゅうでん</rt></ruby>！ アクティブソナーにより<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+      "「――洋上捜索ヘリより<ruby>緊急<rt>きんきゅう</rt></ruby><ruby>入電<rt>にゅうでん</rt></ruby>！ アクティブソナーにより<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・<ruby>日速<rt>にっそく</rt></ruby>約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【<ruby>明神礁<rt>みょうじんしょう</rt></ruby>周辺】へ到達する見込みです！<br>　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む<ruby>漆黒<rt>しっこく</rt></ruby>の巨大生物、そして20本以上の無数の<ruby>触手群<rt>しょくしゅぐん</rt></ruby>を確認！<br>① <ruby>浪寄<rt>なみより</rt></ruby>准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。<br>② <ruby>貝浜<rt>かいはま</rt></ruby>リエゾン、海上保安庁法20条に基づく<ruby>警察<rt>けいさつ</rt></ruby><ruby>比例<rt>ひれい</rt></ruby>の<ruby>原則<rt>げんそく</rt></ruby>ではこの規模の目標に対処不可能です。法的に自衛隊の<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>、あるいは<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を要請すべきか、防衛省としての判断を求めます」",
     asashioMissions: [
-      "【追加ミッション①：巨大生物の北上速度（時速・日速）の算出】これまでの噴火・目撃時刻データと西之島〜鳥島沖の距離データを照合させ、巨大生物の移動スピード（時速および1日あたりの移動距離）を算出させてください。",
-      "【追加ミッション②：明日（Day 4）の到達予測海域の特定】算出した移動スピードをもとに、このまま北上を続けた場合、明日（Day 4）はどのあたり（どの島・海底火山周辺）まで北上するか予想をまとめさせてください。",
+      "【追加ミッション①：浪寄准教授（PC5）からの生物学的所見の聴取】深海写真に写った「20本以上の無数の触手と数百mの巨大生物」について、浪寄准教授に生物学的な見解を提示させてください。",
+      "【追加ミッション②：貝浜リエゾン（PC2）からの法的・防衛的見解の聴取】海上保安庁の警察比例の原則を超える事態に対し、自衛隊の「防衛出動」と「海上警備行動」のどちらを要請すべきか、文民統制の仕組みを踏まえて貝浜リエゾンに判断を示させてください。",
     ],
     gmHandoutNote:
-      "Day 3でソノブイ索敵が成功した直後、長津にアナウンスカード「NG-02」を渡し、朝潮にはこの「Day 3 途中① 指令書」を渡してください。",
+      "Day 3でソノブイ索敵が終わり深海写真を提示する際、長津にアナウンスカード「NG-02」を渡し、朝潮にはこの「Day 3 途中① 指令書」を渡してください。",
   },
   {
     id: "cmd-day3-mid2",
@@ -1137,30 +1044,9 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     badgeLabel: "DAY 3 途中② 指令書",
     sheetCode: "COMMAND-BRIEFING-DAY03-MID2",
     isMidDayAddition: true,
-    linkedNagatsuCardCode: "NG-03",
-    timingNote: "移動速度・位置予測の算出直後、深海写真提示時に配布（長津カード NG-03 と同時）",
-    title: "【Day 3 途中②】深海写真の受信と専門家2名への緊急諮問",
-    nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-03）",
-    nagatsuBriefingText:
-      "「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
-    nagatsuBriefingRubyHtml:
-      "「――洋上捜索ヘリより<ruby>緊急<rt>きんきゅう</rt></ruby><ruby>入電<rt>にゅうでん</rt></ruby>！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む<ruby>漆黒<rt>しっこく</rt></ruby>の巨大生物、そして20本以上の無数の<ruby>触手群<rt>しょくしゅぐん</rt></ruby>を確認！<br>① <ruby>浪寄<rt>なみより</rt></ruby>准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。<br>② <ruby>貝浜<rt>かいはま</rt></ruby>リエゾン、海上保安庁法20条に基づく<ruby>警察<rt>けいさつ</rt></ruby><ruby>比例<rt>ひれい</rt></ruby>の<ruby>原則<rt>げんそく</rt></ruby>ではこの規模の目標に対処不可能です。法的に自衛隊の<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>、あるいは<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を要請すべきか、防衛省としての判断を求めます」",
-    asashioMissions: [
-      "【追加ミッション①：浪寄准教授（PC5）からの生物学的所見の聴取】深海写真に写った「20本以上の無数の触手と数百mの巨大生物」について、浪寄准教授に生物学的な見解を提示させてください。",
-      "【追加ミッション②：貝浜リエゾン（PC2）からの法的・防衛的見解の聴取】海上保安庁の警察比例の原則を超える事態に対し、自衛隊の「防衛出動」と「海上警備行動」のどちらを要請すべきか、文民統制の仕組みを踏まえて貝浜リエゾンに判断を示させてください。",
-    ],
-    gmHandoutNote:
-      "Day 3で深海写真を提示する際、長津にアナウンスカード「NG-03」を渡し、朝潮にはこの「Day 3 途中② 指令書」を渡してください。",
-  },
-  {
-    id: "cmd-day3-mid3",
-    dayNumber: 3,
-    badgeLabel: "DAY 3 途中③ 指令書",
-    sheetCode: "COMMAND-BRIEFING-DAY03-MID3",
-    isMidDayAddition: true,
     linkedNagatsuCardCode: "NG-04",
     timingNote: "専門家2名の所見共有・優先調査の後に配布（長津カード NG-04 と同時）",
-    title: "【Day 3 途中③】呼称（コードネーム）決定と指揮官最終決断の要請",
+    title: "【Day 3 途中②】呼称（コードネーム）決定と指揮官最終決断の要請",
     nagatsuBriefingTitle: "📡 長津からの緊急入電アナウンス（NG-04）",
     nagatsuBriefingText:
       "「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」",
@@ -1171,7 +1057,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "【追加ミッション②：自衛隊への要請方針（防衛出動 または 海上警備行動）の最終決断】総指揮官として、自衛隊への「防衛出動」を要請するか「海上警備行動」を発令するか最終意思決定を下してください。",
     ],
     gmHandoutNote:
-      "Day 3終盤の最終決断タイミングで、長津にアナウンスカード「NG-04」を渡し、朝潮にはこの「Day 3 途中③ 指令書」を渡してください。",
+      "Day 3終盤の最終決断タイミングで、長津にアナウンスカード「NG-04」を渡し、朝潮にはこの「Day 3 途中② 指令書」を渡してください。",
   },
   {
     id: "cmd-day4-start",
@@ -1228,7 +1114,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
     nagatsuBriefingRubyHtml:
       "「――暗号ホットラインに着信！ <ruby>貝浜<rt>かいはま</rt></ruby>リエゾンへ、防衛省作戦本部より直通無線が接続されました！『魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。しかし、目標が発している特有の振動が起きておらず、それにあわせて<ruby>火山性<rt>かざんせい</rt></ruby>の周期的な<ruby>微動<rt>びどう</rt></ruby>が収まっていることを確認できている。アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する<ruby>飽和<rt>ほうわ</rt></ruby><ruby>攻撃<rt>こうげき</rt></ruby>で<ruby>殲滅<rt>せんめつ</rt></ruby>できると主張しているが、疑問が残る。<ruby>浪寄<rt>なみより</rt></ruby>准教授の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？！』とのことです！」",
     asashioMissions: [
-      "【追加ミッション①：魚雷命中後に復活してしまう理由と飽和攻撃の是非の確認】浪寄准教授の写真解析（EV-25）や調査資料をもとに、「どうして魚雷が命中した後に元の大きさへ復活してしまうのか（生物としての正体）」「さらなる魚雷の飽和攻撃で殲滅できるのか」の見解をまとめさせてください。",
+      "【追加ミッション①：魚雷命中後に復活してしまう理由と飽和攻撃の是非の確認】浪寄准教授の写真解析（EV-22）や調査資料をもとに、「どうして魚雷が命中した後に元の大きさへ復活してしまうのか（生物としての正体）」「さらなる魚雷の飽和攻撃で殲滅できるのか」の見解をまとめさせてください。",
       "【追加ミッション②：巨大生物が富士山を目指す理由の特定と回答】これまで集まった証拠から「なぜあの巨大生物は一直線に富士山を目指しているのか」の理由を整理し、防衛省作戦本部へ回答させてください。",
     ],
     gmHandoutNote:
@@ -1249,7 +1135,7 @@ export const DAILY_COMMANDER_BRIEFINGS: DailyCommanderBriefing[] = [
       "「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。<ruby>駿河<rt>するが</rt></ruby>トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の<ruby>火山性<rt>かざんせい</rt></ruby><ruby>微動<rt>びどう</rt></ruby>が再開】しました。<ruby>駿河湾<rt>するがわん</rt></ruby>までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、<ruby>朝倉<rt>あさくら</rt></ruby>教授の遺品である実録音響データをすべて開示します！」",
     asashioMissions: [
       "【ミッション①：未回収だった全調査資料の共有と「太古の解決策」の特定】東京班が回収した残りの資料や『小笠原社記』『神社の祝詞の複製』を照合させ、「太古の島人はどうやってこの巨大生物を鎮めたのか（何が天敵なのか・海中筒で何を響かせたのか）」を解明させてください。",
-      "【ミッション②：朝倉教授の実録音響データの解析】朝倉教授の構文規則と4つの実録音響データ（EV-31〜34）を分析、マッコウクジラ音響言語解析システムにアクセスしてください。",
+      "【ミッション②：朝倉教授の実録音響データの解析】朝倉教授の構文規則（EV-27）と4つの実録音響データ（EV-28〜31）を分析、マッコウクジラ音響言語解析システムにアクセスしてください。",
       "【ミッション③：海上自衛隊の魚雷以外の方法で24時間以内に巨大生物を撃退する作戦を立案】これまでの全ての情報から、24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめてください。",
     ],
     gmHandoutNote:
@@ -1561,7 +1447,7 @@ export const SPECIAL_CHARACTER_CARDS: SpecialCharacterCard[] = [
 ];
 
 /**
- * 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・証拠カード同サイズ・表裏仕様）
+ * 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（証拠カード同サイズ・表裏仕様）
  */
 export const NAGATSU_PHASE_CARDS: NagatsuPhaseCard[] = [
   {
@@ -1569,23 +1455,13 @@ export const NAGATSU_PHASE_CARDS: NagatsuPhaseCard[] = [
     cardCode: "NG-02",
     dayNumber: 3,
     timingBadge: "Day 3 途中①",
-    title: "目標捕捉と北上速度・位置予測の要請",
-    frontTitleHtml: "目標捕捉と北上速度・<br>位置予測の要請",
-    description: `「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」`,
-    rubyHtml: `「――洋上捜索ヘリより<ruby>入電<rt>にゅうでん</rt></ruby>！ アクティブソナーにより<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」`,
-    accentHex: "#0284c7",
-  },
-  {
-    id: "ng-card-3",
-    cardCode: "NG-03",
-    dayNumber: 3,
-    timingBadge: "Day 3 途中②",
-    title: "深海写真の受信と専門家2名への緊急諮問",
-    frontTitleHtml: "深海写真の受信と<br>専門家2名への緊急諮問",
-    description: `「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
+    title: "目標捕捉・北上速度報告と深海写真の受信・専門家2名への緊急諮問",
+    frontTitleHtml: "目標捕捉・北上速度報告と<br>深海写真・専門家2名への諮問",
+    description: `「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！
+　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
 ① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。
 ② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」`,
-    rubyHtml: `「――洋上捜索ヘリより<ruby>緊急<rt>きんきゅう</rt></ruby><ruby>入電<rt>にゅうでん</rt></ruby>！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む<ruby>漆黒<rt>しっこく</rt></ruby>の巨大生物、そして20本以上の無数の<ruby>触手群<rt>しょくしゅぐん</rt></ruby>を確認！<br>① <ruby>浪寄<rt>なみより</rt></ruby>准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。<br>② <ruby>貝浜<rt>かいはま</rt></ruby>リエゾン、海上保安庁法20条に基づく<ruby>警察<rt>けいさつ</rt></ruby><ruby>比例<rt>ひれい</rt></ruby>の<ruby>原則<rt>げんそく</rt></ruby>ではこの規模の目標に対処不可能です。法的に自衛隊の<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>、あるいは<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を要請すべきか、防衛省としての判断を求めます」`,
+    rubyHtml: `「――洋上捜索ヘリより<ruby>緊急<rt>きんきゅう</rt></ruby><ruby>入電<rt>にゅうでん</rt></ruby>！ アクティブソナーにより<ruby>鳥島沖<rt>とりしまおき</rt></ruby>の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・<ruby>日速<rt>にっそく</rt></ruby>約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【<ruby>明神礁<rt>みょうじんしょう</rt></ruby>周辺】へ到達する見込みです！<br>　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む<ruby>漆黒<rt>しっこく</rt></ruby>の巨大生物、そして20本以上の無数の<ruby>触手群<rt>しょくしゅぐん</rt></ruby>を確認！<br>① <ruby>浪寄<rt>なみより</rt></ruby>准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。<br>② <ruby>貝浜<rt>かいはま</rt></ruby>リエゾン、海上保安庁法20条に基づく<ruby>警察<rt>けいさつ</rt></ruby><ruby>比例<rt>ひれい</rt></ruby>の<ruby>原則<rt>げんそく</rt></ruby>ではこの規模の目標に対処不可能です。法的に自衛隊の<ruby>防衛<rt>ぼうえい</rt></ruby><ruby>出動<rt>しゅつどう</rt></ruby>、あるいは<ruby>海上<rt>かいじょう</rt></ruby><ruby>警備<rt>けいび</rt></ruby><ruby>行動<rt>こうどう</rt></ruby>を要請すべきか、防衛省としての判断を求めます」`,
     accentHex: "#4338ca",
   },
   {

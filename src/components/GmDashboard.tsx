@@ -1707,69 +1707,27 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </p>
                       <p>
                         📋 <strong className="text-white">位置特定成功時 ＆ 失敗時の処理</strong>：
-                        プレイヤーがB-3を特定できた場合は<strong>成功時の撮影写真（近接浮上）</strong>のみを提示します。B-3の特定に失敗した場合は成功時の写真は提示せず、<strong>失敗時の撮影写真（約20km彼方の航跡波）</strong>を提示し、小笠原現地の調査枠（2枠）のうち1枠を自動的に<strong>『F-3D：撮影した画像の分析（EV-25）』</strong>へ充当して公開（浪寄へ配布）してください。
+                        プレイヤーがB-3を特定できた場合は<strong>成功時の撮影写真（近接浮上）</strong>のみを提示します。B-3の特定に失敗した場合は成功時の写真は提示せず、<strong>失敗時の撮影写真（約20km彼方の航跡波）</strong>を提示し、小笠原現地の調査枠（2枠）のうち1枠を自動的に<strong>『F-3D：撮影した画像の分析（EV-22）』</strong>へ充当して公開（浪寄へ配布）してください。
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ3.5：アクティブソノブイ終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出） */}
+                  {/* フェーズ3.5：アクティブソノブイ終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達） */}
                   <div className="rounded-xl border border-amber-900/60 bg-slate-900 p-4 space-y-3 shadow-md">
                     <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
                       <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                       <span className="font-bold text-amber-300 text-xs">
-                        【フェーズ3.5：ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への証拠配布】
+                        【フェーズ3.5：ソノブイ索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達）】
                       </span>
                     </div>
 
                     <div className="rounded bg-slate-950/80 border border-amber-900/40 p-3 text-[11px] text-amber-200">
                       <p className="font-semibold text-white mb-1">
-                        🎙️ 総合オペレーター 長津のアナウンス（成否問わず読み上げ）:
+                        🎙️ 総合オペレーター 長津のアナウンス（NG-02 ／ Day 3 途中①指令書）:
                       </p>
                       <blockquote className="border-l-2 border-amber-500 pl-3 py-1 text-slate-200 italic leading-relaxed">
-                        「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                        「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！」
                       </blockquote>
-                    </div>
-
-                    <div className="rounded-lg bg-slate-950 p-3 border border-slate-800 space-y-2 text-[11px] text-slate-300">
-                      <span className="font-bold text-white text-xs block mb-1">
-                        📦 GMから3名のプレイヤーへ以下の証拠カードを個別配備:
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-2">
-                          <span className="font-bold text-indigo-300 block text-[10px]">太刀魚（PC4／気象庁）</span>
-                          <span className="font-semibold text-white text-[11px]">西之島〜鳥島沖 距離観測データ</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">西之島〜鳥島沖カルデラ間の直線距離: <strong>約350 km</strong></p>
-                        </div>
-                        <div className="rounded border border-cyan-900/60 bg-cyan-950/30 p-2">
-                          <span className="font-bold text-cyan-300 block text-[10px]">貝浜（PC3／海上保安庁）</span>
-                          <span className="font-semibold text-white text-[11px]">鳥島沖 ソノブイ探知記録</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">鳥島沖での巨大生物探知・確認時刻: <strong>Day 3 17:00</strong></p>
-                        </div>
-                        <div className="rounded border border-emerald-900/60 bg-emerald-950/30 p-2">
-                          <span className="font-bold text-emerald-300 block text-[10px]">浪寄（PC5／大学准教授）</span>
-                          <span className="font-semibold text-white text-[11px]">遭難船救助・目撃時刻調書</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">Day 1西之島近海での異常遭遇時刻: <strong>Day 1 09:00</strong></p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* GM用正解メモ・計算アシスト */}
-                    <div className="rounded-lg bg-emerald-950/20 border border-emerald-900/50 p-3 text-[11px] text-slate-300 space-y-1.5">
-                      <span className="font-bold text-emerald-300 text-xs block">
-                        💡 【GM用正解メモ・計算アシスト（プレイヤーへの誘導用）】
-                      </span>
-                      <p>
-                        ・<strong>経過時間の計算</strong>: Day 1 09:00 ➔ Day 3 17:00 ＝ <strong>56 時間</strong>（48時間 ＋ 8時間）
-                      </p>
-                      <p>
-                        ・<strong>移動速度の計算</strong>: 約350 km ÷ 56 時間 ＝ <strong className="text-white">時速 6.25 km</strong>（日速 約150 km）
-                      </p>
-                      <p>
-                        ・<strong>翌日（Day 4）の北上予想</strong>: 明日（Day 4）にはさらに約150km北上するため、海図上で<strong className="text-white">須美寿島〜明神礁付近</strong>に到達する見込み。
-                      </p>
-                      <p className="text-[10px] text-slate-400">
-                        ※プレイヤー同士が情報を持ち寄って「時速6km」「明日は明神礁のあたり」と推測できたら大成功です！
-                      </p>
                     </div>
                   </div>
 
@@ -1788,16 +1746,16 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ5：Day 3 合議制アクション操作パネル（東京1枠 ＋ 現地2枠） */}
+                  {/* フェーズ5：Day 3 合議制アクション操作パネル（東京2枠 ＋ 現地2枠） */}
                   <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-indigo-400" />
-                        【フェーズ5：Day 3 合議制アクション（東京1枠 ＋ 現地2枠）】
+                        【フェーズ5：Day 3 合議制アクション（東京2枠 ＋ 現地2枠）】
                       </span>
                       <div className="flex items-center gap-2 text-[10px]">
                         <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
-                          東京: 1枠
+                          東京: 2枠
                         </span>
                         <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
                           現地: {selectedDay3FieldActions.length}/2枠
@@ -1806,7 +1764,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     <p className="text-[11px] text-slate-400">
-                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です（※ソノブイ索敵に失敗した場合は、現地調査2枠のうち1枠を『F-3D：撮影した画像の分析（EV-25）』に自動充当し、残り1枠を選択させます）。
+                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です（※ソノブイ索敵に失敗した場合は、現地調査2枠のうち1枠を『F-3D：撮影した画像の分析（EV-22）』に自動充当し、残り1枠を選択させます）。
                     </p>
 
                     {/* 海上保安庁東京本部アクション */}
@@ -2010,7 +1968,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                       <div className="flex items-center gap-2">
                         <a
-                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -2342,7 +2300,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </span>
                       <div className="flex items-center gap-1.5">
                         <a
-                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -3373,7 +3331,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href={chartModalDay === 5 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg") : chartModalDay === 4 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
+                  href={chartModalDay === 5 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg") : chartModalDay === 4 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day3.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"

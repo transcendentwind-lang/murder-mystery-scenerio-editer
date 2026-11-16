@@ -1418,7 +1418,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             ⚠️【セクター特定 失敗（捜索空振り）】（セクター {day3TargetSector}）
                           </strong>
                           <p className="mt-0.5 text-[11px] text-amber-300">
-                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました（不鮮明な遠方写真を解析するため、小笠原現地調査2枠のうち1枠が『F-3D：撮影した画像の分析（EV-25）』に自動充当されます）。
+                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました（不鮮明な遠方写真を解析するため、小笠原現地調査2枠のうち1枠が『F-3D：撮影した画像の分析（EV-22）』に自動充当されます）。
                           </p>
                           <span className="text-[10px] text-slate-300 mt-1 inline-block">
                             👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された遠方波紋写真と捜索失敗ログを確認できます。
@@ -2352,7 +2352,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -2838,7 +2838,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -4393,7 +4393,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 )}
 
                 <a
-                  href={day3MapTab === "tactical" ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
+                  href={day3MapTab === "tactical" ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day3.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4844,7 +4844,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4906,7 +4906,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"

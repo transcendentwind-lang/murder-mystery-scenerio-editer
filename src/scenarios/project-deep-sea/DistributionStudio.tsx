@@ -126,84 +126,41 @@ const formatEvidenceFrontTitleHtml = (title: string, explicitHtml?: string): str
 
 /**
  * 証拠カードの所持PC・開示Dayに応じたカラーテーマを返すヘルパー
+ * ・小笠原現地組4名（坂凪 pc-3、太刀魚 pc-4、浪寄 pc-5、初瀬 pc-6）：青（ブルー系）で統一
+ * ・東京本部組3名（朝潮 pc-1、貝浜 pc-2、長津 pc-7）：緑（グリーン／エメラルド系）で統一
  */
 const getEvidenceCardColorTheme = (ownerId: string, foundPhase: number) => {
-  const charMap: Record<
-    string,
-    {
-      badgeBg: string;
-      borderHex: string;
-      headerHex: string;
-      dividerHex: string;
-      frontBgHex: string;
-    }
-  > = {
-    "char-asashio": {
-      badgeBg: "#1e40af",
-      borderHex: "#1e3a8a",
-      headerHex: "#1e40af",
-      dividerHex: "#93c5fd",
-      frontBgHex: "#f8fafc",
-    },
-    "char-kaihama": {
-      badgeBg: "#3730a3",
-      borderHex: "#312e81",
-      headerHex: "#3730a3",
-      dividerHex: "#a5b4fc",
-      frontBgHex: "#f8fafc",
-    },
-    "char-sakanagi": {
-      badgeBg: "#0f766e",
-      borderHex: "#115e59",
-      headerHex: "#0f766e",
-      dividerHex: "#5eead4",
-      frontBgHex: "#f8fafc",
-    },
-    "char-tachiuo": {
-      badgeBg: "#0369a1",
-      borderHex: "#075985",
-      headerHex: "#0369a1",
-      dividerHex: "#7dd3fc",
-      frontBgHex: "#f8fafc",
-    },
-    "char-namiyose": {
-      badgeBg: "#6d28d9",
-      borderHex: "#5b21b6",
-      headerHex: "#6d28d9",
-      dividerHex: "#c4b5fd",
-      frontBgHex: "#f8fafc",
-    },
-    "char-hatsuse": {
-      badgeBg: "#b45309",
-      borderHex: "#92400e",
-      headerHex: "#b45309",
-      dividerHex: "#fcd34d",
-      frontBgHex: "#fffbeb",
-    },
+  const tokyoGreenTheme = {
+    badgeBg: "#047857",
+    borderHex: "#065f46",
+    headerHex: "#047857",
+    dividerHex: "#34d399",
+    frontBgHex: "#f0fdf4",
+    dayBg: "#ecfdf5",
+    dayBorder: "#6ee7b7",
+    dayText: "#065f46",
   };
 
-  const dayMap: Record<
-    number,
-    { dayBg: string; dayBorder: string; dayText: string }
-  > = {
-    1: { dayBg: "#eff6ff", dayBorder: "#93c5fd", dayText: "#1d4ed8" },
-    2: { dayBg: "#f0fdfa", dayBorder: "#5eead4", dayText: "#0f766e" },
-    3: { dayBg: "#f0f9ff", dayBorder: "#7dd3fc", dayText: "#0369a1" },
-    4: { dayBg: "#fffbeb", dayBorder: "#fcd34d", dayText: "#b45309" },
-    5: { dayBg: "#fff1f2", dayBorder: "#fda4af", dayText: "#be123c" },
-    6: { dayBg: "#faf5ff", dayBorder: "#d8b4fe", dayText: "#6d28d9" },
+  const ogasawaraBlueTheme = {
+    badgeBg: "#1d4ed8",
+    borderHex: "#1e40af",
+    headerHex: "#1d4ed8",
+    dividerHex: "#60a5fa",
+    frontBgHex: "#eff6ff",
+    dayBg: "#eff6ff",
+    dayBorder: "#93c5fd",
+    dayText: "#1e40af",
   };
 
-  const charTheme = charMap[ownerId] || {
-    badgeBg: "#0f766e",
-    borderHex: "#1e3a8a",
-    headerHex: "#0f766e",
-    dividerHex: "#93c5fd",
-    frontBgHex: "#f8fafc",
-  };
-  const dayTheme = dayMap[foundPhase] || dayMap[1];
+  const isTokyo =
+    ownerId === "pc-1" ||
+    ownerId === "pc-2" ||
+    ownerId === "pc-7" ||
+    ownerId === "char-asashio" ||
+    ownerId === "char-kaihama" ||
+    ownerId === "char-nagatsu";
 
-  return { ...charTheme, ...dayTheme };
+  return isTokyo ? tokyoGreenTheme : ogasawaraBlueTheme;
 };
 
 /**
@@ -697,64 +654,44 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       ],
       gmGuides: [
         "朝潮（PC1）の指揮（ミッション①）で作戦海図（W-3100）上にソノブイ3基の投下ポイントを決定させ、巨大生物の現在位置（セクターB-3）を特定させます。",
-        "あわせてDay 3の優先調査枠（東京2枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。※もしソノブイ索敵でB-3の特定に失敗した場合は、不鮮明な遠方写真を解析するため、小笠原現地の調査枠（2枠）のうち1枠を自動的に『F-3D：撮影した画像の分析（EV-25）』へ充当します（残り1枠を他から選択）。",
+        "あわせてDay 3の優先調査枠（東京2枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。※もしソノブイ索敵でB-3の特定に失敗した場合は、不鮮明な遠方写真を解析するため、小笠原現地の調査枠（2枠）のうち1枠を自動的に『F-3D：撮影した画像の分析（EV-22）』へ充当します（残り1枠を他から選択）。",
       ],
     },
     {
       phaseNumber: "DAY 3 フェーズ 2",
-      phaseTitle: "目標捕捉 ＆ 北上速度・明日（Day 4）の到達位置予測",
+      phaseTitle: "目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問",
       startTrigger: "ソノブイ索敵によって鳥島沖の巨大生物の現在位置（セクターB-3）を特定（または失敗時に広域残響から位置を捕捉）した直後",
       handoutBadges: [
         "長津カード NG-02",
         "DAY 3 途中① 指令書（朝潮へ配布）",
-        "太刀魚へ配布：西之島〜鳥島沖 距離観測データ（約350km）",
-        "貝浜へ配布：鳥島沖 ソノブイ探知記録（Day 3 17:00）",
-        "浪寄へ配布：遭難船救助・目撃時刻調書（Day 1 09:00 西之島近海）",
+        "全体提示（索敵成功時）：洋上ソナー索敵撮影写真（近接浮上・索敵成功時）",
+        "全体提示（索敵失敗時）：洋上ソナー索敵撮影写真（遠距離・索敵失敗時）＋ 浪寄へ『EV-22：撮影した画像の分析』を自動公開（現地調査1枠を消費）",
       ],
       nagatsuAnnouncements: [
         {
           sourceLabel: "『DAY 3 途中① 指令書』および『長津カード NG-02（Day 3 途中①）』と同文",
-          text: "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+          text: "「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！\n　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
         },
       ],
       gmGuides: [
-        "太刀魚・貝浜・浪寄の3名へ距離・時刻データを配布し、【Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）】と明日（Day 4）の北上予測地点（明神礁周辺）を算出・報告させます。",
-      ],
-    },
-    {
-      phaseNumber: "DAY 3 フェーズ 3",
-      phaseTitle: "深海写真の受信 ＆ 専門家2名（浪寄・貝浜）への緊急諮問",
-      startTrigger: "プレイヤーが移動スピードとDay 4の北上予測地点を算出し終えた直後",
-      handoutBadges: [
-        "長津カード NG-03",
-        "DAY 3 途中② 指令書（朝潮へ配布）",
-        "全体提示（索敵成功時）：洋上ソナー索敵撮影写真（近接浮上・索敵成功時）",
-        "全体提示（索敵失敗時）：洋上ソナー索敵撮影写真（遠距離・索敵失敗時）＋ 浪寄へ『EV-25：撮影した画像の分析』を自動公開（現地調査1枠を消費）",
-      ],
-      nagatsuAnnouncements: [
-        {
-          sourceLabel: "『DAY 3 途中② 指令書』および『長津カード NG-03（Day 3 途中②）』と同文",
-          text: "「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
-        },
-      ],
-      gmGuides: [
-        "【ソノブイ索敵成功時】成功時の撮影写真（近接浮上）のみを提示します（『EV-25：撮影した画像の分析』は小笠原現地調査でF-3Dを選択した場合にのみ開示されます）。",
-        "【ソノブイ索敵失敗時】成功時の写真は提示せず、失敗時の撮影写真（遠距離・航跡波）のみを提示します。あわせて小笠原現地の調査枠（2枠）のうち1枠を自動充当して『EV-25：撮影した画像の分析』を公開（浪寄へ配布）し、失敗時の画像を分析した結果（超高感度強調処理）として20本以上の触手と超群体（コロニー）構造が判明した形で進行します。",
+        "長津のアナウンスにより、巨大生物が【時速約6km・日速約150km】で北上しており、明日（Day 4）には【明神礁周辺】へ到達する見込みであることを全体へ共有します。",
+        "【ソノブイ索敵成功時】成功時の撮影写真（近接浮上）のみを提示します（『EV-22：撮影した画像の分析』は小笠原現地調査でF-3Dを選択した場合にのみ開示されます）。",
+        "【ソノブイ索敵失敗時】成功時の写真は提示せず、失敗時の撮影写真（遠距離・航跡波）のみを提示します。あわせて小笠原現地の調査枠（2枠）のうち1枠を自動充当して『EV-22：撮影した画像の分析』を公開（浪寄へ配布）し、失敗時の画像を分析した結果（超高感度強調処理）として20本以上の触手と超群体（コロニー）構造が判明した形で進行します。",
         "浪寄（PC5）から、撮影写真および分析結果に基づく生物学的所見を共有させます。",
         "貝浜（PC2）から『SP-04：文民統制の仕組み』に基づき、海上警備行動（警察比例の原則）と防衛出動（武力攻撃事態）の法的な違いと課題を共有させます。",
       ],
     },
     {
-      phaseNumber: "DAY 3 フェーズ 4",
+      phaseNumber: "DAY 3 フェーズ 3",
       phaseTitle: "公式呼称（コードネーム）決定 ＆ 指揮官の最終決断",
       startTrigger: "専門家2名の所見共有およびDay 3の優先調査カードの共有が完了した時点（Day 3終盤）",
       handoutBadges: [
         "長津カード NG-04",
-        "DAY 3 途中③ 指令書（朝潮へ配布）",
+        "DAY 3 途中② 指令書（朝潮へ配布）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 3 途中③ 指令書』および『長津カード NG-04（Day 3 達成時）』と同文",
+          sourceLabel: "『DAY 3 途中② 指令書』および『長津カード NG-04（Day 3 達成時）』と同文",
           text: "「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」",
         },
       ],
@@ -837,7 +774,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         "SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間（浪寄へ配布）",
         "DAY 5 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 5 御蔵島沖噴火・富士山微動監視海図",
-        "Day 5 調査資料（朝倉教授の構文規則ノート EV-30 等）を配布",
+        "Day 5 調査資料（朝倉教授の構文規則ノート EV-27 等）を配布",
       ],
       nagatsuAnnouncements: [
         {
@@ -878,7 +815,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         "SP-07：防衛省 運用企画局長とのコネクション（7名時は長津へ配布）",
         "DAY 6 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 6 監視海図 ＆ クジラ音響解析ガイド（A4両面）",
-        "Day 6 未回収資料 ＆ 朝倉教授の実録音響データ（EV-31〜34）を全開示",
+        "Day 6 未回収資料 ＆ 朝倉教授の実録音響データ（EV-28〜31）を全開示",
       ],
       nagatsuAnnouncements: [
         {
@@ -1113,30 +1050,22 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 　現場海域ではアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定し、浮上してくることがあれば写真撮影を試みてください。また、午後にはヘリコプターは帰投できますので、索敵と並行して本日の優先調査も進めてください」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ DAY 3 フェーズ2：目標捕捉 ＆ 北上速度・明日（Day 4）の到達位置予測
+■ DAY 3 フェーズ2：目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問
 ⏱️ 開始タイミング・条件：ソノブイ索敵で鳥島沖の巨大生物の現在位置（B-3）を特定した直後
-📦 配布：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、太刀魚（約350km）・貝浜（Day 3 17:00）・浪寄（Day 1 09:00 西之島近海）へ距離・時刻証拠3枚を配布
-💡 正解メモ：Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）
+📦 配布・提示：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、全体へ『成功時写真（失敗時は失敗時写真＋現地調査1枠を自動充当して浪寄へEV-22）』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』と同文） ━━┓
-「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-
-■ DAY 3 フェーズ3：深海写真の受信 ＆ 専門家2名（浪寄・貝浜）への緊急諮問
-⏱️ 開始タイミング・条件：移動スピード（時速6.25km＝日速約150km）とDay 4北上予測（明神礁周辺）を算出し終えた直後
-📦 配布・提示：長津へ『NG-03』、朝潮へ『DAY 3 途中② 指令書』、全体へ『成功時写真（失敗時は失敗時写真＋現地調査1枠を自動充当して浪寄へEV-25）』
-
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中② 指令書』・『NG-03』と同文） ━━┓
-「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
+「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！
+　さらに、撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
 ① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。
 ② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ DAY 3 フェーズ4：公式呼称（コードネーム）決定 ＆ 指揮官の最終決断
+■ DAY 3 フェーズ3：公式呼称（コードネーム）決定 ＆ 指揮官の最終決断
 ⏱️ 開始タイミング・条件：浪寄・貝浜の所見共有とDay 3優先調査カードの共有が完了した時点（Day 3終盤）
-📦 配布：長津へ『NG-04』、朝潮へ『DAY 3 途中③ 指令書』
+📦 配布：長津へ『NG-04』、朝潮へ『DAY 3 途中② 指令書』
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中③ 指令書』・『NG-04』と同文） ━━┓
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中② 指令書』・『NG-04』と同文） ━━┓
 「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
@@ -1179,7 +1108,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
   6: `■ DAY 6 フェーズ1：朝8時ブリーフィング（巨大生物の完全回復・北上再開） ＆ 全音響資料の開示
 ⏱️ 開始タイミング・条件：Day 5が終了し、Day 6（決戦前日・朝8時）へ移行した時点
-📦 配布・提示：7名時は長津へ『SP-07』、朝潮へ『DAY 6 指令書』配布 ＋ 朝倉教授の実録音響データ（EV-31〜34）全開示
+📦 配布・提示：7名時は長津へ『SP-07』、朝潮へ『DAY 6 指令書』配布 ＋ 朝倉教授の実録音響データ（EV-28〜31）全開示
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 6 指令書』と同文） ━━┓
 「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
@@ -1297,12 +1226,10 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   3: [
     "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 30分）",
     "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
-    "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16）、貝浜（EV-17）、浪寄（EV-18）の3名へ証拠を配布する",
-    "【Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖）＝ 56時間、約350km ÷ 56時間 ＝ 時速6.25km（日速約150km）】と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる",
-    "【写真提示と失敗時処理】索敵成功時は『成功時の写真（近接浮上）』のみを提示。索敵失敗時は『失敗時の写真（遠距離・航跡波）』のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-25）』へ自動充当して浪寄へ公開する。その上で浪寄准教授（生物所見）と貝浜リエゾン（法的判断）へ諮問する",
+    "【目標捕捉・北上速度報告と深海写真提示・失敗時処理】ソノブイ終了後、長津アナウンス（NG-02：時速約6km・日速約150kmで北上、明日Day 4は明神礁周辺へ到達見込み）を行う。索敵成功時は『成功時の写真（近接浮上）』のみを提示。索敵失敗時は『失敗時の写真（遠距離・航跡波）』のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-22）』へ自動充当して浪寄へ公開する。その上で浪寄准教授（生物所見）と貝浜リエゾン（法的判断）へ諮問する",
     "防衛省・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
-    "合同対策本部の調査枠（東京側2枠、小笠原現地側2枠 ※ソノブイ失敗時は現地1枠をEV-25で消費したため残り1枠）を選択させ、証拠資料を開示する",
+    "合同対策本部の調査枠（東京側2枠、小笠原現地側2枠 ※ソノブイ失敗時は現地1枠をEV-22で消費したため残り1枠）を選択させ、証拠資料を開示する",
   ],
   4: [
     "【Day 4 開始時】初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
@@ -1313,7 +1240,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   5: [
     "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 15分 ※Day 5終了後に10分程度の休憩を入れる）",
-    "朝倉教授のクジラ構文規則（EV-30：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
+    "朝倉教授のクジラ構文規則（EV-27：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
     "終盤、防衛省作戦本部から貝浜への直通無線（NG-06 ＆ Day 5 途中①指令書）を演出し、「微動は収まったが、アクティブソナー（ソナー探知）でゆっくり深海に沈み込みながら元の大きさに戻っている傾向が確認できる。どうして魚雷命中後に復活してしまうのか？なぜ富士山を目指すのか？」を浪寄准教授らに確認させる",
   ],
   6: [
@@ -1333,16 +1260,28 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
 };
 
-// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外、新規追加ボードも自動マージ）
+// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図や廃止された横長版火山監視図は除外、新規追加ボードも自動マージ）
+const REMOVED_VISUAL_BOARD_IDS = new Set([
+  "vis-route-map",
+  "vis-day0-eruption-landscape",
+  "vis-day3-eruption",
+  "vis-day4-eruption",
+  "vis-day5-eruption",
+  "vis-day6-eruption",
+  "vis-day7-eruption",
+]);
+
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
   if (
     project.visualBoards &&
     project.visualBoards.length > 0 &&
-    project.visualBoards.some((v) => v.id === "vis-day7-eruption")
+    project.visualBoards.some((v) => v.id === "vis-day7-eruption-portrait")
   ) {
     const existingMap: Record<string, VisualBoardItem> = {};
     project.visualBoards.forEach((v) => {
-      existingMap[v.id] = v;
+      if (!REMOVED_VISUAL_BOARD_IDS.has(v.id)) {
+        existingMap[v.id] = v;
+      }
     });
     const merged: VisualBoardItem[] = [];
     for (const initItem of initialVisualBoards) {
@@ -1361,13 +1300,13 @@ function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
       delete existingMap[initItem.id];
     }
     for (const customItem of Object.values(existingMap)) {
-      if (customItem.id !== "vis-route-map") {
+      if (!REMOVED_VISUAL_BOARD_IDS.has(customItem.id)) {
         merged.push(customItem);
       }
     }
     return merged;
   }
-  return initialVisualBoards.filter((v) => v.id !== "vis-route-map");
+  return initialVisualBoards.filter((v) => !REMOVED_VISUAL_BOARD_IDS.has(v.id));
 }
 
 // デフォルトのGM進行ノートを取得するヘルパー
@@ -1414,7 +1353,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
-      (dayNumber === 3 && !existing.readAloudScript.includes("時速6.25km")) ||
+      (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し"))) ||
       (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
       (dayNumber === 7 && !existing.readAloudScript.includes("SP-14"));
 
@@ -1438,12 +1377,15 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
           c.includes("計算ミスがあっても") ||
           c.includes("より駿河湾に近い位置") ||
           c.includes("機械的ペナルティ") ||
-          c.includes("EV-16:")
+          c.includes("EV-16") ||
+          c.includes("時速6.25km") ||
+          c.includes("EV-25") ||
+          c.includes("EV-30")
       ) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")))) ||
-      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("時速6.25km")) || !existing.gmCheckpoints.some((c) => c.includes("写真提示と失敗時処理")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
+      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-14")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
@@ -1788,9 +1730,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
           e &&
           e.id !== "ev-coda-spectrogram" &&
           e.id !== "ev-folk-song-rhythm" &&
+          e.id !== "ev-volcano-chain-log" &&
+          e.id !== "ev-torishima-sonar-time" &&
+          e.id !== "ev-day1-rescue-time" &&
           !(e.title || "").includes("古謡") &&
           !(e.title || "").includes("スペクトログラム") &&
-          !(e.title || "").includes("スペクロログラム")
+          !(e.title || "").includes("スペクロログラム") &&
+          !(e.title || "").includes("距離観測データ") &&
+          !(e.title || "").includes("ソノブイ探知記録") &&
+          !(e.title || "").includes("目撃時刻調書")
       )
       .map((e) => {
         const master = masterEvidenceMap[e.id];

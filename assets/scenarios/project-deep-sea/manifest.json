@@ -123,147 +123,70 @@
       "sha256": "c065ca52c5c44565380d427b080ae3543774f528637d5a275fa473dd4c91a163"
     },
     {
-      "id": "material-12",
-      "path": "releases/images/eruption_monitoring_chart.jpg",
-      "title": "観測図・画像版",
-      "kind": "release",
-      "format": "jpg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart.jpg",
-      "bytes": 797857,
-      "sha256": "aedfc8b8d7d7d447db5018355aa235b91ee999eadf25d5653dad83a354cc782d"
-    },
-    {
-      "id": "material-13",
-      "path": "releases/images/eruption_monitoring_chart.svg",
-      "title": "【Day 3・横長版】伊豆・小笠原火山弧 全域火山活動監視図",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart.svg",
-      "bytes": 19294,
-      "sha256": "2d3cd0a7ef9a9dd072d8e50ab58d1918bfa9e28eb5db8eb5f96cc880f6db283d"
-    },
-    {
-      "id": "material-14",
-      "path": "releases/images/eruption_monitoring_chart_day0.svg",
-      "title": "【Day 0・横長版】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart_day0.svg",
-      "bytes": 14823,
-      "sha256": "34932ead635a713518309f75b2738e3af8fc02e12a1ad3ad1e9b3a73af785c80"
-    },
-    {
-      "id": "material-15",
-      "path": "releases/images/eruption_monitoring_chart_day4.svg",
-      "title": "【Day 4・横長版】明神礁 連動大噴火 ＆ 地震観測図",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart_day4.svg",
-      "bytes": 19434,
-      "sha256": "683d7dceda57953991d2d34f584eec666a2a572cd6a18dd5dea7aa436f4e7517"
-    },
-    {
-      "id": "material-16",
-      "path": "releases/images/eruption_monitoring_chart_day5.svg",
-      "title": "【Day 5・横長版】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart_day5.svg",
-      "bytes": 21616,
-      "sha256": "1beb22edb20ba7f2882f258b6326ac30d6d15e3a210f4f78831f8c0f8dc9c38b"
-    },
-    {
-      "id": "material-17",
-      "path": "releases/images/eruption_monitoring_chart_day6.svg",
-      "title": "【Day 6・横長版】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart_day6.svg",
-      "bytes": 22272,
-      "sha256": "2dd5ff476e90ea737eb8b1a3800e42e0a217b8366031cffd3598ef84b9bbf7f9"
-    },
-    {
-      "id": "material-18",
-      "path": "releases/images/eruption_monitoring_chart_day7.svg",
-      "title": "【Day 7・横長版】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
-      "kind": "release",
-      "format": "svg",
-      "participantApp": false,
-      "legacyUrl": "/images/eruption_monitoring_chart_day7.svg",
-      "bytes": 23034,
-      "sha256": "6c0a58023f2041049b74032f073470ff6dc9939c4b5de3275f496cba646cd4ce"
-    },
-    {
       "id": "material-19",
       "path": "releases/images/eruption_monitoring_chart_portrait_day0.svg",
-      "title": "【Day 0・縦長真縮尺版】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
+      "title": "【Day 0】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day0.svg",
-      "bytes": 19874,
-      "sha256": "4dcfcbd5486643d3d71adbca67c658b65cd9c4c8042b138ce40dcc9ce9c09ecb"
+      "bytes": 19856,
+      "sha256": "3fcaa60c81b6c033e450c48659392393102eb18909cfe9bc487df88c941f57c8"
     },
     {
       "id": "material-20",
       "path": "releases/images/eruption_monitoring_chart_portrait_day3.svg",
-      "title": "【Day 3・縦長真縮尺版】伊豆・小笠原火山弧 全域火山活動監視図",
+      "title": "【Day 3】伊豆・小笠原火山弧 全域火山活動監視図",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day3.svg",
-      "bytes": 21858,
-      "sha256": "42001075c70a1f758614cf4b1b42b7fcc17b662a4efadc4d39bb311999a13400"
+      "bytes": 21840,
+      "sha256": "cecc69d1cbd0a9d696da45a47112ff48eac81433a5d8d5f7c5c4bb1b03009232"
     },
     {
       "id": "material-21",
       "path": "releases/images/eruption_monitoring_chart_portrait_day4.svg",
-      "title": "【Day 4・縦長真縮尺版】明神礁 連動大噴火 ＆ 地震観測図",
+      "title": "【Day 4】明神礁 連動大噴火 ＆ 地震観測図",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day4.svg",
-      "bytes": 23189,
-      "sha256": "25decab4222db70ee5e6312769e33f39c4aac98b3de482f76e6eda1d4595e72f"
+      "bytes": 23171,
+      "sha256": "fd061bbb0496eb0030789f7a69871a41d26990a04a60432e5875f468da22556e"
     },
     {
       "id": "material-22",
       "path": "releases/images/eruption_monitoring_chart_portrait_day5.svg",
-      "title": "【Day 5・縦長真縮尺版】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
+      "title": "【Day 5】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day5.svg",
-      "bytes": 24929,
-      "sha256": "8e1d9c8a68429c131ba9d851e7947f1cb97de3043e9114a9d312674f9e15cbe0"
+      "bytes": 24911,
+      "sha256": "c4e3272a0ca0deb2b41beacbb27f2e52bc010335442b3f036a7674cb1aa2b4e3"
     },
     {
       "id": "material-23",
       "path": "releases/images/eruption_monitoring_chart_portrait_day6.svg",
-      "title": "【Day 6・縦長真縮尺版】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
+      "title": "【Day 6】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day6.svg",
-      "bytes": 25540,
-      "sha256": "d6739801dd7beb54c4218fd81ac9c2b57235de5f1ebe85b0a63007b483ce8e9a"
+      "bytes": 25522,
+      "sha256": "d29ce73ef9879a5c8d4009a3ef393c4facf262a5a8611f0c0c5a6a17ebbc4283"
     },
     {
       "id": "material-24",
       "path": "releases/images/eruption_monitoring_chart_portrait_day7.svg",
-      "title": "【Day 7・縦長真縮尺版】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
+      "title": "【Day 7】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
       "kind": "release",
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/eruption_monitoring_chart_portrait_day7.svg",
-      "bytes": 25609,
-      "sha256": "bdb009d1254954201b2f2baa5ce5b23d617b9aad6ee9800fad52e38682bf7b6d"
+      "bytes": 25591,
+      "sha256": "7d2ef04dd81b966f81d765875bfa74879a9b486420381b730fae42b4ff9a0e46"
     },
     {
       "id": "material-25",
