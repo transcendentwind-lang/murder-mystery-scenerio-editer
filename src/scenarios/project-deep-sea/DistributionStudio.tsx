@@ -168,6 +168,25 @@ const getEvidenceCardColorTheme = (ownerId: string, foundPhase: number) => {
  * ・【重要内容】をクリムゾンレッド太字＋淡いローズ背景で強調
  * ・『発言・証言引用』をディープインディゴ色（内部の【】も維持）で強調
  */
+const renderRubyAwareText = (segment: string, keyPrefix: string): React.ReactNode => {
+  if (!segment.includes("<ruby>")) return segment;
+  const parts = segment.split(/(<ruby>.*?<\/ruby>)/g);
+  return parts.map((part, idx) => {
+    const m = part.match(/^<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>$/);
+    if (m) {
+      return (
+        <ruby key={`${keyPrefix}-r-${idx}`} className="whitespace-nowrap">
+          {m[1]}
+          <rt className="text-[7.5px] leading-none tracking-tight text-slate-600 font-semibold">
+            {m[2]}
+          </rt>
+        </ruby>
+      );
+    }
+    return <React.Fragment key={`${keyPrefix}-rt-${idx}`}>{part}</React.Fragment>;
+  });
+};
+
 const renderBracketHighlights = (segment: string, keyPrefix: string): React.ReactNode => {
   const parts = segment.split(/(【[^】]+】)/g);
   return parts.map((part, i) => {
@@ -178,11 +197,11 @@ const renderBracketHighlights = (segment: string, keyPrefix: string): React.Reac
           className="font-extrabold rounded-[2px] px-0.5"
           style={{ color: "#b91c1c", backgroundColor: "#fff1f2" }}
         >
-          {part}
+          {renderRubyAwareText(part, `${keyPrefix}-b-${i}`)}
         </span>
       );
     }
-    return <React.Fragment key={`${keyPrefix}-t-${i}`}>{part}</React.Fragment>;
+    return <React.Fragment key={`${keyPrefix}-t-${i}`}>{renderRubyAwareText(part, `${keyPrefix}-t-${i}`)}</React.Fragment>;
   });
 };
 
@@ -704,13 +723,13 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
   4: [
     {
       phaseNumber: "DAY 4 フェーズ 1",
-      phaseTitle: "明神礁の海底噴火 ＆ 即応総力体制（全未調査資料の一括開示）",
+      phaseTitle: "明神礁の海底噴火 ＆ 即応総力体制（未選択カード＋Day 4調査カードの自由閲覧解禁）",
       startTrigger: "Day 3の最終決断が完了し、Day 4へ移行した時点",
       handoutBadges: [
         "SP-05：神社の祝詞の複製（初瀬へ配布）",
         "DAY 4 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 4 明神礁噴火・八丈島微動監視海図",
-        "一括全開示：Day 1〜Day 4の未取得だった全証拠カードをすべて配布",
+        "自由閲覧解禁：テーブル上のこれまで選択していなかった証拠カード＋Day 4調査カード",
       ],
       nagatsuAnnouncements: [
         {
@@ -721,10 +740,10 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       gmAnnouncements: [
         {
           tone: "slate",
-          speakerLabel: "📢 GMからの補足案内（前日の防衛出動要請に対する政府回答 ＆ 全資料の一括配布）",
-          text: "「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る。ただし内閣を再説得するためにも、この生物がどこへ向かい何を引き起こす見立てなのか対策本部の専門的予測を至急提出してほしい』との連絡が入っています。これより即応総力体制として、これまで未取得だった調査資料とDay 4の調査資料をすべて一括でお渡しします！」",
+          speakerLabel: "📢 GMからの補足案内（前日の防衛出動要請に対する政府回答 ＆ テーブル上のカード自由閲覧の案内）",
+          text: "「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る』との回答が入っています。また、即応総力体制への移行に伴い、テーブルの上に出ているこれまで選択していなかった調査カードおよびDay 4の調査カードは、すべて自由に閲覧可能となります！」",
           cardActionNote:
-            "👉 GMのカード配布処理：初瀬（PC6）へ『SP-05：神社の祝詞の複製』を渡し、Day 1〜Day 4で未取得だったすべての証拠カードを一括でプレイヤーへ配布します。",
+            "👉 GMのカード進行処理：初瀬（PC6）へ『SP-05：神社の祝詞の複製』を渡し、テーブルの上に出しているこれまで選択していなかった証拠カード（Day 1〜Day 3の未選択分）とDay 4の調査カードをすべて自由に閲覧してよいと案内します。",
         },
       ],
     },
@@ -1069,13 +1088,15 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-  4: `■ DAY 4 フェーズ1：明神礁の海底噴火 ＆ 即応総力体制（全未調査資料の一括開示）
+  4: `■ DAY 4 フェーズ1：明神礁の海底噴火 ＆ 即応総力体制（未選択カード＋Day 4調査カードの自由閲覧解禁）
 ⏱️ 開始タイミング・条件：Day 3の最終決断が完了し、Day 4へ移行した時点
-📦 配布・提示：初瀬へ『SP-05』、朝潮へ『DAY 4 指令書』配布 ＋ Day 1〜Day 4の未取得だった全証拠カードを一括配布
+📦 配布・提示：初瀬へ『SP-05』、朝潮へ『DAY 4 指令書』配布 ＋ テーブル上のこれまで選択していなかった証拠カードとDay 4調査カードをすべて自由に閲覧可能と案内
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 4 指令書』と同文） ━━┓
 「未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が火山性微動を断続的に探知しています。防衛省の水中聴音網（パッシブソナー網）による巨大生物の位置と火山性微動の発生源は完全に一致しており、巨大生物は【日速約150km】で正確に北上を続けています。政府および防衛省より『この巨大生物は一体どこへ向かい、何を引き起こす見立てなのか、合同対策本部の専門的予測を至急提出してほしい』との緊急照会が入っています。なお事態の緊迫化を受け、本日より当合同対策本部は調査枠制限を撤廃する【即応総力体制】へ移行します！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+【GMからの補足案内】：
+「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る』との回答が入っています。また、即応総力体制への移行に伴い、テーブルの上に出ているこれまで選択していなかった調査カードおよびDay 4の調査カードは、すべて自由に閲覧可能となります！」
 
 ■ DAY 4 フェーズ2：北上原因の分析 ＆ 最終到達予測地点（「富士山」vs「東京湾」）の結論報告
 ⏱️ 開始タイミング・条件：全開示された証拠カードの精査が進み、朝潮が進路予測報告をまとめた時点
@@ -1234,7 +1255,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   4: [
     "【Day 4 開始時】初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
-    "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して未取得だった全証拠資料を一括開示する",
+    "合同対策本部が即応総力体制へ移行し、テーブルの上に出ているこれまで選択していなかった調査カードとDay 4の調査カードをすべて自由に閲覧可能になったと案内する",
     "対策本部として巨大生物の最終目的地（富士山か東京湾か）を結論づけさせる（※『東京湾』と結論づけた場合、Day 6の岸部局長交渉で嫌味を言われる）",
     "防衛省が「害獣駆除（災害派遣）」として海上自衛隊動員・実弾迎撃作戦を決定した通達（NG-05）を読み上げる",
   ],
@@ -1354,6 +1375,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("警備救難部") ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
       (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し"))) ||
+      (dayNumber === 4 && !existing.readAloudScript.includes("自由に閲覧可能")) ||
       (dayNumber === 5 && !existing.readAloudScript.includes("EV-26")) ||
       (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
       (dayNumber === 7 && !existing.readAloudScript.includes("SP-14"));
@@ -1387,6 +1409,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")))) ||
       (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
+      (dayNumber === 4 && !existing.gmCheckpoints.some((c) => c.includes("自由に閲覧可能"))) ||
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || !existing.gmCheckpoints.some((c) => c.includes("EV-26")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-14")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
