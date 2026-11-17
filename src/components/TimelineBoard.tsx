@@ -2622,7 +2622,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -3186,7 +3186,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -3495,7 +3495,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         『神社の祝詞の複製』の注釈にはこう記されています――『<strong>祝詞の言の葉そのものに験（しるし）があるにあらず。言の葉（ことのは）をただ声高（こわだか）に唱うるのみでは届かじ。定めの順を違（たが）えず、海の中へと音（ね）を響かせよ</strong>』。そして吉備津の証言により『<strong>祝詞は声高に日本語を読むのではなく、舌を弾いてクリック音を海中筒から放つものだ</strong>』と判明しました。
                       </p>
                       <p className="text-slate-400 leading-relaxed border-t border-amber-900/40 pt-1">
-                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>『人と勇魚の契り　大獲物ぞ　集ひ来よ』という祝詞の型と口伝</strong>として伝えていたのです！
+                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>『人と勇魚の契り　小笠原へ集ひ来よ　大獲物ぞ　集ひ来よ』という祝詞の型と口伝</strong>として伝えていたのです！
                       </p>
                     </div>
 
