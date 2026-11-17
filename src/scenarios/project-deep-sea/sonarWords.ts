@@ -139,4 +139,34 @@ export const sonarWords = [
     meaning: "人間とクジラ",
     soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
   },
+  {
+    id: "word-go-northeast",
+    symbol: "↗↗",
+    meaning: "北東",
+    soundPattern: "上昇4連パルス（ピ・ピツ・ピィッ！）",
+  },
+  {
+    id: "word-go-northwest",
+    symbol: "↖↖",
+    meaning: "北西",
+    soundPattern: "高音から下降4連パルス（ピ・ピポ・ポン）",
+  },
+  {
+    id: "word-place-ogasawara",
+    symbol: "🏝️▼",
+    meaning: "小笠原",
+    soundPattern: "低音長打＋中音2連反響（ボ・ボーン・ポポ）",
+  },
+  {
+    id: "word-place-hachijojima",
+    symbol: "🏝️▲",
+    meaning: "八丈島",
+    soundPattern: "低音2打＋中音2長打（ゴ・ゴ・トトーン）",
+  },
+  {
+    id: "word-place-mikurajima",
+    symbol: "🏝️◎",
+    meaning: "御蔵島",
+    soundPattern: "高音トリル＋中音パルス（クル・ル・ピポン）",
+  },
 ] as const satisfies readonly Pick<CrypticWord, "id" | "symbol" | "meaning" | "soundPattern">[];

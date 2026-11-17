@@ -4,6 +4,7 @@ import { scenarioAssetUrl } from "@/scenarios/catalog";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
+import { sonarWords } from "@/scenarios/project-deep-sea/sonarWords";
 import { AcousticPulsePoint, buildAudioTimeline } from "@/utils/wordAudio";
 export { getWordAcousticPulses } from "@/utils/wordAudio";
 import { audioEngine } from "@/utils/audioSynth";
@@ -273,6 +274,136 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     directionBadge: "⚔️ 巨大獲物へ攻撃開始",
     category: "action",
   },
+  {
+    id: "rule-25-northeast-gather",
+    name: "北東 ＋ 集まれ",
+    sequence: ["word-go-northeast", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北東に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して北東に集まり始めた",
+    directionBadge: "↗️ 北東に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-26-northwest-gather",
+    name: "北西 ＋ 集まれ",
+    sequence: ["word-go-northwest", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北西に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して北西に集まり始めた",
+    directionBadge: "↖️ 北西に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-27-northeast-search",
+    name: "北東 ＋ 探せ",
+    sequence: ["word-go-northeast", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北東を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して北東を探し始めた",
+    directionBadge: "↗️ 北東を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-28-northwest-search",
+    name: "北西 ＋ 探せ",
+    sequence: ["word-go-northwest", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北西を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して北西を探し始めた",
+    directionBadge: "↖️ 北西を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-29-ogasawara-gather",
+    name: "小笠原 ＋ 集まれ",
+    sequence: ["word-place-ogasawara", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが小笠原の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 小笠原に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-30-hachijojima-gather",
+    name: "八丈島 ＋ 集まれ",
+    sequence: ["word-place-hachijojima", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが八丈島の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 八丈島に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-31-mikurajima-gather",
+    name: "御蔵島 ＋ 集まれ",
+    sequence: ["word-place-mikurajima", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが御蔵島の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 御蔵島に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-32-ogasawara-search",
+    name: "小笠原 ＋ 探せ",
+    sequence: ["word-place-ogasawara", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原の海域を探し始めた",
+    behaviorText: "付近のクジラたちが小笠原の海域を探し始めた",
+    directionBadge: "🏝️ 小笠原を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-33-hachijojima-search",
+    name: "八丈島 ＋ 探せ",
+    sequence: ["word-place-hachijojima", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島の海域を探し始めた",
+    behaviorText: "付近のクジラたちが八丈島の海域を探し始めた",
+    directionBadge: "🏝️ 八丈島を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-34-mikurajima-search",
+    name: "御蔵島 ＋ 探せ",
+    sequence: ["word-place-mikurajima", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島の海域を探し始めた",
+    behaviorText: "付近のクジラたちが御蔵島の海域を探し始めた",
+    directionBadge: "🏝️ 御蔵島を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-35-ogasawara-alert",
+    name: "小笠原 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-ogasawara", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが小笠原周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 小笠原周辺を警戒",
+    category: "action",
+  },
+  {
+    id: "rule-36-hachijojima-alert",
+    name: "八丈島 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-hachijojima", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが八丈島周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 八丈島周辺を警戒",
+    category: "action",
+  },
+  {
+    id: "rule-37-mikurajima-alert",
+    name: "御蔵島 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-mikurajima", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが御蔵島周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 御蔵島周辺を警戒",
+    category: "action",
+  },
 ];
 
 // ==========================================
@@ -283,7 +414,7 @@ export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-alert": "周囲を警戒せよ",
 };
 
-// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全24候補：「南」を含む）
+// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全29候補：「南」・複合方角・地名を含む）
 export const JAPANESE_MEANING_CANDIDATES: {
   label: string;
   subHint: string;
@@ -314,6 +445,11 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "西", subHint: "方角（西）" },
   { label: "南", subHint: "方角（南）" },
   { label: "北", subHint: "方角（北）" },
+  { label: "北東", subHint: "方角（北東）" },
+  { label: "北西", subHint: "方角（北西）" },
+  { label: "小笠原", subHint: "海域・島名（小笠原）" },
+  { label: "八丈島", subHint: "海域・島名（八丈島）" },
+  { label: "御蔵島", subHint: "海域・島名（御蔵島）" },
   { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
     label: "海の下の火山",
@@ -456,25 +592,26 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   }, []);
 
   // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
-  const safeWords = React.useMemo(
-    () =>
-      (Array.isArray(words) ? words : [])
-        .filter((w) => w.id !== "word-go-south")
-        .map((w) =>
-          w.id === "word-human-whale"
-            ? {
-                ...w,
-                soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
-              }
-            : w
-        ),
-    [words]
-  );
+  const safeWords = React.useMemo(() => {
+    const baseList = (Array.isArray(words) ? words : [])
+      .filter((w) => w.id !== "word-go-south")
+      .map((w) =>
+        w.id === "word-human-whale"
+          ? {
+              ...w,
+              soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
+            }
+          : w
+      );
+    const existingIds = new Set(baseList.map((w) => w.id));
+    const missingBuiltin = sonarWords.filter((sw) => !existingIds.has(sw.id));
+    return [...baseList, ...missingBuiltin];
+  }, [words]);
   const orderedWords = React.useMemo(() => {
     const lockedOrder = ["word-subsea-volcano", "word-alert"];
     const locked = lockedOrder
       .map((id) => safeWords.find((w) => w.id === id))
-      .filter((w): w is CrypticWord => Boolean(w));
+      .filter((w): w is (typeof safeWords)[number] => Boolean(w));
     const unlocked = safeWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
     return [...locked, ...unlocked];
   }, [safeWords]);

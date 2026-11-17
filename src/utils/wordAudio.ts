@@ -171,13 +171,54 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
       case "word-ack": // 23. カッ（了解した）
       case "word-yes":
         return { pulses: [{ delayMs: 0, freqHz: 2950, durationMs: 18, amplitude: 0.95 }], durationMs: 260 };
-      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ）
+      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ：後半の「カッカッ」は word-human と完全同一の190ms間隔・2350Hz）
         return melodic(
           [
             { delayMs: 0, freq: 1650, duration: 0.024, volume: 0.88 },
             { delayMs: 170, freq: 1350, duration: 0.045, volume: 0.95 },
-            { delayMs: 250, freq: 2350, duration: 0.016, volume: 0.9 },
-            { delayMs: 330, freq: 2350, duration: 0.016, volume: 0.94 },
+            { delayMs: 250, freq: 2350, duration: 0.016, volume: 0.88 },
+            { delayMs: 440, freq: 2350, duration: 0.016, volume: 0.9 },
+          ]);
+      case "word-go-northeast": // 24. ピ・ピツ・ピィッ！（北東）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
+            { delayMs: 170, freq: 2850, duration: 0.015, volume: 0.88 },
+            { delayMs: 280, freq: 1850, duration: 0.02, volume: 0.86 },
+            { delayMs: 470, freq: 3300, duration: 0.016, volume: 0.94 },
+          ]);
+      case "word-go-northwest": // 25. ピ・ピポ・ポン（北西）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
+            { delayMs: 170, freq: 2850, duration: 0.015, volume: 0.88 },
+            { delayMs: 310, freq: 2250, duration: 0.018, volume: 0.86 },
+            { delayMs: 450, freq: 1550, duration: 0.025, volume: 0.92 },
+          ]);
+      case "word-place-ogasawara": // 26. ボ・ボーン・ポポ（小笠原）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1450, duration: 0.026, volume: 0.88 },
+            { delayMs: 190, freq: 1250, duration: 0.044, volume: 0.95 },
+            { delayMs: 390, freq: 1950, duration: 0.018, volume: 0.88 },
+            { delayMs: 510, freq: 1950, duration: 0.018, volume: 0.9 },
+          ]);
+      case "word-place-hachijojima": // 27. ゴ・ゴ・トトーン（八丈島）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1350, duration: 0.026, volume: 0.9 },
+            { delayMs: 160, freq: 1350, duration: 0.026, volume: 0.9 },
+            { delayMs: 340, freq: 2150, duration: 0.018, volume: 0.88 },
+            { delayMs: 470, freq: 1900, duration: 0.036, volume: 0.94 },
+          ]);
+      case "word-place-mikurajima": // 28. クル・ル・ピポン（御蔵島）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2750, duration: 0.015, volume: 0.86 },
+            { delayMs: 90, freq: 2950, duration: 0.015, volume: 0.88 },
+            { delayMs: 220, freq: 2750, duration: 0.015, volume: 0.86 },
+            { delayMs: 370, freq: 3150, duration: 0.016, volume: 0.9 },
+            { delayMs: 500, freq: 2050, duration: 0.026, volume: 0.92 },
           ]);
       default:
         return clicks([0, 200, 400], 2400);}
