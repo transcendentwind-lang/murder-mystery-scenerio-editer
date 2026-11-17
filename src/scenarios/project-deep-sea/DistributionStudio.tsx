@@ -774,7 +774,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         "SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間（浪寄へ配布）",
         "DAY 5 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 5 御蔵島沖噴火・富士山微動監視海図",
-        "Day 5 調査資料（朝倉教授の構文規則ノート EV-27 等）を配布",
+        "Day 5 調査資料（元神主遺族・吉備津の聴取 EV-26、朝倉教授の構文規則ノート EV-27）を配布",
       ],
       nagatsuAnnouncements: [
         {
@@ -783,7 +783,7 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
         },
       ],
       gmGuides: [
-        "Day 5の調査資料（朝倉教授のクジラ言語・『了解した』以外はすべて2語成語のペアで会話する構文規則など）を精査させます。",
+        "Day 5の調査資料（小笠原神社元神主の遺族・吉備津の聴取記録『EV-26』による祝詞のクリック音構成、および朝倉教授のクジラ言語・『了解した』以外はすべて2語成語のペアで会話する構文規則『EV-27』）を精査させます。",
       ],
     },
     {
@@ -1092,7 +1092,7 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 
   5: `■ DAY 5 フェーズ1：御蔵島沖の海底噴火・富士山地下微動（残り48時間） ＆ 独自調査
 ⏱️ 開始タイミング・条件：Day 4が終了し、Day 5へ移行した時点
-📦 配布・提示：浪寄へ『SP-06』、朝潮へ『DAY 5 指令書』配布 ＋ 『Day 5 監視海図』・Day 5調査資料を開示
+📦 配布・提示：浪寄へ『SP-06』、朝潮へ『DAY 5 指令書』配布 ＋ 『Day 5 監視海図』・Day 5調査資料（吉備津の聴取 EV-26・構文規則草稿 EV-27）を開示
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 指令書』と同文） ━━┓
 「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」
@@ -1240,7 +1240,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   5: [
     "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 15分 ※Day 5終了後に10分程度の休憩を入れる）",
-    "朝倉教授のクジラ構文規則（EV-27：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
+    "元神主遺族・吉備津の聴取記録（EV-26：祝詞のクリック音構成）および朝倉教授のクジラ構文規則（EV-27：『了解した』以外はすべて2語成語のペアを単位として会話する規則）を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
     "終盤、防衛省作戦本部から貝浜への直通無線（NG-06 ＆ Day 5 途中①指令書）を演出し、「微動は収まったが、アクティブソナー（ソナー探知）でゆっくり深海に沈み込みながら元の大きさに戻っている傾向が確認できる。どうして魚雷命中後に復活してしまうのか？なぜ富士山を目指すのか？」を浪寄准教授らに確認させる",
   ],
   6: [
@@ -1354,6 +1354,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("警備救難部") ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
       (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し"))) ||
+      (dayNumber === 5 && !existing.readAloudScript.includes("EV-26")) ||
       (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
       (dayNumber === 7 && !existing.readAloudScript.includes("SP-14"));
 
@@ -1386,7 +1387,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")))) ||
       (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
-      (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
+      (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || !existing.gmCheckpoints.some((c) => c.includes("EV-26")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-14")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
@@ -1714,13 +1715,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const activeChar =
     charactersList.find((c) => c.id === selectedCharId) || charactersList[0];
 
-  // マスター証拠のマップ（最新の簡易タイトルと説明文）
+  // マスター証拠のマップ（最新の簡易タイトルと説明文・開示Day・並び順）
   const masterEvidenceMap = useMemo(() => {
     const map: Record<string, EvidenceItem> = {};
     (initialProject.evidences || []).forEach((e) => {
       map[e.id] = e;
     });
     return map;
+  }, []);
+
+  const masterEvidenceOrderMap = useMemo(() => {
+    const orderMap: Record<string, number> = {};
+    (initialProject.evidences || []).forEach((e, idx) => {
+      orderMap[e.id] = idx;
+    });
+    return orderMap;
   }, []);
 
   const allEvidences = useMemo(() => {
@@ -1749,10 +1758,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               frontTitleHtml: master.frontTitleHtml ?? e.frontTitleHtml,
               description: master.description,
               glossaryNote: e.glossaryNote ?? master.glossaryNote,
+              foundPhase: master.foundPhase,
+              acquisitionCondition: master.acquisitionCondition ?? e.acquisitionCondition,
             }
           : e;
+      })
+      .sort((a, b) => {
+        const orderA = masterEvidenceOrderMap[a.id] ?? 9999;
+        const orderB = masterEvidenceOrderMap[b.id] ?? 9999;
+        return orderA - orderB;
       });
-  }, [project.evidences, masterEvidenceMap]);
+  }, [project.evidences, masterEvidenceMap, masterEvidenceOrderMap]);
   const filteredEvidences =
     evidenceDayFilter === "all"
       ? allEvidences

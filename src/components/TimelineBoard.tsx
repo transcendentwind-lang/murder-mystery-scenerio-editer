@@ -199,8 +199,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
   const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project?.id, {
     3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
-    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
-    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+    4: { tokyo: "T-3B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-4B", field: ["F-5A", "F-3C"] },
   });
   const day3TokyoAction = investigationSelections[3].tokyo;
   const setDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
@@ -235,7 +235,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
-  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS, ...DAY5_TOKYO_ACTIONS];
   const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 

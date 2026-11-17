@@ -235,22 +235,10 @@ export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
 ];
 
 // ==========================================
-// Day 4 合議制アクション（旧Day 5から前倒し新設）
+// Day 4 合議制アクション（即応総力体制一括開示）
 // ※Day 3で未選択の項目も繰り越し調査可能
 // ==========================================
-export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
-  {
-    id: "T-4B",
-    title: "T-4B: 都内にいる元神主の子どもの捜索",
-    organization: "警視庁捜査共助課 / 小笠原神社関係者",
-    evidenceId: "ev-shrine-lineage",
-    badge: "元神主の子どもの口伝",
-    summary: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
-    detail: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
-    hasAudio: true,
-    audioCue: "kibitsu-click",
-  },
-];
+export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [];
 
 export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   {
@@ -275,6 +263,20 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
+export const DAY5_NEW_TOKYO_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "T-4B",
+    title: "T-5A: 都内にいる元神主の子どもの捜索",
+    organization: "警視庁捜査共助課 / 小笠原神社関係者",
+    evidenceId: "ev-shrine-lineage",
+    badge: "元神主の子どもの口伝",
+    summary: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
+    detail: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
+    hasAudio: true,
+    audioCue: "kibitsu-click",
+  },
+];
+
 export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-5A",
@@ -288,7 +290,7 @@ export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
 ];
 
 // 後方互換性エイリアス
-export const DAY5_TOKYO_ACTIONS = DAY4_TOKYO_ACTIONS;
+export const DAY5_TOKYO_ACTIONS = DAY5_NEW_TOKYO_ACTIONS;
 export const DAY5_FIELD_ACTIONS = [...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
 
 interface GmDashboardProps {
@@ -307,8 +309,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project.id, {
     3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
-    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
-    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+    4: { tokyo: "T-3B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-4B", field: ["F-5A", "F-3C"] },
   });
   const selectedDay3TokyoAction = investigationSelections[3].tokyo;
   const setSelectedDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
@@ -377,7 +379,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
-  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS, ...DAY5_NEW_TOKYO_ACTIONS];
   const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 
