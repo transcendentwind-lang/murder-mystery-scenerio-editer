@@ -84,7 +84,10 @@ export default function SonarStandalonePage() {
                 アクセスパスワード
               </label>
               <input
-                type="password"
+                type="text"
+                autoCapitalize="none"
+                autoCorrect="off"
+                spellCheck={false}
                 value={passwordInput}
                 onChange={(e) => {
                   setPasswordInput(e.target.value);

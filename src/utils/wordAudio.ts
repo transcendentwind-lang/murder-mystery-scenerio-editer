@@ -171,13 +171,13 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
       case "word-ack": // 23. カッ（了解した）
       case "word-yes":
         return { pulses: [{ delayMs: 0, freqHz: 2950, durationMs: 18, amplitude: 0.95 }], durationMs: 260 };
-      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ：後半の「カッカッ」は word-human と完全同一の190ms間隔・2350Hz）
+      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ：前半は word-whale、後半は word-human と同じテンポ）
         return melodic(
           [
-            { delayMs: 0, freq: 1650, duration: 0.024, volume: 0.88 },
-            { delayMs: 170, freq: 1350, duration: 0.045, volume: 0.95 },
-            { delayMs: 250, freq: 2350, duration: 0.016, volume: 0.88 },
-            { delayMs: 440, freq: 2350, duration: 0.016, volume: 0.9 },
+            { delayMs: 0, freq: 1650, duration: 0.025, volume: 0.85 },
+            { delayMs: 280, freq: 1350, duration: 0.042, volume: 0.95 },
+            { delayMs: 470, freq: 2350, duration: 0.016, volume: 0.88 },
+            { delayMs: 660, freq: 2350, duration: 0.016, volume: 0.9 },
           ]);
       case "word-go-northeast": // 24. ピ・ピツ・ピィッ！（北東）
         return melodic(
