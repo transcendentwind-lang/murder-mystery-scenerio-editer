@@ -88,32 +88,157 @@ func rgba(_ r: Int, _ g: Int, _ b: Int, _ a: Double = 1.0) -> CGColor {
 
 // MARK: - Geographic Data (Pure Geography / Atlas Style)
 
-// Main Honshu coastline (Tohoku -> Kanto -> Tokyo Bay -> Miura -> Sagami -> Izu -> Suruga -> Tokai -> Kii -> Seto -> Sea of Japan -> Noto -> Tohoku)
-let honshuLand: [(Double, Double)] = [
-    (41.40, 141.45), (39.65, 142.05), (38.30, 141.50), (38.25, 141.02), (37.80, 140.96), // Aomori / Sanriku / Sendai
-    (37.00, 140.98), (36.40, 140.62), (35.95, 140.70), (35.70, 140.86), // Fukushima / Ibaraki / Choshi
-    (35.52, 140.45), (35.30, 140.40), (35.12, 140.18), (34.90, 139.89), // Outer Boso / Nojimazaki
-    (34.97, 139.76), (35.10, 139.82), (35.26, 139.86), (35.32, 139.80), // Tateyama / Futtsu
-    (35.42, 139.92), (35.60, 140.10), (35.68, 139.96), (35.66, 139.82), // Chiba / Funabashi
-    (35.65, 139.76), // Tokyo Bay (Takeshiba)
-    (35.55, 139.78), (35.45, 139.65), (35.30, 139.66), (35.25, 139.74), // Haneda / Yokohama / Kannonzaki
-    (35.14, 139.62), (35.22, 139.56), (35.31, 139.48), (35.32, 139.32), (35.25, 139.15), // Miura / Enoshima / Odawara
-    (35.10, 139.09), (34.97, 139.13), (34.80, 139.07), (34.66, 138.95), (34.60, 138.85), // East Izu / Shimoda / Irozaki
-    (34.78, 138.76), (35.02, 138.78), (35.10, 138.86), (35.13, 138.68), (35.00, 138.52), // West Izu / Numazu / Shizuoka
-    (34.85, 138.33), (34.60, 138.22), (34.66, 137.80), (34.65, 137.02), // Omaezaki / Enshu-nada / Atsumi
-    (34.75, 137.18), (35.02, 136.85), (34.98, 136.63), (34.50, 136.82), (34.27, 136.90), // Mikawa & Ise Bay / Shima
-    (33.88, 136.12), (33.44, 135.76), (33.70, 135.34), (34.23, 135.12), // Kumano / Shionomisaki / Wakayama
-    (34.65, 135.45), (34.65, 135.00), (34.75, 134.40), (34.45, 133.80), (34.00, 131.00), // Osaka / Seto / Shimonoseki
-    (34.45, 131.40), (35.50, 133.20), (35.60, 135.20), (35.70, 136.05), // San'in / Wakasa
-    (36.55, 136.60), (37.52, 137.32), (37.10, 137.05), (36.80, 137.20), // Ishikawa / Noto Peninsula / Toyama
-    (37.90, 139.05), (39.70, 140.05), (41.25, 140.35)  // Niigata / Akita / Tsugaru
+// High-precision WGS84 coastline of Honshu (clockwise: Shimokita -> Sanriku -> Sendai -> Joban -> Kashima -> Choshi -> Kujukuri -> Boso -> Tokyo Bay -> Miura -> Sagami -> Izu -> Suruga -> Enshu -> Atsumi -> Mikawa -> Chita -> Ise -> Shima -> Kii -> Osaka -> Seto -> Shimonoseki -> San'in -> Wakasa -> Noto -> Toyama -> Niigata -> Oga -> Tsugaru)
+let honshuLandRaw: [(Double, Double)] = [
+    // Shimokita & Sanriku Coast
+    (41.54, 140.91), (41.43, 141.46), (41.10, 141.39), (40.53, 141.55), (40.19, 141.80),
+    (39.85, 141.98), (39.55, 142.07), (39.27, 141.90), (39.02, 141.75), (38.88, 141.62),
+    (38.67, 141.52), (38.50, 141.50), (38.28, 141.52), // Oshika Peninsula tip
+    (38.41, 141.30), (38.32, 141.05), (38.26, 141.01), (38.08, 140.92), // Ishinomaki & Sendai Bay
+    // Fukushima & Ibaraki (Joban -> Kashima-nada -> Inubosaki)
+    (37.92, 140.94), (37.78, 140.98), (37.58, 141.02), (37.38, 141.03), (37.18, 141.00),
+    (37.00, 140.98), (36.93, 140.90), (36.82, 140.79), (36.68, 140.71), (36.56, 140.65),
+    (36.44, 140.61), (36.34, 140.60), (36.22, 140.59), (36.08, 140.63), (35.95, 140.69),
+    (35.82, 140.79), (35.71, 140.87), (35.69, 140.85), // Choshi / Inubosaki
+    // Kujukuri Beach & Outer Boso Peninsula
+    (35.70, 140.73), (35.67, 140.62), (35.61, 140.51), (35.53, 140.45), (35.44, 140.40),
+    (35.36, 140.39), (35.31, 140.41), // Taitozaki
+    (35.24, 140.40), (35.18, 140.36), (35.14, 140.31), (35.12, 140.19), (35.08, 140.10),
+    (35.02, 140.01), (34.95, 139.96), (34.90, 139.89), (34.91, 139.82), (34.97, 139.75), // Nojimazaki -> Sunosaki
+    // Inner Boso & Tokyo Bay East Shore
+    (34.99, 139.86), (35.04, 139.85), (35.10, 139.83), (35.17, 139.82), (35.24, 139.86),
+    (35.28, 139.85), (35.31, 139.79), // Futtsu Cape!
+    (35.32, 139.84), (35.35, 139.89), (35.39, 139.92), (35.45, 139.96), (35.52, 140.05),
+    (35.60, 140.10), (35.65, 140.03), (35.67, 139.98), (35.63, 139.90), (35.64, 139.85),
+    // Tokyo Bay West Shore -> Miura Peninsula
+    (35.62, 139.79), (35.65, 139.76), (35.60, 139.76), (35.55, 139.79), // Takeshiba -> Haneda
+    (35.50, 139.75), (35.47, 139.69), (35.45, 139.64), (35.42, 139.67), (35.39, 139.63), // Yokohama / Honmoku / Negishi
+    (35.33, 139.64), (35.29, 139.67), (35.26, 139.75), // Yokosuka -> Kannonzaki
+    (35.22, 139.72), (35.18, 139.68), (35.14, 139.68), (35.13, 139.62), // Kurihama -> Tsurugisaki -> Jogashima/Misaki
+    (35.19, 139.60), (35.27, 139.57), (35.30, 139.55), // Hayama -> Kamakura
+    // Sagami Bay -> Izu Peninsula
+    (35.30, 139.48), (35.32, 139.40), (35.31, 139.33), (35.28, 139.22), (35.24, 139.15),
+    (35.15, 139.15), (35.14, 139.11), (35.09, 139.08), (35.03, 139.09), (34.97, 139.11),
+    (34.94, 139.15), (34.88, 139.13), (34.81, 139.07), (34.77, 139.05), (34.71, 138.99),
+    (34.66, 138.99), (34.67, 138.94), (34.62, 138.89), (34.60, 138.85), // Shimoda -> Irozaki
+    (34.64, 138.79), (34.69, 138.75), (34.76, 138.77), (34.84, 138.76), (34.91, 138.79),
+    (34.98, 138.77), (35.03, 138.79), (35.02, 138.89), (35.09, 138.86), // West Izu -> Osezaki -> Numazu
+    // Suruga Bay -> Omaezaki -> Enshu-nada -> Atsumi Peninsula
+    (35.13, 138.74), (35.12, 138.63), (35.06, 138.53), (35.00, 138.53), (34.94, 138.42),
+    (34.86, 138.33), (34.77, 138.29), (34.68, 138.22), (34.60, 138.23), // Omaezaki
+    (34.63, 138.10), (34.66, 137.88), (34.66, 137.72), (34.68, 137.58), (34.66, 137.42),
+    (34.62, 137.22), (34.58, 137.02), // Irago Cape (Atsumi Peninsula)
+    // Mikawa Bay -> Chita Peninsula -> Ise Bay -> Shima -> Kii Peninsula
+    (34.67, 137.24), (34.74, 137.33), (34.81, 137.22), (34.79, 137.08), (34.84, 136.96),
+    (34.70, 136.97), (34.76, 136.85), (34.90, 136.83), (35.04, 136.85), // Chita -> Nagoya Port
+    (35.03, 136.73), (34.95, 136.63), (34.82, 136.58), (34.69, 136.53), (34.58, 136.57),
+    (34.51, 136.79), (34.47, 136.86), (34.37, 136.90), (34.27, 136.90), // Ise -> Toba -> Daiozaki
+    (34.26, 136.75), (34.25, 136.54), (34.18, 136.34), (34.06, 136.20), (33.89, 136.11),
+    (33.72, 136.00), (33.61, 135.94), (33.47, 135.84), (33.43, 135.76), // Shionomisaki
+    (33.54, 135.49), (33.68, 135.34), (33.75, 135.36), (33.89, 135.07), (34.08, 135.10),
+    (34.22, 135.14), (34.28, 135.07), // Wakayama / Kada
+    // Osaka Bay -> Seto Inland Sea -> Shimonoseki
+    (34.41, 135.31), (34.58, 135.45), (34.66, 135.43), (34.68, 135.19), (34.64, 134.99),
+    (34.77, 134.66), (34.73, 134.40), (34.44, 133.91), (34.50, 133.74), (34.38, 133.38),
+    (34.39, 133.08), (34.23, 132.55), (34.35, 132.45), (34.16, 132.23), (33.83, 132.12),
+    (34.04, 131.57), (33.93, 131.25), (33.95, 130.94),
+    // Sea of Japan Coast (San'in -> Tango/Wakasa -> Echizen -> Noto -> Toyama -> Niigata -> Oga -> Tsugaru)
+    (34.35, 130.89), (34.43, 131.40), (34.69, 131.83), (34.91, 132.07), (35.43, 132.63),
+    (35.56, 133.32), (35.45, 133.35), (35.54, 134.22), (35.65, 134.82), (35.78, 135.23),
+    (35.54, 135.36), (35.50, 135.74), (35.67, 136.06), (35.98, 135.96), (36.24, 136.14),
+    (36.58, 136.58), (36.82, 136.74), (37.08, 136.74), (37.28, 136.74), (37.40, 136.90),
+    (37.49, 137.12), (37.53, 137.33), // Noto Peninsula tip (Rokugozaki)
+    (37.35, 137.26), (37.30, 137.14), (37.22, 136.93), (37.13, 137.05), (37.05, 136.97),
+    (37.09, 137.06), (36.86, 136.99), (36.76, 137.22), (36.82, 137.42), (36.95, 137.56), // Nanao Bay & Toyama Bay
+    (37.05, 137.86), (37.18, 138.24), (37.38, 138.55), (37.65, 138.78), (37.95, 139.06), // Niigata
+    (38.35, 139.45), (38.76, 139.73), (38.93, 139.82), (39.32, 139.96), (39.75, 140.06),
+    (39.98, 139.70), (40.12, 139.98), (40.42, 140.02), (40.66, 139.93), (41.26, 140.34), // Oga -> Tappi
+    (40.84, 140.75), (41.16, 141.12)
 ]
 
-let shikokuLand: [(Double, Double)] = [
-    (34.20, 134.62), (33.85, 134.75), (33.25, 134.18), (33.55, 133.55),
-    (32.72, 133.02), (33.20, 132.55), (33.85, 132.72), (34.05, 133.00),
-    (34.35, 134.15)
+let shikokuLandRaw: [(Double, Double)] = [
+    (34.23, 134.64), (34.04, 134.60), (33.84, 134.75), (33.58, 134.38), (33.25, 134.18), // Muroto
+    (33.52, 133.82), (33.50, 133.56), (33.36, 133.28), (33.02, 133.02), (32.72, 133.02), // Ashizuri
+    (32.85, 132.72), (33.18, 132.54), (33.34, 132.02), (33.52, 132.38), (33.86, 132.71), // Sadamisaki -> Matsuyama
+    (34.07, 132.99), (33.98, 133.35), (34.01, 133.60), (34.26, 133.66), (34.33, 133.88),
+    (34.35, 134.08), (34.26, 134.36)
 ]
+
+let kyushuLandRaw: [(Double, Double)] = [
+    (33.95, 130.97), (33.76, 131.02), (33.65, 131.58), (33.55, 131.74), (33.32, 131.50),
+    (33.25, 131.88), (32.96, 131.95), (32.58, 131.68), (32.12, 131.52), (31.80, 131.44),
+    (31.37, 131.34), (31.00, 130.68), (32.00, 130.20), (33.50, 129.85), (33.90, 130.65)
+]
+
+let awajiLandRaw: [(Double, Double)] = [
+    (34.60, 135.02), (34.46, 134.95), (34.33, 134.90), (34.23, 134.72), (34.25, 134.65),
+    (34.38, 134.76), (34.52, 134.89)
+]
+
+let sadoLandRaw: [(Double, Double)] = [
+    (38.33, 138.52), (38.12, 138.45), (38.04, 138.54), (37.88, 138.46), (37.81, 138.26),
+    (37.96, 138.22), (38.05, 138.34), (38.20, 138.34)
+]
+
+// Major Lakes for Authentic Atlas Look (Biwa-ko, Kasumigaura, Kitaura, Hamana-ko, Inawashiro-ko, Suwa-ko)
+let lakeBiwaRaw: [(Double, Double)] = [
+    (35.51, 136.14), (35.43, 136.22), (35.34, 136.27), (35.25, 136.19), (35.15, 136.06),
+    (35.07, 135.94), (34.98, 135.90), (35.06, 135.87), (35.16, 135.91), (35.29, 136.00),
+    (35.42, 136.02), (35.49, 136.07)
+]
+
+let lakeKasumigauraRaw: [(Double, Double)] = [
+    (36.08, 140.21), (36.06, 140.29), (36.15, 140.33), (36.13, 140.38), (36.05, 140.41),
+    (36.01, 140.49), (35.94, 140.56), (35.92, 140.50), (35.96, 140.39), (36.02, 140.31),
+    (36.04, 140.22)
+]
+
+let lakeKitauraRaw: [(Double, Double)] = [
+    (36.15, 140.54), (36.08, 140.57), (35.98, 140.60), (35.96, 140.57), (36.05, 140.53), (36.13, 140.51)
+]
+
+let lakeHamanaRaw: [(Double, Double)] = [
+    (34.79, 137.62), (34.74, 137.64), (34.69, 137.60), (34.70, 137.54), (34.76, 137.52), (34.80, 137.56)
+]
+
+let lakeInawashiroRaw: [(Double, Double)] = [
+    (37.53, 140.08), (37.48, 140.15), (37.41, 140.13), (37.42, 140.04), (37.49, 140.02)
+]
+
+let lakeSuwaRaw: [(Double, Double)] = [
+    (36.07, 138.08), (36.05, 138.12), (36.02, 138.10), (36.04, 138.06)
+]
+
+// Gentle Chaikin corner-smoothing (0.18 / 0.82 preserves sharp capes while rounding artificial straight segments)
+func smoothCoastline(_ pts: [(Double, Double)], iterations: Int = 1) -> [(Double, Double)] {
+    guard pts.count >= 4 else { return pts }
+    var cur = pts
+    for _ in 0..<iterations {
+        var next: [(Double, Double)] = []
+        next.reserveCapacity(cur.count * 2)
+        let n = cur.count
+        for i in 0..<n {
+            let p0 = cur[i]
+            let p1 = cur[(i + 1) % n]
+            next.append((p0.0 * 0.82 + p1.0 * 0.18, p0.1 * 0.82 + p1.1 * 0.18))
+            next.append((p0.0 * 0.18 + p1.0 * 0.82, p0.1 * 0.18 + p1.1 * 0.82))
+        }
+        cur = next
+    }
+    return cur
+}
+
+let honshuLand = smoothCoastline(honshuLandRaw, iterations: 1)
+let shikokuLand = smoothCoastline(shikokuLandRaw, iterations: 1)
+let kyushuLand = smoothCoastline(kyushuLandRaw, iterations: 1)
+let awajiLand = smoothCoastline(awajiLandRaw, iterations: 1)
+let sadoLand = smoothCoastline(sadoLandRaw, iterations: 1)
+let lakeBiwa = smoothCoastline(lakeBiwaRaw, iterations: 1)
+let lakeKasumigaura = smoothCoastline(lakeKasumigauraRaw, iterations: 1)
+let lakeKitaura = smoothCoastline(lakeKitauraRaw, iterations: 1)
+let lakeHamana = smoothCoastline(lakeHamanaRaw, iterations: 1)
+let lakeInawashiro = smoothCoastline(lakeInawashiroRaw, iterations: 1)
+let lakeSuwa = smoothCoastline(lakeSuwaRaw, iterations: 1)
 
 // Detailed island polygons (lat, lon) for Ogasawara Archipelago so zoomed view shows real archipelago shapes!
 struct IslandPoly {
@@ -416,18 +541,18 @@ func cameraAtTime(_ t: Double) -> Camera {
     //               shifted gracefully to right-center so Left Overview Route Panel fits cleanly without overlap!
     // 18.4 - 24.0s: Gentle archipelago showcase hold
 
-    let startGP = GeoPoint(lat: 35.15, lon: 139.65)
+    let startGP = GeoPoint(lat: 35.42, lon: 138.95)
     let routeFrac = easeInOutCubic(progress(t, 2.6, 13.8))
     let (_, curSample) = sampleRoute(at: routeFrac)
 
-    // Camera during voyage: blend smoothly from startGP to following the arrow tip, zoomed slightly wider mid-ocean
-    let followBlend = easeInOutCubic(progress(t, 2.6, 4.8))
+    // Camera during voyage: start wide enough to show iconic Honshu (Noto, Ise Bay, Izu, Tokyo Bay, Boso, Choshi), then track smoothly south!
+    let followBlend = easeInOutCubic(progress(t, 2.6, 5.2))
     let midOceanZoomOut = sin( clamp(progress(t, 3.0, 13.5)) * Double.pi ) // 0 -> 1 -> 0
 
     let voyageWX = lerp(startGP.wx, curSample.wx - 25.0, followBlend)
     let voyageWY = lerp(startGP.wy, curSample.wy - 20.0, followBlend)
-    let voyageScale = lerp(2.55, 1.55, midOceanZoomOut * 0.85 + followBlend * 0.15)
-    let voyageScreenX = lerp(W * 0.54, W * 0.58, followBlend)
+    let voyageScale = lerp(1.72, 1.52, midOceanZoomOut * 0.85 + followBlend * 0.15)
+    let voyageScreenX = lerp(W * 0.60, W * 0.58, followBlend)
     let voyageScreenY = H * 0.52
 
     // Zoomed Archipelago Target Camera (15.0s -> 18.4s):
@@ -516,35 +641,61 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         return path
     }
 
-    let honshuPath = buildGeoPath(honshuLand)
-    let shikokuPath = buildGeoPath(shikokuLand)
+    let landMassPaths = [
+        buildGeoPath(honshuLand),
+        buildGeoPath(shikokuLand),
+        buildGeoPath(kyushuLand),
+        buildGeoPath(awajiLand),
+        buildGeoPath(sadoLand)
+    ]
+    let lakePaths = [
+        buildGeoPath(lakeBiwa),
+        buildGeoPath(lakeKasumigaura),
+        buildGeoPath(lakeKitaura),
+        buildGeoPath(lakeHamana),
+        buildGeoPath(lakeInawashiro),
+        buildGeoPath(lakeSuwa)
+    ]
 
-    // Coastal shallow turquoise glow around Honshu/Shikoku
+    // Coastal shallow turquoise glow around Japan landmasses
     ctx.saveGState()
     ctx.setStrokeColor(rgba(225, 246, 252, 0.75))
-    ctx.setLineWidth(CGFloat(max(10.0, 10.0 * cam.pxPerKm / 2.2)))
+    ctx.setLineWidth(CGFloat(max(9.0, 9.0 * cam.pxPerKm / 2.2)))
     ctx.setLineJoin(.round)
-    ctx.addPath(honshuPath)
-    ctx.addPath(shikokuPath)
+    for lp in landMassPaths { ctx.addPath(lp) }
     ctx.strokePath()
     ctx.restoreGState()
 
-    // Draw Honshu & Shikoku Landmasses (Warm Atlas Ivory-Sand with gentle green-gray coastline)
-    for landPath in [honshuPath, shikokuPath] {
+    // Draw Honshu, Shikoku, Kyushu, Awaji, Sado Landmasses (Warm Atlas Ivory-Sand with gentle green-gray coastline)
+    for landPath in landMassPaths {
         ctx.saveGState()
         ctx.setFillColor(rgba(244, 240, 224, 1.0))
         ctx.addPath(landPath)
         ctx.fillPath()
         ctx.setStrokeColor(rgba(115, 138, 122, 0.95))
-        ctx.setLineWidth(2.2)
+        ctx.setLineWidth(1.9)
         ctx.setLineJoin(.round)
         ctx.addPath(landPath)
         ctx.strokePath()
         ctx.restoreGState()
     }
 
+    // Draw major lakes (Lake Biwa, Kasumigaura, Lake Hamana)
+    for lkPath in lakePaths {
+        ctx.saveGState()
+        ctx.setFillColor(rgba(196, 229, 246, 1.0))
+        ctx.addPath(lkPath)
+        ctx.fillPath()
+        ctx.setStrokeColor(rgba(118, 152, 168, 0.75))
+        ctx.setLineWidth(1.2)
+        ctx.setLineJoin(.round)
+        ctx.addPath(lkPath)
+        ctx.strokePath()
+        ctx.restoreGState()
+    }
+
     // Geographic labels on Honshu (fade softly when far south)
-    let honshuPos = cam.toScreen(GeoPoint(lat: 35.85, lon: 138.95))
+    let honshuPos = cam.toScreen(GeoPoint(lat: 36.32, lon: 137.98))
     if honshuPos.y > -200 && honshuPos.y < H + 100 {
         drawText(ctx, "本 州", x: Double(honshuPos.x), y: Double(honshuPos.y), font: makeFont(size: 26, bold: true), color: rgba(90, 102, 95, 0.75), align: .center, tracking: 8.0)
 
@@ -562,11 +713,11 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         ctx.restoreGState()
         drawText(ctx, "富士山", x: Double(fujiPt.x), y: Double(fujiPt.y) + 21, font: makeFont(size: 16, bold: true), color: rgba(75, 90, 105, 0.85), align: .center)
 
-        let izuPenPt = cam.toScreen(GeoPoint(lat: 34.88, lon: 138.92))
-        drawText(ctx, "伊豆半島", x: Double(izuPenPt.x) - 18, y: Double(izuPenPt.y), font: makeFont(size: 15, bold: false), color: rgba(90, 105, 100, 0.80), align: .right)
+        let izuPenPt = cam.toScreen(GeoPoint(lat: 34.97, lon: 138.93))
+        drawText(ctx, "伊豆半島", x: Double(izuPenPt.x), y: Double(izuPenPt.y), font: makeFont(size: 13.0, bold: true), color: rgba(85, 100, 95, 0.82), align: .center, strokeColor: rgba(244, 240, 224, 0.85), strokeWidth: 3.0)
 
-        let bosoPt = cam.toScreen(GeoPoint(lat: 35.18, lon: 140.15))
-        drawText(ctx, "房総半島", x: Double(bosoPt.x) + 12, y: Double(bosoPt.y), font: makeFont(size: 15, bold: false), color: rgba(90, 105, 100, 0.80), align: .left)
+        let bosoPt = cam.toScreen(GeoPoint(lat: 35.24, lon: 140.16))
+        drawText(ctx, "房総半島", x: Double(bosoPt.x), y: Double(bosoPt.y), font: makeFont(size: 13.5, bold: true), color: rgba(85, 100, 95, 0.82), align: .center, strokeColor: rgba(244, 240, 224, 0.85), strokeWidth: 3.0)
     }
 
     // 4. Draw Transit Islands (Izu Islands -> Nanpo Islands)
@@ -603,7 +754,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         ctx.strokeEllipse(in: bodyRect)
         ctx.restoreGState()
 
-        if isl.showInTransit {
+        if isl.showInTransit && !(Double(pt.y) > H - 118.0 && t < 18.2) {
             let passed = routeFrac >= isl.passProgress - 0.03
             let labelAlpha = passed ? 1.0 : 0.78
             let fontName = makeFont(size: passed ? 21 : 18, bold: true)
@@ -820,11 +971,20 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
             ctx.strokeEllipse(in: CGRect(x: Double(tokyoPt.x) - dotR, y: Double(tokyoPt.y) - dotR, width: dotR * 2, height: dotR * 2))
             ctx.restoreGState()
 
-            // Callout pill next to Tokyo Bay
+            // Callout pill placed cleanly up-left over inland Kanto so Tokyo Bay, Chiba, Boso & Choshi coastlines remain 100% unobstructed!
             let boxW = 240.0
             let boxH = 68.0
-            let bx = Double(tokyoPt.x) + 20.0
-            let by = Double(tokyoPt.y) - boxH * 0.5 - 6.0
+            let bx = Double(tokyoPt.x) - boxW - 26.0
+            let by = Double(tokyoPt.y) - boxH - 16.0
+
+            ctx.saveGState()
+            ctx.setStrokeColor(rgba(228, 78, 52, 0.90 * clamp(pinPop)))
+            ctx.setLineWidth(2.4)
+            ctx.move(to: CGPoint(x: bx + boxW - 14, y: by + boxH))
+            ctx.addLine(to: CGPoint(x: Double(tokyoPt.x) - 6, y: Double(tokyoPt.y) - 5))
+            ctx.strokePath()
+            ctx.restoreGState()
+
             fillRoundedRect(
                 ctx,
                 rect: CGRect(x: bx, y: by, width: boxW, height: boxH),
@@ -1025,11 +1185,11 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         ctx.clip(to: CGRect(x: miniX, y: miniY, width: miniW, height: miniH))
 
         let miniCam = Camera(
-            centerWX: 65.0,
-            centerWY: 495.0,
-            pxPerKm: 0.455,
+            centerWX: -32.0,
+            centerWY: 345.0,
+            pxPerKm: 0.355,
             screenCenterX: miniX + miniW * 0.50,
-            screenCenterY: miniY + miniH * 0.51
+            screenCenterY: miniY + miniH * 0.50
         )
 
         func buildMiniPath(_ coords: [(Double, Double)]) -> CGPath {
@@ -1042,18 +1202,24 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
             return p
         }
 
-        // Honshu & Shikoku on mini map
-        for mp in [buildMiniPath(honshuLand), buildMiniPath(shikokuLand)] {
+        // Honshu, Shikoku, Kyushu, Awaji, Sado & Lakes on mini map
+        for mp in [buildMiniPath(honshuLand), buildMiniPath(shikokuLand), buildMiniPath(kyushuLand), buildMiniPath(awajiLand), buildMiniPath(sadoLand)] {
             ctx.setFillColor(rgba(242, 238, 222, leftAppear))
             ctx.addPath(mp)
             ctx.fillPath()
             ctx.setStrokeColor(rgba(120, 140, 126, 0.9 * leftAppear))
-            ctx.setLineWidth(1.2)
+            ctx.setLineWidth(1.0)
+            ctx.setLineJoin(.round)
             ctx.addPath(mp)
             ctx.strokePath()
         }
+        for mlp in [buildMiniPath(lakeBiwa), buildMiniPath(lakeKasumigaura), buildMiniPath(lakeKitaura), buildMiniPath(lakeHamana), buildMiniPath(lakeInawashiro)] {
+            ctx.setFillColor(rgba(196, 229, 246, leftAppear))
+            ctx.addPath(mlp)
+            ctx.fillPath()
+        }
 
-        let mHonshuLbl = miniCam.toScreen(GeoPoint(lat: 36.1, lon: 138.6))
+        let mHonshuLbl = miniCam.toScreen(GeoPoint(lat: 36.25, lon: 138.35))
         drawText(ctx, "本州", x: Double(mHonshuLbl.x), y: Double(mHonshuLbl.y), font: makeFont(size: 14, bold: true), color: rgba(92, 104, 98, leftAppear), align: .center)
 
         // Islands on mini map
