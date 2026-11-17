@@ -219,7 +219,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
             {/* 前半：ソノブイ・速度報告 */}
             <div className="rounded border border-slate-300 bg-white p-1.5 flex flex-col justify-between">
               <div className="font-bold text-slate-900">
-                ① ソノブイ投下（B-3特定）＆ 長津より速度・到達予測報告（時速約6km・明神礁）
+                ① ソノブイ投下（🎯正解：【B-3】 ／ ♨熱水域：【D-2・C-5】［噴火口：E-5］）
               </div>
               <div className="mt-1 flex items-center gap-1 text-[9.5px]">
                 <span className="rounded bg-emerald-50 border border-emerald-400 px-1.5 py-0.5 font-bold text-emerald-900">
@@ -231,7 +231,7 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 </span>
               </div>
               <div className="mt-1 text-[9.5px] text-slate-700 font-medium">
-                ➔ <strong>特定失敗時は現地調査2枠のうち1枠を『EV-22：撮影した画像の分析』に自動充当</strong>
+                ➔ <strong>失敗時は現地1枠を『EV-22：画像分析』に自動充当</strong> ／ 長津より速度・翌日予測報告（時速約6km・明神礁）
               </div>
             </div>
 

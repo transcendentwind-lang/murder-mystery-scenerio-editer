@@ -1064,6 +1064,13 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
   3: `■ DAY 3 フェーズ1：鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始
 ⏱️ 開始タイミング・条件：Day 2の調査共有が完了し、Day 3へ移行した時点
 📦 配布・提示：貝浜へ『SP-04』、朝潮へ『DAY 3 指令書』配布 ＋ 『鳥島沖ソノブイ作戦海図（W-3100）』提示
+🎯【GM用正解位置 ＆ 熱水域（音響障害域）早見表】：正解位置＝【B-3】 ／ 熱水域＝【D-2（西鳥島海山）・C-5（須美寿東）】（および噴火カルデラ【E-5】）
+📡【ソノブイ1基ごとのGM返答ルール】：
+・①【B-3（直上）】に投下➔「直下に巨大生物の強い音響反射を捕捉！（B-3確定）」
+・②【B-3の周囲1マス（A-2〜A-4, B-2, B-4, C-2〜C-4）】に投下➔「直下には不在だが、周囲1マス圏内（約20km先）から巨大生物の反響あり！」
+・③【熱水域（D-2・C-5）または噴火口（E-5）の直上】に投下➔「激しい熱水・噴火ノイズにより音波が散乱し、探知不能！」
+・④【熱水域・噴火口の周囲1マス】に投下➔「直下には不在！ ただし隣接する熱水・噴火ノイズが干渉し、周囲1マス圏内の反響は探知不能！」
+・⑤【上記以外】➔「直下にも周囲1マス圏内にも反応なし」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 指令書』と同文） ━━┓
 「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
@@ -1248,7 +1255,7 @@ const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
   ],
   3: [
     "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 30分）",
-    "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
+    "作戦海図（W-3100）上でソノブイ投下地点を決定させる（🎯正解位置：【B-3】 ／ ♨熱水域：【D-2・C-5】［噴火口：E-5］。B-3直上＝確定捕捉、B-3周囲1マス＝約20km先から反響あり、熱水域・噴火口直上＝ノイズで探知不能、熱水域・噴火口の周囲1マス＝直下不在だが周囲反響はノイズで探知不能）",
     "【目標捕捉・北上速度報告と深海写真提示・失敗時処理】ソノブイ終了後、長津アナウンス（NG-02：時速約6km・日速約150kmで北上、明日Day 4は明神礁周辺へ到達見込み）を行う。索敵成功時は『成功時の写真（近接浮上）』のみを提示。索敵失敗時は『失敗時の写真（遠距離・航跡波）』のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-22）』へ自動充当して浪寄へ公開する。その上で浪寄准教授（生物所見）と貝浜リエゾン（法的判断）へ諮問する",
     "防衛省・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
@@ -1376,7 +1383,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
-      (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し"))) ||
+      (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し") || !existing.readAloudScript.includes("D-2"))) ||
       (dayNumber === 4 && !existing.readAloudScript.includes("自由に閲覧可能")) ||
       (dayNumber === 5 && !existing.readAloudScript.includes("EV-26")) ||
       (dayNumber === 6 && existing.readAloudScript.includes("目安15分")) ||
@@ -1410,7 +1417,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
       (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")))) ||
-      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
+      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || !existing.gmCheckpoints.some((c) => c.includes("D-2")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
       (dayNumber === 4 && !existing.gmCheckpoints.some((c) => c.includes("自由に閲覧可能"))) ||
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || !existing.gmCheckpoints.some((c) => c.includes("EV-26")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
