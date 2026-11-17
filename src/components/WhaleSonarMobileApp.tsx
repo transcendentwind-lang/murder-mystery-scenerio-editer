@@ -407,7 +407,7 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
 ];
 
 // ==========================================
-// 朝倉教授が最初に示した「最初から日本語が確定している2つの音」
+// 海野教授が最初に示した「最初から日本語が確定している2つの音」
 // ==========================================
 export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-subsea-volcano": "海の下の火山",
@@ -423,7 +423,7 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "集まれ", subHint: "仲間を集める号令" },
   {
     label: "周囲を警戒せよ",
-    subHint: "朝倉教授の記録により最初から確定",
+    subHint: "海野教授の記録により最初から確定",
     isLockedInitial: true,
   },
   { label: "敵がいる", subHint: "外敵・危険生物の存在" },
@@ -453,7 +453,7 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
     label: "海の下の火山",
-    subHint: "朝倉教授の記録により最初から確定",
+    subHint: "海野教授の記録により最初から確定",
     isLockedInitial: true,
   },
   { label: "クジラの子ども", subHint: "子クジラを表す概念" },
@@ -591,7 +591,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     };
   }, []);
 
-  // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
+  // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」、続いて「音#03: 集まれ」「音#04: 敵がいる」、#05以降はジャンルが固まらないよう分散させた sonarWords の順序で統一）
   const safeWords = React.useMemo(() => {
     const baseList = (Array.isArray(words) ? words : [])
       .filter((w) => w.id !== "word-go-south")
@@ -603,9 +603,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             }
           : w
       );
-    const existingIds = new Set(baseList.map((w) => w.id));
-    const missingBuiltin = sonarWords.filter((sw) => !existingIds.has(sw.id));
-    return [...baseList, ...missingBuiltin];
+    const byId = new Map(baseList.map((w) => [w.id, w]));
+    const canonicalOrdered = sonarWords.map((sw) => byId.get(sw.id) ?? sw);
+    const canonicalIds = new Set(sonarWords.map((sw) => sw.id));
+    const extras = baseList.filter((w) => !canonicalIds.has(w.id));
+    return [...canonicalOrdered, ...extras];
   }, [words]);
   const orderedWords = React.useMemo(() => {
     const lockedOrder = ["word-subsea-volcano", "word-alert"];
@@ -634,6 +636,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
       return {
         code: `音 #${numStr}`,
+        shortCode: `#${numStr}`,
         onomatopoeia,
         symbol: wordObj?.symbol || "●●",
         isLocked,
@@ -2026,8 +2029,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                                     </span>
                                     <span>
                                       {meta.assignedJapanese
-                                        ? `${meta.assignedJapanese}`
-                                        : `${meta.code}（${meta.onomatopoeia}）`}
+                                        ? `${meta.shortCode} ${meta.assignedJapanese}`
+                                        : `${meta.shortCode}（${meta.onomatopoeia}）`}
                                     </span>
                                   </button>
                                   {index < selectedSequence.length - 1 && (
@@ -2175,7 +2178,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               {meta.isLocked ? (
                                 <div className="text-[10px] font-semibold text-amber-400/90 flex items-center justify-center gap-1 py-0.5">
                                   <CheckCircle2 className="h-3 w-3 shrink-0" />
-                                  朝倉教授記録により確定
+                                  海野教授記録により確定
                                 </div>
                               ) : (
                                 <button
@@ -2273,7 +2276,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    初期状態では朝倉教授が示した<strong>『ゴゴゴゴ…＝海の下の火山』『ドォン…ドォン…＝周囲を警戒せよ』の2語のみ確定</strong>しており、残りの22語はプレイヤーが実験しながら別画面で日本語をあてはめます。
+                    初期状態では海野教授が示した<strong>『ゴゴゴゴ…＝海の下の火山』『ドォン…ドォン…＝周囲を警戒せよ』の2語のみ確定</strong>しており、残りの22語はプレイヤーが実験しながら別画面で日本語をあてはめます。
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     <button
