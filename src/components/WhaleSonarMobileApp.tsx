@@ -1862,10 +1862,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         <div className="text-center space-y-1 py-2">
                           <div className="text-xs font-bold text-cyan-300 flex items-center justify-center gap-2">
                             <Waves className="h-4 w-4 animate-bounce" />
-                            海中にクリック音パターンを放流しています……
+                            クリック音パターンのシミュレーションを実行中……
                           </div>
                           <p className="text-[11px] text-cyan-400/80">
-                            クジラたちの反応をソナーで観測中……
+                            クジラたちの反応を解析しています……
                           </p>
                         </div>
                       ) : currentOutcome ? (
@@ -1916,7 +1916,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                             【クジラの行動観測モニター】
                           </div>
                           <p className="text-[11px] text-slate-500 leading-relaxed">
-                            クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、
+                            クリック音ボタンを組み合わせて「シミュレーション開始」を押すと、
                             <br />
                             ここにクジラの行動が文字で表示されます。
                           </p>
@@ -1924,7 +1924,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       )}
                     </div>
 
-                    {/* ★クジラの行動観測モニターのすぐ下に設置：発信（再生＆判定）メインボタン★ */}
+                    {/* ★クジラの行動観測モニターのすぐ下に設置：シミュレーション開始（再生＆判定）メインボタン★ */}
                     <button
                       onClick={() => handleTransmitSequence()}
                       disabled={selectedSequence.length === 0 || isPlaying}
@@ -1934,8 +1934,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
                       />
                       {isPlaying
-                        ? "クリック音を海中に放流中..."
-                        : "海中にクリック音を流す（発信）"}
+                        ? "シミュレーション実行中..."
+                        : "シミュレーション開始"}
                     </button>
                   </div>
 

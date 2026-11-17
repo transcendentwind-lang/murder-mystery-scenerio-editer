@@ -35,7 +35,7 @@ test("単音の試聴ではクリックした位置だけ、連続再生では�
   await expect(replay).toBeDisabled();
   for (let index = 0; index < 3; index++) await expect(slots.nth(index)).not.toHaveClass(/bg-cyan-400/);
   await expect(replay).toBeEnabled();
-  await page.getByRole("button", { name: /海中にクリック音を流す/ }).click();
+  await page.getByRole("button", { name: /シミュレーション開始/ }).click();
   for (let index = 0; index < 3; index++) {
     await expect(slots.nth(index)).toHaveClass(/bg-cyan-400/);
   }
