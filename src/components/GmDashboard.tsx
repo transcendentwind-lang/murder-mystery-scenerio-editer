@@ -336,6 +336,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
   const [isFlowchartModalOpen, setIsFlowchartModalOpen] = useState(false);
+  const [isGeoIntroVideoOpen, setIsGeoIntroVideoOpen] = useState(false);
   // Day 1 漂流予測の失敗回数（0: 1発成功［証言2個］, 1: 1回失敗➔2回目成功［証言1個・1個Day2以降へ］, 2: 2回失敗➔自動成功［証言0個・2個ともDay2以降へ］）
   const [day1FailureCount, setDay1FailureCount] = useProjectProgress<0 | 1 | 2>(project.id, "gm.day1FailureCount", 0);
   const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useProjectProgress<"ev-captain-testimony" | "ev-diver-box-photo">(project.id, "gm.day1SingleTestimonyId", "ev-captain-testimony");
@@ -349,6 +350,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         setIsTacticalModalOpen(false);
         setIsDay1ModalOpen(false);
         setIsFlowchartModalOpen(false);
+        setIsGeoIntroVideoOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -784,6 +786,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
         {/* テキストエクスポート＆分岐フローチャートボタン群 */}
         <div className="flex flex-wrap items-center gap-2">
+          <button
+            onClick={() => setIsGeoIntroVideoOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-sky-500 transition shadow"
+            title="本編開始前に参加者へ紹介する小笠原諸島の地理ガイド動画を表示します"
+          >
+            <Play className="h-3.5 w-3.5" />
+            オープニング地理紹介動画
+          </button>
+
           <button
             onClick={() => setIsFlowchartModalOpen(true)}
             className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-rose-500 transition shadow"
@@ -3637,6 +3648,63 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 projectTitle={project.title}
                 selectedDay={currentDay}
                 onSelectDay={(d) => setCurrentDay(d)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* オープニング事前案内：小笠原諸島の地理紹介動画モーダル（ゲーム外ガイド） */}
+      {isGeoIntroVideoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setIsGeoIntroVideoOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-950 border border-sky-700 text-sky-300">
+                  <Navigation className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    オープニング地理紹介動画：小笠原諸島の位置と距離
+                  </h3>
+                  <p className="text-[11px] text-slate-300">
+                    本編開始前のゲーム外ガイドとして、東京湾から南へ約1,000km（船で24時間）・父島を含む群島であることを紹介する映像です。
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href={scenarioAssetUrl("releases/videos/ogasawara_geography_intro.mp4")}
+                  download="ogasawara_geography_intro.mp4"
+                  className="flex items-center gap-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  MP4保存
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsGeoIntroVideoOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-y-auto">
+              <video
+                controls
+                autoPlay
+                preload="auto"
+                aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"
+                src={scenarioAssetUrl("releases/videos/ogasawara_geography_intro.mp4")}
+                className="w-full rounded-xl border border-slate-800 bg-slate-900 shadow-lg"
               />
             </div>
           </div>

@@ -23,7 +23,7 @@ test('資料目録は正本の全ファイルを網羅する', async () => {
   }
 });
 
-test('全35資料を画面から参照・ダウンロードでき、正本と同一内容になる', async ({ page }, testInfo) => {
+test('全資料を画面から参照・ダウンロードでき、正本と同一内容になる', async ({ page }, testInfo) => {
   test.setTimeout(120_000);
   await page.route('**/local-projects.json', (route) => route.fulfill({ json: [] }));
   await page.goto('/');
@@ -47,6 +47,10 @@ test('全35資料を画面から参照・ダウンロードでき、正本と同
     if (['svg', 'jpg', 'png'].includes(file.format)) {
       const image = page.getByRole('img', { name: file.title, exact: true });
       await expect.poll(() => image.evaluate((element) => (element as HTMLImageElement).naturalWidth)).toBeGreaterThan(0);
+    } else if (['mp4', 'webm'].includes(file.format)) {
+      const video = page.locator('video').filter({ hasText: '' }).first();
+      await expect(video).toHaveAttribute('aria-label', file.title);
+      await expect(video).toHaveAttribute('src', scenarioAssetUrl(file.path));
     } else if (['md', 'json'].includes(file.format)) {
       await expect(page.locator('[data-material-text]')).toHaveText(await readFile(path.join(root, file.path), 'utf8'));
     } else await expect(page.locator('iframe[title^="資料プレビュー"]')).toHaveAttribute('src', scenarioAssetUrl(file.path));
@@ -96,4 +100,17 @@ test('新規作品の資料画面に組み込み内容が混ざらず、独自�
   expect(generateSynopsisMarkdown(project)).toContain('GM: なし');
   expect(generateFullScriptMarkdown(project)).toContain('独自の読み上げ文');
   expect(generateFullScriptMarkdown(project)).not.toContain(initialProject.timeline[0].locationName);
+});
+
+test('GM進行画面からオープニング地理紹介動画を開閉・参照できる', async ({ page }) => {
+  await page.route('**/local-projects.json', (route) => route.fulfill({ json: [] }));
+  await page.goto('/');
+  await page.getByRole('button', { name: 'このシナリオで作業開始' }).click();
+  await page.getByRole('button', { name: /③ GM進行/ }).click();
+  await page.getByRole('button', { name: 'オープニング地理紹介動画' }).click();
+  const video = page.locator('video[aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"]');
+  await expect(video).toBeVisible();
+  await expect(video).toHaveAttribute('src', scenarioAssetUrl('releases/videos/ogasawara_geography_intro.mp4'));
+  await page.keyboard.press('Escape');
+  await expect(video).toHaveCount(0);
 });
