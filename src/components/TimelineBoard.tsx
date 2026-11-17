@@ -3452,7 +3452,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>🐋 3. 朝倉ノート＆クジラ言語</span>
+                    <span>🐋 3. 海野ノート＆クジラ言語</span>
                   </button>
                   <button
                     onClick={() => setDay6ActiveTab("sonar_network")}
@@ -3522,7 +3522,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1.5">
                         <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
-                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
+                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 海野ノートへ繋がる4段階の証拠ロジック】</span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed">
                           かつて小笠原の神職は、沖合の小舟から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
@@ -3540,12 +3540,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg bg-slate-900/90 border border-cyan-800/80 p-3.5 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-cyan-900/60 pb-1.5">
                         <strong className="text-cyan-200 font-bold text-xs flex items-center gap-1.5">
-                          🪜 【朝倉ノートの真価を引き出す4段階の証拠ロジック（開示順序）】
+                          🪜 【海野ノートの真価を引き出す4段階の証拠ロジック（開示順序）】
                         </strong>
                         <span className="text-[10px] text-cyan-400 font-mono">論理的必然性の連鎖</span>
                       </div>
                       <p className="text-[11px] text-slate-300 leading-relaxed">
-                        「なぜ今、朝倉教授のクジラ音響ノートが必要なのか？」は、以下の4つの証拠が順番に揃って初めてプレイヤー全員に完全に腑に落ちます：
+                        「なぜ今、海野教授のクジラ音響ノートが必要なのか？」は、以下の4つの証拠が順番に揃って初めてプレイヤー全員に完全に腑に落ちます：
                       </p>
 
                       <div className="grid grid-cols-2 gap-2 text-[11px]">
@@ -3591,7 +3591,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <p className="mt-0.5 leading-relaxed text-slate-200">
                           「相手は通常兵器で倒せない巨大なイカの塊りだ。太古の先人はマッコウクジラを呼び集めて食べさせて解決した。
                           ならば我々もマッコウクジラに呼びかけねばならない――だが、太古の祝詞だけでは現代の広大な太平洋全域のクジラを統率できない。
-                          <strong>クジラ自身が話す言語（コーダ）の文法と音響記録</strong>が必要だ！」 ➔ <strong>【タブ3：朝倉教授ノート】へ！</strong>
+                          <strong>クジラ自身が話す言語（コーダ）の文法と音響記録</strong>が必要だ！」 ➔ <strong>【タブ3：海野教授ノート】へ！</strong>
                         </p>
                       </div>
                     </div>
@@ -3624,15 +3624,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ3: 朝倉教授ノート 3段階開示 ＆ クジラ言語（5大コーダ実録） --- */}
+                {/* --- タブ3: 海野教授ノート 3段階開示 ＆ クジラ言語（5大コーダ実録） --- */}
                 {day6ActiveTab === "coda_grammar" && (
                   <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
                     <div className="space-y-1">
                       <h4 className="font-bold text-indigo-300 text-sm flex items-center gap-1.5">
-                        <span>🐋 【故・朝倉教授の研究ノート：3段階の真実 ＆ クジラ言語（5大コーダ）】</span>
+                        <span>🐋 【故・海野教授の研究ノート：3段階の真実 ＆ クジラ言語（5大コーダ）】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed text-[11px]">
-                        海洋生物学者・朝倉教授が遺した研究資料は、一般人の常識を覆す基礎生態から、世界初のクジラ言語文法、そして実音響調査テープへと3段階で深まります。
+                        海洋生物学者・海野教授が遺した研究資料は、一般人の常識を覆す基礎生態から、世界初のクジラ言語文法、そして実音響調査テープへと3段階で深まります。
                       </p>
                     </div>
 
@@ -3673,11 +3673,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </p>
                     </div>
 
-                    {/* 第3段階：朝倉教授の海洋音響実録テープ ＆ 5大コーダ */}
+                    {/* 第3段階：海野教授の海洋音響実録テープ ＆ 5大コーダ */}
                     <div className="rounded-lg bg-indigo-950/40 border border-indigo-700/80 p-3.5 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                         <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                          📼 第3段階：【実音響調査記録】朝倉教授の5大コーダ実録テープ ＆ 行動対応ログ
+                          📼 第3段階：【実音響調査記録】海野教授の5大コーダ実録テープ ＆ 行動対応ログ
                         </span>
                         <span className="text-[10px] text-amber-400 font-mono">小笠原海溝 実録データ</span>
                       </div>
@@ -3851,7 +3851,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は完全無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
                             <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
-                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（海野日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 

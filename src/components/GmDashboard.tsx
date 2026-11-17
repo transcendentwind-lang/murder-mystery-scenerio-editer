@@ -243,12 +243,12 @@ export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [];
 export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-4A",
-    title: "F-4A: 朝倉教授の研究ノートについての調査",
-    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
+    title: "F-4A: 海野教授の研究ノートについての調査",
+    organization: "海洋科学大学 小笠原研究所 海野研究室",
     evidenceId: "ev-asakura-notes-origin",
     badge: "学術起源＆盟約口伝ノート",
-    summary: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
-    detail: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
+    summary: "名誉教授ロバート・ディーツ博士に師事した海野教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
+    detail: "名誉教授ロバート・ディーツ博士に師事した海野教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
   },
   {
     id: "F-4D",
@@ -281,7 +281,7 @@ export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-5A",
     title: "F-5A: クジラの鳴音（コーダ）に関する論文草稿の調査",
-    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
+    organization: "海洋科学大学 小笠原研究所 海野研究室",
     evidenceId: "ev-asakura-notes-syntax",
     badge: "コーダ構文規則ドラフト",
     summary: "クリック間隔（ICI）と2語成語規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは【了解した】を示す「（カッ）」のみ【1語単独で機能】し、他はすべて【2語単位で1つの意味・行動指示（2語成語）】となり、【2語成語のペアを複数繋ぎ合わせる】ことで会話しているという動物言語学の先駆的構文規則を発見）",
@@ -2572,7 +2572,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 text-[11px] space-y-1">
                       <strong className="text-rose-300 block">朝のブリーフィング（朝8時・巨大生物の回復と北上再開）:</strong>
                       <p className="italic text-rose-100 leading-relaxed font-mono">
-                        （🎙️ 総合オペレーター 長津）:「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
+                        （🎙️ 総合オペレーター 長津）:「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、海野教授の遺品である実録音響データをすべて開示します！」
                       </p>
                     </div>
                   </div>
@@ -2616,7 +2616,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded-xl border border-cyan-900/60 bg-[#0d1829] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-900/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
-                        <span>🎋 【フェーズ2：海中筒作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
+                        <span>🎋 【フェーズ2：海中筒作法 ＆ 海野ノートへ繋がる4段階の証拠ロジック】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("sea-tube")}
@@ -2630,10 +2630,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </p>
                     <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2.5 rounded border border-cyan-900/40 space-y-1.5">
                       <strong className="text-cyan-200 font-bold block">
-                        🪜 【朝倉ノートの存在価値を最大化する4段階開示ロジック（GM演出の梯子）】
+                        🪜 【海野ノートの存在価値を最大化する4段階開示ロジック（GM演出の梯子）】
                       </strong>
                       <p className="text-slate-200 leading-relaxed">
-                        以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ朝倉教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
+                        以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ海野教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
                       </p>
                       <ul className="list-disc list-inside space-y-0.5 pl-1 text-[10px] text-slate-300">
                         <li><strong>① 儀礼の存在</strong>: 噴火や巨大生物出現時、神社では海へ出て海中筒から水底へ祝詞を響かせる儀礼があった</li>
@@ -2642,16 +2642,16 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <li><strong>④ 太古の解決史</strong>: 『小笠原社記（抄）』に、太古に海中筒の祈りでマッコウクジラを呼び集め、深海の巨大生物（巨大なイカの塊り）を捕食させて鎮めた前例がある</li>
                       </ul>
                       <p className="text-amber-300 text-[10px] pt-1 border-t border-cyan-900/60 font-semibold">
-                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラを駿河湾へ導けない。そこで必要になるのが――朝倉教授のクジラ言語ノートだ！」
+                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラを駿河湾へ導けない。そこで必要になるのが――海野教授のクジラ言語ノートだ！」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ3：朝倉教授ノート3段階開示 ＆ 5大コーダ実録 */}
+                  {/* フェーズ3：海野教授ノート3段階開示 ＆ 5大コーダ実録 */}
                   <div className="rounded-xl border border-indigo-900/60 bg-[#120f26] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                        <span>🐋 【フェーズ3：故・朝倉教授ノート 3段階開示 ＆ 5大コーダ実録テープ】</span>
+                        <span>🐋 【フェーズ3：故・海野教授ノート 3段階開示 ＆ 5大コーダ実録テープ】</span>
                       </span>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -2669,11 +2669,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。朝倉教授の遺品テープと研究ノート。マッコウクジラは深海で独自のクリック言語体系（コーダ）を操り、仲間同士で高度な会話を交わしていたのです！」
+                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。海野教授の遺品テープと研究ノート。マッコウクジラは深海で独自のクリック言語体系（コーダ）を操り、仲間同士で高度な会話を交わしていたのです！」
                     </p>
                     <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2.5 rounded border border-indigo-900/40 space-y-1.5">
                       <strong className="text-amber-200 font-bold block">
-                        📚 朝倉教授ノートの3段階構成 ＆ 5大コーダ実録:
+                        📚 海野教授ノートの3段階構成 ＆ 5大コーダ実録:
                       </strong>
                       <div className="grid grid-cols-3 gap-2 text-[10px]">
                         <div className="rounded bg-slate-900 p-2 border border-slate-800">
@@ -2811,7 +2811,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                             <strong>🎯 反論から導き出させる解答（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が命中しても深海で元の大きさに復活してしまった事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
                             <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
-                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（海野日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 

@@ -676,7 +676,7 @@ export function printWhaleSonarGuideA4(
                 </div>
               </div>
               <div class="sound-card-footer">
-                <div class="sound-locked-note">✔ 朝倉教授記録により確定</div>
+                <div class="sound-locked-note">✔ 海野教授記録により確定</div>
               </div>
             </div>
 
