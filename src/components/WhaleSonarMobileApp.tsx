@@ -1090,7 +1090,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   const playTrace = async (trace: RecordedWaveformTrace, sequenceIndices: number[] = []) => {
     if (!audioEngine) throw new Error("音声を利用できない");
-    const controller = new AbortController();
+    const controller = playbackControllerRef.current ?? new AbortController();
     playbackControllerRef.current = controller;
     const playback = await audioEngine.startTimeline(trace, controller.signal);
     if (!mountedRef.current) { playback.cancel(); return false; }
@@ -1125,6 +1125,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         progressTimerRef.current = null;
       }
     }
+    const runController = new AbortController();
+    playbackControllerRef.current = runController;
     playbackBusyRef.current = true;
     setIsPlaying(true);
     setPlaybackError("");
@@ -1134,11 +1136,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         setPlaybackError("音声を再生できなかった。もう一度再生を押して確認。");
       }
     } finally {
-      playbackBusyRef.current = false;
-      if (mountedRef.current) {
-        setIsPlaying(false);
-        setActivePlayingIndex(null);
-        setActiveWordId(null);
+      if (playbackControllerRef.current === runController) {
+        playbackBusyRef.current = false;
+        if (mountedRef.current) {
+          setIsPlaying(false);
+          setActivePlayingIndex(null);
+          setActiveWordId(null);
+        }
       }
     }
   };
