@@ -339,6 +339,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
   const [isFlowchartModalOpen, setIsFlowchartModalOpen] = useState(false);
   const [isGeoIntroVideoOpen, setIsGeoIntroVideoOpen] = useState(false);
+  const [isDay7SonarVideoOpen, setIsDay7SonarVideoOpen] = useState(false);
   // Day 1 漂流予測の失敗回数（0: 1発成功［証言2個］, 1: 1回失敗➔2回目成功［証言1個・1個Day2以降へ］, 2: 2回失敗➔自動成功［証言0個・2個ともDay2以降へ］）
   const [day1FailureCount, setDay1FailureCount] = useProjectProgress<0 | 1 | 2>(project.id, "gm.day1FailureCount", 0);
   const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useProjectProgress<"ev-captain-testimony" | "ev-diver-box-photo">(project.id, "gm.day1SingleTestimonyId", "ev-captain-testimony");
@@ -353,6 +354,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         setIsDay1ModalOpen(false);
         setIsFlowchartModalOpen(false);
         setIsGeoIntroVideoOpen(false);
+        setIsDay7SonarVideoOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -795,6 +797,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           >
             <Play className="h-3.5 w-3.5" />
             オープニング地理紹介動画
+          </button>
+
+          <button
+            onClick={() => setIsDay7SonarVideoOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-500 transition shadow"
+            title="Day 7のクライマックスで駿河湾口へクジラ群が集結・潜航するソナー監視動画を表示します"
+          >
+            <Radar className="h-3.5 w-3.5" />
+            Day 7 駿河湾ソナー動画
           </button>
 
           <button
@@ -2885,14 +2896,24 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                   {/* フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食 */}
                   <div className="rounded-xl border border-rose-900/60 bg-[#160f1c] p-3.5 space-y-2 shadow-md">
-                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-rose-400" />
                         【フェーズ1：運命の夜明け・駿河湾付近まで接近 ＆ 夜通し泳いだクジラ群の到達・大捕食】
                       </span>
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
-                        微動完全停止・作戦成功
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsDay7SonarVideoOpen(true)}
+                          className="flex items-center gap-1 rounded-md bg-teal-600 hover:bg-teal-500 px-2.5 py-1 text-[11px] font-bold text-white shadow transition"
+                        >
+                          <Radar className="h-3.5 w-3.5" />
+                          駿河湾ソナー監視動画を再生
+                        </button>
+                        <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
+                          微動完全停止・作戦成功
+                        </span>
+                      </div>
                     </div>
                     <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-cyan-300 block font-bold">🌊 夜明けの接近報告 ＆ 深海での決着ナレーション（GM読み上げ用）:</strong>
@@ -3706,6 +3727,63 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 preload="auto"
                 aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"
                 src={scenarioAssetUrl("releases/videos/ogasawara_geography_intro.mp4")}
+                className="w-full rounded-xl border border-slate-800 bg-slate-900 shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 7 クライマックス演出：駿河湾口 深海ソナー監視動画モーダル */}
+      {isDay7SonarVideoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setIsDay7SonarVideoOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-950 border border-teal-700 text-teal-300">
+                  <Radar className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）
+                  </h3>
+                  <p className="text-[11px] text-slate-300">
+                    海上自衛隊が湾内で待機するなか、駿河湾口の巨大群体へクジラ群が続々と集結・潜水し、目標反応が消失するまでの監視映像です。
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href={scenarioAssetUrl("releases/videos/day7_suruga_sonar_convergence.mp4")}
+                  download="day7_suruga_sonar_convergence.mp4"
+                  className="flex items-center gap-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  MP4保存
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsDay7SonarVideoOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-y-auto">
+              <video
+                controls
+                autoPlay
+                preload="auto"
+                aria-label="【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）"
+                src={scenarioAssetUrl("releases/videos/day7_suruga_sonar_convergence.mp4")}
                 className="w-full rounded-xl border border-slate-800 bg-slate-900 shadow-lg"
               />
             </div>

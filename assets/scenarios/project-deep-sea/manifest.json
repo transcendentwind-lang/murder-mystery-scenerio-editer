@@ -9,8 +9,8 @@
       "format": "md",
       "participantApp": false,
       "legacyUrl": null,
-      "bytes": 1449,
-      "sha256": "e423fd23d62c066875a3ae96ad811ce0adbf4c03c2990fbd6adb5e70d88a4c40"
+      "bytes": 1480,
+      "sha256": "99f60bb47b12315b71424b54ec3fbe8bc0e56ba2e964c0d2368087e9d3919360"
     },
     {
       "id": "material-02",
@@ -275,6 +275,17 @@
       "legacyUrl": "/pdfs/volcano-monitoring-maps-portrait.pdf",
       "bytes": 7224758,
       "sha256": "d8b0efe6a034acf7ec35ec601ec7d05cedb8785e7d6d3f023bfdb6704c80fcca"
+    },
+    {
+      "id": "material-36",
+      "path": "releases/videos/day7_suruga_sonar_convergence.mp4",
+      "title": "【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）",
+      "kind": "release",
+      "format": "mp4",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 6574226,
+      "sha256": "3a2b20ff7c27a47f9df31f016b8eb083e1df957423f1fc3f70dc0547d82ec266"
     },
     {
       "id": "material-35",

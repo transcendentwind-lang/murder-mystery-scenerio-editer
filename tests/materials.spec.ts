@@ -102,15 +102,22 @@ test('新規作品の資料画面に組み込み内容が混ざらず、独自�
   expect(generateFullScriptMarkdown(project)).not.toContain(initialProject.timeline[0].locationName);
 });
 
-test('GM進行画面からオープニング地理紹介動画を開閉・参照できる', async ({ page }) => {
+test('GM進行画面からオープニング地理紹介動画と駿河湾ソナー監視動画を開閉・参照できる', async ({ page }) => {
   await page.route('**/local-projects.json', (route) => route.fulfill({ json: [] }));
   await page.goto('/');
   await page.getByRole('button', { name: 'このシナリオで作業開始' }).click();
   await page.getByRole('button', { name: /③ GM進行/ }).click();
   await page.getByRole('button', { name: 'オープニング地理紹介動画' }).click();
-  const video = page.locator('video[aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"]');
-  await expect(video).toBeVisible();
-  await expect(video).toHaveAttribute('src', scenarioAssetUrl('releases/videos/ogasawara_geography_intro.mp4'));
+  const introVideo = page.locator('video[aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"]');
+  await expect(introVideo).toBeVisible();
+  await expect(introVideo).toHaveAttribute('src', scenarioAssetUrl('releases/videos/ogasawara_geography_intro.mp4'));
   await page.keyboard.press('Escape');
-  await expect(video).toHaveCount(0);
+  await expect(introVideo).toHaveCount(0);
+
+  await page.getByRole('button', { name: 'Day 7 駿河湾ソナー動画' }).click();
+  const sonarVideo = page.locator('video[aria-label="【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）"]');
+  await expect(sonarVideo).toBeVisible();
+  await expect(sonarVideo).toHaveAttribute('src', scenarioAssetUrl('releases/videos/day7_suruga_sonar_convergence.mp4'));
+  await page.keyboard.press('Escape');
+  await expect(sonarVideo).toHaveCount(0);
 });

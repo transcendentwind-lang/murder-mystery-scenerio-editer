@@ -3,7 +3,7 @@
 このフォルダは一つの作品に所属する資料の正本。共通素材や新規作品の既定資料として使用しない。
 
 - `sources/`: 編集可能な原本と再生成手順。原本がない配布物は、現行ファイルを保持する。
-- `releases/images/`, `releases/pdfs/`, `releases/videos/`: 現行の表示・配布ファイル。オープニング地理紹介動画（`releases/videos/ogasawara_geography_intro.mp4`）は macOS 上で `swift -module-cache-path /tmp/swift-module-cache scripts/generate_ogasawara_geography_video.swift` により再生成できる。
+- `releases/images/`, `releases/pdfs/`, `releases/videos/`: 現行の表示・配布ファイル。動画資料は macOS 上で `swift -module-cache-path /tmp/swift-module-cache scripts/generate_ogasawara_geography_video.swift` および `swift -module-cache-path /tmp/swift-module-cache scripts/generate_day7_suruga_sonar_video.swift` により再生成できる。
 - `archive/`: 旧配置から退避した比較用PDF。現行PDFと完全一致しないため保管。自動的に旧版とは断定しない。
 - `manifest.json`: ファイル一覧、用途、公開対象、旧URL、照合用ハッシュ。
 
