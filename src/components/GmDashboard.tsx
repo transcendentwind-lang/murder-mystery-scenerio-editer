@@ -1068,6 +1068,41 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
               {currentDay === 1 && (
                 <div className="space-y-3 text-xs leading-relaxed">
+                  {/* ゲーム開始前アナウンス（GMからの案内） */}
+                  <div className="rounded-lg border-2 border-teal-600/80 bg-teal-950/30 p-3.5 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-bold text-teal-300">
+                        【ゲーム開始前アナウンス：GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択）】
+                      </span>
+                      <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
+                        ⏱️ 開始条件：ゲーム開始前（プレイヤー全員が着席した時点）
+                      </span>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-slate-950/90 p-3 text-[11px] text-slate-200 whitespace-pre-wrap leading-relaxed select-text">
+{`本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。
+この作品は、ライブアクションロールプレイングという種類で、TRPGに近いのですが、サイコロでの判定などはなく、五感を使ったアクションをしていただく内容となっています。今回は特に「音」を使った行動が多くなり、場合によってはご自身の耳で音を確認していただくため、皆様のスマートフォンをご利用いただくことがあります。スマートフォンはすぐに取り出せるよう、お手元にご準備をお願いいたします。
+またこの作品の特徴として、体験型クトゥルフとなっています。クトゥルフ神話とは、この世界のどこか、あるいは宇宙の彼方の異世界の神が、この地球を侵略しようとしているといった物語です。現在の常識とは異なる未知の世界、魔術の世界や宇宙的恐怖の世界を体験していく部分があります。クトゥルフのことを全く知らなくても楽しめますが、もしご存じであればさらに納得感が広がるものと思います。
+それではまずはこの作品の概要をお知らせしていきましょう。
+小笠原諸島は、東京都に所属している離島で、最も人口の多い父島をはじめとした複数の島で構成されています。独自に進化した生態系が評価され、2011年には世界遺産にも登録されました。東京都であるものの東京湾からの距離は約1000km離れています。近年では、島の西側での火山噴火により島が形成され「西之島」と名付けられています。今回の作品は、この小笠原沖で、突如電源喪失した船からの救難信号を受け、太平洋上で遭難した船の捜索にあたります。3名は東京・霞が関にある海上保安庁本部の会議室に集まった「東京本部チーム」、4名は小笠原諸島・父島にある海上保安庁支部の会議室に集まった「小笠原現地チーム」として救助にあたっていただきます。なお、東京・霞が関の本部会議室と父島支部の会議室の通信は常に繋がっている状態としますので、ゲーム中はいつでも自由に会話や情報共有を行っていただけます。
+早速ですが、まずはプレイヤーの皆様の自己紹介を簡単にしていただきたいと思います。
+（※プレイヤー自己紹介）
+ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。
+・朝潮（あさしお）は、東京本部の司令塔、皆さんの頼れるリーダーです。最終的な決定権と責任はこの朝潮さんが受け持つことが多いです。
+・貝浜（かいはま）は、東京本部の中でも特別な立ち位置で、海上保安庁と海上自衛隊をつなぐ橋渡し役、リエゾンという位置で、防衛省側の人間です。
+・長津（ながつ）は、朝潮を信頼するオペレーターで、各所からの連絡を受け持ちます。
+・坂凪（さかなぎ）は、海上保安庁の小笠原支部の人間で、巡視船やヘリコプターなどを手配可能な海難救助隊の現場リーダーです。
+・太刀魚（たちうお）は、小笠原の父島にある気象庁小笠原観測所の職員です。気象や海流のデータを扱います。
+・浪寄（なみより）は、小笠原にある海洋科学大学小笠原研究所の准教授で、深海生物の生態やクジラなどの動物行動学を専門にしています。
+・初瀬（はつせ）は、海難救助の救護技術に優れている一方、島の旧家の家系で神社などとのつながりがあるキャラクターです。
+それでは、担当するキャラクターを選んでいただきたいと思います。
+（※キャラクター選択・決定）
+それでは、各自のキャラクターのハンドアウトを読み込んでください。何か不明な点があればGMにお尋ねください。
+（※ハンドアウト読み込み）
+キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。
+それでは、Let’s get down to the story!`}
+                    </div>
+                  </div>
+
                   <div className="rounded-lg border-2 border-indigo-600/80 bg-indigo-950/40 p-3 space-y-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="font-bold text-indigo-300">
@@ -1076,6 +1111,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
                         ⏱️ 開始条件：ゲーム開始時（全員がハンドアウトを読み終えた時点）
                       </span>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「これより本編を開始します。現在、東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。」
                     </div>
                     <div className="rounded border-2 border-indigo-500/80 bg-slate-950/90 p-2.5">
                       <div className="text-[11px] font-bold text-indigo-300 mb-1">
@@ -1291,6 +1329,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
                       </span>
                     </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 2を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策にあたっています。」
+                    </div>
                     <div className="rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
                       <p className="font-semibold text-white">
                         🚨 緊急速報：西之島周辺海底火山が突発的大規模噴火
@@ -1304,7 +1345,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         （🎙️ 総合オペレーター 長津）:「長津です。皆様、お疲れ様です。気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。現場海域の船舶の避難は完了していますが、新しい指示がでています。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
                       </p>
                       <div className="pt-2 border-t border-slate-800/80 text-[11px] text-cyan-300/95 leading-relaxed font-medium">
-                        🗣️ <strong>GMからの案内</strong>: 「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
+                        🗣️ <strong>GMからの案内</strong>: 「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
                       </div>
                     </div>
                     <div className="text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
@@ -1573,22 +1614,25 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               {currentDay === 3 && (
                 <div className="space-y-4 text-xs leading-relaxed">
                   {/* フェーズ1：鳥島沖海底大噴火 GMアナウンス */}
-                  <div className="rounded-lg border border-amber-900/60 bg-amber-950/25 p-3.5 shadow-sm">
+                  <div className="rounded-lg border border-amber-900/60 bg-amber-950/25 p-3.5 shadow-sm space-y-2.5">
                     <div className="flex items-center gap-2">
                       <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                       <span className="font-bold text-amber-300">
                         【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
                       </span>
                     </div>
-                    <div className="mt-2 rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（Day 3のみ小笠原現地4人全員がヘリコプターへ搭乗）</strong>：「Day 3を迎えました。本日（Day 3）のみ、小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）は父島の会議室を出て大型捜索ヘリコプターに乗り込み、途中の海域に展開する大型巡視船『あきつしま』で洋上給油を受けながら鳥島沖の現場上空へと向かいます。東京本部チームの3名（朝潮・貝浜・長津）は東京・霞が関の会議室におり、ヘリコプター内の4名と無線通信で常時繋がっています。」
+                    </div>
+                    <div className="rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
                       <p className="font-semibold text-white">
                         🚨 緊急速報：鳥島沖海底カルデラが連動大爆発
                       </p>
                       <p className="mt-0.5 text-slate-300">
-                        西之島から北へ約350km。時速6.25km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
+                        西之島から北へ約350km。時速約6km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
                       </p>
                     </div>
-                    <p className="text-slate-300 mt-2.5 italic whitespace-pre-line">
+                    <p className="text-slate-300 italic whitespace-pre-line">
                       （🎙️ 総合オペレーター 長津）:「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
 　これより小笠原基地から小笠原現地メンバーを乗せた大型捜索ヘリコプターが現場へ向かいますが、ヘリコプターでは鳥島沖まで航続距離に問題があるため、途中の海域に展開している大型巡視船『あきつしま』で洋上給油を受けて鳥島沖に展開してください。
 　現場海域ではアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定し、浮上してくることがあれば写真撮影を試みてください。また、午後にはヘリコプターは帰投できますので、索敵と並行して本日の優先調査も進めてください」
@@ -2031,6 +2075,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     {/* 📢 【GM読み上げ台本：Day 4 開幕状況報告】 */}
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（Day 4以降は再び両拠点の会議室で進行）</strong>：「Day 4を迎えました。昨日ヘリコプターで鳥島沖へ出動していた小笠原現地チームの4名も父島へ帰投しており、本日（Day 4）以降は再び、小笠原・父島にある海上保安庁支部の会議室（4名）と、東京・霞が関にある海上保安庁本部の会議室（3名）にそれぞれ集まり、両会議室を通信回線で繋いで対策会議を行っています。」
+                    </div>
                     <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2">
                       <strong className="text-amber-300 block font-bold text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-amber-400" />
@@ -2362,6 +2409,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 5を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
+                    </div>
+
                     <div className="rounded-lg bg-black/50 border border-rose-900/50 p-2.5 text-[11px] text-rose-100 space-y-1">
                       <strong className="text-rose-300 block font-bold">📢 【GMナレーション：民間放送局の臨時ニュース（富士山地下微動 ＆ 伊豆七島避難準備指示）】</strong>
                       <p className="italic text-slate-200 leading-relaxed">
@@ -2578,6 +2629,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <span className="text-[10px] font-mono text-red-400 font-bold bg-red-950/80 px-2 py-0.5 rounded border border-red-800/80">
                         駿河湾到達まで 24時間
                       </span>
+                    </div>
+
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 6（決戦前日・朝8時）を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
                     </div>
 
                     <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 text-[11px] space-y-1">
@@ -2914,6 +2969,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           微動完全停止・作戦成功
                         </span>
                       </div>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 7（最終決戦の夜明け）を迎えました。東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）を通信回線で繋ぎ、両会議室から固唾を呑んで駿河湾の状況を見守っています。」
                     </div>
                     <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-cyan-300 block font-bold">🌊 夜明けの接近報告 ＆ 深海での決着ナレーション（GM読み上げ用）:</strong>
