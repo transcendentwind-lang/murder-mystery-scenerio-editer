@@ -888,18 +888,22 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         {/* 左側：Day切り替えと演出台詞スクリプト */}
         <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           {/* Dayタブ */}
-          <div className="mb-4 flex items-center gap-1.5 border-b border-slate-800 pb-3">
-            {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+          <div className="mb-4 flex flex-wrap items-center gap-1.5 border-b border-slate-800 pb-3">
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((d) => (
               <button
                 key={d}
                 onClick={() => setCurrentDay(d)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                   currentDay === d
-                    ? "bg-indigo-600 text-white shadow"
+                    ? d === 0
+                      ? "bg-teal-600 text-white shadow"
+                      : "bg-indigo-600 text-white shadow"
+                    : d === 0
+                    ? "border border-teal-800/80 bg-teal-950/40 text-teal-300 hover:text-white"
                     : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
                 }`}
               >
-                Day {d}
+                {d === 0 ? "ゲーム開始前" : `Day ${d}`}
               </button>
             ))}
           </div>
@@ -907,13 +911,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           <div className="space-y-4">
             <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
               <span className="text-[11px] font-bold text-indigo-400 uppercase">
-                DAY {currentDay} 状況概要
+                {currentDay === 0 ? "ゲーム開始前 導入概要" : `DAY ${currentDay} 状況概要`}
               </span>
               <h3 className="text-base font-bold text-white mt-1">
-                {currentTimelineStep?.situationTitle}
+                {currentDay === 0
+                  ? "GMからの開始前案内・作品概要・拠点説明・キャラクター選択・ハンドアウト読み込み"
+                  : currentTimelineStep?.situationTitle}
               </h3>
               <p className="mt-1 text-xs text-slate-300 leading-relaxed">
-                {currentTimelineStep?.incidentOverview}
+                {currentDay === 0
+                  ? "本編（Day 1）開始前にGMから参加者へ行う導入ガイダンス。作品のルール、小笠原諸島と拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）の前提説明、プレイヤー自己紹介、キャラクター紹介・選択、およびハンドアウト読み込みを行います。"
+                  : currentTimelineStep?.incidentOverview}
               </p>
             </div>
 
@@ -1066,7 +1074,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 </span>
               </div>
 
-              {currentDay === 1 && (
+              {currentDay === 0 && (
                 <div className="space-y-3 text-xs leading-relaxed">
                   {/* ゲーム開始前アナウンス（GMからの案内） */}
                   <div className="rounded-lg border-2 border-teal-600/80 bg-teal-950/30 p-3.5 space-y-2">
@@ -1102,7 +1110,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 それでは、Let’s get down to the story!`}
                     </div>
                   </div>
+                </div>
+              )}
 
+              {currentDay === 1 && (
+                <div className="space-y-3 text-xs leading-relaxed">
                   <div className="rounded-lg border-2 border-indigo-600/80 bg-indigo-950/40 p-3 space-y-2">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <span className="font-bold text-indigo-300">

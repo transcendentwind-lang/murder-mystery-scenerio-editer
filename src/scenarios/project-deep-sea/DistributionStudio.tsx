@@ -569,8 +569,20 @@ export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `本日は、「燃える海を渡�
 キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。
 それでは、Let’s get down to the story!`;
 
+const PRE_GAME_TIMELINE_STEP: IncidentStep = {
+  dayNumber: 0,
+  locationName: "東京・霞が関 本部会議室 ＆ 小笠原・父島 支部会議室",
+  distanceKm: 0,
+  situationTitle: "GMからの開始前案内・作品概要・拠点説明・キャラクター選択・ハンドアウト読み込み",
+  incidentOverview:
+    "本編（Day 1）開始前にGMから参加者へ行う導入ガイダンス。作品のルール、小笠原諸島と拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）の前提説明、プレイヤー自己紹介、キャラクター紹介・選択、およびハンドアウト読み込みを行います。",
+  hqResponse: "東京・霞が関にある海上保安庁本部の会議室（朝潮・貝浜・長津の3名）",
+  fieldResponse: "小笠原諸島・父島にある海上保安庁支部の会議室（坂凪・太刀魚・浪寄・初瀬の4名）",
+  revealedEvidenceIds: [],
+};
+
 const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
-  1: [
+  0: [
     {
       phaseNumber: "ゲーム開始前アナウンス",
       phaseTitle: "GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）",
@@ -585,7 +597,13 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
           text: PRE_GAME_GM_ANNOUNCEMENT_TEXT,
         },
       ],
+      gmGuides: [
+        "プレイヤーの自己紹介 ➔ キャラクター7名（6名時は長津不在）の紹介・担当決定 ➔ 個人ハンドアウト（B5本紙）の配布・読み込みの順に進め、全員が読み終えたら『Day 1』シートへ進みます。",
+      ],
     },
+  ],
+
+  1: [
     {
       phaseNumber: "DAY 1 フェーズ 1",
       phaseTitle: "緊急対策回線の開設 ＆ 各員の点呼・自己紹介",
@@ -1074,15 +1092,15 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
 // GM演出用ナレーション ＆ NPCセリフ台本（テキスト編集欄用：GM_DAY_STRUCTURED_PHASESと同内容）
 const DEFAULT_GM_NARRATIONS: Record<number, string> = {
-  1: `■ ゲーム開始前アナウンス：GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）
+  0: `■ ゲーム開始前アナウンス：GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）
 ⏱️ 開始タイミング・条件：ゲーム開始前（プレイヤー全員が着席した時点）
 📦 配布資料：キャラクター決定後に各PCの個人ハンドアウト（B5本紙）を配布
 
 ┏━━ 🎙️ GMからのゲーム開始前アナウンス ━━┓
 ${PRE_GAME_GM_ANNOUNCEMENT_TEXT}
-┗━━━━━━━━━━━━━━━━━━━━━━┛
+┗━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-■ DAY 1 フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介
+  1: `■ DAY 1 フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介
 ⏱️ 開始タイミング・条件：ゲーム開始時（全員がキャラクターハンドアウトを読み終えた時点）
 📦 配布資料：朝潮へ『SP-01：黒い小さな隕石のかけら』『DAY 1 指令書』（7名時は長津経由）
 📢【GMからの開始描写】：「これより本編を開始します。現在、東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。」
@@ -1306,6 +1324,7 @@ ${PRE_GAME_GM_ANNOUNCEMENT_TEXT}
 
 // 各Dayの目標進行時間（分）デフォルト値
 const DEFAULT_DAY_TARGET_MINUTES: Record<number, number> = {
+  0: 15,
   1: 15,
   2: 10,
   3: 30,
@@ -1317,9 +1336,14 @@ const DEFAULT_DAY_TARGET_MINUTES: Record<number, number> = {
 
 // GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
+  0: [
+    "【作品概要・注意事項の案内】スマートフォン（音の確認・アプリ利用）の手元準備を促し、作品の特徴（ライブアクションロールプレイング・体験型クトゥルフ）を案内する",
+    "【拠点と通信の前提説明】東京本部チーム3名＝『東京・霞が関にある海上保安庁本部の会議室』、小笠原現地チーム4名＝『小笠原諸島・父島にある海上保安庁支部の会議室』であり、両会議室の通信は常に繋がっていて自由に会話・情報共有できることを案内する",
+    "【プレイヤー自己紹介 ＆ キャラクター選択】参加者の簡単な自己紹介のあと、7名のキャラクター（6名時は長津不在）を紹介して担当キャラクターを決定する",
+    "【個人ハンドアウト（B5本紙）の配布・読み込み】各自の個人ハンドアウトを配布して読み込ませ、不明点がないか確認してからDay 1本編へ進む",
+  ],
   1: [
-    "【ゲーム開始前アナウンス】GMからの案内（作品概要、東京・霞が関の本部会議室3名と小笠原・父島の支部会議室4名の拠点・常時通信説明、プレイヤー自己紹介、キャラクター紹介・選択、ハンドアウト読み込み）を行う",
-    "【Day 1 開始時】両拠点の会議室が通信で繋がっている描写を行い、朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』と『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 15分）",
+    "【Day 1 開始時】両拠点（東京・霞が関の本部会議室と小笠原・父島の支部会議室）が通信で繋がっている描写を行い、朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』と『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 15分）",
     "遭難海図を展開し、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分経過＋航行40分＝1時間後）を整理させ、巡視船を急行させるべき海域を指定させる",
     "【失敗時の処理】1回目の指定で外れた場合は「もう一度だけ再指定（リトライ）」を許可し、2回目も外れた場合は自動的に救助成功として進行する",
     "【証言カードのペナルティ処理】1発成功時は『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の両方をDay 1で取得。1回失敗時は1枚のみ取得（残り1枚はDay 2以降の調査枠へ）。2回失敗時は0枚（2枚ともDay 2以降の調査枠へ繰り越し）",
@@ -1422,7 +1446,10 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     `【Day ${dayNumber} 導入読み上げ】\n状況をプレイヤー全員に提示し、各班のアクション選択および情報共有を開始してください。`;
 
   const timeline = project.timeline || [];
-  const step = timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
+  const step =
+    dayNumber === 0
+      ? PRE_GAME_TIMELINE_STEP
+      : timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
 
   const defaultTargetMinutes = DEFAULT_DAY_TARGET_MINUTES[dayNumber] || 20;
 
@@ -1434,7 +1461,9 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     ];
 
   const defaultBgm =
-    dayNumber <= 2
+    dayNumber === 0
+      ? "穏やかな波音・オープニング環境音"
+      : dayNumber <= 2
       ? "静かな緊迫感・環境音（深海・無線ノイズ）"
       : dayNumber <= 5
       ? "捜査・解析フェーズBGM（中テンポ・サスペンス）"
@@ -1445,7 +1474,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     const isOldDefaultScript =
       !existing.readAloudScript ||
       existing.readAloudScript === step?.incidentOverview ||
-      !existing.readAloudScript.includes("┏━━ 📡 オペレーター（長津）のアナウンス") ||
+      (dayNumber >= 1 && !existing.readAloudScript.includes("┏━━ 📡 オペレーター（長津）のアナウンス")) ||
       existing.readAloudScript.includes("小笠原基地より小笠原現地メンバーを乗せた大型捜索ヘリが緊急発進") ||
       existing.readAloudScript.includes("ネタバレ防止") ||
       existing.readAloudScript.includes("何時間の猶予") ||
@@ -1459,8 +1488,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
       existing.readAloudScript.includes("朝倉") ||
-      !existing.readAloudScript.includes("【GMからの開始描写】") ||
-      (dayNumber === 1 && (!existing.readAloudScript.includes("ゲーム開始前アナウンス") || existing.readAloudScript.includes("これより合同海難救助チームを開設します"))) ||
+      (dayNumber >= 1 && !existing.readAloudScript.includes("【GMからの開始描写】")) ||
+      (dayNumber === 1 && (existing.readAloudScript.includes("ゲーム開始前アナウンス") || existing.readAloudScript.includes("これより合同海難救助チームを開設します"))) ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
       (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し") || !existing.readAloudScript.includes("D-2"))) ||
       (dayNumber === 4 && !existing.readAloudScript.includes("自由に閲覧可能")) ||
@@ -1493,7 +1522,8 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
           c.includes("EV-25") ||
           c.includes("EV-30") ||
           c.includes("朝倉") ||
-          c.includes("ミッション①・②・③")
+          c.includes("ミッション①・②・③") ||
+          (dayNumber === 1 && c.includes("ゲーム開始前アナウンス"))
       ) ||
       !existing.gmCheckpoints.some((c) => c.includes("霞が関")) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
@@ -1504,7 +1534,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか")) || !existing.gmCheckpoints.some((c) => c.includes("EV-26")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
       (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("QRコードを提示してアプリへアクセスさせる")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
       (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("SP-14")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
-      (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
+      (dayNumber >= 1 && dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
 
@@ -1902,8 +1932,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     Array.isArray(project.timeline) && project.timeline.length > 0
       ? project.timeline
       : initialProject.timeline;
+  const allGmProgressionSteps = useMemo(
+    () => [PRE_GAME_TIMELINE_STEP, ...timelineList],
+    [timelineList]
+  );
   const activeTimelineStep =
-    timelineList.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
+    allGmProgressionSteps.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
 
   const activeGmNote = getGmNoteForDay(project, selectedGmDay);
 
@@ -2475,11 +2509,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const targetSteps =
       typeof targetDayNumber === "number"
-        ? (project.timeline || []).filter((s) => s.dayNumber === targetDayNumber)
-        : project.timeline || [];
+        ? allGmProgressionSteps.filter((s) => s.dayNumber === targetDayNumber)
+        : allGmProgressionSteps;
 
     const pagesHtml = targetSteps
       .map((step, idx) => {
+        const dayLabel = step.dayNumber === 0 ? "ゲーム開始前" : `Day ${step.dayNumber}`;
         const note = getGmNoteForDay(project, step.dayNumber);
         const structuredPhases = GM_DAY_STRUCTURED_PHASES[step.dayNumber] || [];
 
@@ -2676,16 +2711,14 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
           <div class="print-no-split">
             <div class="rounded-md p-3 bg-slate-900 text-white flex items-end justify-between gap-4">
               <div>
-                <span class="block text-[12px] uppercase tracking-wider text-slate-300">Day ${
-                  step.dayNumber
-                } 状況タイトル</span>
+                <span class="block text-[12px] uppercase tracking-wider text-slate-300">${dayLabel} 状況タイトル</span>
                 <h1 class="mt-0.5 text-base font-bold leading-tight">${escapeHtml(
                   step.situationTitle
                 )}</h1>
               </div>
               <div class="flex items-center gap-4 text-[12px] shrink-0">
                 <div>
-                  <span class="block text-[12px] text-slate-300">観測地点</span>
+                  <span class="block text-[12px] text-slate-300">拠点・観測地点</span>
                   <div class="font-semibold">${escapeHtml(step.locationName)}</div>
                 </div>
                 <div class="border-l border-white/25 pl-3">
@@ -2699,9 +2732,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             ${phasesHtml}
           </div>
           <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
-            <div class="mb-1 text-[12px] font-bold text-slate-900">✅ Day ${
-              step.dayNumber
-            } GM進行チェックリスト</div>
+            <div class="mb-1 text-[12px] font-bold text-slate-900">✅ ${dayLabel} GM進行チェックリスト</div>
             <div class="space-y-1">
               ${(note.gmCheckpoints || [])
                 .map(
@@ -3448,7 +3479,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  GM進行資料（全{(project.timeline || []).length}フェーズ）
+                  GM進行資料（開始前＋全{(project.timeline || []).length}フェーズ）
                 </h3>
               </div>
 
@@ -3477,7 +3508,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
 
               <div className="space-y-2">
-                {(project.timeline || []).map((step) => {
+                {allGmProgressionSteps.map((step) => {
+                  const isPreGame = step.dayNumber === 0;
                   const isSelected = step.dayNumber === selectedGmDay;
                   const fc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
                   return (
@@ -3485,19 +3517,36 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       key={step.dayNumber}
                       onClick={() => {
                         setSelectedGmDay(step.dayNumber);
+                        if (isPreGame && gmGuideViewMode === "flowchart") {
+                          setGmGuideViewMode("daily_sheet");
+                        }
                       }}
                       className={`w-full rounded-xl border p-3 text-left transition ${
                         isSelected
-                          ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                          ? isPreGame
+                            ? "border-teal-400 bg-teal-950/70 shadow-md ring-1 ring-teal-400/50"
+                            : "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                          : isPreGame
+                          ? "border-teal-800/60 bg-slate-950/90 hover:border-teal-600"
                           : "border-slate-800 bg-slate-950/80 hover:border-slate-700"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
-                          Day {step.dayNumber}
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-[10px] font-bold border ${
+                            isPreGame
+                              ? "bg-teal-500/20 border-teal-500/40 text-teal-300"
+                              : "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
+                          }`}
+                        >
+                          {isPreGame ? "ゲーム開始前" : `Day ${step.dayNumber}`}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">
-                          {fc?.hasFailureBranch ? "🔀 分岐あり" : step.locationName}
+                          {isPreGame
+                            ? "🎙️ 導入シート"
+                            : fc?.hasFailureBranch
+                            ? "🔀 分岐あり"
+                            : step.locationName}
                         </span>
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">
@@ -5591,7 +5640,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   {/* A4・1枚完結の視覚的成功・失敗分岐フローチャート図 */}
                   <GmOnePageFlowchart
                     projectTitle={project.title}
-                    selectedDay={selectedGmDay}
+                    selectedDay={selectedGmDay === 0 ? 1 : selectedGmDay}
                     onSelectDay={setSelectedGmDay}
                   />
                 </div>
@@ -5601,10 +5650,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM進行資料（Day {activeTimelineStep.dayNumber} 進行台本＆管理シート）
+                        {project.title} ― GM進行資料（
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前"
+                          : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                        進行台本＆管理シート）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                        Day {activeTimelineStep.dayNumber}：{activeTimelineStep.situationTitle}
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前"
+                          : `Day ${activeTimelineStep.dayNumber}`}
+                        ：{activeTimelineStep.situationTitle}
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -5614,7 +5670,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        このDay {activeTimelineStep.dayNumber} のみを印刷 / PDF保存
+                        この
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前シート"
+                          : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                        のみを印刷 / PDF保存
                       </button>
                       <button
                         type="button"
@@ -5622,7 +5682,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        進行資料を一括印刷 / PDF保存（Day 1〜7）
+                        進行資料を一括印刷 / PDF保存（開始前＋Day 1〜7）
                       </button>
                     </div>
                   </div>
@@ -5636,7 +5696,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="flex flex-wrap items-end justify-between gap-4">
                         <div className="flex-1 min-w-[260px]">
                           <span className="block text-[12px] uppercase tracking-wider text-slate-300">
-                            Day {activeTimelineStep.dayNumber} 状況タイトル
+                            {activeTimelineStep.dayNumber === 0
+                              ? "ゲーム開始前"
+                              : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                            状況タイトル
                           </span>
                           <h1 className="mt-0.5 text-lg font-bold leading-tight">
                             {activeTimelineStep.situationTitle}
@@ -5646,7 +5709,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         <div className="flex items-center gap-4 text-[12px] shrink-0">
                           <div>
                             <span className="block text-[12px] uppercase tracking-wider text-slate-300">
-                              観測地点
+                              拠点・観測地点
                             </span>
                             <div className="mt-1 text-sm font-semibold">
                               {activeTimelineStep.locationName}
@@ -5875,7 +5938,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="mb-2 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-[12px] font-bold text-slate-900">
                           <CheckSquare className="h-4 w-4 text-indigo-600" />
-                          Day {activeTimelineStep.dayNumber} GM進行チェックリスト
+                          {activeTimelineStep.dayNumber === 0
+                            ? "ゲーム開始前"
+                            : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                          GM進行チェックリスト
                         </span>
                       </div>
                       <div className="space-y-1.5">
