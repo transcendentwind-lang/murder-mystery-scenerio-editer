@@ -539,7 +539,7 @@ interface GmStructuredPhase {
   gmGuides?: string[];
 }
 
-export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。
+export const PRE_GAME_GM_ANNOUNCEMENT_PART1 = `本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。
 
 この作品は、ライブアクションロールプレイングという種類で、TRPGに近いのですが、サイコロでの判定などはなく、五感を使ったアクションをしていただく内容となっています。今回は特に「音」を使った行動が多くなり、場合によってはご自身の耳で音を確認していただくため、皆様のスマートフォンをご利用いただくことがあります。スマートフォンはすぐに取り出せるよう、お手元にご準備をお願いいたします。
 
@@ -549,9 +549,9 @@ export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `本日は、「燃える海を渡�
 小笠原諸島は、東京都に所属している離島で、最も人口の多い父島をはじめとした複数の島で構成されています。独自に進化した生態系が評価され、2011年には世界遺産にも登録されました。東京都であるものの東京湾からの距離は約1000km離れています。近年では、島の西側での火山噴火により島が形成され「西之島」と名付けられています。今回の作品は、この小笠原沖で、突如電源喪失した船からの救難信号を受け、太平洋上で遭難した船の捜索にあたります。3名は東京・霞が関にある海上保安庁本部の会議室に集まった「東京本部チーム」、4名は小笠原諸島・父島にある海上保安庁支部の会議室に集まった「小笠原現地チーム」として救助にあたっていただきます。なお、東京・霞が関の本部会議室と父島支部の会議室の通信は常に繋がっている状態としますので、ゲーム中はいつでも自由に会話や情報共有を行っていただけます。
 
 早速ですが、まずはプレイヤーの皆様の自己紹介を簡単にしていただきたいと思います。
-（※プレイヤー自己紹介）
+（※プレイヤー自己紹介）`;
 
-ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。
+export const PRE_GAME_GM_ANNOUNCEMENT_PART2 = `ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。
 ・朝潮（あさしお）は、東京本部の司令塔、皆さんの頼れるリーダーです。最終的な決定権と責任はこの朝潮さんが受け持つことが多いです。
 ・貝浜（かいはま）は、東京本部の中でも特別な立ち位置で、海上保安庁と海上自衛隊をつなぐ橋渡し役、リエゾンという位置で、防衛省側の人間です。
 ・長津（ながつ）は、朝潮を信頼するオペレーターで、各所からの連絡を受け持ちます。
@@ -569,6 +569,8 @@ export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `本日は、「燃える海を渡�
 キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。
 それでは、Let’s get down to the story!`;
 
+export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `${PRE_GAME_GM_ANNOUNCEMENT_PART1}\n\n${PRE_GAME_GM_ANNOUNCEMENT_PART2}`;
+
 const PRE_GAME_TIMELINE_STEP: IncidentStep = {
   dayNumber: 0,
   locationName: "東京・霞が関 本部会議室 ＆ 小笠原・父島 支部会議室",
@@ -584,21 +586,36 @@ const PRE_GAME_TIMELINE_STEP: IncidentStep = {
 const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
   0: [
     {
-      phaseNumber: "ゲーム開始前アナウンス",
-      phaseTitle: "GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）",
+      phaseNumber: "ゲーム開始前 フェーズ 1",
+      phaseTitle: "ご挨拶・作品概要・拠点説明 ＆ プレイヤー自己紹介",
       startTrigger: "ゲーム開始前（プレイヤー全員が着席した時点）",
+      gmAnnouncements: [
+        {
+          tone: "slate",
+          speakerLabel: "🎙️ GMからのゲーム開始前アナウンス（前半：作品概要・拠点説明・プレイヤー自己紹介）",
+          text: PRE_GAME_GM_ANNOUNCEMENT_PART1,
+        },
+      ],
+      gmGuides: [
+        "まずは作品のルール・舞台設定・拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）を案内し、プレイヤー全員の簡単な自己紹介を行ってもらいます。",
+      ],
+    },
+    {
+      phaseNumber: "ゲーム開始前 フェーズ 2",
+      phaseTitle: "キャラクター紹介・担当選択 ＆ ハンドアウト読み込み",
+      startTrigger: "プレイヤー全員の自己紹介が完了した時点",
       handoutBadges: [
         "キャラクター決定後に配布：各PCの個人ハンドアウト（B5本紙）",
       ],
       gmAnnouncements: [
         {
           tone: "slate",
-          speakerLabel: "🎙️ GMからのゲーム開始前アナウンス",
-          text: PRE_GAME_GM_ANNOUNCEMENT_TEXT,
+          speakerLabel: "🎙️ GMからのゲーム開始前アナウンス（後半：キャラクター紹介・担当選択・ハンドアウト読み込み）",
+          text: PRE_GAME_GM_ANNOUNCEMENT_PART2,
         },
       ],
       gmGuides: [
-        "プレイヤーの自己紹介 ➔ キャラクター7名（6名時は長津不在）の紹介・担当決定 ➔ 個人ハンドアウト（B5本紙）の配布・読み込みの順に進め、全員が読み終えたら『Day 1』シートへ進みます。",
+        "キャラクター7名（6名時は長津不在）の紹介・担当決定 ➔ 個人ハンドアウト（B5本紙）の配布・読み込みの順に進め、全員が読み終えたら『Day 1』シートへ進みます。",
       ],
     },
   ],
@@ -1092,13 +1109,20 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
 // GM演出用ナレーション ＆ NPCセリフ台本（テキスト編集欄用：GM_DAY_STRUCTURED_PHASESと同内容）
 const DEFAULT_GM_NARRATIONS: Record<number, string> = {
-  0: `■ ゲーム開始前アナウンス：GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）
+  0: `■ ゲーム開始前 フェーズ1：ご挨拶・作品概要・拠点説明 ＆ プレイヤー自己紹介
 ⏱️ 開始タイミング・条件：ゲーム開始前（プレイヤー全員が着席した時点）
+
+┏━━ 🎙️ GMからのゲーム開始前アナウンス（前半：作品概要・拠点説明・プレイヤー自己紹介） ━━┓
+${PRE_GAME_GM_ANNOUNCEMENT_PART1}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+■ ゲーム開始前 フェーズ2：キャラクター紹介・担当選択 ＆ ハンドアウト読み込み
+⏱️ 開始タイミング・条件：プレイヤー全員の自己紹介が完了した時点
 📦 配布資料：キャラクター決定後に各PCの個人ハンドアウト（B5本紙）を配布
 
-┏━━ 🎙️ GMからのゲーム開始前アナウンス ━━┓
-${PRE_GAME_GM_ANNOUNCEMENT_TEXT}
-┗━━━━━━━━━━━━━━━━━━━━━━┛`,
+┏━━ 🎙️ GMからのゲーム開始前アナウンス（後半：キャラクター紹介・担当選択・ハンドアウト読み込み） ━━┓
+${PRE_GAME_GM_ANNOUNCEMENT_PART2}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
   1: `■ DAY 1 フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介
 ⏱️ 開始タイミング・条件：ゲーム開始時（全員がキャラクターハンドアウトを読み終えた時点）
@@ -1488,6 +1512,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("巨大質量") ||
       existing.readAloudScript.includes("警備救難部") ||
       existing.readAloudScript.includes("朝倉") ||
+      (dayNumber === 0 && !existing.readAloudScript.includes("ゲーム開始前 フェーズ1")) ||
       (dayNumber >= 1 && !existing.readAloudScript.includes("【GMからの開始描写】")) ||
       (dayNumber === 1 && (existing.readAloudScript.includes("ゲーム開始前アナウンス") || existing.readAloudScript.includes("これより合同海難救助チームを開設します"))) ||
       (dayNumber === 2 && existing.readAloudScript.includes("3つの調査項目から1つ")) ||
