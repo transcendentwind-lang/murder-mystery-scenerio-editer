@@ -10,7 +10,7 @@ import UniformTypeIdentifiers
 let W: Double = 1920.0
 let H: Double = 1080.0
 let FPS: Int32 = 30
-let DURATION: Double = 25.0
+let DURATION: Double = 60.0
 let TOTAL_FRAMES: Int = Int(DURATION * Double(FPS))
 
 func clamp(_ x: Double, _ a: Double = 0.0, _ b: Double = 1.0) -> Double {
@@ -218,47 +218,47 @@ struct WhaleAgent {
 func generateWhales() -> [WhaleAgent] {
     var whales: [WhaleAgent] = []
 
-    // 1. The Lead White Whale ("白いクジラ" - appears alone first from the south at t = 4.0s!)
+    // 1. The Lead White Whale ("白いクジラ" - appears alone first from the south at t = 8.0s and glides slowly over ~35.5s!)
     whales.append(WhaleAgent(
         isLeader: true,
-        startWX: 1.5,
-        startWY: 54.0,   // ~34.12°N (southern edge of Suruga Trough)
-        midWX: 0.6,
-        midWY: 13.5,     // Pauses/cruises ~13.5km south of Target as the pod rallies behind it
+        startWX: 1.2,
+        startWY: 46.5,   // Clearly visible above the bottom caption bar (~46.5km south of Target)
+        midWX: 0.5,
+        midWY: 16.0,     // Smooth Bezier control point guiding its calm northward approach
         finalOffsetWX: 0.0,
         finalOffsetWY: 0.0, // Dives dead-center onto Target (0, 0)!
-        appearTime: 4.0,
-        gatherEndTime: 9.2,
-        diveStartTime: 13.2,
-        diveEndTime: 16.4
+        appearTime: 8.0,
+        gatherEndTime: 28.0,
+        diveStartTime: 34.5,
+        diveEndTime: 43.5
     ))
 
-    // 2. 115 Following Sperm Whales streaming in from south / SSW / SSE!
+    // 2. 115 Following Sperm Whales streaming in slowly from south / SSW / SSE over 60s timeline!
     var rng = SeededRNG(seed: 20261117)
     let count = 115
     for i in 0..<count {
         let frac = Double(i) / Double(count - 1)
-        // Appear progressively between t = 6.8s and t = 12.8s (first a few, then an overwhelming wave!)
-        let appear = 6.8 + pow(frac, 0.78) * 5.8 + rng.range(-0.18, 0.18)
+        // Appear progressively between t = 18.0s and t = 31.5s
+        let appear = 18.0 + pow(frac, 0.85) * 13.2 + rng.range(-0.30, 0.30)
 
-        // Fan in from south (-36km .. +38km east-west, 48km .. 78km south)
-        let angleSpread = rng.range(-0.58, 0.58) // radians from due south
-        let startDist = rng.range(48.0, 76.0)
+        // Fan in from visible southern ocean above caption bar (-26km .. +26km east-west, 38km .. 49km south)
+        let angleSpread = rng.range(-0.54, 0.54) // radians from due south
+        let startDist = rng.range(41.0, 49.5) - frac * 3.0
         let sWX = sin(angleSpread) * startDist
         let sWY = cos(angleSpread) * startDist
 
-        // Rallying arc 12km .. 28km south/southeast/southwest of target
-        let midAngle = angleSpread * 0.72 + rng.range(-0.18, 0.18)
-        let midDist = rng.range(12.5, 29.0)
+        // Smooth inward control point 15km .. 27km south of target
+        let midAngle = angleSpread * 0.65 + rng.range(-0.14, 0.14)
+        let midDist = rng.range(15.0, 27.0)
         let mWX = sin(midAngle) * midDist
         let mWY = cos(midAngle) * midDist
 
-        let gatherEnd = min(13.3, appear + rng.range(2.8, 4.3))
-        // All dive together in an unstoppable surge between t = 13.5s and t = 19.6s!
-        let diveStart = 13.5 + pow(frac, 0.85) * 2.8 + rng.range(0.0, 0.55)
-        let diveEnd = diveStart + rng.range(2.5, 3.6)
+        // Begin deep dive between t = 35.5s and t = 42.8s, taking ~7.5s to plunge to 950m!
+        let diveStart = 35.5 + pow(frac, 0.88) * 6.8 + rng.range(-0.25, 0.55)
+        let diveEnd = diveStart + rng.range(6.8, 8.0)
+        let gatherEnd = diveStart
 
-        // Final coordinates overlap right onto the Target's coordinates (within r = 0.0 .. 1.9 km)!
+        // Final coordinates overlap right onto the Target's coordinates (within r = 0.0 .. 1.85 km)!
         let fAng = rng.range(0.0, Double.pi * 2.0)
         let fRad = pow(rng.nextDouble(), 0.7) * 1.85
         whales.append(WhaleAgent(
@@ -270,9 +270,9 @@ func generateWhales() -> [WhaleAgent] {
             finalOffsetWX: cos(fAng) * fRad,
             finalOffsetWY: sin(fAng) * fRad,
             appearTime: appear,
-            gatherEndTime: max(appear + 0.8, gatherEnd),
-            diveStartTime: max(gatherEnd, diveStart),
-            diveEndTime: max(gatherEnd + 1.8, diveEnd)
+            gatherEndTime: gatherEnd,
+            diveStartTime: diveStart,
+            diveEndTime: diveEnd
         ))
     }
     return whales
@@ -285,39 +285,44 @@ struct WhaleState {
     let alpha: Double
     let wx: Double
     let wy: Double
-    let depthM: Double     // ~40m cruising -> 950m deep dive!
+    let depthM: Double     // ~45m cruising -> 950m deep dive!
     let diveFrac: Double   // 0 = surface/shallow approach, 1 = deep overlap at 950m
     let isLeader: Bool
 }
 
 func evaluateWhale(_ w: WhaleAgent, at t: Double) -> WhaleState {
     guard t >= w.appearTime else {
-        return WhaleState(visible: false, alpha: 0, wx: w.startWX, wy: w.startWY, depthM: 40, diveFrac: 0, isLeader: w.isLeader)
+        return WhaleState(visible: false, alpha: 0, wx: w.startWX, wy: w.startWY, depthM: 45, diveFrac: 0, isLeader: w.isLeader)
     }
-    let fade = clamp((t - w.appearTime) / 0.55)
+    let fade = clamp((t - w.appearTime) / 1.4)
 
+    // Continuous slow travel parameter from appearTime -> diveEndTime (no sudden acceleration or mid-way lurch!)
+    let uRaw = progress(t, w.appearTime, w.diveEndTime)
+    let uSmooth = uRaw * uRaw * (3.0 - 2.0 * uRaw)
+    let u = 0.76 * uRaw + 0.24 * uSmooth
+
+    let d = easeInOutCubic(progress(t, w.diveStartTime, w.diveEndTime))
+    let postTime = max(0.0, t - w.diveEndTime)
+    // Very slow, calm micro-drift on the target coordinates after arrival
+    let orbitAng = postTime * 0.42 + (w.finalOffsetWX * 3.0)
+    let settleFactor = max(0.38, 1.0 - postTime * 0.03)
+    let targetX = w.finalOffsetWX * settleFactor + cos(orbitAng) * 0.16 * d
+    let targetY = w.finalOffsetWY * settleFactor + sin(orbitAng) * 0.16 * d
+
+    // Single continuous Quadratic Bezier trajectory from southern ocean through gathering arc onto Target (0, 0)
+    let oneMinusU = 1.0 - u
+    let wx = oneMinusU * oneMinusU * w.startWX + 2.0 * oneMinusU * u * w.midWX + u * u * targetX
+    let wy = oneMinusU * oneMinusU * w.startWY + 2.0 * oneMinusU * u * w.midWY + u * u * targetY
+
+    let depth: Double
     if t < w.diveStartTime {
-        // Approaching & gathering from South
-        let g = easeOutCubic(progress(t, w.appearTime, w.diveStartTime))
-        // Slight continuing northward drift even after reaching mid-zone
-        let wx = lerp(w.startWX, w.midWX, g)
-        let wy = lerp(w.startWY, w.midWY, g)
-        return WhaleState(visible: true, alpha: fade, wx: wx, wy: wy, depthM: 45.0 + g * 55.0, diveFrac: 0.0, isLeader: w.isLeader)
+        let g = progress(t, w.appearTime, w.diveStartTime)
+        depth = 45.0 + g * 60.0
     } else {
-        // Diving straight into the Target at (0, 0) & Depth 950m!
-        let d = easeInOutCubic(progress(t, w.diveStartTime, w.diveEndTime))
-        let postTime = max(0.0, t - w.diveEndTime)
-        // Subtle organic circling micro-motion right on the target coordinates after arrival
-        let orbitAng = postTime * 1.4 + (w.finalOffsetWX * 3.0)
-        let settleFactor = max(0.35, 1.0 - postTime * 0.08)
-        let targetX = w.finalOffsetWX * settleFactor + cos(orbitAng) * 0.22 * d
-        let targetY = w.finalOffsetWY * settleFactor + sin(orbitAng) * 0.22 * d
-
-        let wx = lerp(w.midWX, targetX, d)
-        let wy = lerp(w.midWY, targetY, d)
-        let depth = lerp(100.0, 950.0, easeInQuad(progress(t, w.diveStartTime, w.diveEndTime)))
-        return WhaleState(visible: true, alpha: fade, wx: wx, wy: wy, depthM: depth, diveFrac: d, isLeader: w.isLeader)
+        depth = lerp(105.0, 950.0, easeInOutCubic(progress(t, w.diveStartTime, w.diveEndTime)))
     }
+
+    return WhaleState(visible: true, alpha: fade, wx: wx, wy: wy, depthM: depth, diveFrac: d, isLeader: w.isLeader)
 }
 
 // MARK: - Typography & Vector Drawing Helpers
@@ -432,8 +437,8 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     let colorSpace = CGColorSpace(name: CGColorSpace.sRGB)!
 
     // Target shrinkage & elimination curve:
-    // Full ominous strength until t = 16.2s, then shrinks rapidly as 100+ whales overlap & devour it, vanishing by t = 21.0s!
-    let targetShrink = easeInOutCubic(progress(t, 16.2, 21.0))
+    // Full ominous strength until t = 40.0s, then shrinks gradually as 100+ whales overlap & devour it, vanishing by t = 51.5s!
+    let targetShrink = easeInOutCubic(progress(t, 40.0, 51.5))
     let targetStrength = 1.0 - targetShrink // 1.0 -> 0.0
 
     // 1. Deep Abyssal Sonar Ocean Background
@@ -594,7 +599,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     ctx.saveGState()
     if targetStrength > 0.05 {
         // Volcanic tremor warning pulse around Mt. Fuji while target is active
-        let fPulse = (sin(t * 5.0) * 0.5 + 0.5) * targetStrength
+        let fPulse = (sin(t * 2.8) * 0.5 + 0.5) * targetStrength
         let fR = 18.0 + fPulse * 18.0
         ctx.setFillColor(rgba(245, 158, 11, 0.20 * targetStrength))
         ctx.fillEllipse(in: CGRect(x: Double(fujiPt.x) - fR, y: Double(fujiPt.y) - fR, width: fR * 2, height: fR * 2))
@@ -657,7 +662,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     }
 
     let fleetLblPt = VIEW.toScreen(GeoPoint(lat: 34.825, lon: 138.56))
-    let fleetStatusText = (t >= 21.2) ? "海上自衛隊 展開部隊［攻撃中止・待機継続］" : "海上自衛隊 護衛艦・潜水艦部隊［待機中］"
+    let fleetStatusText = (t >= 52.0) ? "海上自衛隊 展開部隊［攻撃中止・待機継続］" : "海上自衛隊 護衛艦・潜水艦部隊［待機中］"
     drawText(
         ctx, fleetStatusText,
         x: Double(fleetLblPt.x), y: Double(fleetLblPt.y),
@@ -670,9 +675,9 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
 
     // 7. THE RED GIANT COLONY TARGET AT SURUGA BAY MOUTH (34.61°N, 138.55°E)
     if targetStrength > 0.005 {
-        // Periodic ominous low-frequency acoustic vibration rings (every 1.6s)
-        for waveOffset in [0.0, 0.8] {
-            let phase = ((t + waveOffset).truncatingRemainder(dividingBy: 1.6)) / 1.6
+        // Periodic ominous low-frequency acoustic vibration rings (every 2.6s)
+        for waveOffset in [0.0, 1.3] {
+            let phase = ((t + waveOffset).truncatingRemainder(dividingBy: 2.6)) / 2.6
             let ringR = (14.0 + phase * 82.0) * (0.4 + 0.6 * targetStrength)
             let alpha = (1.0 - phase) * 0.68 * targetStrength
             ctx.saveGState()
@@ -683,9 +688,9 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         }
 
         // Throbbing blink / pulse of the giant colony mass
-        let blink = 0.68 + 0.32 * sin(t * 5.8)
-        let outerGlowR = (38.0 + 7.0 * sin(t * 3.6)) * targetStrength
-        let coreR = (17.5 + 3.0 * sin(t * 5.8)) * targetStrength
+        let blink = 0.68 + 0.32 * sin(t * 3.2)
+        let outerGlowR = (38.0 + 7.0 * sin(t * 2.0)) * targetStrength
+        let coreR = (17.5 + 3.0 * sin(t * 3.2)) * targetStrength
 
         // Soft crimson bio-signature glow
         ctx.saveGState()
@@ -707,8 +712,8 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
 
         // Organic swarming sub-nodes around the red core (representing a giant colony organism!)
         for k in 0..<8 {
-            let ang = Double(k) * (Double.pi / 4.0) + t * 0.7
-            let dist = (9.0 + 3.5 * sin(t * 3.1 + Double(k))) * targetStrength
+            let ang = Double(k) * (Double.pi / 4.0) + t * 0.38
+            let dist = (9.0 + 3.5 * sin(t * 1.8 + Double(k))) * targetStrength
             let nx = Double(targetPt.x) + cos(ang) * dist
             let ny = Double(targetPt.y) + sin(ang) * dist
             let nr = 5.5 * targetStrength
@@ -762,7 +767,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
             strokeColor: rgba(4, 12, 22, 0.94 * lblAlpha),
             strokeWidth: 4.5
         )
-        let subTarget = (t < 15.5) ? "駿河湾口・周期振動を検知中" : "反応急速縮小中…"
+        let subTarget = (t < 40.0) ? "駿河湾口・周期振動を検知中" : "クジラ群と重複・反応縮小中…"
         drawText(
             ctx, subTarget,
             x: callX, y: callY + 23,
@@ -807,9 +812,9 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         }
 
         if st.isLeader {
-            // Lead White Whale ("先頭の白いクジラ"): larger, pure radiant white-gold/cyan beacon + echolocation ping!
-            let pingPhase = ((t - wAgent.appearTime).truncatingRemainder(dividingBy: 1.5)) / 1.5
-            if t < 16.5 {
+            // Lead White Whale ("先頭の白いクジラ"): larger, pure radiant white-gold/cyan beacon + calm echolocation ping!
+            let pingPhase = ((t - wAgent.appearTime).truncatingRemainder(dividingBy: 2.6)) / 2.6
+            if t < 43.8 {
                 let pR = 8.0 + pingPhase * 34.0
                 ctx.setStrokeColor(rgba(255, 255, 255, (1.0 - pingPhase) * 0.75 * st.alpha))
                 ctx.setLineWidth(1.8)
@@ -838,10 +843,10 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         ctx.restoreGState()
     }
 
-    // Contact flashes right at Target coordinates during intense deep-sea overlap (15.5s -> 20.8s)
-    if t >= 15.5 && t <= 20.8 {
-        let clashIntensity = sin(progress(t, 15.5, 20.8) * Double.pi)
-        let sparkR = (22.0 + 10.0 * sin(t * 14.0)) * clashIntensity
+    // Contact flashes right at Target coordinates during deep-sea overlap (40.0s -> 51.5s)
+    if t >= 40.0 && t <= 51.5 {
+        let clashIntensity = sin(progress(t, 40.0, 51.5) * Double.pi)
+        let sparkR = (22.0 + 10.0 * sin(t * 6.5)) * clashIntensity
         ctx.saveGState()
         ctx.setStrokeColor(rgba(186, 230, 253, 0.65 * clashIntensity))
         ctx.setLineWidth(2.2)
@@ -849,9 +854,9 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         ctx.restoreGState()
     }
 
-    // Post-elimination status label at Suruga Bay Mouth (t >= 20.8s)
-    if t >= 20.8 {
-        let clearAlpha = easeOutCubic(progress(t, 20.8, 21.8))
+    // Post-elimination status label at Suruga Bay Mouth (t >= 51.5s)
+    if t >= 51.5 {
+        let clearAlpha = easeOutCubic(progress(t, 51.5, 53.0))
         let callX = Double(targetPt.x) - 52.0
         let callY = Double(targetPt.y) + 22.0
         ctx.saveGState()
@@ -960,7 +965,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     }
     drawText(ctx, displayWhaleStr, x: panelX + panelW - 36, y: cntY + 68, font: makeHeavyFont(size: 32), color: activeWhaleCount > 0 ? rgba(125, 211, 252, 1.0) : rgba(100, 130, 150, 0.8), align: .right)
 
-    let subCntText = (t >= 13.4) ? "深海潜航・目標座標へ到達中" : (activeWhaleCount > 1 ? "南方海域より続々集結中" : "太平洋側を監視中")
+    let subCntText = (t >= 51.5) ? "目標座標（水深950m）に集結完了" : ((t >= 35.0) ? "深海潜航・目標座標へ到達中" : (activeWhaleCount > 1 ? "南方海域より続々集結中" : "太平洋側を監視中"))
     drawText(ctx, subCntText, x: panelX + 36, y: cntY + 95, font: makeFont(size: 13, bold: true), color: rgba(103, 232, 249, 0.82), align: .left)
 
     // VERTICAL DEPTH CROSS-SECTION GAUGE (0m -> 1,200m)
@@ -1039,7 +1044,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     // Bottom Target Status Indicator inside Left Panel
     let statY = depY + depH + 14.0
     let statH = panelY + panelH - statY - 18.0
-    let isCleared = (t >= 20.8)
+    let isCleared = (t >= 51.5)
     fillRoundedRect(
         ctx,
         rect: CGRect(x: depX, y: statY, width: depW, height: statH),
@@ -1049,7 +1054,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         lineWidth: 1.6
     )
     let statTitle = isCleared ? "● 目標生体反応：消失・振動停止" : "▲ 目標生体反応：駿河湾口で明滅中"
-    let statSub = isCleared ? "クジラ群の潜航接触後、巨大反応の消滅を確認" : (t >= 13.4 ? "クジラ群が一斉潜航し目標座標と重複中" : "水深950mで周期的な地殻刺激振動を発信")
+    let statSub = isCleared ? "クジラ群の潜航接触後、巨大反応の消滅を確認" : (t >= 35.0 ? "クジラ群が一斉潜航し目標座標と重複中" : "水深950mで周期的な地殻刺激振動を発信")
     drawText(ctx, statTitle, x: depX + 18, y: statY + 26, font: makeHeavyFont(size: 16.5), color: isCleared ? rgba(110, 231, 183, 1.0) : rgba(254, 202, 202, 1.0), align: .left)
     drawText(ctx, statSub, x: depX + 18, y: statY + 52, font: makeFont(size: 13.5, bold: true), color: isCleared ? rgba(209, 250, 229, 0.92) : rgba(253, 164, 175, 0.92), align: .left)
 
@@ -1084,7 +1089,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
             let u = Double(i) / Double(samples)
             let xx = waveBoxX + 12.0 + u * (waveBoxW - 24.0)
             let envelope = sin(u * Double.pi)
-            let rawOsc = sin(u * 28.0 - t * 14.0) * 0.65 + sin(u * 53.0 + t * 21.0) * 0.35
+            let rawOsc = sin(u * 28.0 - t * 8.0) * 0.65 + sin(u * 53.0 + t * 12.0) * 0.35
             let yy = midWaveY + rawOsc * maxAmp * envelope * targetStrength
             if i == 0 { wavePath.move(to: CGPoint(x: xx, y: yy)) }
             else { wavePath.addLine(to: CGPoint(x: xx, y: yy)) }
@@ -1112,24 +1117,24 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     drawText(ctx, "SURUGA BAY / DEPTH SONAR", x: W - topBadgeW - 14, y: 50, font: makeMonoFont(size: 12, bold: true), color: rgba(103, 232, 249, 0.85), align: .left)
     drawText(ctx, "駿河湾口 統合ソナー監視映像", x: W - topBadgeW - 14, y: 73, font: makeFont(size: 15, bold: true), color: rgba(240, 249, 255, 0.95), align: .left)
 
-    // Narrative Caption Pill at Bottom-Center of Map Area
+    // Narrative Caption Pill at Bottom-Center of Map Area (60-second slow dramatic pacing)
     var caption = ""
     var capAlpha = 0.0
-    if t >= 0.5 && t < 4.2 {
+    if t >= 0.8 && t < 7.6 {
         caption = "駿河湾内に自衛隊艦艇が待機する中、駿河湾口の深海で巨大群体が明滅している"
-        capAlpha = min(progress(t, 0.5, 1.1), 1.0 - progress(t, 3.7, 4.2))
-    } else if t >= 4.2 && t < 8.0 {
+        capAlpha = min(progress(t, 0.8, 1.6), 1.0 - progress(t, 6.8, 7.6))
+    } else if t >= 8.0 && t < 17.6 {
         caption = "南の外洋から、まず先頭となる1頭のクジラの反応が出現——"
-        capAlpha = min(progress(t, 4.2, 4.7), 1.0 - progress(t, 7.5, 8.0))
-    } else if t >= 8.0 && t < 13.5 {
+        capAlpha = min(progress(t, 8.0, 8.8), 1.0 - progress(t, 16.8, 17.6))
+    } else if t >= 18.0 && t < 34.6 {
         caption = "先頭の1頭に導かれるように、南から続々とクジラの群れが集結してくる"
-        capAlpha = min(progress(t, 8.0, 8.5), 1.0 - progress(t, 13.0, 13.5))
-    } else if t >= 13.5 && t < 20.6 {
+        capAlpha = min(progress(t, 18.0, 18.8), 1.0 - progress(t, 33.8, 34.6))
+    } else if t >= 35.0 && t < 51.0 {
         caption = "集まったクジラが一斉に深海へ潜水し、次々とターゲットと同じ座標へ重なっていく！"
-        capAlpha = min(progress(t, 13.5, 14.0), 1.0 - progress(t, 20.1, 20.6))
-    } else if t >= 20.6 {
+        capAlpha = min(progress(t, 35.0, 35.8), 1.0 - progress(t, 50.2, 51.0))
+    } else if t >= 51.5 {
         caption = "深海でクジラ群と重なり合った巨大群体の反応は縮小・消失し、振動が完全に停止した"
-        capAlpha = progress(t, 20.6, 21.3)
+        capAlpha = progress(t, 51.5, 52.5)
     }
 
     if capAlpha > 0.01 {
@@ -1149,10 +1154,10 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         drawText(ctx, caption, x: cx, y: H - 57.0, font: capFont, color: rgba(240, 249, 255, capAlpha), align: .center)
     }
 
-    // Initial smooth fade-in (0.0 -> 0.5s)
-    if t < 0.5 {
+    // Initial smooth fade-in (0.0 -> 0.8s)
+    if t < 0.8 {
         ctx.saveGState()
-        ctx.setFillColor(rgba(3, 10, 19, 1.0 - t / 0.5))
+        ctx.setFillColor(rgba(3, 10, 19, 1.0 - t / 0.8))
         ctx.fill(CGRect(x: 0, y: 0, width: W, height: H))
         ctx.restoreGState()
     }
@@ -1208,7 +1213,7 @@ func encodeMP4(to outputURL: URL) throws {
         AVVideoWidthKey: Int(W),
         AVVideoHeightKey: Int(H),
         AVVideoCompressionPropertiesKey: [
-            AVVideoAverageBitRateKey: 2_200_000,
+            AVVideoAverageBitRateKey: 1_150_000,
             AVVideoProfileLevelKey: AVVideoProfileLevelH264HighAutoLevel,
             AVVideoMaxKeyFrameIntervalKey: 60
         ]
@@ -1290,7 +1295,7 @@ if let idx = args.firstIndex(of: "--preview-frames"), idx + 1 < args.count {
     let (ctx, rawData, _) = createBitmapContext()
     defer { rawData.deallocate() }
 
-    let sampleTimes: [Double] = [2.0, 5.5, 9.8, 12.8, 15.8, 18.8, 22.5]
+    let sampleTimes: [Double] = [4.0, 13.0, 24.0, 33.0, 41.0, 47.0, 55.0]
     for (i, t) in sampleTimes.enumerated() {
         ctx.saveGState()
         renderFrame(ctx, time: t)
