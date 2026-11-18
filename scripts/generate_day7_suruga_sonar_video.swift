@@ -573,33 +573,6 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
     ctx.strokePath()
     ctx.restoreGState()
 
-    // Rotating Passive/Active Sonar Sweep Sector (1 rotation every 4.2s)
-    let sweepAngle = (t / 4.2) * Double.pi * 2.0 - Double.pi * 0.5
-    let sweepRadius = 60.0 * VIEW.pxPerKm
-    ctx.saveGState()
-    let trailSteps = 18
-    let sectorSpan = 0.48 // radians (~27 degrees glowing wedge)
-    for s in 0..<trailSteps {
-        let f0 = Double(s) / Double(trailSteps)
-        let f1 = Double(s + 1) / Double(trailSteps)
-        let a0 = sweepAngle - sectorSpan * (1.0 - f0)
-        let a1 = sweepAngle - sectorSpan * (1.0 - f1)
-        let wedge = CGMutablePath()
-        wedge.move(to: targetPt)
-        wedge.addArc(center: targetPt, radius: CGFloat(sweepRadius), startAngle: CGFloat(a0), endAngle: CGFloat(a1), clockwise: false)
-        wedge.closeSubpath()
-        ctx.setFillColor(rgba(34, 211, 238, 0.008 * f1 * f1 * 14.0))
-        ctx.addPath(wedge)
-        ctx.fillPath()
-    }
-    // Leading crisp sweep line
-    ctx.setStrokeColor(rgba(103, 232, 249, 0.55))
-    ctx.setLineWidth(1.8)
-    ctx.move(to: targetPt)
-    ctx.addLine(to: CGPoint(x: Double(targetPt.x) + cos(sweepAngle) * sweepRadius, y: Double(targetPt.y) + sin(sweepAngle) * sweepRadius))
-    ctx.strokePath()
-    ctx.restoreGState()
-
     // 5. Geographic Landmarks (駿河湾, 伊豆半島, 御前崎, 石廊崎, 富士山 + Seismic Status)
     let surugaBayCenter = VIEW.toScreen(GeoPoint(lat: 34.88, lon: 138.58))
     drawText(ctx, "駿 河 湾", x: Double(surugaBayCenter.x), y: Double(surugaBayCenter.y), font: makeHeavyFont(size: 24), color: rgba(125, 205, 238, 0.45), align: .center, tracking: 8.0)
@@ -823,20 +796,7 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
         let wAgent = WHALES[idx]
         let pt = VIEW.toScreenXY(st.wx, st.wy)
 
-        // Subtle wake trail behind moving whale (drawn from 0.45s earlier position)
-        let prevSt = evaluateWhale(wAgent, at: max(wAgent.appearTime, t - 0.55))
-        let prevPt = VIEW.toScreenXY(prevSt.wx, prevSt.wy)
-        let moveDist = hypot(Double(pt.x - prevPt.x), Double(pt.y - prevPt.y))
-
         ctx.saveGState()
-        if moveDist > 1.5 {
-            ctx.setStrokeColor(st.isLeader ? rgba(255, 255, 255, 0.65 * st.alpha) : rgba(56, 189, 248, 0.42 * st.alpha))
-            ctx.setLineWidth(st.isLeader ? 2.8 : 1.7)
-            ctx.setLineCap(.round)
-            ctx.move(to: prevPt)
-            ctx.addLine(to: pt)
-            ctx.strokePath()
-        }
 
         // Contracting "Dive Ring" as the whale plunges from shallow water into the 950m abyss!
         if st.diveFrac > 0.02 && st.diveFrac < 0.96 {
@@ -863,20 +823,6 @@ func renderFrame(_ ctx: CGContext, time t: Double) {
             let dotR = 5.6
             ctx.setFillColor(rgba(255, 255, 255, st.alpha))
             ctx.fillEllipse(in: CGRect(x: Double(pt.x) - dotR, y: Double(pt.y) - dotR, width: dotR * 2, height: dotR * 2))
-
-            // Label the first whale while it leads the pod northward (4.3s -> 13.5s)
-            if t >= 4.2 && t < 13.6 {
-                let lFade = min(progress(t, 4.2, 4.8), 1.0 - progress(t, 12.9, 13.6))
-                drawText(
-                    ctx, "先頭のクジラ反応",
-                    x: Double(pt.x) + 16, y: Double(pt.y) - 2,
-                    font: makeHeavyFont(size: 16),
-                    color: rgba(255, 255, 255, lFade),
-                    align: .left,
-                    strokeColor: rgba(4, 12, 22, 0.90 * lFade),
-                    strokeWidth: 4.0
-                )
-            }
         } else {
             // Following pod whale blip: shifts from bright cyan (surface/mid-water) to crisp ice-white-cyan at 950m overlap!
             let glowR = lerp(6.8, 5.5, st.diveFrac)
