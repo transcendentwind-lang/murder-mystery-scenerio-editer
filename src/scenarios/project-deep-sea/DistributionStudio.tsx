@@ -198,6 +198,156 @@ const NAMETAG_ITEMS: NametagItem[] = [
 ];
 
 /**
+ * 全体掲示用・Day別目的シート（A4横置き・超特大文字・全10枚）
+ * 会場のホワイトボードや中央テーブルなど全員から見える位置に掲示し、
+ * そのフェーズで「誰が」「何を決定・回答すべきか」を一目で共有するためのシート
+ */
+interface GmGoalBoardItem {
+  id: string;
+  sheetNumber: number;
+  phaseBadge: string;
+  sidebarTitle: string;
+  timingNote: string;
+  line1: string;
+  line2?: string;
+}
+
+const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
+  {
+    id: "goal-day1",
+    sheetNumber: 1,
+    phaseBadge: "DAY 1",
+    sidebarTitle: "Day 1：遭難船の位置を特定（坂凪）",
+    timingNote: "Day 1 開始時（自己紹介後・漂流海図展開時）に掲示",
+    line1: "遭難船の位置を特定（坂凪）",
+  },
+  {
+    id: "goal-day2",
+    sheetNumber: 2,
+    phaseBadge: "DAY 2",
+    sidebarTitle: "Day 2：［A］により［B］が起きている可能性（朝潮）",
+    timingNote: "Day 2 開始時（西之島沖噴火・優先調査開始時）に掲示",
+    line1: "［A］により［B］が起きている可能性（朝潮）",
+  },
+  {
+    id: "goal-day3",
+    sheetNumber: 3,
+    phaseBadge: "DAY 3",
+    sidebarTitle: "Day 3：巨大生物の位置を特定（坂凪）",
+    timingNote: "Day 3 開始時（鳥島沖ソノブイ3基投下作戦時）に掲示",
+    line1: "巨大生物の位置を特定（坂凪）",
+  },
+  {
+    id: "goal-day3-1",
+    sheetNumber: 4,
+    phaseBadge: "DAY 3 - 1",
+    sidebarTitle: "Day 3-1：生物の正体は？（浪寄）／ 防衛／海上警備（貝浜）",
+    timingNote: "Day 3 途中①（ソノブイ捕捉・深海写真撮影直後）に掲示",
+    line1: "生物の正体は？（浪寄）",
+    line2: "防衛／海上警備（貝浜）",
+  },
+  {
+    id: "goal-day3-2",
+    sheetNumber: 5,
+    phaseBadge: "DAY 3 - 2",
+    sidebarTitle: "Day 3-2：ワタツミ／クスルフ ／ 防衛／海上警備（朝潮）",
+    timingNote: "Day 3 途中②（呼称決定＆指揮官の最終決断時）に掲示",
+    line1: "ワタツミ／クスルフ",
+    line2: "防衛／海上警備（朝潮）",
+  },
+  {
+    id: "goal-day4",
+    sheetNumber: 6,
+    phaseBadge: "DAY 4",
+    sidebarTitle: "Day 4：どこへ向かうか ／ どんな危機か（朝潮）",
+    timingNote: "Day 4 開始時（明神礁噴火・即応総力体制移行時）に掲示",
+    line1: "どこへ向かうか",
+    line2: "どんな危機か（朝潮）",
+  },
+  {
+    id: "goal-day5",
+    sheetNumber: 7,
+    phaseBadge: "DAY 5",
+    sidebarTitle: "Day 5：調査",
+    timingNote: "Day 5 開始時（御蔵島沖噴火・独自調査フェーズ）に掲示",
+    line1: "調査",
+  },
+  {
+    id: "goal-day5-1",
+    sheetNumber: 8,
+    phaseBadge: "DAY 5 - 1",
+    sidebarTitle: "Day 5-1：どうして復活する？（浪寄）／ なぜ北上するのか？（朝潮）",
+    timingNote: "Day 5 途中①（魚雷命中後の防衛省緊急照会時）に掲示",
+    line1: "どうして復活する？（浪寄）",
+    line2: "なぜ北上するのか？（朝潮）",
+  },
+  {
+    id: "goal-day6",
+    sheetNumber: 9,
+    phaseBadge: "DAY 6",
+    sidebarTitle: "Day 6：分析 ／ ［A］を分析し、［B］に届く新しい言葉を作ろう",
+    timingNote: "Day 6 開始時（音響データ全開示・アプリ解析時）に掲示",
+    line1: "分析",
+    line2: "［A］を分析し、［B］に届く新しい言葉を作ろう",
+  },
+  {
+    id: "goal-day7",
+    sheetNumber: 10,
+    phaseBadge: "DAY 7",
+    sidebarTitle: "Day 7：自衛隊／自分たち",
+    timingNote: "Day 7 フェーズ3（防衛省幹部からの直通電話・秘匿カード配布時）に掲示",
+    line1: "自衛隊／自分たち",
+  },
+];
+
+/**
+ * 目的シートの1行テキストを装飾描画するヘルパー
+ * ・［A］［B］を穴埋めボックスとして強調
+ * ・（坂凪）（朝潮）（浪寄）（貝浜）を担当者として視認性高く強調
+ */
+const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
+  const parts = line.split(/(［[A-ZＡ-Ｚ]］|（[^）]+）)/g);
+  return parts.map((part, idx) => {
+    if (/^［[A-ZＡ-Ｚ]］$/.test(part)) {
+      const letter = part.slice(1, -1);
+      return (
+        <span
+          key={idx}
+          className="inline-flex items-center justify-center rounded-xl border-[4px] border-slate-900 bg-amber-100 px-3.5 py-0.5 mx-1.5 text-slate-950 font-black shadow-sm"
+        >
+          ［{letter}］
+        </span>
+      );
+    }
+    if (part.startsWith("（") && part.endsWith("）")) {
+      return (
+        <span
+          key={idx}
+          className="inline-block ml-2 text-indigo-900 font-black"
+        >
+          {part}
+        </span>
+      );
+    }
+    return <React.Fragment key={idx}>{part}</React.Fragment>;
+  });
+};
+
+const getGoalBoardLineFontSizeClass = (line: string, hasTwoLines: boolean): string => {
+  const len = line.length;
+  if (len <= 3) {
+    return hasTwoLines ? "text-5xl sm:text-6xl" : "text-7xl sm:text-8xl";
+  }
+  if (len <= 10) {
+    return hasTwoLines ? "text-4xl sm:text-5xl" : "text-6xl sm:text-7xl";
+  }
+  if (len <= 15) {
+    return hasTwoLines ? "text-3xl sm:text-[44px]" : "text-4xl sm:text-[52px]";
+  }
+  return "text-2xl sm:text-[34px]";
+};
+
+/**
  * 日本語の段落文章整形ヘルパー
  * カギカッコ（「や『）以外で始まる段落の先頭に全角スペース（　）を付与して字下げする
  */
@@ -1949,6 +2099,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [visualMarginOverrides, setVisualMarginOverrides] = useState<Record<string, boolean>>({});
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
+  const [gmPrepTool, setGmPrepTool] = useState<"nametags" | "goal_boards">("goal_boards");
+  const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
   const isDirectEditMode = false;
@@ -1992,6 +2144,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     if (kind === "briefing") setSelectedBriefingId(id);
     else setSelectedPhaseCardId(id);
     scrollHandoutDocument(id, kind);
+  };
+
+  const selectGoalBoardDocument = (id: string) => {
+    setSelectedGoalBoardId(id);
+    const canvas = previewCanvasRef.current;
+    const target = printableSheetRef.current?.querySelector<HTMLElement>(
+      `[data-goal-board-id="${CSS.escape(id)}"]`
+    );
+    if (canvas && target) {
+      canvas.scrollTo({
+        top: canvas.scrollTop + target.getBoundingClientRect().top - canvas.getBoundingClientRect().top - 16,
+      });
+    }
   };
 
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -2300,6 +2465,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
   // デザインされたシートをそのままA4/PDF印刷する関数
   const handlePrintDesignedSheet = () => {
+    if (category === "gm_prep" && gmPrepTool === "goal_boards") {
+      handlePrintGmGoalBoards();
+      return;
+    }
     // 全体提示の地図・写真カテゴリの場合は、A4用紙（余白0mm・画像のみ最大化・90度回転配置）で印刷
     if (category === "visuals" && activeVisual?.imageUrl) {
       const imgUrl = activeVisual.imageUrl;
@@ -2686,6 +2855,172 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   // 全キャラクターの個人ハンドアウト（B5規格）を一括印刷
   const handlePrintAllCharactersB5 = () => {
     printCharacterHandoutsB5(project.characters, project.title);
+  };
+
+  // 全体掲示用・Day別目的シート（A4横置き・全10枚または指定1枚）を印刷 / PDF保存
+  const handlePrintGmGoalBoards = (targetBoardId?: string) => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const formatLineHtml = (line: string) => {
+      const parts = line.split(/(［[A-ZＡ-Ｚ]］|（[^）]+）)/g);
+      return parts
+        .map((part) => {
+          if (/^［[A-ZＡ-Ｚ]］$/.test(part)) {
+            const letter = escapeHtml(part.slice(1, -1));
+            return `<span class="inline-flex items-center justify-center rounded-xl border-[5px] border-slate-900 bg-amber-100 px-4 py-1 mx-2 text-slate-950 font-black">［${letter}］</span>`;
+          }
+          if (part.startsWith("（") && part.endsWith("）")) {
+            return `<span class="inline-block ml-3 text-indigo-900 font-black">${escapeHtml(part)}</span>`;
+          }
+          return escapeHtml(part);
+        })
+        .join("");
+    };
+
+    const getPrintFontSize = (line: string, hasTwoLines: boolean): string => {
+      const len = line.length;
+      if (len <= 3) {
+        return hasTwoLines ? "66px" : "104px";
+      }
+      if (len <= 10) {
+        return hasTwoLines ? "58px" : "80px";
+      }
+      if (len <= 15) {
+        return hasTwoLines ? "52px" : "62px";
+      }
+      return "41px";
+    };
+
+    const targetBoards = targetBoardId
+      ? GM_GOAL_BOARDS.filter((b) => b.id === targetBoardId)
+      : GM_GOAL_BOARDS;
+
+    const pagesHtml = targetBoards
+      .map((board) => {
+        const hasTwo = Boolean(board.line2);
+        const f1 = getPrintFontSize(board.line1, hasTwo);
+        const f2 = board.line2 ? getPrintFontSize(board.line2, hasTwo) : "48px";
+
+        return `
+        <div class="goal-a4-landscape-page">
+          <div class="goal-inner-frame">
+            <div class="flex items-center justify-between border-b-4 border-slate-900 pb-4">
+              <div class="flex items-center gap-4">
+                <span class="rounded-lg bg-slate-900 px-6 py-2 text-3xl font-black tracking-widest text-white">
+                  ${escapeHtml(board.phaseBadge)}
+                </span>
+                <span class="text-lg font-extrabold tracking-widest text-slate-600">
+                  全体目的・達成ミッション
+                </span>
+              </div>
+              <span class="font-mono text-sm font-bold text-slate-400">
+                ${escapeHtml(project.title)} / SHEET ${String(board.sheetNumber).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center text-center px-4">
+              <div class="w-full font-black tracking-tight text-slate-950 leading-tight whitespace-nowrap" style="font-size: ${f1};">
+                ${formatLineHtml(board.line1)}
+              </div>
+              ${
+                board.line2
+                  ? `
+                <div class="my-7 w-4/5 border-t-4 border-dashed border-slate-300"></div>
+                <div class="w-full font-black tracking-tight text-slate-950 leading-tight whitespace-nowrap" style="font-size: ${f2};">
+                  ${formatLineHtml(board.line2)}
+                </div>
+              `
+                  : ""
+              }
+            </div>
+          </div>
+        </div>`;
+      })
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - 全体掲示用・Day別目的シート（A4横置き）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .goal-a4-landscape-page {
+      width: 297mm;
+      height: 210mm;
+      padding: 12mm 14mm;
+      margin: 0 auto;
+      background: #ffffff;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      display: flex;
+    }
+    .goal-a4-landscape-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .goal-inner-frame {
+      width: 100%;
+      height: 100%;
+      border: 5px solid #0f172a;
+      border-radius: 12px;
+      padding: 10mm 12mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
   };
 
   // Day別（単一DayまたはDay 1〜Day 7一括）のGM進行資料をA4印刷 / PDF保存（複数ページまたぎ時に文字切れ・枠切れを起こさないページネーション対応）
@@ -3217,7 +3552,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <IdCard className="h-4 w-4" />
             ⑤ GM事前準備
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              ネームタグ
+              目的シート・ネームタグ
             </span>
           </button>
         </div>
@@ -3776,32 +4111,115 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </span>
               </div>
 
-              <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
-                <div className="font-bold text-slate-200">🏷️ ネームタグ（首下げ名札中紙）</div>
-                <div className="text-[11px] text-slate-400 leading-relaxed">
-                  市販の首下げ名札ケース（名刺サイズ〜A7）に入る中紙です。文字が中央に大きく配置されており、ホルダーの枠で端が隠れても名前とルビが欠けません。
-                </div>
+              {/* ツール切替（全体目的シート / 首下げネームタグ） */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("goal_boards")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "goal_boards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🎯 全体目的シート (10枚)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("nametags")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "nametags"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🏷️ ネームタグ (8枠)
+                </button>
               </div>
 
-              <div className="space-y-2">
-                <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40">
-                  <div className="flex items-center justify-between">
-                    <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
-                      A4・8面配置
-                    </span>
-                    <span className="text-[10px] font-mono text-slate-400">
-                      全7名 ＋ GM用
-                    </span>
+              {gmPrepTool === "goal_boards" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🎯 全体掲示用・Day別目的シート</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      その日の大きな目的と回答担当者を特大文字で記したA4横置きシート（全10枚）です。会場の全体から見える位置に掲示することで、議論のゴールが明確になります。
+                    </div>
                   </div>
-                  <div className="mt-1.5 font-bold text-xs text-white flex items-center gap-1.5">
-                    <IdCard className="h-3.5 w-3.5 text-indigo-400" />
-                    首下げネームタグ一括シート
+
+                  <div className="space-y-2">
+                    {GM_GOAL_BOARDS.map((board) => {
+                      const isSelected = selectedGoalBoardId === board.id;
+                      return (
+                        <button
+                          key={board.id}
+                          type="button"
+                          onClick={() => selectGoalBoardDocument(board.id)}
+                          className={`w-full rounded-xl border p-3 text-left transition ${
+                            isSelected
+                              ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                              : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-900"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                isSelected
+                                  ? "bg-indigo-500/20 border border-indigo-500/40 text-indigo-300"
+                                  : "bg-slate-900 border border-slate-800 text-slate-400"
+                              }`}
+                            >
+                              {board.phaseBadge}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">
+                              A4横・#{String(board.sheetNumber).padStart(2, "0")}
+                            </span>
+                          </div>
+                          <div className="mt-1.5 font-bold text-xs text-white leading-snug">
+                            {board.line1}
+                          </div>
+                          {board.line2 && (
+                            <div className="mt-0.5 font-bold text-xs text-indigo-200 leading-snug">
+                              {board.line2}
+                            </div>
+                          )}
+                          <div className="mt-1 text-[10px] text-slate-400">
+                            {board.timingNote}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                  <div className="mt-1 text-[11px] text-slate-400">
-                    切り取り線（破線）付き・中央セーフエリア配置
+                </>
+              ) : (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🏷️ ネームタグ（首下げ名札中紙）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      市販の首下げ名札ケース（名刺サイズ〜A7）に入る中紙です。文字が中央に大きく配置されており、ホルダーの枠で端が隠れても名前とルビが欠けません。
+                    </div>
                   </div>
-                </div>
-              </div>
+
+                  <div className="space-y-2">
+                    <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40">
+                      <div className="flex items-center justify-between">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                          A4・8面配置
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          全7名 ＋ GM用
+                        </span>
+                      </div>
+                      <div className="mt-1.5 font-bold text-xs text-white flex items-center gap-1.5">
+                        <IdCard className="h-3.5 w-3.5 text-indigo-400" />
+                        首下げネームタグ一括シート
+                      </div>
+                      <div className="mt-1 text-[11px] text-slate-400">
+                        切り取り線（破線）付き・中央セーフエリア配置
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -6205,98 +6623,238 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             )}
 
             {/* ================================================================
-                ⑤ GM事前準備（首下げネームタグ中紙シート A4・8面配置）
+                ⑤ GM事前準備（全体掲示用・Day別目的シート A4横置き全10枚 ＆ 首下げネームタグ中紙シート A4・8面配置）
                ================================================================ */}
             {category === "gm_prep" && (
-              <div className="space-y-6">
-                {/* 画面上部見出し ＆ 右上印刷ボタン行（他タブと完全統一） */}
-                <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
-                  <div>
-                    <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                      {project.title} ― GM事前準備（首下げネームタグ中紙シート）
-                    </span>
-                    <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                      首下げネームタグ中紙（全7名 ＋ GM用 / A4・8面一括印刷）
-                    </h2>
-                  </div>
-                  <div className="flex flex-wrap items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={handlePrintDesignedSheet}
-                      className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
-                    >
-                      <Printer className="h-3.5 w-3.5" />
-                      ネームタグをA4印刷 / PDF保存
-                    </button>
-                  </div>
-                </div>
-
-                {/* ✂️ 印刷・切り分けガイド（画面表示のみ） */}
-                <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
-                  <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
-                    <Scissors className="h-4 w-4" />
-                    首下げ名札ホルダー用 中紙の印刷・使用方法
-                  </div>
-                  <div>
-                    ・<strong>A4用紙1枚</strong>に7名分（PC1〜PC7）とGM用の計8枠が配置されています。「ネームタグをA4印刷 / PDF保存」からそのまま等倍（100%）で印刷してください。
-                  </div>
-                  <div>
-                    ・印刷後、各カードの**外側の破線（切り取り線）**に沿ってハサミやカッターで切り分け、市販の首下げ名札ケース（名刺サイズ〜イベント用ケース）に入れてご使用ください。
-                  </div>
-                  <div>
-                    ・<strong>中央セーフエリア配置：</strong>名札ホルダーの縁や圧着部で四辺が数ミリ隠れても、名前・ルビ・所属が隠れないようゆったり中央寄りに配置しています。
-                  </div>
-                </div>
-
-                {/* ネームタグ A4印刷シート本体（2列 × 4行 = 8枚） */}
-                <div className="nametag-print-sheet mx-auto bg-white p-3 sm:p-5 print:p-0 rounded border border-slate-200 print:border-0 shadow-sm print:shadow-none">
-                  {/* シート最上部の微小ガイド（印刷時のみ・用紙上端） */}
-                  <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pb-1 border-b border-slate-200 mb-2">
-                    <span>【合同海難対策本部 公式ネームタグ中紙】 A4判・8面 （PC1〜PC7 ＋ GM進行役）</span>
-                    <span>✂ 破線に沿って切り離して市販の首下げ名札ケースへ入れてください</span>
-                  </div>
-
-                  <div className="nametag-grid-print grid grid-cols-1 md:grid-cols-2 gap-3.5 print:grid-cols-2 print:gap-[4mm]">
-                    {NAMETAG_ITEMS.map((item) => (
-                      <div
-                        key={item.id}
-                        className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-center items-center min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none text-center"
+              gmPrepTool === "goal_boards" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（全体掲示用・Day別目的シート / A4横置き・全10枚）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        全体掲示用・Day別目的シート（A4横置き・超特大文字・全10枚）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handlePrintGmGoalBoards(selectedGoalBoardId)}
+                        className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800 shadow-sm hover:bg-slate-100 transition"
                       >
-                        {/* 切り取り線の角マーカーガイド */}
-                        <div className="absolute -top-1.5 -left-1.5 text-[8px] text-slate-400 font-mono no-print">✂</div>
-
-                        {/* ① 所属・役職（肩書き：テーブル越しにも一目でわかるよう大きく太字で配置） */}
-                        <div className="w-full px-2">
-                          <p className="text-[16px] sm:text-[17px] font-black text-slate-900 tracking-wide leading-snug break-words">
-                            {item.profession}
-                          </p>
-                        </div>
-
-                        {/* 区切りライン（視覚的な安定感の演出） */}
-                        <div className="my-2.5 sm:my-3 w-12 border-b-2 border-slate-300 mx-auto" />
-
-                        {/* ② メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
-                        <div className="w-full space-y-1">
-                          {/* ふりがな（ルビ） */}
-                          <div className="text-[13px] sm:text-[14px] font-bold tracking-[0.25em] text-slate-600 pl-[0.25em]">
-                            {item.ruby}
-                          </div>
-                          {/* 氏名 */}
-                          <div className="text-3xl sm:text-[34px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight">
-                            {item.name}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+                        <Printer className="h-3.5 w-3.5 text-indigo-600" />
+                        選択中の1枚のみ印刷
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handlePrintGmGoalBoards()}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        全10枚をA4横置きで一括印刷 / PDF保存
+                      </button>
+                    </div>
                   </div>
 
-                  {/* シート最下部の微小ガイド（印刷時のみ・用紙下端） */}
-                  <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pt-1.5 border-t border-slate-200 mt-2">
-                    <span>※四辺に十分な余白（セーフゾーン）を設けているため、ホルダーの枠で端が隠れても文字は隠れません</span>
-                    <span>1/1 頁（全8枠）</span>
+                  {/* 案内ボックス */}
+                  <div className="no-print rounded-lg border border-indigo-200 bg-indigo-50/80 p-4 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-indigo-900">
+                      🎯 全体掲示用・Day別目的シートの活用方法（A4横置き）
+                    </div>
+                    <div>
+                      ・各Dayや途中フェーズの開始時に、<strong>会場のホワイトボードや中央テーブルなど全員から見える位置</strong>に掲示してください。
+                    </div>
+                    <div>
+                      ・制限時間タイマーと合わせて掲示することで、「今この時間内に誰が何を答えればいいのか」が全員に一目で共有され、朝潮（PC1）の手元で指令書が止まる問題が解消されます。
+                    </div>
+                  </div>
+
+                  {/* 全10枚プレビュー一覧（A4横置き比率カード） */}
+                  <div className="space-y-8">
+                    {GM_GOAL_BOARDS.map((board) => {
+                      const isSelected = selectedGoalBoardId === board.id;
+                      const hasTwoLines = Boolean(board.line2);
+                      const fontSize1 = getGoalBoardLineFontSizeClass(board.line1, hasTwoLines);
+                      const fontSize2 = board.line2
+                        ? getGoalBoardLineFontSizeClass(board.line2, hasTwoLines)
+                        : "";
+
+                      return (
+                        <div
+                          key={board.id}
+                          data-goal-board-id={board.id}
+                          onClick={() => setSelectedGoalBoardId(board.id)}
+                          className="space-y-2 cursor-pointer"
+                        >
+                          <div className="no-print flex flex-wrap items-center justify-between gap-2 rounded bg-slate-800 px-3.5 py-2 text-xs font-bold text-white">
+                            <div className="flex items-center gap-2">
+                              <span className="rounded bg-indigo-500 px-2 py-0.5 text-[11px] font-black text-white">
+                                シート #{String(board.sheetNumber).padStart(2, "0")}
+                              </span>
+                              <span>{board.sidebarTitle}</span>
+                            </div>
+                            <div className="flex items-center gap-3">
+                              <span className="text-[11px] font-normal text-slate-300">
+                                ⏱️ {board.timingNote}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePrintGmGoalBoards(board.id);
+                                }}
+                                className="rounded bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-emerald-500 transition"
+                              >
+                                この1枚をA4横印刷
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* A4横置き（297:210）プレビュー枠 */}
+                          <div
+                            className={`aspect-[297/210] w-full rounded-lg border-4 border-slate-900 bg-white p-6 sm:p-8 flex flex-col justify-between shadow-md transition ${
+                              isSelected ? "ring-4 ring-indigo-500/70" : ""
+                            }`}
+                          >
+                            {/* 上部ヘッダー帯 */}
+                            <div className="flex items-center justify-between border-b-4 border-slate-900 pb-3">
+                              <div className="flex items-center gap-3">
+                                <span className="rounded-lg bg-slate-900 px-5 py-1.5 text-xl sm:text-2xl font-black tracking-widest text-white">
+                                  {board.phaseBadge}
+                                </span>
+                                <span className="text-sm sm:text-base font-extrabold tracking-widest text-slate-600">
+                                  全体目的・達成ミッション
+                                </span>
+                              </div>
+                              <span className="font-mono text-xs font-bold text-slate-400">
+                                {project.title} / SHEET {String(board.sheetNumber).padStart(2, "0")}
+                              </span>
+                            </div>
+
+                            {/* 中央・超特大目的テキスト領域 */}
+                            <div className="my-auto py-6 flex flex-col items-center justify-center text-center px-2">
+                              <div
+                                className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize1}`}
+                              >
+                                {renderGoalBoardFormattedLine(board.line1)}
+                              </div>
+
+                              {board.line2 && (
+                                <>
+                                  <div className="my-5 sm:my-7 w-4/5 border-t-4 border-dashed border-slate-300" />
+                                  <div
+                                    className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize2}`}
+                                  >
+                                    {renderGoalBoardFormattedLine(board.line2)}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+
+                            {/* 下部フッター余白バランス用 */}
+                            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 pt-2 border-t border-slate-200">
+                              <span>掲示タイミング：{board.timingNote}</span>
+                              <span>A4 LANDSCAPE / MISSION BOARD</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行（他タブと完全統一） */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（首下げネームタグ中紙シート）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        首下げネームタグ中紙（全7名 ＋ GM用 / A4・8面一括印刷）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        ネームタグをA4印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・切り分けガイド（画面表示のみ） */}
+                  <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
+                      <Scissors className="h-4 w-4" />
+                      首下げ名札ホルダー用 中紙の印刷・使用方法
+                    </div>
+                    <div>
+                      ・<strong>A4用紙1枚</strong>に7名分（PC1〜PC7）とGM用の計8枠が配置されています。「ネームタグをA4印刷 / PDF保存」からそのまま等倍（100%）で印刷してください。
+                    </div>
+                    <div>
+                      ・印刷後、各カードの**外側の破線（切り取り線）**に沿ってハサミやカッターで切り分け、市販の首下げ名札ケース（名刺サイズ〜イベント用ケース）に入れてご使用ください。
+                    </div>
+                    <div>
+                      ・<strong>中央セーフエリア配置：</strong>名札ホルダーの縁や圧着部で四辺が数ミリ隠れても、名前・ルビ・所属が隠れないようゆったり中央寄りに配置しています。
+                    </div>
+                  </div>
+
+                  {/* ネームタグ A4印刷シート本体（2列 × 4行 = 8枚） */}
+                  <div className="nametag-print-sheet mx-auto bg-white p-3 sm:p-5 print:p-0 rounded border border-slate-200 print:border-0 shadow-sm print:shadow-none">
+                    {/* シート最上部の微小ガイド（印刷時のみ・用紙上端） */}
+                    <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pb-1 border-b border-slate-200 mb-2">
+                      <span>【合同海難対策本部 公式ネームタグ中紙】 A4判・8面 （PC1〜PC7 ＋ GM進行役）</span>
+                      <span>✂ 破線に沿って切り離して市販の首下げ名札ケースへ入れてください</span>
+                    </div>
+
+                    <div className="nametag-grid-print grid grid-cols-1 md:grid-cols-2 gap-3.5 print:grid-cols-2 print:gap-[4mm]">
+                      {NAMETAG_ITEMS.map((item) => (
+                        <div
+                          key={item.id}
+                          className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-center items-center min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none text-center"
+                        >
+                          {/* 切り取り線の角マーカーガイド */}
+                          <div className="absolute -top-1.5 -left-1.5 text-[8px] text-slate-400 font-mono no-print">✂</div>
+
+                          {/* ① 所属・役職（肩書き：テーブル越しにも一目でわかるよう大きく太字で配置） */}
+                          <div className="w-full px-2">
+                            <p className="text-[16px] sm:text-[17px] font-black text-slate-900 tracking-wide leading-snug break-words">
+                              {item.profession}
+                            </p>
+                          </div>
+
+                          {/* 区切りライン（視覚的な安定感の演出） */}
+                          <div className="my-2.5 sm:my-3 w-12 border-b-2 border-slate-300 mx-auto" />
+
+                          {/* ② メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
+                          <div className="w-full space-y-1">
+                            {/* ふりがな（ルビ） */}
+                            <div className="text-[13px] sm:text-[14px] font-bold tracking-[0.25em] text-slate-600 pl-[0.25em]">
+                              {item.ruby}
+                            </div>
+                            {/* 氏名 */}
+                            <div className="text-3xl sm:text-[34px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight">
+                              {item.name}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* シート最下部の微小ガイド（印刷時のみ・用紙下端） */}
+                    <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pt-1.5 border-t border-slate-200 mt-2">
+                      <span>※四辺に十分な余白（セーフゾーン）を設けているため、ホルダーの枠で端が隠れても文字は隠れません</span>
+                      <span>1/1 頁（全8枠）</span>
+                    </div>
+                  </div>
+                </div>
+              )
             )}
           </div>
         </div>
