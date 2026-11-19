@@ -67,6 +67,8 @@ import {
   RotateCw,
   ExternalLink,
   Maximize2,
+  IdCard,
+  Scissors,
 } from "lucide-react";
 
 interface DocumentDesignStudioProps {
@@ -76,7 +78,124 @@ interface DocumentDesignStudioProps {
   onSendAiPrompt?: (prompt: string) => void;
 }
 
-type StudioCategory = "handouts" | "evidences" | "visuals" | "gm_guides";
+type StudioCategory = "handouts" | "evidences" | "visuals" | "gm_guides" | "gm_prep";
+
+/**
+ * 首下げネームタグ用キャラクターデータ（7名分 ＋ GM用 = 計8枠）
+ * 市販の吊り下げ名札ケース（名刺サイズ〜A7サイズ）に適合する中紙サイズ（約93mm × 64mm）
+ * ホルダーの縁で端が隠れても文字が欠けないよう中央に配置
+ */
+interface NametagItem {
+  id: string;
+  pcCode: string;
+  name: string;
+  ruby: string;
+  profession: string;
+  location: string;
+  locationBadge: string;
+  accentColor: string;
+  borderHex: string;
+  badgeBg: string;
+}
+
+const NAMETAG_ITEMS: NametagItem[] = [
+  {
+    id: "tag-pc-1",
+    pcCode: "PC-1",
+    name: "朝　潮",
+    ruby: "あ さ し お",
+    profession: "海上保安庁東京本部 危機管理官",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#1e3a8a",
+    borderHex: "#1e3a8a",
+    badgeBg: "bg-blue-900 text-white",
+  },
+  {
+    id: "tag-pc-2",
+    pcCode: "PC-2",
+    name: "貝　浜",
+    ruby: "か い は ま",
+    profession: "情報通信・音響分析官（防衛省リエゾン）",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#334155",
+    borderHex: "#334155",
+    badgeBg: "bg-slate-800 text-white",
+  },
+  {
+    id: "tag-pc-3",
+    pcCode: "PC-3",
+    name: "坂　凪",
+    ruby: "さ か な ぎ",
+    profession: "海上保安庁小笠原支部 巡視船船長",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#0f766e",
+    borderHex: "#0f766e",
+    badgeBg: "bg-teal-800 text-white",
+  },
+  {
+    id: "tag-pc-4",
+    pcCode: "PC-4",
+    name: "太刀魚",
+    ruby: "た ち う お",
+    profession: "気象庁 小笠原観測所 観測員",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#0284c7",
+    borderHex: "#0284c7",
+    badgeBg: "bg-sky-800 text-white",
+  },
+  {
+    id: "tag-pc-5",
+    pcCode: "PC-5",
+    name: "浪　寄",
+    ruby: "な み よ り",
+    profession: "海洋科学大学 小笠原研究所 准教授",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#4338ca",
+    borderHex: "#4338ca",
+    badgeBg: "bg-indigo-800 text-white",
+  },
+  {
+    id: "tag-pc-6",
+    pcCode: "PC-6",
+    name: "初　瀬",
+    ruby: "は つ せ",
+    profession: "小笠原役場 救護担当",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#b45309",
+    borderHex: "#b45309",
+    badgeBg: "bg-amber-800 text-white",
+  },
+  {
+    id: "tag-pc-7",
+    pcCode: "PC-7",
+    name: "長　津",
+    ruby: "な が つ",
+    profession: "海上保安庁東京本部 首席通信解析官",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#be123c",
+    borderHex: "#be123c",
+    badgeBg: "bg-rose-800 text-white",
+  },
+  {
+    id: "tag-gm",
+    pcCode: "GM",
+    name: "進行役",
+    ruby: "ゲームマスター",
+    profession: "合同海難対策本部 統括進行",
+    location: "司令統括デスク",
+    locationBadge: "司令統括",
+    accentColor: "#0f172a",
+    borderHex: "#0f172a",
+    badgeBg: "bg-slate-950 text-white",
+  },
+];
 
 /**
  * 日本語の段落文章整形ヘルパー
@@ -2353,6 +2472,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const isB5HandoutSheet = category === "handouts" && handoutViewMode === "sheet";
     const isSingleEvidenceSheet = category === "evidences" && evidenceViewMode === "single";
+    const isNametagSheet = category === "gm_prep";
     const isDuplexCardSheet =
       (category === "handouts" &&
         (handoutViewMode === "cards" || handoutViewMode === "nagatsu_cards")) ||
@@ -2372,6 +2492,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       margin: ${
         isDuplexCardSheet
           ? "0"
+          : isNametagSheet
+          ? "10mm 10mm"
           : isB5HandoutSheet
           ? "8mm 9mm"
           : isSingleEvidenceSheet
@@ -2489,6 +2611,43 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         max-height: 133mm !important;
         border: none !important;
         background: transparent !important;
+      }
+      .nametag-print-sheet {
+        position: relative !important;
+        width: 190mm !important;
+        height: 277mm !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        border: none !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .nametag-grid-print {
+        display: grid !important;
+        grid-template-columns: 93mm 93mm !important;
+        grid-template-rows: 64mm 64mm 64mm 64mm !important;
+        column-gap: 4mm !important;
+        row-gap: 4mm !important;
+        width: 190mm !important;
+        height: 268mm !important;
+        margin: 0 auto !important;
+      }
+      .nametag-card-print {
+        position: relative !important;
+        width: 93mm !important;
+        height: 64mm !important;
+        min-height: 64mm !important;
+        max-height: 64mm !important;
+        box-sizing: border-box !important;
+        border: 1px dashed #94a3b8 !important;
+        background: #ffffff !important;
+        padding: 3.5mm 4.5mm !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
       }
     }
     ruby {
@@ -3041,6 +3200,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               全{(project.timeline || []).length}フェーズ
             </span>
           </button>
+
+          <button
+            onClick={() => setCategory("gm_prep")}
+            className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-bold transition ${
+              category === "gm_prep"
+                ? "bg-indigo-600 text-white shadow-md ring-1 ring-indigo-400"
+                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+            }`}
+          >
+            <IdCard className="h-4 w-4" />
+            ⑤ GM事前準備
+            <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
+              ネームタグ
+            </span>
+          </button>
         </div>
       </div>
 
@@ -3581,6 +3755,47 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     </button>
                   );
                 })}
+              </div>
+            </div>
+          )}
+
+          {/* ⑤ GM事前準備メニュー */}
+          {category === "gm_prep" && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  GM事前準備ツール
+                </h3>
+                <span className="rounded bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                  A4印刷用
+                </span>
+              </div>
+
+              <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                <div className="font-bold text-slate-200">🏷️ ネームタグ（首下げ名札中紙）</div>
+                <div className="text-[11px] text-slate-400 leading-relaxed">
+                  市販の首下げ名札ケース（名刺サイズ〜A7）に入る中紙です。文字が中央に大きく配置されており、ホルダーの枠で端が隠れても名前とルビが欠けません。
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40">
+                  <div className="flex items-center justify-between">
+                    <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                      A4・8面配置
+                    </span>
+                    <span className="text-[10px] font-mono text-slate-400">
+                      全7名 ＋ GM用
+                    </span>
+                  </div>
+                  <div className="mt-1.5 font-bold text-xs text-white flex items-center gap-1.5">
+                    <IdCard className="h-3.5 w-3.5 text-indigo-400" />
+                    首下げネームタグ一括シート
+                  </div>
+                  <div className="mt-1 text-[11px] text-slate-400">
+                    切り取り線（破線）付き・中央セーフエリア配置
+                  </div>
+                </div>
               </div>
             </div>
           )}
@@ -5982,6 +6197,128 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   </div>
                 </div>
               )
+            )}
+
+            {/* ================================================================
+                ⑤ GM事前準備（首下げネームタグ中紙シート A4・8面配置）
+               ================================================================ */}
+            {category === "gm_prep" && (
+              <div className="space-y-6">
+                {/* 画面上部見出し ＆ 右上印刷ボタン行（他タブと完全統一） */}
+                <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                      {project.title} ― GM事前準備（首下げネームタグ中紙シート）
+                    </span>
+                    <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                      首下げネームタグ中紙（全7名 ＋ GM用 / A4・8面一括印刷）
+                    </h2>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    <button
+                      type="button"
+                      onClick={handlePrintDesignedSheet}
+                      className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                    >
+                      <Printer className="h-3.5 w-3.5" />
+                      ネームタグをA4印刷 / PDF保存
+                    </button>
+                  </div>
+                </div>
+
+                {/* ✂️ 印刷・切り分けガイド（画面表示のみ） */}
+                <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                  <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
+                    <Scissors className="h-4 w-4" />
+                    首下げ名札ホルダー用 中紙の印刷・使用方法
+                  </div>
+                  <div>
+                    ・<strong>A4用紙1枚</strong>に7名分（PC1〜PC7）とGM用の計8枠が配置されています。「ネームタグをA4印刷 / PDF保存」からそのまま等倍（100%）で印刷してください。
+                  </div>
+                  <div>
+                    ・印刷後、各カードの**外側の破線（切り取り線）**に沿ってハサミやカッターで切り分け、市販の首下げ名札ケース（名刺サイズ〜イベント用ケース）に入れてご使用ください。
+                  </div>
+                  <div>
+                    ・<strong>中央セーフエリア配置：</strong>名札ホルダーの縁や圧着部で四辺が数ミリ隠れても、名前・ルビ・所属が隠れないようゆったり中央寄りに配置しています。
+                  </div>
+                </div>
+
+                {/* ネームタグ A4印刷シート本体（2列 × 4行 = 8枚） */}
+                <div className="nametag-print-sheet mx-auto bg-white p-3 sm:p-5 print:p-0 rounded border border-slate-200 print:border-0 shadow-sm print:shadow-none">
+                  {/* シート最上部の微小ガイド（印刷時のみ・用紙上端） */}
+                  <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pb-1 border-b border-slate-200 mb-2">
+                    <span>【合同海難対策本部 公式ネームタグ中紙】 A4判・8面 （PC1〜PC7 ＋ GM進行役）</span>
+                    <span>✂ 破線に沿って切り離して市販の首下げ名札ケースへ入れてください</span>
+                  </div>
+
+                  <div className="nametag-grid-print grid grid-cols-1 md:grid-cols-2 gap-3.5 print:grid-cols-2 print:gap-[4mm]">
+                    {NAMETAG_ITEMS.map((item) => (
+                      <div
+                        key={item.id}
+                        className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-between min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none"
+                      >
+                        {/* 切り取り線の角マーカーガイド */}
+                        <div className="absolute -top-1.5 -left-1.5 text-[8px] text-slate-400 font-mono no-print">✂</div>
+
+                        {/* ① 上部ヘッダー（機関名 ＆ PC番号 ＆ 拠点バッジ） */}
+                        <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                          <span className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
+                            合同海難対策本部
+                          </span>
+                          <div className="flex items-center gap-1.5">
+                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700">
+                              {item.locationBadge}
+                            </span>
+                            <span
+                              className="rounded px-2 py-0.5 font-mono text-[10px] font-black text-white"
+                              style={{ backgroundColor: item.accentColor }}
+                            >
+                              {item.pcCode}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* ② 所属・役職（中央配置） */}
+                        <div className="pt-2 text-center">
+                          <span className="text-[11px] font-bold text-slate-700 tracking-wide inline-block max-w-full truncate">
+                            {item.profession}
+                          </span>
+                        </div>
+
+                        {/* ③ メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
+                        <div className="py-2.5 my-auto text-center space-y-1">
+                          {/* ふりがな（ルビ） */}
+                          <div className="text-[12px] font-bold tracking-[0.3em] text-slate-600 pl-[0.3em]">
+                            {item.ruby}
+                          </div>
+                          {/* 氏名 */}
+                          <div
+                            className="text-2xl sm:text-[28px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight"
+                          >
+                            {item.name}
+                          </div>
+                        </div>
+
+                        {/* ④ 下段フッター（アクセントライン ＆ 公式名札表記） */}
+                        <div className="border-t border-slate-200 pt-1 flex items-center justify-between text-[8.5px] text-slate-400">
+                          <span className="font-semibold text-slate-500">
+                            {item.location}
+                          </span>
+                          <span className="font-mono">
+                            {project.title}
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* シート最下部の微小ガイド（印刷時のみ・用紙下端） */}
+                  <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pt-1.5 border-t border-slate-200 mt-2">
+                    <span>※四辺に十分な余白（セーフゾーン）を設けているため、ホルダーの枠で端が隠れても文字は隠れません</span>
+                    <span>1/1 頁（全8枠）</span>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
         </div>
