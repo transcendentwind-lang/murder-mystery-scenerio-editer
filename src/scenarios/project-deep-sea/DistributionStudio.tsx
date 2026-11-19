@@ -2643,11 +2643,16 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         box-sizing: border-box !important;
         border: 1px dashed #94a3b8 !important;
         background: #ffffff !important;
-        padding: 3.5mm 4.5mm !important;
+        padding: 4mm 5mm !important;
         box-shadow: none !important;
         overflow: hidden !important;
         page-break-inside: avoid !important;
         break-inside: avoid !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
       }
     }
     ruby {
@@ -6255,58 +6260,31 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     {NAMETAG_ITEMS.map((item) => (
                       <div
                         key={item.id}
-                        className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-between min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none"
+                        className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-center items-center min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none text-center"
                       >
                         {/* 切り取り線の角マーカーガイド */}
                         <div className="absolute -top-1.5 -left-1.5 text-[8px] text-slate-400 font-mono no-print">✂</div>
 
-                        {/* ① 上部ヘッダー（機関名 ＆ PC番号 ＆ 拠点バッジ） */}
-                        <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
-                          <span className="text-[10px] font-bold tracking-wider text-slate-500 uppercase">
-                            合同海難対策本部
-                          </span>
-                          <div className="flex items-center gap-1.5">
-                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700">
-                              {item.locationBadge}
-                            </span>
-                            <span
-                              className="rounded px-2 py-0.5 font-mono text-[10px] font-black text-white"
-                              style={{ backgroundColor: item.accentColor }}
-                            >
-                              {item.pcCode}
-                            </span>
-                          </div>
-                        </div>
-
-                        {/* ② 所属・役職（中央配置） */}
-                        <div className="pt-2 text-center">
-                          <span className="text-[11px] font-bold text-slate-700 tracking-wide inline-block max-w-full truncate">
+                        {/* ① 所属・役職（肩書き：テーブル越しにも一目でわかるよう大きく太字で配置） */}
+                        <div className="w-full px-2">
+                          <p className="text-[16px] sm:text-[17px] font-black text-slate-900 tracking-wide leading-snug break-words">
                             {item.profession}
-                          </span>
+                          </p>
                         </div>
 
-                        {/* ③ メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
-                        <div className="py-2.5 my-auto text-center space-y-1">
+                        {/* 区切りライン（視覚的な安定感の演出） */}
+                        <div className="my-2.5 sm:my-3 w-12 border-b-2 border-slate-300 mx-auto" />
+
+                        {/* ② メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
+                        <div className="w-full space-y-1">
                           {/* ふりがな（ルビ） */}
-                          <div className="text-[12px] font-bold tracking-[0.3em] text-slate-600 pl-[0.3em]">
+                          <div className="text-[13px] sm:text-[14px] font-bold tracking-[0.25em] text-slate-600 pl-[0.25em]">
                             {item.ruby}
                           </div>
                           {/* 氏名 */}
-                          <div
-                            className="text-2xl sm:text-[28px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight"
-                          >
+                          <div className="text-3xl sm:text-[34px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight">
                             {item.name}
                           </div>
-                        </div>
-
-                        {/* ④ 下段フッター（アクセントライン ＆ 公式名札表記） */}
-                        <div className="border-t border-slate-200 pt-1 flex items-center justify-between text-[8.5px] text-slate-400">
-                          <span className="font-semibold text-slate-500">
-                            {item.location}
-                          </span>
-                          <span className="font-mono">
-                            {project.title}
-                          </span>
                         </div>
                       </div>
                     ))}
