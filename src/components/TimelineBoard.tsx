@@ -3850,7 +3850,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は完全無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
-                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く層）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
                             <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（海野日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
