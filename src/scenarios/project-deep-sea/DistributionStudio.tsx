@@ -1,6 +1,8 @@
 "use client";
 
 import { scenarioAssetUrl } from "@/scenarios/catalog";
+import { sonarWords } from "./sonarWords";
+import { JAPANESE_MEANING_CANDIDATES, LOCKED_INITIAL_MEANINGS } from "@/components/WhaleSonarMobileApp";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
@@ -637,6 +639,60 @@ const getCoinTokenSvgString = (kind: CoinTokenKind, colorHex: string): string =>
       return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 12 6 12 9 4 12 20 15 9 18 15 20 12 22 12"/></svg>`;
   }
 };
+
+/**
+ * オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カード
+ * マジック：ザ・ギャザリング（MTG／スタンダードTCG）と完全同一サイズ：63mm × 88mm
+ * A4用紙1枚につき 3列 × 3行 ＝ 9枚配置
+ */
+interface WhaleMtgCardItem {
+  id: string;
+  kind: "click_sound" | "japanese_meaning";
+  codeLabel: string;
+  mainText: string;
+  lockedBadge?: string;
+}
+
+const WHALE_CLICK_MTG_CARDS: WhaleMtgCardItem[] = (() => {
+  const lockedOrder = ["word-subsea-volcano", "word-alert"];
+  const locked = lockedOrder
+    .map((id) => sonarWords.find((w) => w.id === id))
+    .filter((w): w is (typeof sonarWords)[number] => Boolean(w));
+  const unlocked = sonarWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
+  const ordered = [...locked, ...unlocked];
+
+  return ordered.map((w, idx) => {
+    const numStr = String(idx + 1).padStart(2, "0");
+    const rawOnomatopoeia =
+      w.soundPattern.match(/（(.+?)）/)?.[1] || w.soundPattern;
+    const onomatopoeia = rawOnomatopoeia.split("/")[0].trim();
+    const lockedMeaning = LOCKED_INITIAL_MEANINGS[w.id];
+    return {
+      id: `mtg-click-${w.id}`,
+      kind: "click_sound" as const,
+      codeLabel: `音 #${numStr}`,
+      mainText: onomatopoeia,
+      lockedBadge: lockedMeaning ? `初期確定：${lockedMeaning}` : undefined,
+    };
+  });
+})();
+
+const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES.map(
+  (cand, idx) => {
+    const numStr = String(idx + 1).padStart(2, "0");
+    return {
+      id: `mtg-jp-${numStr}`,
+      kind: "japanese_meaning" as const,
+      codeLabel: `日本語 #${numStr}`,
+      mainText: cand.label,
+      lockedBadge: cand.isLockedInitial
+        ? cand.label === "海の下の火山"
+          ? "初期確定：音 #01"
+          : "初期確定：音 #02"
+        : undefined,
+    };
+  }
+);
 
 /**
  * 日本語の段落文章整形ヘルパー
@@ -2391,8 +2447,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [visualMarginOverrides, setVisualMarginOverrides] = useState<Record<string, boolean>>({});
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
-  const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "nametags">("goal_boards");
+  const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "whale_cards" | "nametags">("goal_boards");
   const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
+  const [whaleMtgFilter, setWhaleMtgFilter] = useState<"all" | "click_sound" | "japanese_meaning">("all");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
   const isDirectEditMode = false;
@@ -2763,6 +2820,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
     if (category === "gm_prep" && gmPrepTool === "coin_tokens") {
       handlePrintGmCoinTokens();
+      return;
+    }
+    if (category === "gm_prep" && gmPrepTool === "whale_cards") {
+      handlePrintWhaleMtgCards(whaleMtgFilter);
       return;
     }
     // 全体提示の地図・写真カテゴリの場合は、A4用紙（余白0mm・画像のみ最大化・90度回転配置）で印刷
@@ -3565,6 +3626,299 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     <span>収録数：ソノブイ×3 ／ 遭難船×1 ／ 巡視船×1 ／ 暗礁×2 ／ 火山噴火・海底噴火×6 ／ 火山性微動×6 （計19個 ＋ 予備8個）</span>
     <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください</span>
   </div>
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
+  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード（28枚）＆ 日本語カード（29枚）をMTGサイズ（63mm × 88mm / A4 9面配置）で印刷 / PDF保存
+  const handlePrintWhaleMtgCards = (
+    targetFilter: "all" | "click_sound" | "japanese_meaning" = whaleMtgFilter
+  ) => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const chunkIntoPagesOf9 = (cards: WhaleMtgCardItem[]): (WhaleMtgCardItem | null)[][] => {
+      const pages: (WhaleMtgCardItem | null)[][] = [];
+      for (let i = 0; i < cards.length; i += 9) {
+        const chunk: (WhaleMtgCardItem | null)[] = [];
+        for (let j = 0; j < 9; j++) {
+          chunk.push(cards[i + j] ?? null);
+        }
+        pages.push(chunk);
+      }
+      return pages;
+    };
+
+    const pageGroups: {
+      deckTitle: string;
+      pages: (WhaleMtgCardItem | null)[][];
+    }[] = [];
+
+    if (targetFilter === "all" || targetFilter === "click_sound") {
+      pageGroups.push({
+        deckTitle: "【クジラのクリック音カード】（全28枚 / MTGサイズ 63mm×88mm）",
+        pages: chunkIntoPagesOf9(WHALE_CLICK_MTG_CARDS),
+      });
+    }
+    if (targetFilter === "all" || targetFilter === "japanese_meaning") {
+      pageGroups.push({
+        deckTitle: "【あてはめる日本語カード】（全29枚 / MTGサイズ 63mm×88mm）",
+        pages: chunkIntoPagesOf9(WHALE_JAPANESE_MTG_CARDS),
+      });
+    }
+
+    const renderMtgCardSlotHtml = (card: WhaleMtgCardItem | null) => {
+      if (!card) {
+        return `<div class="mtg-card-empty"></div>`;
+      }
+      const isClick = card.kind === "click_sound";
+      const borderColor = isClick ? "#0284c7" : "#d97706";
+      const bgColor = isClick ? "#f0f9ff" : "#fffbeb";
+      const headerBg = isClick ? "#0369a1" : "#b45309";
+      const textColor = isClick ? "#0c4a6e" : "#78350f";
+      const deckBadge = isClick ? "クジラのクリック音" : "あてはめる日本語";
+      const textLen = card.mainText.length;
+      const fontSizePt =
+        textLen <= 4
+          ? "22pt"
+          : textLen <= 7
+          ? "17.5pt"
+          : textLen <= 10
+          ? "14.5pt"
+          : "12.5pt";
+
+      return `
+        <div class="mtg-card-cell" style="background-color: ${bgColor};">
+          <div class="mtg-card-inner" style="border-color: ${borderColor};">
+            <div class="mtg-card-header">
+              <span class="mtg-deck-badge" style="background-color: ${headerBg};">${deckBadge}</span>
+              <span class="mtg-code-label" style="color: ${headerBg};">${escapeHtml(card.codeLabel)}</span>
+            </div>
+
+            <div class="mtg-card-body">
+              <div class="mtg-main-text" style="color: ${textColor}; font-size: ${fontSizePt};">
+                ${escapeHtml(card.mainText)}
+              </div>
+            </div>
+
+            <div class="mtg-card-footer" style="border-top-color: ${borderColor};">
+              ${
+                card.lockedBadge
+                  ? `<span class="mtg-locked-badge" style="background-color: ${headerBg};">🔒 ${escapeHtml(
+                      card.lockedBadge
+                    )}</span>`
+                  : `<span class="mtg-footer-code" style="color: ${headerBg};">${
+                      isClick ? "CLICK SOUND" : "JAPANESE MEANING"
+                    } / 63×88mm</span>`
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    let globalPageIdx = 0;
+    const totalPages = pageGroups.reduce((acc, g) => acc + g.pages.length, 0);
+
+    const allPagesHtml = pageGroups
+      .map((group) =>
+        group.pages
+          .map((nineCards, pIdx) => {
+            globalPageIdx++;
+            return `
+            <div class="mtg-a4-page">
+              <div class="mtg-page-top-guide">
+                <span>${escapeHtml(project.title)} ― ${escapeHtml(group.deckTitle)} （シート ${
+              pIdx + 1
+            }/${group.pages.length}）</span>
+                <span>✂ 外枠（63mm × 88mm：MTG標準カードサイズ）に沿って切り抜いてください ［${globalPageIdx}/${totalPages}頁］</span>
+              </div>
+              <div class="mtg-grid-9">
+                ${nineCards.map(renderMtgCardSlotHtml).join("")}
+              </div>
+              <div class="mtg-page-bottom-guide">
+                <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください（市販のMTGレギュラーサイズスリーブ 63×88mm に適合）</span>
+                <span>A4 PORTRAIT / 9-POCKET MTG GRID (189mm × 264mm)</span>
+              </div>
+            </div>
+          `;
+          })
+          .join("\n")
+      )
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - クジラクリック音＆日本語カード（MTGサイズ 63mm×88mm）</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .mtg-a4-page {
+      width: 210mm;
+      height: 297mm;
+      padding: 8mm 10.5mm;
+      margin: 0 auto;
+      background: #ffffff;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mtg-a4-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .mtg-page-top-guide,
+    .mtg-page-bottom-guide {
+      width: 189mm;
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* 3列 × 3行 ＝ 9枚（1枚 63mm × 88mm、全体 189mm × 264mm） */
+    .mtg-grid-9 {
+      width: 189mm;
+      height: 264mm;
+      display: grid;
+      grid-template-columns: 63mm 63mm 63mm;
+      grid-template-rows: 88mm 88mm 88mm;
+      gap: 0;
+    }
+    .mtg-card-cell {
+      width: 63mm;
+      height: 88mm;
+      border: 0.35mm dashed #64748b;
+      padding: 3.2mm;
+      display: flex;
+    }
+    .mtg-card-empty {
+      width: 63mm;
+      height: 88mm;
+      border: 0.25mm dashed #e2e8f0;
+      background: transparent;
+    }
+    .mtg-card-inner {
+      width: 100%;
+      height: 100%;
+      border: 0.8mm solid;
+      border-radius: 3mm;
+      background: #ffffff;
+      padding: 3mm 3.2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mtg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.35mm solid #cbd5e1;
+      padding-bottom: 1.8mm;
+    }
+    .mtg-deck-badge {
+      font-size: 7.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.6mm 2mm;
+      border-radius: 1.2mm;
+      letter-spacing: 0.02em;
+    }
+    .mtg-code-label {
+      font-size: 9.5pt;
+      font-weight: 900;
+      font-family: monospace;
+    }
+    .mtg-card-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2mm 1mm;
+    }
+    .mtg-main-text {
+      font-weight: 900;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    .mtg-card-footer {
+      border-top: 0.35mm dashed;
+      padding-top: 1.8mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 6mm;
+    }
+    .mtg-locked-badge {
+      font-size: 7.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.6mm 2.2mm;
+      border-radius: 1.2mm;
+    }
+    .mtg-footer-code {
+      font-size: 6.8pt;
+      font-weight: 800;
+      font-family: monospace;
+      letter-spacing: 0.04em;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  ${allPagesHtml}
 </body>
 </html>`);
       doc.close();
@@ -4665,40 +5019,51 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </span>
               </div>
 
-              {/* ツール切替（全体目的シート / コイントークン / 首下げネームタグ） */}
-              <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              {/* ツール切替（全体目的シート / コイントークン / クジラ音＆日本語カード / 首下げネームタグ） */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   type="button"
                   onClick={() => setGmPrepTool("goal_boards")}
-                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "goal_boards"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🎯 目的シート
+                  🎯 目的シート (10枚)
                 </button>
                 <button
                   type="button"
                   onClick={() => setGmPrepTool("coin_tokens")}
-                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "coin_tokens"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🪙 トークン
+                  🪙 コイントークン
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("whale_cards")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "whale_cards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🐋 クジラ音・日本語
                 </button>
                 <button
                   type="button"
                   onClick={() => setGmPrepTool("nametags")}
-                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "nametags"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🏷️ ネームタグ
+                  🏷️ ネームタグ (8枠)
                 </button>
               </div>
 
@@ -4784,6 +5149,75 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         <div>・火山噴火／海底噴火 × 6</div>
                         <div>・火山性微動 × 6</div>
                       </div>
+                    </div>
+                  </div>
+                </>
+              ) : gmPrepTool === "whale_cards" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🐋 クジラ音 ＆ 日本語カード（MTGサイズ）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      Wi-Fiが使えない環境に備え、クジラのクリック音（28枚）とそれにあてはめる日本語（29枚）をマジック：ザ・ギャザリングと同サイズ（63mm×88mm）でカード化した一覧シートです。
+                    </div>
+                  </div>
+
+                  {/* 表示・印刷対象の絞り込み */}
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-400">
+                      表示・印刷するカード種別
+                    </span>
+                    <div className="space-y-1.5">
+                      {(
+                        [
+                          {
+                            id: "all",
+                            badge: "全57枚（A4・8頁）",
+                            title: "両方すべて（クリック音28枚 ＋ 日本語29枚）",
+                          },
+                          {
+                            id: "click_sound",
+                            badge: "全28枚（A4・4頁）",
+                            title: "🌊 クジラのクリック音カードのみ（音 #01〜#28）",
+                          },
+                          {
+                            id: "japanese_meaning",
+                            badge: "全29枚（A4・4頁）",
+                            title: "🏷️ あてはめる日本語カードのみ（日本語 #01〜#29）",
+                          },
+                        ] as const
+                      ).map((opt) => {
+                        const isSelected = whaleMtgFilter === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => setWhaleMtgFilter(opt.id)}
+                            className={`w-full rounded-xl border p-2.5 text-left transition ${
+                              isSelected
+                                ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                                : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-900"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span
+                                className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                  isSelected
+                                    ? "bg-indigo-500/20 border border-indigo-500/40 text-indigo-300"
+                                    : "bg-slate-900 border border-slate-800 text-slate-400"
+                                }`}
+                              >
+                                {opt.badge}
+                              </span>
+                              <span className="text-[10px] font-mono text-slate-400">
+                                63mm × 88mm
+                              </span>
+                            </div>
+                            <div className="mt-1 font-bold text-xs text-white">
+                              {opt.title}
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 </>
@@ -7584,6 +8018,170 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </div>
                       ))}
                     </div>
+                  </div>
+                </div>
+              ) : gmPrepTool === "whale_cards" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 / MTGサイズ 63mm×88mm）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        クジラクリック音 ＆ あてはめる日本語カード（MTGサイズ：63mm × 88mm / A4・9面配置）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handlePrintWhaleMtgCards(whaleMtgFilter)}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        {whaleMtgFilter === "click_sound"
+                          ? "クリック音カード（28枚）をA4印刷 / PDF保存"
+                          : whaleMtgFilter === "japanese_meaning"
+                          ? "日本語カード（29枚）をA4印刷 / PDF保存"
+                          : "全57枚（クリック音＋日本語）をA4印刷 / PDF保存"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・使用ガイド */}
+                  <div className="no-print rounded-lg border border-indigo-200 bg-indigo-50/80 p-4 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-indigo-900">
+                      <Scissors className="h-4 w-4" />
+                      マジック：ザ・ギャザリング（MTG）同サイズカード（63mm × 88mm）の印刷・使用方法
+                    </div>
+                    <div>
+                      ・<strong>1枚 63mm × 88mm（横6.3cm × 縦8.8cm）</strong>のMTG標準カードサイズで、A4用紙1枚に<strong>3列 × 3行 ＝ 9枚</strong>ずつ配置されています。
+                    </div>
+                    <div>
+                      ・<strong>倍率100%（実際のサイズ）</strong>で印刷して破線に沿って切り分けると、市販のMTGレギュラーサイズ用スリーブにそのまま入れてご使用いただけます。
+                    </div>
+                    <div>
+                      ・Wi-Fiが使えない会場でも、プレイヤー全員が見えるテーブル上に<strong>「クジラのクリック音カード（青・28枚）」</strong>と<strong>「あてはめる日本語カード（黄・29枚）」</strong>を一覧で並べてペアリングさせることができます。
+                    </div>
+                  </div>
+
+                  {/* カード一覧プレビュー（3列グリッド・63:88比率） */}
+                  <div className="space-y-8">
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "click_sound") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-sky-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🌊 【クジラのクリック音カード】一覧（全{WHALE_CLICK_MTG_CARDS.length}枚 / 音 #01 〜 音 #28）</span>
+                          <span className="font-mono text-[11px] text-sky-200">MTG SIZE: 63mm × 88mm (A4・4シート)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_CLICK_MTG_CARDS.map((card) => {
+                            const len = card.mainText.length;
+                            const textSizeClass =
+                              len <= 4
+                                ? "text-2xl sm:text-3xl"
+                                : len <= 7
+                                ? "text-xl sm:text-2xl"
+                                : len <= 10
+                                ? "text-lg sm:text-xl"
+                                : "text-base sm:text-lg";
+                            return (
+                              <div
+                                key={card.id}
+                                className="aspect-[63/88] w-full rounded-md border border-dashed border-slate-400 bg-sky-50 p-2.5 flex shadow-sm"
+                              >
+                                <div className="w-full h-full rounded-lg border-[3px] border-sky-600 bg-white p-3 flex flex-col justify-between">
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span className="rounded bg-sky-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                      クジラのクリック音
+                                    </span>
+                                    <span className="font-mono text-xs font-black text-sky-800">
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-2 flex items-center justify-center text-center">
+                                    <div className={`font-black text-sky-950 leading-snug break-words ${textSizeClass}`}>
+                                      {card.mainText}
+                                    </div>
+                                  </div>
+
+                                  <div className="border-t border-dashed border-sky-400 pt-1.5 flex items-center justify-center min-h-[24px]">
+                                    {card.lockedBadge ? (
+                                      <span className="rounded bg-sky-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                        🔒 {card.lockedBadge}
+                                      </span>
+                                    ) : (
+                                      <span className="font-mono text-[9px] font-extrabold text-sky-700/75 tracking-wider">
+                                        CLICK SOUND / 63×88mm
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "japanese_meaning") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-amber-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🏷️ 【あてはめる日本語カード】一覧（全{WHALE_JAPANESE_MTG_CARDS.length}枚 / 補足ヒントなし）</span>
+                          <span className="font-mono text-[11px] text-amber-200">MTG SIZE: 63mm × 88mm (A4・4シート)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_JAPANESE_MTG_CARDS.map((card) => {
+                            const len = card.mainText.length;
+                            const textSizeClass =
+                              len <= 4
+                                ? "text-2xl sm:text-3xl"
+                                : len <= 7
+                                ? "text-xl sm:text-2xl"
+                                : len <= 10
+                                ? "text-lg sm:text-xl"
+                                : "text-base sm:text-lg";
+                            return (
+                              <div
+                                key={card.id}
+                                className="aspect-[63/88] w-full rounded-md border border-dashed border-slate-400 bg-amber-50 p-2.5 flex shadow-sm"
+                              >
+                                <div className="w-full h-full rounded-lg border-[3px] border-amber-600 bg-white p-3 flex flex-col justify-between">
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span className="rounded bg-amber-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                      あてはめる日本語
+                                    </span>
+                                    <span className="font-mono text-xs font-black text-amber-800">
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-2 flex items-center justify-center text-center">
+                                    <div className={`font-black text-amber-950 leading-snug break-words ${textSizeClass}`}>
+                                      {card.mainText}
+                                    </div>
+                                  </div>
+
+                                  <div className="border-t border-dashed border-amber-400 pt-1.5 flex items-center justify-center min-h-[24px]">
+                                    {card.lockedBadge ? (
+                                      <span className="rounded bg-amber-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                        🔒 {card.lockedBadge}
+                                      </span>
+                                    ) : (
+                                      <span className="font-mono text-[9px] font-extrabold text-amber-700/75 tracking-wider">
+                                        JAPANESE MEANING / 63×88mm
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ) : (
