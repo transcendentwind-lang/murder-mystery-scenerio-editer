@@ -363,6 +363,282 @@ const getGoalBoardLineFontSizeClass = (): string => {
 };
 
 /**
+ * 海図用コイントークン（コイン実寸 直径2.49cm ＝ 24.9mm ／ 切り抜き円 直径2.6cm ＝ 26mm・文字大きめ設計）
+ * ・ソノブイ × 3
+ * ・遭難船 × 1
+ * ・巡視船 × 1
+ * ・暗礁 × 2
+ * ・火山噴火／海底噴火 × 6
+ * ・火山性微動 × 6
+ * （計19個 ＋ 切り損じ・紛失時用の予備トークン8個）
+ */
+type CoinTokenKind =
+  | "sonobuoy"
+  | "distressed_ship"
+  | "patrol_ship"
+  | "reef"
+  | "eruption"
+  | "tremor";
+
+interface CoinTokenItem {
+  id: string;
+  kind: CoinTokenKind;
+  topSubLabel: string;
+  mainLine1: string;
+  mainLine2?: string;
+  bottomBadge?: string;
+  rimHex: string;
+  bgHex: string;
+  textHex: string;
+  subTextHex: string;
+}
+
+interface CoinTokenSection {
+  id: string;
+  sectionTitle: string;
+  usageNote: string;
+  tokens: CoinTokenItem[];
+}
+
+const GM_COIN_TOKEN_SECTIONS: CoinTokenSection[] = [
+  {
+    id: "sec-day3-sonobuoy",
+    sectionTitle: "① Day 3：鳥島沖 洋上ソノブイ索敵作戦用トークン（計3個）",
+    usageNote: "Day 3の36セクター索敵海図（A-1〜F-6）の投下ポイントに配置します",
+    tokens: [
+      {
+        id: "tok-sono-1",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #1",
+        mainLine1: "ソノブイ",
+        bottomBadge: "1基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-sono-2",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #2",
+        mainLine1: "ソノブイ",
+        bottomBadge: "2基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-sono-3",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #3",
+        mainLine1: "ソノブイ",
+        bottomBadge: "3基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+    ],
+  },
+  {
+    id: "sec-day1-rescue",
+    sectionTitle: "② Day 1：小笠原南西沖 漂流救難作戦用トークン（計4個：遭難船1・巡視船1・暗礁2）",
+    usageNote: "Day 1の航海用海図（白地図）上で、遭難船の漂流予測位置・巡視船の派遣先・暗礁位置の共有に使用します",
+    tokens: [
+      {
+        id: "tok-distressed-1",
+        kind: "distressed_ship",
+        topSubLabel: "SOS VESSEL",
+        mainLine1: "遭難船",
+        bottomBadge: "救助対象",
+        rimHex: "#ea580c",
+        bgHex: "#fff7ed",
+        textHex: "#7c2d12",
+        subTextHex: "#c2410c",
+      },
+      {
+        id: "tok-patrol-1",
+        kind: "patrol_ship",
+        topSubLabel: "JCG PATROL",
+        mainLine1: "巡視船",
+        bottomBadge: "海保船艇",
+        rimHex: "#1d4ed8",
+        bgHex: "#eff6ff",
+        textHex: "#1e3a8a",
+        subTextHex: "#1d4ed8",
+      },
+      {
+        id: "tok-reef-1",
+        kind: "reef",
+        topSubLabel: "HAZARD #1",
+        mainLine1: "暗　礁",
+        bottomBadge: "座礁危険",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+      {
+        id: "tok-reef-2",
+        kind: "reef",
+        topSubLabel: "HAZARD #2",
+        mainLine1: "暗　礁",
+        bottomBadge: "座礁危険",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+    ],
+  },
+  {
+    id: "sec-eruption",
+    sectionTitle: "③ Day 2〜Day 7：広域監視海図「火山噴火／海底噴火」トークン（計6個）",
+    usageNote: "西之島沖・鳥島沖・明神礁・御蔵島沖など、噴火が発生した位置へ順次配置します",
+    tokens: Array.from({ length: 6 }, (_, i) => ({
+      id: `tok-eruption-${i + 1}`,
+      kind: "eruption" as const,
+      topSubLabel: `ERUPTION #${i + 1}`,
+      mainLine1: "火山噴火",
+      mainLine2: "海底噴火",
+      rimHex: "#dc2626",
+      bgHex: "#fef2f2",
+      textHex: "#7f1d1d",
+      subTextHex: "#b91c1c",
+    })),
+  },
+  {
+    id: "sec-tremor",
+    sectionTitle: "④ Day 2〜Day 7：広域監視海図「火山性微動」トークン（計6個）",
+    usageNote: "八丈島・青ヶ島・伊豆大島・富士山地下深部など、火山性微動が観測された位置へ配置します",
+    tokens: Array.from({ length: 6 }, (_, i) => ({
+      id: `tok-tremor-${i + 1}`,
+      kind: "tremor" as const,
+      topSubLabel: `TREMOR #${i + 1}`,
+      mainLine1: "火山性",
+      mainLine2: "微　動",
+      rimHex: "#d97706",
+      bgHex: "#fffbeb",
+      textHex: "#78350f",
+      subTextHex: "#b45309",
+    })),
+  },
+  {
+    id: "sec-spares",
+    sectionTitle: "⑤ 予備トークン（切り損じ・紛失時用 ／ 計8個）",
+    usageNote: "工作時の切り損じや紛失時のスペアとしてご使用ください",
+    tokens: [
+      {
+        id: "tok-spare-sono",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR SP",
+        mainLine1: "ソノブイ",
+        bottomBadge: "予　備",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-spare-distressed",
+        kind: "distressed_ship",
+        topSubLabel: "SOS VESSEL",
+        mainLine1: "遭難船",
+        bottomBadge: "予　備",
+        rimHex: "#ea580c",
+        bgHex: "#fff7ed",
+        textHex: "#7c2d12",
+        subTextHex: "#c2410c",
+      },
+      {
+        id: "tok-spare-patrol",
+        kind: "patrol_ship",
+        topSubLabel: "JCG PATROL",
+        mainLine1: "巡視船",
+        bottomBadge: "予　備",
+        rimHex: "#1d4ed8",
+        bgHex: "#eff6ff",
+        textHex: "#1e3a8a",
+        subTextHex: "#1d4ed8",
+      },
+      {
+        id: "tok-spare-reef",
+        kind: "reef",
+        topSubLabel: "HAZARD SP",
+        mainLine1: "暗　礁",
+        bottomBadge: "予　備",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+      {
+        id: "tok-spare-erupt-1",
+        kind: "eruption",
+        topSubLabel: "ERUPTION SP",
+        mainLine1: "火山噴火",
+        mainLine2: "海底噴火",
+        rimHex: "#dc2626",
+        bgHex: "#fef2f2",
+        textHex: "#7f1d1d",
+        subTextHex: "#b91c1c",
+      },
+      {
+        id: "tok-spare-erupt-2",
+        kind: "eruption",
+        topSubLabel: "ERUPTION SP",
+        mainLine1: "火山噴火",
+        mainLine2: "海底噴火",
+        rimHex: "#dc2626",
+        bgHex: "#fef2f2",
+        textHex: "#7f1d1d",
+        subTextHex: "#b91c1c",
+      },
+      {
+        id: "tok-spare-tremor-1",
+        kind: "tremor",
+        topSubLabel: "TREMOR SP",
+        mainLine1: "火山性",
+        mainLine2: "微　動",
+        rimHex: "#d97706",
+        bgHex: "#fffbeb",
+        textHex: "#78350f",
+        subTextHex: "#b45309",
+      },
+      {
+        id: "tok-spare-tremor-2",
+        kind: "tremor",
+        topSubLabel: "TREMOR SP",
+        mainLine1: "火山性",
+        mainLine2: "微　動",
+        rimHex: "#d97706",
+        bgHex: "#fffbeb",
+        textHex: "#78350f",
+        subTextHex: "#b45309",
+      },
+    ],
+  },
+];
+
+const getCoinTokenSvgString = (kind: CoinTokenKind, colorHex: string): string => {
+  switch (kind) {
+    case "sonobuoy":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5" fill="${colorHex}"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>`;
+    case "distressed_ship":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 16l2-7h12l2 7"/><path d="M12 4v5"/><path d="M9 6h6"/></svg>`;
+    case "patrol_ship":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="${colorHex}" fill-opacity="0.2"/></svg>`;
+    case "reef":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18L16 8l-4 6-3-4-6 10z" fill="${colorHex}" fill-opacity="0.18"/><path d="M12 3v3"/><path d="M8 5l1.5 2"/><path d="M16 5l-1.5 2"/></svg>`;
+    case "eruption":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L9 10h6l5 10H4z" fill="${colorHex}" fill-opacity="0.2"/><path d="M12 3v5"/><path d="M8 5l2.5 3"/><path d="M16 5l-2.5 3"/></svg>`;
+    case "tremor":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 12 6 12 9 4 12 20 15 9 18 15 20 12 22 12"/></svg>`;
+  }
+};
+
+/**
  * 日本語の段落文章整形ヘルパー
  * カギカッコ（「や『）以外で始まる段落の先頭に全角スペース（　）を付与して字下げする
  */
@@ -2115,7 +2391,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [visualMarginOverrides, setVisualMarginOverrides] = useState<Record<string, boolean>>({});
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
-  const [gmPrepTool, setGmPrepTool] = useState<"nametags" | "goal_boards">("goal_boards");
+  const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "nametags">("goal_boards");
   const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
@@ -2483,6 +2759,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const handlePrintDesignedSheet = () => {
     if (category === "gm_prep" && gmPrepTool === "goal_boards") {
       handlePrintGmGoalBoards();
+      return;
+    }
+    if (category === "gm_prep" && gmPrepTool === "coin_tokens") {
+      handlePrintGmCoinTokens();
       return;
     }
     // 全体提示の地図・写真カテゴリの場合は、A4用紙（余白0mm・画像のみ最大化・90度回転配置）で印刷
@@ -3031,6 +3311,275 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
   };
 
+  // 海図用コイントークンシート（コイン直径2.49cm対応・切り抜き直径2.6cm ＝ 26mm・A4縦1枚一括）を印刷 / PDF保存
+  const handlePrintGmCoinTokens = () => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const renderTokenHtml = (tok: CoinTokenItem) => {
+      const svgIcon = getCoinTokenSvgString(tok.kind, tok.rimHex);
+      const isTwoLine = Boolean(tok.mainLine2);
+      return `
+        <div class="token-cell">
+          <div class="token-cut-outer" style="background-color: ${tok.bgHex}; border-color: ${tok.rimHex};">
+            <div class="token-coin-guide" style="border-color: ${tok.rimHex};">
+              <div class="token-icon-wrap">${svgIcon}</div>
+              ${
+                isTwoLine
+                  ? `
+                  <div class="token-main-2line" style="color: ${tok.textHex};">
+                    <span>${escapeHtml(tok.mainLine1)}</span>
+                    <span class="token-divider-line" style="background-color: ${tok.rimHex};"></span>
+                    <span>${escapeHtml(tok.mainLine2 || "")}</span>
+                  </div>
+                `
+                  : `
+                  <div class="token-main-1line" style="color: ${tok.textHex};">
+                    ${escapeHtml(tok.mainLine1)}
+                  </div>
+                  ${
+                    tok.bottomBadge
+                      ? `<div class="token-bottom-badge" style="background-color: ${tok.rimHex};">${escapeHtml(
+                          tok.bottomBadge
+                        )}</div>`
+                      : ""
+                  }
+                `
+              }
+            </div>
+          </div>
+          <div class="token-caption">${escapeHtml(tok.topSubLabel)}</div>
+        </div>
+      `;
+    };
+
+    const sectionsHtml = GM_COIN_TOKEN_SECTIONS.map(
+      (sec) => `
+      <div class="token-section">
+        <div class="token-section-header">
+          <span class="token-section-title">${escapeHtml(sec.sectionTitle)}</span>
+          <span class="token-section-note">${escapeHtml(sec.usageNote)}</span>
+        </div>
+        <div class="token-grid">
+          ${sec.tokens.map(renderTokenHtml).join("")}
+        </div>
+      </div>
+    `
+    ).join("");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - 海図用コイントークン印刷シート（コイン直径2.49cm対応 / 切り抜き直径2.6cm）</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .sheet-header {
+      border-bottom: 2.5px solid #0f172a;
+      padding-bottom: 3mm;
+      margin-bottom: 4mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .sheet-title {
+      font-size: 14pt;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .sheet-subtitle {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 1mm;
+    }
+    .sheet-spec-badge {
+      font-size: 8.5pt;
+      font-weight: 800;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 1.5mm 3mm;
+      border-radius: 1.5mm;
+    }
+    .token-section {
+      border: 1.2px solid #cbd5e1;
+      border-radius: 2.5mm;
+      padding: 3mm 4mm;
+      margin-bottom: 3.8mm;
+      background: #ffffff;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .token-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 1.5mm;
+      margin-bottom: 3mm;
+    }
+    .token-section-title {
+      font-size: 9.5pt;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .token-section-note {
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #475569;
+    }
+    .token-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4mm 5.5mm;
+      align-items: center;
+    }
+    .token-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* 外側切り抜き円：直径 26.2mm（2.62cm ＝ コイン2.49cmより少し大きめ） */
+    .token-cut-outer {
+      width: 26.2mm;
+      height: 26.2mm;
+      border-radius: 9999px;
+      border: 1.4px dashed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* 内側コイン実寸リング：直径 24.9mm（2.49cm）太枠 */
+    .token-coin-guide {
+      width: 24.9mm;
+      height: 24.9mm;
+      border-radius: 9999px;
+      border: 1.7mm solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.8mm;
+      overflow: hidden;
+    }
+    .token-icon-wrap {
+      line-height: 1;
+      margin-bottom: 0.4mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .token-main-1line {
+      font-size: 11.5pt;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .token-main-2line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.6pt;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .token-divider-line {
+      width: 14mm;
+      height: 0.45mm;
+      margin: 0.5mm 0;
+      border-radius: 1mm;
+      opacity: 0.65;
+    }
+    .token-bottom-badge {
+      margin-top: 0.7mm;
+      font-size: 6.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.2mm 2mm;
+      border-radius: 2mm;
+      line-height: 1.15;
+    }
+    .token-caption {
+      margin-top: 1mm;
+      font-size: 6.5pt;
+      font-family: monospace;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .sheet-footer {
+      margin-top: 2mm;
+      font-size: 7.5pt;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet-header">
+    <div>
+      <div class="sheet-title">${escapeHtml(project.title)} ― 海図用コイントークン印刷シート</div>
+      <div class="sheet-subtitle">✂ 外側の破線円（直径2.62cm）または内側の太枠円（コイン実寸・直径2.49cm）に沿って切り抜き、コインに貼り付けてご使用ください</div>
+    </div>
+    <div class="sheet-spec-badge">A4 等倍（100%）印刷 ／ 2.49cmコイン対応（外径2.62cm）</div>
+  </div>
+  ${sectionsHtml}
+  <div class="sheet-footer">
+    <span>収録数：ソノブイ×3 ／ 遭難船×1 ／ 巡視船×1 ／ 暗礁×2 ／ 火山噴火・海底噴火×6 ／ 火山性微動×6 （計19個 ＋ 予備8個）</span>
+    <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください</span>
+  </div>
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
   // Day別（単一DayまたはDay 1〜Day 7一括）のGM進行資料をA4印刷 / PDF保存（複数ページまたぎ時に文字切れ・枠切れを起こさないページネーション対応）
   const handlePrintAllGmProgressionSheets = (targetDayNumber?: number) => {
     const escapeHtml = (str: string) =>
@@ -3560,7 +4109,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <IdCard className="h-4 w-4" />
             ⑤ GM事前準備
             <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
-              目的シート・ネームタグ
+              目的・トークン・名札
             </span>
           </button>
         </div>
@@ -4116,29 +4665,40 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </span>
               </div>
 
-              {/* ツール切替（全体目的シート / 首下げネームタグ） */}
-              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+              {/* ツール切替（全体目的シート / コイントークン / 首下げネームタグ） */}
+              <div className="grid grid-cols-3 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
                 <button
                   type="button"
                   onClick={() => setGmPrepTool("goal_boards")}
-                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "goal_boards"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🎯 全体目的シート (10枚)
+                  🎯 目的シート
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("coin_tokens")}
+                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "coin_tokens"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🪙 トークン
                 </button>
                 <button
                   type="button"
                   onClick={() => setGmPrepTool("nametags")}
-                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                  className={`rounded-md px-1 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "nametags"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
                   }`}
                 >
-                  🏷️ ネームタグ (8枠)
+                  🏷️ ネームタグ
                 </button>
               </div>
 
@@ -4193,6 +4753,38 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </button>
                       );
                     })}
+                  </div>
+                </>
+              ) : gmPrepTool === "coin_tokens" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🪙 海図用コイントークン（2.49cmコイン対応）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      直径2.49cmのコインに貼れるよう、少し大きめの切り抜き円（外径2.62cm・内枠2.49cm）と大きな文字で設計されたA4一括シートです。
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                          A4・全19個＋予備8個
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-300">
+                          直径2.49cmコイン用
+                        </span>
+                      </div>
+                      <div className="font-bold text-xs text-white">
+                        海図用コイントークン一括シート
+                      </div>
+                      <div className="text-[11px] text-slate-300 space-y-0.5">
+                        <div>・ソノブイ × 3</div>
+                        <div>・遭難船 × 1 ／ 巡視船 × 1</div>
+                        <div>・暗礁 × 2</div>
+                        <div>・火山噴火／海底噴火 × 6</div>
+                        <div>・火山性微動 × 6</div>
+                      </div>
+                    </div>
                   </div>
                 </>
               ) : (
@@ -6826,6 +7418,172 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </div>
                       );
                     })}
+                  </div>
+                </div>
+              ) : gmPrepTool === "coin_tokens" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（海図用コイントークン印刷シート / 直径2.49cmコイン対応）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        海図用コイントークン印刷シート（コイン直径2.49cm対応・外径2.62cm・全19個＋予備8個）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrintGmCoinTokens}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        コイントークンをA4印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・貼り付けガイド */}
+                  <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
+                      <Scissors className="h-4 w-4" />
+                      海図用コイントークンの印刷・工作ガイド（直径2.49cmコイン用）
+                    </div>
+                    <div>
+                      ・<strong>コイン実寸（直径2.49cm ＝ 24.9mm）</strong>に対し、多少大きめに切っても余白が出ないよう<strong>外側破線円を直径2.62cm（26.2mm）</strong>、内側の太色枠を直径2.49cmで設計しています。
+                    </div>
+                    <div>
+                      ・「コイントークンをA4印刷 / PDF保存」から<strong>倍率100%（等倍）</strong>でA4用紙（またはA4シール用紙）に印刷し、丸く切り抜いてコインへ貼り付けてください。
+                    </div>
+                    <div>
+                      ・<strong>Day 1（遭難船1・巡視船1・暗礁2）</strong>、<strong>Day 3（ソノブイ3）</strong>、<strong>Day 2〜7（火山噴火／海底噴火6・火山性微動6）</strong>の計19個に加え、下段に予備8個を収録しています。
+                    </div>
+                  </div>
+
+                  {/* トークン一覧プレビューシート */}
+                  <div className="space-y-5 rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-900 pb-2.5">
+                      <div>
+                        <div className="text-base font-black text-slate-900">
+                          {project.title} ― 海図用コイントークン印刷シート
+                        </div>
+                        <div className="text-xs font-bold text-slate-600">
+                          ✂ 外側破線円：直径2.62cm（26.2mm） ／ 内側太枠円：コイン実寸 直径2.49cm（24.9mm）
+                        </div>
+                      </div>
+                      <span className="rounded bg-slate-900 px-3 py-1 text-xs font-extrabold text-white">
+                        A4 等倍（100%）印刷用
+                      </span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {GM_COIN_TOKEN_SECTIONS.map((sec) => (
+                        <div
+                          key={sec.id}
+                          className="rounded-lg border border-slate-200 bg-slate-50/50 p-3.5 space-y-3"
+                        >
+                          <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-dashed border-slate-300 pb-1.5">
+                            <span className="text-xs font-black text-slate-900">
+                              {sec.sectionTitle}
+                            </span>
+                            <span className="text-[11px] font-semibold text-slate-500">
+                              {sec.usageNote}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-4 sm:gap-5 pt-1">
+                            {sec.tokens.map((tok) => {
+                              const svgHtml = getCoinTokenSvgString(tok.kind, tok.rimHex);
+                              const isTwoLine = Boolean(tok.mainLine2);
+                              return (
+                                <div
+                                  key={tok.id}
+                                  className="flex flex-col items-center"
+                                >
+                                  {/* 外側切り抜き円（直径2.62cm相当プレビュー） */}
+                                  <div
+                                    className="rounded-full border-2 border-dashed flex items-center justify-center shadow-sm"
+                                    style={{
+                                      width: "26.2mm",
+                                      height: "26.2mm",
+                                      backgroundColor: tok.bgHex,
+                                      borderColor: tok.rimHex,
+                                    }}
+                                  >
+                                    {/* 内側コイン実寸リング（直径2.49cm相当） */}
+                                    <div
+                                      className="rounded-full flex flex-col items-center justify-center text-center overflow-hidden"
+                                      style={{
+                                        width: "24.9mm",
+                                        height: "24.9mm",
+                                        borderWidth: "1.7mm",
+                                        borderStyle: "solid",
+                                        borderColor: tok.rimHex,
+                                        padding: "0.8mm",
+                                      }}
+                                    >
+                                      <div
+                                        className="leading-none mb-0.5 flex items-center justify-center"
+                                        dangerouslySetInnerHTML={{ __html: svgHtml }}
+                                      />
+                                      {isTwoLine ? (
+                                        <div
+                                          className="flex flex-col items-center justify-center font-black leading-[1.08] tracking-tight whitespace-nowrap"
+                                          style={{
+                                            color: tok.textHex,
+                                            fontSize: "9.6pt",
+                                          }}
+                                        >
+                                          <span>{tok.mainLine1}</span>
+                                          <span
+                                            className="my-0.5 rounded"
+                                            style={{
+                                              width: "14mm",
+                                              height: "0.45mm",
+                                              backgroundColor: tok.rimHex,
+                                              opacity: 0.65,
+                                            }}
+                                          />
+                                          <span>{tok.mainLine2}</span>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div
+                                            className="font-black leading-[1.05] tracking-tight whitespace-nowrap"
+                                            style={{
+                                              color: tok.textHex,
+                                              fontSize: "11.5pt",
+                                            }}
+                                          >
+                                            {tok.mainLine1}
+                                          </div>
+                                          {tok.bottomBadge && (
+                                            <div
+                                              className="mt-0.5 rounded font-black text-white leading-tight"
+                                              style={{
+                                                backgroundColor: tok.rimHex,
+                                                fontSize: "6.5pt",
+                                                padding: "0.2mm 2mm",
+                                              }}
+                                            >
+                                              {tok.bottomBadge}
+                                            </div>
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="mt-1 font-mono text-[10px] font-bold text-slate-500">
+                                    {tok.topSubLabel}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               ) : (
