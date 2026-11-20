@@ -677,6 +677,27 @@ const WHALE_CLICK_MTG_CARDS: WhaleMtgCardItem[] = (() => {
   });
 })();
 
+const formatWhaleJapaneseCardLabel = (label: string): string => {
+  switch (label) {
+    case "（子ども）餌をくれ":
+      return "（子ども）\n餌をくれ";
+    case "（子ども）自分の場所はここだ":
+      return "（子ども）\n自分の場所はここだ";
+    case "（大人）自分の場所はここだ":
+      return "（大人）\n自分の場所はここだ";
+    case "我ら・自分（クジラ）":
+      return "我ら・自分\n（クジラ）";
+    case "あなたたち・あなた":
+      return "あなたたち\nあなた";
+    case "挨拶／こんにちは":
+      return "挨拶\nこんにちは";
+    case "大きい・たくさんの餌":
+      return "大きい\nたくさんの餌";
+    default:
+      return label;
+  }
+};
+
 const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES.map(
   (cand, idx) => {
     const numStr = String(idx + 1).padStart(2, "0");
@@ -684,7 +705,7 @@ const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES
       id: `mtg-jp-${numStr}`,
       kind: "japanese_meaning" as const,
       codeLabel: `日本語 #${numStr}`,
-      mainText: cand.label,
+      mainText: formatWhaleJapaneseCardLabel(cand.label),
       lockedBadge: cand.isLockedInitial
         ? cand.label === "海の下の火山"
           ? "初期確定：音 #01"
@@ -3692,15 +3713,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       const headerBg = isClick ? "#0369a1" : "#b45309";
       const textColor = isClick ? "#0c4a6e" : "#78350f";
       const deckBadge = isClick ? "クジラのクリック音" : "あてはめる日本語";
-      const textLen = card.mainText.length;
-      const fontSizePt =
-        textLen <= 4
-          ? "22pt"
-          : textLen <= 7
-          ? "17.5pt"
-          : textLen <= 10
-          ? "14.5pt"
-          : "12.5pt";
+      // 全57枚すべて同一の統一フォントサイズ（1行最大9文字『自分の場所はここだ』『ド・ドーッカッカッ』が1行に綺麗に収まるサイズ）
+      const fontSizePt = "13.8pt";
+      const formattedMainHtml = card.mainText
+        .split("\n")
+        .map((line) => escapeHtml(line))
+        .join("<br />");
 
       return `
         <div class="mtg-card-cell" style="background-color: ${bgColor};">
@@ -3712,7 +3730,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
             <div class="mtg-card-body">
               <div class="mtg-main-text" style="color: ${textColor}; font-size: ${fontSizePt};">
-                ${escapeHtml(card.mainText)}
+                ${formattedMainHtml}
               </div>
             </div>
 
@@ -8068,15 +8086,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
                           {WHALE_CLICK_MTG_CARDS.map((card) => {
-                            const len = card.mainText.length;
-                            const textSizeClass =
-                              len <= 4
-                                ? "text-2xl sm:text-3xl"
-                                : len <= 7
-                                ? "text-xl sm:text-2xl"
-                                : len <= 10
-                                ? "text-lg sm:text-xl"
-                                : "text-base sm:text-lg";
                             return (
                               <div
                                 key={card.id}
@@ -8093,7 +8102,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   </div>
 
                                   <div className="my-auto py-2 flex items-center justify-center text-center">
-                                    <div className={`font-black text-sky-950 leading-snug break-words ${textSizeClass}`}>
+                                    <div className="font-black text-sky-950 leading-relaxed whitespace-pre-line text-lg sm:text-xl">
                                       {card.mainText}
                                     </div>
                                   </div>
@@ -8126,15 +8135,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
                           {WHALE_JAPANESE_MTG_CARDS.map((card) => {
-                            const len = card.mainText.length;
-                            const textSizeClass =
-                              len <= 4
-                                ? "text-2xl sm:text-3xl"
-                                : len <= 7
-                                ? "text-xl sm:text-2xl"
-                                : len <= 10
-                                ? "text-lg sm:text-xl"
-                                : "text-base sm:text-lg";
                             return (
                               <div
                                 key={card.id}
@@ -8151,7 +8151,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   </div>
 
                                   <div className="my-auto py-2 flex items-center justify-center text-center">
-                                    <div className={`font-black text-amber-950 leading-snug break-words ${textSizeClass}`}>
+                                    <div className="font-black text-amber-950 leading-relaxed whitespace-pre-line text-lg sm:text-xl">
                                       {card.mainText}
                                     </div>
                                   </div>
