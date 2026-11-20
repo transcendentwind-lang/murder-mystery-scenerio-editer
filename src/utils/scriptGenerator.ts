@@ -556,12 +556,18 @@ export function printDocumentText(title: string, markdownOrText: string, imageUr
  * HTMLエスケープヘルパー
  */
 function escapeHtmlForB5(str: string = ""): string {
-  return str
+  const escaped = str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+  // Allow safe ruby tags for furigana in handouts
+  return escaped
+    .replace(/&lt;ruby&gt;/g, "<ruby>")
+    .replace(/&lt;\/ruby&gt;/g, "</ruby>")
+    .replace(/&lt;rt&gt;/g, "<rt>")
+    .replace(/&lt;\/rt&gt;/g, "</rt>");
 }
 
 export const CHARACTER_NAME_RUBIES: Record<string, string> = {
@@ -1224,6 +1230,12 @@ export const B5_HANDOUT_PRINT_STYLES = `
   }
   ruby {
     ruby-align: center;
+  }
+  rt {
+    font-size: 0.55em;
+    letter-spacing: 0;
+    line-height: 1;
+    font-weight: normal;
   }
 `;
 

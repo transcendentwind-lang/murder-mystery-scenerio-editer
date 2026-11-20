@@ -750,6 +750,13 @@ const formatJapaneseParagraphs = (text: string): string => {
 };
 
 /**
+ * 日本語の段落文章HTML整形ヘルパー（ルビ対応・改行br変換）
+ */
+const formatJapaneseParagraphsHtml = (text: string): string => {
+  return formatJapaneseParagraphs(text).replace(/\n/g, "<br/>");
+};
+
+/**
  * 証拠カード表面タイトルの改行整形ヘルパー
  * ・明示的な frontTitleHtml があればそれを優先
  * ・「および」が含まれる場合は「および<br>」で改行
@@ -5617,9 +5624,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               <span>あなたの記憶（当日の状況・背景情報）</span>
                             </h3>
                           </div>
-                          <div className="text-[14px] leading-relaxed text-slate-800 tracking-normal whitespace-pre-wrap">
-                            {formatJapaneseParagraphs(activeChar.introduction)}
-                          </div>
+                          <div
+                            className="text-[14px] leading-relaxed text-slate-800 tracking-normal [&_ruby]:ruby-align-center [&_rt]:text-[10px] [&_rt]:text-slate-500"
+                            dangerouslySetInnerHTML={{
+                              __html: formatJapaneseParagraphsHtml(activeChar.introduction),
+                            }}
+                          />
                         </div>
 
                         {/* ③ 自己紹介（開始時ロールプレイ台詞・シートの最後） */}
