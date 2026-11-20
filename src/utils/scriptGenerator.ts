@@ -564,16 +564,39 @@ function escapeHtmlForB5(str: string = ""): string {
     .replace(/'/g, "&#039;");
 }
 
+export const CHARACTER_NAME_RUBIES: Record<string, string> = {
+  "pc-1": "あ さ し お",
+  "pc-2": "か い は ま",
+  "pc-3": "さ か な ぎ",
+  "pc-4": "た ち う お",
+  "pc-5": "な み よ り",
+  "pc-6": "は つ せ",
+  "pc-7": "な が つ",
+};
+
+export const CHARACTER_COMPACT_RUBIES: Record<string, string> = {
+  "pc-1": "あさしお",
+  "pc-2": "かいはま",
+  "pc-3": "さかなぎ",
+  "pc-4": "たちうお",
+  "pc-5": "なみより",
+  "pc-6": "はつせ",
+  "pc-7": "ながつ",
+};
+
 /**
- * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト単体HTML生成
- * 構成：所属・氏名、公開プロフィール、自己紹介、あなたの内面（誇り＆喪失）、あなたの記憶
- * ※秘匿目標・所持品リスト・後ろめたさは排除した完全協力型高密度レイアウト
+ * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト（3枚組）HTML生成
+ * 1枚目：表紙・配役シート（肩書きと名前のみ・最初にプレイヤー達が見る）
+ * 2枚目：チームメンバー紹介シート（全7名一覧・自分はグレー表示・公開プロフィール掲載）
+ * 3枚目：個人秘匿シート（あなたの内面・行動指針 ＆ あなたの記憶 ＆ 最後に自己紹介ロールプレイ台詞）
  */
 export function generateB5HandoutSingleHtml(
   c: Character,
   projectTitle: string,
-  index: number
+  index: number,
+  allCharacters?: Character[]
 ): string {
+  const characters = allCharacters && allCharacters.length > 0 ? allCharacters : [c];
   const memoryText = [c.introduction, c.handout?.backgroundTimeline]
     .filter(Boolean)
     .join("\n\n");
@@ -581,60 +604,134 @@ export function generateB5HandoutSingleHtml(
   const locationText =
     c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊";
 
-  return `
-  <div class="b5-sheet">
+  const ruby = CHARACTER_NAME_RUBIES[c.id] || "";
+
+  /* ----------------------------------------------------
+     【1枚目】表紙・配役シート（最初にプレイヤー達が見る）
+     ---------------------------------------------------- */
+  const page1Html = `
+  <div class="b5-sheet b5-sheet-cover">
     <!-- ヘッダー -->
     <div class="header-band">
       <div class="header-left">
-        <span class="sub-title">合同対策本部 記録資料</span>
+        <span class="sub-title">合同対策本部 公式記録資料</span>
         <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
       </div>
       <div class="header-right">
-        <span class="confidential-badge">【非公開・個人ハンドアウト】</span>
+        <span class="confidential-badge">【配役カード】</span>
         <span class="location-badge">拠点：${locationText}</span>
       </div>
     </div>
 
-    <!-- 所属・氏名 IDプレート -->
-    <div class="id-plate">
-      <div class="id-info">
-        <div class="profession-label">${escapeHtmlForB5(c.profession)}</div>
-        <div class="character-name">${escapeHtmlForB5(c.name)}</div>
-      </div>
-      <div class="id-meta">
-        <div class="pc-badge">PC-${index + 1}</div>
+    <!-- 中央配役カード（堂々たる表札スタイル） -->
+    <div class="cover-card">
+      <div class="cover-pc-badge">PC-${index + 1}</div>
+      <div class="cover-profession">${escapeHtmlForB5(c.profession)}</div>
+      ${ruby ? `<div class="cover-ruby">${ruby}</div>` : ""}
+      <div class="cover-name">${escapeHtmlForB5(c.name)}</div>
+      <div class="cover-location">${locationText}</div>
+    </div>
+
+    <!-- 下部ガイダンス -->
+    <div class="cover-guidance">
+      <div class="guidance-title">📋 プレイヤー用配役シート（ゲーム開始時）</div>
+      <div class="guidance-body">
+        ・ゲーム開始前、この面を表にして各自の席・手元に配置してください。<br/>
+        ・他のプレイヤーに対してあなたの担当役職・氏名を明示し、裏面の秘匿情報（記憶・目標）のネタバレを防止します。
       </div>
     </div>
 
-    <!-- 公開情報エリア（2列対称グリッド） -->
-    <div class="grid-2col">
-      <!-- 公開プロフィール -->
-      <div class="card card-public">
-        <div class="card-header">
-          <span class="card-title">🌐 【公開情報】全員に公開できるプロフィール</span>
-          <span class="card-sub-hint">（自己紹介で開示）</span>
-        </div>
-        <div class="card-content">
-          ${escapeHtmlForB5(c.handout?.publicProfile || "").replace(/\n/g, "<br/>")}
-        </div>
-      </div>
+    <!-- フッター -->
+    <div class="footer-band">
+      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+      <span class="page-num">B5 1/3 頁（表紙・配役）</span>
+    </div>
+  </div>
+  `;
 
-      <!-- 自己紹介（開始時台詞） -->
-      <div class="card card-intro">
-        <div class="card-header intro-header">
-          <span class="card-title">💬 【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
-        </div>
-        <div class="card-content quote-content">
-          ${escapeHtmlForB5(c.handout?.handoutBody || "").replace(/\n/g, "<br/>")}
-        </div>
+  /* ----------------------------------------------------
+     【2枚目】チームメンバー紹介シート（全7名一覧・自分はグレー表示）
+     ---------------------------------------------------- */
+  const page2Html = `
+  <div class="b5-sheet b5-sheet-members">
+    <!-- ヘッダー -->
+    <div class="header-band">
+      <div class="header-left">
+        <span class="sub-title">合同対策本部 チーム編成</span>
+        <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
+      </div>
+      <div class="header-right">
+        <span class="public-badge">【公開情報】対策本部 参加メンバー一覧（全${characters.length}名）</span>
       </div>
     </div>
 
-    <!-- 非公開情報：あなたの内面（2列対称グリッド） -->
+    <!-- サブガイドバー -->
+    <div class="members-guide-bar">
+      <span>※自己紹介フェーズや議論の際、各PCの役職や公開プロフィールを手元で確認できる一覧シートです</span>
+      <span class="self-notice">（※灰色の枠は【あなた】です）</span>
+    </div>
+
+    <!-- メンバー一覧（全7名） -->
+    <div class="members-list">
+      ${characters
+        .map((m, mIdx) => {
+          const isSelf = m.id === c.id;
+          const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
+          const mLoc = m.location === "headquarters" ? "東京本部" : "小笠原現地";
+          return `
+        <div class="member-card ${isSelf ? "member-card-self" : ""}">
+          <div class="member-badge-col">
+            <span class="member-pc-code">PC-${mIdx + 1}</span>
+            <span class="member-loc-tag">${mLoc}</span>
+            ${isSelf ? '<span class="member-self-tag">あなた</span>' : ""}
+          </div>
+          <div class="member-info-col">
+            <div class="member-header-row">
+              <div class="member-name-group">
+                <ruby class="member-name">${escapeHtmlForB5(m.name)}${mRuby ? `<rt>${mRuby}</rt>` : ""}</ruby>
+              </div>
+              <div class="member-profession">${escapeHtmlForB5(m.profession)}</div>
+            </div>
+            <div class="member-profile">
+              ${escapeHtmlForB5(m.handout?.publicProfile || "").replace(/\n/g, " ")}
+            </div>
+          </div>
+        </div>
+        `;
+        })
+        .join("")}
+    </div>
+
+    <!-- フッター -->
+    <div class="footer-band">
+      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+      <span class="page-num">B5 2/3 頁（メンバー紹介）</span>
+    </div>
+  </div>
+  `;
+
+  /* ----------------------------------------------------
+     【3枚目】個人秘匿シート（内面・記憶・自己紹介ロールプレイ台詞）
+     ---------------------------------------------------- */
+  const page3Html = `
+  <div class="b5-sheet b5-sheet-secret">
+    <!-- ヘッダー -->
+    <div class="header-band">
+      <div class="header-left">
+        <span class="sub-title">合同対策本部 個人秘匿記録</span>
+        <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
+      </div>
+      <div class="header-right">
+        <span class="confidential-badge">【非公開情報】他プレイヤーには見せないでください</span>
+        <span class="location-badge">PC-${index + 1}</span>
+      </div>
+    </div>
+
+    <!-- ① あなたの内面・行動指針（2列グリッド） -->
     <div class="internal-drama-section">
       <div class="section-title-bar">
         <span class="section-title">🔒 あなたの内面（非公開）・行動指針</span>
-        <span class="section-notice">※他プレイヤーには非公開（ロールプレイの軸となります）</span>
+        <span class="section-notice">※他プレイヤーには非公開（ロールプレイや判断の軸となります）</span>
       </div>
       <div class="grid-2col">
         <!-- 誇り・信条 -->
@@ -655,7 +752,7 @@ export function generateB5HandoutSingleHtml(
       </div>
     </div>
 
-    <!-- 非公開情報：あなたの記憶（全幅） -->
+    <!-- ② あなたの記憶（全幅・ゆったりと読める時系列・背景情報） -->
     <div class="card card-memory">
       <div class="card-header memory-header">
         <span class="card-title">📖 あなたの記憶（当日の状況・背景情報）</span>
@@ -666,12 +763,31 @@ export function generateB5HandoutSingleHtml(
       </div>
     </div>
 
+    <!-- ③ 自己紹介（開始時のセリフ） -->
+    <div class="card card-intro">
+      <div class="card-header intro-header">
+        <span class="card-title">💬 【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
+        <span class="intro-hint">※ゲーム開始の自己紹介フェーズでそのまま音読してください</span>
+      </div>
+      <div class="card-content quote-content">
+        ${escapeHtmlForB5(c.handout?.handoutBody || "").replace(/\n/g, "<br/>")}
+      </div>
+    </div>
+
     <!-- フッター -->
     <div class="footer-band">
       <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
-      <span class="page-num">B5 1/1 頁</span>
+      <span class="page-num">B5 3/3 頁（個人秘匿シート）</span>
     </div>
   </div>
+  `;
+
+  return `
+    ${page1Html}
+    <div class="b5-page-break"></div>
+    ${page2Html}
+    <div class="b5-page-break"></div>
+    ${page3Html}
   `;
 }
 
@@ -699,17 +815,21 @@ export const B5_HANDOUT_PRINT_STYLES = `
   }
   .b5-sheet {
     width: 100%;
+    height: 241mm;
+    max-height: 241mm;
     box-sizing: border-box;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 7px;
+    justify-content: space-between;
     page-break-inside: avoid;
     break-inside: avoid;
+    overflow: hidden;
   }
   .b5-page-break {
     page-break-after: always !important;
     break-after: page !important;
+    height: 0;
   }
   .header-band {
     display: flex;
@@ -717,6 +837,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     align-items: center;
     border-bottom: 2px solid #0f172a;
     padding-bottom: 4px;
+    margin-bottom: 4px;
   }
   .header-left {
     display: flex;
@@ -748,6 +869,15 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border-radius: 3px;
     letter-spacing: 0.05em;
   }
+  .public-badge {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
   .location-badge {
     border: 1px solid #cbd5e1;
     background: #f1f5f9;
@@ -757,50 +887,195 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding: 2px 6px;
     border-radius: 3px;
   }
-  .id-plate {
+
+  /* 1枚目：表紙・配役シート */
+  .cover-card {
+    margin: auto 0;
+    padding: 28px 24px;
     background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    border-radius: 8px;
     color: #ffffff;
-    border-radius: 5px;
-    padding: 8px 12px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover-pc-badge {
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: #ffffff;
+    font-family: monospace;
+    font-size: 11pt;
+    font-weight: 800;
+    padding: 3px 14px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .cover-profession {
+    font-size: 14pt;
+    font-weight: 800;
+    color: #cbd5e1;
+    margin-bottom: 14px;
+    letter-spacing: 0.05em;
+  }
+  .cover-ruby {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #94a3b8;
+    letter-spacing: 0.25em;
+    padding-left: 0.25em;
+    margin-bottom: 4px;
+  }
+  .cover-name {
+    font-size: 30pt;
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 0.15em;
+    padding-left: 0.15em;
+    line-height: 1.1;
+    margin-bottom: 14px;
+  }
+  .cover-location {
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: #94a3b8;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 8px;
+    width: 60%;
+  }
+  .cover-guidance {
+    border: 1px dashed #cbd5e1;
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 10px 14px;
+    margin-bottom: 8px;
+  }
+  .guidance-title {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 3px;
+  }
+  .guidance-body {
+    font-size: 7.5pt;
+    color: #64748b;
+    line-height: 1.5;
+  }
+
+  /* 2枚目：チームメンバー紹介シート */
+  .members-guide-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .profession-label {
-    font-size: 8pt;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 3px 8px;
+    font-size: 7pt;
+    color: #475569;
     font-weight: 600;
-    color: #94a3b8;
-    margin-bottom: 2px;
+    margin-bottom: 4px;
   }
-  .character-name {
-    font-size: 15pt;
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    color: #ffffff;
+  .self-notice {
+    color: #64748b;
+    font-weight: 700;
   }
-  .id-meta {
-    text-align: right;
+  .members-list {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 3px;
+    gap: 4.5px;
+    flex: 1;
+    justify-content: space-between;
   }
-  .pc-badge {
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.12);
-    color: #ffffff;
+  .member-card {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 4px 8px;
+    gap: 8px;
+  }
+  .member-card-self {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+  }
+  .member-badge-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-width: 48px;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 6px;
+  }
+  .member-pc-code {
     font-family: monospace;
-    font-size: 8.5pt;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 3px;
-    letter-spacing: 0.08em;
+    font-size: 8pt;
+    font-weight: 800;
+    color: #1e293b;
   }
-  .coop-status {
-    font-size: 7pt;
+  .member-loc-tag {
+    font-size: 6.5pt;
     font-weight: 700;
-    color: #6ee7b7;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 1px 4px;
+    border-radius: 2px;
   }
+  .member-self-tag {
+    font-size: 6.5pt;
+    font-weight: 800;
+    background: #94a3b8;
+    color: #ffffff;
+    padding: 1px 4px;
+    border-radius: 2px;
+  }
+  .member-info-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+  }
+  .member-header-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .member-name {
+    font-size: 10pt;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.05em;
+  }
+  .member-name rt {
+    font-size: 6pt;
+    color: #64748b;
+  }
+  .member-profession {
+    font-size: 8pt;
+    font-weight: 700;
+    color: #475569;
+  }
+  .member-profile {
+    font-size: 7.5pt;
+    line-height: 1.4;
+    color: #334155;
+  }
+  .member-card-self .member-name,
+  .member-card-self .member-name rt,
+  .member-card-self .member-profession,
+  .member-card-self .member-profile,
+  .member-card-self .member-pc-code,
+  .member-card-self .member-loc-tag {
+    color: #94a3b8 !important;
+  }
+
+  /* 3枚目：個人秘匿シート */
   .grid-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -811,13 +1086,6 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border: 1px solid #cbd5e1;
     padding: 7px 9px;
     background: #ffffff;
-  }
-  .card-public {
-    background: #f8fafc;
-  }
-  .card-intro {
-    background: #eef2ff;
-    border-color: #c7d2fe;
   }
   .card-header {
     display: flex;
@@ -832,20 +1100,23 @@ export const B5_HANDOUT_PRINT_STYLES = `
     font-weight: 700;
     color: #1e293b;
   }
-  .card-sub-hint {
-    font-size: 7pt;
-    color: #64748b;
+  .card-intro {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    padding: 7px 10px;
   }
-  .card-content {
-    font-size: 8.5pt;
-    line-height: 1.48;
-    color: #1e293b;
+  .intro-hint {
+    font-size: 7pt;
+    color: #4f46e5;
+    font-weight: 600;
   }
   .quote-content {
     font-style: italic;
     border-left: 3px solid #6366f1;
-    padding-left: 6px;
+    padding-left: 8px;
     color: #0f172a;
+    font-size: 8.5pt;
+    line-height: 1.5;
   }
   .internal-drama-section {
     display: flex;
@@ -895,6 +1166,9 @@ export const B5_HANDOUT_PRINT_STYLES = `
     background: #ffffff;
     border-color: #cbd5e1;
     padding: 8px 10px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
   }
   .memory-header {
     display: flex;
@@ -919,7 +1193,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #0f172a;
   }
   .footer-band {
-    margin-top: 2px;
+    margin-top: 4px;
     border-top: 1px solid #e2e8f0;
     padding-top: 3px;
     display: flex;
@@ -928,12 +1202,11 @@ export const B5_HANDOUT_PRINT_STYLES = `
     font-size: 7pt;
     color: #64748b;
   }
-  .coop-note {
-    font-weight: 600;
-    color: #475569;
-  }
   .page-num {
     font-family: monospace;
+  }
+  ruby {
+    ruby-align: center;
   }
 `;
 
@@ -957,10 +1230,11 @@ export function printCharacterHandoutsB5(
       const sheetHtml = generateB5HandoutSingleHtml(
         c,
         projectTitle,
-        origIndex >= 0 ? origIndex : idx
+        origIndex >= 0 ? origIndex : idx,
+        characters
       );
       const isLast = idx === targetChars.length - 1;
-      return `<div class="${isLast ? "" : "b5-page-break"}">${sheetHtml}</div>`;
+      return `<div class="b5-character-package">${sheetHtml}</div>${isLast ? "" : '<div class="b5-page-break"></div>'}`;
     })
     .join("\n");
 

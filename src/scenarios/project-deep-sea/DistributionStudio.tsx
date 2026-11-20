@@ -30,6 +30,8 @@ import { GmOnePageFlowchart } from "@/components/GmOnePageFlowchart";
 import {
   printCharacterHandoutsB5,
   printWhaleSonarGuideA4,
+  CHARACTER_NAME_RUBIES,
+  CHARACTER_COMPACT_RUBIES,
 } from "@/utils/scriptGenerator";
 import {
   Sparkles,
@@ -2101,6 +2103,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const activePhaseCardId = NAGATSU_PHASE_CARDS.find((card) => card.id === selectedPhaseCardId)?.id
     ?? NAGATSU_PHASE_CARDS[0]?.id;
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
+  const [handoutSheetPage, setHandoutSheetPage] = useState<"all" | 1 | 2 | 3>("all");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
   );
@@ -4242,17 +4245,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               <div className="space-y-6">
                 {handoutViewMode === "sheet" ? (
                   /* ------------------------------------------------------------
-                     📄 個人ハンドアウト本紙（B5規格特化・無駄な余白ゼロ・高品位レイアウト）
+                     📄 個人ハンドアウト（B5規格・全3枚組：①表紙 ②メンバー紹介 ③個人秘匿）
                      ------------------------------------------------------------ */
-                  <div className="space-y-5 print:space-y-2 font-sans">
-                    {/* 証拠資料と同じ形式の画面上部タイトル ＆ 右上印刷ボタン行 */}
+                  <div className="space-y-6 font-sans">
+                    {/* 画面上部タイトル ＆ 右上印刷ボタン行 */}
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 個人ハンドアウト本紙（B5規格・全{(project.characters || []).length}名）
+                          {project.title} ― 個人ハンドアウト（B5規格・全3枚組・全{(project.characters || []).length}名）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          個人ハンドアウト本紙（選択中：{activeChar.name}）
+                          個人ハンドアウト（選択中：{activeChar.name} / 3枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -4260,14 +4263,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           type="button"
                           onClick={() =>
                             printCharacterHandoutsB5(
-                              activeChar ? [activeChar] : project.characters || [],
-                              project.title
+                              project.characters || [],
+                              project.title,
+                              activeChar.id
                             )
                           }
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          このPCをB5印刷 / PDF保存
+                          このPC（3枚組）をB5印刷 / PDF保存
                         </button>
                         <button
                           type="button"
@@ -4275,265 +4279,339 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          全員分を一括B5印刷 / PDF保存
+                          全員分（全21枚）を一括B5印刷 / PDF保存
                         </button>
                       </div>
                     </div>
 
-                    {/* ① シート最上部ヘッダー（公的機関ブリーフィング見出し） */}
-                    <div className="border-b-2 border-slate-900 pb-1.5 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-500">
-                          合同対策本部 記録資料
-                        </span>
-                        <span className="text-[11px] font-black text-slate-900">
-                          『{project.title}』
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="rounded bg-slate-900 px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-white">
-                          【非公開・個人ハンドアウト】
-                        </span>
-                        <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[9.5px] font-semibold text-slate-700">
-                          拠点：
-                          {activeChar.location === "headquarters"
-                            ? "海上保安庁東京本部"
-                            : "小笠原・現地救難隊"}
-                        </span>
-                      </div>
+                    {/* 3枚組切り替えタブ */}
+                    <div className="no-print flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 p-1 text-xs font-bold">
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage("all")}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === "all"
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        📄 全3枚を連続表示
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(1)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 1
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ① 1枚目：表紙・配役シート
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(2)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 2
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ② 2枚目：チームメンバー紹介（全7名）
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(3)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 3
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ③ 3枚目：内面・記憶・自己紹介
+                      </button>
                     </div>
 
-                    {/* ② 所属・氏名（堂々たるアイデンティティ・プレート） */}
-                    <div className="rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-3 text-white shadow-sm flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex-1 min-w-[200px]">
-                        <div className="text-[10.5px] font-semibold text-slate-300 tracking-wider mb-0.5">
-                          {isDirectEditMode ? (
-                            <input
-                              type="text"
-                              value={activeChar.profession}
-                              placeholder="所属・肩書"
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  profession: e.target.value,
-                                }))
-                              }
-                              className="w-full max-w-md rounded border border-dashed border-slate-500 bg-slate-800/80 px-2 py-0.5 text-xs font-semibold text-white focus:outline-none"
-                            />
-                          ) : (
-                            <span>{activeChar.profession}</span>
-                          )}
-                        </div>
-                        <div className="flex items-baseline gap-2">
-                          {isDirectEditMode ? (
-                            <input
-                              type="text"
-                              value={activeChar.name}
-                              placeholder="氏名"
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
-                              }
-                              className="w-64 rounded border border-dashed border-slate-500 bg-slate-800/80 px-2 py-0.5 text-xl font-black text-white focus:outline-none"
-                            />
-                          ) : (
-                            <h2 className="text-xl sm:text-2xl font-black tracking-wide text-white">
-                              {activeChar.name}
-                            </h2>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center">
-                        <span className="rounded border border-slate-500 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold text-white tracking-widest">
-                          PC-{(project.characters || []).findIndex((c) => c.id === activeChar.id) + 1}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* ③ 【公開情報エリア】プロフィール ＆ 自己紹介（左右2分割グリッドで完全均等配置・無駄な余白ゼロ） */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {/* 左列：全員に公開できるプロフィール */}
-                      <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3 flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2">
-                            <h3 className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
-                              <span>🌐</span>
-                              <span>【公開情報】全員に公開できるプロフィール</span>
-                            </h3>
-                            <span className="text-[9px] text-slate-500 font-medium">（自己紹介で開示）</span>
+                    {/* ========================================================
+                        【1枚目】表紙・配役シート（最初にプレイヤー達が見る）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 1) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-6">
+                        {/* ヘッダー */}
+                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                              合同対策本部 公式記録資料
+                            </span>
+                            <span className="text-xs font-black text-slate-900">
+                              『{project.title}』
+                            </span>
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.publicProfile || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: { ...c.handout, publicProfile: e.target.value },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {activeChar.handout?.publicProfile || ""}
-                            </p>
-                          )}
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-slate-900 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white">
+                              【配役カード】
+                            </span>
+                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                              拠点：{activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* 中央配役カード（堂々たる表札スタイル） */}
+                        <div className="my-auto py-12 px-6 rounded-2xl bg-gradient-to-br from-slate-950 via-slate-900 to-slate-800 text-white text-center shadow-lg border border-slate-700 flex flex-col items-center justify-center space-y-4">
+                          <span className="rounded-md border border-white/30 bg-white/10 px-4 py-1 font-mono text-sm font-bold tracking-widest text-white">
+                            PC-{(project.characters || []).findIndex((c) => c.id === activeChar.id) + 1}
+                          </span>
+                          <div className="text-lg sm:text-xl font-extrabold text-slate-300 tracking-wide">
+                            {activeChar.profession}
+                          </div>
+                          <div className="space-y-1">
+                            <div className="text-sm font-bold tracking-[0.3em] text-slate-400 pl-[0.3em]">
+                              {CHARACTER_NAME_RUBIES[activeChar.id] || ""}
+                            </div>
+                            <div className="text-4xl sm:text-5xl font-black tracking-[0.2em] text-white pl-[0.2em]">
+                              {activeChar.name}
+                            </div>
+                          </div>
+                          <div className="pt-3 text-xs font-semibold text-slate-400 border-t border-slate-700/80 w-1/2 mx-auto">
+                            {activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
+                          </div>
+                        </div>
+
+                        {/* 下部ガイダンス */}
+                        <div className="rounded-lg border border-dashed border-slate-300 bg-slate-50/90 p-3.5 text-xs text-slate-700 space-y-1">
+                          <div className="font-bold text-slate-900 flex items-center gap-1.5">
+                            <span>📋</span>
+                            <span>プレイヤー用配役シート（ゲーム開始時）</span>
+                          </div>
+                          <div className="text-[11px] text-slate-600 leading-relaxed">
+                            ・ゲーム開始前、この面を表にして各自の席・手元に配置してください。<br />
+                            ・他のプレイヤーにあなたの役職と氏名を明示し、裏面の秘匿情報（記憶・ロールプレイ指針）のネタバレを防止します。
+                          </div>
+                        </div>
+
+                        {/* フッター */}
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 1/3 頁（表紙・配役）</span>
                         </div>
                       </div>
+                    )}
 
-                      {/* 右列：自己紹介（ロールプレイ台詞） */}
-                      <div className="rounded-lg border border-indigo-200 bg-indigo-50/40 p-3 flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between border-b border-indigo-200/80 pb-1.5 mb-2">
-                            <h3 className="text-[11px] font-bold text-indigo-950 flex items-center gap-1.5">
+                    {/* ========================================================
+                        【2枚目】チームメンバー紹介シート（全7名一覧・自分はグレー表示）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 2) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-4">
+                        {/* ヘッダー */}
+                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                              合同対策本部 チーム編成
+                            </span>
+                            <span className="text-xs font-black text-slate-900">
+                              『{project.title}』
+                            </span>
+                          </div>
+                          <span className="rounded bg-blue-900 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white">
+                            【公開情報】対策本部 参加メンバー一覧（全{(project.characters || []).length}名）
+                          </span>
+                        </div>
+
+                        {/* サブガイドバー */}
+                        <div className="rounded border border-slate-200 bg-slate-100 px-3 py-1.5 text-[11px] text-slate-600 font-semibold flex items-center justify-between">
+                          <span>※自己紹介フェーズや議論の際、各PCの役職や公開プロフィールを手元で確認できる一覧シートです</span>
+                          <span className="text-slate-500 font-bold">（※灰色の枠は【あなた】です）</span>
+                        </div>
+
+                        {/* メンバー一覧（全7名） */}
+                        <div className="space-y-2 flex-1">
+                          {(project.characters || []).map((m, mIdx) => {
+                            const isSelf = m.id === activeChar.id;
+                            const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
+                            const mLoc = m.location === "headquarters" ? "東京本部" : "小笠原現地";
+
+                            return (
+                              <div
+                                key={m.id}
+                                className={`rounded-lg border p-3 flex flex-col sm:flex-row items-start sm:items-center gap-3 transition ${
+                                  isSelf
+                                    ? "border-slate-300 bg-slate-100/70 text-slate-400"
+                                    : "border-slate-300 bg-white text-slate-900 shadow-sm"
+                                }`}
+                              >
+                                {/* バッジ列 */}
+                                <div className="flex sm:flex-col items-center justify-center gap-1 min-w-[70px] border-b sm:border-b-0 sm:border-r border-slate-200 pb-1 sm:pb-0 sm:pr-3 w-full sm:w-auto">
+                                  <span className={`font-mono text-xs font-black ${isSelf ? "text-slate-400" : "text-slate-900"}`}>
+                                    PC-{mIdx + 1}
+                                  </span>
+                                  <span
+                                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
+                                      isSelf
+                                        ? "bg-slate-200 text-slate-400"
+                                        : "bg-slate-100 text-slate-700 border border-slate-300"
+                                    }`}
+                                  >
+                                    {mLoc}
+                                  </span>
+                                  {isSelf && (
+                                    <span className="rounded bg-slate-300 px-1.5 py-0.5 text-[9px] font-black text-slate-600">
+                                      あなた
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* 情報列 */}
+                                <div className="flex-1 space-y-1">
+                                  <div className="flex flex-wrap items-baseline gap-2">
+                                    <span
+                                      className={`text-base font-black tracking-wide ${
+                                        isSelf ? "text-slate-400" : "text-slate-950"
+                                      }`}
+                                    >
+                                      <ruby>
+                                        {m.name}
+                                        {mRuby && (
+                                          <rt
+                                            className={`text-[10px] ${
+                                              isSelf ? "text-slate-400" : "text-slate-500"
+                                            }`}
+                                          >
+                                            {mRuby}
+                                          </rt>
+                                        )}
+                                      </ruby>
+                                    </span>
+                                    <span
+                                      className={`text-xs font-bold ${
+                                        isSelf ? "text-slate-400" : "text-slate-700"
+                                      }`}
+                                    >
+                                      {m.profession}
+                                    </span>
+                                  </div>
+                                  <p
+                                    className={`text-[11.5px] leading-relaxed ${
+                                      isSelf ? "text-slate-400" : "text-slate-700"
+                                    }`}
+                                  >
+                                    {m.handout?.publicProfile || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* フッター */}
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 2/3 頁（メンバー紹介）</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ========================================================
+                        【3枚目】個人秘匿シート（内面・記憶・自己紹介台詞）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 3) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-5">
+                        {/* ヘッダー */}
+                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                              合同対策本部 個人秘匿記録
+                            </span>
+                            <span className="text-xs font-black text-slate-900">
+                              『{project.title}』
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="rounded bg-rose-950 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-rose-100">
+                              【非公開情報】他プレイヤーには見せないでください
+                            </span>
+                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-700 font-mono">
+                              PC-{(project.characters || []).findIndex((c) => c.id === activeChar.id) + 1}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* ① あなたの内面・行動指針（誇り vs 喪失） */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between px-0.5">
+                            <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                              <Lock className="h-3.5 w-3.5 text-slate-700" />
+                              <span>あなたの内面（非公開）・行動指針</span>
+                            </span>
+                            <span className="text-[10px] text-slate-500">
+                              ※他プレイヤーには非公開（あなたのロールプレイや判断の軸となります）
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {/* 誇り・信条 */}
+                            <div className="rounded-lg border border-amber-300/80 bg-amber-50/50 p-3.5">
+                              <div className="text-xs font-bold text-amber-950 border-b border-amber-200/80 pb-1 mb-2 flex items-center gap-1">
+                                <span>✦</span>
+                                <span>誇り・信条・行動指針</span>
+                              </div>
+                              <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap">
+                                {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
+                              </p>
+                            </div>
+
+                            {/* 過去の喪失・悔恨 */}
+                            <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3.5">
+                              <div className="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1 mb-2 flex items-center gap-1">
+                                <span>✦</span>
+                                <span>過去の喪失・悔恨</span>
+                              </div>
+                              <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap">
+                                {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ② あなたの記憶（全幅・ゆったりと読める背景情報） */}
+                        <div className="rounded-lg border border-slate-300 bg-white p-4 shadow-sm flex-1">
+                          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2.5">
+                            <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                              <BookOpen className="h-4 w-4 text-indigo-700" />
+                              <span>あなたの記憶（当日の状況・背景情報）</span>
+                            </h3>
+                            <span className="rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700">
+                              非公開情報：他プレイヤーには見せないでください
+                            </span>
+                          </div>
+                          <div className="text-xs leading-[1.8] text-slate-800 tracking-normal whitespace-pre-wrap">
+                            {formatJapaneseParagraphs(activeChar.introduction)}
+                          </div>
+                        </div>
+
+                        {/* ③ 自己紹介（開始時ロールプレイ台詞・シートの最後） */}
+                        <div className="rounded-lg border border-indigo-200 bg-indigo-50/50 p-4">
+                          <div className="flex items-center justify-between border-b border-indigo-200 pb-1.5 mb-2.5">
+                            <h3 className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
                               <span>💬</span>
                               <span>【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
                             </h3>
-                            {onSendAiPrompt && (
-                              <button
-                                onClick={() =>
-                                  onSendAiPrompt(
-                                    `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout?.handoutBody || ""}`
-                                  )
-                                }
-                                className="no-print flex items-center gap-1 rounded bg-indigo-700 px-2 py-0.5 text-[9.5px] font-bold text-white hover:bg-indigo-600 shadow-sm"
-                              >
-                                <Sparkles className="h-3 w-3" />
-                                推敲
-                              </button>
-                            )}
+                            <span className="text-[10px] font-bold text-indigo-600">
+                              ※ゲーム開始の自己紹介フェーズでそのまま音読してください
+                            </span>
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.handoutBody || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: { ...c.handout, handoutBody: e.target.value },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-indigo-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-indigo-800 focus:outline-none"
-                            />
-                          ) : (
-                            <blockquote className="border-l-2 border-indigo-500 pl-2 text-[11.5px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
-                            </blockquote>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* ④ 【非公開情報エリア】あなたの内面・行動指針（左右2分割グリッド：誇り vs 喪失） */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between px-0.5">
-                        <span className="text-[11px] font-bold text-slate-900 flex items-center gap-1.5">
-                          <Lock className="h-3.5 w-3.5 text-slate-700" />
-                          <span>あなたの内面（非公開）・行動指針</span>
-                        </span>
-                        <span className="text-[9.5px] text-slate-500">
-                          ※他プレイヤーには非公開（あなたのロールプレイや判断の軸となります）
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {/* 左列：誇り・信条・行動指針 */}
-                        <div className="rounded-lg border border-amber-300/80 bg-amber-50/50 p-3">
-                          <div className="text-[10.5px] font-bold text-amber-950 border-b border-amber-200/80 pb-1 mb-1.5 flex items-center gap-1">
-                            <span>✦</span>
-                            <span>誇り・信条・行動指針</span>
-                          </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.internalDrama?.pride || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
-                                      pride: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-amber-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-amber-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
-                            </p>
-                          )}
+                          <blockquote className="border-l-4 border-indigo-500 pl-3 text-xs sm:text-[13px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
+                            {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
+                          </blockquote>
                         </div>
 
-                        {/* 右列：過去の喪失・悔恨 */}
-                        <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3">
-                          <div className="text-[10.5px] font-bold text-slate-800 border-b border-slate-200 pb-1 mb-1.5 flex items-center gap-1">
-                            <span>✦</span>
-                            <span>過去の喪失・悔恨</span>
-                          </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.internalDrama?.loss || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
-                                      loss: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
-                            </p>
-                          )}
+                        {/* フッター */}
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 3/3 頁（個人秘匿シート）</span>
                         </div>
                       </div>
-                    </div>
-
-                    {/* ⑤ 【非公開情報エリア】あなたの記憶（全幅・ゆったりと読める時系列・背景情報） */}
-                    <div className="rounded-lg border border-slate-300 bg-white p-3.5 shadow-sm">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2">
-                        <h3 className="text-[11px] font-bold text-slate-900 flex items-center gap-1.5">
-                          <BookOpen className="h-3.5 w-3.5 text-indigo-700" />
-                          <span>あなたの記憶（当日の状況・背景情報）</span>
-                        </h3>
-                        <span className="rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[9.5px] font-bold text-rose-700">
-                          非公開情報：他プレイヤーには見せないでください
-                        </span>
-                      </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={8}
-                          value={activeChar.introduction}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                        />
-                      ) : (
-                        <div className="text-[11.5px] leading-[1.7] text-slate-800 tracking-normal whitespace-pre-wrap">
-                          {formatJapaneseParagraphs(activeChar.introduction)}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* ⑥ B5フッター（公式記録フォーマット） */}
-                    <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[9.5px] text-slate-500">
-                      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
-                      <span className="font-mono">B5 1/1 頁</span>
-                    </div>
+                    )}
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
