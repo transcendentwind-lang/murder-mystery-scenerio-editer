@@ -3692,13 +3692,13 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     if (targetFilter === "all" || targetFilter === "click_sound") {
       pageGroups.push({
-        deckTitle: "【クジラのクリック音カード】（全28枚 / MTGサイズ 63mm×88mm）",
+        deckTitle: "【クジラのクリック音カード】（全28枚 / MTG横長サイズ 88mm×63mm）",
         pages: chunkIntoPagesOf9(WHALE_CLICK_MTG_CARDS),
       });
     }
     if (targetFilter === "all" || targetFilter === "japanese_meaning") {
       pageGroups.push({
-        deckTitle: "【あてはめる日本語カード】（全29枚 / MTGサイズ 63mm×88mm）",
+        deckTitle: "【あてはめる日本語カード】（全29枚 / MTG横長サイズ 88mm×63mm）",
         pages: chunkIntoPagesOf9(WHALE_JAPANESE_MTG_CARDS),
       });
     }
@@ -3713,8 +3713,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       const headerBg = isClick ? "#0369a1" : "#b45309";
       const textColor = isClick ? "#0c4a6e" : "#78350f";
       const deckBadge = isClick ? "クジラのクリック音" : "あてはめる日本語";
-      // 全57枚すべて同一の統一フォントサイズ（1行最大9文字『自分の場所はここだ』『ド・ドーッカッカッ』が1行に綺麗に収まるサイズ）
-      const fontSizePt = "13.8pt";
+      // 横長（88mm×63mm）化に伴い、全57枚共通の統一フォントサイズを19.5ptへ大幅拡大（最大9文字が1行に余裕で収まるサイズ）
+      const fontSizePt = "19.5pt";
       const formattedMainHtml = card.mainText
         .split("\n")
         .map((line) => escapeHtml(line))
@@ -3742,7 +3742,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     )}</span>`
                   : `<span class="mtg-footer-code" style="color: ${headerBg};">${
                       isClick ? "CLICK SOUND" : "JAPANESE MEANING"
-                    } / 63×88mm</span>`
+                    } / 88×63mm</span>`
               }
             </div>
           </div>
@@ -3764,14 +3764,14 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 <span>${escapeHtml(project.title)} ― ${escapeHtml(group.deckTitle)} （シート ${
               pIdx + 1
             }/${group.pages.length}）</span>
-                <span>✂ 外枠（63mm × 88mm：MTG標準カードサイズ）に沿って切り抜いてください ［${globalPageIdx}/${totalPages}頁］</span>
+                <span>✂ 外枠（横88mm × 縦63mm：MTG標準カード横長サイズ）に沿って切り抜いてください ［${globalPageIdx}/${totalPages}頁］</span>
               </div>
               <div class="mtg-grid-9">
                 ${nineCards.map(renderMtgCardSlotHtml).join("")}
               </div>
               <div class="mtg-page-bottom-guide">
-                <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください（市販のMTGレギュラーサイズスリーブ 63×88mm に適合）</span>
-                <span>A4 PORTRAIT / 9-POCKET MTG GRID (189mm × 264mm)</span>
+                <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください（市販のMTGレギュラーサイズスリーブ 88×63mm に適合）</span>
+                <span>A4 LANDSCAPE / 9-POCKET HORIZONTAL MTG GRID (264mm × 189mm)</span>
               </div>
             </div>
           `;
@@ -3796,10 +3796,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>${escapeHtml(project.title)} - クジラクリック音＆日本語カード（MTGサイズ 63mm×88mm）</title>
+  <title>${escapeHtml(project.title)} - クジラクリック音＆日本語カード（MTG横長サイズ 88mm×63mm）</title>
   <style>
     @page {
-      size: A4 portrait;
+      size: A4 landscape;
       margin: 0;
     }
     * {
@@ -3815,9 +3815,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
     }
     .mtg-a4-page {
-      width: 210mm;
-      height: 297mm;
-      padding: 8mm 10.5mm;
+      width: 297mm;
+      height: 210mm;
+      padding: 5.5mm 16.5mm;
       margin: 0 auto;
       background: #ffffff;
       page-break-after: always;
@@ -3835,7 +3835,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
     .mtg-page-top-guide,
     .mtg-page-bottom-guide {
-      width: 189mm;
+      width: 264mm;
       font-size: 7.5pt;
       font-weight: 700;
       color: #475569;
@@ -3843,25 +3843,25 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       justify-content: space-between;
       align-items: center;
     }
-    /* 3列 × 3行 ＝ 9枚（1枚 63mm × 88mm、全体 189mm × 264mm） */
+    /* 3列 × 3行 ＝ 9枚（1枚 横88mm × 縦63mm、全体 264mm × 189mm） */
     .mtg-grid-9 {
-      width: 189mm;
-      height: 264mm;
+      width: 264mm;
+      height: 189mm;
       display: grid;
-      grid-template-columns: 63mm 63mm 63mm;
-      grid-template-rows: 88mm 88mm 88mm;
+      grid-template-columns: 88mm 88mm 88mm;
+      grid-template-rows: 63mm 63mm 63mm;
       gap: 0;
     }
     .mtg-card-cell {
-      width: 63mm;
-      height: 88mm;
+      width: 88mm;
+      height: 63mm;
       border: 0.35mm dashed #64748b;
-      padding: 3.2mm;
+      padding: 2.8mm;
       display: flex;
     }
     .mtg-card-empty {
-      width: 63mm;
-      height: 88mm;
+      width: 88mm;
+      height: 63mm;
       border: 0.25mm dashed #e2e8f0;
       background: transparent;
     }
@@ -5173,9 +5173,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               ) : gmPrepTool === "whale_cards" ? (
                 <>
                   <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
-                    <div className="font-bold text-slate-200">🐋 クジラ音 ＆ 日本語カード（MTGサイズ）</div>
+                    <div className="font-bold text-slate-200">🐋 クジラ音 ＆ 日本語カード（MTG横長）</div>
                     <div className="text-[11px] text-slate-400 leading-relaxed">
-                      Wi-Fiが使えない環境に備え、クジラのクリック音（28枚）とそれにあてはめる日本語（29枚）をマジック：ザ・ギャザリングと同サイズ（63mm×88mm）でカード化した一覧シートです。
+                      Wi-Fiが使えない環境に備え、クジラのクリック音（28枚）とそれにあてはめる日本語（29枚）をマジック：ザ・ギャザリングと同サイズ（横88mm×縦63mm）でカード化した一覧シートです。
                     </div>
                   </div>
 
@@ -5189,17 +5189,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         [
                           {
                             id: "all",
-                            badge: "全57枚（A4・8頁）",
+                            badge: "全57枚（A4横・8頁）",
                             title: "両方すべて（クリック音28枚 ＋ 日本語29枚）",
                           },
                           {
                             id: "click_sound",
-                            badge: "全28枚（A4・4頁）",
+                            badge: "全28枚（A4横・4頁）",
                             title: "🌊 クジラのクリック音カードのみ（音 #01〜#28）",
                           },
                           {
                             id: "japanese_meaning",
-                            badge: "全29枚（A4・4頁）",
+                            badge: "全29枚（A4横・4頁）",
                             title: "🏷️ あてはめる日本語カードのみ（日本語 #01〜#29）",
                           },
                         ] as const
@@ -5227,7 +5227,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 {opt.badge}
                               </span>
                               <span className="text-[10px] font-mono text-slate-400">
-                                63mm × 88mm
+                                横88mm × 縦63mm
                               </span>
                             </div>
                             <div className="mt-1 font-bold text-xs text-white">
@@ -8036,10 +8036,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 / MTGサイズ 63mm×88mm）
+                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 / MTG横長サイズ 88mm×63mm）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                        クジラクリック音 ＆ あてはめる日本語カード（MTGサイズ：63mm × 88mm / A4・9面配置）
+                        クジラクリック音 ＆ あてはめる日本語カード（MTG横長サイズ：横88mm × 縦63mm / A4横・9面配置）
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -8050,10 +8050,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       >
                         <Printer className="h-3.5 w-3.5" />
                         {whaleMtgFilter === "click_sound"
-                          ? "クリック音カード（28枚）をA4印刷 / PDF保存"
+                          ? "クリック音カード（28枚）をA4横印刷 / PDF保存"
                           : whaleMtgFilter === "japanese_meaning"
-                          ? "日本語カード（29枚）をA4印刷 / PDF保存"
-                          : "全57枚（クリック音＋日本語）をA4印刷 / PDF保存"}
+                          ? "日本語カード（29枚）をA4横印刷 / PDF保存"
+                          : "全57枚（クリック音＋日本語）をA4横印刷 / PDF保存"}
                       </button>
                     </div>
                   </div>
@@ -8062,26 +8062,26 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print rounded-lg border border-indigo-200 bg-indigo-50/80 p-4 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
                     <div className="font-bold flex items-center gap-1.5 text-sm text-indigo-900">
                       <Scissors className="h-4 w-4" />
-                      マジック：ザ・ギャザリング（MTG）同サイズカード（63mm × 88mm）の印刷・使用方法
+                      マジック：ザ・ギャザリング（MTG）同サイズ横長カード（横88mm × 縦63mm）の印刷・使用方法
                     </div>
                     <div>
-                      ・<strong>1枚 63mm × 88mm（横6.3cm × 縦8.8cm）</strong>のMTG標準カードサイズで、A4用紙1枚に<strong>3列 × 3行 ＝ 9枚</strong>ずつ配置されています。
+                      ・<strong>1枚 横88mm × 縦63mm（横8.8cm × 縦6.3cm）</strong>のMTG標準カード（横向き）サイズで、A4横置き用紙1枚に<strong>3列 × 3行 ＝ 9枚</strong>ずつ配置されています。
                     </div>
                     <div>
                       ・<strong>倍率100%（実際のサイズ）</strong>で印刷して破線に沿って切り分けると、市販のMTGレギュラーサイズ用スリーブにそのまま入れてご使用いただけます。
                     </div>
                     <div>
-                      ・Wi-Fiが使えない会場でも、プレイヤー全員が見えるテーブル上に<strong>「クジラのクリック音カード（青・28枚）」</strong>と<strong>「あてはめる日本語カード（黄・29枚）」</strong>を一覧で並べてペアリングさせることができます。
+                      ・横長レイアウトにより統一文字サイズを大幅に拡大（印刷時 `19.5pt` 太字）しており、テーブル上で一覧として並べた際の視認性が抜群です。
                     </div>
                   </div>
 
-                  {/* カード一覧プレビュー（3列グリッド・63:88比率） */}
+                  {/* カード一覧プレビュー（3列グリッド・横長 88:63 比率） */}
                   <div className="space-y-8">
                     {(whaleMtgFilter === "all" || whaleMtgFilter === "click_sound") && (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between rounded bg-sky-900 px-3.5 py-2 text-xs font-bold text-white">
                           <span>🌊 【クジラのクリック音カード】一覧（全{WHALE_CLICK_MTG_CARDS.length}枚 / 音 #01 〜 音 #28）</span>
-                          <span className="font-mono text-[11px] text-sky-200">MTG SIZE: 63mm × 88mm (A4・4シート)</span>
+                          <span className="font-mono text-[11px] text-sky-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・4シート)</span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
@@ -8089,7 +8089,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             return (
                               <div
                                 key={card.id}
-                                className="aspect-[63/88] w-full rounded-md border border-dashed border-slate-400 bg-sky-50 p-2.5 flex shadow-sm"
+                                className="aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 bg-sky-50 p-2.5 flex shadow-sm"
                               >
                                 <div className="w-full h-full rounded-lg border-[3px] border-sky-600 bg-white p-3 flex flex-col justify-between">
                                   <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
@@ -8101,20 +8101,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                     </span>
                                   </div>
 
-                                  <div className="my-auto py-2 flex items-center justify-center text-center">
-                                    <div className="font-black text-sky-950 leading-relaxed whitespace-pre-line text-lg sm:text-xl">
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div className="font-black text-sky-950 leading-snug whitespace-pre-line text-xl sm:text-2xl">
                                       {card.mainText}
                                     </div>
                                   </div>
 
-                                  <div className="border-t border-dashed border-sky-400 pt-1.5 flex items-center justify-center min-h-[24px]">
+                                  <div className="border-t border-dashed border-sky-400 pt-1.5 flex items-center justify-center min-h-[22px]">
                                     {card.lockedBadge ? (
                                       <span className="rounded bg-sky-700 px-2 py-0.5 text-[10px] font-black text-white">
                                         🔒 {card.lockedBadge}
                                       </span>
                                     ) : (
                                       <span className="font-mono text-[9px] font-extrabold text-sky-700/75 tracking-wider">
-                                        CLICK SOUND / 63×88mm
+                                        CLICK SOUND / 88×63mm
                                       </span>
                                     )}
                                   </div>
@@ -8130,7 +8130,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="space-y-3">
                         <div className="flex items-center justify-between rounded bg-amber-900 px-3.5 py-2 text-xs font-bold text-white">
                           <span>🏷️ 【あてはめる日本語カード】一覧（全{WHALE_JAPANESE_MTG_CARDS.length}枚 / 補足ヒントなし）</span>
-                          <span className="font-mono text-[11px] text-amber-200">MTG SIZE: 63mm × 88mm (A4・4シート)</span>
+                          <span className="font-mono text-[11px] text-amber-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・4シート)</span>
                         </div>
 
                         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
@@ -8138,7 +8138,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             return (
                               <div
                                 key={card.id}
-                                className="aspect-[63/88] w-full rounded-md border border-dashed border-slate-400 bg-amber-50 p-2.5 flex shadow-sm"
+                                className="aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 bg-amber-50 p-2.5 flex shadow-sm"
                               >
                                 <div className="w-full h-full rounded-lg border-[3px] border-amber-600 bg-white p-3 flex flex-col justify-between">
                                   <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
@@ -8150,20 +8150,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                     </span>
                                   </div>
 
-                                  <div className="my-auto py-2 flex items-center justify-center text-center">
-                                    <div className="font-black text-amber-950 leading-relaxed whitespace-pre-line text-lg sm:text-xl">
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div className="font-black text-amber-950 leading-snug whitespace-pre-line text-xl sm:text-2xl">
                                       {card.mainText}
                                     </div>
                                   </div>
 
-                                  <div className="border-t border-dashed border-amber-400 pt-1.5 flex items-center justify-center min-h-[24px]">
+                                  <div className="border-t border-dashed border-amber-400 pt-1.5 flex items-center justify-center min-h-[22px]">
                                     {card.lockedBadge ? (
                                       <span className="rounded bg-amber-700 px-2 py-0.5 text-[10px] font-black text-white">
                                         🔒 {card.lockedBadge}
                                       </span>
                                     ) : (
                                       <span className="font-mono text-[9px] font-extrabold text-amber-700/75 tracking-wider">
-                                        JAPANESE MEANING / 63×88mm
+                                        JAPANESE MEANING / 88×63mm
                                       </span>
                                     )}
                                   </div>
