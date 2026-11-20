@@ -227,7 +227,7 @@ const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
     phaseBadge: "DAY 2",
     sidebarTitle: "Day 2：［A］により［B］が起きている可能性（朝潮）",
     timingNote: "Day 2 開始時（西之島沖噴火・優先調査開始時）に掲示",
-    line1: "［A］により［B］が起きている可能性（朝潮）",
+    line1: "［A］により［B］が\n起きている可能性（朝潮）",
   },
   {
     id: "goal-day3",
@@ -250,18 +250,18 @@ const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
     id: "goal-day3-2",
     sheetNumber: 5,
     phaseBadge: "DAY 3 - 2",
-    sidebarTitle: "Day 3-2：ワタツミ／クスルフ ／ 防衛／海上警備（朝潮）",
+    sidebarTitle: "Day 3-2：名称決定：ワタツミ／クスルフ ／ 防衛／海上警備（朝潮）",
     timingNote: "Day 3 途中②（呼称決定＆指揮官の最終決断時）に掲示",
-    line1: "ワタツミ／クスルフ",
+    line1: "名称決定：ワタツミ／クスルフ",
     line2: "防衛／海上警備（朝潮）",
   },
   {
     id: "goal-day4",
     sheetNumber: 6,
     phaseBadge: "DAY 4",
-    sidebarTitle: "Day 4：どこへ向かうか ／ どんな危機か（朝潮）",
+    sidebarTitle: "Day 4：どこへ向かうか（誰でも）／ どんな危機か（朝潮）",
     timingNote: "Day 4 開始時（明神礁噴火・即応総力体制移行時）に掲示",
-    line1: "どこへ向かうか",
+    line1: "どこへ向かうか（誰でも）",
     line2: "どんな危機か（朝潮）",
   },
   {
@@ -288,22 +288,22 @@ const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
     sidebarTitle: "Day 6：分析 ／ ［A］を分析し、［B］に届く新しい言葉を作ろう",
     timingNote: "Day 6 開始時（音響データ全開示・アプリ解析時）に掲示",
     line1: "分析",
-    line2: "［A］を分析し、［B］に届く新しい言葉を作ろう",
+    line2: "［A］を分析し、\n［B］に届く新しい言葉を作ろう",
   },
   {
     id: "goal-day7",
     sheetNumber: 10,
     phaseBadge: "DAY 7",
-    sidebarTitle: "Day 7：自衛隊／自分たち",
+    sidebarTitle: "Day 7：自衛隊の功績／合同対策本部の功績",
     timingNote: "Day 7 フェーズ3（防衛省幹部からの直通電話・秘匿カード配布時）に掲示",
-    line1: "自衛隊／自分たち",
+    line1: "自衛隊の功績／合同対策本部の功績",
   },
 ];
 
 /**
  * 目的シートの1行テキストを装飾描画するヘルパー
  * ・［A］［B］を穴埋めボックスとして強調
- * ・（坂凪）（朝潮）（浪寄）（貝浜）を担当者として視認性高く強調
+ * ・（坂凪）（朝潮）（浪寄）（貝浜）（誰でも）を担当者として視認性高く強調し、途中で改行しないよう固定
  */
 const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
   const parts = line.split(/(［[A-ZＡ-Ｚ]］|（[^）]+）)/g);
@@ -313,7 +313,7 @@ const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
       return (
         <span
           key={idx}
-          className="inline-flex items-center justify-center rounded-xl border-[4px] border-slate-900 bg-amber-100 px-3.5 py-0.5 mx-1.5 text-slate-950 font-black shadow-sm"
+          className="inline-flex items-center justify-center rounded-xl border-[4px] border-slate-900 bg-amber-100 px-3.5 py-0.5 mx-1.5 text-slate-950 font-black shadow-sm whitespace-nowrap"
         >
           ［{letter}］
         </span>
@@ -323,7 +323,7 @@ const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
       return (
         <span
           key={idx}
-          className="inline-block ml-2 text-indigo-900 font-black"
+          className="inline-block whitespace-nowrap ml-2 text-indigo-900 font-black"
         >
           {part}
         </span>
@@ -333,18 +333,30 @@ const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
   });
 };
 
-const getGoalBoardLineFontSizeClass = (line: string, hasTwoLines: boolean): string => {
-  const len = line.length;
-  if (len <= 3) {
-    return hasTwoLines ? "text-5xl sm:text-6xl" : "text-7xl sm:text-8xl";
+/**
+ * 目的シートの改行（\n）対応レンダラー
+ */
+const renderGoalBoardLine = (line: string): React.ReactNode => {
+  const sublines = line.split("\n");
+  if (sublines.length === 1) {
+    return renderGoalBoardFormattedLine(sublines[0]);
   }
-  if (len <= 10) {
-    return hasTwoLines ? "text-4xl sm:text-5xl" : "text-6xl sm:text-7xl";
-  }
-  if (len <= 15) {
-    return hasTwoLines ? "text-3xl sm:text-[44px]" : "text-4xl sm:text-[52px]";
-  }
-  return "text-2xl sm:text-[34px]";
+  return (
+    <span className="inline-flex flex-col items-center justify-center space-y-2">
+      {sublines.map((sub, sidx) => (
+        <span key={sidx} className="block leading-tight">
+          {renderGoalBoardFormattedLine(sub)}
+        </span>
+      ))}
+    </span>
+  );
+};
+
+/**
+ * 全目的シート共通の統一フォントサイズクラス
+ */
+const getGoalBoardLineFontSizeClass = (): string => {
+  return "text-2xl sm:text-3xl md:text-[38px] lg:text-[42px]";
 };
 
 /**
@@ -2872,28 +2884,24 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         .map((part) => {
           if (/^［[A-ZＡ-Ｚ]］$/.test(part)) {
             const letter = escapeHtml(part.slice(1, -1));
-            return `<span class="inline-flex items-center justify-center rounded-xl border-[5px] border-slate-900 bg-amber-100 px-4 py-1 mx-2 text-slate-950 font-black">［${letter}］</span>`;
+            return `<span class="inline-flex items-center justify-center rounded-xl border-[5px] border-slate-900 bg-amber-100 px-4 py-1 mx-2 text-slate-950 font-black whitespace-nowrap">［${letter}］</span>`;
           }
           if (part.startsWith("（") && part.endsWith("）")) {
-            return `<span class="inline-block ml-3 text-indigo-900 font-black">${escapeHtml(part)}</span>`;
+            return `<span class="inline-block whitespace-nowrap ml-3 text-indigo-900 font-black">${escapeHtml(part)}</span>`;
           }
           return escapeHtml(part);
         })
         .join("");
     };
 
-    const getPrintFontSize = (line: string, hasTwoLines: boolean): string => {
-      const len = line.length;
-      if (len <= 3) {
-        return hasTwoLines ? "66px" : "104px";
+    const formatLineHtmlWithBreaks = (line: string): string => {
+      const sublines = line.split("\n");
+      if (sublines.length === 1) {
+        return `<div class="leading-tight">${formatLineHtml(sublines[0])}</div>`;
       }
-      if (len <= 10) {
-        return hasTwoLines ? "58px" : "80px";
-      }
-      if (len <= 15) {
-        return hasTwoLines ? "52px" : "62px";
-      }
-      return "41px";
+      return sublines
+        .map((sub) => `<div class="leading-tight">${formatLineHtml(sub)}</div>`)
+        .join('<div class="h-3"></div>');
     };
 
     const targetBoards = targetBoardId
@@ -2902,10 +2910,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const pagesHtml = targetBoards
       .map((board) => {
-        const hasTwo = Boolean(board.line2);
-        const f1 = getPrintFontSize(board.line1, hasTwo);
-        const f2 = board.line2 ? getPrintFontSize(board.line2, hasTwo) : "48px";
-
         return `
         <div class="goal-a4-landscape-page">
           <div class="goal-inner-frame">
@@ -2914,7 +2918,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 <span class="rounded-lg bg-slate-900 px-6 py-2 text-3xl font-black tracking-widest text-white">
                   ${escapeHtml(board.phaseBadge)}
                 </span>
-                <span class="text-lg font-extrabold tracking-widest text-slate-600">
+                <span class="text-3xl font-black tracking-widest text-slate-900">
                   全体目的・達成ミッション
                 </span>
               </div>
@@ -2924,15 +2928,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             </div>
 
             <div class="flex-1 flex flex-col items-center justify-center text-center px-4">
-              <div class="w-full font-black tracking-tight text-slate-950 leading-tight whitespace-nowrap" style="font-size: ${f1};">
-                ${formatLineHtml(board.line1)}
+              <div class="w-full font-black tracking-tight text-slate-950 leading-tight" style="font-size: 48px;">
+                ${formatLineHtmlWithBreaks(board.line1)}
               </div>
               ${
                 board.line2
                   ? `
                 <div class="my-7 w-4/5 border-t-4 border-dashed border-slate-300"></div>
-                <div class="w-full font-black tracking-tight text-slate-950 leading-tight whitespace-nowrap" style="font-size: ${f2};">
-                  ${formatLineHtml(board.line2)}
+                <div class="w-full font-black tracking-tight text-slate-950 leading-tight" style="font-size: 48px;">
+                  ${formatLineHtmlWithBreaks(board.line2)}
                 </div>
               `
                   : ""
@@ -6676,10 +6680,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     {GM_GOAL_BOARDS.map((board) => {
                       const isSelected = selectedGoalBoardId === board.id;
                       const hasTwoLines = Boolean(board.line2);
-                      const fontSize1 = getGoalBoardLineFontSizeClass(board.line1, hasTwoLines);
-                      const fontSize2 = board.line2
-                        ? getGoalBoardLineFontSizeClass(board.line2, hasTwoLines)
-                        : "";
+                      const fontSize1 = getGoalBoardLineFontSizeClass();
+                      const fontSize2 = getGoalBoardLineFontSizeClass();
 
                       return (
                         <div
@@ -6724,7 +6726,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 <span className="rounded-lg bg-slate-900 px-5 py-1.5 text-xl sm:text-2xl font-black tracking-widest text-white">
                                   {board.phaseBadge}
                                 </span>
-                                <span className="text-sm sm:text-base font-extrabold tracking-widest text-slate-600">
+                                <span className="text-xl sm:text-2xl font-black tracking-widest text-slate-900">
                                   全体目的・達成ミッション
                                 </span>
                               </div>
@@ -6738,7 +6740,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               <div
                                 className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize1}`}
                               >
-                                {renderGoalBoardFormattedLine(board.line1)}
+                                {renderGoalBoardLine(board.line1)}
                               </div>
 
                               {board.line2 && (
@@ -6747,7 +6749,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   <div
                                     className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize2}`}
                                   >
-                                    {renderGoalBoardFormattedLine(board.line2)}
+                                    {renderGoalBoardLine(board.line2)}
                                   </div>
                                 </>
                               )}
