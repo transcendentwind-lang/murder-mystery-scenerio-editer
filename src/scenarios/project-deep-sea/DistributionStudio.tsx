@@ -650,6 +650,7 @@ interface WhaleMtgCardItem {
   kind: "click_sound" | "japanese_meaning";
   codeLabel: string;
   mainText: string;
+  mainRuby?: string;
   lockedBadge?: string;
 }
 
@@ -706,6 +707,7 @@ const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES
       kind: "japanese_meaning" as const,
       codeLabel: `日本語 #${numStr}`,
       mainText: formatWhaleJapaneseCardLabel(cand.label),
+      mainRuby: cand.label === "御蔵島" ? "みくらじま" : undefined,
       lockedBadge: cand.isLockedInitial
         ? cand.label === "海の下の火山"
           ? "初期確定：音 #01"
@@ -3715,10 +3717,14 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       const deckBadge = isClick ? "クジラのクリック音" : "あてはめる日本語";
       // 横長（88mm×63mm）化に伴い、全57枚共通の統一フォントサイズを19.5ptへ大幅拡大（最大9文字が1行に余裕で収まるサイズ）
       const fontSizePt = "19.5pt";
-      const formattedMainHtml = card.mainText
-        .split("\n")
-        .map((line) => escapeHtml(line))
-        .join("<br />");
+      const formattedMainHtml = card.mainRuby
+        ? `<ruby>${escapeHtml(card.mainText)}<rt class="mtg-ruby-rt">${escapeHtml(
+            card.mainRuby
+          )}</rt></ruby>`
+        : card.mainText
+            .split("\n")
+            .map((line) => escapeHtml(line))
+            .join("<br />");
 
       return `
         <div class="mtg-card-cell" style="background-color: ${bgColor};">
@@ -3910,6 +3916,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       letter-spacing: 0.01em;
       word-break: keep-all;
       overflow-wrap: break-word;
+    }
+    .mtg-main-text ruby {
+      ruby-align: center;
+    }
+    .mtg-ruby-rt {
+      font-size: 8.5pt;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.08em;
     }
     .mtg-card-footer {
       border-top: 0.35mm dashed;
@@ -8152,7 +8167,16 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                                   <div className="my-auto py-1 flex items-center justify-center text-center">
                                     <div className="font-black text-amber-950 leading-snug whitespace-pre-line text-xl sm:text-2xl">
-                                      {card.mainText}
+                                      {card.mainRuby ? (
+                                        <ruby>
+                                          {card.mainText}
+                                          <rt className="text-[11px] font-extrabold tracking-widest text-amber-900">
+                                            {card.mainRuby}
+                                          </rt>
+                                        </ruby>
+                                      ) : (
+                                        card.mainText
+                                      )}
                                     </div>
                                   </div>
 
