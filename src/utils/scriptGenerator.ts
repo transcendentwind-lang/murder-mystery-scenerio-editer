@@ -711,23 +711,22 @@ export function generateB5HandoutSingleHtml(
      ---------------------------------------------------- */
   const page3Html = `
   <div class="b5-sheet b5-sheet-secret">
-    <!-- ヘッダー -->
-    <div class="header-band">
-      <div class="header-left">
-        <span class="sub-title">合同対策本部 個人秘匿記録</span>
-        <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
+    <!-- ヘッダー（3段スタック構造） -->
+    <div class="secret-header-band">
+      <div class="secret-header-sub">合同対策本部</div>
+      <div class="secret-header-main">
+        <div class="secret-header-title">個人記録　${escapeHtmlForB5(cleanCharacterName(c.name))}</div>
+        <div class="location-badge">拠点：${locationText}</div>
       </div>
-      <div class="header-right">
-        <span class="confidential-badge">【非公開情報】他プレイヤーには見せないでください</span>
-        <span class="location-badge">拠点：${locationText}</span>
+      <div class="secret-confidential-bar">
+        【非公開情報】他のプレイヤーには見せないでください
       </div>
     </div>
 
     <!-- ① あなたの内面・行動指針（2列グリッド） -->
     <div class="internal-drama-section">
       <div class="section-title-bar">
-        <span class="section-title">🔒 あなたの内面（非公開）・行動指針</span>
-        <span class="section-notice">※他プレイヤーには非公開（ロールプレイや判断の軸となります）</span>
+        <span class="section-title">🔒 あなたの内面・行動指針</span>
       </div>
       <div class="grid-2col">
         <!-- 誇り・信条 -->
@@ -752,7 +751,6 @@ export function generateB5HandoutSingleHtml(
     <div class="card card-memory">
       <div class="card-header memory-header">
         <span class="card-title">📖 あなたの記憶（当日の状況・背景情報）</span>
-        <span class="memory-badge">非公開情報：他プレイヤーには見せないでください</span>
       </div>
       <div class="memory-content">
         ${escapeHtmlForB5(memoryText).replace(/\n/g, "<br/>")}
@@ -762,7 +760,7 @@ export function generateB5HandoutSingleHtml(
     <!-- ③ 自己紹介（開始時のセリフ） -->
     <div class="card card-intro">
       <div class="card-header intro-header">
-        <span class="card-title">💬 【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
+        <span class="card-title">💬 自己紹介（開始時ロールプレイ台詞）</span>
         <span class="intro-hint">※ゲーム開始の自己紹介フェーズでそのまま音読してください</span>
       </div>
       <div class="card-content quote-content">
@@ -948,6 +946,13 @@ export const B5_HANDOUT_PRINT_STYLES = `
   }
 
   /* 2枚目：チームメンバー紹介シート */
+  .b5-sheet-members {
+    justify-content: flex-start;
+    gap: 5px;
+  }
+  .b5-sheet-members .footer-band {
+    margin-top: auto;
+  }
   .members-guide-bar {
     display: flex;
     justify-content: space-between;
@@ -956,10 +961,10 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border: 1px solid #e2e8f0;
     border-radius: 4px;
     padding: 2.5px 8px;
-    font-size: 7pt;
+    font-size: 7.5pt;
     color: #475569;
     font-weight: 600;
-    margin-bottom: 3px;
+    margin-bottom: 2px;
   }
   .self-notice {
     color: #64748b;
@@ -968,9 +973,8 @@ export const B5_HANDOUT_PRINT_STYLES = `
   .members-list {
     display: flex;
     flex-direction: column;
-    gap: 3.5px;
-    flex: 1;
-    justify-content: space-between;
+    gap: 4px;
+    flex: none;
   }
   .member-card {
     display: flex;
@@ -978,7 +982,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border: 1px solid #cbd5e1;
     border-radius: 5px;
     background: #ffffff;
-    padding: 3.5px 8px;
+    padding: 4px 8px;
     gap: 8px;
   }
   .member-card-self {
@@ -997,12 +1001,12 @@ export const B5_HANDOUT_PRINT_STYLES = `
     align-items: center;
     justify-content: center;
     gap: 2.5px;
-    min-width: 52px;
+    min-width: 56px;
     border-right: 1px solid #e2e8f0;
     padding-right: 6px;
   }
   .member-loc-tag {
-    font-size: 6.5pt;
+    font-size: 7pt;
     font-weight: 700;
     background: #e2e8f0;
     color: #475569;
@@ -1011,7 +1015,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     white-space: nowrap;
   }
   .member-self-tag {
-    font-size: 6.5pt;
+    font-size: 7pt;
     font-weight: 800;
     background: #94a3b8;
     color: #ffffff;
@@ -1032,29 +1036,69 @@ export const B5_HANDOUT_PRINT_STYLES = `
     gap: 8px;
   }
   .member-name {
-    font-size: 10pt;
+    font-size: 11pt;
     font-weight: 800;
     color: #0f172a;
     letter-spacing: 0.05em;
   }
   .member-name rt {
-    font-size: 6pt;
+    font-size: 6.5pt;
     color: #64748b;
   }
   .member-profession {
-    font-size: 8pt;
+    font-size: 8.5pt;
     font-weight: 700;
     color: #475569;
   }
   .member-profile {
-    font-size: 7.5pt;
-    line-height: 1.38;
+    font-size: 13.5px;
+    line-height: 1.4;
     color: #334155;
   }
 
   /* 3枚目：個人秘匿シート */
   .b5-sheet-secret {
-    gap: 4px;
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .b5-sheet-secret .footer-band {
+    margin-top: auto;
+  }
+  .secret-header-band {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 3.5px;
+    margin-bottom: 3px;
+  }
+  .secret-header-sub {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+  }
+  .secret-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .secret-header-title {
+    font-size: 13pt;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: 0.05em;
+  }
+  .secret-confidential-bar {
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 8.5pt;
+    font-weight: 800;
+    padding: 2.5px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-top: 1px;
   }
   .grid-2col {
     display: grid;
@@ -1076,8 +1120,8 @@ export const B5_HANDOUT_PRINT_STYLES = `
     margin-bottom: 4px;
   }
   .card-title {
-    font-size: 8.5pt;
-    font-weight: 700;
+    font-size: 9pt;
+    font-weight: 800;
     color: #1e293b;
   }
   .card-intro {
@@ -1095,8 +1139,8 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border-left: 3px solid #6366f1;
     padding-left: 8px;
     color: #0f172a;
-    font-size: 8.5pt;
-    line-height: 1.45;
+    font-size: 14px;
+    line-height: 1.48;
   }
   .internal-drama-section {
     display: flex;
@@ -1110,20 +1154,16 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding: 0 2px;
   }
   .section-title {
-    font-size: 8.5pt;
-    font-weight: 700;
+    font-size: 9pt;
+    font-weight: 800;
     color: #0f172a;
-  }
-  .section-notice {
-    font-size: 7pt;
-    color: #64748b;
   }
   .card-pride {
     background: #fffbeb;
     border-color: #fde68a;
   }
   .pride-header {
-    font-size: 8pt;
+    font-size: 8.5pt;
     font-weight: 700;
     color: #78350f;
     border-bottom: 1px solid #fde68a;
@@ -1135,18 +1175,24 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border-color: #e2e8f0;
   }
   .loss-header {
-    font-size: 8pt;
+    font-size: 8.5pt;
     font-weight: 700;
     color: #334155;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 2px;
     margin-bottom: 3px;
   }
+  .card-pride .card-content,
+  .card-loss .card-content {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #0f172a;
+  }
   .card-memory {
     background: #ffffff;
     border-color: #cbd5e1;
-    padding: 7px 9px;
-    flex: 1;
+    padding: 6px 9px;
+    flex: none;
     display: flex;
     flex-direction: column;
   }
@@ -1158,18 +1204,9 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding-bottom: 2.5px;
     margin-bottom: 4px;
   }
-  .memory-badge {
-    background: #fff1f2;
-    border: 1px solid #fecdd3;
-    color: #be123c;
-    font-size: 7pt;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
-  }
   .memory-content {
-    font-size: 8.5pt;
-    line-height: 1.5;
+    font-size: 14px;
+    line-height: 1.48;
     color: #0f172a;
   }
   .footer-band {

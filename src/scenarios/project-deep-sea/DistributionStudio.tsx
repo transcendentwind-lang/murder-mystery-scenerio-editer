@@ -5413,7 +5413,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         【2枚目】チームメンバー紹介シート（全7名一覧・自分はグレー表示）
                        ======================================================== */}
                     {(handoutSheetPage === "all" || handoutSheetPage === 2) && (
-                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-4">
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-start min-h-[580px] space-y-4">
                         {/* ヘッダー */}
                         <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -5435,8 +5435,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           <span className="text-slate-500 font-bold">（※灰色の枠は【あなた】です）</span>
                         </div>
 
-                        {/* メンバー一覧（全7名） */}
-                        <div className="space-y-2 flex-1">
+                        {/* メンバー一覧（全7名・上詰め配置） */}
+                        <div className="space-y-2 flex-none">
                           {(project.characters || []).map((m) => {
                             const isSelf = m.id === activeChar.id;
                             const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
@@ -5491,7 +5491,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                       </ruby>
                                     </span>
                                     <span
-                                      className={`text-xs font-bold ${
+                                      className={`text-xs sm:text-[13px] font-bold ${
                                         isSelf ? "text-slate-400" : "text-slate-700"
                                       }`}
                                     >
@@ -5499,7 +5499,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                     </span>
                                   </div>
                                   <p
-                                    className={`text-[11.5px] leading-relaxed ${
+                                    className={`text-[13.5px] leading-relaxed ${
                                       isSelf ? "text-slate-400" : "text-slate-700"
                                     }`}
                                   >
@@ -5512,7 +5512,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </div>
 
                         {/* フッター */}
-                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                        <div className="mt-auto pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
                           <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
                           <span className="font-mono font-bold">B5 2/3 頁（メンバー紹介）</span>
                         </div>
@@ -5523,24 +5523,22 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         【3枚目】個人秘匿シート（内面・記憶・自己紹介台詞）
                        ======================================================== */}
                     {(handoutSheetPage === "all" || handoutSheetPage === 3) && (
-                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-5">
-                        {/* ヘッダー */}
-                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
-                              合同対策本部 個人秘匿記録
-                            </span>
-                            <span className="text-xs font-black text-slate-900">
-                              『{project.title}』
-                            </span>
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-start min-h-[580px] space-y-4">
+                        {/* ヘッダー（3段スタック構造） */}
+                        <div className="border-b-2 border-slate-900 pb-2 space-y-1">
+                          <div className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                            合同対策本部
                           </div>
-                          <div className="flex items-center gap-2">
-                            <span className="rounded bg-rose-950 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-rose-100">
-                              【非公開情報】他プレイヤーには見せないでください
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="text-base sm:text-lg font-black text-slate-900">
+                              個人記録　{cleanCharacterName(activeChar.name)}
                             </span>
                             <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
                               拠点：{activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
                             </span>
+                          </div>
+                          <div className="rounded bg-slate-900 px-3 py-1 text-center text-xs font-bold tracking-wider text-white">
+                            【非公開情報】他のプレイヤーには見せないでください
                           </div>
                         </div>
 
@@ -5549,10 +5547,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           <div className="flex items-center justify-between px-0.5">
                             <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                               <Lock className="h-3.5 w-3.5 text-slate-700" />
-                              <span>あなたの内面（非公開）・行動指針</span>
-                            </span>
-                            <span className="text-[10px] text-slate-500">
-                              ※他プレイヤーには非公開（あなたのロールプレイや判断の軸となります）
+                              <span>あなたの内面・行動指針</span>
                             </span>
                           </div>
 
@@ -5563,7 +5558,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 <span>✦</span>
                                 <span>誇り・信条・行動指針</span>
                               </div>
-                              <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap">
+                              <p className="text-[13.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
                                 {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
                               </p>
                             </div>
@@ -5574,25 +5569,22 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 <span>✦</span>
                                 <span>過去の喪失・悔恨</span>
                               </div>
-                              <p className="text-xs leading-relaxed text-slate-800 whitespace-pre-wrap">
+                              <p className="text-[13.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
                                 {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
                               </p>
                             </div>
                           </div>
                         </div>
 
-                        {/* ② あなたの記憶（全幅・ゆったりと読める背景情報） */}
-                        <div className="rounded-lg border border-slate-300 bg-white p-4 shadow-sm flex-1">
+                        {/* ② あなたの記憶（全幅・自然な高さ） */}
+                        <div className="rounded-lg border border-slate-300 bg-white p-4 shadow-sm flex-none">
                           <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2.5">
                             <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
                               <BookOpen className="h-4 w-4 text-indigo-700" />
                               <span>あなたの記憶（当日の状況・背景情報）</span>
                             </h3>
-                            <span className="rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[10px] font-bold text-rose-700">
-                              非公開情報：他プレイヤーには見せないでください
-                            </span>
                           </div>
-                          <div className="text-xs leading-[1.8] text-slate-800 tracking-normal whitespace-pre-wrap">
+                          <div className="text-[14px] leading-relaxed text-slate-800 tracking-normal whitespace-pre-wrap">
                             {formatJapaneseParagraphs(activeChar.introduction)}
                           </div>
                         </div>
@@ -5602,19 +5594,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           <div className="flex items-center justify-between border-b border-indigo-200 pb-1.5 mb-2.5">
                             <h3 className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
                               <span>💬</span>
-                              <span>【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
+                              <span>自己紹介（開始時ロールプレイ台詞）</span>
                             </h3>
                             <span className="text-[10px] font-bold text-indigo-600">
                               ※ゲーム開始の自己紹介フェーズでそのまま音読してください
                             </span>
                           </div>
-                          <blockquote className="border-l-4 border-indigo-500 pl-3 text-xs sm:text-[13px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
+                          <blockquote className="border-l-4 border-indigo-500 pl-3 text-[14px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
                             {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
                           </blockquote>
                         </div>
 
                         {/* フッター */}
-                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                        <div className="mt-auto pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
                           <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
                           <span className="font-mono font-bold">B5 3/3 頁（個人秘匿シート）</span>
                         </div>
