@@ -4829,8 +4829,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               ) : (
                                 <div
                                   className={`card-body-12px text-[14px] ${
-                                    card.glossaryNote ? "leading-[1.42]" : "leading-[1.52]"
-                                  } text-slate-800 whitespace-pre-wrap text-justify`}
+                                    card.glossaryNote || (card.description || "").length > 260
+                                      ? "leading-[1.42]"
+                                      : "leading-[1.52]"
+                                  } text-slate-800 whitespace-pre-wrap text-left`}
                                 >
                                   {renderColoredCardBody(card.description)}
                                 </div>
@@ -5489,7 +5491,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 ev.glossaryNote
                                   ? "leading-[1.42]"
                                   : "leading-[1.52]"
-                              } text-slate-800 whitespace-pre-wrap text-justify`}
+                              } text-slate-800 whitespace-pre-wrap text-left`}
                             >
                               {renderColoredCardBody(ev.description)}
                             </div>
