@@ -585,8 +585,15 @@ export const CHARACTER_COMPACT_RUBIES: Record<string, string> = {
 };
 
 /**
+ * キャラクター名からカッコ表記「（あさしお）」等を除去し、純粋な漢字表記のみを抽出するヘルパー
+ */
+export function cleanCharacterName(name: string = ""): string {
+  return name.replace(/（[^）]*）|\([^)]*\)/g, "").trim();
+}
+
+/**
  * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト（3枚組）HTML生成
- * 1枚目：表紙・配役シート（肩書きと名前のみ・最初にプレイヤー達が見る）
+ * 1枚目：表紙シート（肩書きと名前のみ・白地印刷配慮・最初にプレイヤー達が見る）
  * 2枚目：チームメンバー紹介シート（全7名一覧・自分はグレー表示・公開プロフィール掲載）
  * 3枚目：個人秘匿シート（あなたの内面・行動指針 ＆ あなたの記憶 ＆ 最後に自己紹介ロールプレイ台詞）
  */
@@ -607,7 +614,7 @@ export function generateB5HandoutSingleHtml(
   const ruby = CHARACTER_NAME_RUBIES[c.id] || "";
 
   /* ----------------------------------------------------
-     【1枚目】表紙・配役シート（最初にプレイヤー達が見る）
+     【1枚目】表紙シート（肩書きと名前のみ・白地・最初にプレイヤー達が見る）
      ---------------------------------------------------- */
   const page1Html = `
   <div class="b5-sheet b5-sheet-cover">
@@ -618,33 +625,23 @@ export function generateB5HandoutSingleHtml(
         <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
       </div>
       <div class="header-right">
-        <span class="confidential-badge">【配役カード】</span>
         <span class="location-badge">拠点：${locationText}</span>
       </div>
     </div>
 
-    <!-- 中央配役カード（堂々たる表札スタイル） -->
+    <!-- 中央配役カード（白地・格式ある二重枠・省インク印刷仕様） -->
     <div class="cover-card">
-      <div class="cover-pc-badge">PC-${index + 1}</div>
+      <div class="cover-location-tag">${locationText}</div>
       <div class="cover-profession">${escapeHtmlForB5(c.profession)}</div>
       ${ruby ? `<div class="cover-ruby">${ruby}</div>` : ""}
-      <div class="cover-name">${escapeHtmlForB5(c.name)}</div>
-      <div class="cover-location">${locationText}</div>
-    </div>
-
-    <!-- 下部ガイダンス -->
-    <div class="cover-guidance">
-      <div class="guidance-title">📋 プレイヤー用配役シート（ゲーム開始時）</div>
-      <div class="guidance-body">
-        ・ゲーム開始前、この面を表にして各自の席・手元に配置してください。<br/>
-        ・他のプレイヤーに対してあなたの担当役職・氏名を明示し、裏面の秘匿情報（記憶・目標）のネタバレを防止します。
-      </div>
+      <div class="cover-name">${escapeHtmlForB5(cleanCharacterName(c.name))}</div>
+      <div class="cover-affiliation">合同対策本部 構成員 // 『${escapeHtmlForB5(projectTitle)}』</div>
     </div>
 
     <!-- フッター -->
     <div class="footer-band">
       <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
-      <span class="page-num">B5 1/3 頁（表紙・配役）</span>
+      <span class="page-num">B5 1/3 頁（表紙）</span>
     </div>
   </div>
   `;
@@ -674,21 +671,20 @@ export function generateB5HandoutSingleHtml(
     <!-- メンバー一覧（全7名） -->
     <div class="members-list">
       ${characters
-        .map((m, mIdx) => {
+        .map((m) => {
           const isSelf = m.id === c.id;
           const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
           const mLoc = m.location === "headquarters" ? "東京本部" : "小笠原現地";
           return `
         <div class="member-card ${isSelf ? "member-card-self" : ""}">
           <div class="member-badge-col">
-            <span class="member-pc-code">PC-${mIdx + 1}</span>
             <span class="member-loc-tag">${mLoc}</span>
             ${isSelf ? '<span class="member-self-tag">あなた</span>' : ""}
           </div>
           <div class="member-info-col">
             <div class="member-header-row">
               <div class="member-name-group">
-                <ruby class="member-name">${escapeHtmlForB5(m.name)}${mRuby ? `<rt>${mRuby}</rt>` : ""}</ruby>
+                <ruby class="member-name">${escapeHtmlForB5(cleanCharacterName(m.name))}${mRuby ? `<rt>${mRuby}</rt>` : ""}</ruby>
               </div>
               <div class="member-profession">${escapeHtmlForB5(m.profession)}</div>
             </div>
@@ -723,7 +719,7 @@ export function generateB5HandoutSingleHtml(
       </div>
       <div class="header-right">
         <span class="confidential-badge">【非公開情報】他プレイヤーには見せないでください</span>
-        <span class="location-badge">PC-${index + 1}</span>
+        <span class="location-badge">拠点：${locationText}</span>
       </div>
     </div>
 
@@ -888,80 +884,63 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border-radius: 3px;
   }
 
-  /* 1枚目：表紙・配役シート */
+  /* 1枚目：表紙（役職・氏名） */
   .cover-card {
     margin: auto 0;
-    padding: 28px 24px;
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    border-radius: 8px;
-    color: #ffffff;
+    padding: 44px 32px;
+    background: #ffffff;
+    border: 3px double #0f172a;
+    border-radius: 6px;
+    color: #0f172a;
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
   }
-  .cover-pc-badge {
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
-    color: #ffffff;
-    font-family: monospace;
-    font-size: 11pt;
-    font-weight: 800;
+  .cover-location-tag {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #334155;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
     padding: 3px 14px;
     border-radius: 4px;
-    letter-spacing: 0.1em;
-    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+    margin-bottom: 18px;
   }
   .cover-profession {
-    font-size: 14pt;
+    font-size: 15pt;
     font-weight: 800;
-    color: #cbd5e1;
-    margin-bottom: 14px;
+    color: #1e293b;
+    margin-bottom: 18px;
     letter-spacing: 0.05em;
   }
   .cover-ruby {
-    font-size: 11pt;
+    font-size: 12pt;
     font-weight: 700;
-    color: #94a3b8;
+    color: #475569;
     letter-spacing: 0.25em;
     padding-left: 0.25em;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
   }
   .cover-name {
-    font-size: 30pt;
+    font-size: 34pt;
     font-weight: 900;
-    color: #ffffff;
-    letter-spacing: 0.15em;
-    padding-left: 0.15em;
+    color: #0f172a;
+    letter-spacing: 0.18em;
+    padding-left: 0.18em;
     line-height: 1.1;
-    margin-bottom: 14px;
+    margin-bottom: 22px;
   }
-  .cover-location {
+  .cover-affiliation {
     font-size: 9.5pt;
     font-weight: 600;
-    color: #94a3b8;
-    border-top: 1px solid rgba(255, 255, 255, 0.2);
-    padding-top: 8px;
-    width: 60%;
-  }
-  .cover-guidance {
-    border: 1px dashed #cbd5e1;
-    background: #f8fafc;
-    border-radius: 6px;
-    padding: 10px 14px;
-    margin-bottom: 8px;
-  }
-  .guidance-title {
-    font-size: 8.5pt;
-    font-weight: 700;
-    color: #1e293b;
-    margin-bottom: 3px;
-  }
-  .guidance-body {
-    font-size: 7.5pt;
     color: #64748b;
-    line-height: 1.5;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 14px;
+    width: 60%;
+    letter-spacing: 0.05em;
   }
 
   /* 2枚目：チームメンバー紹介シート */
@@ -1002,21 +981,21 @@ export const B5_HANDOUT_PRINT_STYLES = `
     background: #f8fafc !important;
     border-color: #cbd5e1 !important;
   }
+  .member-card-self .member-name,
+  .member-card-self .member-name rt,
+  .member-card-self .member-profession,
+  .member-card-self .member-profile {
+    color: #94a3b8 !important;
+  }
   .member-badge-col {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 2px;
-    min-width: 48px;
+    gap: 3px;
+    min-width: 52px;
     border-right: 1px solid #e2e8f0;
     padding-right: 6px;
-  }
-  .member-pc-code {
-    font-family: monospace;
-    font-size: 8pt;
-    font-weight: 800;
-    color: #1e293b;
   }
   .member-loc-tag {
     font-size: 6.5pt;
@@ -1025,6 +1004,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #475569;
     padding: 1px 4px;
     border-radius: 2px;
+    white-space: nowrap;
   }
   .member-self-tag {
     font-size: 6.5pt;
@@ -1033,6 +1013,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #ffffff;
     padding: 1px 4px;
     border-radius: 2px;
+    white-space: nowrap;
   }
   .member-info-col {
     flex: 1;
