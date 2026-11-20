@@ -780,9 +780,7 @@ export function generateB5HandoutSingleHtml(
 
   return `
     ${page1Html}
-    <div class="b5-page-break"></div>
     ${page2Html}
-    <div class="b5-page-break"></div>
     ${page3Html}
   `;
 }
@@ -793,7 +791,7 @@ export function generateB5HandoutSingleHtml(
 export const B5_HANDOUT_PRINT_STYLES = `
   @page {
     size: B5 portrait;
-    margin: 8mm 9mm;
+    margin: 6mm 8mm;
   }
   * {
     box-sizing: border-box;
@@ -807,33 +805,39 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #0f172a;
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Segoe UI", Roboto, Meiryo, sans-serif;
     font-size: 10pt;
-    line-height: 1.48;
+    line-height: 1.45;
+  }
+  .b5-character-package {
+    display: contents;
   }
   .b5-sheet {
     width: 100%;
-    height: 241mm;
-    max-height: 241mm;
+    height: 232mm;
+    max-height: 232mm;
     box-sizing: border-box;
+    margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    page-break-inside: avoid;
-    break-inside: avoid;
-    overflow: hidden;
-  }
-  .b5-page-break {
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
     page-break-after: always !important;
     break-after: page !important;
-    height: 0;
+    overflow: hidden;
+  }
+  .b5-sheet:last-child,
+  .b5-character-package:last-child .b5-sheet:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
   }
   .header-band {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #0f172a;
-    padding-bottom: 4px;
-    margin-bottom: 4px;
+    padding-bottom: 3.5px;
+    margin-bottom: 3px;
   }
   .header-left {
     display: flex;
@@ -887,7 +891,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
   /* 1枚目：表紙（役職・氏名） */
   .cover-card {
     margin: auto 0;
-    padding: 44px 32px;
+    padding: 38px 28px;
     background: #ffffff;
     border: 3px double #0f172a;
     border-radius: 6px;
@@ -907,13 +911,13 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding: 3px 14px;
     border-radius: 4px;
     letter-spacing: 0.05em;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
   }
   .cover-profession {
     font-size: 15pt;
     font-weight: 800;
     color: #1e293b;
-    margin-bottom: 18px;
+    margin-bottom: 16px;
     letter-spacing: 0.05em;
   }
   .cover-ruby {
@@ -922,7 +926,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #475569;
     letter-spacing: 0.25em;
     padding-left: 0.25em;
-    margin-bottom: 6px;
+    margin-bottom: 5px;
   }
   .cover-name {
     font-size: 34pt;
@@ -931,14 +935,14 @@ export const B5_HANDOUT_PRINT_STYLES = `
     letter-spacing: 0.18em;
     padding-left: 0.18em;
     line-height: 1.1;
-    margin-bottom: 22px;
+    margin-bottom: 20px;
   }
   .cover-affiliation {
     font-size: 9.5pt;
     font-weight: 600;
     color: #64748b;
     border-top: 1px solid #e2e8f0;
-    padding-top: 14px;
+    padding-top: 12px;
     width: 60%;
     letter-spacing: 0.05em;
   }
@@ -951,11 +955,11 @@ export const B5_HANDOUT_PRINT_STYLES = `
     background: #f1f5f9;
     border: 1px solid #e2e8f0;
     border-radius: 4px;
-    padding: 3px 8px;
+    padding: 2.5px 8px;
     font-size: 7pt;
     color: #475569;
     font-weight: 600;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .self-notice {
     color: #64748b;
@@ -964,7 +968,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
   .members-list {
     display: flex;
     flex-direction: column;
-    gap: 4.5px;
+    gap: 3.5px;
     flex: 1;
     justify-content: space-between;
   }
@@ -974,7 +978,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border: 1px solid #cbd5e1;
     border-radius: 5px;
     background: #ffffff;
-    padding: 4px 8px;
+    padding: 3.5px 8px;
     gap: 8px;
   }
   .member-card-self {
@@ -992,7 +996,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 3px;
+    gap: 2.5px;
     min-width: 52px;
     border-right: 1px solid #e2e8f0;
     padding-right: 6px;
@@ -1020,7 +1024,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2px;
+    gap: 1.5px;
   }
   .member-header-row {
     display: flex;
@@ -1044,28 +1048,23 @@ export const B5_HANDOUT_PRINT_STYLES = `
   }
   .member-profile {
     font-size: 7.5pt;
-    line-height: 1.4;
+    line-height: 1.38;
     color: #334155;
-  }
-  .member-card-self .member-name,
-  .member-card-self .member-name rt,
-  .member-card-self .member-profession,
-  .member-card-self .member-profile,
-  .member-card-self .member-pc-code,
-  .member-card-self .member-loc-tag {
-    color: #94a3b8 !important;
   }
 
   /* 3枚目：個人秘匿シート */
+  .b5-sheet-secret {
+    gap: 4px;
+  }
   .grid-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 7px;
   }
   .card {
     border-radius: 5px;
     border: 1px solid #cbd5e1;
-    padding: 7px 9px;
+    padding: 6px 9px;
     background: #ffffff;
   }
   .card-header {
@@ -1073,8 +1072,8 @@ export const B5_HANDOUT_PRINT_STYLES = `
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
+    padding-bottom: 2.5px;
+    margin-bottom: 4px;
   }
   .card-title {
     font-size: 8.5pt;
@@ -1084,7 +1083,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
   .card-intro {
     background: #eef2ff;
     border-color: #c7d2fe;
-    padding: 7px 10px;
+    padding: 6px 9px;
   }
   .intro-hint {
     font-size: 7pt;
@@ -1097,12 +1096,12 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding-left: 8px;
     color: #0f172a;
     font-size: 8.5pt;
-    line-height: 1.5;
+    line-height: 1.45;
   }
   .internal-drama-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
   .section-title-bar {
     display: flex;
@@ -1129,7 +1128,7 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #78350f;
     border-bottom: 1px solid #fde68a;
     padding-bottom: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .card-loss {
     background: #f8fafc;
@@ -1141,12 +1140,12 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #334155;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .card-memory {
     background: #ffffff;
     border-color: #cbd5e1;
-    padding: 8px 10px;
+    padding: 7px 9px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -1156,8 +1155,8 @@ export const B5_HANDOUT_PRINT_STYLES = `
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
+    padding-bottom: 2.5px;
+    margin-bottom: 4px;
   }
   .memory-badge {
     background: #fff1f2;
@@ -1170,13 +1169,13 @@ export const B5_HANDOUT_PRINT_STYLES = `
   }
   .memory-content {
     font-size: 8.5pt;
-    line-height: 1.58;
+    line-height: 1.5;
     color: #0f172a;
   }
   .footer-band {
-    margin-top: 4px;
+    margin-top: 3px;
     border-top: 1px solid #e2e8f0;
-    padding-top: 3px;
+    padding-top: 2.5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1214,8 +1213,7 @@ export function printCharacterHandoutsB5(
         origIndex >= 0 ? origIndex : idx,
         characters
       );
-      const isLast = idx === targetChars.length - 1;
-      return `<div class="b5-character-package">${sheetHtml}</div>${isLast ? "" : '<div class="b5-page-break"></div>'}`;
+      return `<div class="b5-character-package">${sheetHtml}</div>`;
     })
     .join("\n");
 
@@ -1255,6 +1253,6 @@ export function printCharacterHandoutsB5(
           document.body.removeChild(iframe);
         }
       }, 3000);
-    }, 350);
+    }, 450);
   }
 }
