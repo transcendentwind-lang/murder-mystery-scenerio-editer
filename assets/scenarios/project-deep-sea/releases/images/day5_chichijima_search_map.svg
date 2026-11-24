@@ -58,7 +58,6 @@
       L 958 244
       Z
     " fill="url(#chichijima-forest)" stroke="#16a34a" stroke-width="1.8" stroke-linejoin="round" />
-    <text x="998" y="304" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">東 島</text>
 
     <!-- 2. 南島（父島南西沖・扇池を有する沈水カルスト地形の南北に細長い島＋周囲の岩礁群） -->
     <path d="
@@ -84,7 +83,7 @@
     <circle cx="408" cy="754" r="3" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.2" />
     <circle cx="436" cy="776" r="4" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.2" />
     <circle cx="405" cy="908" r="3.5" fill="#bbf7d0" stroke="#16a34a" stroke-width="1.2" />
-    <text x="398" y="924" font-size="11" font-weight="bold" fill="#14532d" text-anchor="middle">南島（扇池）</text>
+    <text x="398" y="926" font-size="14.5" font-weight="900" fill="#14532d" text-anchor="middle" style="paint-order: stroke fill; stroke: #ffffff; stroke-width: 3.5px;">南島（扇池）</text>
 
     <!-- 3. 二見湾口の烏帽子岩 -->
     <circle cx="546" cy="308" r="3.5" fill="#bbf7d0" stroke="#15803d" stroke-width="1.2" />
@@ -323,7 +322,7 @@
       <polygon points="-11,0 -6,-7 6,-7 11,0 6,7 -6,7" fill="#1d4ed8" stroke="#ffffff" stroke-width="1" />
       <text x="0" y="3.5" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">240</text>
     </g>
-    <g transform="translate(766, 336)">
+    <g transform="translate(766, 368)">
       <polygon points="-11,0 -6,-7 6,-7 11,0 6,7 -6,7" fill="#1d4ed8" stroke="#ffffff" stroke-width="1" />
       <text x="0" y="3.5" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">240</text>
     </g>
@@ -337,34 +336,34 @@
     </g>
 
     <!-- =================================================================== -->
-    <!-- 島内の地名・海岸・山岳ラベル（ピン・引き出し線・道路・海岸線と重なりゼロ） -->
+    <!-- 島内の地名・海岸・山岳ラベル（サイズ大幅拡大・ピン・引き出し線・道路・海岸線と重なりゼロ） -->
     <!-- =================================================================== -->
     <!-- 二見湾 -->
-    <text x="588" y="365" font-size="18" font-weight="900" fill="#0369a1" text-anchor="middle" letter-spacing="5">二 見 湾</text>
-    <text x="588" y="383" font-size="10" font-weight="bold" fill="#0284c7" text-anchor="middle" letter-spacing="2">FUTAMI BAY</text>
+    <text x="585" y="378" font-size="21" font-weight="900" fill="#0369a1" text-anchor="middle" letter-spacing="5">二 見 湾</text>
+    <text x="585" y="398" font-size="12" font-weight="bold" fill="#0284c7" text-anchor="middle" letter-spacing="2">FUTAMI BAY</text>
 
     <!-- Googleマップ記載の主要ランドマーク・地名（白縁ハロー付きで線と重ならない開けた位置に配置） -->
-    <g style="paint-order: stroke fill; stroke: #ffffff; stroke-width: 3px; stroke-linejoin: round;">
-      <text x="518" y="314" font-size="11" font-weight="900" fill="#1e293b" text-anchor="middle">小笠原村</text>
-      <text x="572" y="162" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">大村（西町・東町）</text>
-      <text x="722" y="192" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">奥村地区</text>
+    <g style="paint-order: stroke fill; stroke: #ffffff; stroke-width: 3.8px; stroke-linejoin: round;">
+      <text x="502" y="272" font-size="13.5" font-weight="900" fill="#1e293b" text-anchor="middle">小笠原村</text>
+      <text x="582" y="136" font-size="13.5" font-weight="900" fill="#334155" text-anchor="middle">大村（西町・東町）</text>
+      <text x="752" y="198" font-size="13.5" font-weight="900" fill="#334155" text-anchor="middle">奥村地区</text>
 
-      <text x="795" y="256" font-size="10" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 旭山 (267m)</text>
-      <text x="786" y="386" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">父 島</text>
-      <text x="726" y="486" font-size="11" font-weight="900" fill="#15803d" text-anchor="middle">小笠原国立公園</text>
-      <text x="838" y="452" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 中央山 (319m)</text>
+      <text x="845" y="275" font-size="13.5" font-weight="900" fill="#14532d" text-anchor="middle">▲ 旭山 (267m)</text>
+      <text x="792" y="422" font-size="15" font-weight="900" fill="#334155" text-anchor="middle">父 島</text>
+      <text x="765" y="496" font-size="14.5" font-weight="900" fill="#15803d" text-anchor="middle">小笠原国立公園</text>
+      <text x="825" y="465" font-size="14" font-weight="900" fill="#14532d" text-anchor="middle">▲ 中央山 (319m)</text>
 
-      <text x="735" y="150" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">長崎展望台</text>
-      <text x="646" y="352" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">境浦海岸</text>
-      <text x="595" y="438" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="middle">扇浦海岸</text>
-      <text x="468" y="468" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="end">洲崎（飛行場跡地）</text>
-      <text x="476" y="544" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">コペペ海岸</text>
-      <text x="502" y="596" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">小港海岸</text>
-      <text x="478" y="662" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ブタ海岸</text>
-      <text x="452" y="746" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ジョンビーチ</text>
-      <text x="434" y="794" font-size="9.5" font-weight="bold" fill="#0f766e" text-anchor="end">ジニービーチ</text>
-      <text x="624" y="762" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">千尋岩（ハートロック）</text>
-      <text x="862" y="722" font-size="10" font-weight="bold" fill="#0369a1" text-anchor="start">巽 湾</text>
+      <text x="735" y="142" font-size="13.5" font-weight="900" fill="#0369a1" text-anchor="middle">長崎展望台</text>
+      <text x="662" y="342" font-size="13" font-weight="900" fill="#0f766e" text-anchor="end">境浦海岸</text>
+      <text x="595" y="438" font-size="13.5" font-weight="900" fill="#0f766e" text-anchor="middle">扇浦海岸</text>
+      <text x="515" y="492" font-size="13" font-weight="900" fill="#475569" text-anchor="start">洲崎（飛行場跡地）</text>
+      <text x="474" y="544" font-size="13.5" font-weight="900" fill="#0369a1" text-anchor="end">コペペ海岸</text>
+      <text x="500" y="602" font-size="13.5" font-weight="900" fill="#0f766e" text-anchor="end">小港海岸</text>
+      <text x="476" y="666" font-size="13.5" font-weight="900" fill="#0369a1" text-anchor="end">ブタ海岸</text>
+      <text x="362" y="752" font-size="13.5" font-weight="900" fill="#0369a1" text-anchor="end">ジョンビーチ</text>
+      <text x="362" y="802" font-size="13.5" font-weight="900" fill="#0f766e" text-anchor="end">ジニービーチ</text>
+      <text x="624" y="758" font-size="14" font-weight="900" fill="#14532d" text-anchor="middle">千尋岩（ハートロック）</text>
+      <text x="865" y="725" font-size="14" font-weight="900" fill="#0369a1" text-anchor="start">巽 湾</text>
     </g>
 
     <!-- 測地グリッドオーバーレイ -->
@@ -383,139 +382,139 @@
     </g>
 
     <!-- =================================================================== -->
-    <!-- ★ 海上保安庁 小笠原支部（大村・東町の陸地上：x=598, y=210）※高視認性の灰色（グレー）配色 -->
+    <!-- ★ 海上保安庁 小笠原支部（大村・東町の陸地上：x=598, y=210）※高視認性の灰色（グレー）配色・文字拡大 -->
     <!-- =================================================================== -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="598" y1="210" x2="385" y2="495" stroke="#475569" stroke-width="2.5" stroke-dasharray="4 3" />
-      <circle cx="598" cy="210" r="8.5" fill="#475569" stroke="#ffffff" stroke-width="2.5" />
-      <g transform="translate(85, 472)">
-        <rect x="0" y="0" width="300" height="48" rx="7" fill="#e2e8f0" stroke="#475569" stroke-width="2.5" />
-        <text x="150" y="19" font-size="11" font-weight="900" fill="#475569" text-anchor="middle">★ 現在地（現地対策本部・父島大村）</text>
-        <text x="150" y="39" font-size="14.5" font-weight="900" fill="#0f172a" text-anchor="middle">海上保安庁 小笠原支部</text>
+      <line x1="598" y1="210" x2="345" y2="480" stroke="#475569" stroke-width="2.8" stroke-dasharray="5 3" />
+      <circle cx="598" cy="210" r="10" fill="#475569" stroke="#ffffff" stroke-width="2.8" />
+      <g transform="translate(75, 452)">
+        <rect x="0" y="0" width="270" height="56" rx="8" fill="#e2e8f0" stroke="#475569" stroke-width="2.8" />
+        <text x="135" y="22" font-size="13" font-weight="900" fill="#475569" text-anchor="middle">★ 現在地（現地対策本部・父島大村）</text>
+        <text x="135" y="45" font-size="17" font-weight="900" fill="#0f172a" text-anchor="middle">海上保安庁 小笠原支部</text>
       </g>
     </g>
 
     <!-- =================================================================== -->
-    <!-- 父島 調査対象 8拠点ピン ＆ ボックス（すべて【青】に完全統一・すべて確実な陸地上！） -->
+    <!-- 父島 調査対象 8拠点ピン ＆ ボックス（すべて【青】統一・文字サイズ大幅拡大・すべて確実な陸地上！） -->
     <!-- =================================================================== -->
 
-    <!-- ① 海洋科学大学 小笠原研究所（扇浦・八瀬川流域の陸地上：x=654, y=476） -->
+    <!-- ① 海洋科学大学 小笠原研究所（扇浦・八瀬川流域の陸地上：x=654, y=476 ➔ 右下の空き領域へ引き出し） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="654" y1="476" x2="385" y2="615" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="654" cy="476" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="654" y="481" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">1</text>
+      <line x1="654" y1="476" x2="965" y2="608" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="654" cy="476" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="654" y="482" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">1</text>
 
-      <g transform="translate(85, 580)">
-        <rect x="0" y="0" width="300" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="300" height="24" rx="6" fill="#1d4ed8" />
-        <text x="150" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ① （扇浦・八瀬川流域）</text>
-        <text x="150" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">海洋科学大学 小笠原研究所</text>
-        <text x="150" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">海洋生物研究棟・海野教授の旧研究室</text>
+      <g transform="translate(965, 565)">
+        <rect x="0" y="0" width="350" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="350" height="29" rx="7" fill="#1d4ed8" />
+        <text x="175" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ① （扇浦・八瀬川流域）</text>
+        <text x="175" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">海洋科学大学 小笠原研究所</text>
+        <text x="175" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">海洋生物研究棟・海野教授の旧研究室</text>
       </g>
     </g>
 
     <!-- ② パパズドルフィン（大村・東町、二見港岸壁北側の陸地上：x=616, y=206） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="616" y1="206" x2="995" y2="235" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="616" cy="206" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="616" y="211" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
+      <line x1="616" y1="206" x2="965" y2="250" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="616" cy="206" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="616" y="212" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
 
-      <g transform="translate(995, 198)">
-        <rect x="0" y="0" width="325" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="325" height="24" rx="6" fill="#1d4ed8" />
-        <text x="162" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ② （大村東町・二見港付近）</text>
-        <text x="162" y="44" font-size="17.5" font-weight="900" fill="#1e3a8a" text-anchor="middle">パパズドルフィン（観光漁船兼宿泊所）</text>
-        <text x="162" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">ダイビングチャーター船・宿泊施設</text>
+      <g transform="translate(965, 222)">
+        <rect x="0" y="0" width="355" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="355" height="29" rx="7" fill="#1d4ed8" />
+        <text x="177" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ② （大村東町・二見港付近）</text>
+        <text x="177" y="54" font-size="19.5" font-weight="900" fill="#1e3a8a" text-anchor="middle">パパズドルフィン（観光漁船兼宿泊所）</text>
+        <text x="177" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">ダイビングチャーター船・宿泊施設</text>
       </g>
     </g>
 
     <!-- ③ ウェザーステーション展望台（三日月山展望台：Googleマップと同位置の陸地上 x=486, y=214） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="486" y1="214" x2="385" y2="258" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="486" cy="214" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="486" y="219" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">3</text>
+      <line x1="486" y1="214" x2="385" y2="272" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="486" cy="214" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="486" y="220" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">3</text>
 
-      <g transform="translate(85, 222)">
-        <rect x="0" y="0" width="300" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="300" height="24" rx="6" fill="#1d4ed8" />
-        <text x="150" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ③ （三日月山展望台・西町高台）</text>
-        <text x="150" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">ウェザーステーション展望台</text>
-        <text x="150" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">西海域・ホエールウォッチング展望台</text>
+      <g transform="translate(75, 228)">
+        <rect x="0" y="0" width="310" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="310" height="29" rx="7" fill="#1d4ed8" />
+        <text x="155" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ③ （三日月山展望台・西町高台）</text>
+        <text x="155" y="54" font-size="20.5" font-weight="900" fill="#1e3a8a" text-anchor="middle">ウェザーステーション展望台</text>
+        <text x="155" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">西海域・ホエールウォッチング展望台</text>
       </g>
     </g>
 
     <!-- ④ 小笠原神社（大村・大神山麓の陸地上：x=626, y=180） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="626" y1="180" x2="995" y2="145" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="626" cy="180" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="626" y="185" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">4</text>
+      <line x1="626" y1="180" x2="965" y2="156" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="626" cy="180" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="626" y="186" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">4</text>
 
-      <g transform="translate(995, 110)">
-        <rect x="0" y="0" width="325" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="325" height="24" rx="6" fill="#1d4ed8" />
-        <text x="162" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ④ （大村・大神山南麓）</text>
-        <text x="162" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原神社</text>
-        <text x="162" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">父島総鎮守・社務所および古文書庫</text>
+      <g transform="translate(965, 112)">
+        <rect x="0" y="0" width="355" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="355" height="29" rx="7" fill="#1d4ed8" />
+        <text x="177" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ④ （大村・大神山南麓）</text>
+        <text x="177" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原神社</text>
+        <text x="177" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">父島総鎮守・社務所および古文書庫</text>
       </g>
     </g>
 
     <!-- ⑤ 気象庁 小笠原観測所（大村・西町の陸地上：x=526, y=222） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="526" y1="222" x2="385" y2="152" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="526" cy="222" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="526" y="227" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">5</text>
+      <line x1="526" y1="222" x2="385" y2="159" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="526" cy="222" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="526" y="228" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">5</text>
 
-      <g transform="translate(85, 115)">
-        <rect x="0" y="0" width="300" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="300" height="24" rx="6" fill="#1d4ed8" />
-        <text x="150" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑤ （大村・西町地区）</text>
-        <text x="150" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">気象庁 小笠原観測所</text>
-        <text x="150" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">高層気象・地震および海洋観測施設</text>
+      <g transform="translate(75, 115)">
+        <rect x="0" y="0" width="310" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="310" height="29" rx="7" fill="#1d4ed8" />
+        <text x="155" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑤ （大村・西町地区）</text>
+        <text x="155" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">気象庁 小笠原観測所</text>
+        <text x="155" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">高層気象・地震および海洋観測施設</text>
       </g>
     </g>
 
     <!-- ⑥ 小笠原水産センター（清瀬地区・二見漁港北東奥の陸地上：x=654, y=224） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="654" y1="224" x2="995" y2="332" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="654" cy="224" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="654" y="229" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
+      <line x1="654" y1="224" x2="965" y2="385" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="654" cy="224" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="654" y="230" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
 
-      <g transform="translate(995, 295)">
-        <rect x="0" y="0" width="325" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="325" height="24" rx="6" fill="#1d4ed8" />
-        <text x="162" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑥ （清瀬地区・二見漁港奥）</text>
-        <text x="162" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原水産センター</text>
-        <text x="162" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">東京都島しょ農林水産総合センター研究棟</text>
+      <g transform="translate(965, 335)">
+        <rect x="0" y="0" width="355" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="355" height="29" rx="7" fill="#1d4ed8" />
+        <text x="177" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑥ （清瀬地区・二見漁港奥）</text>
+        <text x="177" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原水産センター</text>
+        <text x="177" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">東京都島しょ農林水産総合センター研究棟</text>
       </g>
     </g>
 
     <!-- ⑦ 小笠原海洋センター（Googleマップと同位置の屏風谷・陸地上：x=658, y=262） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="658" y1="262" x2="995" y2="432" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="658" cy="262" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="658" y="267" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">7</text>
+      <line x1="658" y1="262" x2="965" y2="494" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="658" cy="262" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="658" y="268" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">7</text>
 
-      <g transform="translate(995, 395)">
-        <rect x="0" y="0" width="325" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="325" height="24" rx="6" fill="#1d4ed8" />
-        <text x="162" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑦ （奥村・屏風谷地区）</text>
-        <text x="162" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原海洋センター</text>
-        <text x="162" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">海洋生物保全・鯨類およびウミガメ研究施設</text>
+      <g transform="translate(965, 450)">
+        <rect x="0" y="0" width="355" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="355" height="29" rx="7" fill="#1d4ed8" />
+        <text x="177" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑦ （奥村・屏風谷地区）</text>
+        <text x="177" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">小笠原海洋センター</text>
+        <text x="177" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">海洋生物保全・鯨類およびウミガメ研究施設</text>
       </g>
     </g>
 
     <!-- ⑧ 二見港（船客待合所）（大村・西町、二見港本村船客岸壁の陸地上：x=566, y=236） -->
     <g filter="url(#pin-card-shadow)">
-      <line x1="566" y1="236" x2="385" y2="375" stroke="#1d4ed8" stroke-width="3" />
-      <circle cx="566" cy="236" r="13.5" fill="#1d4ed8" stroke="#ffffff" stroke-width="2.8" />
-      <text x="566" y="241" font-size="13.5" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
+      <line x1="566" y1="236" x2="385" y2="386" stroke="#1d4ed8" stroke-width="3.2" />
+      <circle cx="566" cy="236" r="16" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+      <text x="566" y="242" font-size="16" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
 
-      <g transform="translate(85, 342)">
-        <rect x="0" y="0" width="300" height="74" rx="8" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3" />
-        <rect x="0" y="0" width="300" height="24" rx="6" fill="#1d4ed8" />
-        <text x="150" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑧ （二見港・本村船客岸壁）</text>
-        <text x="150" y="44" font-size="18" font-weight="900" fill="#1e3a8a" text-anchor="middle">二見港（船客待合所）</text>
-        <text x="150" y="63" font-size="11" font-weight="bold" fill="#1e40af" text-anchor="middle">定期船「おがさわら丸」発着埠頭・待合所</text>
+      <g transform="translate(75, 342)">
+        <rect x="0" y="0" width="310" height="88" rx="9" fill="#eff6ff" stroke="#1d4ed8" stroke-width="3.2" />
+        <rect x="0" y="0" width="310" height="29" rx="7" fill="#1d4ed8" />
+        <text x="155" y="20" font-size="15" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑧ （二見港・本村船客岸壁）</text>
+        <text x="155" y="54" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">二見港（船客待合所）</text>
+        <text x="155" y="76" font-size="13.5" font-weight="bold" fill="#1e40af" text-anchor="middle">定期船「おがさわら丸」発着埠頭・待合所</text>
       </g>
     </g>
   </g>
@@ -523,7 +522,7 @@
   <!-- ===================================================================== -->
   <!-- 方位磁針（コンパスローズ）※N・E・S・Wの文字が矢印と絶対に重ならない外周配置 -->
   <!-- ===================================================================== -->
-  <g transform="translate(1255, 585)" filter="url(#pin-card-shadow)">
+  <g transform="translate(1255, 785)" filter="url(#pin-card-shadow)">
     <circle cx="0" cy="0" r="56" fill="#ffffff" stroke="#0f172a" stroke-width="2" opacity="0.96" />
     <circle cx="0" cy="0" r="34" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
     <line x1="-34" y1="0" x2="34" y2="0" stroke="#94a3b8" stroke-width="1" />
@@ -541,28 +540,6 @@
     <text x="0" y="49" font-size="11.5" font-weight="900" fill="#475569" text-anchor="middle">S</text>
     <text x="43" y="4" font-size="11.5" font-weight="900" fill="#475569" text-anchor="middle">E</text>
     <text x="-43" y="4" font-size="11.5" font-weight="900" fill="#475569" text-anchor="middle">W</text>
-  </g>
-
-  <!-- ===================================================================== -->
-  <!-- 右下：父島 調査対象拠点索引表（青テーマ統一・文字重なりゼロ） -->
-  <!-- ===================================================================== -->
-  <g transform="translate(1015, 675)" filter="url(#pin-card-shadow)">
-    <rect x="0" y="0" width="305" height="238" rx="8" fill="#ffffff" stroke="#1d4ed8" stroke-width="2" opacity="0.97" />
-    <rect x="0" y="0" width="305" height="28" rx="6" fill="#1d4ed8" />
-    <text x="14" y="19" font-size="12.5" font-weight="900" fill="#ffffff" letter-spacing="1">小笠原諸島・父島 調査対象拠点索引</text>
-
-    <g font-size="11.5" font-weight="bold" fill="#1e3a8a">
-      <text x="14" y="50">① 海洋科学大学 小笠原研究所（扇浦）</text>
-      <text x="14" y="72">② パパズドルフィン（大村・二見港付近）</text>
-      <text x="14" y="94">③ ウェザーステーション展望台（三日月山）</text>
-      <text x="14" y="116">④ 小笠原神社（大村・大神山麓）</text>
-      <text x="14" y="138">⑤ 気象庁 小笠原観測所（大村・西町）</text>
-      <text x="14" y="160">⑥ 小笠原水産センター（清瀬）</text>
-      <text x="14" y="182">⑦ 小笠原海洋センター（奥村・屏風谷）</text>
-      <text x="14" y="204">⑧ 二見港（船客待合所・本村岸壁）</text>
-    </g>
-    <line x1="14" y1="214" x2="291" y2="214" stroke="#cbd5e1" stroke-width="1" />
-    <text x="14" y="229" font-size="10.5" font-weight="900" fill="#475569">★ 現在地：海上保安庁 小笠原支部（大村）</text>
   </g>
 
   <!-- ===================================================================== -->
