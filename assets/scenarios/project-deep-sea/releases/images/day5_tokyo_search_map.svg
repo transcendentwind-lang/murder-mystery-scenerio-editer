@@ -251,19 +251,6 @@
     <path d="M 812 908 L 866 908 L 868 935 L 812 935 Z" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
 
     <!-- =================================================================== -->
-    <!-- 皇居のお濠（Googleマップ中央の象徴的な水濠リング形状） -->
-    <!-- =================================================================== -->
-    <path d="
-      M 594 372
-      C 626 364, 662 376, 672 406
-      C 680 438, 668 476, 636 488
-      C 602 496, 568 476, 562 442
-      C 556 408, 568 380, 594 372
-      Z
-    " fill="none" stroke="#38bdf8" stroke-width="4.5" opacity="0.85" />
-    <text x="618" y="436" font-size="11" font-weight="900" fill="#334155" text-anchor="middle" letter-spacing="2">皇 居</text>
-
-    <!-- =================================================================== -->
     <!-- 主要幹道・湾岸道路・東京ゲートブリッジ（Googleマップの主要道路網を上品なグレー実線で表現・島名の文字背景として先に描画） -->
     <!-- =================================================================== -->
     <g fill="none" stroke="#cbd5e1" stroke-width="1.8" opacity="0.72">
@@ -405,13 +392,13 @@
       <rect x="675" y="539" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
       <text x="698" y="548" font-size="11.5" font-weight="900" fill="#0f172a">新橋駅</text>
 
-      <!-- 浜松町駅（⑧ピン・引き出し線・JR路線と一切重ならない位置） -->
+      <!-- 浜松町駅（⑧ピン・引き出し線・JR路線と一切重ならないよう駅の左上・山手線内側の白地に配置） -->
       <rect x="679" y="617" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="670" y="638" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">浜松町駅</text>
+      <text x="670" y="612" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">浜松町駅</text>
 
-      <!-- 田町駅 -->
+      <!-- 田町駅（⑧の引き出し線と一切重ならないよう駅の左上・山手線内側の白地に配置） -->
       <circle cx="642" cy="698" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="632" y="702" text-anchor="end">田町駅</text>
+      <text x="632" y="692" text-anchor="end">田町駅</text>
 
       <!-- 品川駅（⑦の引き出し線 y=776..795 を避けて、線路左上の開けた白地へ配置） -->
       <rect x="590" y="783" width="15" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" />
@@ -421,9 +408,9 @@
       <circle cx="495" cy="858" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
       <text x="495" y="878" text-anchor="middle">大崎駅</text>
 
-      <!-- 渋谷駅（②のボックスや国道246号・山手線と一切重ならない左上の開けた白地へ配置） -->
+      <!-- 渋谷駅（②のボックスを右へ移したことで、アイコンも文字も100%露出してくっきり読める配置） -->
       <rect x="289" y="613" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="278" y="608" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">渋谷駅</text>
+      <text x="278" y="618" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">渋谷駅</text>
 
       <rect x="278" y="371" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
       <text x="270" y="388" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">新宿駅</text>
@@ -496,13 +483,13 @@
       </g>
     </g>
 
-    <!-- ② 海洋研究開発機構（千代田区内幸町：x=652, y=522 ➔ 左下の空き領域へ引き出し、東京駅・有楽町駅・新橋駅を一切隠さない配置） -->
+    <!-- ② 海洋研究開発機構（千代田区内幸町：x=652, y=522 ➔ 渋谷駅のアイコンと文字から完全に離れた中央空き領域へ配置） -->
     <g filter="url(#box-shadow)">
-      <line x1="652" y1="522" x2="515" y2="608" stroke="#047857" stroke-width="3" />
+      <line x1="652" y1="522" x2="565" y2="598" stroke="#047857" stroke-width="3" />
       <circle cx="652" cy="522" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
       <text x="652" y="527" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
 
-      <g transform="translate(262, 582)">
+      <g transform="translate(335, 580)">
         <rect x="0" y="0" width="255" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
         <rect x="0" y="0" width="255" height="24" rx="6" fill="#047857" />
         <text x="127" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ② （千代田区・内幸町）</text>
@@ -586,13 +573,13 @@
       </g>
     </g>
 
-    <!-- ⑧ 竹芝桟橋ターミナル（港区海岸・浜松町竹芝埠頭の陸地上：x=714, y=586） -->
+    <!-- ⑧ 竹芝桟橋ターミナル（港区海岸・浜松町竹芝埠頭の陸地上：x=714, y=586 ➔ 浜松町駅・田町駅の文字を通らないルートで引き出し） -->
     <g filter="url(#box-shadow)">
-      <line x1="714" y1="586" x2="537" y2="698" stroke="#047857" stroke-width="3" />
+      <line x1="714" y1="586" x2="555" y2="704" stroke="#047857" stroke-width="3" />
       <circle cx="714" cy="586" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
       <text x="714" y="591" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
 
-      <g transform="translate(262, 668)">
+      <g transform="translate(290, 668)">
         <rect x="0" y="0" width="275" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
         <rect x="0" y="0" width="275" height="24" rx="6" fill="#047857" />
         <text x="137" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ⑧ （港区海岸・浜松町）</text>
