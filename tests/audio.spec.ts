@@ -124,3 +124,21 @@ test("スマホ画面のスクロール時に発信するクリック音パタ�
   expect(box).not.toBeNull();
   expect(box!.y).toBeCloseTo(0, 0);
 });
+
+test("狂気の深淵の確認ダイアログで戻る・覗くを選択でき、コード入力からlast-missionで未知の言語画面へ移行できる", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("mm_sonar_player_auth_v1", "whale-study"));
+  await page.goto("/sonar");
+  await page.getByRole("button", { name: "狂気の深淵を覗き込み、クジラの言語をより理解する", exact: true }).click();
+  await expect(page.getByText("狂気の深淵を覗き込み、クジラの言語をより理解します。検討時間が追加されますのでGMにもお知らせください。本当によろしいですか？")).toBeVisible();
+  await page.getByRole("button", { name: "戻る", exact: true }).click();
+  await expect(page.getByText("解読状況: 2 / 28 語あてはめ済")).toBeVisible();
+
+  await page.getByRole("button", { name: "コード入力", exact: true }).click();
+  await page.getByPlaceholder("コードを入力...").fill("last-mission");
+  await page.getByRole("button", { name: "コード認証して聞き取り画面へ移行", exact: true }).click();
+  await expect(page.getByRole("button", { name: "まとめて聞く", exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声A", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声B", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声C", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声D", { exact: true })).toBeVisible();
+});

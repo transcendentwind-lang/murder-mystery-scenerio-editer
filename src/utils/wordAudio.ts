@@ -220,6 +220,21 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
             { delayMs: 370, freq: 3150, duration: 0.016, volume: 0.9 },
             { delayMs: 500, freq: 2050, duration: 0.026, volume: 0.92 },
           ]);
+      case "word-unknown-c": // クジラ音声C（未知の言語：ポ・ルル・トーン）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1950, duration: 0.022, volume: 0.88 },
+            { delayMs: 170, freq: 2450, duration: 0.016, volume: 0.9 },
+            { delayMs: 270, freq: 2650, duration: 0.016, volume: 0.92 },
+            { delayMs: 430, freq: 2150, duration: 0.042, volume: 0.95 },
+          ]);
+      case "word-unknown-d": // クジラ音声D（未知の言語：タ・タン・ドーン）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2550, duration: 0.016, volume: 0.88 },
+            { delayMs: 160, freq: 2150, duration: 0.022, volume: 0.92 },
+            { delayMs: 360, freq: 1380, duration: 0.045, volume: 0.96 },
+          ]);
       default:
         return clicks([0, 200, 400], 2400);}
 }
