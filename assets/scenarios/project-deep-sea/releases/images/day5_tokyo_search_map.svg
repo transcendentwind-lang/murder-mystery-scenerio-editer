@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 990" width="1400" height="990" style="background-color: #ffffff; font-family: 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;">
   <defs>
-    <!-- 水域グラデーション（東京湾・隅田川・荒川・臨海運河） -->
+    <!-- 水域グラデーション（Googleマップと同等の明るく明瞭な東京湾・河川ブルー） -->
     <linearGradient id="tokyo-water-grad" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#dbeafe" />
-      <stop offset="55%" stop-color="#bae6fd" />
-      <stop offset="100%" stop-color="#93c5fd" />
+      <stop offset="0%" stop-color="#bae6fd" />
+      <stop offset="55%" stop-color="#93c5fd" />
+      <stop offset="100%" stop-color="#7dd3fc" />
     </linearGradient>
 
     <!-- 経緯度・測地グリッドパターン -->
     <pattern id="map-grid-sub" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#cbd5e1" stroke-width="0.45" opacity="0.55" />
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#cbd5e1" stroke-width="0.45" opacity="0.48" />
     </pattern>
 
     <!-- ラベルボックス用シャドウ -->
@@ -29,364 +29,424 @@
   </clipPath>
 
   <g clip-path="url(#tokyo-map-clip)">
-    <!-- ベース水域（東京湾・隅田川・荒川） -->
+    <!-- ベース水域（東京湾・隅田川・荒川・運河網） -->
     <rect x="55" y="100" width="1290" height="835" fill="url(#tokyo-water-grad)" />
 
-    <!-- 東京湾の等深線 -->
-    <path d="M 720 935 Q 785 835 900 845 Q 1030 855 1140 935" fill="none" stroke="#60a5fa" stroke-width="1.2" stroke-dasharray="6 4" opacity="0.65" />
-
     <!-- =================================================================== -->
-    <!-- 1. 東京本土（隅田川西岸〜竹芝・日の出・芝浦埠頭・品川埠頭・大井埠頭） -->
-    <!--    ※芝浦埠頭・品川埠頭を独立した島ではなく、本土の臨海岸壁から張り出す実際の埠頭形状で描画 -->
+    <!-- 1. 東京本土（隅田川西岸〜湊・築地・浜離宮・竹芝・日の出・芝浦埠頭・品川埠頭・大井埠頭） -->
+    <!--    ※添付Googleマップから隅田川西岸のカーブ、竹芝〜日の出〜芝浦〜品川〜大井の埠頭と運河の凹凸を忠実にトレース -->
     <!-- =================================================================== -->
     <path d="
       M 55 100
-      L 864 100
-      C 882 145, 888 195, 878 255
-      C 870 305, 864 355, 854 405
-      C 844 452, 822 496, 804 542
-      L 788 574
-      L 752 595
-      L 732 608
-      L 734 652
-      L 716 660
-      L 714 684
-      L 744 684
-      L 748 756
-      L 712 758
-      L 708 742
-      L 695 742
-      L 692 782
-      L 736 782
-      L 742 868
-      L 692 870
-      L 688 852
-      L 672 852
-      L 668 892
-      L 725 894
-      L 728 935
+      L 934 100
+      C 908 145, 892 185, 876 232
+      C 864 268, 868 308, 862 346
+      C 854 385, 838 418, 822 452
+      L 788 506
+      L 754 538
+      L 732 558
+      L 724 592
+      L 708 606
+      L 704 636
+      L 732 636
+      L 736 704
+      L 704 706
+      L 702 688
+      L 690 688
+      L 688 732
+      L 736 732
+      L 744 824
+      L 694 826
+      L 692 806
+      L 678 806
+      L 676 848
+      L 746 848
+      L 764 935
       L 55 935
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.8" stroke-linejoin="round" />
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6" stroke-linejoin="round" />
 
-    <!-- 芝浦・品川の運河スリット（本土と陸続きの埠頭であることを示す高浜運河・芝浦運河の入り江） -->
-    <path d="M 712 694 L 702 694 L 700 734" fill="none" stroke="#93c5fd" stroke-width="3.5" />
-    <path d="M 690 792 L 678 792 L 676 844" fill="none" stroke="#93c5fd" stroke-width="3.5" />
-    <text x="728" y="726" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">芝浦埠頭</text>
-    <text x="714" y="828" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">品川埠頭</text>
+    <!-- 芝浦・品川・大井の運河スリット（本土と一体で繋がった埠頭群と内側の運河） -->
+    <path d="M 704 646 L 694 646 L 692 682" fill="none" stroke="#7dd3fc" stroke-width="3.2" />
+    <path d="M 686 742 L 674 742 L 672 798" fill="none" stroke="#7dd3fc" stroke-width="3.2" />
+    <text x="720" y="676" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">芝浦埠頭</text>
+    <text x="716" y="782" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">品川埠頭</text>
+    <text x="716" y="886" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">大井埠頭</text>
 
     <!-- =================================================================== -->
-    <!-- 2. 江東・墨田・深川本土（隅田川東岸と荒川西岸に挟まれた市街地・越中島まで） -->
-    <!--    ※隅田川（川幅約26〜32px）と荒川（川幅約45〜52px）の実際の蛇行と河口形状を再現 -->
+    <!-- 2. 墨田・江東本土（隅田川東岸〜荒川西岸：浅草・両国・錦糸町・清澄・門前仲町・木場・東陽町・南砂） -->
+    <!--    ※添付Googleマップの隅田川（北東から南西へ蛇行）と荒川（北西から南南東へ太く流れる）を忠実にトレース -->
     <!-- =================================================================== -->
     <path d="
-      M 894 100
-      L 1236 100
-      C 1232 195, 1235 295, 1240 405
-      C 1244 465, 1246 512, 1248 548
-      L 1142 548
-      L 1068 544
-      L 1066 525
-      L 962 522
-      L 954 536
-      L 908 532
-      L 888 505
-      L 872 478
-      C 882 432, 888 386, 896 335
-      C 904 282, 912 225, 906 165
-      C 902 135, 898 115, 894 100
+      M 964 100
+      L 1118 100
+      C 1168 158, 1212 218, 1236 286
+      C 1252 345, 1254 415, 1254 492
+      L 1146 492
+      L 1146 476
+      L 1036 474
+      L 1032 456
+      L 934 454
+      L 918 474
+      L 872 472
+      L 852 446
+      C 868 412, 882 378, 892 342
+      C 898 304, 894 264, 906 228
+      C 922 182, 938 142, 964 100
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.8" stroke-linejoin="round" />
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6" stroke-linejoin="round" />
+
+    <!-- 江東内部の主要運河（小名木川・仙台堀川・大横川の直交運河スリット：Googleマップ準拠） -->
+    <line x1="888" y1="348" x2="1248" y2="344" stroke="#7dd3fc" stroke-width="2.5" opacity="0.85" />
+    <line x1="972" y1="346" x2="972" y2="454" stroke="#7dd3fc" stroke-width="2.5" opacity="0.85" />
 
     <!-- =================================================================== -->
-    <!-- 3. 江戸川区側（荒川・中川東岸〜葛西臨海エリア） -->
+    <!-- 3. 江戸川・葛西側（荒川・中川東岸〜葛西臨海公園エリア） -->
     <!-- =================================================================== -->
     <path d="
-      M 1286 100
+      M 1168 100
       L 1345 100
-      L 1345 645
-      L 1302 645
-      C 1296 485, 1292 315, 1286 100
+      L 1345 556
+      L 1296 556
+      L 1298 485
+      C 1298 395, 1294 318, 1276 256
+      C 1252 192, 1212 142, 1168 100
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.8" stroke-linejoin="round" />
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.6" stroke-linejoin="round" />
+
+    <!-- 荒川と中川を隔てる中堤（Googleマップの二重河川形状） -->
+    <path d="M 1152 100 C 1196 152, 1238 208, 1262 272 C 1278 328, 1280 412, 1280 515" fill="none" stroke="#f8fafc" stroke-width="3.2" />
 
     <!-- =================================================================== -->
-    <!-- 4. 東京湾岸の埋立地群（実際の地図に即した直線護岸・運河・埠頭形状） -->
+    <!-- 4. 東京湾岸の埋立地・人工島群（添付Googleマップから1島ずつ忠実にトレース） -->
     <!-- =================================================================== -->
 
-    <!-- 4-A. 佃・月島・勝どき・豊海（隅田川河口と晴海運河に挟まれた北東―南西方向の細長い島＋西側の豊海埠頭） -->
+    <!-- 4-A. 佃・月島・勝どき・豊海（隅田川河口と朝潮運河・晴海運河に挟まれた北東―南西方向の島＋西側の豊海埠頭） -->
     <path d="
-      M 862 496
-      L 884 484
-      L 898 506
-      L 878 535
-      L 890 546
-      L 842 616
-      L 814 600
-      L 818 590
-      L 794 576
-      L 808 552
-      L 826 562
-      L 852 522
+      M 838 456
+      L 858 446
+      L 872 466
+      L 814 558
+      L 790 544
+      L 798 532
+      L 776 518
+      L 790 496
+      L 808 508
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="850" y="566" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle" transform="rotate(-52 850 566)">月島・勝どき</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="826" y="512" font-size="8.5" font-weight="bold" fill="#475569" text-anchor="middle" transform="rotate(-55 826 512)">月島・勝どき</text>
 
-    <!-- 4-B. 晴海（月島の南東、朝潮運河と晴海運河に囲まれた埠頭形状） -->
+    <!-- 4-B. 晴海（月島の南東、朝潮運河と晴海運河に挟まれた南西へ突き出す埠頭形状） -->
     <path d="
-      M 896 552
-      L 934 532
-      L 958 564
-      L 915 628
-      L 888 642
-      L 862 624
-      L 868 608
-      L 898 566
+      M 878 482
+      L 908 468
+      L 932 496
+      L 872 586
+      L 842 592
+      L 826 576
+      L 836 558
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="912" y="592" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">晴海</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="876" y="538" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle" transform="rotate(-52 876 538)">晴海</text>
 
-    <!-- 4-C. 枝川・塩浜・潮見（越中島の南、豊洲運河と砂町運河の間の矩形埋立地） -->
+    <!-- 4-C. 枝川・潮見（越中島・木場の南、運河に囲まれた直交埋立地ブロック） -->
     <path d="
-      M 968 534
-      L 1066 536
-      L 1066 572
-      L 1082 572
-      L 1082 604
-      L 1018 604
-      L 1018 576
-      L 968 574
+      M 936 468
+      L 1026 470
+      L 1026 514
+      L 936 512
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="1048" y="592" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">潮見</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="
+      M 1038 488
+      L 1138 490
+      L 1138 542
+      L 1038 540
+      Z
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="1088" y="520" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">潮見</text>
 
-    <!-- 4-D. 豊洲（晴海の南東、南西へ大きく突き出す豊洲埠頭・六丁目と東雲運河） -->
+    <!-- 4-D. 豊洲（晴海の南東、南西へ長く伸びる豊洲ふ頭・豊洲市場〜六丁目） -->
     <path d="
-      M 964 584
-      L 1012 586
-      L 1032 612
-      L 996 654
-      L 935 712
-      L 904 686
-      L 938 638
-      L 928 628
+      M 938 526
+      L 986 526
+      L 1004 548
+      L 916 664
+      L 882 642
+      L 912 598
+      L 898 586
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="965" y="655" font-size="10.5" font-weight="bold" fill="#475569" text-anchor="middle">豊洲</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="945" y="596" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle" transform="rotate(-52 945 596)">豊洲</text>
 
-    <!-- 4-E. 辰巳・東雲（豊洲の東〜南東の直交護岸ブロック） -->
+    <!-- 4-E. 東雲・辰巳（豊洲の南東に並ぶ矩形埋立地） -->
     <path d="
-      M 1012 622
-      L 1074 622
-      L 1074 676
-      L 998 676
-      L 998 656
+      M 984 584
+      L 1048 554
+      L 1048 624
+      L 968 624
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="1042" y="654" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">東雲</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="1016" y="604" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">東雲</text>
 
     <path d="
-      M 1088 614
-      L 1146 614
-      L 1146 682
-      L 1088 682
+      M 1062 554
+      L 1138 554
+      L 1138 628
+      L 1062 628
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="1117" y="652" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">辰巳</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="1100" y="596" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">辰巳</text>
 
-    <!-- 4-F. 新木場・夢の島・若洲（荒川河口西岸の埋立地・ゴルフ場半島） -->
+    <!-- 4-F. 夢の島・新木場・若洲（荒川河口西岸の埋立地＋南へ細長く突き出す若洲ゴルフリンクス半島：Googleマップ完全準拠） -->
     <path d="
-      M 1158 562
-      L 1248 562
-      L 1252 688
-      L 1236 755
-      L 1214 755
-      L 1218 688
-      L 1158 686
+      M 1152 504
+      L 1254 504
+      L 1254 624
+      L 1244 742
+      L 1222 742
+      L 1224 634
+      L 1152 632
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="1204" y="628" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">新木場</text>
-    <text x="1232" y="725" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">若洲</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="1202" y="576" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">新木場</text>
+    <text x="1234" y="692" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">若洲</text>
 
-    <!-- 4-G. 有明（東雲の南西、有明西運河と東雲運河に囲まれた台形・埠頭ブロック） -->
+    <!-- 4-G. 有明（東雲の南西、有明北・有明南の埠頭形状） -->
     <path d="
-      M 962 712
-      L 1012 688
-      L 1074 688
-      L 1074 752
-      L 1018 796
-      L 986 796
-      L 986 762
-      L 948 738
+      M 946 654
+      L 986 636
+      L 1048 636
+      L 1048 704
+      L 986 756
+      L 954 756
+      L 954 714
+      L 924 688
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="1024" y="738" font-size="10.5" font-weight="bold" fill="#475569" text-anchor="middle">有明</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="996" y="692" font-size="10" font-weight="bold" fill="#475569" text-anchor="middle">有明</text>
 
-    <!-- 4-H. 台場・青海（お台場：有明西運河の西側、大井・品川と対峙するL字＋コンテナ埠頭形状） -->
+    <!-- 4-H. 台場・青海（お台場・日本科学未来館エリア：北西―南東に伸びる特徴的な埠頭形状と船の科学館・青海コンテナ埠頭） -->
     <path d="
-      M 848 742
-      L 928 722
-      L 968 768
-      L 946 848
-      L 904 852
-      L 902 802
-      L 872 806
-      L 852 842
-      L 826 828
-      L 836 775
+      M 822 686
+      L 896 664
+      L 942 718
+      L 922 798
+      L 886 802
+      L 886 754
+      L 858 758
+      L 842 796
+      L 812 782
+      L 818 726
       Z
-    " fill="#f8fafc" stroke="#64748b" stroke-width="1.6" stroke-linejoin="round" />
-    <text x="905" y="778" font-size="10.5" font-weight="bold" fill="#475569" text-anchor="middle">お台場・青海</text>
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="882" y="728" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">お台場・青海</text>
 
-    <!-- 4-I. 中央防波堤埋立地 -->
-    <path d="M 975 882 L 1095 876 L 1098 922 L 975 925 Z" fill="#f8fafc" stroke="#64748b" stroke-width="1.5" />
+    <!-- 4-I. 中央防波堤（海の森公園・外側埋立地：Googleマップの台形＋南西ウイング形状に完全準拠） -->
+    <path d="
+      M 948 808
+      L 1046 772
+      L 1108 776
+      L 1108 836
+      L 1004 868
+      L 952 848
+      Z
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="
+      M 896 868
+      L 1042 872
+      L 1086 922
+      L 884 922
+      Z
+    " fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-linejoin="round" />
+    <text x="1032" y="822" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="middle">海の森（中央防波堤）</text>
+
+    <!-- 4-J. 城南島（大井埠頭の南東沖：Googleマップ下端の位置に準拠） -->
+    <path d="M 812 908 L 866 908 L 868 935 L 812 935 Z" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+    <text x="840" y="926" font-size="9" font-weight="bold" fill="#475569" text-anchor="middle">城南島</text>
+
+    <!-- =================================================================== -->
+    <!-- 皇居のお濠（Googleマップ中央の象徴的な水濠リング形状） -->
+    <!-- =================================================================== -->
+    <path d="
+      M 594 372
+      C 626 364, 662 376, 672 406
+      C 680 438, 668 476, 636 488
+      C 602 496, 568 476, 562 442
+      C 556 408, 568 380, 594 372
+      Z
+    " fill="none" stroke="#38bdf8" stroke-width="4.5" opacity="0.85" />
+    <text x="618" y="436" font-size="11" font-weight="900" fill="#334155" text-anchor="middle" letter-spacing="2">皇 居</text>
+
+    <!-- =================================================================== -->
+    <!-- 主要幹道・湾岸道路・東京ゲートブリッジ（Googleマップの主要道路網を上品なグレー実線で表現） -->
+    <!-- =================================================================== -->
+    <g fill="none" stroke="#cbd5e1" stroke-width="2" opacity="0.85">
+      <!-- 湾岸線（大井〜お台場〜有明〜辰巳〜新木場〜葛西） -->
+      <path d="M 738 895 L 868 742 L 1002 662 L 1100 584 L 1202 562 L 1345 548" stroke-width="2.6" />
+      <!-- 東京ゲートブリッジ（若洲〜中央防波堤〜城南島・臨海トンネル） -->
+      <path d="M 1232 742 L 1108 796 L 976 868 L 856 912" stroke-dasharray="4 3" />
+      <!-- 晴海通り・有明通り（日比谷〜勝どき〜晴海〜豊洲〜有明） -->
+      <path d="M 672 495 L 826 512 L 876 538 L 945 596 L 996 692" />
+      <!-- 永代通り・葛西橋通り（大手町〜門前仲町〜木場〜東陽町〜南砂） -->
+      <path d="M 695 426 L 938 432 L 1118 432 L 1254 432" />
+      <!-- 靖国通り・京葉道路（新宿〜市ヶ谷〜九段下〜神保町〜秋葉原〜両国〜錦糸町〜亀戸） -->
+      <path d="M 285 376 L 562 346 L 764 316 L 936 318 L 1185 318" />
+      <!-- 国道246号・青山通り（三宅坂〜赤坂見附〜青山〜渋谷） -->
+      <path d="M 568 456 L 442 522 L 296 618 L 125 712" />
+      <!-- 第一京浜・国道15号（日本橋〜新橋〜浜松町〜田町〜品川〜大森） -->
+      <path d="M 728 418 L 692 536 L 682 618 L 642 702 L 598 792 L 542 935" />
+    </g>
 
     <!-- =================================================================== -->
     <!-- 隅田川・荒川・東京湾の河川海域名称（他の地名や島と一切重ならない位置） -->
     <!-- =================================================================== -->
-    <text x="892" y="230" font-size="11.5" font-weight="900" fill="#0369a1" transform="rotate(86 892 230)" letter-spacing="3">隅田川</text>
-    <text x="1264" y="295" font-size="12" font-weight="900" fill="#0369a1" transform="rotate(88 1264 295)" letter-spacing="4">荒 川</text>
-    <text x="1155" y="835" font-size="20" font-weight="900" fill="#0369a1" letter-spacing="6" text-anchor="middle" opacity="0.82">東 京 湾 (TOKYO BAY)</text>
+    <text x="896" y="212" font-size="11.5" font-weight="900" fill="#0369a1" transform="rotate(-68 896 212)" letter-spacing="3">隅田川</text>
+    <text x="1216" y="218" font-size="12" font-weight="900" fill="#0369a1" transform="rotate(58 1216 218)" letter-spacing="4">荒 川</text>
+    <text x="1185" y="885" font-size="19" font-weight="900" fill="#0369a1" letter-spacing="5" text-anchor="middle" opacity="0.85">東 京 湾 (TOKYO BAY)</text>
 
     <!-- =================================================================== -->
-    <!-- 鉄道網 ＆ 主要駅（箱の下に一切隠れない見やすい配置） -->
+    <!-- 鉄道網 ＆ 主要駅（Googleマップの実際の駅位置に準拠し、箱の下に一切隠れない見やすい配置） -->
     <!-- =================================================================== -->
-    <!-- JR山手線・京浜東北線（上野〜秋葉原〜神田〜東京〜有楽町〜新橋〜浜松町〜田町〜品川〜大崎〜渋谷〜新宿〜池袋〜駒込〜上野） -->
+    <!-- JR山手線・京浜東北線（上野〜秋葉原〜神田〜東京〜有楽町〜新橋〜浜松町〜田町〜高輪GW〜品川〜大崎〜五反田〜目黒〜恵比寿〜渋谷〜原宿〜代々木〜新宿〜新大久保〜高田馬場〜目白〜池袋〜大塚〜巣鴨〜駒込〜田端〜日暮里〜上野） -->
     <path d="
-      M 758 175
-      L 748 292
-      L 718 355
-      L 695 445
-      L 672 562
-      L 682 645
-      L 638 725
-      L 595 815
-      L 485 865
-      L 325 785
-      L 225 635
-      L 215 415
-      L 265 215
-      L 455 125
-      L 645 128
+      M 776 188
+      L 764 296
+      L 736 354
+      L 716 436
+      L 694 492
+      L 682 544
+      L 686 622
+      L 642 698
+      L 598 788
+      L 495 858
+      L 382 782
+      L 296 618
+      L 285 376
+      L 325 182
+      L 515 118
+      L 685 124
       Z
-    " fill="none" stroke="#475569" stroke-width="3.5" opacity="0.6" />
+    " fill="none" stroke="#475569" stroke-width="3.2" opacity="0.65" />
     <path d="
-      M 758 175
-      L 748 292
-      L 718 355
-      L 695 445
-      L 672 562
-      L 682 645
-      L 638 725
-      L 595 815
-      L 485 865
-      L 325 785
-      L 225 635
-      L 215 415
-      L 265 215
-      L 455 125
-      L 645 128
+      M 776 188
+      L 764 296
+      L 736 354
+      L 716 436
+      L 694 492
+      L 682 544
+      L 686 622
+      L 642 698
+      L 598 788
+      L 495 858
+      L 382 782
+      L 296 618
+      L 285 376
+      L 325 182
+      L 515 118
+      L 685 124
       Z
-    " fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="8 8" opacity="0.9" />
+    " fill="none" stroke="#ffffff" stroke-width="1.4" stroke-dasharray="7 7" opacity="0.92" />
 
-    <!-- JR中央・総武線（新宿〜四ツ谷〜市ヶ谷〜飯田橋〜水道橋〜御茶ノ水〜秋葉原〜両国〜錦糸町〜亀戸） -->
-    <path d="M 215 415 L 395 422 L 485 335 L 575 318 L 662 312 L 748 296 L 925 298 L 1345 305" fill="none" stroke="#64748b" stroke-width="2.6" stroke-dasharray="6 4" opacity="0.65" />
+    <!-- JR中央・総武線（中野〜新宿〜四ツ谷〜市ヶ谷〜飯田橋〜水道橋〜御茶ノ水〜秋葉原〜浅草橋〜両国〜錦糸町〜亀戸〜平井） -->
+    <path d="M 115 362 L 285 376 L 445 415 L 528 326 L 606 308 L 686 304 L 764 296 L 916 298 L 1022 298 L 1345 276" fill="none" stroke="#64748b" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.65" />
 
-    <!-- 東京メトロ東西線（中野・高田馬場〜飯田橋〜九段下〜大手町〜日本橋〜茅場町〜門前仲町〜木場〜東陽町〜南砂町） -->
-    <path d="M 255 285 L 485 335 L 545 355 L 695 435 L 955 472 L 1115 468 L 1345 455" fill="none" stroke="#0284c7" stroke-width="2.2" stroke-dasharray="5 4" opacity="0.55" />
+    <!-- 東京メトロ東西線（高田馬場〜飯田橋〜九段下〜大手町〜日本橋〜茅場町〜門前仲町〜木場〜東陽町〜南砂町〜西葛西） -->
+    <path d="M 305 268 L 528 326 L 584 352 L 716 426 L 802 428 L 938 442 L 1012 442 L 1096 442 L 1345 432" fill="none" stroke="#0284c7" stroke-width="2" stroke-dasharray="5 4" opacity="0.55" />
 
     <!-- JR京葉線（東京〜八丁堀〜越中島〜潮見〜新木場〜葛西臨海公園） -->
-    <path d="M 695 452 L 825 475 L 945 512 L 1048 582 L 1204 618 L 1345 622" fill="none" stroke="#64748b" stroke-width="2.2" stroke-dasharray="5 4" opacity="0.55" />
+    <path d="M 716 442 L 808 456 L 918 468 L 1088 514 L 1202 562 L 1345 552" fill="none" stroke="#64748b" stroke-width="2" stroke-dasharray="5 4" opacity="0.55" />
 
-    <!-- 主要駅ドット＆駅名ラベル（すべての拠点ボックスと重ならないよう配置） -->
+    <!-- 主要駅ドット＆駅名ラベル（すべての拠点ボックス・引き出し線と重ならないよう配置） -->
     <g fill="#1e293b" font-size="11" font-weight="bold">
       <!-- 東京駅 -->
-      <rect x="687" y="438" width="16" height="10" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" />
-      <text x="710" y="447" font-size="12" font-weight="900" fill="#0f172a">東京駅</text>
+      <rect x="708" y="431" width="16" height="10" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" />
+      <text x="730" y="440" font-size="12" font-weight="900" fill="#0f172a">東京駅</text>
 
       <!-- 神田駅 -->
-      <circle cx="718" cy="355" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="728" y="359">神田駅</text>
+      <circle cx="736" cy="354" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="746" y="358">神田駅</text>
 
       <!-- 秋葉原駅 -->
-      <circle cx="748" cy="296" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="758" y="300">秋葉原駅</text>
+      <circle cx="764" cy="296" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="774" y="300">秋葉原駅</text>
 
       <!-- 御茶ノ水駅 -->
-      <circle cx="662" cy="312" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="652" y="328" text-anchor="end">御茶ノ水駅</text>
+      <circle cx="686" cy="304" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="678" y="320" text-anchor="end">御茶ノ水駅</text>
 
       <!-- 水道橋駅・飯田橋駅・四ツ谷駅 -->
-      <circle cx="575" cy="318" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="575" y="306" text-anchor="middle">水道橋駅</text>
+      <circle cx="606" cy="308" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="606" y="296" text-anchor="middle">水道橋駅</text>
 
-      <circle cx="485" cy="335" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="485" y="323" text-anchor="middle">飯田橋駅</text>
+      <circle cx="528" cy="326" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="528" y="314" text-anchor="middle">飯田橋駅</text>
 
-      <circle cx="395" cy="422" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="395" y="440" text-anchor="middle">四ツ谷駅</text>
+      <circle cx="445" cy="415" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="445" y="432" text-anchor="middle">四ツ谷駅</text>
 
       <!-- 上野駅 -->
-      <rect x="751" y="170" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="772" y="179" font-size="11.5" font-weight="900" fill="#0f172a">上野駅</text>
+      <rect x="769" y="183" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
+      <text x="789" y="192" font-size="11.5" font-weight="900" fill="#0f172a">上野駅</text>
+
+      <!-- 茅場町駅（Googleマップ記載） -->
+      <circle cx="802" cy="428" r="3.5" fill="#ffffff" stroke="#334155" stroke-width="1.4" />
+      <text x="808" y="422" font-size="10">茅場町駅</text>
 
       <!-- 有楽町駅 -->
-      <circle cx="682" cy="505" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="692" y="509">有楽町駅</text>
+      <circle cx="694" cy="492" r="3.8" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="704" y="496">有楽町駅</text>
 
       <!-- 新橋駅（※JAMSTECの箱に隠れないよう明瞭に表示） -->
-      <rect x="665" y="557" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="685" y="566" font-size="11.5" font-weight="900" fill="#0f172a">新橋駅</text>
+      <rect x="675" y="539" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
+      <text x="695" y="548" font-size="11.5" font-weight="900" fill="#0f172a">新橋駅</text>
 
       <!-- 浜松町駅 -->
-      <rect x="675" y="640" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="668" y="648" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">浜松町駅</text>
+      <rect x="679" y="617" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
+      <text x="672" y="625" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">浜松町駅</text>
 
       <!-- 田町駅 -->
-      <circle cx="638" cy="725" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="628" y="729" text-anchor="end">田町駅</text>
+      <circle cx="642" cy="698" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="632" y="702" text-anchor="end">田町駅</text>
 
       <!-- 品川駅 -->
-      <rect x="587" y="810" width="15" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" />
-      <text x="580" y="819" font-size="12" font-weight="900" fill="#0f172a" text-anchor="end">品川駅</text>
+      <rect x="590" y="783" width="15" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.8" />
+      <text x="583" y="792" font-size="12" font-weight="900" fill="#0f172a" text-anchor="end">品川駅</text>
 
-      <!-- 大崎駅・渋谷駅・新宿駅・池袋駅 -->
-      <circle cx="485" cy="865" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="485" y="883" text-anchor="middle">大崎駅</text>
+      <!-- 大崎駅・渋谷駅・新宿駅 -->
+      <circle cx="495" cy="858" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="495" y="876" text-anchor="middle">大崎駅</text>
 
-      <rect x="218" y="630" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="210" y="639" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">渋谷駅</text>
+      <rect x="289" y="613" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
+      <text x="281" y="622" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">渋谷駅</text>
 
-      <rect x="208" y="410" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="200" y="419" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">新宿駅</text>
-
-      <rect x="258" y="210" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
-      <text x="250" y="219" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">池袋駅</text>
+      <rect x="278" y="371" width="14" height="9" rx="2" fill="#ffffff" stroke="#0f172a" stroke-width="1.6" />
+      <text x="270" y="380" font-size="11.5" font-weight="900" fill="#0f172a" text-anchor="end">新宿駅</text>
 
       <!-- 両国駅・錦糸町駅・亀戸駅 -->
-      <circle cx="925" cy="298" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="925" y="287" text-anchor="middle">両国駅</text>
+      <circle cx="916" cy="298" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="916" y="287" text-anchor="middle">両国駅</text>
 
-      <circle cx="1015" cy="299" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="1015" y="288" text-anchor="middle">錦糸町駅</text>
+      <circle cx="1022" cy="298" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="1022" y="287" text-anchor="middle">錦糸町駅</text>
 
-      <circle cx="1115" cy="301" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="1115" y="290" text-anchor="middle">亀戸駅</text>
+      <circle cx="1122" cy="292" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="1122" y="281" text-anchor="middle">亀戸駅</text>
 
       <!-- 門前仲町駅・木場駅・東陽町駅（江東区） -->
-      <circle cx="955" cy="472" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="955" y="490" text-anchor="middle">門前仲町駅</text>
+      <circle cx="938" cy="442" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="938" y="430" text-anchor="middle">門前仲町駅</text>
 
-      <circle cx="1032" cy="470" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="1032" y="488" text-anchor="middle">木場駅</text>
+      <circle cx="1012" cy="442" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="1012" y="458" text-anchor="middle">木場駅</text>
 
-      <circle cx="1115" cy="468" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
-      <text x="1115" y="486" text-anchor="middle">東陽町駅</text>
+      <circle cx="1096" cy="442" r="4" fill="#ffffff" stroke="#334155" stroke-width="1.5" />
+      <text x="1096" y="458" text-anchor="middle">東陽町駅</text>
     </g>
 
     <!-- 測地グリッドオーバーレイ -->
     <rect x="55" y="100" width="1290" height="835" fill="url(#map-grid-sub)" />
-    <g stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.5">
+    <g stroke="#94a3b8" stroke-width="0.7" stroke-dasharray="4 4" opacity="0.45">
       <line x1="255" y1="100" x2="255" y2="935" />
       <line x1="495" y1="100" x2="495" y2="935" />
       <line x1="735" y1="100" x2="735" y2="935" />
@@ -403,8 +463,8 @@
     <!-- ★ 海上保安庁 東京本部（霞が関・現在地）※高視認性の灰色（グレー）配色 -->
     <!-- =================================================================== -->
     <g filter="url(#box-shadow)">
-      <line x1="585" y1="548" x2="365" y2="548" stroke="#475569" stroke-width="2.5" stroke-dasharray="4 3" />
-      <circle cx="585" cy="548" r="9" fill="#475569" stroke="#ffffff" stroke-width="2.5" />
+      <line x1="608" y1="532" x2="365" y2="548" stroke="#475569" stroke-width="2.5" stroke-dasharray="4 3" />
+      <circle cx="608" cy="532" r="9" fill="#475569" stroke="#ffffff" stroke-width="2.5" />
       <g transform="translate(125, 524)">
         <rect x="0" y="0" width="242" height="46" rx="7" fill="#e2e8f0" stroke="#475569" stroke-width="2.5" />
         <text x="121" y="19" font-size="11" font-weight="900" fill="#475569" text-anchor="middle">★ 現在地（対策本部・霞が関）</text>
@@ -416,26 +476,26 @@
     <!-- 調査対象 8拠点ピン ＆ コールアウトボックス（すべて【緑】に完全統一！） -->
     <!-- =================================================================== -->
 
-    <!-- ① 本人住所（江東区・門前仲町／木場エリアの陸地上） -->
+    <!-- ① 本人住所（江東区・深川／木場エリアの陸地上：x=1012, y=396） -->
     <g filter="url(#box-shadow)">
-      <line x1="1015" y1="435" x2="1082" y2="415" stroke="#047857" stroke-width="3" />
-      <circle cx="1015" cy="435" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="1015" y="440" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">1</text>
+      <line x1="1012" y1="396" x2="1082" y2="385" stroke="#047857" stroke-width="3" />
+      <circle cx="1012" cy="396" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="1012" y="401" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">1</text>
 
-      <g transform="translate(1075, 372)">
-        <rect x="0" y="0" width="250" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
-        <rect x="0" y="0" width="250" height="24" rx="6" fill="#047857" />
-        <text x="125" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ① （江東区・深川／木場）</text>
-        <text x="125" y="44" font-size="18" font-weight="900" fill="#064e3b" text-anchor="middle">本人住所（江東区）</text>
-        <text x="125" y="63" font-size="11" font-weight="bold" fill="#065f46" text-anchor="middle">吉備津の登録住所（集合住宅）</text>
+      <g transform="translate(1078, 342)">
+        <rect x="0" y="0" width="248" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
+        <rect x="0" y="0" width="248" height="24" rx="6" fill="#047857" />
+        <text x="124" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ① （江東区・深川／木場）</text>
+        <text x="124" y="44" font-size="18" font-weight="900" fill="#064e3b" text-anchor="middle">本人住所（江東区）</text>
+        <text x="124" y="63" font-size="11" font-weight="bold" fill="#065f46" text-anchor="middle">吉備津の登録住所（集合住宅）</text>
       </g>
     </g>
 
-    <!-- ② 海洋研究開発機構（千代田区内幸町：x=635, y=535 ➔ 左下の空き領域へ引き出し、東京駅・有楽町駅・新橋駅を一切隠さない配置） -->
+    <!-- ② 海洋研究開発機構（千代田区内幸町：x=652, y=522 ➔ 左下の空き領域へ引き出し、東京駅・有楽町駅・新橋駅を一切隠さない配置） -->
     <g filter="url(#box-shadow)">
-      <line x1="635" y1="535" x2="515" y2="608" stroke="#047857" stroke-width="3" />
-      <circle cx="635" cy="535" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="635" y="540" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
+      <line x1="652" y1="522" x2="515" y2="608" stroke="#047857" stroke-width="3" />
+      <circle cx="652" cy="522" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="652" y="527" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
 
       <g transform="translate(262, 582)">
         <rect x="0" y="0" width="255" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -446,13 +506,13 @@
       </g>
     </g>
 
-    <!-- ③ 吉備津神社（千代田区外神田・神田明神の場所：x=688, y=278 ➔ 右上の浅草・墨田上空へ引き出し、秋葉原駅・両国駅を一切隠さない） -->
+    <!-- ③ 吉備津神社（千代田区外神田・神田明神の場所：x=712, y=276 ➔ 右上の空き領域へ引き出し、上野駅・秋葉原駅・両国駅を一切隠さない） -->
     <g filter="url(#box-shadow)">
-      <line x1="688" y1="278" x2="778" y2="225" stroke="#047857" stroke-width="3" />
-      <circle cx="688" cy="278" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="688" y="283" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">3</text>
+      <line x1="712" y1="276" x2="825" y2="232" stroke="#047857" stroke-width="3" />
+      <circle cx="712" cy="276" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="712" y="281" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">3</text>
 
-      <g transform="translate(772, 182)">
+      <g transform="translate(822, 185)">
         <rect x="0" y="0" width="245" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
         <rect x="0" y="0" width="245" height="24" rx="6" fill="#047857" />
         <text x="122" y="17" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">拠点 ③ （千代田区・外神田）</text>
@@ -461,11 +521,11 @@
       </g>
     </g>
 
-    <!-- ④ 国立国会図書館（千代田区・永田町：x=515, y=498） -->
+    <!-- ④ 国立国会図書館（千代田区・永田町：x=538, y=482） -->
     <g filter="url(#box-shadow)">
-      <line x1="515" y1="498" x2="375" y2="472" stroke="#047857" stroke-width="3" />
-      <circle cx="515" cy="498" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="515" y="503" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">4</text>
+      <line x1="538" y1="482" x2="375" y2="472" stroke="#047857" stroke-width="3" />
+      <circle cx="538" cy="482" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="538" y="487" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">4</text>
 
       <g transform="translate(125, 434)">
         <rect x="0" y="0" width="250" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -476,11 +536,11 @@
       </g>
     </g>
 
-    <!-- ⑤ 科学技術館（千代田区・北の丸公園：x=562, y=372） -->
+    <!-- ⑤ 科学技術館（千代田区・北の丸公園：x=592, y=384） -->
     <g filter="url(#box-shadow)">
-      <line x1="562" y1="372" x2="395" y2="352" stroke="#047857" stroke-width="3" />
-      <circle cx="562" cy="372" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="562" y="377" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">5</text>
+      <line x1="592" y1="384" x2="395" y2="352" stroke="#047857" stroke-width="3" />
+      <circle cx="592" cy="384" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="592" y="389" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">5</text>
 
       <g transform="translate(145, 315)">
         <rect x="0" y="0" width="250" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -491,11 +551,11 @@
       </g>
     </g>
 
-    <!-- ⑥ 国立科学博物館（台東区・上野：x=755, y=152） -->
+    <!-- ⑥ 国立科学博物館（台東区・上野：x=772, y=156） -->
     <g filter="url(#box-shadow)">
-      <line x1="755" y1="152" x2="632" y2="152" stroke="#047857" stroke-width="3" />
-      <circle cx="755" cy="152" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="755" y="157" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
+      <line x1="772" y1="156" x2="632" y2="152" stroke="#047857" stroke-width="3" />
+      <circle cx="772" cy="156" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="772" y="161" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
 
       <g transform="translate(382, 115)">
         <rect x="0" y="0" width="250" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -506,11 +566,11 @@
       </g>
     </g>
 
-    <!-- ⑦ 海洋科学大学（港区港南・品川キャンパス：x=642, y=805） -->
+    <!-- ⑦ 海洋科学大学（港区港南・品川キャンパス：x=642, y=776） -->
     <g filter="url(#box-shadow)">
-      <line x1="642" y1="805" x2="465" y2="795" stroke="#047857" stroke-width="3" />
-      <circle cx="642" cy="805" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="642" y="810" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">7</text>
+      <line x1="642" y1="776" x2="465" y2="795" stroke="#047857" stroke-width="3" />
+      <circle cx="642" cy="776" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="642" y="781" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">7</text>
 
       <g transform="translate(210, 758)">
         <rect x="0" y="0" width="255" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -521,11 +581,11 @@
       </g>
     </g>
 
-    <!-- ⑧ 竹芝桟橋ターミナル（港区海岸・浜松町竹芝埠頭の陸地上：x=722, y=632） -->
+    <!-- ⑧ 竹芝桟橋ターミナル（港区海岸・浜松町竹芝埠頭の陸地上：x=714, y=586） -->
     <g filter="url(#box-shadow)">
-      <line x1="722" y1="632" x2="537" y2="698" stroke="#047857" stroke-width="3" />
-      <circle cx="722" cy="632" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
-      <text x="722" y="637" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
+      <line x1="714" y1="586" x2="537" y2="698" stroke="#047857" stroke-width="3" />
+      <circle cx="714" cy="586" r="14" fill="#047857" stroke="#ffffff" stroke-width="3" />
+      <text x="714" y="591" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
 
       <g transform="translate(262, 668)">
         <rect x="0" y="0" width="275" height="74" rx="8" fill="#f0fdf4" stroke="#047857" stroke-width="3" />
@@ -540,7 +600,7 @@
   <!-- ===================================================================== -->
   <!-- 方位磁針（コンパスローズ）※N・E・S・Wの文字が矢印と絶対に重ならない外周配置 -->
   <!-- ===================================================================== -->
-  <g transform="translate(1255, 190)" filter="url(#box-shadow)">
+  <g transform="translate(1265, 185)" filter="url(#box-shadow)">
     <circle cx="0" cy="0" r="56" fill="#ffffff" stroke="#0f172a" stroke-width="2" opacity="0.96" />
     <circle cx="0" cy="0" r="34" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2 2" />
     <line x1="-34" y1="0" x2="34" y2="0" stroke="#94a3b8" stroke-width="1" />
@@ -597,12 +657,12 @@
   </g>
 
   <!-- ===================================================================== -->
-  <!-- 外枠・経緯度目盛り・上部タイトルヘッダー -->
+  <!-- 外枠・経緯度目盛り・上部タイトルヘッダー（印刷に適した【白背景・黒文字】） -->
   <!-- ===================================================================== -->
-  <!-- 上部タイトルバー -->
-  <rect x="55" y="25" width="1290" height="75" fill="#0f172a" />
-  <text x="80" y="57" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="3">東京都内 広域捜索図（東京都心〜東京湾岸地域）</text>
-  <text x="80" y="81" font-size="12.5" font-weight="bold" fill="#94a3b8" font-family="monospace" letter-spacing="1">TOKYO METROPOLITAN AREA TACTICAL SEARCH CHART // JAPAN COAST GUARD &amp; JOINT TASK FORCE</text>
+  <!-- 上部タイトルバー（白背景・黒文字） -->
+  <rect x="55" y="25" width="1290" height="75" fill="#ffffff" />
+  <text x="80" y="57" font-size="24" font-weight="900" fill="#0f172a" letter-spacing="3">東京都内 広域捜索図（東京都心〜東京湾岸地域）</text>
+  <text x="80" y="81" font-size="12.5" font-weight="bold" fill="#475569" font-family="monospace" letter-spacing="1">TOKYO METROPOLITAN AREA TACTICAL SEARCH CHART // JAPAN COAST GUARD &amp; JOINT TASK FORCE</text>
 
   <!-- 枠外の経緯度目盛り -->
   <g font-size="10.5" font-weight="bold" fill="#334155" font-family="monospace">
@@ -624,6 +684,6 @@
   </g>
 
   <!-- 図郭外枠線 -->
-  <rect x="55" y="25" width="1290" height="910" fill="none" stroke="#0f172a" stroke-width="4" />
-  <rect x="55" y="100" width="1290" height="835" fill="none" stroke="#0f172a" stroke-width="2" />
+  <rect x="55" y="25" width="1290" height="910" fill="none" stroke="#0f172a" stroke-width="3.5" />
+  <line x1="55" y1="100" x2="1345" y2="100" stroke="#0f172a" stroke-width="2" />
 </svg>
