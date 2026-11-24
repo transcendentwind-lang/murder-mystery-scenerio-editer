@@ -130,8 +130,8 @@
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/day5_chichijima_search_map.svg",
-      "bytes": 30955,
-      "sha256": "69c3b423af181b704124c2883396e4bbe3dde8719177ecd8686dd8545cc5022f"
+      "bytes": 63996,
+      "sha256": "3948462561f73ce920d75a9794cef6177258be56cfdf7aa948eb2a5eadc50626"
     },
     {
       "id": "material-38",
@@ -141,8 +141,8 @@
       "format": "svg",
       "participantApp": false,
       "legacyUrl": "/images/day5_tokyo_search_map.svg",
-      "bytes": 66279,
-      "sha256": "54f2eb5f3d2ed71cc07b18cfdfe8bec878b25c25a6f869517f295a37e8a7b39c"
+      "bytes": 66459,
+      "sha256": "db55398e4c97f9ee1ab8e4cda32eaaaaf8018b0524ba1559220975cfdd835745"
     },
     {
       "id": "material-19",
