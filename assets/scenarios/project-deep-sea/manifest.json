@@ -123,6 +123,28 @@
       "sha256": "c065ca52c5c44565380d427b080ae3543774f528637d5a275fa473dd4c91a163"
     },
     {
+      "id": "material-37",
+      "path": "releases/images/day5_chichijima_search_map.svg",
+      "title": "【Day 5】小笠原諸島・父島 現地調査マップ（海野教授の遺した研究捜索図・全8拠点）",
+      "kind": "release",
+      "format": "svg",
+      "participantApp": false,
+      "legacyUrl": "/images/day5_chichijima_search_map.svg",
+      "bytes": 15835,
+      "sha256": "92dd7e8bb2a6561f390c3b14efe01a8862620ecfb164161f5252b4cfe341b088"
+    },
+    {
+      "id": "material-38",
+      "path": "releases/images/day5_tokyo_search_map.svg",
+      "title": "【Day 5】東京都内 広域捜索マップ（元神主遺族・吉備津の足取り追跡図・全8拠点）",
+      "kind": "release",
+      "format": "svg",
+      "participantApp": false,
+      "legacyUrl": "/images/day5_tokyo_search_map.svg",
+      "bytes": 17049,
+      "sha256": "fbd60cd9abf5a2243edca623c15c6c418723067e37d47614bf8666da006e000f"
+    },
+    {
       "id": "material-19",
       "path": "releases/images/eruption_monitoring_chart_portrait_day0.svg",
       "title": "【Day 0】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",

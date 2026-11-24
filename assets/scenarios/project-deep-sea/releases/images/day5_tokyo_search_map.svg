@@ -1,0 +1,213 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 990" width="1400" height="990" style="background-color: #f8fafc; font-family: 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;">
+  <defs>
+    <linearGradient id="tokyo-bay-grad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#bae6fd" />
+      <stop offset="60%" stop-color="#7dd3fc" />
+      <stop offset="100%" stop-color="#38bdf8" />
+    </linearGradient>
+    <pattern id="grid-tokyo" width="70" height="70" patternUnits="userSpaceOnUse">
+      <path d="M 70 0 L 0 0 0 70" fill="none" stroke="#cbd5e1" stroke-width="0.9" stroke-dasharray="3 3" />
+    </pattern>
+    <filter id="card-shadow" x="-8%" y="-8%" width="116%" height="120%">
+      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#0f172a" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <!-- 背景（陸地ベース） -->
+  <rect x="0" y="0" width="1400" height="990" fill="#f1f5f9" />
+  <rect x="40" y="95" width="1320" height="835" fill="#f8fafc" />
+
+  <!-- 東京湾・隅田川・皇居のお堀などの水域 -->
+  <!-- 東京湾（南東〜南側） -->
+  <path d="M 650 930 L 680 790 Q 720 720 790 690 L 870 630 Q 940 600 1030 620 L 1160 660 L 1360 640 L 1360 930 Z" fill="url(#tokyo-bay-grad)" opacity="0.65" />
+  <!-- 埋立地（台場・豊洲・晴海・有明） -->
+  <path d="M 885 690 L 985 645 L 1045 700 L 945 755 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5" />
+  <path d="M 1015 745 L 1135 695 L 1175 765 L 1055 815 Z" fill="#e2e8f0" stroke="#64748b" stroke-width="1.5" />
+  <text x="965" y="708" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">晴海・豊洲埠頭</text>
+  <text x="1095" y="762" font-size="12" font-weight="bold" fill="#475569" text-anchor="middle">有明・お台場</text>
+  <text x="860" y="865" font-size="22" font-weight="900" fill="#0369a1" letter-spacing="8" opacity="0.75">東 京 湾 (TOKYO BAY)</text>
+
+  <!-- 隅田川（北から南東・東京湾へ流れる大河） -->
+  <path d="M 870 95 Q 890 220 885 330 Q 880 450 855 545 Q 835 620 815 695" fill="none" stroke="#38bdf8" stroke-width="26" stroke-linecap="round" opacity="0.65" />
+  <path d="M 870 95 Q 890 220 885 330 Q 880 450 855 545 Q 835 620 815 695" fill="none" stroke="#0284c7" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.6" />
+  <text x="898" y="395" font-size="13" font-weight="bold" fill="#0284c7" transform="rotate(85 898 395)" letter-spacing="3">隅田川</text>
+
+  <!-- 荒川（東端） -->
+  <path d="M 1270 95 Q 1260 360 1280 645" fill="none" stroke="#38bdf8" stroke-width="34" opacity="0.5" />
+  <text x="1295" y="350" font-size="13" font-weight="bold" fill="#0284c7" transform="rotate(88 1295 350)" letter-spacing="3">荒川・砂町運河</text>
+
+  <!-- 神田川（東西） -->
+  <path d="M 150 325 Q 420 310 610 315 Q 750 320 882 335" fill="none" stroke="#38bdf8" stroke-width="9" opacity="0.6" />
+  <text x="380" y="305" font-size="11" font-weight="bold" fill="#0284c7">神田川</text>
+
+  <!-- 皇居・北の丸公園・日比谷公園の緑地と内堀 -->
+  <path d="M 485 375 Q 555 345 620 385 Q 655 445 615 510 Q 545 535 480 495 Q 445 435 485 375 Z" fill="#dcfce7" stroke="#16a34a" stroke-width="3" />
+  <path d="M 485 375 Q 555 345 620 385 Q 655 445 615 510 Q 545 535 480 495 Q 445 435 485 375 Z" fill="none" stroke="#38bdf8" stroke-width="7" opacity="0.65" />
+  <text x="550" y="458" font-size="16" font-weight="900" fill="#166534" text-anchor="middle" letter-spacing="3">皇 居</text>
+
+  <!-- 上野恩賜公園の緑地 -->
+  <ellipse cx="755" cy="175" rx="75" ry="48" fill="#dcfce7" stroke="#22c55e" stroke-width="2" />
+  <text x="755" y="212" font-size="11" font-weight="bold" fill="#15803d" text-anchor="middle">上野恩賜公園</text>
+
+  <!-- 主要鉄道・幹線道路ネットワーク（山手線・総武線・京葉線・首都高） -->
+  <!-- 山手線ループ -->
+  <path d="M 745 140 Q 775 260 735 360 Q 715 450 695 540 Q 670 645 600 760 Q 470 830 330 760 Q 210 640 220 450 Q 230 260 380 160 Q 560 110 745 140 Z" fill="none" stroke="#65a30d" stroke-width="4" stroke-dasharray="12 6" opacity="0.55" />
+  <text x="295" y="205" font-size="12" font-weight="bold" fill="#4d7c0f" transform="rotate(-25 295 205)">JR山手線</text>
+
+  <!-- 中央・総武線（新宿〜御茶ノ水〜秋葉原〜両国〜江東区方面） -->
+  <path d="M 140 365 L 680 340 L 1260 365" fill="none" stroke="#eab308" stroke-width="3.5" stroke-dasharray="10 5" opacity="0.6" />
+  <text x="1180" y="352" font-size="11" font-weight="bold" fill="#a16207">総武線・東西線（江東方面）</text>
+
+  <!-- 東京メトロ・臨海新交通（ゆりかもめ） -->
+  <path d="M 685 575 L 775 645 L 950 700" fill="none" stroke="#0284c7" stroke-width="3" stroke-dasharray="5 5" opacity="0.65" />
+
+  <!-- グリッドオーバーレイ -->
+  <rect x="40" y="95" width="1320" height="835" fill="url(#grid-tokyo)" />
+
+  <!-- 区名・エリア背景ラベル -->
+  <g font-size="20" font-weight="900" fill="#94a3b8" opacity="0.45" letter-spacing="4">
+    <text x="530" y="340" text-anchor="middle">千代田区</text>
+    <text x="770" y="130" text-anchor="middle">台東区（上野）</text>
+    <text x="1085" y="310" text-anchor="middle">江東区（深川・門前仲町・豊洲）</text>
+    <text x="520" y="660" text-anchor="middle">港区（浜松町・虎ノ門）</text>
+    <text x="510" y="860" text-anchor="middle">品川区（天王洲・品川）</text>
+    <text x="270" y="420" text-anchor="middle">新宿区</text>
+    <text x="800" y="485" text-anchor="middle">中央区（日本橋・銀座）</text>
+  </g>
+
+  <!-- ★ 海上保安庁 東京本部（霞が関・現在地マーカー） ★ -->
+  <g transform="translate(555, 560)" filter="url(#card-shadow)">
+    <circle cx="0" cy="0" r="11" fill="#0f172a" stroke="#ffffff" stroke-width="3" />
+    <rect x="-115" y="15" width="230" height="34" rx="6" fill="#0f172a" stroke="#38bdf8" stroke-width="2" />
+    <text x="0" y="37" font-size="13" font-weight="900" fill="#38bdf8" text-anchor="middle">★ 海上保安庁 東京本部（霞が関）</text>
+  </g>
+
+  <!-- ===================================================================== -->
+  <!-- 調査対象 8大拠点ピン ＆ 大判ラベルボックス（A2〜A4どこからでも鮮明） -->
+  <!-- ===================================================================== -->
+
+  <!-- ① 本人住所（江東区） -->
+  <g transform="translate(1075, 455)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="0" y2="-38" stroke="#be123c" stroke-width="4" />
+    <circle cx="0" cy="0" r="14" fill="#be123c" stroke="#ffffff" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="5" fill="#ffffff" />
+    <rect x="-155" y="-122" width="310" height="86" rx="10" fill="#fff1f2" stroke="#be123c" stroke-width="4" />
+    <rect x="-155" y="-122" width="310" height="28" rx="8" fill="#be123c" />
+    <text x="0" y="-103" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle">START 拠点 ① ［初期手がかり］</text>
+    <text x="0" y="-70" font-size="22" font-weight="900" fill="#881337" text-anchor="middle">本人住所（江東区）</text>
+    <text x="0" y="-48" font-size="12.5" font-weight="bold" fill="#9f1239" text-anchor="middle">吉備津の自宅集合住宅（電話番号不明・まず現地へ）</text>
+  </g>
+
+  <!-- ② 海洋研究開発機構（千代田区） -->
+  <g transform="translate(650, 520)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="85" y2="-25" stroke="#1d4ed8" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#1d4ed8" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">2</text>
+    <rect x="75" y="-68" width="295" height="78" rx="10" fill="#ffffff" stroke="#1d4ed8" stroke-width="3.5" />
+    <rect x="75" y="-68" width="295" height="25" rx="7" fill="#1d4ed8" />
+    <text x="222" y="-51" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ② （千代田区・内幸町）</text>
+    <text x="222" y="-22" font-size="20" font-weight="900" fill="#1e3a8a" text-anchor="middle">海洋研究開発機構 (JAMSTEC)</text>
+    <text x="222" y="-2" font-size="12" font-weight="bold" fill="#334155" text-anchor="middle">東京事務所（海洋・海底火山研究機関）</text>
+  </g>
+
+  <!-- ③ 吉備津神社（神田明神の場所） -->
+  <g transform="translate(690, 290)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="70" y2="-20" stroke="#b45309" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#b45309" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">3</text>
+    <rect x="65" y="-60" width="285" height="78" rx="10" fill="#fffbeb" stroke="#b45309" stroke-width="3.5" />
+    <rect x="65" y="-60" width="285" height="25" rx="7" fill="#b45309" />
+    <text x="207" y="-43" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ③ （外神田・御茶ノ水）</text>
+    <text x="207" y="-14" font-size="21" font-weight="900" fill="#78350f" text-anchor="middle">吉備津神社（神田）</text>
+    <text x="207" y="6" font-size="12" font-weight="bold" fill="#92400e" text-anchor="middle">元神主一族ゆかりの神社・古文書保管先</text>
+  </g>
+
+  <!-- ④ 国立国会図書館（永田町） -->
+  <g transform="translate(435, 505)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="-75" y2="-15" stroke="#0f766e" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#0f766e" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">4</text>
+    <rect x="-355" y="-55" width="285" height="78" rx="10" fill="#f0fdfa" stroke="#0f766e" stroke-width="3.5" />
+    <rect x="-355" y="-55" width="285" height="25" rx="7" fill="#0f766e" />
+    <text x="-212" y="-38" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ④ （千代田区・永田町）</text>
+    <text x="-212" y="-9" font-size="21" font-weight="900" fill="#134e4a" text-anchor="middle">国立国会図書館</text>
+    <text x="-212" y="11" font-size="12" font-weight="bold" fill="#115e59" text-anchor="middle">古典籍・貴重古文書アーカイブ資料室</text>
+  </g>
+
+  <!-- ⑤ 科学技術館（北の丸公園） -->
+  <g transform="translate(525, 365)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="-85" y2="-35" stroke="#4338ca" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#4338ca" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">5</text>
+    <rect x="-365" y="-85" width="285" height="78" rx="10" fill="#eef2ff" stroke="#4338ca" stroke-width="3.5" />
+    <rect x="-365" y="-85" width="285" height="25" rx="7" fill="#4338ca" />
+    <text x="-222" y="-68" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ⑤ （千代田区・北の丸公園）</text>
+    <text x="-222" y="-39" font-size="21" font-weight="900" fill="#312e81" text-anchor="middle">科学技術館</text>
+    <text x="-222" y="-19" font-size="12" font-weight="bold" fill="#3730a3" text-anchor="middle">先端AI・通信音声変換技術展示フロア</text>
+  </g>
+
+  <!-- ⑥ 国立科学博物館（上野） -->
+  <g transform="translate(755, 165)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="-90" y2="-10" stroke="#0369a1" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#0369a1" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">6</text>
+    <rect x="-375" y="-48" width="285" height="78" rx="10" fill="#f0f9ff" stroke="#0369a1" stroke-width="3.5" />
+    <rect x="-375" y="-48" width="285" height="25" rx="7" fill="#0369a1" />
+    <text x="-232" y="-31" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ⑥ （台東区・上野公園）</text>
+    <text x="-232" y="-2" font-size="21" font-weight="900" fill="#0c4a6e" text-anchor="middle">国立科学博物館</text>
+    <text x="-232" y="18" font-size="12" font-weight="bold" fill="#075985" text-anchor="middle">日本館・海洋生物とクジラ生態展示</text>
+  </g>
+
+  <!-- ⑦ 海洋科学大学（品川） -->
+  <g transform="translate(565, 815)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="-85" y2="-15" stroke="#1e40af" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#1e40af" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">7</text>
+    <rect x="-375" y="-55" width="295" height="78" rx="10" fill="#eff6ff" stroke="#1e40af" stroke-width="3.5" />
+    <rect x="-375" y="-55" width="295" height="25" rx="7" fill="#1e40af" />
+    <text x="-227" y="-38" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ⑦ （港区・品川キャンパス）</text>
+    <text x="-227" y="-9" font-size="21" font-weight="900" fill="#1e3a8a" text-anchor="middle">海洋科学大学（品川）</text>
+    <text x="-227" y="11" font-size="12" font-weight="bold" fill="#1d4ed8" text-anchor="middle">東京本校・海洋生物および鯨類研究棟</text>
+  </g>
+
+  <!-- ⑧ 竹芝桟橋ターミナル（浜松町） -->
+  <g transform="translate(730, 665)" filter="url(#card-shadow)">
+    <line x1="0" y1="0" x2="75" y2="25" stroke="#047857" stroke-width="3.5" />
+    <circle cx="0" cy="0" r="13" fill="#047857" stroke="#ffffff" stroke-width="3" />
+    <text x="0" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">8</text>
+    <rect x="65" y="-12" width="310" height="82" rx="10" fill="#ecfdf5" stroke="#047857" stroke-width="3.5" />
+    <rect x="65" y="-12" width="310" height="25" rx="7" fill="#047857" />
+    <text x="220" y="5" font-size="13" font-weight="900" fill="#ffffff" text-anchor="middle">調査拠点 ⑧ （港区・浜松町海岸）</text>
+    <text x="220" y="34" font-size="20" font-weight="900" fill="#064e3b" text-anchor="middle">竹芝桟橋ターミナル（浜松町）</text>
+    <text x="220" y="55" font-size="12" font-weight="bold" fill="#047857" text-anchor="middle">小笠原定期船「おがさわら丸」発着客船ターミナル</text>
+  </g>
+
+  <!-- 方位記号（コンパス） -->
+  <g transform="translate(1285, 175)">
+    <circle cx="0" cy="0" r="42" fill="#ffffff" stroke="#0f172a" stroke-width="2" />
+    <polygon points="0,-34 9,-8 0,-14 -9,-8" fill="#dc2626" />
+    <polygon points="0,34 9,8 0,14 -9,8" fill="#475569" />
+    <text x="0" y="-18" font-size="13" font-weight="900" fill="#0f172a" text-anchor="middle">N</text>
+  </g>
+
+  <!-- 左下：捜索ルール＆初期手がかりパネル -->
+  <g transform="translate(65, 125)" filter="url(#card-shadow)">
+    <rect x="0" y="0" width="380" height="150" rx="10" fill="#0f172a" stroke="#334155" stroke-width="2" />
+    <rect x="0" y="0" width="380" height="32" rx="8" fill="#1e3a8a" />
+    <text x="16" y="22" font-size="14" font-weight="900" fill="#ffffff">🗼 東京本部チーム ミッション：吉備津（きびつ）の捜索</text>
+    <text x="16" y="54" font-size="13" font-weight="bold" fill="#f8fafc">・初期手がかり：小笠原神社元神主の子ども【吉備津】の</text>
+    <text x="28" y="74" font-size="13" font-weight="bold" fill="#fde047">東京都内の住所＝「① 本人住所（江東区）」が判明している。</text>
+    <text x="16" y="98" font-size="12.5" font-weight="bold" fill="#cbd5e1">・電話番号は不明。まずは①へ向かい、足取りを追跡せよ。</text>
+    <text x="16" y="120" font-size="12.5" font-weight="bold" fill="#cbd5e1">・各メンバーが1巡につき1拠点ずつ調査先を指定し、</text>
+    <text x="28" y="138" font-size="12.5" font-weight="bold" fill="#38bdf8">GMからその拠点で得られた情報を聞き取って居場所を特定する。</text>
+  </g>
+
+  <!-- 上部タイトルヘッダーバー -->
+  <rect x="40" y="22" width="1320" height="73" fill="#0f172a" />
+  <text x="65" y="54" font-size="24" font-weight="900" fill="#ffffff" letter-spacing="2">【Day 5】東京都内 広域捜索マップ ― 元神主遺族「吉備津」の足取り追跡図（全8拠点）</text>
+  <text x="65" y="79" font-size="13" font-weight="bold" fill="#94a3b8" font-family="monospace">TOKYO METROPOLITAN TACTICAL SEARCH MAP / SCALE: A2・A3・A4 共通 / 海上保安庁東京本部（朝潮・貝浜・長津）担当</text>
+
+  <!-- 外枠ボーダー -->
+  <rect x="40" y="22" width="1320" height="908" fill="none" stroke="#0f172a" stroke-width="4" />
+  <rect x="40" y="95" width="1320" height="835" fill="none" stroke="#0f172a" stroke-width="2" />
+</svg>
