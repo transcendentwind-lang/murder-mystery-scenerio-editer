@@ -718,6 +718,76 @@ const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES
 );
 
 /**
+ * Day 7専用（last-mission 受信音4枚 ＋ 日本語4枚 ＝ 計8枚・別シート1頁）
+ */
+const WHALE_DAY7_CLICK_MTG_CARDS: WhaleMtgCardItem[] = [
+  {
+    id: "mtg-day7-click-a",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声A",
+    mainText: "ド・ドーッカッカッ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-b",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声B",
+    mainText: "チ・トン・チ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-c",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声C",
+    mainText: "ポ・ルル・トーン",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-d",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声D",
+    mainText: "タ・タン・ドーン",
+    lockedBadge: "Day 7 専用",
+  },
+];
+
+const WHALE_DAY7_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = [
+  {
+    id: "mtg-day7-jp-1",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語①",
+    mainText: "人間とクジラ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-2",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語②",
+    mainText: "約束",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-3",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語③",
+    mainText: "ありがとう",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-4",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語④",
+    mainText: "ごちそうさま\n完了した",
+    lockedBadge: "Day 7 専用",
+  },
+];
+
+const WHALE_DAY7_ALL_MTG_CARDS: WhaleMtgCardItem[] = [
+  ...WHALE_DAY7_CLICK_MTG_CARDS,
+  ...WHALE_DAY7_JAPANESE_MTG_CARDS,
+];
+
+/**
  * 日本語の段落文章整形ヘルパー
  * カギカッコ（「や『）以外で始まる段落の先頭に全角スペース（　）を付与して字下げする
  */
@@ -2619,7 +2689,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
   const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "whale_cards" | "nametags">("goal_boards");
   const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
-  const [whaleMtgFilter, setWhaleMtgFilter] = useState<"all" | "click_sound" | "japanese_meaning">("all");
+  const [whaleMtgFilter, setWhaleMtgFilter] = useState<
+    "all" | "click_sound" | "japanese_meaning" | "day7_only"
+  >("all");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
   const isDirectEditMode = false;
@@ -3811,9 +3883,13 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
   };
 
-  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード（28枚）＆ 日本語カード（29枚）をMTGサイズ（63mm × 88mm / A4 9面配置）で印刷 / PDF保存
+  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カードをMTGサイズ（63mm × 88mm / A4 9面配置）で印刷 / PDF保存
   const handlePrintWhaleMtgCards = (
-    targetFilter: "all" | "click_sound" | "japanese_meaning" = whaleMtgFilter
+    targetFilter:
+      | "all"
+      | "click_sound"
+      | "japanese_meaning"
+      | "day7_only" = whaleMtgFilter
   ) => {
     const escapeHtml = (str: string) =>
       str
@@ -3849,6 +3925,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       pageGroups.push({
         deckTitle: "【あてはめる日本語カード】（全29枚 / MTG横長サイズ 88mm×63mm）",
         pages: chunkIntoPagesOf9(WHALE_JAPANESE_MTG_CARDS),
+      });
+    }
+    if (targetFilter === "all" || targetFilter === "day7_only") {
+      pageGroups.push({
+        deckTitle: "【Day 7 専用】クジラクリック音（4枚）＆ あてはめる日本語（4枚）別シート（全8枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9(WHALE_DAY7_ALL_MTG_CARDS),
       });
     }
 
@@ -3890,9 +3972,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <div class="mtg-card-footer" style="border-top-color: ${borderColor};">
               ${
                 card.lockedBadge
-                  ? `<span class="mtg-locked-badge" style="background-color: ${headerBg};">🔒 ${escapeHtml(
-                      card.lockedBadge
-                    )}</span>`
+                  ? `<span class="mtg-locked-badge" style="background-color: ${headerBg};">${
+                      card.lockedBadge === "Day 7 専用" ? "" : "🔒 "
+                    }${escapeHtml(card.lockedBadge)}</span>`
                   : `<span class="mtg-footer-code" style="color: ${headerBg};">${
                       isClick ? "CLICK SOUND" : "JAPANESE MEANING"
                     } / 88×63mm</span>`
@@ -5351,8 +5433,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         [
                           {
                             id: "all",
-                            badge: "全57枚（A4横・8頁）",
-                            title: "両方すべて（クリック音28枚 ＋ 日本語29枚）",
+                            badge: "全65枚（A4横・9頁）",
+                            title: "すべて（Day 6用57枚 ＋ Day 7専用別シート8枚）",
                           },
                           {
                             id: "click_sound",
@@ -5363,6 +5445,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             id: "japanese_meaning",
                             badge: "全29枚（A4横・4頁）",
                             title: "🏷️ あてはめる日本語カードのみ（日本語 #01〜#29）",
+                          },
+                          {
+                            id: "day7_only",
+                            badge: "全8枚（A4横・別シート1頁）",
+                            title: "🐋 Day 7 専用シート（受信音4枚 ＋ 日本語4枚）",
                           },
                         ] as const
                       ).map((opt) => {
@@ -8187,7 +8274,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 / MTG横長サイズ 88mm×63mm）
+                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 ＋ Day 7専用別シート8枚 / MTG横長サイズ 88mm×63mm）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
                         クジラクリック音 ＆ あてはめる日本語カード（MTG横長サイズ：横88mm × 縦63mm / A4横・9面配置）
@@ -8204,7 +8291,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           ? "クリック音カード（28枚）をA4横印刷 / PDF保存"
                           : whaleMtgFilter === "japanese_meaning"
                           ? "日本語カード（29枚）をA4横印刷 / PDF保存"
-                          : "全57枚（クリック音＋日本語）をA4横印刷 / PDF保存"}
+                          : whaleMtgFilter === "day7_only"
+                          ? "Day 7 専用シート（8枚・1頁）をA4横印刷 / PDF保存"
+                          : "全65枚（Day 6用＋Day 7専用別シート）をA4横印刷 / PDF保存"}
                       </button>
                     </div>
                   </div>
@@ -8326,6 +8415,76 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                         JAPANESE MEANING / 88×63mm
                                       </span>
                                     )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "day7_only") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-indigo-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🐋 【Day 7 専用】クジラクリック音（4枚）＆ あてはめる日本語（4枚）別シート（全{WHALE_DAY7_ALL_MTG_CARDS.length}枚）</span>
+                          <span className="font-mono text-[11px] text-indigo-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・別シート1頁)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_DAY7_ALL_MTG_CARDS.map((card) => {
+                            const isClick = card.kind === "click_sound";
+                            return (
+                              <div
+                                key={card.id}
+                                className={`aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 ${
+                                  isClick ? "bg-sky-50" : "bg-amber-50"
+                                } p-2.5 flex shadow-sm`}
+                              >
+                                <div
+                                  className={`w-full h-full rounded-lg border-[3px] ${
+                                    isClick ? "border-sky-600" : "border-amber-600"
+                                  } bg-white p-3 flex flex-col justify-between`}
+                                >
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span
+                                      className={`rounded ${
+                                        isClick ? "bg-sky-700" : "bg-amber-700"
+                                      } px-2 py-0.5 text-[10px] font-black text-white`}
+                                    >
+                                      {isClick ? "クジラのクリック音" : "あてはめる日本語"}
+                                    </span>
+                                    <span
+                                      className={`font-mono text-xs font-black ${
+                                        isClick ? "text-sky-800" : "text-amber-800"
+                                      }`}
+                                    >
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div
+                                      className={`font-black ${
+                                        isClick ? "text-sky-950" : "text-amber-950"
+                                      } leading-snug whitespace-pre-line text-xl sm:text-2xl`}
+                                    >
+                                      {card.mainText}
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className={`border-t border-dashed ${
+                                      isClick ? "border-sky-400" : "border-amber-400"
+                                    } pt-1.5 flex items-center justify-center min-h-[22px]`}
+                                  >
+                                    <span
+                                      className={`rounded ${
+                                        isClick ? "bg-sky-700" : "bg-amber-700"
+                                      } px-2 py-0.5 text-[10px] font-black text-white`}
+                                    >
+                                      {card.lockedBadge}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
