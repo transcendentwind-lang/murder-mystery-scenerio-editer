@@ -40,9 +40,8 @@
     <rect x="55" y="100" width="1290" height="835" fill="url(#chichijima-ocean)" />
 
     <!-- 定期船航路（竹芝―二見航路・二見―沖港航路の破線：実在GoogleMapに準拠） -->
-    <path d="M 606 238 C 584 295, 568 355, 515 415 C 445 495, 345 585, 225 685" fill="none" stroke="#0284c7" stroke-width="1.3" stroke-dasharray="6 5" opacity="0.7" />
-    <path d="M 552 365 C 465 398, 345 385, 215 368" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="5 5" opacity="0.55" />
-    <text x="572" y="335" font-size="9" font-weight="bold" fill="#0369a1" transform="rotate(-70 572 335)" opacity="0.85">竹芝 - 二見</text>
+    <path d="M 606 238 C 584 295, 568 355, 515 415 C 445 495, 345 585, 225 685" fill="none" stroke="#0284c7" stroke-width="1.3" stroke-dasharray="6 5" opacity="0.65" />
+    <path d="M 552 365 C 465 398, 345 385, 215 368" fill="none" stroke="#0284c7" stroke-width="1.2" stroke-dasharray="5 5" opacity="0.5" />
 
     <!-- =================================================================== -->
     <!-- 周辺島嶼（Googleマップの実際の輪郭・位置関係に完全準拠） -->
@@ -319,16 +318,16 @@
     <!-- 大村半島の南側ループ道路 -->
     <path d="M 504 248 C 498 272, 514 296, 536 286 C 556 276, 568 242, 576 212" fill="none" stroke="#94a3b8" stroke-width="2.5" />
 
-    <!-- 都道240号 標識ヘキサゴン（Googleマップと同位置） -->
-    <g transform="translate(604, 194)">
+    <!-- 都道240号 標識ヘキサゴン（引き出し線や文字と一切重ならない位置） -->
+    <g transform="translate(558, 192)">
       <polygon points="-11,0 -6,-7 6,-7 11,0 6,7 -6,7" fill="#1d4ed8" stroke="#ffffff" stroke-width="1" />
       <text x="0" y="3.5" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">240</text>
     </g>
-    <g transform="translate(766, 304)">
+    <g transform="translate(766, 336)">
       <polygon points="-11,0 -6,-7 6,-7 11,0 6,7 -6,7" fill="#1d4ed8" stroke="#ffffff" stroke-width="1" />
       <text x="0" y="3.5" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">240</text>
     </g>
-    <g transform="translate(638, 502)">
+    <g transform="translate(642, 526)">
       <polygon points="-11,0 -6,-7 6,-7 11,0 6,7 -6,7" fill="#1d4ed8" stroke="#ffffff" stroke-width="1" />
       <text x="0" y="3.5" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">240</text>
     </g>
@@ -338,33 +337,35 @@
     </g>
 
     <!-- =================================================================== -->
-    <!-- 島内の地名・海岸・山岳ラベル（Googleマップに準拠＆ピン・引き出し線と重なりゼロ） -->
+    <!-- 島内の地名・海岸・山岳ラベル（ピン・引き出し線・道路・海岸線と重なりゼロ） -->
     <!-- =================================================================== -->
     <!-- 二見湾 -->
-    <text x="592" y="378" font-size="18" font-weight="900" fill="#0369a1" text-anchor="middle" letter-spacing="5">二 見 湾</text>
-    <text x="592" y="396" font-size="10" font-weight="bold" fill="#0284c7" text-anchor="middle" letter-spacing="2">FUTAMI BAY</text>
+    <text x="588" y="365" font-size="18" font-weight="900" fill="#0369a1" text-anchor="middle" letter-spacing="5">二 見 湾</text>
+    <text x="588" y="383" font-size="10" font-weight="bold" fill="#0284c7" text-anchor="middle" letter-spacing="2">FUTAMI BAY</text>
 
-    <!-- Googleマップ記載の主要ランドマーク・地名 -->
-    <text x="536" y="266" font-size="11.5" font-weight="900" fill="#1e293b" text-anchor="middle">小笠原村</text>
-    <text x="556" y="198" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">大村（西町・東町）</text>
-    <text x="708" y="218" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">奥村地区</text>
+    <!-- Googleマップ記載の主要ランドマーク・地名（白縁ハロー付きで線と重ならない開けた位置に配置） -->
+    <g style="paint-order: stroke fill; stroke: #ffffff; stroke-width: 3px; stroke-linejoin: round;">
+      <text x="518" y="314" font-size="11" font-weight="900" fill="#1e293b" text-anchor="middle">小笠原村</text>
+      <text x="572" y="162" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">大村（西町・東町）</text>
+      <text x="722" y="192" font-size="9.5" font-weight="bold" fill="#334155" text-anchor="middle">奥村地区</text>
 
-    <text x="698" y="294" font-size="10" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 旭山 (267m)</text>
-    <text x="765" y="352" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">父 島</text>
-    <text x="722" y="486" font-size="11" font-weight="900" fill="#15803d" text-anchor="middle">小笠原国立公園</text>
-    <text x="818" y="452" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 中央山 (319m)</text>
+      <text x="795" y="256" font-size="10" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 旭山 (267m)</text>
+      <text x="786" y="386" font-size="11" font-weight="bold" fill="#334155" text-anchor="middle">父 島</text>
+      <text x="726" y="486" font-size="11" font-weight="900" fill="#15803d" text-anchor="middle">小笠原国立公園</text>
+      <text x="838" y="452" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">▲ 中央山 (319m)</text>
 
-    <text x="722" y="154" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">長崎展望台</text>
-    <text x="646" y="346" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">境浦海岸</text>
-    <text x="595" y="440" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="middle">扇浦海岸</text>
-    <text x="468" y="468" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="end">洲崎（飛行場跡地）</text>
-    <text x="476" y="544" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">コペペ海岸</text>
-    <text x="502" y="596" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">小港海岸</text>
-    <text x="478" y="662" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ブタ海岸</text>
-    <text x="452" y="746" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ジョンビーチ</text>
-    <text x="434" y="794" font-size="9.5" font-weight="bold" fill="#0f766e" text-anchor="end">ジニービーチ</text>
-    <text x="624" y="766" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">千尋岩（ハートロック）</text>
-    <text x="855" y="718" font-size="10" font-weight="bold" fill="#0369a1" text-anchor="start">巽 湾</text>
+      <text x="735" y="150" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="middle">長崎展望台</text>
+      <text x="646" y="352" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">境浦海岸</text>
+      <text x="595" y="438" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="middle">扇浦海岸</text>
+      <text x="468" y="468" font-size="9.5" font-weight="bold" fill="#475569" text-anchor="end">洲崎（飛行場跡地）</text>
+      <text x="476" y="544" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">コペペ海岸</text>
+      <text x="502" y="596" font-size="10" font-weight="bold" fill="#0f766e" text-anchor="end">小港海岸</text>
+      <text x="478" y="662" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ブタ海岸</text>
+      <text x="452" y="746" font-size="9.5" font-weight="bold" fill="#0369a1" text-anchor="end">ジョンビーチ</text>
+      <text x="434" y="794" font-size="9.5" font-weight="bold" fill="#0f766e" text-anchor="end">ジニービーチ</text>
+      <text x="624" y="762" font-size="10.5" font-weight="bold" fill="#14532d" text-anchor="middle">千尋岩（ハートロック）</text>
+      <text x="862" y="722" font-size="10" font-weight="bold" fill="#0369a1" text-anchor="start">巽 湾</text>
+    </g>
 
     <!-- 測地グリッドオーバーレイ -->
     <rect x="55" y="100" width="1290" height="835" fill="url(#chichijima-subgrid)" />
