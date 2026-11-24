@@ -102,11 +102,6 @@
         L 645 445
         Z
       " fill="#f8fafc" opacity="0.92" />
-
-      <!-- 島内の主要河川（八瀬川・小港川） -->
-      <path d="M 642 462 C 654 492, 658 532, 642 568 C 626 594, 582 612, 526 622" fill="none" stroke="#38bdf8" stroke-width="2" />
-      <path d="M 648 554 C 692 558, 752 548, 824 582" fill="none" stroke="#38bdf8" stroke-width="1.6" />
-      <path d="M 532 672 C 574 678, 612 702, 654 708" fill="none" stroke="#38bdf8" stroke-width="1.6" />
     </g>
 
     <!-- 白地図PDFから抽出した精密海岸線ストローク（最前面の海岸線輪郭） -->
