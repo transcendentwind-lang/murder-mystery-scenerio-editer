@@ -537,12 +537,12 @@ export const Day3TacticalMap: React.FC<Day3TacticalMapProps> = ({
             <circle cx="0" cy="0" r="22" fill="none" stroke="#334155" strokeWidth="1" />
             <line x1="0" y1="-22" x2="0" y2="22" stroke="#475569" strokeWidth="1" />
             <line x1="-22" y1="0" x2="22" y2="0" stroke="#475569" strokeWidth="1" />
-            <polygon points="0,-22 -4,-8 0,-12 4,-8" fill="#38bdf8" />
-            <polygon points="0,22 -4,8 0,12 4,8" fill="#64748b" />
-            <text x="0" y="-26" fill="#38bdf8" fontSize="9.5" fontWeight="bold" textAnchor="middle">N</text>
-            <text x="0" y="33" fill="#64748b" fontSize="8.5" textAnchor="middle">S</text>
-            <text x="30" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">E</text>
-            <text x="-30" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">W</text>
+            <polygon points="0,-19 -4,-7 0,-11 4,-7" fill="#38bdf8" />
+            <polygon points="0,19 -4,7 0,11 4,7" fill="#64748b" />
+            <text x="0" y="-28" fill="#38bdf8" fontSize="9.5" fontWeight="bold" textAnchor="middle">N</text>
+            <text x="0" y="35" fill="#64748b" fontSize="8.5" textAnchor="middle">S</text>
+            <text x="32" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">E</text>
+            <text x="-32" y="3" fill="#64748b" fontSize="8.5" textAnchor="middle">W</text>
           </g>
 
           {/* 海図凡例（LEGEND：枠外中央右・青い四角の外側） */}

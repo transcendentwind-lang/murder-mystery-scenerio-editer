@@ -156,8 +156,8 @@ export const initialVisualBoards: VisualBoardItem[] = [
   },
   {
     id: "vis-day5-tokyo-search-map",
-    title: "【Day 5】東京都内 広域捜索マップ（元神主遺族・吉備津の足取り追跡図・全8拠点）",
-    subtitle: "MAP NO. T-501 / A2・A3・A4横置き（東京本部チーム用：江東区本人住所〜海洋研究開発機構〜吉備津神社〜国会図書館〜竹芝桟橋）",
+    title: "【Day 5】東京都内 広域捜索図（東京都心〜東京湾岸地域）",
+    subtitle: "MAP NO. T-501 / 東京都内（江東区・千代田区・外神田・永田町・北の丸公園・上野・品川・竹芝桟橋）",
     boardType: "custom_image",
     dayNumber: 5,
     imageUrl: scenarioAssetUrl("releases/images/day5_tokyo_search_map.svg"),
@@ -165,8 +165,8 @@ export const initialVisualBoards: VisualBoardItem[] = [
   },
   {
     id: "vis-day5-chichijima-search-map",
-    title: "【Day 5】小笠原諸島・父島 現地調査マップ（海野教授の遺した研究捜索図・A2判対応・全8拠点）",
-    subtitle: "MAP NO. F-502 / A2・A3・A4横置き（小笠原現地チーム用：小笠原研究所・パパズドルフィン・展望台・神社・気象観測所・水産センター）",
+    title: "【Day 5】小笠原諸島・父島 現地調査図（二見湾・父島全域）",
+    subtitle: "MAP NO. F-502 / 小笠原諸島・父島（小笠原研究所・パパズドルフィン・展望台・神社・気象観測所・水産センター・海洋センター・二見港）",
     boardType: "custom_image",
     dayNumber: 5,
     imageUrl: scenarioAssetUrl("releases/images/day5_chichijima_search_map.svg"),
