@@ -282,10 +282,10 @@ const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
     id: "goal-day5-1",
     sheetNumber: 8,
     phaseBadge: "DAY 5 - 1",
-    sidebarTitle: "Day 5-1：小笠原チーム：海野教授の研究を探し出す ／ 東京側チーム：吉備津本人を探し出す",
+    sidebarTitle: "Day 5-1：小笠原チーム：海野教授の研究を探す ／ 東京側チーム：吉備津本人を探す",
     timingNote: "Day 5 途中①（東京広域捜索マップ＆父島現地調査マップ展開時）に掲示",
-    line1: "小笠原チーム：海野教授の研究を探し出す",
-    line2: "東京側チーム：吉備津本人を探し出す",
+    line1: "小笠原チーム：海野教授の研究を探す",
+    line2: "東京側チーム：吉備津本人を探す",
   },
   {
     id: "goal-day6",
