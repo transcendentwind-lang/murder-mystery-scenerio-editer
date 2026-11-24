@@ -146,27 +146,24 @@
     <line x1="595" y1="324" x2="582" y2="342" stroke="#475569" stroke-width="2.5" />
     <circle cx="582" cy="342" r="3" fill="#0284c7" />
 
-    <!-- 清瀬・二見漁港（奥村・清瀬の船溜まり防波堤） -->
-    <line x1="712" y1="315" x2="696" y2="328" stroke="#475569" stroke-width="2.2" />
-
     <!-- =================================================================== -->
-    <!-- 島内の山岳・等高線・道路網 -->
+    <!-- 島内の山岳・等高線・道路網（ピンや引き出し線と一切重ならない位置に配置） -->
     <!-- =================================================================== -->
-    <!-- 三日月山（204m・父島西端） -->
+    <!-- 三日月山（204m・父島西端）※③・⑤ピンおよび引き出し線と重ならない位置に配置 -->
     <ellipse cx="485" cy="282" rx="34" ry="22" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.2" stroke-dasharray="4 3" />
-    <polygon points="488,274 494,285 482,285" fill="#15803d" />
-    <text x="508" y="274" font-size="10" font-weight="bold" fill="#365314">三日月山 (204m)</text>
+    <polygon points="498,291 504,301 492,301" fill="#15803d" />
+    <text x="502" y="315" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">三日月山 (204m)</text>
 
     <!-- 大神山（大村地区背後の山） -->
-    <ellipse cx="645" cy="242" rx="38" ry="22" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.2" stroke-dasharray="4 3" />
-    <text x="645" y="236" font-size="10" font-weight="bold" fill="#365314" text-anchor="middle">大神山</text>
+    <ellipse cx="645" cy="238" rx="38" ry="20" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.2" stroke-dasharray="4 3" />
+    <text x="642" y="214" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">大神山</text>
 
-    <!-- 旭山（267m）・夜明山（308m） -->
-    <ellipse cx="818" cy="335" rx="75" ry="52" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.2" stroke-dasharray="5 3" />
-    <polygon points="795,325 802,337 788,337" fill="#15803d" />
-    <text x="802" y="320" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">旭山 (267m)</text>
-    <polygon points="848,355 855,367 841,367" fill="#15803d" />
-    <text x="852" y="382" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">夜明山 (308m)</text>
+    <!-- 旭山（267m）・夜明山（308m）※②・⑥・⑦の引き出し線の隙間（y=340〜390）に明確に分離配置 -->
+    <ellipse cx="835" cy="348" rx="75" ry="52" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.2" stroke-dasharray="5 3" />
+    <polygon points="815,338 822,350 808,350" fill="#15803d" />
+    <text x="815" y="365" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">旭山 (267m)</text>
+    <polygon points="892,366 899,378 885,378" fill="#15803d" />
+    <text x="892" y="393" font-size="10.5" font-weight="bold" fill="#365314" text-anchor="middle">夜明山 (308m)</text>
 
     <!-- 中央山（319m・父島最高峰） -->
     <ellipse cx="815" cy="545" rx="95" ry="75" fill="url(#mountain-ridge)" stroke="#65a30d" stroke-width="1.4" stroke-dasharray="5 3" />
@@ -211,7 +208,7 @@
       Q 625 705 522 638
     " fill="none" stroke="#b45309" stroke-width="2.5" stroke-dasharray="6 4" opacity="0.55" />
 
-    <!-- 湾・岬・地区名ラベル -->
+    <!-- 湾・岬・地区名ラベル（ピンや引き出し線と重ならない開けた位置に配置） -->
     <text x="595" y="405" font-size="19" font-weight="900" fill="#0369a1" text-anchor="middle" letter-spacing="5">二 見 湾</text>
     <text x="595" y="424" font-size="10.5" font-weight="bold" fill="#0284c7" text-anchor="middle" letter-spacing="2">FUTAMI BAY</text>
 
@@ -223,8 +220,8 @@
     <text x="442" y="538" font-size="10" font-weight="bold" fill="#14532d" text-anchor="end">洲 崎</text>
 
     <g font-size="11.5" font-weight="bold" fill="#365314">
-      <text x="615" y="272" text-anchor="middle">大村（西町・東町）</text>
-      <text x="772" y="305">奥村地区</text>
+      <text x="598" y="256" text-anchor="middle">大村（西町・東町）</text>
+      <text x="775" y="296" text-anchor="middle">奥村地区</text>
       <text x="728" y="456">境浦</text>
       <text x="618" y="528">扇浦</text>
     </g>
