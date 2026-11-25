@@ -13,6 +13,8 @@ updates:
     ignore:
       - dependency-name: "@types/node"
         update-types: ["version-update:semver-major"]
+      - dependency-name: "tailwindcss"
+        update-types: ["version-update:semver-major"]
     groups:
       framework-major:
         patterns: [next, react, react-dom, "@types/react", "@types/react-dom"]
