@@ -199,8 +199,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const [day3MapMode, setDay3MapMode] = useState<"player" | "gm">("player");
   const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project?.id, {
     3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
-    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
-    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+    4: { tokyo: "T-3B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-4B", field: ["F-5A", "F-3C"] },
   });
   const day3TokyoAction = investigationSelections[3].tokyo;
   const setDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
@@ -235,7 +235,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
   const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
-  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS, ...DAY5_TOKYO_ACTIONS];
   const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 
@@ -362,6 +362,9 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
     setDay3SearchOutcome(isSuccess ? "success" : "failure");
     setDay3ActivePhotoTab(isSuccess ? "success" : "failure");
     setDay3IsReportUnlocked(true);
+    if (!isSuccess && !day3FieldActions.includes("F-3D")) {
+      changeInvestigation(3, "field", "F-3D");
+    }
     audioEngine?.playWordSound(isSuccess ? "word-enemy" : "word-alert");
   };
 
@@ -1118,7 +1121,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     【合同対策本部 GMアナウンス】鳥島沖海底大噴火 ＆ 緊急洋上捜索命令
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    昨夜、西之島（Day 1）から北へ約380km離れた「鳥島沖海底カルデラ」において突発的な大規模水蒸気爆発が発生しました。24時間で約380km。時速約6km（日速約150km）の一定ペースで深海を北上する巨大物体が海底火山を次々と刺激している可能性が濃厚です。<br />
+                    西之島から北へ約350km離れた「鳥島沖海底カルデラ」において突発的な大規模水蒸気爆発が発生しました。時速6.25km（日速約150km）の一定ペースで深海を北上する巨大物体が海底火山を次々と刺激している可能性が濃厚です。<br />
                     これを受け、小笠原基地より<strong>大型捜索ヘリ</strong>を緊急発進させ、洋上に展開する大型巡視船『あきつしま』での洋上給油を中継して現場海域へ投入します。<br />
                     <strong>任務目標：『海図上の怪物の潜航位置を推測し、ソノブイを投下して相手との距離を割り出し、その姿（映像）を捉えよ！』</strong>
                   </p>
@@ -1202,7 +1205,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </div>
                       <div className="rounded-lg bg-slate-950/80 border border-slate-800 p-2.5 text-[11px] text-slate-300 space-y-1">
                         <p>
-                          ・<strong>連動噴火の確認</strong>：西之島から鳥島までの約380kmを24時間で正確に到達。深海を北上する物体の通過が海底火山を次々と刺激して噴火を誘発している動かぬ証拠。
+                          ・<strong>連動噴火の確認</strong>：西之島から鳥島沖までの約350kmを56時間（時速6.25km／日速約150km）で北上。深海を北上する物体の通過が海底火山を次々と刺激して噴火を誘発している動かぬ証拠。
                         </p>
                         <p>
                           ・<strong>未噴火警戒海域</strong>：北方に連なる須美寿島、青ヶ島、八丈島、伊豆諸島、駿河湾・富士山方面は現時点で未噴火（残り4日で本土直下に到達する計算）。
@@ -1415,7 +1418,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                             ⚠️【セクター特定 失敗（捜索空振り）】（セクター {day3TargetSector}）
                           </strong>
                           <p className="mt-0.5 text-[11px] text-amber-300">
-                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました。
+                            指定したセクターに怪物は不在！ 約20km彼方の海面に怪物が起こした異常な大波を目視するも、ヘリが到達したときにはすでに深海800mへと急速潜航してしまっていました（不鮮明な遠方写真を解析するため、小笠原現地調査2枠のうち1枠が『F-3D：撮影した画像の分析（EV-22）』に自動充当されます）。
                           </p>
                           <span className="text-[10px] text-slate-300 mt-1 inline-block">
                             👇 下部の<strong>【洋上ヘリ航空偵察 写真記録】</strong>にて、撮影された遠方波紋写真と捜索失敗ログを確認できます。
@@ -1514,13 +1517,13 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
                           <div className="space-y-1.5 text-[11px] text-slate-300 leading-relaxed">
                             <p>
-                              ・<strong className="text-white">深海に溶け込む巨大な質量</strong>: 本体の輪郭線は特定の生物の形としては定まらず、<strong>海面下に潜む広大な深海シャドウ（漆黒の巨大質量）</strong>としてぼんやりと認識されるのみ。
+                              ・<strong className="text-white">深海に溶け込む巨大な生物</strong>: 本体の輪郭線は特定の生物の形としては定まらず、<strong>海面下に潜む広大な深海シャドウ（漆黒の巨大生物）</strong>としてぼんやりと認識されるのみ。
                             </p>
                             <p>
                               ・<strong className="text-white">目視される無数の触手群</strong>: ぼやけた本体の後背部から、<strong>20本を超える無数の触手・触腕だけが海中を長く直線的にたなびく姿</strong>が鮮明に確認できる。
                             </p>
                             <p>
-                              ・<strong className="text-white">繊細なケルビン波（航跡波）</strong>: 前進遊泳に伴い、海面にはごく控えめな薄い白波がV字型に広がり、巨大な質量が深海を時速約6kmで着実に北上している様子を捉えている。
+                              ・<strong className="text-white">繊細なケルビン波（航跡波）</strong>: 前進遊泳に伴い、海面にはごく控えめな薄い白波がV字型に広がり、巨大な生物が深海を時速約6kmで着実に北上している様子を捉えている。
                             </p>
                           </div>
                         </div>
@@ -1584,7 +1587,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                               ・<strong className="text-white">ヘリ急行後</strong>: ヘリが現場へ到達したときには、怪物は接近を察知してすでに深海800m以深へ急速潜航してしまっており捉えられない。
                             </p>
                             <p>
-                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時はこの写真を提示し、「20km以上先で大波を目視したが、急行した時にはすでに潜航してしまっていた」と説明してください。
+                              ・<strong className="text-white">GM進行メモ</strong>: 特定失敗時は成功時の写真は提示せず、この失敗時写真のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-22）』へ自動充当して浪寄へ公開してください（超高感度強調処理により20本以上の触手と超群体構造が判明）。
                             </p>
                           </div>
                         </div>
@@ -1601,51 +1604,22 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   )}
                 </div>
 
-                {/* ④ 【Day 3 ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出）】 */}
+                {/* ④ 【Day 3 ソノブイ索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達）】 */}
                 <div className="rounded-xl border border-amber-900/60 bg-gradient-to-r from-slate-950 via-[#181308] to-slate-950 p-4 shadow-md space-y-3">
                   <div className="flex items-center gap-2 border-b border-amber-900/40 pb-2">
                     <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                     <span className="font-bold text-xs text-amber-300">
-                      【索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示】
+                      【索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想）】
                     </span>
                   </div>
 
                   <div className="rounded border border-amber-800/40 bg-slate-950/80 p-3 text-[11px] text-amber-200">
                     <span className="font-semibold text-white block mb-1">
-                      🎙️ 総合オペレーター 長津からのアナウンス:
+                      🎙️ 総合オペレーター 長津からのアナウンス（NG-02 ／ Day 3 途中①指令書）:
                     </span>
                     <p className="italic text-slate-200 leading-relaxed pl-2 border-l-2 border-amber-500">
-                      「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                      「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！」
                     </p>
-                  </div>
-
-                  <div className="space-y-1.5">
-                    <span className="text-[11px] font-bold text-slate-300 block">
-                      🧩 3名の手元に配備された情報断片（各自のデータを持ち寄って計算してください）:
-                    </span>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <div className="rounded-lg border border-indigo-900/60 bg-indigo-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-indigo-300 block">太刀魚（PC4／気象庁）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">西之島〜鳥島沖 距離観測データ</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          西之島から鳥島沖海底カルデラまでの直線距離: <strong>約350 km</strong>
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-cyan-900/60 bg-cyan-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-cyan-300 block">貝浜（PC3／海上保安庁）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">鳥島沖 ソノブイ探知記録</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          鳥島沖海域にて巨大生物の音響反射を捉えた時刻: <strong>Day 3 17:00</strong>
-                        </p>
-                      </div>
-                      <div className="rounded-lg border border-emerald-900/60 bg-emerald-950/30 p-2.5">
-                        <span className="font-bold text-[10px] text-emerald-300 block">浪寄（PC5／大学准教授）</span>
-                        <span className="font-semibold text-white text-[11px] block mt-0.5">遭難船救助・目撃時刻調書</span>
-                        <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
-                          Day 1に西之島近海で遭難船がスクリューに巻き付かれた最初の異常遭遇時刻: <strong>Day 1 09:00</strong>
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
 
@@ -1854,12 +1828,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   <div className="rounded-lg bg-amber-950/30 border border-amber-800/40 p-3 text-xs text-amber-200 space-y-1">
                     <div className="flex items-center gap-1.5 font-bold text-amber-300">
                       <Radio className="h-3.5 w-3.5 text-amber-400 animate-pulse" />
-                      【海上保安庁 警備救難部からの緊急諮問】
+                      【深海写真の受信と専門家2名への緊急諮問】
                     </div>
                     <p className="text-[11px] text-slate-300 leading-relaxed">
-                      洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大質量と20本以上の無数の触手群）を受け、現場の海上保安庁は緊迫しています。<br />
-                      「全長数百mの潜航物体……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
-                      海上保安庁は直ちに合同対策本部に対し、<strong>【海洋生物学者 浪寄（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛省リエゾン 貝浜（PC2）への自衛隊出動判断の要請】</strong>を行いました。全員で合議した上で、<strong>海上保安庁東京本部の危機管理官 朝潮（PC1）</strong>が最終意思決定を下します。
+                      洋上ヘリが撮影した写真（海面下に潜む漆黒の巨大生物と20本以上の無数の触手群）を受け、合同対策本部は緊迫しています。<br />
+                      「全長数百mの巨大生物……これは到底、海上保安庁の巡視船や警察比例の原則で対応できる事態ではない」。<br />
+                      合同対策本部では直ちに、<strong>【海洋生物学者 浪寄（PC5）への写真鑑定の相談】</strong>と、<strong>【防衛省リエゾン 貝浜（PC2）への自衛隊出動判断の要請】</strong>を行います。全員で合議した上で、<strong>危機管理官 朝潮（PC1）</strong>が最終意思決定を下します。
                     </p>
                   </div>
 
@@ -1869,7 +1843,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       <div className="flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-teal-400" />
                         <span className="font-bold text-xs text-teal-200">
-                          ① 海上保安庁 ➔ 浪寄（PC5: 海洋生物学者）への相談: 写真の生物学的解釈
+                          ① 浪寄（PC5: 海洋生物学者）への相談: 写真の生物学的解釈
                         </span>
                       </div>
                       <span className="text-[10px] text-teal-300 font-mono bg-teal-950 px-2 py-0.5 rounded border border-teal-800">
@@ -1877,7 +1851,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </span>
                     </div>
                     <p className="text-[11px] text-slate-300 italic">
-                      「浪寄准教授、この写真（海面下の巨大影と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                      「浪寄准教授、この写真（海面下の巨大生物と無数の触手）を生物学的にどう解釈されますか？通常のダイオウイカ（10本）と明らかに異なる20本以上の触手、そして数百mの巨大生物。専門家としての所見を提示してください」
                     </p>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
@@ -2349,7 +2323,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -2648,7 +2622,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -2835,7 +2809,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     </div>
                     <div className="flex items-center gap-2">
                       <a
-                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                        href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                         target="_blank"
                         rel="noreferrer"
                         className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-1 text-[11px] text-slate-300 transition border border-slate-700"
@@ -3212,7 +3186,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                                 </button>
                               </div>
                               <p className="text-[9.5px] text-amber-200/90 font-mono leading-tight">
-                                「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
+                                「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」
                               </p>
                             </div>
                           )}
@@ -3478,7 +3452,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         : "text-slate-400 hover:text-slate-200 hover:bg-slate-900"
                     }`}
                   >
-                    <span>🐋 3. 朝倉ノート＆クジラ言語</span>
+                    <span>🐋 3. 海野ノート＆クジラ言語</span>
                   </button>
                   <button
                     onClick={() => setDay6ActiveTab("sonar_network")}
@@ -3521,7 +3495,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         『神社の祝詞の複製』の注釈にはこう記されています――『<strong>祝詞の言の葉そのものに験（しるし）があるにあらず。言の葉（ことのは）をただ声高（こわだか）に唱うるのみでは届かじ。定めの順を違（たが）えず、海の中へと音（ね）を響かせよ</strong>』。そして吉備津の証言により『<strong>祝詞は声高に日本語を読むのではなく、舌を弾いてクリック音を海中筒から放つものだ</strong>』と判明しました。
                       </p>
                       <p className="text-slate-400 leading-relaxed border-t border-amber-900/40 pt-1">
-                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>『人と勇魚の契り　大獲物ぞ　集ひ来よ』という祝詞の型と口伝</strong>として伝えていたのです！
+                        ※文字や音響物理学を持たなかった太古の島人が、後世の人々に「マッコウクジラと交信できるクリック音列」を間違いなく再現・継承させるため、<strong>『人と勇魚の契り　小笠原へ集ひ来よ　大獲物ぞ　集ひ来よ』という祝詞の型と口伝</strong>として伝えていたのです！
                       </p>
                     </div>
 
@@ -3548,7 +3522,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="flex items-start justify-between gap-3">
                       <div className="space-y-1.5">
                         <h4 className="font-bold text-cyan-300 text-sm flex items-center gap-1.5">
-                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
+                          <span>🎋 【海中筒（通海竹筒）の作法 ＆ 海野ノートへ繋がる4段階の証拠ロジック】</span>
                         </h4>
                         <p className="text-slate-300 leading-relaxed">
                           かつて小笠原の神職は、沖合の小舟から<strong>水深数メートルまで長い竹筒（海中筒）</strong>を直接差し入れ、その筒口に口を密着させて海中へ直接祝詞（舌クリック音）を放射していました。
@@ -3566,12 +3540,12 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                     <div className="rounded-lg bg-slate-900/90 border border-cyan-800/80 p-3.5 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-cyan-900/60 pb-1.5">
                         <strong className="text-cyan-200 font-bold text-xs flex items-center gap-1.5">
-                          🪜 【朝倉ノートの真価を引き出す4段階の証拠ロジック（開示順序）】
+                          🪜 【海野ノートの真価を引き出す4段階の証拠ロジック（開示順序）】
                         </strong>
                         <span className="text-[10px] text-cyan-400 font-mono">論理的必然性の連鎖</span>
                       </div>
                       <p className="text-[11px] text-slate-300 leading-relaxed">
-                        「なぜ今、朝倉教授のクジラ音響ノートが必要なのか？」は、以下の4つの証拠が順番に揃って初めてプレイヤー全員に完全に腑に落ちます：
+                        「なぜ今、海野教授のクジラ音響ノートが必要なのか？」は、以下の4つの証拠が順番に揃って初めてプレイヤー全員に完全に腑に落ちます：
                       </p>
 
                       <div className="grid grid-cols-2 gap-2 text-[11px]">
@@ -3617,7 +3591,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                         <p className="mt-0.5 leading-relaxed text-slate-200">
                           「相手は通常兵器で倒せない巨大なイカの塊りだ。太古の先人はマッコウクジラを呼び集めて食べさせて解決した。
                           ならば我々もマッコウクジラに呼びかけねばならない――だが、太古の祝詞だけでは現代の広大な太平洋全域のクジラを統率できない。
-                          <strong>クジラ自身が話す言語（コーダ）の文法と音響記録</strong>が必要だ！」 ➔ <strong>【タブ3：朝倉教授ノート】へ！</strong>
+                          <strong>クジラ自身が話す言語（コーダ）の文法と音響記録</strong>が必要だ！」 ➔ <strong>【タブ3：海野教授ノート】へ！</strong>
                         </p>
                       </div>
                     </div>
@@ -3650,15 +3624,15 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                   </div>
                 )}
 
-                {/* --- タブ3: 朝倉教授ノート 3段階開示 ＆ クジラ言語（5大コーダ実録） --- */}
+                {/* --- タブ3: 海野教授ノート 3段階開示 ＆ クジラ言語（5大コーダ実録） --- */}
                 {day6ActiveTab === "coda_grammar" && (
                   <div className="space-y-4 bg-slate-950/60 p-4 rounded-lg border border-indigo-900/50 text-xs">
                     <div className="space-y-1">
                       <h4 className="font-bold text-indigo-300 text-sm flex items-center gap-1.5">
-                        <span>🐋 【故・朝倉教授の研究ノート：3段階の真実 ＆ クジラ言語（5大コーダ）】</span>
+                        <span>🐋 【故・海野教授の研究ノート：3段階の真実 ＆ クジラ言語（5大コーダ）】</span>
                       </h4>
                       <p className="text-slate-300 leading-relaxed text-[11px]">
-                        海洋生物学者・朝倉教授が遺した研究資料は、一般人の常識を覆す基礎生態から、世界初のクジラ言語文法、そして実音響調査テープへと3段階で深まります。
+                        海洋生物学者・海野教授が遺した研究資料は、一般人の常識を覆す基礎生態から、世界初のクジラ言語文法、そして実音響調査テープへと3段階で深まります。
                       </p>
                     </div>
 
@@ -3699,11 +3673,11 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                       </p>
                     </div>
 
-                    {/* 第3段階：朝倉教授の海洋音響実録テープ ＆ 5大コーダ */}
+                    {/* 第3段階：海野教授の海洋音響実録テープ ＆ 5大コーダ */}
                     <div className="rounded-lg bg-indigo-950/40 border border-indigo-700/80 p-3.5 space-y-2.5">
                       <div className="flex items-center justify-between border-b border-indigo-900/60 pb-1.5">
                         <span className="font-bold text-amber-300 text-xs flex items-center gap-1.5">
-                          📼 第3段階：【実音響調査記録】朝倉教授の5大コーダ実録テープ ＆ 行動対応ログ
+                          📼 第3段階：【実音響調査記録】海野教授の5大コーダ実録テープ ＆ 行動対応ログ
                         </span>
                         <span className="text-[10px] text-amber-400 font-mono">小笠原海溝 実録データ</span>
                       </div>
@@ -3876,8 +3850,8 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                           <div className="text-emerald-300 bg-emerald-950/40 p-2 rounded border border-emerald-900/60 space-y-1 text-[10px]">
                             <strong className="text-emerald-200 block font-bold">🎯 論破の決め手（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が直撃しても瞬時に再結合した事実（通常兵器は完全無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
-                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
-                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず最大1万km届く層）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が特別な行動（仲間同士の共鳴・バケツリレー）をとることで広域の群れへ次々と伝播させる（海野日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 
@@ -4390,7 +4364,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
                 )}
 
                 <a
-                  href={day3MapTab === "tactical" ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
+                  href={day3MapTab === "tactical" ? scenarioAssetUrl("releases/images/day3_sonar_tactical_chart.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day3.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4841,7 +4815,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -4903,7 +4877,7 @@ export const TimelineBoard: React.FC<TimelineBoardProps> = ({
 
               <div className="flex items-center gap-2">
                 <a
-                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                  href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"

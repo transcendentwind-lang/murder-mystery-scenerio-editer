@@ -2,7 +2,7 @@ import { MMProject } from "../src/types/schema";
 import { test, expect, Page } from "@playwright/test";
 import { createEmptyProject } from "../src/utils/projectStorage";
 import { initialProject } from "../src/utils/initialProjectData";
-import { DAY3_TOKYO_ACTIONS, DAY4_TOKYO_ACTIONS } from "../src/components/GmDashboard";
+import { DAY3_TOKYO_ACTIONS, DAY5_NEW_TOKYO_ACTIONS } from "../src/components/GmDashboard";
 import { progressKey } from "../src/utils/progressStorage";
 import { reconcileInvestigations } from "../src/utils/investigationSelections";
 
@@ -83,7 +83,7 @@ test("後日の無効な調査を解除する前に確認し、キャンセル�
   const project = initialProject;
   const earlier = DAY3_TOKYO_ACTIONS[0];
   const later = DAY3_TOKYO_ACTIONS[1];
-  const independent = DAY4_TOKYO_ACTIONS[0];
+  const independent = DAY5_NEW_TOKYO_ACTIONS[0];
   const key = progressKey(project.id, "investigations");
   const selections = {
     3: { tokyo: earlier.id, field: [] },

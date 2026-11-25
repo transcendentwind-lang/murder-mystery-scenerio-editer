@@ -68,7 +68,9 @@ export function ScenarioMaterialLibrary() {
       <div className="min-h-64 overflow-auto rounded-lg border border-slate-700 bg-white p-3 text-slate-950">
         {selected ? <><h3 className="mb-3 font-bold">{selected.title}</h3>{['svg', 'jpg', 'png'].includes(selected.format)
           ? <img src={scenarioAssetUrl(selected.path)} alt={selected.title} className="h-auto w-full" />
-          : ['md', 'json'].includes(selected.format) ? <pre data-material-text className="whitespace-pre-wrap break-words text-sm leading-relaxed">{previewText}</pre> : <iframe title={`資料プレビュー：${selected.title}`} src={scenarioAssetUrl(selected.path)} className="h-[65vh] w-full" />}</>
+          : ['mp4', 'webm'].includes(selected.format)
+            ? <video key={selected.path} controls preload="metadata" aria-label={selected.title} src={scenarioAssetUrl(selected.path)} className="h-auto w-full rounded bg-slate-950" />
+            : ['md', 'json'].includes(selected.format) ? <pre data-material-text className="whitespace-pre-wrap break-words text-sm leading-relaxed">{previewText}</pre> : <iframe title={`資料プレビュー：${selected.title}`} src={scenarioAssetUrl(selected.path)} className="h-[65vh] w-full" />}</>
           : <p>資料の「プレビュー」を押すと内容を表示します。</p>}
       </div>
     </div>

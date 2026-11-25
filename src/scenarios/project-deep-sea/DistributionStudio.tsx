@@ -1,6 +1,8 @@
 "use client";
 
 import { scenarioAssetUrl } from "@/scenarios/catalog";
+import { sonarWords } from "./sonarWords";
+import { JAPANESE_MEANING_CANDIDATES, LOCKED_INITIAL_MEANINGS } from "@/components/WhaleSonarMobileApp";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
@@ -30,6 +32,9 @@ import { GmOnePageFlowchart } from "@/components/GmOnePageFlowchart";
 import {
   printCharacterHandoutsB5,
   printWhaleSonarGuideA4,
+  CHARACTER_NAME_RUBIES,
+  CHARACTER_COMPACT_RUBIES,
+  cleanCharacterName,
 } from "@/utils/scriptGenerator";
 import {
   Sparkles,
@@ -67,6 +72,8 @@ import {
   RotateCw,
   ExternalLink,
   Maximize2,
+  IdCard,
+  Scissors,
 } from "lucide-react";
 
 interface DocumentDesignStudioProps {
@@ -76,7 +83,710 @@ interface DocumentDesignStudioProps {
   onSendAiPrompt?: (prompt: string) => void;
 }
 
-type StudioCategory = "handouts" | "evidences" | "visuals" | "gm_guides";
+type StudioCategory = "handouts" | "evidences" | "visuals" | "gm_guides" | "gm_prep";
+
+/**
+ * 首下げネームタグ用キャラクターデータ（7名分 ＋ GM用 = 計8枠）
+ * 市販の吊り下げ名札ケース（名刺サイズ〜A7サイズ）に適合する中紙サイズ（約93mm × 64mm）
+ * ホルダーの縁で端が隠れても文字が欠けないよう中央に配置
+ */
+interface NametagItem {
+  id: string;
+  pcCode: string;
+  name: string;
+  ruby: string;
+  profession: string;
+  location: string;
+  locationBadge: string;
+  accentColor: string;
+  borderHex: string;
+  badgeBg: string;
+}
+
+const NAMETAG_ITEMS: NametagItem[] = [
+  {
+    id: "tag-pc-1",
+    pcCode: "PC-1",
+    name: "朝　潮",
+    ruby: "あ さ し お",
+    profession: "海上保安庁東京本部 危機管理官",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#1e3a8a",
+    borderHex: "#1e3a8a",
+    badgeBg: "bg-blue-900 text-white",
+  },
+  {
+    id: "tag-pc-2",
+    pcCode: "PC-2",
+    name: "貝　浜",
+    ruby: "か い は ま",
+    profession: "情報通信・音響分析官（防衛省リエゾン）",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#334155",
+    borderHex: "#334155",
+    badgeBg: "bg-slate-800 text-white",
+  },
+  {
+    id: "tag-pc-3",
+    pcCode: "PC-3",
+    name: "坂　凪",
+    ruby: "さ か な ぎ",
+    profession: "海上保安庁小笠原支部 巡視船船長",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#0f766e",
+    borderHex: "#0f766e",
+    badgeBg: "bg-teal-800 text-white",
+  },
+  {
+    id: "tag-pc-4",
+    pcCode: "PC-4",
+    name: "太刀魚",
+    ruby: "た ち う お",
+    profession: "気象庁 小笠原観測所 観測員",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#0284c7",
+    borderHex: "#0284c7",
+    badgeBg: "bg-sky-800 text-white",
+  },
+  {
+    id: "tag-pc-5",
+    pcCode: "PC-5",
+    name: "浪　寄",
+    ruby: "な み よ り",
+    profession: "海洋科学大学 小笠原研究所 准教授",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#4338ca",
+    borderHex: "#4338ca",
+    badgeBg: "bg-indigo-800 text-white",
+  },
+  {
+    id: "tag-pc-6",
+    pcCode: "PC-6",
+    name: "初　瀬",
+    ruby: "は つ せ",
+    profession: "小笠原役場 救護担当",
+    location: "小笠原・現地救難隊",
+    locationBadge: "小笠原現地",
+    accentColor: "#b45309",
+    borderHex: "#b45309",
+    badgeBg: "bg-amber-800 text-white",
+  },
+  {
+    id: "tag-pc-7",
+    pcCode: "PC-7",
+    name: "長　津",
+    ruby: "な が つ",
+    profession: "海上保安庁東京本部 首席通信解析官",
+    location: "海上保安庁東京本部",
+    locationBadge: "東京本部",
+    accentColor: "#be123c",
+    borderHex: "#be123c",
+    badgeBg: "bg-rose-800 text-white",
+  },
+  {
+    id: "tag-gm",
+    pcCode: "GM",
+    name: "進行役",
+    ruby: "ゲームマスター",
+    profession: "合同海難対策本部 統括進行",
+    location: "司令統括デスク",
+    locationBadge: "司令統括",
+    accentColor: "#0f172a",
+    borderHex: "#0f172a",
+    badgeBg: "bg-slate-950 text-white",
+  },
+];
+
+/**
+ * 全体掲示用・Day別目的シート（A4横置き・超特大文字・全10枚）
+ * 会場のホワイトボードや中央テーブルなど全員から見える位置に掲示し、
+ * そのフェーズで「誰が」「何を決定・回答すべきか」を一目で共有するためのシート
+ */
+interface GmGoalBoardItem {
+  id: string;
+  sheetNumber: number;
+  phaseBadge: string;
+  sidebarTitle: string;
+  timingNote: string;
+  line1: string;
+  line2?: string;
+}
+
+const GM_GOAL_BOARDS: GmGoalBoardItem[] = [
+  {
+    id: "goal-day1",
+    sheetNumber: 1,
+    phaseBadge: "DAY 1",
+    sidebarTitle: "Day 1：遭難船の位置を特定（坂凪）",
+    timingNote: "Day 1 開始時（自己紹介後・漂流海図展開時）に掲示",
+    line1: "遭難船の位置を特定（坂凪）",
+  },
+  {
+    id: "goal-day2",
+    sheetNumber: 2,
+    phaseBadge: "DAY 2",
+    sidebarTitle: "Day 2：［A］により［B］が起きている可能性（朝潮）",
+    timingNote: "Day 2 開始時（西之島沖噴火・優先調査開始時）に掲示",
+    line1: "［A］により［B］が\n起きている可能性（朝潮）",
+  },
+  {
+    id: "goal-day3",
+    sheetNumber: 3,
+    phaseBadge: "DAY 3",
+    sidebarTitle: "Day 3：巨大生物の位置を特定（坂凪）",
+    timingNote: "Day 3 開始時（鳥島沖ソノブイ3基投下作戦時）に掲示",
+    line1: "巨大生物の位置を特定（坂凪）",
+  },
+  {
+    id: "goal-day3-1",
+    sheetNumber: 4,
+    phaseBadge: "DAY 3 - 1",
+    sidebarTitle: "Day 3-1：生物の正体は？（浪寄）／ 防衛／海上警備（貝浜）",
+    timingNote: "Day 3 途中①（ソノブイ捕捉・深海写真撮影直後）に掲示",
+    line1: "生物の正体は？（浪寄）",
+    line2: "防衛／海上警備（貝浜）",
+  },
+  {
+    id: "goal-day3-2",
+    sheetNumber: 5,
+    phaseBadge: "DAY 3 - 2",
+    sidebarTitle: "Day 3-2：名称決定：ワタツミ／クスルフ ／ 防衛／海上警備（朝潮）",
+    timingNote: "Day 3 途中②（呼称決定＆指揮官の最終決断時）に掲示",
+    line1: "名称決定：ワタツミ／クスルフ",
+    line2: "防衛／海上警備（朝潮）",
+  },
+  {
+    id: "goal-day4",
+    sheetNumber: 6,
+    phaseBadge: "DAY 4",
+    sidebarTitle: "Day 4：どこへ向かうか（誰でも）／ どんな危機か（朝潮）",
+    timingNote: "Day 4 開始時（明神礁噴火・即応総力体制移行時）に掲示",
+    line1: "どこへ向かうか（誰でも）",
+    line2: "どんな危機か（朝潮）",
+  },
+  {
+    id: "goal-day5",
+    sheetNumber: 7,
+    phaseBadge: "DAY 5",
+    sidebarTitle: "Day 5：どうして復活する？（浪寄）／ なぜ北上するのか？（朝潮）",
+    timingNote: "Day 5 開始時（魚雷攻撃失敗・防衛省からの緊急照会時）に掲示",
+    line1: "どうして復活する？（浪寄）",
+    line2: "なぜ北上するのか？（朝潮）",
+  },
+  {
+    id: "goal-day5-1",
+    sheetNumber: 8,
+    phaseBadge: "DAY 5 - 1",
+    sidebarTitle: "Day 5-1：小笠原チーム：海野教授の研究を探す ／ 東京側チーム：吉備津本人を探す",
+    timingNote: "Day 5 途中①（東京広域捜索マップ＆父島現地調査マップ展開時）に掲示",
+    line1: "小笠原チーム：海野教授の研究を探す",
+    line2: "東京側チーム：吉備津本人を探す",
+  },
+  {
+    id: "goal-day6",
+    sheetNumber: 9,
+    phaseBadge: "DAY 6",
+    sidebarTitle: "Day 6：分析 ／ ［A］を分析し、［B］に届く新しい言葉を作ろう",
+    timingNote: "Day 6 開始時（音響データ全開示・アプリ解析時）に掲示",
+    line1: "分析",
+    line2: "［A］を分析し、\n［B］に届く新しい言葉を作ろう",
+  },
+  {
+    id: "goal-day7",
+    sheetNumber: 10,
+    phaseBadge: "DAY 7",
+    sidebarTitle: "Day 7：自衛隊の功績／合同対策本部の功績",
+    timingNote: "Day 7 フェーズ3（防衛省幹部からの直通電話・特別配布カード［Day 7 配布］配布時）に掲示",
+    line1: "自衛隊の功績／合同対策本部の功績",
+  },
+];
+
+/**
+ * 目的シートの1行テキストを装飾描画するヘルパー
+ * ・［A］［B］を穴埋めボックスとして強調
+ * ・（坂凪）（朝潮）（浪寄）（貝浜）（誰でも）を担当者として視認性高く強調し、途中で改行しないよう固定
+ */
+const renderGoalBoardFormattedLine = (line: string): React.ReactNode => {
+  const parts = line.split(/(［[A-ZＡ-Ｚ]］|（[^）]+）)/g);
+  return parts.map((part, idx) => {
+    if (/^［[A-ZＡ-Ｚ]］$/.test(part)) {
+      const letter = part.slice(1, -1);
+      return (
+        <span
+          key={idx}
+          className="inline-flex items-center justify-center rounded-xl border-[4px] border-slate-900 bg-amber-100 px-3.5 py-0.5 mx-1.5 text-slate-950 font-black shadow-sm whitespace-nowrap"
+        >
+          ［{letter}］
+        </span>
+      );
+    }
+    if (part.startsWith("（") && part.endsWith("）")) {
+      return (
+        <span
+          key={idx}
+          className="inline-block whitespace-nowrap ml-2 text-indigo-900 font-black"
+        >
+          {part}
+        </span>
+      );
+    }
+    return <React.Fragment key={idx}>{part}</React.Fragment>;
+  });
+};
+
+/**
+ * 目的シートの改行（\n）対応レンダラー
+ */
+const renderGoalBoardLine = (line: string): React.ReactNode => {
+  const sublines = line.split("\n");
+  if (sublines.length === 1) {
+    return renderGoalBoardFormattedLine(sublines[0]);
+  }
+  return (
+    <span className="inline-flex flex-col items-center justify-center space-y-2">
+      {sublines.map((sub, sidx) => (
+        <span key={sidx} className="block leading-tight">
+          {renderGoalBoardFormattedLine(sub)}
+        </span>
+      ))}
+    </span>
+  );
+};
+
+/**
+ * 全目的シート共通の統一フォントサイズクラス
+ */
+const getGoalBoardLineFontSizeClass = (): string => {
+  return "text-2xl sm:text-3xl md:text-[38px] lg:text-[42px]";
+};
+
+/**
+ * 海図用コイントークン（コイン実寸 直径2.49cm ＝ 24.9mm ／ 切り抜き円 直径2.6cm ＝ 26mm・文字大きめ設計）
+ * ・ソノブイ × 3
+ * ・遭難船 × 1
+ * ・巡視船 × 1
+ * ・暗礁 × 2
+ * ・火山噴火／海底噴火 × 6
+ * ・火山性微動 × 6
+ * （計19個 ＋ 切り損じ・紛失時用の予備トークン8個）
+ */
+type CoinTokenKind =
+  | "sonobuoy"
+  | "distressed_ship"
+  | "patrol_ship"
+  | "reef"
+  | "eruption"
+  | "tremor";
+
+interface CoinTokenItem {
+  id: string;
+  kind: CoinTokenKind;
+  topSubLabel: string;
+  mainLine1: string;
+  mainLine2?: string;
+  bottomBadge?: string;
+  rimHex: string;
+  bgHex: string;
+  textHex: string;
+  subTextHex: string;
+}
+
+interface CoinTokenSection {
+  id: string;
+  sectionTitle: string;
+  usageNote: string;
+  tokens: CoinTokenItem[];
+}
+
+const GM_COIN_TOKEN_SECTIONS: CoinTokenSection[] = [
+  {
+    id: "sec-day3-sonobuoy",
+    sectionTitle: "① Day 3：鳥島沖 洋上ソノブイ索敵作戦用トークン（計3個）",
+    usageNote: "Day 3の36セクター索敵海図（A-1〜F-6）の投下ポイントに配置します",
+    tokens: [
+      {
+        id: "tok-sono-1",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #1",
+        mainLine1: "ソノブイ",
+        bottomBadge: "1基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-sono-2",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #2",
+        mainLine1: "ソノブイ",
+        bottomBadge: "2基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-sono-3",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR #3",
+        mainLine1: "ソノブイ",
+        bottomBadge: "3基目",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+    ],
+  },
+  {
+    id: "sec-day1-rescue",
+    sectionTitle: "② Day 1：小笠原南西沖 漂流救難作戦用トークン（計4個：遭難船1・巡視船1・暗礁2）",
+    usageNote: "Day 1の航海用海図（白地図）上で、遭難船の漂流予測位置・巡視船の派遣先・暗礁位置の共有に使用します",
+    tokens: [
+      {
+        id: "tok-distressed-1",
+        kind: "distressed_ship",
+        topSubLabel: "SOS VESSEL",
+        mainLine1: "遭難船",
+        bottomBadge: "救助対象",
+        rimHex: "#ea580c",
+        bgHex: "#fff7ed",
+        textHex: "#7c2d12",
+        subTextHex: "#c2410c",
+      },
+      {
+        id: "tok-patrol-1",
+        kind: "patrol_ship",
+        topSubLabel: "JCG PATROL",
+        mainLine1: "巡視船",
+        bottomBadge: "海保船艇",
+        rimHex: "#1d4ed8",
+        bgHex: "#eff6ff",
+        textHex: "#1e3a8a",
+        subTextHex: "#1d4ed8",
+      },
+      {
+        id: "tok-reef-1",
+        kind: "reef",
+        topSubLabel: "HAZARD #1",
+        mainLine1: "暗　礁",
+        bottomBadge: "座礁危険",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+      {
+        id: "tok-reef-2",
+        kind: "reef",
+        topSubLabel: "HAZARD #2",
+        mainLine1: "暗　礁",
+        bottomBadge: "座礁危険",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+    ],
+  },
+  {
+    id: "sec-eruption",
+    sectionTitle: "③ Day 2〜Day 7：広域監視海図「火山噴火／海底噴火」トークン（計6個）",
+    usageNote: "西之島沖・鳥島沖・明神礁・御蔵島沖など、噴火が発生した位置へ順次配置します",
+    tokens: Array.from({ length: 6 }, (_, i) => ({
+      id: `tok-eruption-${i + 1}`,
+      kind: "eruption" as const,
+      topSubLabel: `ERUPTION #${i + 1}`,
+      mainLine1: "火山噴火",
+      mainLine2: "海底噴火",
+      rimHex: "#dc2626",
+      bgHex: "#fef2f2",
+      textHex: "#7f1d1d",
+      subTextHex: "#b91c1c",
+    })),
+  },
+  {
+    id: "sec-tremor",
+    sectionTitle: "④ Day 2〜Day 7：広域監視海図「火山性微動」トークン（計6個）",
+    usageNote: "八丈島・青ヶ島・伊豆大島・富士山地下深部など、火山性微動が観測された位置へ配置します",
+    tokens: Array.from({ length: 6 }, (_, i) => ({
+      id: `tok-tremor-${i + 1}`,
+      kind: "tremor" as const,
+      topSubLabel: `TREMOR #${i + 1}`,
+      mainLine1: "火山性",
+      mainLine2: "微　動",
+      rimHex: "#d97706",
+      bgHex: "#fffbeb",
+      textHex: "#78350f",
+      subTextHex: "#b45309",
+    })),
+  },
+  {
+    id: "sec-spares",
+    sectionTitle: "⑤ 予備トークン（切り損じ・紛失時用 ／ 計8個）",
+    usageNote: "工作時の切り損じや紛失時のスペアとしてご使用ください",
+    tokens: [
+      {
+        id: "tok-spare-sono",
+        kind: "sonobuoy",
+        topSubLabel: "SONAR SP",
+        mainLine1: "ソノブイ",
+        bottomBadge: "予　備",
+        rimHex: "#0284c7",
+        bgHex: "#f0f9ff",
+        textHex: "#0c4a6e",
+        subTextHex: "#0369a1",
+      },
+      {
+        id: "tok-spare-distressed",
+        kind: "distressed_ship",
+        topSubLabel: "SOS VESSEL",
+        mainLine1: "遭難船",
+        bottomBadge: "予　備",
+        rimHex: "#ea580c",
+        bgHex: "#fff7ed",
+        textHex: "#7c2d12",
+        subTextHex: "#c2410c",
+      },
+      {
+        id: "tok-spare-patrol",
+        kind: "patrol_ship",
+        topSubLabel: "JCG PATROL",
+        mainLine1: "巡視船",
+        bottomBadge: "予　備",
+        rimHex: "#1d4ed8",
+        bgHex: "#eff6ff",
+        textHex: "#1e3a8a",
+        subTextHex: "#1d4ed8",
+      },
+      {
+        id: "tok-spare-reef",
+        kind: "reef",
+        topSubLabel: "HAZARD SP",
+        mainLine1: "暗　礁",
+        bottomBadge: "予　備",
+        rimHex: "#5b21b6",
+        bgHex: "#f5f3ff",
+        textHex: "#3b0764",
+        subTextHex: "#6d28d9",
+      },
+      {
+        id: "tok-spare-erupt-1",
+        kind: "eruption",
+        topSubLabel: "ERUPTION SP",
+        mainLine1: "火山噴火",
+        mainLine2: "海底噴火",
+        rimHex: "#dc2626",
+        bgHex: "#fef2f2",
+        textHex: "#7f1d1d",
+        subTextHex: "#b91c1c",
+      },
+      {
+        id: "tok-spare-erupt-2",
+        kind: "eruption",
+        topSubLabel: "ERUPTION SP",
+        mainLine1: "火山噴火",
+        mainLine2: "海底噴火",
+        rimHex: "#dc2626",
+        bgHex: "#fef2f2",
+        textHex: "#7f1d1d",
+        subTextHex: "#b91c1c",
+      },
+      {
+        id: "tok-spare-tremor-1",
+        kind: "tremor",
+        topSubLabel: "TREMOR SP",
+        mainLine1: "火山性",
+        mainLine2: "微　動",
+        rimHex: "#d97706",
+        bgHex: "#fffbeb",
+        textHex: "#78350f",
+        subTextHex: "#b45309",
+      },
+      {
+        id: "tok-spare-tremor-2",
+        kind: "tremor",
+        topSubLabel: "TREMOR SP",
+        mainLine1: "火山性",
+        mainLine2: "微　動",
+        rimHex: "#d97706",
+        bgHex: "#fffbeb",
+        textHex: "#78350f",
+        subTextHex: "#b45309",
+      },
+    ],
+  },
+];
+
+const getCoinTokenSvgString = (kind: CoinTokenKind, colorHex: string): string => {
+  switch (kind) {
+    case "sonobuoy":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="2.5" fill="${colorHex}"/><path d="M16.24 7.76a6 6 0 0 1 0 8.49m-8.48-.01a6 6 0 0 1 0-8.49m11.31-2.82a10 10 0 0 1 0 14.14m-14.14 0a10 10 0 0 1 0-14.14"/></svg>`;
+    case "distressed_ship":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M2 20a2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1 2.4 2.4 0 0 1 2-1 2.4 2.4 0 0 1 2 1 2.4 2.4 0 0 0 2 1 2.4 2.4 0 0 0 2-1"/><path d="M4 16l2-7h12l2 7"/><path d="M12 4v5"/><path d="M9 6h6"/></svg>`;
+    case "patrol_ship":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" fill="${colorHex}" fill-opacity="0.2"/></svg>`;
+    case "reef":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18L16 8l-4 6-3-4-6 10z" fill="${colorHex}" fill-opacity="0.18"/><path d="M12 3v3"/><path d="M8 5l1.5 2"/><path d="M16 5l-1.5 2"/></svg>`;
+    case "eruption":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20L9 10h6l5 10H4z" fill="${colorHex}" fill-opacity="0.2"/><path d="M12 3v5"/><path d="M8 5l2.5 3"/><path d="M16 5l-2.5 3"/></svg>`;
+    case "tremor":
+      return `<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="${colorHex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="2 12 6 12 9 4 12 20 15 9 18 15 20 12 22 12"/></svg>`;
+  }
+};
+
+/**
+ * オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カード
+ * マジック：ザ・ギャザリング（MTG／スタンダードTCG）と完全同一サイズ：63mm × 88mm
+ * A4用紙1枚につき 3列 × 3行 ＝ 9枚配置
+ */
+interface WhaleMtgCardItem {
+  id: string;
+  kind: "click_sound" | "japanese_meaning";
+  codeLabel: string;
+  mainText: string;
+  mainRuby?: string;
+  lockedBadge?: string;
+}
+
+const WHALE_CLICK_MTG_CARDS: WhaleMtgCardItem[] = (() => {
+  const lockedOrder = ["word-subsea-volcano", "word-alert"];
+  const locked = lockedOrder
+    .map((id) => sonarWords.find((w) => w.id === id))
+    .filter((w): w is (typeof sonarWords)[number] => Boolean(w));
+  const unlocked = sonarWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
+  const ordered = [...locked, ...unlocked];
+
+  return ordered.map((w, idx) => {
+    const numStr = String(idx + 1).padStart(2, "0");
+    const rawOnomatopoeia =
+      w.soundPattern.match(/（(.+?)）/)?.[1] || w.soundPattern;
+    const onomatopoeia = rawOnomatopoeia.split("/")[0].trim();
+    const lockedMeaning = LOCKED_INITIAL_MEANINGS[w.id];
+    return {
+      id: `mtg-click-${w.id}`,
+      kind: "click_sound" as const,
+      codeLabel: `音 #${numStr}`,
+      mainText: onomatopoeia,
+      lockedBadge: lockedMeaning ? `初期確定：${lockedMeaning}` : undefined,
+    };
+  });
+})();
+
+const formatWhaleJapaneseCardLabel = (label: string): string => {
+  switch (label) {
+    case "（子ども）餌をくれ":
+      return "（子ども）\n餌をくれ";
+    case "（子ども）自分の場所はここだ":
+      return "（子ども）\n自分の場所はここだ";
+    case "（大人）自分の場所はここだ":
+      return "（大人）\n自分の場所はここだ";
+    case "我ら・自分（クジラ）":
+      return "我ら・自分\n（クジラ）";
+    case "あなたたち・あなた":
+      return "あなたたち\nあなた";
+    case "挨拶／こんにちは":
+      return "挨拶\nこんにちは";
+    case "大きい・たくさんの餌":
+      return "大きい\nたくさんの餌";
+    default:
+      return label;
+  }
+};
+
+const WHALE_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = JAPANESE_MEANING_CANDIDATES.map(
+  (cand, idx) => {
+    const numStr = String(idx + 1).padStart(2, "0");
+    return {
+      id: `mtg-jp-${numStr}`,
+      kind: "japanese_meaning" as const,
+      codeLabel: `日本語 #${numStr}`,
+      mainText: formatWhaleJapaneseCardLabel(cand.label),
+      mainRuby: cand.label === "御蔵島" ? "みくらじま" : undefined,
+      lockedBadge: cand.isLockedInitial
+        ? cand.label === "海の下の火山"
+          ? "初期確定：音 #01"
+          : "初期確定：音 #02"
+        : undefined,
+    };
+  }
+);
+
+/**
+ * Day 7専用（last-mission 受信音4枚 ＋ 日本語4枚 ＝ 計8枚・別シート1頁）
+ */
+const WHALE_DAY7_CLICK_MTG_CARDS: WhaleMtgCardItem[] = [
+  {
+    id: "mtg-day7-click-a",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声A",
+    mainText: "ド・ドーッカッカッ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-b",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声B",
+    mainText: "チ・トン・チ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-c",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声C",
+    mainText: "ポ・ルル・トーン",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-click-d",
+    kind: "click_sound",
+    codeLabel: "Day 7 音声D",
+    mainText: "タ・タン・ドーン",
+    lockedBadge: "Day 7 専用",
+  },
+];
+
+const WHALE_DAY7_JAPANESE_MTG_CARDS: WhaleMtgCardItem[] = [
+  {
+    id: "mtg-day7-jp-1",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語①",
+    mainText: "人間とクジラ",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-2",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語②",
+    mainText: "約束",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-3",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語③",
+    mainText: "ありがとう",
+    lockedBadge: "Day 7 専用",
+  },
+  {
+    id: "mtg-day7-jp-4",
+    kind: "japanese_meaning",
+    codeLabel: "Day 7 日本語④",
+    mainText: "ごちそうさま\n完了した",
+    lockedBadge: "Day 7 専用",
+  },
+];
+
+const WHALE_DAY7_ALL_MTG_CARDS: WhaleMtgCardItem[] = [
+  ...WHALE_DAY7_CLICK_MTG_CARDS,
+  ...WHALE_DAY7_JAPANESE_MTG_CARDS,
+];
 
 /**
  * 日本語の段落文章整形ヘルパー
@@ -111,6 +821,13 @@ const formatJapaneseParagraphs = (text: string): string => {
 };
 
 /**
+ * 日本語の段落文章HTML整形ヘルパー（ルビ対応・改行br変換）
+ */
+const formatJapaneseParagraphsHtml = (text: string): string => {
+  return formatJapaneseParagraphs(text).replace(/\n/g, "<br/>");
+};
+
+/**
  * 証拠カード表面タイトルの改行整形ヘルパー
  * ・明示的な frontTitleHtml があればそれを優先
  * ・「および」が含まれる場合は「および<br>」で改行
@@ -126,84 +843,41 @@ const formatEvidenceFrontTitleHtml = (title: string, explicitHtml?: string): str
 
 /**
  * 証拠カードの所持PC・開示Dayに応じたカラーテーマを返すヘルパー
+ * ・小笠原現地組4名（坂凪 pc-3、太刀魚 pc-4、浪寄 pc-5、初瀬 pc-6）：青（ブルー系）で統一
+ * ・東京本部組3名（朝潮 pc-1、貝浜 pc-2、長津 pc-7）：緑（グリーン／エメラルド系）で統一
  */
 const getEvidenceCardColorTheme = (ownerId: string, foundPhase: number) => {
-  const charMap: Record<
-    string,
-    {
-      badgeBg: string;
-      borderHex: string;
-      headerHex: string;
-      dividerHex: string;
-      frontBgHex: string;
-    }
-  > = {
-    "char-asashio": {
-      badgeBg: "#1e40af",
-      borderHex: "#1e3a8a",
-      headerHex: "#1e40af",
-      dividerHex: "#93c5fd",
-      frontBgHex: "#f8fafc",
-    },
-    "char-kaihama": {
-      badgeBg: "#3730a3",
-      borderHex: "#312e81",
-      headerHex: "#3730a3",
-      dividerHex: "#a5b4fc",
-      frontBgHex: "#f8fafc",
-    },
-    "char-sakanagi": {
-      badgeBg: "#0f766e",
-      borderHex: "#115e59",
-      headerHex: "#0f766e",
-      dividerHex: "#5eead4",
-      frontBgHex: "#f8fafc",
-    },
-    "char-tachiuo": {
-      badgeBg: "#0369a1",
-      borderHex: "#075985",
-      headerHex: "#0369a1",
-      dividerHex: "#7dd3fc",
-      frontBgHex: "#f8fafc",
-    },
-    "char-namiyose": {
-      badgeBg: "#6d28d9",
-      borderHex: "#5b21b6",
-      headerHex: "#6d28d9",
-      dividerHex: "#c4b5fd",
-      frontBgHex: "#f8fafc",
-    },
-    "char-hatsuse": {
-      badgeBg: "#b45309",
-      borderHex: "#92400e",
-      headerHex: "#b45309",
-      dividerHex: "#fcd34d",
-      frontBgHex: "#fffbeb",
-    },
+  const tokyoGreenTheme = {
+    badgeBg: "#047857",
+    borderHex: "#065f46",
+    headerHex: "#047857",
+    dividerHex: "#34d399",
+    frontBgHex: "#f0fdf4",
+    dayBg: "#ecfdf5",
+    dayBorder: "#6ee7b7",
+    dayText: "#065f46",
   };
 
-  const dayMap: Record<
-    number,
-    { dayBg: string; dayBorder: string; dayText: string }
-  > = {
-    1: { dayBg: "#eff6ff", dayBorder: "#93c5fd", dayText: "#1d4ed8" },
-    2: { dayBg: "#f0fdfa", dayBorder: "#5eead4", dayText: "#0f766e" },
-    3: { dayBg: "#f0f9ff", dayBorder: "#7dd3fc", dayText: "#0369a1" },
-    4: { dayBg: "#fffbeb", dayBorder: "#fcd34d", dayText: "#b45309" },
-    5: { dayBg: "#fff1f2", dayBorder: "#fda4af", dayText: "#be123c" },
-    6: { dayBg: "#faf5ff", dayBorder: "#d8b4fe", dayText: "#6d28d9" },
+  const ogasawaraBlueTheme = {
+    badgeBg: "#1d4ed8",
+    borderHex: "#1e40af",
+    headerHex: "#1d4ed8",
+    dividerHex: "#60a5fa",
+    frontBgHex: "#eff6ff",
+    dayBg: "#eff6ff",
+    dayBorder: "#93c5fd",
+    dayText: "#1e40af",
   };
 
-  const charTheme = charMap[ownerId] || {
-    badgeBg: "#0f766e",
-    borderHex: "#1e3a8a",
-    headerHex: "#0f766e",
-    dividerHex: "#93c5fd",
-    frontBgHex: "#f8fafc",
-  };
-  const dayTheme = dayMap[foundPhase] || dayMap[1];
+  const isTokyo =
+    ownerId === "pc-1" ||
+    ownerId === "pc-2" ||
+    ownerId === "pc-7" ||
+    ownerId === "char-asashio" ||
+    ownerId === "char-kaihama" ||
+    ownerId === "char-nagatsu";
 
-  return { ...charTheme, ...dayTheme };
+  return isTokyo ? tokyoGreenTheme : ogasawaraBlueTheme;
 };
 
 /**
@@ -211,6 +885,25 @@ const getEvidenceCardColorTheme = (ownerId: string, foundPhase: number) => {
  * ・【重要内容】をクリムゾンレッド太字＋淡いローズ背景で強調
  * ・『発言・証言引用』をディープインディゴ色（内部の【】も維持）で強調
  */
+const renderRubyAwareText = (segment: string, keyPrefix: string): React.ReactNode => {
+  if (!segment.includes("<ruby>")) return segment;
+  const parts = segment.split(/(<ruby>.*?<\/ruby>)/g);
+  return parts.map((part, idx) => {
+    const m = part.match(/^<ruby>(.*?)<rt>(.*?)<\/rt><\/ruby>$/);
+    if (m) {
+      return (
+        <ruby key={`${keyPrefix}-r-${idx}`} className="whitespace-nowrap">
+          {m[1]}
+          <rt className="text-[7.5px] leading-none tracking-tight text-slate-600 font-semibold">
+            {m[2]}
+          </rt>
+        </ruby>
+      );
+    }
+    return <React.Fragment key={`${keyPrefix}-rt-${idx}`}>{part}</React.Fragment>;
+  });
+};
+
 const renderBracketHighlights = (segment: string, keyPrefix: string): React.ReactNode => {
   const parts = segment.split(/(【[^】]+】)/g);
   return parts.map((part, i) => {
@@ -221,11 +914,11 @@ const renderBracketHighlights = (segment: string, keyPrefix: string): React.Reac
           className="font-extrabold rounded-[2px] px-0.5"
           style={{ color: "#b91c1c", backgroundColor: "#fff1f2" }}
         >
-          {part}
+          {renderRubyAwareText(part, `${keyPrefix}-b-${i}`)}
         </span>
       );
     }
-    return <React.Fragment key={`${keyPrefix}-t-${i}`}>{part}</React.Fragment>;
+    return <React.Fragment key={`${keyPrefix}-t-${i}`}>{renderRubyAwareText(part, `${keyPrefix}-t-${i}`)}</React.Fragment>;
   });
 };
 
@@ -535,12 +1228,13 @@ const PAPER_STYLES: Record<DocumentPaperStyle, { name: string; className: string
   },
 };
 
-// GM進行資料：各Dayのフェーズ別構造化データ（開始タイミング・条件 ／ 長津アナウンス囲み枠 ／ GMアナウンス・進行ガイド）
+// GM進行資料：各Dayのフェーズ別構造化データ（開始タイミング・条件 ／ GM開始描写 ／ 長津アナウンス囲み枠 ／ GMアナウンス・進行ガイド）
 interface GmStructuredPhase {
   phaseNumber: string;
   phaseTitle: string;
   startTrigger: string;
   handoutBadges?: string[];
+  gmOpeningDescription?: string;
   nagatsuAnnouncements?: {
     sourceLabel: string;
     text: string;
@@ -550,33 +1244,122 @@ interface GmStructuredPhase {
     tone?: "emerald" | "amber" | "rose" | "slate";
     speakerLabel: string;
     text: string;
+    handoutBadges?: string[];
+    subAnnouncements?: {
+      subBadge?: string;
+      speakerLabel: string;
+      text: string;
+      handoutBadges?: string[];
+    }[];
     cardActionNote?: string;
   }[];
   gmGuides?: string[];
 }
 
+export const PRE_GAME_GM_ANNOUNCEMENT_PART1 = `本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。
+
+この作品は、ライブアクションロールプレイングという種類で、TRPGに近いのですが、サイコロでの判定などはなく、五感を使ったアクションをしていただく内容となっています。今回は特に「音」を使った行動が多くなり、場合によってはご自身の耳で音を確認していただくため、皆様のスマートフォンをご利用いただくことがあります。スマートフォンはすぐに取り出せるよう、お手元にご準備をお願いいたします。
+
+またこの作品の特徴として、体験型クトゥルフとなっています。クトゥルフ神話とは、この世界のどこか、あるいは宇宙の彼方の異世界の神が、この地球を侵略しようとしているといった物語です。現在の常識とは異なる未知の世界、魔術の世界や宇宙的恐怖の世界を体験していく部分があります。クトゥルフのことを全く知らなくても楽しめますが、もしご存じであればさらに納得感が広がるものと思います。
+
+それではまずはこの作品の概要をお知らせしていきましょう。
+小笠原諸島は、東京都に所属している離島で、最も人口の多い父島をはじめとした複数の島で構成されています。独自に進化した生態系が評価され、2011年には世界遺産にも登録されました。東京都であるものの東京湾からの距離は約1000km離れています。近年では、島の西側での火山噴火により島が形成され「西之島」と名付けられています。今回の作品は、この小笠原沖で、突如電源喪失した船からの救難信号を受け、太平洋上で遭難した船の捜索にあたります。3名は東京・霞が関にある海上保安庁本部の会議室に集まった「東京本部チーム」、4名は小笠原諸島・父島にある海上保安庁支部の会議室に集まった「小笠原現地チーム」として救助にあたっていただきます。なお、東京・霞が関の本部会議室と父島支部の会議室の通信は常に繋がっている状態としますので、ゲーム中はいつでも自由に会話や情報共有を行っていただけます。
+
+早速ですが、まずはプレイヤーの皆様の自己紹介を簡単にしていただきたいと思います。
+（※プレイヤー自己紹介）`;
+
+export const PRE_GAME_GM_ANNOUNCEMENT_PART2 = `ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。
+・朝潮（あさしお）は、東京本部の司令塔、皆さんの頼れるリーダーです。最終的な決定権と責任はこの朝潮さんが受け持つことが多いです。
+・貝浜（かいはま）は、東京本部の中でも特別な立ち位置で、海上保安庁と海上自衛隊をつなぐ橋渡し役、リエゾンという位置で、防衛省側の人間です。
+・長津（ながつ）は、朝潮を信頼するオペレーターで、各所からの連絡を受け持ちます。
+・坂凪（さかなぎ）は、海上保安庁の小笠原支部の人間で、巡視船やヘリコプターなどを手配可能な海難救助隊の現場リーダーです。
+・太刀魚（たちうお）は、小笠原の父島にある気象庁小笠原観測所の職員です。気象や海流のデータを扱います。
+・浪寄（なみより）は、小笠原にある海洋科学大学小笠原研究所の准教授で、深海生物の生態やクジラなどの動物行動学を専門にしています。
+・初瀬（はつせ）は、海難救助の救護技術に優れている一方、島の旧家の家系で神社などとのつながりがあるキャラクターです。
+
+それでは、担当するキャラクターを選んでいただきたいと思います。
+（※キャラクター選択・決定）
+
+それでは、各自のキャラクターのハンドアウトを読み込んでください。何か不明な点があればGMにお尋ねください。
+（※ハンドアウト読み込み）
+
+キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。
+それでは、Let’s get down to the story!`;
+
+export const PRE_GAME_GM_ANNOUNCEMENT_TEXT = `${PRE_GAME_GM_ANNOUNCEMENT_PART1}\n\n${PRE_GAME_GM_ANNOUNCEMENT_PART2}`;
+
+const PRE_GAME_TIMELINE_STEP: IncidentStep = {
+  dayNumber: 0,
+  locationName: "東京・霞が関 本部会議室 ＆ 小笠原・父島 支部会議室",
+  distanceKm: 0,
+  situationTitle: "GMからの開始前案内・作品概要・拠点説明・キャラクター選択・ハンドアウト読み込み",
+  incidentOverview:
+    "本編（Day 1）開始前にGMから参加者へ行う導入ガイダンス。作品のルール、小笠原諸島と拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）の前提説明、プレイヤー自己紹介、キャラクター紹介・選択、およびハンドアウト読み込みを行います。",
+  hqResponse: "東京・霞が関にある海上保安庁本部の会議室（朝潮・貝浜・長津の3名）",
+  fieldResponse: "小笠原諸島・父島にある海上保安庁支部の会議室（坂凪・太刀魚・浪寄・初瀬の4名）",
+  revealedEvidenceIds: [],
+};
+
 const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
+  0: [
+    {
+      phaseNumber: "ゲーム開始前 フェーズ 1",
+      phaseTitle: "ご挨拶・作品概要・拠点説明 ＆ プレイヤー自己紹介",
+      startTrigger: "ゲーム開始前（プレイヤー全員が着席した時点）",
+      gmAnnouncements: [
+        {
+          tone: "slate",
+          speakerLabel: "🎙️ GMからのゲーム開始前アナウンス（前半：作品概要・拠点説明・プレイヤー自己紹介）",
+          text: PRE_GAME_GM_ANNOUNCEMENT_PART1,
+        },
+      ],
+      gmGuides: [
+        "まずは作品のルール・舞台設定・拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）を案内し、プレイヤー全員の簡単な自己紹介を行ってもらいます。",
+      ],
+    },
+    {
+      phaseNumber: "ゲーム開始前 フェーズ 2",
+      phaseTitle: "キャラクター紹介・担当選択 ＆ ハンドアウト読み込み",
+      startTrigger: "プレイヤー全員の自己紹介が完了した時点",
+      handoutBadges: [
+        "キャラクター決定後に配布：各PCの個人ハンドアウト（B5本紙）",
+      ],
+      gmAnnouncements: [
+        {
+          tone: "slate",
+          speakerLabel: "🎙️ GMからのゲーム開始前アナウンス（後半：キャラクター紹介・担当選択・ハンドアウト読み込み）",
+          text: PRE_GAME_GM_ANNOUNCEMENT_PART2,
+        },
+      ],
+      gmGuides: [
+        "キャラクター7名（6名時は長津不在）の紹介・担当決定 ➔ 個人ハンドアウト（B5本紙）の配布・読み込みの順に進め、全員が読み終えたら『Day 1』シートへ進みます。",
+      ],
+    },
+  ],
+
   1: [
     {
-      phaseNumber: "フェーズ 1",
+      phaseNumber: "DAY 1 フェーズ 1",
       phaseTitle: "緊急対策回線の開設 ＆ 各員の点呼・自己紹介",
       startTrigger: "ゲーム開始時（全員がキャラクターハンドアウトを読み終えた時点）",
       handoutBadges: [
         "SP-01：黒い小さな隕石のかけら（朝潮へ配布）",
-        "DAY 1 指令書 COMMAND-BRIEFING-DAY01（朝潮へ配布 ※7名時は長津経由）",
+        "DAY 1 指令書（朝潮へ配布 ※7名時は長津経由）",
       ],
+      gmOpeningDescription:
+        "「これより本編を開始します。現在、東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 1 指令書（COMMAND-BRIEFING-DAY01）』の長津ブリーフィングと同文",
-          text: "「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します」",
+          sourceLabel: "『DAY 1 指令書』の長津ブリーフィングと同文",
+          text: "「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。それでは朝潮危機管理官、よろしくお願いします」",
         },
       ],
       gmGuides: [
-        "朝潮（PC1）へ『DAY 1 指令書』を手渡し（7名プレイ時は長津が上段を読み上げてから朝潮へ手渡し）、ミッション①に従ってメンバー全員の点呼・自己紹介（氏名・所属・専門分野）を進行させます。",
+        "朝潮（PC1）へ『DAY 1 指令書』を手渡し（7名プレイ時は長津が上段を読み上げてから朝潮へ手渡し）、ミッション①に従ってメンバー全員の点呼・自己紹介（氏名・所属・専門分野）を行わせ、最後に朝潮から「それではこれより合同海難救助チームを設立する」とまとめさせます。",
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
+      phaseNumber: "DAY 1 フェーズ 2",
       phaseTitle: "漂流海図の展開 ＆ 初期証拠カードの開示・捜索海域の決定",
       startTrigger: "全員の自己紹介が完了した直後",
       handoutBadges: [
@@ -589,45 +1372,41 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       ],
     },
     {
-      phaseNumber: "フェーズ 3",
+      phaseNumber: "DAY 1 フェーズ 3",
       phaseTitle: "救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布",
-      startTrigger: "プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点（※最大2回まで地点指定可能）",
-      handoutBadges: [
-        "EV-08：船長の証言（成否に応じて配布）",
-        "EV-07：大型冷凍ボックス（成否に応じて配布）",
-      ],
+      startTrigger: "プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点",
       gmAnnouncements: [
         {
           branchBadge: "🟢 分岐1：1回目の指定で【東北東の漂流予測海域】を正解した場合（失敗0回 ➔ 証言カード2枚とも配布）",
           tone: "emerald",
           speakerLabel: "📢 GMからのアナウンス",
-          text: "「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 荒波のなか間一髪で船長とダイバーたちの全員救出に成功しました。救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」",
-          cardActionNote:
-            "👉 GMのカード配布処理：『EV-08：船長の証言』と『EV-07：大型冷凍ボックス』の【2枚とも】その場でプレイヤーへ渡します。",
+          text: "「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 船内では漂流開始直後からダイバーの1人が心停止状態に陥っており、同乗していた大人2人が交代で懸命に心臓マッサージ（胸骨圧迫）を継続していました。ただちに救護担当の初瀬が交代して救急救命活動を引き継いだことで、心停止していたダイバーも一命を取り留め、荒波のなか全員の救出・救命に成功しました！ 救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」",
+          handoutBadges: [
+            "EV-07：大型冷凍ボックス",
+            "EV-08：船長の証言",
+          ],
         },
         {
           branchBadge: "🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ再指定［リトライ］を促す）",
           tone: "amber",
           speakerLabel: "📢 GMからのアナウンス",
           text: "「指定された海域へ巡視船が急行しましたが、波浪と視界不良のなか船影を発見できません！ もう一度だけ、海流（真東2.0kt）と風圧流（北東1.5kt）、そして救難信号からの経過時間（現在20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」",
-          cardActionNote:
-            "👉 GMの進行処理：プレイヤーにもう一度だけ合議させ、2回目の捜索海域を指定させます。",
-        },
-        {
-          branchBadge: "🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）",
-          tone: "amber",
-          speakerLabel: "📢 GMからのアナウンス",
-          text: "「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります（残る1枚は明日Day 2以降の調査枠として選択可能になります）」",
-          cardActionNote:
-            "👉 GMのカード配布処理：プレイヤーが選んだ【1枚のみ】をその場で渡します（残る1枚はDay 2以降の現地調査枠へ繰り越します）。",
+          subAnnouncements: [
+            {
+              subBadge: "🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）",
+              speakerLabel: "📢 GMからのアナウンス",
+              text: "「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・接舷しました！ 船内では漂流開始からダイバーの1人が心停止状態となっており、大人2人が交代で心臓マッサージを継続していましたが、初瀬が交代して救急救命活動を行ったことで無事に一命を取り留め、全員の救出・救命に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります」",
+              handoutBadges: [
+                "EV-07：大型冷凍ボックス または EV-08：船長の証言",
+              ],
+            },
+          ],
         },
         {
           branchBadge: "🔴 分岐3：2回目の再指定も外れた場合（失敗2回 ➔ 自動救助成功・Day 1での証言カード配布は0枚）",
           tone: "rose",
           speakerLabel: "📢 GMからのアナウンス",
-          text: "「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」",
-          cardActionNote:
-            "👉 GMのカード配布処理：Day 1ではカードを渡さず、【2枚とも】Day 2以降の現地調査枠へ繰り越します。",
+          text: "「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急接舷しました！ 船内では漂流開始からダイバーの1人が心停止状態となり大人2人が交代で心臓マッサージを継続していましたが、初瀬が交代して救急救命活動を行ったことで辛うじて一命を取り留め、全員の救出・救命に成功しました！ しかし救命処置と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」",
         },
       ],
     },
@@ -635,38 +1414,39 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
   2: [
     {
-      phaseNumber: "フェーズ 1",
+      phaseNumber: "DAY 2 フェーズ 1",
       phaseTitle: "西之島沖の突発海底噴火 ＆ 即応体制維持の通達",
       startTrigger: "Day 1の救助・証言カード確認が終わり、Day 2へ移行した時点",
       handoutBadges: [
-        "SP-02：朝倉教授の最期（坂凪へ配布）",
-        "SP-03：SOFAR層の特異性（太刀魚へ配布）",
-        "DAY 2 指令書 COMMAND-BRIEFING-DAY02（朝潮へ配布 ※7名時は長津経由）",
+        "SP-02：海野教授の最期（坂凪へ配布）",
+        "DAY 2 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 2 西之島沖噴火・微動監視海図",
       ],
+      gmOpeningDescription:
+        "「Day 2を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策にあたっています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 2 指令書（COMMAND-BRIEFING-DAY02）』の長津ブリーフィングと同文",
+          sourceLabel: "『DAY 2 指令書』の長津ブリーフィングと同文",
           text: "「気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」",
         },
       ],
       gmGuides: [
-        "坂凪（PC3）へ『SP-02』、太刀魚（PC4）へ『SP-03』を配布し、朝潮（PC1）へ『DAY 2 指令書』を手渡します。",
+        "坂凪（PC3）へ『SP-02』を配布し、朝潮（PC1）へ『DAY 2 指令書』を手渡します。",
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
-      phaseTitle: "優先調査項目の選択（東京1枠・小笠原2枠） ＆ 調査結果の共有",
+      phaseNumber: "DAY 2 フェーズ 2",
+      phaseTitle: "優先調査項目の選択（東京2枠・小笠原2枠） ＆ 調査結果の共有",
       startTrigger: "長津のブリーフィング終了後、朝潮（PC1）が調査項目の選定（ミッション①）を開始した時点",
       handoutBadges: [
-        "東京本部の調査カード（3択から1枚配布）",
+        "東京本部の調査カード（3択から2枚配布）",
         "小笠原現地の調査カード（4択［＋Day 1未取得証言カード］から2枚配布）",
       ],
       gmAnnouncements: [
         {
           tone: "slate",
           speakerLabel: "📢 GMからのアナウンス（調査枠の案内）",
-          text: "「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」",
+          text: "「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」",
           cardActionNote:
             "👉 GMのカード配布処理：プレイヤーが合議して選んだ調査項目の証拠カードを配布し、全員で共有・議論させます。",
         },
@@ -676,81 +1456,66 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
   3: [
     {
-      phaseNumber: "フェーズ 1",
+      phaseNumber: "DAY 3 フェーズ 1",
       phaseTitle: "鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始",
       startTrigger: "Day 2の調査共有が完了し、Day 3へ移行した時点",
       handoutBadges: [
         "SP-04：文民統制の仕組み（貝浜へ配布）",
-        "DAY 3 指令書 COMMAND-BRIEFING-DAY03（朝潮へ配布 ※7名時は長津経由）",
+        "DAY 3 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：鳥島沖ソノブイ作戦海図（W-3100）",
       ],
+      gmOpeningDescription:
+        "「Day 3を迎えました。本日（Day 3）のみ、小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）は父島の会議室を出て大型捜索ヘリコプターに乗り込み、途中の海域に展開する大型巡視船『あきつしま』で洋上給油を受けながら鳥島沖の現場上空へと向かいます。東京本部チームの3名（朝潮・貝浜・長津）は東京・霞が関の会議室におり、ヘリコプター内の4名と無線通信で常時繋がっています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 3 指令書（COMMAND-BRIEFING-DAY03）』の長津ブリーフィングと同文",
+          sourceLabel: "『DAY 3 指令書』の長津ブリーフィングと同文",
           text: `「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
 　これより小笠原基地から小笠原現地メンバーを乗せた大型捜索ヘリコプターが現場へ向かいますが、ヘリコプターでは鳥島沖まで航続距離に問題があるため、途中の海域に展開している大型巡視船『あきつしま』で洋上給油を受けて鳥島沖に展開してください。
 　現場海域ではアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定し、浮上してくることがあれば写真撮影を試みてください。また、午後にはヘリコプターは帰投できますので、索敵と並行して本日の優先調査も進めてください」`,
         },
       ],
       gmGuides: [
-        "朝潮（PC1）の指揮（ミッション①）で作戦海図（W-3100）上にソノブイ3基の投下ポイントを決定させ、巨大生物の現在位置（セクターB-3）を特定させます。",
-        "あわせてDay 3の優先調査枠（東京1枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。",
+        "朝潮（PC1）の指揮（ミッション①）で作戦海図（W-3100）上にソノブイ3基の投下ポイントを決定させ、巨大生物の現在位置を特定させます。",
+        "🎯【GM用正解位置 ＆ 熱水域（音響障害域）早見表】：正解位置＝【B-3】 ／ 熱水域＝【D-2（西鳥島海山）・C-5（須美寿東）】（および噴火カルデラ【E-5】）",
+        "📡【ソノブイ1基ごとのGM返答ルール】：①【B-3（直上）】に投下➔「直下に巨大生物の強い音響反射を捕捉！（B-3確定）」 ／ ②【B-3の周囲1マス（A-2〜A-4, B-2, B-4, C-2〜C-4）】に投下➔「直下には不在だが、周囲1マス圏内（約20km先）から巨大生物の反響あり！」 ／ ③【熱水域（D-2・C-5）または噴火口（E-5）の直上】に投下➔「激しい熱水・噴火ノイズにより音波が散乱し、探知不能！」 ／ ④【熱水域・噴火口の周囲1マス】に投下➔「直下には不在！ ただし隣接する熱水・噴火ノイズが干渉し、周囲1マス圏内の反響は探知不能！」 ／ ⑤【上記以外】➔「直下にも周囲1マス圏内にも反応なし」",
+        "あわせてDay 3の優先調査枠（東京2枠・小笠原現地2枠 ※前日未選択分を含む）も選択させ、該当する証拠カードを配布します（ミッション②）。※もしソノブイ索敵でB-3の特定に失敗した場合は、不鮮明な遠方写真を解析するため、小笠原現地の調査枠（2枠）のうち1枠を自動的に『F-3D：撮影した画像の分析（EV-22）』へ充当します（残り1枠を他から選択）。",
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
-      phaseTitle: "目標捕捉 ＆ 北上速度・明日（Day 4）の到達位置予測",
-      startTrigger: "ソノブイ索敵によって鳥島沖の巨大生物の現在位置（セクターB-3）を特定した直後",
+      phaseNumber: "DAY 3 フェーズ 2",
+      phaseTitle: "目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問",
+      startTrigger: "ソノブイ索敵によって鳥島沖の巨大生物の現在位置（セクターB-3）を特定（または失敗時に広域残響から位置を捕捉）した直後",
       handoutBadges: [
-        "長津カード NG-02（長津へ配布）",
-        "DAY 3 途中① 指令書 COMMAND-BRIEFING-DAY03-MID1（朝潮へ配布）",
-        "太刀魚へ配布：西之島〜鳥島沖 距離観測データ",
-        "貝浜へ配布：鳥島沖 ソノブイ探知記録（17:00捕捉）",
-        "浪寄へ配布：遭難船救助・目撃時刻調書（Day 1 09:00）",
+        "長津カード NG-02・NG-03",
+        "DAY 3 途中① 指令書（朝潮へ配布）",
+        "全体提示（索敵成功時）：洋上ソナー索敵撮影写真（近接浮上・索敵成功時）",
+        "全体提示（索敵失敗時）：洋上ソナー索敵撮影写真（遠距離・索敵失敗時）＋ 浪寄へ『EV-22：撮影した画像の分析』を自動公開（現地調査1枠を消費）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 3 途中① 指令書』および『長津カード NG-02（Day 3 途中①）』と同文",
-          text: "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」",
+          sourceLabel: "『DAY 3 途中① 指令書』および『長津カード NG-02・NG-03』と同文",
+          text: "「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！\n　続けて洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
         },
       ],
       gmGuides: [
-        "太刀魚・貝浜・浪寄の3名へ距離・時刻データを配布し、経過56時間・距離約350kmから移動スピード（時速約6.25km＝日速約150km）と明日（Day 4）の北上予測地点（明神礁周辺）を算出・報告させます。",
-        "※もし計算や予測地点をミスしても機械的なペナルティはありません（翌Day 4冒頭の明神礁噴火の事実によって自然に軌道修正されます）。",
-      ],
-    },
-    {
-      phaseNumber: "フェーズ 3",
-      phaseTitle: "深海写真の受信 ＆ 専門家2名（浪寄・貝浜）への緊急諮問",
-      startTrigger: "プレイヤーが移動スピードとDay 4の北上予測地点を算出し終えた直後",
-      handoutBadges: [
-        "長津カード NG-03（長津へ配布）",
-        "DAY 3 途中② 指令書 COMMAND-BRIEFING-DAY03-MID2（朝潮へ配布）",
-        "全体提示：深海撮影写真（無数の触手と巨大質量）",
-        "浪寄へ配布：深海生物の群体（コロニー）写真解析",
-      ],
-      nagatsuAnnouncements: [
-        {
-          sourceLabel: "『DAY 3 途中② 指令書』および『長津カード NG-03（Day 3 途中②）』と同文",
-          text: "「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策本部へ緊急の諮問が下されております。\n① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大質量について、生物学的な所見を提示してください。\n② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」",
-        },
-      ],
-      gmGuides: [
-        "浪寄（PC5）から「単一生物ではなく多数のダイオウイカが結合した超巨大群体（コロニー）である」という生物学的所見を共有させます。",
+        "長津のアナウンスにより、巨大生物が【時速約6km・日速約150km】で北上しており、明日（Day 4）には【明神礁周辺】へ到達する見込みであることを全体へ共有します。",
+        "【ソノブイ索敵成功時】成功時の撮影写真（近接浮上）のみを提示します（『EV-22：撮影した画像の分析』は小笠原現地調査でF-3Dを選択した場合にのみ開示されます）。",
+        "【ソノブイ索敵失敗時】成功時の写真は提示せず、失敗時の撮影写真（遠距離・航跡波）のみを提示します。あわせて小笠原現地の調査枠（2枠）のうち1枠を自動充当して『EV-22：撮影した画像の分析』を公開（浪寄へ配布）し、失敗時の画像を分析した結果（超高感度強調処理）として20本以上の触手と超群体（コロニー）構造が判明した形で進行します。",
+        "浪寄（PC5）から、撮影写真および分析結果に基づく生物学的所見を共有させます。",
         "貝浜（PC2）から『SP-04：文民統制の仕組み』に基づき、海上警備行動（警察比例の原則）と防衛出動（武力攻撃事態）の法的な違いと課題を共有させます。",
       ],
     },
     {
-      phaseNumber: "フェーズ 4",
+      phaseNumber: "DAY 3 フェーズ 3",
       phaseTitle: "公式呼称（コードネーム）決定 ＆ 指揮官の最終決断",
       startTrigger: "専門家2名の所見共有およびDay 3の優先調査カードの共有が完了した時点（Day 3終盤）",
       handoutBadges: [
-        "長津カード NG-04（長津へ配布）",
-        "DAY 3 途中③ 指令書 COMMAND-BRIEFING-DAY03-MID3（朝潮へ配布）",
+        "長津カード NG-04",
+        "DAY 3 途中② 指令書（朝潮へ配布）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 3 途中③ 指令書』および『長津カード NG-04（Day 3 達成時）』と同文",
+          sourceLabel: "『DAY 3 途中② 指令書』および『長津カード NG-04（Day 3 達成時）』と同文",
           text: "「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」",
         },
       ],
@@ -762,35 +1527,38 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
   4: [
     {
-      phaseNumber: "フェーズ 1",
-      phaseTitle: "明神礁の海底噴火 ＆ 即応総力体制（全未調査資料の一括開示）",
+      phaseNumber: "DAY 4 フェーズ 1",
+      phaseTitle: "明神礁の海底噴火 ＆ 即応総力体制（未選択カード＋Day 4調査カードの自由閲覧解禁）",
       startTrigger: "Day 3の最終決断が完了し、Day 4へ移行した時点",
       handoutBadges: [
+        "SP-03：SOFAR層の特異性（太刀魚へ配布）",
         "SP-05：神社の祝詞の複製（初瀬へ配布）",
-        "DAY 4 指令書 COMMAND-BRIEFING-DAY04（朝潮へ配布 ※7名時は長津経由）",
+        "DAY 4 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 4 明神礁噴火・八丈島微動監視海図",
-        "一括全開示：Day 1〜Day 4の未取得だった全証拠カードをすべて配布",
+        "自由閲覧解禁：テーブル上のこれまで選択していなかった証拠カード＋Day 4調査カード",
       ],
+      gmOpeningDescription:
+        "「Day 4を迎えました。昨日ヘリコプターで鳥島沖へ出動していた小笠原現地チームの4名も父島へ帰投しており、本日（Day 4）以降は再び、小笠原・父島にある海上保安庁支部の会議室（4名）と、東京・霞が関にある海上保安庁本部の会議室（3名）にそれぞれ集まり、両会議室を通信回線で繋いで対策会議を行っています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 4 指令書（COMMAND-BRIEFING-DAY04）』の長津ブリーフィングと同文",
+          sourceLabel: "『DAY 4 指令書』の長津ブリーフィングと同文",
           text: "「未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が火山性微動を断続的に探知しています。防衛省の水中聴音網（パッシブソナー網）による巨大生物の位置と火山性微動の発生源は完全に一致しており、巨大生物は【日速約150km】で正確に北上を続けています。政府および防衛省より『この巨大生物は一体どこへ向かい、何を引き起こす見立てなのか、合同対策本部の専門的予測を至急提出してほしい』との緊急照会が入っています。なお事態の緊迫化を受け、本日より当合同対策本部は調査枠制限を撤廃する【即応総力体制】へ移行します！」",
         },
       ],
       gmAnnouncements: [
         {
           tone: "slate",
-          speakerLabel: "📢 GMからの補足案内（前日の防衛出動要請に対する政府回答 ＆ 全資料の一括配布）",
-          text: "「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る。ただし内閣を再説得するためにも、この生物がどこへ向かい何を引き起こす見立てなのか対策本部の専門的予測を至急提出してほしい』との連絡が入っています。これより即応総力体制として、これまで未取得だった調査資料とDay 4の調査資料をすべて一括でお渡しします！」",
+          speakerLabel: "📢 GMからの補足案内（前日の防衛出動要請に対する政府回答 ＆ テーブル上のカード自由閲覧の案内）",
+          text: "「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る』との回答が入っています。また、即応総力体制への移行に伴い、テーブルの上に出ているこれまで選択していなかった調査カードおよびDay 4の調査カードは、すべて自由に閲覧可能となります！」",
           cardActionNote:
-            "👉 GMのカード配布処理：初瀬（PC6）へ『SP-05：神社の祝詞の複製』を渡し、Day 1〜Day 4で未取得だったすべての証拠カードを一括でプレイヤーへ配布します。",
+            "👉 GMのカード進行処理：太刀魚（PC4）へ『SP-03：SOFAR層の特異性』、初瀬（PC6）へ『SP-05：神社の祝詞の複製』を渡し、テーブルの上に出しているこれまで選択していなかった証拠カード（Day 1〜Day 3の未選択分）とDay 4の調査カードをすべて自由に閲覧してよいと案内します。",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
+      phaseNumber: "DAY 4 フェーズ 2",
       phaseTitle: "北上原因の分析 ＆ 最終到達予測地点（「富士山」vs「東京湾」）の結論報告",
-      startTrigger: "一括開示された全証拠カードの精査が進み、朝潮（PC1）が上層部への進路予測報告（ミッション②・③）をまとめた時点",
+      startTrigger: "一括開示された全証拠カードの精査が進み、朝潮（PC1）が上層部への進路予測報告（ミッション②）をまとめた時点",
       gmGuides: [
         "巨大生物が北上する理由（①地磁気 ＋ ②小笠原・八丈島・三宅島の神社から盗まれ海へ順番に落とされた隕石の特殊物質、および約30kgの冷凍ボックスの配送先が『静岡県・富士山麓』であること）を整理させます。",
         "合同対策本部として、巨大生物の最終到達予測地点が【富士山（駿河湾）】か【東京湾】かを結論づけさせます。",
@@ -800,21 +1568,21 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
           branchBadge: "🟢 結論分岐A：【富士山（駿河湾）】と結論づけた場合（正解ルート）",
           tone: "emerald",
           speakerLabel: "📋 GM進行記録（富士山ルート）",
-          text: "対策本部の正確な予測を受け、海上自衛隊が三宅島〜御蔵島沖の最適迎撃ラインへ遅滞なく展開します。",
+          text: "Day 6の岸部運用企画局長との電話交渉が通常の第一声で進行します。",
         },
         {
-          branchBadge: "🟡 結論分岐B：【東京湾】と結論づけた場合（部隊展開遅れ ＆ Day 6岸部局長の嫌味分岐）",
+          branchBadge: "🟡 結論分岐B：【東京湾】と結論づけた場合（Day 6岸部局長の嫌味分岐）",
           tone: "amber",
           speakerLabel: "📋 GM進行記録（東京湾ルート）",
-          text: "機械的なペナルティはありませんが、海自の主力部隊が東京湾側へ展開してしまうため転進が遅れ、翌Day 5では【より駿河湾に近い位置】での攻撃となります。さらに【Day 6の岸部運用企画局長との電話交渉で嫌味を言われる】ことになります（GMは東京湾と答えたことを控えておいてください）。",
+          text: "Day 4・Day 5の進行も共通ですが、【Day 6の岸部運用企画局長との電話交渉で嫌味を言われる】ことになります（GMは東京湾と答えたことを控えておいてください）。",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 3",
+      phaseNumber: "DAY 4 フェーズ 3",
       phaseTitle: "防衛省「害獣駆除」方針による海上自衛隊の動員通達",
       startTrigger: "対策本部が最終到達予測地点（富士山または東京湾）を報告した直後（Day 4終盤）",
-      handoutBadges: ["長津カード NG-05（長津へ配布）"],
+      handoutBadges: ["長津カード NG-05"],
       nagatsuAnnouncements: [
         {
           sourceLabel: "『長津カード NG-05（Day 4 達成時）』と同文",
@@ -826,96 +1594,192 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
   5: [
     {
-      phaseNumber: "フェーズ 1",
-      phaseTitle: "御蔵島沖の海底噴火・富士山地下微動（残り48時間） ＆ 独自調査",
+      phaseNumber: "DAY 5 フェーズ 1",
+      phaseTitle: "御蔵島沖の海底噴火・残り48時間 ＆ 海上自衛隊の魚雷攻撃失敗（深海での復活）・防衛省からの緊急照会",
       startTrigger: "Day 4が終了し、Day 5へ移行した時点",
       handoutBadges: [
-        "SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間（浪寄へ配布）",
-        "DAY 5 指令書 COMMAND-BRIEFING-DAY05（朝潮へ配布 ※7名時は長津経由）",
+        "長津カード NG-06（Day 5 開始時：魚雷命中後のソナー観測報告）",
+        "DAY 5 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 5 御蔵島沖噴火・富士山微動監視海図",
-        "Day 5 調査資料（朝倉教授の構文規則ノート EV-30 等）を配布",
       ],
+      gmOpeningDescription:
+        "「Day 5を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 5 指令書（COMMAND-BRIEFING-DAY05）』の長津ブリーフィングと同文",
-          text: "「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」",
+          sourceLabel: "『DAY 5 指令書』および『長津カード NG-06（Day 5 開始時）』と同文",
+          text: "「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表しました。防衛省および火山噴火予知連絡会より『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』との報告が入っています。\n　続けて暗号ホットラインに着信！ 貝浜リエゾンへ、防衛省作戦本部より直通無線が接続されました！『海上自衛隊が発射した魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。一時的に特有の振動と火山性の周期的な微動は収まったものの、アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ北上し、富士山を目指すのか？！』とのことです！」",
         },
       ],
       gmGuides: [
-        "Day 5の調査資料（朝倉教授のクジラ言語・『了解した』以外はすべて2語成語のペアで会話する構文規則など）を精査させます。",
+        "まずは防衛省作戦本部からの緊急照会に対し、「①単一の生物ではなく多数のダイオウイカの超群体（コロニー）であるため、魚雷で一部を砕いても深海で再結合して元の大きさに戻ってしまうこと（浪寄）」「②富士山麓の民家へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること（朝潮）」を整理・回答させます。",
+        "通常兵器（魚雷）では撃滅できず、天敵である【マッコウクジラ】を【神社の盟約の祝詞】と【海野教授のクジラ言語研究】によって呼び寄せるしかないという共通認識が固まり次第、フェーズ2（東京×小笠原の分断・同時進行マップ捜索ミッション）へ進みます。",
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
-      phaseTitle: "魚雷命中後のソナー観測報告 ＆ 防衛省作戦本部からの緊急照会",
-      startTrigger: "Day 5調査資料の精査が一通り進んだ時点（Day 5後半）",
+      phaseNumber: "DAY 5 フェーズ 2",
+      phaseTitle: "東京本部 × 小笠原現地 分断・同時進行マップ捜索ミッション（各人2〜3アクション・計21アクション目安）",
+      startTrigger: "魚雷攻撃の限界とマッコウクジラ召喚の必要性を確認した直後",
       handoutBadges: [
-        "長津カード NG-06（長津へ配布）",
-        "DAY 5 途中① 指令書 COMMAND-BRIEFING-DAY05-MID1（朝潮へ配布）",
+        "DAY 5 途中① 指令書（朝潮へ配布）",
+        "全体提示（東京本部）：東京都内 広域捜索マップ（全8拠点）",
+        "全体提示（小笠原現地）：小笠原諸島・父島 現地調査マップ（A2判・全8拠点）",
+        "東京班クリア報酬：EV-26（祝詞のクリック音構成）＋ 吉備津の直通連絡先（Day 7で使用）",
+        "小笠原班クリア報酬：① EV-27（構文規則の草稿）＋ ② 解析システムパスワード書類（whale-study）＋ ③ 実録音響4つ（EV-28〜31）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 5 途中① 指令書』および『長津カード NG-06（Day 5 達成時）』と同文",
-          text: "「――暗号ホットラインに着信！ 貝浜リエゾンへ、防衛省作戦本部より直通無線が接続されました！『魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。しかし、目標が発している特有の振動が起きておらず、それにあわせて火山性の周期的な微動が収まっていることを確認できている。アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？！』とのことです！」",
+          sourceLabel: "『DAY 5 途中① 指令書』の長津アナウンスと同文",
+          text: "「――魚雷では超群体を撃滅できないことがはっきりしました。我々に残された唯一の手段は、ダイオウイカの天敵である【マッコウクジラ】を、神社の【盟約の祝詞】と海野教授の【クジラ言語研究】によって呼び寄せることです！\n　これより東京本部チーム（3名）と小笠原現地チーム（4名）は二手に分かれ、時間を使って各拠点を回る【現地捜索ミッション】を開始してください！\n・【東京本部チーム】は、祝詞のクリック音を知る元神主の子ども【吉備津（きびつ）】を東京都内8拠点のマップから捜索してください。最初の手がかりは名前と『① 本人住所（江東区）』（※電話番号は不明）です。\n・【小笠原現地チーム】は、海野教授が島の飲み仲間たちにバックアップを分けて預けていた【3つの研究内容（①草稿・②解析システムのパスワード書類・③実録音響データ4つ）】を父島8拠点のA2マップからすべて回収してください。3つすべてが見つからない限り作戦は進行できません！」",
         },
       ],
-      gmGuides: [
-        "※Day 4で『東京湾』と結論づけていた場合は、「対策本部が東京湾と報告したため海自部隊の展開が遅れ、より駿河湾に近い位置での攻撃となった」旨を補足します。",
-        "対策本部として「①多数のダイオウイカの超群体（コロニー）であるため魚雷で一部を砕いても深海で再結合して元の大きさに戻ってしまうこと（さらに火山帯での魚雷飽和攻撃は富士山噴火を誘発する危険があること）」「②富士山麓の民家へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること」を整理・回答させてDay 5を終了します。",
+      gmAnnouncements: [
+        {
+          branchBadge: "🗼 【東京本部チーム用】東京都内 広域捜索マップ（全8拠点）GM読み上げテキスト一覧",
+          tone: "emerald",
+          speakerLabel: "📋 プレイヤーが指定した東京拠点の情報をGMが読み上げます（スタート：名前と『①本人住所（江東区）』が判明・電話番号は不明）",
+          text: `【① 本人住所（江東区）】（※初期手がかりの住所）
+「江東区のマンションを訪ねましたが、吉備津本人は不在です。ここで帰りを待てば会えるかもしれませんが、危機到達まで残り48時間という状況で待っている時間は惜しいでしょう。近所の住民に話を聞いたところ、吉備津の【詳しい容貌（背格好・眼鏡・服装の特徴）】を教えてもらえました！ さらに、彼の勤め先が千代田区にある【② 海洋研究開発機構（JAMSTEC東京事務所）】であることも判明しました」
+（※GMメモ：①本人住所を訪れて「吉備津の容貌」が判明した後は、途中の拠点を飛ばしていきなり『⑧ 竹芝桟橋ターミナル』へ行った場合でも、容貌からすぐ吉備津本人を発見してクリアとなります！）
+
+【② 海洋研究開発機構（千代田区）】
+「千代田区のオフィスを訪ねました。同僚によると、吉備津はこの数日、伊豆・小笠原諸島の連続海底噴火のニュースをひどく気にしており、今日は急遽休みをとっているとのことです。『家に伝わる小笠原の古い祝詞を確認しなければならないと言って、外神田にある【③ 吉備津神社】へ向かったはずだ』という証言が得られました」
+
+【③ 吉備津神社（外神田・神田明神の場所）】
+「外神田の吉備津神社を訪ねました。神職によると、確かに吉備津本人が小笠原の祝詞の古文書を確認しに駆け込んできたとのことです。しかし『その祝詞に関する古い書類一式は、すでに永田町の【④ 国立国会図書館】に預けてある』と伝えたところ、吉備津はすぐさま国立国会図書館へ向かったことが判明しました」
+
+【④ 国立国会図書館（永田町）】
+「永田町の国立国会図書館・古典籍資料室を訪ねました。受付記録によると、吉備津は預けられていた小笠原の祝詞の古文書を閲覧し、その内容を見て顔色を変え、『クジラ言語を研究している海野教授に今すぐ連絡を取らなければ！』と言い残して、品川の【⑦ 海洋科学大学】へ急行したことが分かりました」
+
+【⑤ 科学技術館（北の丸公園）】
+「北の丸公園の科学技術館を調査しました。吉備津本人の足取りはありませんでしたが、通信・福祉技術の特別展示にて重要な知見が得られました。『耳の聞こえない（ろう者の）両親を持ち、手話と音声言語の通訳を行わなければならない聴者の子どものことを【コーダ（CODA：Children of Deaf Adults）】と呼ぶこと。そして現在はAI技術が手話をリアルタイムで音声に変え、スマートフォンさえあれば通訳がいなくとも音声交流できる技術が開発されていること』が紹介されています」
+
+【⑥ 国立科学博物館（上野）】
+「上野の国立科学博物館を調査しました。吉備津本人の足取りはありませんでしたが、海洋生物の特別展示にて、『小笠原諸島におけるマッコウクジラ研究』が詳しく紹介されており、マッコウクジラたちがクリック音の組み合わせによる【コーダ（Coda）】と呼ばれる高度な言語体系を持っていることが分かりました」
+
+【⑦ 海洋科学大学（品川）】［★小笠原の推理を解く鍵］
+「品川の海洋科学大学キャンパスを訪ねました。鯨類研究棟の元同僚によると、先ほど吉備津が海野教授を訪ねて駆け込んできたものの、『海野教授はもう数年前に小笠原の海で亡くなられた』と知らされて激しいショックを受け、小笠原行きの定期船が出る浜松町の【⑧ 竹芝桟橋ターミナル】へ向かったとのことです。
+　さらに元同僚から、海野教授が残した【保管・3つの鉄則】のメモが見つかりました。教授は研究が完成すると弟子の浪寄や周囲に危険が及ぶのを恐れ、島の飲み仲間にバックアップを分けて預ける際、次の3つの基準で預け先を選んでいたとのことです――
+　① 草稿：酒に酔ってうっかり口を滑らせる人間には絶対に預けない（お酒を飲まない下戸に託す）。
+　② 解析システムのパスワード書類：パソコンが得意な人間に預けると中身を開いて研究を完成させてしまうため、あえてパソコンに触れないアナログ派（紙派）に意味を教えずに預ける。
+　③ 実録音響データの磁気テープ：父島の高温多湿ですぐ劣化するため、低温保管庫を使えて、なおかつ録音機材の手入れができる人間に預ける。」
+
+【⑧ 竹芝桟橋ターミナル（浜松町）】
+・［①本人住所で容貌が判明している状態で訪問した場合］：
+「竹芝桟橋ターミナルのデッキへ駆けつけると、近所の人から聞いていた容貌の特徴と一致する人物――【吉備津】が、小笠原へと続く南の海をひとり静かに見つめているのを発見しました！
+　事情を説明すると、吉備津は国立国会図書館で確認した『小笠原の祝詞のクリック音構成』の記録をあなたたちに託してくれます。さらに、今後もすぐに連絡が取れるよう【吉備津の直通連絡先（電話番号）】を教えてくれました！」
+（※ショートカット時の補足：⑦海洋科学大学を通らずに直接⑧へ来ていた場合は、吉備津から「先ほど品川の海洋科学大学へ行ったとき、海野教授の元同僚から『小笠原の飲み仲間に研究を分けた際の保管・3つの鉄則』を聞きましたよ」として、⑦と同じ3つの鉄則をそのまま伝えてもらいます）
+（※✅ 東京本部ミッション達成！『EV-26：祝詞のクリック音構成』および『吉備津の連絡先』を獲得！）
+・［万が一、①本人住所へ行かずに容貌不明のまま訪問した場合］：
+「多くの乗船客や見物人が行き交っており、吉備津の容貌も電話番号も分からないため誰が本人か判別できません。まずは『① 本人住所（江東区）』で手がかりを掴む必要があります」`,
+        },
+        {
+          branchBadge: "🏝️ 【小笠原現地チーム用】父島 現地調査マップ（A2判・全8拠点）GM読み上げテキスト一覧",
+          tone: "amber",
+          speakerLabel: "📋 プレイヤーが指定した父島拠点の情報をGMが読み上げます（目標：飲み仲間6人から担当者3名を推理し、3つの資料を回収）",
+          text: `※【推理ルール】：父島8拠点で出会う島民は全員が海野教授を知っています。数年前に亡くなった海野教授は、研究が完成すると浪寄や周囲に迷惑がかかると考え、当時よく飲み歩いていた島の仲間6人（神代・磯辺・潮見・柏木・湊・網野）のうち3人にバックアップを分けて預けていました。小笠原の各拠点で集めた証言と、東京⑦（品川の海洋科学大学）で判明する『保管・3つの鉄則』を照合して3施設の担当者（④神社＝神代、⑤観測所＝潮見、⑥水産センター＝湊）を推理・特定し回収します（※先に④⑤⑥へ訪れていた場合、推理後の名前連絡・再訪問はアクション消費なし）。
+
+【① 海洋科学大学 小笠原研究所】（研究所の事務員）
+「海野教授は『研究が完成すると浪寄さんにも迷惑がかかる』と気にして、よく飲み歩いていた島の仲間6人（神代・磯辺・潮見・柏木・湊・網野）のうち3人にバックアップを分けて預けていました。選び方の基準は東京・品川の大学にメモを残しているそうですよ」
+
+【② パパズドルフィン（観光漁船兼宿泊所・二見港付近）】（船長兼宿の主人）
+「海野先生はよく6人の飲み仲間とうちの座敷で飲んでいたよ。6人の中でお酒を飲めない下戸は『神代』と『湊』だけで、『磯辺』は酔うと何でも喋ってしまう酒豪だったな。神代と磯辺はよく小笠原神社に出入りしていたよ」
+
+【③ ウェザーステーション展望台】（ベテランガイド）
+「海野先生とはよくここでクジラを眺めたよ。飲み仲間6人の中でPCや録音機材が得意なのは『柏木』と『湊』だけで、『潮見』はパソコンに触れない筋金入りの紙派だったな。潮見と柏木はよく気象庁の小笠原観測所に出入りしていたよ」
+
+【④ 小笠原神社】（社務所の神職）［★正解担当者：神代］
+・［名前特定前］：
+「海野先生のクジラ構文規則の草稿ですか？ 数年前、先生と飲み歩いていた神社関係者のどなたかが社務所の奥に保管していた記憶があります。当時出入りしていた方も多いので、どなたの名義か（名前）が分かればすぐにお出しできますよ」
+・［【神代（かみしろ）】と特定して伝えた後］：
+「確かに口が堅い神代さんの保管箱ですね。どうぞ！」
+（✅ ① クジラ構文規則の草稿［EV-27］を入手！）
+
+【⑤ 気象庁 小笠原観測所】（観測所の所長）［★正解担当者：潮見］
+・［名前特定前］：
+「海野教授の解析システムのパスワード書類ですね？ 数年前に飲み仲間の誰かが『もしもの時の封筒』を所内の書庫に預けていた話があります。当時のファイルが膨大ですので、どの担当者のファイルか（名前）が分かればすぐ引き出せますよ」
+・［【潮見（しおみ）】と特定して伝えた後］：
+「紙派の潮見さんのファイルですね。どうぞ！」
+（✅ ② マッコウクジラ音響言語解析システムへのアクセス権［QRコード／パスワード：whale-study］を入手！）
+
+【⑥ 小笠原水産センター】（センターの担当者）［★正解担当者：湊］
+・［名前特定前］：
+「海野先生の磁気テープ（実録音響データ）ですね？ うちの低温保管庫の奥に、数年前に飲み仲間のどなたかが預けた私物ケースが残っているはずです。名義ごとに管理していますので、どなたの名義か（名前）を教えていただければすぐお出しできますよ」
+・［【湊（みなと）】と特定して伝えた後］：
+「元研究員の湊さんのケースですね。どうぞ！」
+（✅ ③ 海野教授の実録音響データ4つ［EV-28〜EV-31］を入手！）
+
+【⑦ 小笠原海洋センター】（鯨類保全スタッフ）
+「海野先生は『白いマッコウクジラは100頭に1頭の極めて知能の高いリーダー個体』だと仰っていましたよ。飲み仲間の『柏木』はPCが得意すぎて勝手にデータを解析しようとして怒られていましたし、『神代』はとても口が堅い方でした」
+
+【⑧ 二見港（船客待合所）】（港湾案内所の職員）
+「飲み仲間の『湊』と『網野』はよく小笠原水産センターに出入りしていたな。漁師の網野は『機械やテープはさっぱりだ』と笑っていたけど、湊は録音機材の湿気対策に詳しかったよ。先生は品川の大学に預け先の基準をメモしてあると言っていたな」
+
+【GM用・推理早見メモ】
+・④小笠原神社（①草稿）：候補［神代 vs 磯辺］＋ 鉄則①［酔って喋らない下戸］ ➔ 神代（かみしろ）
+・⑤気象庁観測所（②PW書類）：候補［潮見 vs 柏木］＋ 鉄則②［完成させないためPCに触れない紙派］ ➔ 潮見（しおみ）
+・⑥小笠原水産センター（③実録音響4つ）：候補［湊 vs 網野］＋ 鉄則③［低温庫＋録音機材が得意］ ➔ 湊（みなと）`,
+          cardActionNote:
+            "👉 GM進行処理：東京班が『⑧ 竹芝桟橋ターミナル』で吉備津を発見して【EV-26＋吉備津の連絡先】を入手し、小笠原班が飲み仲間6人から担当者3名（神代・潮見・湊）を推理・特定して【①草稿（EV-27）・②解析システムアクセス（whale-study）・③実録音響4つ（EV-28〜31）】の3つすべてを回収したらDay 5達成となります（※Day 6に入る前に10分程度の休憩を入れることを推奨します）。",
+        },
       ],
     },
   ],
 
   6: [
     {
-      phaseNumber: "フェーズ 1",
-      phaseTitle: "朝8時ブリーフィング（巨大生物の完全回復・北上再開） ＆ 全音響資料の開示",
-      startTrigger: "Day 5が終了し、Day 6（決戦前日・朝8時）へ移行した時点",
+      phaseNumber: "DAY 6 フェーズ 1",
+      phaseTitle: "朝8時ブリーフィング（巨大生物の完全回復・北上再開） ＆ 距離限界カード配布・音響解析の開始",
+      startTrigger: "Day 5の捜索ミッション（吉備津の発見＆海野研究3つの回収）がすべて完了し、Day 6（決戦前日・朝8時）へ移行した時点",
       handoutBadges: [
+        "SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間（浪寄へ配布）",
         "SP-07：防衛省 運用企画局長とのコネクション（7名時は長津へ配布）",
-        "DAY 6 指令書 COMMAND-BRIEFING-DAY06（朝潮へ配布 ※7名時は長津経由）",
+        "DAY 6 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 6 監視海図 ＆ クジラ音響解析ガイド（A4両面）",
-        "Day 6 未回収資料 ＆ 朝倉教授の実録音響データ（EV-31〜34）を全開示",
       ],
+      gmOpeningDescription:
+        "「Day 6（決戦前日・朝8時）を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 6 指令書（COMMAND-BRIEFING-DAY06）』の長津ブリーフィングと同文",
-          text: "「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」",
+          sourceLabel: "『DAY 6 指令書』の長津ブリーフィングと同文",
+          text: "「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。昨日、東京班が吉備津から入手した祝詞の記録（EV-26）と、小笠原班が3箇所から回収した海野教授の3つの研究（①構文規則の草稿 EV-27・②音響言語解析システムアクセス・③実録音響データ4つ EV-28〜31）がすべて揃いました。直ちに解析を開始してください！」",
         },
+      ],
+      gmGuides: [
+        "浪寄（PC5）へ『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』、長津（PC7・7名時）へ『SP-07：防衛省 運用企画局長とのコネクション』を配布し、朝潮（PC1）へ『DAY 6 指令書』を手渡します。",
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
-      phaseTitle: "朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安15分）",
+      phaseNumber: "DAY 6 フェーズ 2",
+      phaseTitle: "海野教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安20分・延長の可能性あり）",
       startTrigger: "フェーズ1の資料開示直後、プレイヤーが『マッコウクジラ音響言語解析システム（/sonar）』にアクセスし、実録音響データの分析と撃退作戦の立案を開始した時点",
       gmGuides: [
-        "【ミッション②・③の進行】伝統の祝詞（『人と勇魚の契り、大獲物ぞ、集ひ来よ』・4語）だけでは移動する巨大生物を追跡・迎撃するための位置や行動を伝えきれないため、システム上は最大8語（2語×4組）まで許容されています（8語すべてを固定枠として埋めることが必須なのではなく、クジラを駿河湾へ呼び寄せて巨大生物を捕食させる意図が成立していれば柔軟に正解として扱えます。標準的な構成例：【①人間とクジラ＋約束】【②海の下の火山＋探せ】【③北＋集まれ】【④大きい・たくさんの餌＋攻撃せよ】）。あわせて、24時間後の駿河湾到達までにどうやって巨大生物を撃退するか（深海SOFAR層での音響放流・クジラの移動時間6〜8時間）の作戦をまとめさせます。",
+        "【ミッション①・②の進行】伝統の祝詞（『人と勇魚、契り、小笠原へ、集ひ来よ、大獲物ぞ、集ひ来よ』＝6語）のままではクジラが小笠原に集まってしまうため、北方（駿河湾）へ呼び寄せるよう組み替える必要があります（最大8語［2語×4組］まで許容。標準構成例：【①人間とクジラ＋約束】【②海の下の火山＋探せ】【③北＋集まれ】【④大きい・たくさんの餌＋攻撃せよ】など）。あわせて24時間以内に巨大生物を撃退する作戦（深海SOFAR層での音響放流・クジラの移動時間6〜8時間）をまとめさせます。",
       ],
       gmAnnouncements: [
         {
           branchBadge: "⚠️ 条件分岐：プレイヤーがアプリ内の『狂気の深淵を覗く』ボタンを押した場合（押さなかった場合は発生しません）",
           tone: "rose",
           speakerLabel: "📢 GMからの心停止宣言 ＆ 救命（声かけ）処理（ボタン押下から5分間の猶予経過後に発生）",
-          text: "【1. 心停止の宣言（ボタン押下から5分後・議論の一区切りまたは祝詞完成直後）】\n「……その時です。『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！ このまま数分が経過すれば絶命してしまいます！」\n\n【2. 蘇生条件（数分以内／身体接触や床に倒れる演技は不要・口頭宣言のみ）】\n① 坂凪（PC3）または初瀬（PC6）が「救命処置（心肺蘇生・AED）を行う（※東京本部のメンバーが倒れた場合は、通信越しに遠隔で救命処置を指示する）」と宣言する。\n② 初瀬（PC6）の直観（「意識がなくても耳には声が作用する」）に基づき、名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。\n\n【3. 蘇生成功の宣言】\n「救命処置、そして皆さんの『戻ってこい』という呼びかけの声が、暗い深淵の底へと沈みかけていた〇〇さんの耳に届きました。……ドクン！！と力強く心臓が再び脈打ち、〇〇さんは息を吹き返します！」",
+          text: "【1. 心停止の宣言（ボタン押下から5分後・議論の一区切りまたは祝詞完成直後）】\n「……その時です。『狂気の深淵』を覗いてしまった〇〇さんが、突如として激しい心臓発作に襲われ、意識を失います。脈がなく、呼吸も止まっています――【心停止】です！ このまま数分が経過すれば絶命してしまいます！」\n【2. 蘇生条件（数分以内／身体接触や床に倒れる演技は不要・口頭宣言のみ）】\n① 坂凪（PC3）または初瀬（PC6）が「救命処置（心肺蘇生・AED）を行う（※東京本部のメンバーが倒れた場合は、通信越しに遠隔で救命処置を指示する）」と宣言する。\n② 初瀬（PC6）の直観（「意識がなくても耳には声が作用する」）に基づき、名前を呼んで「戻ってこい」「まだ死ぬな」と【声かけ】を行う。\n【3. 蘇生成功の宣言】\n「救命処置、そして皆さんの『戻ってこい』という呼びかけの声が、暗い深淵の底へと沈みかけていた〇〇さんの耳に届きました。……ドクン！！と力強く心臓が再び脈打ち、〇〇さんは息を吹き返します！」",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 3",
+      phaseNumber: "DAY 6 フェーズ 3",
       phaseTitle: "長津からの直通交渉提案（新言語祝詞の音声完成直後）",
       startTrigger: "プレイヤーが新言語祝詞（2語×4組）の音声信号を完成させた直後（および心停止イベントが発生した場合は蘇生完了後）",
       handoutBadges: [
-        "DAY 6 途中① 指令書 COMMAND-BRIEFING-DAY06-MID1（朝潮へ配布 ※SP-07連動）",
+        "DAY 6 途中① 指令書（朝潮へ配布 ※SP-07連動）",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 6 途中① 指令書（COMMAND-BRIEFING-DAY06-MID1）』の長津アナウンスと同文",
+          sourceLabel: "『DAY 6 途中① 指令書』の長津アナウンスと同文",
           text: "「――クジラを呼び寄せる新言語祝詞の音声が完成しましたね！ しかし、防衛省の上層部は『さらなる魚雷の飽和攻撃』の準備を進めており、通常のルートで上申しても潜水艦で祝詞の音声を流すような作戦は到底承認されません。……朝潮危機管理官、皆さん、実は防衛省で自衛隊部隊の運用を統括する最高責任者・【運用企画局長の岸部（きしべ）】は私の親戚（叔父）にあたりまして、直通の連絡先を持っています。厳格な現実主義者ですが、科学的な根拠と計算に基づく進言であれば耳を傾けてくれるはずです。準備が整い次第、回線を繋ぎますので直接説得を頼みます！」",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 4",
+      phaseNumber: "DAY 6 フェーズ 4",
       phaseTitle: "防衛省 運用企画局長・岸部（きしべ）との直通電話交渉（GMロールプレイ）",
       startTrigger: "対策本部が説得の根拠（ミッション①）を整理し、長津を通じて岸部局長へ直通電話を繋いだ時点",
       gmAnnouncements: [
@@ -935,25 +1799,25 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
           branchBadge: "⚠️ 岸部局長の反論による思考誘導（プレイヤーの説明に不足がある場合、反論してその場で答えを導き出させる）",
           tone: "slate",
           speakerLabel: "🎙️ NPC：防衛省 運用企画局長・岸部（GM）",
-          text: "①【なぜ魚雷の飽和攻撃ではなくクジラなのか？が曖昧な場合】\n「海自の魚雷で仕留めきれなかったのは事実だ。だが、なぜ大量の魚雷による飽和攻撃ではなく、クジラでなければならんのだ？！」\n➔ 『魚雷では超群体が再結合してしまい、火山帯での爆発衝撃は富士山噴火を誘発する危険があること』『ダイオウイカの天敵はマッコウクジラであること』を引き出す。\n\n②【音響層（水深1,000mのSOFAR層／潜水艦の水中スピーカー）が抜けていた場合】\n「海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラへ音を届ける具体的な『海の層』と『手段』を示せ！」\n➔ 『水深1,000mのSOFAR層（深海音響チャネル）まで海自の潜水艦で潜航し、水中スピーカーで大出力放流する』解答を引き出す。\n\n③【移動時間（クジラが集結するのに6〜8時間＝今夜の発信が必要）が抜けていた場合】\n「なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？！」\n➔ 『太平洋のクジラが泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには今夜のうちに発信しなければならない』解答を引き出す。",
+          text: "①【なぜ魚雷の飽和攻撃ではなくクジラなのか？が曖昧な場合】\n「海自の魚雷で仕留めきれなかったのは事実だ。だが、なぜ大量の魚雷による飽和攻撃ではなく、クジラでなければならんのだ？！」\n➔ 『単一生物ではなく多数のダイオウイカの超巨大群体（コロニー）であるため、魚雷では深海で再結合して復活してしまうこと』『ダイオウイカの天敵はマッコウクジラであること』を引き出す。\n②【音響層（水深1,000mのSOFAR層／潜水艦の水中スピーカー）が抜けていた場合】\n「海面や浅い海からスピーカーで音を出したところで、水中の音は数キロ先で減衰して消えるぞ！ 何百キロも先のクジラへ音を届ける具体的な『海の層』と『手段』を示せ！」\n➔ 『水深1,000mのSOFAR層まで海自の潜水艦で潜航し、水中スピーカーで大出力放流する』解答を引き出す。\n③【移動時間（クジラが集結するのに6〜8時間＝今夜の発信が必要）が抜けていた場合】\n「なぜ『今夜、この深夜』のうちに緊急で潜水艦を動かさねばならんのだ？！ 明日の朝、目標が駿河湾に現れてから音を流せば十分ではないのか？！」\n➔ 『太平洋のクジラが泳いで駿河湾へ集結するには6〜8時間かかるため、明朝の決戦に間に合わせるには今夜のうちに発信しなければならない』解答を引き出す。",
         },
         {
           branchBadge: "✅ 3つの根拠が揃った時点：交渉成立・岸部局長の決断",
           tone: "emerald",
           speakerLabel: "🎙️ NPC：防衛省 運用企画局長・岸部（GM）",
-          text: "「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海SOFAR層による音響伝達とクジラの遊泳時間（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛省運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、水中スピーカー（水中音響送信機）より貴官らの人工音源（祝詞音源）を大出力で放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」",
+          text: "「――……なるほど。超巨大群体に対する通常兵器の限界と天敵クジラによる捕食、そして深海SOFAR層による音響伝達とクジラの遊泳時間（6〜8時間）の逆算か。机上の空論ではなく、極めて冷徹な計算に基づいているな。……いいだろう。防衛省運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。潜水艦を深海1,000mのSOFAR層へ急速潜航させ、水中スピーカー（水中音響送信機）より貴官らの人工音源（祝詞音源）を大出力で放流させる。また、明朝の現場部隊へは『実弾魚雷の即時発射を抑制し、クジラの捕食を見届けて待機せよ』と通達しよう。――明朝の運命、君たちに託すぞ」",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 5",
+      phaseNumber: "DAY 6 フェーズ 5",
       phaseTitle: "深海SOFAR層での新言語祝詞・大出力放流開始",
       startTrigger: "岸部運用企画局長の説得に成功し、第1潜水隊群への緊急出動命令が下った直後（Day 6終盤）",
-      handoutBadges: ["長津カード NG-07（長津へ配布）"],
+      handoutBadges: ["長津カード NG-07"],
       nagatsuAnnouncements: [
         {
           sourceLabel: "『長津カード NG-07（Day 6 達成時）』と同文",
-          text: "「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」",
+          text: "「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波はSOFAR層に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」",
         },
       ],
     },
@@ -961,32 +1825,34 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
   7: [
     {
-      phaseNumber: "フェーズ 1",
+      phaseNumber: "DAY 7 フェーズ 1",
       phaseTitle: "最終決戦の夜明け ＆ 駿河湾への目標接近",
       startTrigger: "Day 6が終了し、Day 7（最終決戦の夜明け）へ移行した時点",
       handoutBadges: [
-        "DAY 7 指令書 COMMAND-BRIEFING-DAY07（朝潮へ配布 ※7名時は長津経由）",
+        "DAY 7 指令書（朝潮へ配布 ※7名時は長津経由）",
         "全体提示：Day 7 最終決戦監視海図",
       ],
+      gmOpeningDescription:
+        "「Day 7（最終決戦の夜明け）を迎えました。東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）を通信回線で繋ぎ、両会議室から固唾を呑んで駿河湾の状況を見守っています。」",
       nagatsuAnnouncements: [
         {
-          sourceLabel: "『DAY 7 指令書（COMMAND-BRIEFING-DAY07）』の長津ブリーフィングと同文",
+          sourceLabel: "『DAY 7 指令書』の長津ブリーフィングと同文",
           text: "「夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、巨大生物は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および水中聴音網（パッシブソナー網）より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」",
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 2",
+      phaseNumber: "DAY 7 フェーズ 2",
       phaseTitle: "マッコウクジラ大群の集結・深海大捕食 ＆ 富士山噴火危機の完全停止",
       startTrigger: "フェーズ1の開始ブリーフィングに続けて、深海ソナー探知および気象庁の火山観測データが入電した時点",
       handoutBadges: [
-        "長津カード NG-08-1（長津へ配布）",
-        "長津カード NG-08-2（長津へ配布）",
+        "長津カード NG-08-1",
+        "長津カード NG-08-2",
       ],
       nagatsuAnnouncements: [
         {
           sourceLabel: "『長津カード NG-08-1（Day 7 達成時①）』と同文",
-          text: "「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。\n　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。\n　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」",
+          text: "「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー・光学探知から、一頭の白いクジラに続いて、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。\n　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。\n　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」",
         },
         {
           sourceLabel: "『長津カード NG-08-2（Day 7 達成時②）』と同文",
@@ -995,51 +1861,79 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
       ],
     },
     {
-      phaseNumber: "フェーズ 3",
-      phaseTitle: "防衛省・自衛艦隊幹部からの直通電話（公表方法の最終選択）",
+      phaseNumber: "DAY 7 フェーズ 3",
+      phaseTitle: "防衛省幹部からの直通電話・特別配布カード（Day 7 配布）配布 ＆ 岸部からの小笠原班への緊急解析要請（last-mission ➔ 吉備津連絡）",
       startTrigger: "長津の作戦成功アナウンス（NG-08-2）が完了し、対策本部に安堵が広がった直後",
+      handoutBadges: [
+        "🟦 SP-08〜SP-10：組織の論理（朝潮・貝浜・長津へ配布）",
+        "🟪 SP-11：組織と現場の狭間（坂凪へ配布）",
+        "🟥 SP-12・SP-13：盟約断絶の危機（太刀魚・初瀬へ配布）",
+        "🟥 SP-14：海野研究の危険性（浪寄へ配布）",
+        "アプリ『コード入力』に【last-mission】を入力してクジラ4音声を再生",
+      ],
       gmAnnouncements: [
         {
           tone: "slate",
           speakerLabel: "🎙️ NPC：防衛省・自衛艦隊幹部（GM）",
           text: "「――朝潮君、貝浜君、聞こえるかね。\n……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。\nだがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。\nこのあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。そもそも、クジラの攻撃で相手が完全に消滅したという確固たる証拠があるわけでもないだろう？\n世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。\n君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」",
           cardActionNote:
-            "👉 GM進行処理：プレイヤー全員で合議させ、【選択肢A：功績を出さず、海上自衛隊の戦果として処理する】か【選択肢B：合同対策本部の功績として発表し、自衛隊の武力攻撃は不要とする】を決断させます。\n💡【A案でもクジラを逃がせるガイド】：仮に選択肢Aを選んだ場合でも、プレイヤーがクジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。",
+            "👉 GM進行処理：ここで特別配布カード（Day 7 配布）全7枚（🟦青：SP-08朝潮・SP-09貝浜・SP-10長津 ／ 🟪紫：SP-11坂凪 ／ 🟥赤：SP-12太刀魚・SP-13初瀬・SP-14浪寄）を配布します（6名プレイ時はGMが長津としてSP-10の立場を発言）。\n・🟦東京本部組（朝潮・貝浜・長津）『組織の論理』：「上位の命令や、協力してくれた岸部局長の顔を立てるべき（クジラを巻き込んでの発砲もやむなし＝海自の戦果案）」\n・🟪坂凪（海保船長）『組織と現場の狭間』：「組織の論理も理解できるが、先頭の白いクジラ（姉と挨拶を交わし海野教授が『あの白いクジラがコーダだったんだ』と言い残した100頭に1頭のリーダー個体）が死ねば盟約が途切れる可能性があり板挟みとなる」\n・🟥太刀魚・初瀬『盟約断絶の危機』：「先頭の白いクジラは100頭に1頭のリーダー個体・コーダ（通訳者）であり、死ねば人間とクジラの盟約が途切れるため、クジラへの発砲など絶対にありえない」\n・🟥浪寄『海野研究の危険性』：「クジラ言語研究の公開は『クジラが高度な知的生物である』と証明し捕鯨推進派に不都合なため、海野教授があなたを守ろうとした真意を悟り、自分がヒーローになることを望まない」",
         },
         {
-          branchBadge: "🟣 条件分岐：プレイヤーが「爆雷を投下させず、かつ自衛隊も立てる第3の選択」を交渉してきた場合",
+          branchBadge: "📞 追加の電話：岸部（運用企画局長）から小笠原現地メンバーへの緊急連絡 ＆ コード【last-mission】の案内",
           tone: "amber",
-          speakerLabel: "🎙️ NPC：防衛省・自衛艦隊幹部（岸部 / GM）",
-          text: "「現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない」\n\n（※ここから先の交渉の成否や展開は、その場のGMの判断・裁量に委ねます。\n【第3の選択の参考案】：総理に嘘を吐くのではなく、『海上自衛隊の潜水艦による深海音響作戦が奏功して無力化・駆除できたこと』『無意味な爆雷投下による火山再刺激を避け、国民の生命と国土を守ることを最優先した結果であること』として報告・発表する形にまとめる等）",
+          speakerLabel: "🎙️ NPC：防衛省 運用企画局長・岸部（GM）",
+          text: `「――待ってくれ、私だ、岸部だ！ 小笠原現地の諸君もそのまま聞いてくれ！
+　実は今、現場海域に展開している海上自衛隊の潜水艦部隊から、『ソナー上ではもはや撃つべき対象が確認できず、これ以上魚雷を撃つ必要性が本当にあるのか？』という確認と疑問の声が複数上がっている！
+　さらに、現場のクジラたちが先ほどから【同じコーダ（クリック音の信号）】を何度も繰り返し発信しているのだ。合同対策本部の諸君なら、このクジラの言葉の意味が分かるのではないか、と現場が確認を求めている。
+　特に小笠原現地メンバーの意見と解析結果を至急聞きたい！ 総理の最終判断については、私が少し時間を稼いでおく！」`,
+          cardActionNote:
+            "👉 GM進行処理：\n1. 全員にアプリ画面右上の『コード入力』ボタンを押させ、コード【last-mission】を入力させます。",
         },
         {
-          branchBadge: "プレイヤーの回答を受けた後の結びのセリフ",
+          branchBadge: "📞 吉備津（きびつ）へ連絡して未知のクジラ音声（ポ・ルル・トーン ／ タ・タン・ドーン）を尋ねた場合",
           tone: "emerald",
-          speakerLabel: "🎙️ NPC：防衛省・自衛艦隊幹部（GM）",
-          text: "「……わかった。このあと、政府からの発表がある。\nいずれにしても、君たちが正しかった。感謝する」\n（ツーツーツー……と静かに終話音が響く）",
+          speakerLabel: "🎙️ NPC：元神主の子ども・吉備津（GM）",
+          text: "「――ああ、その音（『ポ・ルル・トーン』『タ・タン・ドーン』）ならわかります！ 古文書に記されていた祝詞の返礼の合図です。クジラからの合図で、人間に対して『ありがとう』『ごちそうさま』、または『（人間との約束が）完了した』という意味ですよ！」",
+        },
+        {
+          branchBadge: "✅ 岸部へクジラの言葉の意味（「人間とクジラの約束は完了した／ありがとう・ごちそうさま」）を報告した時点",
+          tone: "emerald",
+          speakerLabel: "🎙️ NPC：防衛省 運用企画局長・岸部（GM）",
+          text: `「――なんだと……！『人間とクジラの約束は完了した』『ありがとう、ごちそうさま』……クジラ自身が、巨大生物の完全な捕食と盟約の完了を我々に伝えてきていたというのか！
+　……これで確証が得られた。目標は完全に消滅しており、もはや魚雷を撃つ必要など微塵もない！ 総理にも私から責任を持って進言し、実弾掃討攻撃は完全に中止させる！
+　その上で、総理および国民への最終的な説明・公表方法としては、次のどちらの形でも通すことができる。
+　選択肢A：【自衛隊の作戦によって巨大生物が完全消滅した（自衛隊の功績）】として発表するか。
+　選択肢B：【合同対策本部の作戦が奏功し、完全消滅を自衛隊が確認できた（自分たちの功績）】として発表するか。
+　クジラたちの命も盟約も守られた今、この歴史的勝利をどちらの形で世に発表するか――朝潮危機管理官、最後の決断を聞かせてくれ！」
+
+（プレイヤーの最終選択を受けた後の結びのセリフ）：
+「……わかった。このあと、政府からの公式発表がある。
+いずれにしても、君たちが正しかった。感謝する」
+（ツーツーツー……と静かに終話音が響く）`,
         },
       ],
     },
     {
-      phaseNumber: "フェーズ 4",
+      phaseNumber: "DAY 7 フェーズ 4",
       phaseTitle: "テレビ臨時ニュース（政府公式発表の全国報道・選択肢A/B分岐） ＆ 対策本部解散",
-      startTrigger: "フェーズ3でプレイヤーが公表方法（選択肢AまたはB）を決断し、防衛省幹部との電話が切れた直後",
+      startTrigger: "フェーズ3でプレイヤーが公表方法（選択肢AまたはB）を決断し、岸部局長との電話が切れた直後",
       handoutBadges: [
-        "選択肢Aの場合：長津カード NG-09（長津へ配布）",
-        "選択肢Bの場合：長津カード NG-10（長津へ配布）",
+        "選択肢Aの場合：長津カード NG-09",
+        "選択肢Bの場合：長津カード NG-10",
       ],
       nagatsuAnnouncements: [
         {
-          sourceLabel: "【選択肢Aを選んだ場合】『長津カード NG-09（Day 7 報道A：自衛隊の戦果として処理）』と同文",
-          text: "「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が海底のマグマ網を刺激していた可能性が高いことが判明。これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊および護衛艦による実弾掃討作戦を敢行し、この巨大生物を完全に撃滅・駆除したとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『自衛隊の果敢な決断と迅速な行動が国土と国民の生命を守り抜いた』と声明を発表しています――」",
+          sourceLabel: "【選択肢Aを選んだ場合】『長津カード NG-09（Day 7 報道A：自衛隊の作戦により完全消滅）』と同文",
+          text: "「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が海底のマグマ網を刺激していた可能性が高いことが判明。これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊による特命深海作戦を敢行し、この巨大生物の完全消滅を確認したとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『自衛隊の果敢な決断と迅速な作戦行動が国土と国民の生命を守り抜いた』と声明を発表しています――」",
         },
         {
-          sourceLabel: "【選択肢Bを選んだ場合】『長津カード NG-10（Day 7 報道B：合同対策本部の功績として公表）』と同文",
-          text: "「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけての連続海底噴火と富士山の火山性微動について、内閣官房長官は先ほど、危機事態が完全に沈静化したと発表しました。西之島沖から駿河トラフへ北上していた『未確認の超巨大海洋生物』が海底マグマ網を刺激していたことが判明。政府は海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせ、深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事に巨大生物の駆除に成功し、自衛隊による武力攻撃は不要となったとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『一発の砲火も交えず、現場の機転と科学の力で日本を救った合同対策本部のメンバーは我が国の誇りでありヒーローである』と称える声明を発表しています――」",
+          sourceLabel: "【選択肢Bを選んだ場合】『長津カード NG-10（Day 7 報道B：合同対策本部の作戦が奏功・自衛隊が完全消滅を確認）』と同文",
+          text: "「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけての連続海底噴火と富士山の火山性微動について、内閣官房長官は先ほど、危機事態が完全に沈静化したと発表しました。西之島沖から駿河トラフへ北上していた『未確認の超巨大海洋生物』が海底マグマ網を刺激していたことが判明。今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせた独自の無力化作戦を敢行して見事に奏功し、現場に展開していた海上自衛隊の潜水艦部隊がその完全消滅を確認したため、実弾による武力攻撃は不要となったとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『一発の砲火も交えず、現場の機転と科学の力で日本を救った合同対策本部のメンバーは我が国の誇りでありヒーローである』と称える声明を発表しています――」",
         },
       ],
       gmGuides: [
-        "臨時ニュースの読み上げ後、朝潮（PC1）からメンバー全員へ労いの言葉と「合同対策本部の解散宣言」（ミッション③）を行ってもらい、物語の幕を閉じます。",
+        "臨時ニュースの読み上げ後、朝潮（PC1）から「皆さん、これで合同対策本部を解散します。お疲れ様でした」と解散宣言（ミッション②）を行ってもらい、物語の幕を閉じます。",
       ],
     },
   ],
@@ -1047,58 +1941,81 @@ const GM_DAY_STRUCTURED_PHASES: Record<number, GmStructuredPhase[]> = {
 
 // GM演出用ナレーション ＆ NPCセリフ台本（テキスト編集欄用：GM_DAY_STRUCTURED_PHASESと同内容）
 const DEFAULT_GM_NARRATIONS: Record<number, string> = {
-  1: `■ フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介
+  0: `■ ゲーム開始前 フェーズ1：ご挨拶・作品概要・拠点説明 ＆ プレイヤー自己紹介
+⏱️ 開始タイミング・条件：ゲーム開始前（プレイヤー全員が着席した時点）
+
+┏━━ 🎙️ GMからのゲーム開始前アナウンス（前半：作品概要・拠点説明・プレイヤー自己紹介） ━━┓
+${PRE_GAME_GM_ANNOUNCEMENT_PART1}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+
+■ ゲーム開始前 フェーズ2：キャラクター紹介・担当選択 ＆ ハンドアウト読み込み
+⏱️ 開始タイミング・条件：プレイヤー全員の自己紹介が完了した時点
+📦 配布資料：キャラクター決定後に各PCの個人ハンドアウト（B5本紙）を配布
+
+┏━━ 🎙️ GMからのゲーム開始前アナウンス（後半：キャラクター紹介・担当選択・ハンドアウト読み込み） ━━┓
+${PRE_GAME_GM_ANNOUNCEMENT_PART2}
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
+
+  1: `■ DAY 1 フェーズ1：緊急対策回線の開設 ＆ 各員の点呼・自己紹介
 ⏱️ 開始タイミング・条件：ゲーム開始時（全員がキャラクターハンドアウトを読み終えた時点）
 📦 配布資料：朝潮へ『SP-01：黒い小さな隕石のかけら』『DAY 1 指令書』（7名時は長津経由）
+📢【GMからの開始描写】：「これより本編を開始します。現在、東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 1 指令書』と同文） ━━┓
-「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。これより合同海難救助チームを開設します」
+「東京本部および小笠原現地チームへ緊急入信。小笠原南西沖にて民間チャーター船『パパズドルフィン（総トン数約40t）』が突如全電源を喪失、AIS（自動船舶識別装置）も停波し、救難信号を発信した直後に通信が途絶いたしました。救難信号の発信から現在20分が経過しております。それでは朝潮危機管理官、よろしくお願いします」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-・朝潮（PC1）の進行（ミッション①）で全員の点呼・自己紹介を行わせます。
+・朝潮（PC1）の進行（ミッション①）で全員の点呼・自己紹介を行わせ、最後に「それではこれより合同海難救助チームを設立する」とまとめさせます。
 
-■ フェーズ2：漂流海図の展開 ＆ 初期証拠カードの開示・捜索海域の決定
+■ DAY 1 フェーズ2：漂流海図の展開 ＆ 初期証拠カードの開示・捜索海域の決定
 ⏱️ 開始タイミング・条件：全員の自己紹介が完了した直後
 📦 提示・配布：『漂流海図（白地図）』提示 ＋ Day 1初期証拠カード6枚を公開可能にする
 ・朝潮の指揮（ミッション②・③）のもと、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分＋航行40分＝合計1時間後）を合成し、巡視船を急行させる捜索海域（正解：【東北東の漂流予測海域】）を決定させます。
 
-■ フェーズ3：救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布
-⏱️ 開始タイミング・条件：プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点（最大2回まで指定可能）
+■ DAY 1 フェーズ3：救助判定 ＆ 成否分岐ごとのGMアナウンス・証言カード配布
+⏱️ 開始タイミング・条件：プレイヤーが巡視船を急行させる「捜索海域」をGMへ宣言した時点
 
 ▼ 🟢 分岐1：1回目の指定で【東北東の漂流予測海域】を正解した場合（失敗0回 ➔ 証言カード2枚とも配布）
 【GMからのアナウンス】：
-「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 荒波のなか間一髪で船長とダイバーたちの全員救出に成功しました。救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」
-👉 GM対応：『EV-08：船長の証言』と『EV-07：大型冷凍ボックス』の【2枚とも】その場で渡します。
+「巡視船が指定された東北東の海域へ急行し、暗礁群の手前で漂流していた遭難船『パパズドルフィン』を発見・接舷しました！ 船内では漂流開始直後からダイバーの1人が心停止状態に陥っており、同乗していた大人2人が交代で懸命に心臓マッサージ（胸骨圧迫）を継続していました。ただちに救護担当の初瀬が交代して救急救命活動を引き継いだことで、心停止していたダイバーも一命を取り留め、荒波のなか全員の救出・救命に成功しました！ 救助された船長とダイバーグループから、それぞれ証言と荷物の情報が得られましたのでカードを2枚ともお渡しします」
+📦 配布・提示：EV-07：大型冷凍ボックス ／ EV-08：船長の証言
 
-▼ 🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ地点の再指定［リトライ］を促す）
+▼ 🟡 分岐2-A：1回目の指定が外れた場合（もう一度だけ再指定［リトライ］を促す）
 【GMからのアナウンス】：
 「指定された海域へ巡視船が急行しましたが、波浪と視界不良のなか船影を発見できません！ もう一度だけ、海流（真東2.0kt）と風圧流（北東1.5kt）、そして救難信号からの経過時間（現在20分＋航行40分＝合計1時間）を再計算し、急行すべき海域を再指定してください！」
-
-▼ 🟡 分岐2-B：2回目の再指定で正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）
+▼ 🟡 分岐2-B：2回目の再指定で【東北東の漂流予測海域】を正解した場合（失敗1回 ➔ 証言カード1枚のみ配布）
 【GMからのアナウンス】：
-「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・救助に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります（残る1枚は明日Day 2以降の調査枠として選択可能になります）」
-👉 GM対応：プレイヤーが選んだ【1枚のみ】をその場で渡します（残る1枚はDay 2以降の調査枠へ繰り越し）。
+「再指定された東北東の海域にて、暗礁群スレスレを漂流する遭難船を発見・接舷しました！ 船内では漂流開始からダイバーの1人が心停止状態となっており、大人2人が交代で心臓マッサージを継続していましたが、初瀬が交代して救急救命活動を行ったことで無事に一命を取り留め、全員の救出・救命に成功しました！ ただし捜索に時間を要したため、本日（Day 1）中に確認できるのは『船長の証言（EV-08）』または『大型冷凍ボックス（EV-07）』のどちらか1枚のみとなります」
+📦 配布・提示：EV-07：大型冷凍ボックス または EV-08：船長の証言
 
 ▼ 🔴 分岐3：2回目の再指定も外れた場合（失敗2回 ➔ 自動救助成功・Day 1での証言カード配布は0枚）
 【GMからのアナウンス】：
-「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急曳航・救助に成功しました！ しかし救助作業と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」
-👉 GM対応：Day 1ではカードを渡さず、【2枚とも】Day 2以降の調査枠へ繰り越します。`,
+「指定海域からは外れていましたが、東北東の暗礁群手前を漂流していた遭難船を現場隊が目視で辛うじて発見し、緊急接舷しました！ 船内では漂流開始からダイバーの1人が心停止状態となり大人2人が交代で心臓マッサージを継続していましたが、初瀬が交代して救急救命活動を行ったことで辛うじて一命を取り留め、全員の救出・救命に成功しました！ しかし救命処置と荒天対応に全力を割いたため、本日の現場聴取は打ち切りとなります。『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の2枚は、明日Day 2以降の調査枠として選択可能になります」`,
 
-  2: `■ フェーズ1：西之島沖の突発海底噴火 ＆ 即応体制維持の通達
+  2: `■ DAY 2 フェーズ1：西之島沖の突発海底噴火 ＆ 即応体制維持の通達
 ⏱️ 開始タイミング・条件：Day 1の救助・証言カード確認が終わり、Day 2へ移行した時点
-📦 配布・提示：坂凪へ『SP-02』、太刀魚へ『SP-03』、朝潮へ『DAY 2 指令書』配布 ＋ 『Day 2 監視海図』提示
+📦 配布・提示：坂凪へ『SP-02』、朝潮へ『DAY 2 指令書』配布 ＋ 『Day 2 監視海図』提示
+📢【GMからの開始描写】：「Day 2を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策にあたっています。」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 2 指令書』と同文） ━━┓
 「気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ2：優先調査項目の選択（東京1枠・小笠原2枠） ＆ 調査結果の共有
+■ DAY 2 フェーズ2：優先調査項目の選択（東京2枠・小笠原2枠） ＆ 調査結果の共有
 ⏱️ 開始タイミング・条件：長津のブリーフィング終了後、朝潮（PC1）が調査項目の選定を開始した時点
 【GMからの案内】：
-「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」`,
+「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目（※Day 1で未取得の証言カードがある場合はそれも加えた項目）から2つを選ぶことができます。ここで選択されなかった情報は、明日（Day 3）以降の調査枠で調べることができます」`,
 
-  3: `■ フェーズ1：鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始
+  3: `■ DAY 3 フェーズ1：鳥島沖の海底噴火 ＆ 洋上ソノブイ索敵作戦の開始
 ⏱️ 開始タイミング・条件：Day 2の調査共有が完了し、Day 3へ移行した時点
 📦 配布・提示：貝浜へ『SP-04』、朝潮へ『DAY 3 指令書』配布 ＋ 『鳥島沖ソノブイ作戦海図（W-3100）』提示
+📢【GMからの開始描写】：「Day 3を迎えました。本日（Day 3）のみ、小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）は父島の会議室を出て大型捜索ヘリコプターに乗り込み、途中の海域に展開する大型巡視船『あきつしま』で洋上給油を受けながら鳥島沖の現場上空へと向かいます。東京本部チームの3名（朝潮・貝浜・長津）は東京・霞が関の会議室におり、ヘリコプター内の4名と無線通信で常時繋がっています。」
+🎯【GM用正解位置 ＆ 熱水域（音響障害域）早見表】：正解位置＝【B-3】 ／ 熱水域＝【D-2（西鳥島海山）・C-5（須美寿東）】（および噴火カルデラ【E-5】）
+📡【ソノブイ1基ごとのGM返答ルール】：
+・①【B-3（直上）】に投下➔「直下に巨大生物の強い音響反射を捕捉！（B-3確定）」
+・②【B-3の周囲1マス（A-2〜A-4, B-2, B-4, C-2〜C-4）】に投下➔「直下には不在だが、周囲1マス圏内（約20km先）から巨大生物の反響あり！」
+・③【熱水域（D-2・C-5）または噴火口（E-5）の直上】に投下➔「激しい熱水・噴火ノイズにより音波が散乱し、探知不能！」
+・④【熱水域・噴火口の周囲1マス】に投下➔「直下には不在！ ただし隣接する熱水・噴火ノイズが干渉し、周囲1マス圏内の反響は探知不能！」
+・⑤【上記以外】➔「直下にも周囲1マス圏内にも反応なし」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 指令書』と同文） ━━┓
 「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
@@ -1106,85 +2023,109 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 　現場海域ではアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定し、浮上してくることがあれば写真撮影を試みてください。また、午後にはヘリコプターは帰投できますので、索敵と並行して本日の優先調査も進めてください」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ2：目標捕捉 ＆ 北上速度・明日（Day 4）の到達位置予測
+■ DAY 3 フェーズ2：目標捕捉・北上速度報告 ＆ 深海写真の受信・専門家2名（浪寄・貝浜）への緊急諮問
 ⏱️ 開始タイミング・条件：ソノブイ索敵で鳥島沖の巨大生物の現在位置（B-3）を特定した直後
-📦 配布：長津へ『NG-02』、朝潮へ『DAY 3 途中① 指令書』、太刀魚・貝浜・浪寄へ距離・時刻証拠3枚を配布
+📦 配布・提示：長津へ『NG-02』『NG-03』、朝潮へ『DAY 3 途中① 指令書』、全体へ『成功時写真（失敗時は失敗時写真＋現地調査1枠を自動充当して浪寄へEV-22）』
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』と同文） ━━┓
-「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ なお、これまでの海底噴火の時刻と巨大生物の動きには明確な関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要です。各員のデータから物体の移動スピードを算出し、明日（Day 4）はどのあたりまで北上するか予想を出してください！」
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-
-■ フェーズ3：深海写真の受信 ＆ 専門家2名（浪寄・貝浜）への緊急諮問
-⏱️ 開始タイミング・条件：移動スピード（日速約150km）とDay 4北上予測（明神礁周辺）を算出し終えた直後
-📦 配布・提示：長津へ『NG-03』、朝潮へ『DAY 3 途中② 指令書』、全体へ『深海写真』、浪寄へ『群体写真解析』
-
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中② 指令書』・『NG-03』と同文） ━━┓
-「――洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策本部へ緊急の諮問が下されております。
-① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大質量について、生物学的な所見を提示してください。
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中① 指令書』・『NG-02』『NG-03』と同文） ━━┓
+「――洋上捜索ヘリより入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！
+　続けて洋上捜索ヘリより緊急入電！ 撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！
+① 浪寄准教授、通常のダイオウイカ（10本）と明らかに異なる無数の触手と数百mの巨大生物について、生物学的な所見を提示してください。
 ② 貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則ではこの規模の目標に対処不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ4：公式呼称（コードネーム）決定 ＆ 指揮官の最終決断
+■ DAY 3 フェーズ3：公式呼称（コードネーム）決定 ＆ 指揮官の最終決断
 ⏱️ 開始タイミング・条件：浪寄・貝浜の所見共有とDay 3優先調査カードの共有が完了した時点（Day 3終盤）
-📦 配布：長津へ『NG-04』、朝潮へ『DAY 3 途中③ 指令書』
+📦 配布：長津へ『NG-04』、朝潮へ『DAY 3 途中② 指令書』
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中③ 指令書』・『NG-04』と同文） ━━┓
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 3 途中② 指令書』・『NG-04』と同文） ━━┓
 「――防衛省および内閣官房より至急諮問が入電！『今後の公式対処記録および部隊動員計画にあたり、この未確認巨大生物の公式呼称（コードネーム）を当合同対策本部で決定してほしい』とのことです。現在、上層部からは日本神話の古き海神に由来する【ワタツミ】、もしくは海洋古伝承の異形神に由来する【クスルフ】の2案が有力候補として提示されています（チーム独自の命名でも構いません）。呼称を決定のうえ、朝潮危機管理官、指揮官として自衛隊への防衛出動を要請するか、または海上警備行動を発令するか最終意思決定をお願いいたします！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-  4: `■ フェーズ1：明神礁の海底噴火 ＆ 即応総力体制（全未調査資料の一括開示）
+  4: `■ DAY 4 フェーズ1：明神礁の海底噴火 ＆ 即応総力体制（未選択カード＋Day 4調査カードの自由閲覧解禁）
 ⏱️ 開始タイミング・条件：Day 3の最終決断が完了し、Day 4へ移行した時点
-📦 配布・提示：初瀬へ『SP-05』、朝潮へ『DAY 4 指令書』配布 ＋ Day 1〜Day 4の未取得だった全証拠カードを一括配布
+📦 配布・提示：太刀魚へ『SP-03：SOFAR層の特異性』、初瀬へ『SP-05：神社の祝詞の複製』、朝潮へ『DAY 4 指令書』配布 ＋ テーブル上のこれまで選択していなかった証拠カードとDay 4調査カードをすべて自由に閲覧可能と案内
+📢【GMからの開始描写】：「Day 4を迎えました。昨日ヘリコプターで鳥島沖へ出動していた小笠原現地チームの4名も父島へ帰投しており、本日（Day 4）以降は再び、小笠原・父島にある海上保安庁支部の会議室（4名）と、東京・霞が関にある海上保安庁本部の会議室（3名）にそれぞれ集まり、両会議室を通信回線で繋いで対策会議を行っています。」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 4 指令書』と同文） ━━┓
 「未明、鳥島沖の北方に位置する【明神礁】周辺にて新たな海底噴火が発生。さらに八丈島および青ヶ島の地震計が火山性微動を断続的に探知しています。防衛省の水中聴音網（パッシブソナー網）による巨大生物の位置と火山性微動の発生源は完全に一致しており、巨大生物は【日速約150km】で正確に北上を続けています。政府および防衛省より『この巨大生物は一体どこへ向かい、何を引き起こす見立てなのか、合同対策本部の専門的予測を至急提出してほしい』との緊急照会が入っています。なお事態の緊迫化を受け、本日より当合同対策本部は調査枠制限を撤廃する【即応総力体制】へ移行します！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+【GMからの補足案内】：
+「前日の朝潮危機管理官の決断について、官邸および内閣法制局より『未知の生物は外国からの武力攻撃に該当せず、噴火との因果関係も未立証のため、現時点での防衛出動は見送る』との回答が入っています。また、即応総力体制への移行に伴い、テーブルの上に出ているこれまで選択していなかった調査カードおよびDay 4の調査カードは、すべて自由に閲覧可能となります！」
 
-■ フェーズ2：北上原因の分析 ＆ 最終到達予測地点（「富士山」vs「東京湾」）の結論報告
+■ DAY 4 フェーズ2：北上原因の分析 ＆ 最終到達予測地点（「富士山」vs「東京湾」）の結論報告
 ⏱️ 開始タイミング・条件：全開示された証拠カードの精査が進み、朝潮が進路予測報告をまとめた時点
-・🟢「富士山（駿河湾）」と結論づけた場合：自衛隊が三宅島〜御蔵島沖の最適ラインへ遅滞なく展開します。
-・🟡「東京湾」と結論づけた場合：機械的なペナルティはありませんが、海自部隊が東京湾側へ展開して迎撃が遅れ、翌Day 5では【より駿河湾に近い位置】での攻撃となり、【Day 6の岸部局長との交渉で嫌味を言われる】ことになります。
+・🟢「富士山（駿河湾）」と結論づけた場合：Day 6の岸部局長との交渉が通常の第一声で進行します。
+・🟡「東京湾」と結論づけた場合：【Day 6の岸部局長との交渉で嫌味を言われる】ことになります。
 
-■ フェーズ3：防衛省「害獣駆除」方針による海上自衛隊の動員通達
+■ DAY 4 フェーズ3：防衛省「害獣駆除」方針による海上自衛隊の動員通達
 ⏱️ 開始タイミング・条件：対策本部が最終到達予測地点を報告した直後（Day 4終盤）
-📦 配布：長津へ『NG-05』
+📦 配布：『長津カード NG-05』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『長津カード NG-05』と同文） ━━┓
 「――防衛省より至急通達が入電！ 内閣法制局の見解により武力侵略に対する『防衛出動』は見送られましたが、国民への重大危機を看過できない防衛省は内閣の合意を取り付け、【害獣駆除（有害鳥獣等駆除・災害派遣）】という方針に基づき、海上自衛隊の動員を正式決定いたしました！ 八丈島〜御蔵島沖にて通常兵器（最新鋭魚雷・爆雷）による一斉駆除作戦を敢行します！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-  5: `■ フェーズ1：御蔵島沖の海底噴火・富士山地下微動（残り48時間） ＆ 独自調査
+  5: `■ DAY 5 フェーズ1：御蔵島沖の海底噴火・残り48時間 ＆ 海上自衛隊の魚雷攻撃失敗（深海での復活）・防衛省からの緊急照会
 ⏱️ 開始タイミング・条件：Day 4が終了し、Day 5へ移行した時点
-📦 配布・提示：浪寄へ『SP-06』、朝潮へ『DAY 5 指令書』配布 ＋ 『Day 5 監視海図』・Day 5調査資料を開示
+📦 配布・提示：長津へ『NG-06』、朝潮へ『DAY 5 指令書』配布 ＋ 『Day 5 監視海図』提示
+📢【GMからの開始描写】：「Day 5を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 指令書』と同文） ━━┓
-「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表、政府は伊豆七島の噴火警戒レベル引き上げと避難準備を指示しました。同時に防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです。また、自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行し情報提供が遮断されたため、合同対策本部は独自の調査任務を進めるよう通達が出ています」
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 指令書』・『NG-06』と同文） ━━┓
+「伊豆諸島を北上する連続海底噴火を受け、気象庁は【富士山地下深部において微弱な火山性微動が観測された】と発表しました。防衛省および火山噴火予知連絡会より『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』との報告が入っています。
+　続けて暗号ホットラインに着信！ 貝浜リエゾンへ、防衛省作戦本部より直通無線が接続されました！『海上自衛隊が発射した魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。一時的に特有の振動と火山性の周期的な微動は収まったものの、アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ北上し、富士山を目指すのか？！』とのことです！」
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+・①多数のダイオウイカの超群体（コロニー）であるため魚雷で一部を砕いても深海で再結合して復活すること（浪寄）、②富士山麓へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること（朝潮）を回答させ、天敵マッコウクジラを【盟約の祝詞】と【海野教授のクジラ言語研究】で呼び寄せる方針を固めさせます。
 
-■ フェーズ2：魚雷命中後のソナー観測報告 ＆ 防衛省作戦本部からの緊急照会
-⏱️ 開始タイミング・条件：Day 5調査資料の精査が一通り進んだ時点（Day 5後半）
-📦 配布：長津へ『NG-06』、朝潮へ『DAY 5 途中① 指令書』
+■ DAY 5 フェーズ2：東京本部 × 小笠原現地 分断・同時進行マップ捜索ミッション（各人2〜3アクション・計21アクション目安）
+⏱️ 開始タイミング・条件：魚雷攻撃の限界とマッコウクジラ召喚の必要性を確認した直後
+📦 配布・提示：朝潮へ『DAY 5 途中① 指令書』配布 ＋ 『東京都内 広域捜索マップ（全8拠点）』・『父島 現地調査マップ（A2・全8拠点）』展開
 
-┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 途中① 指令書』・『NG-06』と同文） ━━┓
-「――暗号ホットラインに着信！ 貝浜リエゾンへ、防衛省作戦本部より直通無線が接続されました！『魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。しかし、目標が発している特有の振動が起きておらず、それにあわせて火山性の周期的な微動が収まっていることを確認できている。アクティブソナーでの確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？！』とのことです！」
-┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
+┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 5 途中① 指令書』と同文） ━━┓
+「――魚雷では超群体を撃滅できないことがはっきりしました。我々に残された唯一の手段は、ダイオウイカの天敵である【マッコウクジラ】を、神社の【盟約の祝詞】と海野教授の【クジラ言語研究】によって呼び寄せることです！
+　これより東京本部チーム（3名）と小笠原現地チーム（4名）は二手に分かれ、時間を使って各拠点を回る【現地捜索ミッション】を開始してください！
+・【東京本部チーム】は、祝詞のクリック音を知る元神主の子ども【吉備津（きびつ）】を東京都内8拠点のマップから捜索してください。最初の手がかりは名前と『① 本人住所（江東区）』（※電話番号は不明）です。
+・【小笠原現地チーム】は、海野教授が島の飲み仲間たちにバックアップを分けて預けていた【3つの研究内容（①草稿・②解析システムのパスワード書類・③実録音響データ4つ）】を父島8拠点のA2マップからすべて回収してください。3つすべてが見つからない限り作戦は進行できません！」
+┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-  6: `■ フェーズ1：朝8時ブリーフィング（巨大生物の完全回復・北上再開） ＆ 全音響資料の開示
-⏱️ 開始タイミング・条件：Day 5が終了し、Day 6（決戦前日・朝8時）へ移行した時点
-📦 配布・提示：7名時は長津へ『SP-07』、朝潮へ『DAY 6 指令書』配布 ＋ 朝倉教授の実録音響データ（EV-31〜34）全開示
+🗼【東京本部チーム：東京都内8拠点 GM読み上げテキスト】
+・① 本人住所（江東区）：不在（待つ時間は惜しい）。近所の人から【吉備津の詳しい容貌】と、勤め先が【② 海洋研究開発機構（千代田区）】だと判明。（※容貌が判明した後は、いきなり⑧竹芝桟橋へ行っても即発見可能！）
+・② 海洋研究開発機構（千代田区）：この数日連続噴火のニュースを気にして今日は休みをとっており、小笠原の祝詞を確認しに【③ 吉備津神社】へ向かったと判明。
+・③ 吉備津神社（外神田・神田明神の場所）：小笠原の祝詞を確認しに来たが、『その書類は【④ 国立国会図書館】に預けてある』と伝えると国会図書館へ向かったと判明。
+・④ 国立国会図書館（永田町）：預けられた祝詞書類を閲覧し、海野教授に連絡を取ろうとして品川の【⑦ 海洋科学大学】へ急行したと判明。
+・⑤ 科学技術館（北の丸公園）：耳の聞こえない両親の通訳を行わなければならない子どものことを【コーダ（CODA）】といい、現在はAI技術が手話を音声に変え、スマホがあれば通訳がいなくとも音声交流できる技術が開発されていることが分かる。
+・⑥ 国立科学博物館（上野）：小笠原のクジラ研究が紹介されており、マッコウクジラには【コーダ】という言語があることが分かる。
+・⑦ 海洋科学大学（品川）［★小笠原推理の鍵］：海野教授はすでに亡くなっていたことを知り、ショックを受けて【⑧ 竹芝桟橋ターミナル】へ向かったと判明。さらに元同僚から、教授が残した『保管・3つの鉄則』メモが判明（①草稿＝酒に酔って口を滑らせる人間には預けない［下戸に託す］、②パスワード書類＝PCが得意な人だと中身を開いて完成させてしまうため、あえてPCに触れない紙派に預ける、③実録音響テープ＝父島の高温多湿で劣化するため、低温保管庫を使えて録音機材の手入れができる人間に預ける）。
+・⑧ 竹芝桟橋ターミナル（浜松町）：（※①で容貌が判明していれば即発見！）海を見つめている【吉備津】を発見！ 祝詞のクリック音構成（『EV-26』）と、Day 7で連絡するための【吉備津の直通連絡先】を入手！（※⑦未訪問で直行した場合は、吉備津から品川の大学で聞いた『保管・3つの鉄則』も補足される）
+
+🏝️【小笠原現地チーム：父島A2マップ8拠点 GM読み上げテキスト】
+（※推理ルール：出会う島民全員が海野教授を知っている。飲み仲間6人［神代・磯辺・潮見・柏木・湊・網野］の証言と東京⑦の『保管・3つの鉄則』を突き合わせて3施設の担当者［神代・潮見・湊］を推理・特定し回収する。先に④⑤⑥へ訪れていた場合、推理後の名前連絡・再訪問はアクション消費なし）
+・① 海洋科学大学 小笠原研究所（事務員）：「海野教授は『研究が完成すると浪寄さんにも迷惑がかかる』と気にして、よく飲み歩いていた島の仲間6人（神代・磯辺・潮見・柏木・湊・網野）のうち3人にバックアップを分けて預けていました。選び方の基準は東京・品川の大学にメモを残しているそうですよ」
+・② パパズドルフィン（船長兼宿の主人）：「海野先生はよく6人の飲み仲間とうちの座敷で飲んでいたよ。6人の中でお酒を飲めない下戸は『神代』と『湊』だけで、『磯辺』は酔うと何でも喋ってしまう酒豪だったな。神代と磯辺はよく小笠原神社に出入りしていたよ」
+・③ ウェザーステーション展望台（ベテランガイド）：「海野先生とはよくここでクジラを眺めたよ。飲み仲間6人の中でPCや録音機材が得意なのは『柏木』と『湊』だけで、『潮見』はパソコンに触れない筋金入りの紙派だったな。潮見と柏木はよく気象庁の小笠原観測所に出入りしていたよ」
+・④ 小笠原神社（神職）：「海野先生のクジラ構文規則の草稿ですか？ 数年前、先生と飲み歩いていた神社関係者のどなたかが社務所の奥に保管していた記憶があります。当時出入りしていた方も多いので、どなたの名義か（名前）が分かればすぐにお出しできますよ」 ➔ 【神代（かみしろ）】と特定して伝えると、✅【① クジラ構文規則の草稿（EV-27）】を入手！
+・⑤ 気象庁 小笠原観測所（所長）：「海野教授の解析システムのパスワード書類ですね？ 数年前に飲み仲間の誰かが『もしもの時の封筒』を所内の書庫に預けていた話があります。当時のファイルが膨大ですので、どの担当者のファイルか（名前）が分かればすぐ引き出せますよ」 ➔ 【潮見（しおみ）】と特定して伝えると、✅【② マッコウクジラ音響言語解析システムへのアクセス（whale-study）】を入手！
+・⑥ 小笠原水産センター（担当者）：「海野先生の磁気テープ（実録音響データ）ですね？ うちの低温保管庫の奥に、数年前に飲み仲間のどなたかが預けた私物ケースが残っているはずです。名義ごとに管理していますので、どなたの名義か（名前）を教えていただければすぐお出しできますよ」 ➔ 【湊（みなと）】と特定して伝えると、✅【③ 実録音響データ4つ（EV-28〜31）】を入手！
+・⑦ 小笠原海洋センター（鯨類保全スタッフ）：「海野先生は『白いマッコウクジラは100頭に1頭の極めて知能の高いリーダー個体』だと仰っていましたよ。飲み仲間の『柏木』はPCが得意すぎて勝手にデータを解析しようとして怒られていましたし、『神代』はとても口が堅い方でした」
+・⑧ 二見港（港湾案内所の職員）：「飲み仲間の『湊』と『網野』はよく小笠原水産センターに出入りしていたな。漁師の網野は『機械やテープはさっぱりだ』と笑っていたけど、湊は録音機材の湿気対策に詳しかったよ。先生は品川の大学に預け先の基準をメモしてあると言っていたな」`,
+
+  6: `■ DAY 6 フェーズ1：朝8時ブリーフィング（巨大生物の完全回復・北上再開） ＆ 距離限界カード配布・音響解析の開始
+⏱️ 開始タイミング・条件：Day 5の捜索ミッションがすべて完了し、Day 6（決戦前日・朝8時）へ移行した時点
+📦 配布・提示：浪寄へ『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』、7名時は長津へ『SP-07』、朝潮へ『DAY 6 指令書』配布
+📢【GMからの開始描写】：「Day 6（決戦前日・朝8時）を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 6 指令書』と同文） ━━┓
-「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
+「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。昨日、東京班が吉備津から入手した祝詞の記録（EV-26）と、小笠原班が3箇所から回収した海野教授の3つの研究（①構文規則の草稿 EV-27・②音響言語解析システムアクセス・③実録音響データ4つ EV-28〜31）がすべて揃いました。直ちに解析を開始してください！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ2：朝倉教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安15分）
+■ DAY 6 フェーズ2：海野教授の実録音響データの解析 ＆ 魚雷以外の方法で24時間以内に巨大生物を撃退する作戦の立案（目安20分・延長の可能性あり）
 ⏱️ 開始タイミング・条件：フェーズ1の資料開示直後、プレイヤーが『マッコウクジラ音響言語解析システム（/sonar）』にアクセスして分析・作戦立案を開始した時点
-💡【クジラ言語の柔軟な判定】伝統の4語祝詞だけでは移動する巨大生物を追跡・迎撃する情報を伝えきれないため最大8語（2語×4組）まで許容されています。8語の穴埋めを強制する必要はなく、クジラを駿河湾へ呼び寄せて巨大生物を撃退する作戦がまとまればOKです（標準構成例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】）。
+💡【クジラ言語の柔軟な判定】伝統の祝詞（『人と勇魚、契り、小笠原へ、集ひ来よ、大獲物ぞ、集ひ来よ』）のままではクジラが小笠原へ集まってしまうため、北方へ呼び寄せるよう組み替える必要があります（最大8語［2語×4組］まで許容）。8語の穴埋めを強制する必要はなく、クジラを駿河湾へ呼び寄せて巨大生物を撃退する作戦がまとまればOKです（標準構成例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】）。
 ⚠️【条件分岐：アプリで『狂気の深淵を覗く』ボタンを押した場合（5分間の猶予経過後に発生）】
 ・5分経過後、覗いたPCが【心臓発作により心停止】したことをGMが口頭宣言します（演技・接触は不要）。
 ・蘇生条件：数分以内に①坂凪または初瀬による救命処置の宣言（東京班の場合は遠隔指示の宣言）＋②初瀬の直観に基づく『名前を呼んで戻ってこい・まだ死ぬなと声をかける』宣言があれば息を吹き返します。
 
-■ フェーズ3：長津からの直通交渉提案（クジラへの呼びかけ音声と撃退作戦の立案直後）
+■ DAY 6 フェーズ3：長津からの直通交渉提案（クジラへの呼びかけ音声と撃退作戦の立案直後）
 ⏱️ 開始タイミング・条件：プレイヤーがクジラを呼び寄せる音声信号と24時間以内の撃退作戦をまとめた直後
 📦 配布：朝潮へ『DAY 6 途中① 指令書（SP-07連動）』
 
@@ -1192,35 +2133,36 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 「――クジラを呼び寄せる新言語祝詞の音声が完成しましたね！ しかし、防衛省の上層部は『さらなる魚雷の飽和攻撃』の準備を進めており、通常のルートで上申しても潜水艦で祝詞の音声を流すような作戦は到底承認されません。……朝潮危機管理官、皆さん、実は防衛省で自衛隊部隊の運用を統括する最高責任者・【運用企画局長の岸部（きしべ）】は私の親戚（叔父）にあたりまして、直通の連絡先を持っています。厳格な現実主義者ですが、科学的な根拠と計算に基づく進言であれば耳を傾けてくれるはずです。準備が整い次第、回線を繋ぎますので直接説得を頼みます！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ4：防衛省 運用企画局長・岸部（きしべ）との直通電話交渉（GMロールプレイ）
+■ DAY 6 フェーズ4：防衛省 運用企画局長・岸部（きしべ）との直通電話交渉（GMロールプレイ）
 ⏱️ 開始タイミング・条件：対策本部が説得の根拠を整理し、長津を通じて岸部局長へ直通電話を繋いだ時点
 ・🟢通常時第一声：「――防衛省運用企画局長の岸部だ。長津からの緊急回線とはな……合同対策本部の諸君、こんな深夜に一体何の用件だね？」
 ・🟡Day 4で『東京湾』と答えていた場合の嫌味第一声：「――防衛省運用企画局長の岸部だ。……ほう、一昨日は『巨大生物は東京湾へ向かう』と報告して我が海上自衛隊の展開を遅らせ、結果として駿河湾の目と鼻の先まで押し込まれる原因を作った対策本部の諸君か。その節は実に貴重なご高説をありがとう。で、こんな深夜に今度は一体どんな名案を持ってきたというのだね？」
 ・⚠️不足時の反論誘導：①なぜ魚雷の飽和攻撃ではなくクジラなのか？ ②水深1,000mのSOFAR層・潜水艦の水中スピーカー ③クジラの移動時間（6〜8時間＝今夜の発信が必要）の3点が揃うよう反論して導き出させます。
-・✅交渉成立：「――……なるほど。通常兵器の無力化と火山刺激の破滅リスク、そして深海SOFAR層による音響伝達とクジラの遊泳時間（6〜8時間）の逆算か。……いいだろう。防衛省運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。――明朝の運命、君たちに託すぞ」
+・✅交渉成立：「――……なるほど。超巨大群体に対する通常兵器の限界と天敵クジラによる捕食、そして深海SOFAR層による音響伝達とクジラの遊泳時間（6〜8時間）の逆算か。……いいだろう。防衛省運用企画局長として、私が全責任を背負おう。直ちに第1潜水隊群へ緊急出動を下令する。――明朝の運命、君たちに託すぞ」
 
-■ フェーズ5：深海SOFAR層での新言語祝詞・大出力放流開始
+■ DAY 6 フェーズ5：深海SOFAR層での新言語祝詞・大出力放流開始
 ⏱️ 開始タイミング・条件：岸部局長の説得に成功し、第1潜水隊群への緊急出動命令が下った直後（Day 6終盤）
 📦 配布：長津へ『NG-07』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『長津カード NG-07』と同文） ━━┓
-「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」
+「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波はSOFAR層に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
 
-  7: `■ フェーズ1：最終決戦の夜明け ＆ 駿河湾への目標接近
+  7: `■ DAY 7 フェーズ1：最終決戦の夜明け ＆ 駿河湾への目標接近
 ⏱️ 開始タイミング・条件：Day 6が終了し、Day 7（最終決戦の夜明け）へ移行した時点
 📦 配布・提示：朝潮へ『DAY 7 指令書』配布 ＋ 『Day 7 最終決戦監視海図』提示
+📢【GMからの開始描写】：「Day 7（最終決戦の夜明け）を迎えました。東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）を通信回線で繋ぎ、両会議室から固唾を呑んで駿河湾の状況を見守っています。」
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（『DAY 7 指令書』と同文） ━━┓
 「夜明けを迎えました。現状、【富士山地下の火山性微動は継続】しており、巨大生物は水深600〜1,000mを維持して【駿河湾付近まで接近】しています！ 周辺海域に展開する海上自衛隊の潜水艦部隊および水中聴音網（パッシブソナー網）より、順次リアルタイムの探知状況と気象庁の火山観測データが入電いたします！」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ2：マッコウクジラ大群の集結・深海大捕食 ＆ 富士山噴火危機の完全停止
+■ DAY 7 フェーズ2：マッコウクジラ大群の集結・深海大捕食 ＆ 富士山噴火危機の完全停止
 ⏱️ 開始タイミング・条件：フェーズ1の開始ブリーフィングに続けて、深海ソナー探知および火山観測データが入電した時点
 📦 配布：長津へ『NG-08-1』『NG-08-2』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス①（『長津カード NG-08-1』と同文） ━━┓
-「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー探知から、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。
+「長津です。水中聴音網（パッシブソナー網）および海自潜水艦の深海ソナー・光学探知から、一頭の白いクジラに続いて、クジラと思われる生物が100頭以上、駿河湾に集結しています。昨夜からの呼びかけに応えたものと考えられます。さらに太平洋全域から、後続の1,000頭近くが駿河湾への移動を示しています。
 　先ほどから、クジラが深海へと潜水を開始。水深1,000m付近の巨大生物への複数回の接触が見られます。大量のクジラが一斉に巨大生物に喰らいついていると考えられます。
 　深海ソナー探知の結果、巨大生物は大幅にその大きさが縮小しており、さきほどクジラとの区別がつかなくなりました。同時に、この巨大生物から発せられていた特有の振動も完全に停止しています」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
@@ -1232,92 +2174,132 @@ const DEFAULT_GM_NARRATIONS: Record<number, string> = {
 　皆さん、やりました。我々と、クジラの勝利です」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
-■ フェーズ3：防衛省・自衛艦隊幹部からの直通電話（公表方法の最終選択）
+■ DAY 7 フェーズ3：防衛省幹部からの直通電話・特別配布カード（Day 7 配布）配布 ＆ 岸部からの小笠原班への緊急解析要請（last-mission ➔ 吉備津連絡）
 ⏱️ 開始タイミング・条件：長津の作戦成功アナウンス（NG-08-2）が完了した直後
+📦 配布：特別配布カード（Day 7 配布）全7枚（🟦SP-08朝潮・SP-09貝浜・SP-10長津 ／ 🟪SP-11坂凪 ／ 🟥SP-12太刀魚・SP-13初瀬・SP-14浪寄）
 【🎙️ NPC：防衛省・自衛艦隊幹部（GM）】：
 「――朝潮君、貝浜君、聞こえるかね。……まずは、事態をここまで抑え込んだ君たちの尽力には感謝する。だがね……自衛隊の出動まで閣議決定しておいて、自衛隊側は何の活動もしなかったというのは、世間にも国会にも説明ができないんでね。ここは、海上自衛隊の出動を決めた総理が国民に説明するために、少し稼働したいと言っている。このあと、駿河湾沖合に向けて、自衛隊側から『害獣駆除の掃討攻撃（爆雷・魚雷投下）』を一斉に行わせる。……君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる」
-・💡【A案でもクジラを逃がせるガイド】：仮にA案を選んだ場合でも、クジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、魚雷・爆雷を回避してもらうことができます。
-・🟣【第3の選択（爆雷を投下させず、自衛隊を立てる選択）を交渉してきた場合】：
-  幹部（岸部）：「現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない」
-  （※その後の交渉はGMの裁量に委ねます。参考案：『自衛隊の深海音響作戦が奏功したこと』『国民の生命と国土を守ることを優先したこと』として総理に報告・発表する形にまとめる等）
-（プレイヤーの回答を受けた後）：
-「……わかった。このあと、政府からの発表がある。いずれにしても、君たちが正しかった。感謝する」
 
-■ フェーズ4：テレビ臨時ニュース（選択肢A/B分岐） ＆ 対策本部解散
-⏱️ 開始タイミング・条件：プレイヤーが公表方法（AまたはB）を決断し、防衛省幹部との電話が切れた直後
+📞【続けて入る岸部（運用企画局長）からの緊急連絡】：
+「――待ってくれ、私だ、岸部だ！ 小笠原現地の諸君もそのまま聞いてくれ！
+　実は今、現場海域に展開している海上自衛隊の潜水艦部隊から、『ソナー上ではもはや撃つべき対象が確認できず、これ以上魚雷を撃つ必要性が本当にあるのか？』という確認と疑問の声が複数上がっている！
+　さらに、現場のクジラたちが先ほどから【同じコーダ（クリック音の信号）】を何度も繰り返し発信しているのだ。合同対策本部の諸君なら、このクジラの言葉の意味が分かるのではないか、と現場が確認を求めている。
+　特に小笠原現地メンバーの意見と解析結果を至急聞きたい！ 総理の最終判断については、私が少し時間を稼いでおく！」
+
+🐋【last-mission の音声確認】：
+・全員にアプリ画面右上の『コード入力』ボタンを押させ、コード【last-mission】を入力させます。
+・Day 5の最後で入手した【吉備津の連絡先】に連絡してこの未知の音を尋ねると、吉備津が答えます：
+  🎙️ 吉備津：「――ああ、その音（『ポ・ルル・トーン』『タ・タン・ドーン』）ならわかります！ クジラからの合図で、人間に対して『ありがとう』『ごちそうさま』、または『（人間との約束が）完了した』という意味ですよ！」
+・これを岸部に報告すると、岸部は【実弾魚雷の発射は完全に不要であると確信して攻撃を中止】させ、総理への説明・公表方法として次の2択を提示します：
+  - 選択肢A：【自衛隊の作戦によって完全消滅した（自衛隊の功績）】
+  - 選択肢B：【合同対策本部の作戦が奏功し、完全消滅は自衛隊が確認できた（自分たちの功績）】
+（プレイヤーの最終選択を受けた後）：
+「……わかった。このあと、政府からの公式発表がある。いずれにしても、君たちが正しかった。感謝する」
+
+■ DAY 7 フェーズ4：テレビ臨時ニュース（選択肢A/B分岐） ＆ 対策本部解散
+⏱️ 開始タイミング・条件：プレイヤーが公表方法（AまたはB）を決断し、岸部局長との電話が切れた直後
 📦 配布：長津へ『NG-09（選択肢Aの場合）』または『NG-10（選択肢Bの場合）』
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（選択肢A：『長津カード NG-09』と同文） ━━┓
-「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が海底のマグマ網を刺激していた可能性が高いことが判明。これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊および護衛艦による実弾掃討作戦を敢行し、この巨大生物を完全に撃滅・駆除したとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『自衛隊の果敢な決断と迅速な行動が国土と国民の生命を守り抜いた』と声明を発表しています――」
+「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、一連の危機事態が完全に沈静化したと発表しました。政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が海底のマグマ網を刺激していた可能性が高いことが判明。これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊による特命深海作戦を敢行し、この巨大生物の完全消滅を確認したとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『自衛隊の果敢な決断と迅速な作戦行動が国土と国民の生命を守り抜いた』と声明を発表しています――」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 
 ┏━━ 📡 オペレーター（長津）のアナウンス（選択肢B：『長津カード NG-10』と同文） ━━┓
-「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけての連続海底噴火と富士山の火山性微動について、内閣官房長官は先ほど、危機事態が完全に沈静化したと発表しました。西之島沖から駿河トラフへ北上していた『未確認の超巨大海洋生物』が海底マグマ網を刺激していたことが判明。政府は海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせ、深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事に巨大生物の駆除に成功し、自衛隊による武力攻撃は不要となったとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『一発の砲火も交えず、現場の機転と科学の力で日本を救った合同対策本部のメンバーは我が国の誇りでありヒーローである』と称える声明を発表しています――」
+「――政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。伊豆諸島から駿河湾にかけての連続海底噴火と富士山の火山性微動について、内閣官房長官は先ほど、危機事態が完全に沈静化したと発表しました。西之島沖から駿河トラフへ北上していた『未確認の超巨大海洋生物』が海底マグマ網を刺激していたことが判明。今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせた独自の無力化作戦を敢行して見事に奏功し、現場に展開していた海上自衛隊の潜水艦部隊がその完全消滅を確認したため、実弾による武力攻撃は不要となったとのことです。これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『一発の砲火も交えず、現場の機転と科学の力で日本を救った合同対策本部のメンバーは我が国の誇りでありヒーローである』と称える声明を発表しています――」
 ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛`,
+};
+
+// 各Dayの目標進行時間（分）デフォルト値
+const DEFAULT_DAY_TARGET_MINUTES: Record<number, number> = {
+  0: 15,
+  1: 15,
+  2: 10,
+  3: 30,
+  4: 25,
+  5: 15,
+  6: 20,
+  7: 15,
 };
 
 // GM進行チェックリストのデフォルト値（各Day最新シナリオ連動）
 const DEFAULT_GM_CHECKPOINTS: Record<number, string[]> = {
+  0: [
+    "【作品概要・注意事項の案内】スマートフォン（音の確認・アプリ利用）の手元準備を促し、作品の特徴（ライブアクションロールプレイング・体験型クトゥルフ）を案内する",
+    "【拠点と通信の前提説明】東京本部チーム3名＝『東京・霞が関にある海上保安庁本部の会議室』、小笠原現地チーム4名＝『小笠原諸島・父島にある海上保安庁支部の会議室』であり、両会議室の通信は常に繋がっていて自由に会話・情報共有できることを案内する",
+    "【プレイヤー自己紹介 ＆ キャラクター選択】参加者の簡単な自己紹介のあと、7名のキャラクター（6名時は長津不在）を紹介して担当キャラクターを決定する",
+    "【個人ハンドアウト（B5本紙）の配布・読み込み】各自の個人ハンドアウトを配布して読み込ませ、不明点がないか確認してからDay 1本編へ進む",
+  ],
   1: [
-    "【Day 1 開始時】朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』を渡し、あわせて『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 30分）",
+    "【Day 1 開始時】両拠点（東京・霞が関の本部会議室と小笠原・父島の支部会議室）が通信で繋がっている描写を行い、朝潮（PC1）へ特別配布カード『SP-01：黒い小さな隕石のかけら（初期）』と『Day 1 対策本部・日次ブリーフィング＆指揮官ミッションシート』（7名時は長津経由）を手渡して各員の点呼・自己紹介を行わせる（目標時間: 15分）",
     "遭難海図を展開し、海流（真東2.0kt）・風圧流（北東1.5kt）・経過時間（現在20分経過＋航行40分＝1時間後）を整理させ、巡視船を急行させるべき海域を指定させる",
     "【失敗時の処理】1回目の指定で外れた場合は「もう一度だけ再指定（リトライ）」を許可し、2回目も外れた場合は自動的に救助成功として進行する",
     "【証言カードのペナルティ処理】1発成功時は『船長の証言（EV-08）』と『大型冷凍ボックス（EV-07）』の両方をDay 1で取得。1回失敗時は1枚のみ取得（残り1枚はDay 2以降の調査枠へ）。2回失敗時は0枚（2枚ともDay 2以降の調査枠へ繰り越し）",
   ],
   2: [
-    "【Day 2 開始時】坂凪（PC3）へ特別配布カード『SP-02：朝倉教授の最期』、太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
-    "東京側（3択中1つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
+    "【Day 2 開始時】東京・霞が関の本部会議室（3名）と小笠原・父島の支部会議室（4名）を通信で繋いでいる開始描写を行い、坂凪（PC3）へ特別配布カード『SP-02：海野教授の最期』を配布し、朝潮（7名時は長津経由）へ『Day 2 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 10分）",
+    "東京側（3択中2つ）と小笠原現地（4択＋Day 1未取得証言カードの中から2つ）の調査枠を提示する（※選択されなかった情報はあとの行動で調査可能と案内する）",
     "選択された証拠を開示し、「ダイオウイカの組織なのに、なぜ数百mもの超巨大な影なのか？」というサイズ矛盾を合議させる",
   ],
   3: [
-    "【Day 3 開始時】貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 25分）",
-    "作戦海図（W-3100）上でソノブイ投下地点を決定させ、巨大生物の現在位置（セクターB-3）を特定させる",
-    "ソノブイ終了後、長津アナウンス（連動噴火と北上予想要請）を行い、太刀魚（EV-16: 距離データ）、貝浜（EV-17: ソノブイ探知時間 17:00）、浪寄（EV-18: Day1救助時間 09:00）の3名へ証拠を配布する",
-    "経過56時間・距離約350kmから、移動速度（約150km/日）と明日（Day 4 明神礁周辺）の到達地点を計算・合議させる（※計算ミスがあってもペナルティはなく、翌朝の明神礁噴火で自然に軌道修正される）",
-    "深海写真（漆黒の巨大質量と20本以上の触手）を開示し、浪寄准教授（生物所見）と貝浜リエゾン（特別配布カード『文民統制の仕組み』に基づく法的判断）へ諮問する",
+    "【Day 3 開始時】Day 3のみ小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）が大型捜索ヘリコプターに乗り込み、巡視船『あきつしま』で洋上給油を受けながら鳥島沖へ向かう描写（東京本部3名は霞が関の会議室から無線接続）を行う。貝浜（PC2）へ特別配布カード『SP-04：文民統制の仕組み』を配布し、朝潮（7名時は長津経由）へ『Day 3 ブリーフィング＆指揮官ミッションシート』を手渡してソノブイ3基による索敵任務を開始させる（目標時間: 30分）",
+    "作戦海図（W-3100）上でソノブイ投下地点を決定させる（🎯正解位置：【B-3】 ／ ♨熱水域：【D-2・C-5】［噴火口：E-5］。B-3直上＝確定捕捉、B-3周囲1マス＝約20km先から反響あり、熱水域・噴火口直上＝ノイズで探知不能、熱水域・噴火口の周囲1マス＝直下不在だが周囲反響はノイズで探知不能）",
+    "【目標捕捉・北上速度報告と深海写真提示・失敗時処理】ソノブイ終了後、長津アナウンス（NG-02：時速約6km・日速約150kmで北上、明日Day 4は明神礁周辺へ到達見込み）を行う。索敵成功時は『成功時の写真（近接浮上）』のみを提示。索敵失敗時は『失敗時の写真（遠距離・航跡波）』のみを提示し、小笠原現地の調査枠（2枠）のうち1枠を『F-3D：撮影した画像の分析（EV-22）』へ自動充当して浪寄へ公開する。その上で浪寄准教授（生物所見）と貝浜リエゾン（法的判断）へ諮問する",
     "防衛省・官邸からの緊急諮問として、未確認巨大生物の公式呼称（コードネーム: ワタツミ／クスルフ／独自命名）を合議・決定させる",
     "朝潮危機管理官（PC1）に自衛隊への防衛出動要請、または海上警備行動発令の最終意思決定を行わせる（※どちらを選んでもDay 4終盤で同じ結果へ合流）",
-    "合同対策本部の調査枠（東京側1枠、小笠原現地側2枠）を選択させ、証拠資料を開示する",
+    "合同対策本部の調査枠（東京側2枠、小笠原現地側2枠 ※ソノブイ失敗時は現地1枠をEV-22で消費したため残り1枠）を選択させ、証拠資料を開示する",
   ],
   4: [
-    "【Day 4 開始時】初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』を配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
+    "【Day 4 開始時】小笠原現地チームの4名も父島へ帰投し、Day 4以降は再び父島の海上保安庁支部の会議室（4名）と東京・霞が関の本部会議室（3名）を通信で繋いで対策会議を行っている開始描写を行う。太刀魚（PC4）へ特別配布カード『SP-03：SOFAR層の特異性』、初瀬（PC6）へ特別配布カード『SP-05：神社の祝詞の複製』をそれぞれ配布し、朝潮（7名時は長津経由）へ『Day 4 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: 25分）",
     "このまま北上すると伊豆諸島マグマ網を経て【富士山地下マグマ網】へ直撃・破局噴火を招く危機を共有させる",
-    "合同対策本部が即応総力体制へ移行し、調査枠制限を撤廃して未取得だった全証拠資料を一括開示する",
-    "対策本部として巨大生物の最終目的地（富士山か東京湾か）を結論づけさせる（※『東京湾』と結論づけた場合、機械的ペナルティはないが、Day 5での自衛隊の攻撃位置がより駿河湾に近い位置へ遅れ、Day 6の岸部局長交渉で嫌味を言われる）",
+    "合同対策本部が即応総力体制へ移行し、テーブルの上に出ているこれまで選択していなかった調査カードとDay 4の調査カードをすべて自由に閲覧可能になったと案内する",
+    "対策本部として巨大生物の最終目的地（富士山か東京湾か）を結論づけさせる（※『東京湾』と結論づけた場合、Day 6の岸部局長交渉で嫌味を言われる）",
     "防衛省が「害獣駆除（災害派遣）」として海上自衛隊動員・実弾迎撃作戦を決定した通達（NG-05）を読み上げる",
   ],
   5: [
-    "【Day 5 開始時】浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』を配布し、朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間と報告）』を手渡す（目標時間: 25分）",
-    "朝倉教授のクジラ構文規則（EV-30：『了解した』以外はすべて2語成語のペアを単位として会話する規則）等を開示し、「超群体であること」「クジラの捕食対象であること」「なぜ富士山を目指すのか」の真相に迫らせる",
-    "終盤、防衛省作戦本部から貝浜への直通無線（NG-06 ＆ Day 5 途中①指令書）を演出し、「微動は収まったが、アクティブソナー（ソナー探知）でゆっくり深海に沈み込みながら元の大きさに戻っている傾向が確認できる。どうして魚雷命中後に復活してしまうのか？なぜ富士山を目指すのか？」を浪寄准教授らに確認させる（※Day 4で東京湾と答えていた場合は、より駿河湾に近い位置での遅滞攻撃になった旨を添える）",
+    "【Day 5 開始時】東京・霞が関の本部会議室（3名）と小笠原・父島の支部会議室（4名）を通信で繋いで対策会議を行っている開始描写を行い、長津カード『NG-06（魚雷命中後の深海での復活報告）』および朝潮（7名時は長津経由）へ『Day 5 ブリーフィング＆指揮官ミッションシート（残距離240km・時速5kmから危機到達まで残り48時間、魚雷攻撃失敗と防衛省からの緊急照会）』を手渡す（目標時間: 15分 ※Day 5終了後に10分程度の休憩を入れる）",
+    "防衛省からの緊急照会に対し、「①超群体（コロニー）であるため魚雷で一部を砕いても深海で再結合して元の大きさに戻ってしまうこと（浪寄）」「②富士山麓へ運ばれた約30kgの隕石の特殊物質と地磁気に引き寄せられていること（朝潮）」を回答させ、天敵マッコウクジラを【盟約の祝詞】と【海野教授のクジラ言語研究】で呼び寄せる方針を確認する",
+    "【東京×小笠原の分断・同時進行マップ捜索ミッション（飲み仲間6人からの担当者推理）】朝潮へ『Day 5 途中①指令書』を渡し、『東京都内 広域捜索マップ（全8拠点）』と『父島 現地調査マップ（A2・全8拠点）』を展開する。東京班には『①本人住所（江東区）』（容貌と勤め先JAMSTECが判明）から元神主の子ども【吉備津】を捜索させ（①で容貌が判明していれば『⑧竹芝桟橋ターミナル』で即発見可能）、『EV-26：祝詞のクリック音構成』と【吉備津の直通連絡先】を入手させるとともに、『⑦海洋科学大学（品川）』（ショートカット時は⑧吉備津）で判明する海野教授の『保管・3つの鉄則』を小笠原班へ共有させる。小笠原班には、出会う島民全員の証言から飲み仲間6人（神代・磯辺・潮見・柏木・湊・網野）の人柄と出入り先を集めさせ、東京側の『3つの鉄則』と照合して3施設（④小笠原神社＝神代・⑤気象庁小笠原観測所＝潮見・⑥小笠原水産センター＝湊）の担当者を推理・特定させ、【①構文規則の草稿（EV-27）・②解析システムパスワード（whale-study）・③実録音響4つ（EV-28〜31）】の3つすべてを回収させる",
   ],
   6: [
-    "【Day 6 開始時】7名プレイ時は長津（PC7）へ特別配布カード『SP-07：防衛省 運用企画局長とのコネクション』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート（朝8時時点：巨大生物の完全回復・北上再開と火山性微動再開、駿河湾到達まで24時間）』を手渡す（目標時間: 30分）",
-    "【ミッション①・②・③】未回収資料と『小笠原社記』『神社の祝詞の複製』から太古の解決策（マッコウクジラによる捕食）を特定させ、朝倉教授の構文規則と4つの実録音響データ（EV-31〜34）を分析して『マッコウクジラ音響言語解析システム』へアクセスさせる。そのうえで、海上自衛隊の魚雷以外の方法で24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめさせる（※クジラ言語は4語では追跡・迎撃情報を伝えきれないため最大8語まで許容。標準構成例：【人間とクジラ＋約束】【海の下の火山＋探せ】【北＋集まれ】【大きい・たくさんの餌＋攻撃せよ】。解読・作戦立案目安：15分）",
-    "【『狂気の深淵を覗く』使用時の5分猶予 ＆ 心停止・救命（声かけ）ルール】アプリで『狂気の深淵を覗く』を使用した場合は【5分の猶予（＋5分延長）】の後、覗いたPCが心臓発作・心停止に陥る。GMが心停止を宣言してから数分以内に、坂凪または初瀬による救命処置の口頭宣言（東京班が倒れた場合は通信越しの遠隔救命指示の宣言）＋初瀬の導きによる『名前を呼んで戻ってこい・まだ死ぬなと声をかける』宣言があれば息を吹き返す（※身体演技や接触は不要）",
-    "クジラへの呼びかけ音声と撃退作戦がまとまった後、朝潮へ『Day 6 途中① 指令書』を渡し、長津が親戚（叔父）である防衛省運用企画局長・岸部（きしべ）への直通回線を繋いで（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
-    "【岸部局長の反論による思考誘導】クジラを呼び寄せる作戦と音声がまとまっていれば、もし『水深1,000mのSOFAR層（潜水艦）』や『クジラの移動時間（6〜8時間＝今夜の送信が必要）』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
+    "【Day 6 開始時】東京・霞が関の本部会議室（3名）と小笠原・父島の支部会議室（4名）を通信で繋いで対策会議を行っている開始描写を行い、浪寄（PC5）へ特別配布カード『SP-06：マッコウクジラクリック音の距離限界と集合に必要な時間』、長津（PC7）へ特別配布カード『SP-07』を配布し、朝潮（7名時は長津経由）へ『Day 6 ブリーフィング＆指揮官ミッションシート』を手渡す（目標時間: クジラ音響言語の説明後20分 ※延長の可能性あり）",
+    "【ミッション①・②】Day 5で回収した海野教授の構文規則（EV-27）・解析システムアクセス（whale-study）・4つの実録音響データ（EV-28〜31）からアプリへアクセスさせる。そのうえで、海上自衛隊の魚雷以外の方法で24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめさせる（※クジラ言語は4語では追跡・迎撃情報を伝えきれないため最大8語まで許容。解読・作戦立案目安：20分［延長の可能性あり］）",
+    "アプリで『狂気の深淵を覗く』を使用した場合は【5分の猶予（＋5分延長）】の後、覗いたPCが心臓発作・心停止をアナウンス。GMが心停止を宣言してから数分以内に、坂凪または初瀬による救命処置の口頭宣言（東京班が倒れた場合は通信越しの遠隔救命指示の宣言）＋初瀬の導きによる『名前を呼んで戻ってこい・まだ死ぬなと声をかける』宣言があれば息を吹き返す（※身体演技や接触は不要）",
+    "朝潮へ『Day 6 途中① 指令書』を渡し、長津が防衛省運用企画局長・岸部（きしべ）への直通回線を繋いで（7名時はPC7長津が宣言）、朝潮・貝浜を中心に電話交渉を行わせる（※Day 4で東京湾と結論づけていた場合は、岸部局長から嫌味を言わせる）",
+    "【岸部局長の反論による思考誘導】もし『水深1,000mのSOFAR層』や『クジラの移動時間』が抜けていても、岸部局長が鋭く反論・質問することでプレイヤー自身にその場で考えさせて解答を導き出させる",
     "岸部局長の作戦承諾と第1潜水隊群への緊急出動下令、明朝の現場部隊への「魚雷攻撃抑制（スタンドダウン）」通達を読み上げ、続けて深夜の潜水艦による深海SOFAR層での水中スピーカー（水中音響送信機）を用いた人工音源の大出力放流開始（NG-07）をアナウンスする",
   ],
   7: [
-    "【Day 7 開始時】GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 30分）",
-    "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー探知によるクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
-    "防衛省幹部からの直通電話を演出し、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部が機転を効かせて解決したヒーローとして発表し自衛隊の活動を不要にするか」の選択をプレイヤーに委ねる。もし「第3の選択」を交渉してきた場合は、その場のGM裁量で交渉を行う。最後に「いずれにしても、君たちが正しかった。感謝する」と結ぶ。",
-    "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊による撃滅報道 ／ パターンB：合同対策本部が特別な薬剤を撃ち込み自衛隊の活動不要で解決したとするヒーロー報道）を読み上げる",
+    "【Day 7 開始時】東京・霞が関の本部会議室（3名）と小笠原・父島の支部会議室（4名）を通信で繋ぎ、両会議室から固唾を呑んで駿河湾の状況を見守っている開始描写を行う。GMから朝潮（7名時は長津経由）へ『Day 7 ブリーフィング＆指揮官ミッションシート』を手渡し、祝詞に応えて夜通し泳いできたマッコウクジラ群の駿河湾到達・巨大生物の大捕食・富士山微動の完全停止を描写する（目標時間: 15分）",
+    "長津が作戦成功アナウンス（NG-08-1・NG-08-2：水中聴音網および深海ソナー・光学探知による一頭の白いクジラに続くクジラ100頭以上の集結・1,000頭近くの移動、巨大生物の消滅、富士山微動停止、全部隊攻撃中止）を報告する",
+    "防衛省幹部からの直通電話を演出し、特別配布カード（Day 7 配布）全7枚（🟦青：SP-08朝潮・SP-09貝浜・SP-10長津『組織の論理』 ／ 🟪紫：SP-11坂凪『組織と現場の狭間』 ／ 🟥赤：SP-12太刀魚・SP-13初瀬『盟約断絶の危機』・SP-14浪寄『海野研究の危険性』）を配布する。続けて【岸部から小笠原現地メンバーへの追加電話】を演出し、「海自の現場から『撃つべき対象が確認できず発射の必要性があるのか』と疑問が上がっていること、クジラが同じコーダを繰り返し発しており意味を解析してほしいこと（総理の判断は岸部が時間を稼ぐ）」を伝え、全員にアプリのコード入力で【last-mission】を入力させる",
+    "【last-mission 4音声の確認 ➔ 吉備津への連絡】アプリで4つの音声（ド・ドーッカッカッ＝人間とクジラ、チ・トン・チ＝約束、ポ・ルル・トーン＝未知、タ・タン・ドーン＝未知）を確認させ、Day 5で入手した【吉備津の連絡先】へ連絡させる。吉備津から「その音ならわかります。クジラからの合図で、人間に対して『ありがとう』『ごちそうさま』、または『（約束が）完了した』という意味だ」と伝え、岸部へ報告させることで実弾魚雷の発射を完全中止させる。その上で総理への説明・公表方法を「選択肢A：自衛隊の作戦によって完全消滅した（自衛隊）」「選択肢B：合同対策本部の作戦が奏功し、完全消滅は自衛隊が確認できた（自分たち）」の2択から最終決断させる",
+    "プレイヤーの選択に応じたテレビ臨時ニュース（パターンA：自衛隊の特命深海作戦により完全消滅を確認したとする報道［NG-09］ ／ パターンB：合同対策本部の作戦が奏功し自衛隊が完全消滅を確認したとするヒーロー報道［NG-10］）を読み上げる",
     "朝潮の指揮で対策本部を解散し、エピローグの情景を読み上げてゲームを終了・感想戦へ移行する",
   ],
 };
 
-// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図は除外、新規追加ボードも自動マージ）
+// デフォルトの全体提示ビジュアル資料一覧を取得するヘルパー（各Day図・写真網羅、古い海図や廃止された横長版火山監視図は除外、新規追加ボードも自動マージ）
+const REMOVED_VISUAL_BOARD_IDS = new Set([
+  "vis-route-map",
+  "vis-day0-eruption-landscape",
+  "vis-day3-eruption",
+  "vis-day4-eruption",
+  "vis-day5-eruption",
+  "vis-day6-eruption",
+  "vis-day7-eruption",
+]);
+
 function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
   if (
     project.visualBoards &&
     project.visualBoards.length > 0 &&
-    project.visualBoards.some((v) => v.id === "vis-day7-eruption")
+    project.visualBoards.some((v) => v.id === "vis-day7-eruption-portrait")
   ) {
     const existingMap: Record<string, VisualBoardItem> = {};
     project.visualBoards.forEach((v) => {
-      existingMap[v.id] = v;
+      if (!REMOVED_VISUAL_BOARD_IDS.has(v.id)) {
+        existingMap[v.id] = v;
+      }
     });
     const merged: VisualBoardItem[] = [];
     for (const initItem of initialVisualBoards) {
@@ -1336,13 +2318,13 @@ function getDefaultVisualBoards(project: MMProject): VisualBoardItem[] {
       delete existingMap[initItem.id];
     }
     for (const customItem of Object.values(existingMap)) {
-      if (customItem.id !== "vis-route-map") {
+      if (!REMOVED_VISUAL_BOARD_IDS.has(customItem.id)) {
         merged.push(customItem);
       }
     }
     return merged;
   }
-  return initialVisualBoards.filter((v) => v.id !== "vis-route-map");
+  return initialVisualBoards.filter((v) => !REMOVED_VISUAL_BOARD_IDS.has(v.id));
 }
 
 // デフォルトのGM進行ノートを取得するヘルパー
@@ -1352,19 +2334,24 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     `【Day ${dayNumber} 導入読み上げ】\n状況をプレイヤー全員に提示し、各班のアクション選択および情報共有を開始してください。`;
 
   const timeline = project.timeline || [];
-  const step = timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
+  const step =
+    dayNumber === 0
+      ? PRE_GAME_TIMELINE_STEP
+      : timeline.find((t) => t.dayNumber === dayNumber) || timeline[0];
+
+  const defaultTargetMinutes = DEFAULT_DAY_TARGET_MINUTES[dayNumber] || 20;
 
   const defaultCheckpoints =
     DEFAULT_GM_CHECKPOINTS[dayNumber] || [
-      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${
-        dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25
-      }分）をタイマーセットする`,
+      `Day ${dayNumber} 開始時に全体状況をアナウンスし、制限時間（目安 ${defaultTargetMinutes}分）をタイマーセットする`,
       `このフェーズで開示可能な証拠（${(step?.revealedEvidenceIds || []).length}件）の取得条件を確認する`,
       `議論が停滞している場合は、各PCの「固有能力」や「専門知識」の活用を促す`,
     ];
 
   const defaultBgm =
-    dayNumber <= 2
+    dayNumber === 0
+      ? "穏やかな波音・オープニング環境音"
+      : dayNumber <= 2
       ? "静かな緊迫感・環境音（深海・無線ノイズ）"
       : dayNumber <= 5
       ? "捜査・解析フェーズBGM（中テンポ・サスペンス）"
@@ -1375,7 +2362,7 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
     const isOldDefaultScript =
       !existing.readAloudScript ||
       existing.readAloudScript === step?.incidentOverview ||
-      !existing.readAloudScript.includes("┏━━ 📡 オペレーター（長津）のアナウンス") ||
+      (dayNumber >= 1 && !existing.readAloudScript.includes("┏━━ 📡 オペレーター（長津）のアナウンス")) ||
       existing.readAloudScript.includes("小笠原基地より小笠原現地メンバーを乗せた大型捜索ヘリが緊急発進") ||
       existing.readAloudScript.includes("ネタバレ防止") ||
       existing.readAloudScript.includes("何時間の猶予") ||
@@ -1385,7 +2372,20 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       existing.readAloudScript.includes("防衛庁") ||
       existing.readAloudScript.includes("怪異") ||
       existing.readAloudScript.includes("ハイドロスピーカー") ||
-      existing.readAloudScript.includes("救難艇");
+      existing.readAloudScript.includes("救難艇") ||
+      existing.readAloudScript.includes("巨大質量") ||
+      existing.readAloudScript.includes("警備救難部") ||
+      existing.readAloudScript.includes("朝倉") ||
+      existing.readAloudScript.includes("深海音響チャネル") ||
+      (dayNumber === 0 && !existing.readAloudScript.includes("ゲーム開始前 フェーズ1")) ||
+      (dayNumber >= 1 && !existing.readAloudScript.includes("【GMからの開始描写】")) ||
+      (dayNumber === 1 && (existing.readAloudScript.includes("ゲーム開始前アナウンス") || existing.readAloudScript.includes("これより合同海難救助チームを開設します"))) ||
+      (dayNumber === 2 && (existing.readAloudScript.includes("3つの調査項目から1つ") || existing.readAloudScript.includes("SP-03"))) ||
+      (dayNumber === 3 && (existing.readAloudScript.includes("時速6.25km") || existing.readAloudScript.includes("移動スピードを算出し") || !existing.readAloudScript.includes("D-2"))) ||
+      (dayNumber === 4 && (!existing.readAloudScript.includes("自由に閲覧可能") || !existing.readAloudScript.includes("SP-03"))) ||
+      (dayNumber === 5 && (!existing.readAloudScript.includes("保管・3つの鉄則") || existing.readAloudScript.includes("SP-06"))) ||
+      (dayNumber === 6 && (existing.readAloudScript.includes("目安15分") || !existing.readAloudScript.includes("SP-06"))) ||
+      (dayNumber === 7 && (!existing.readAloudScript.includes("SP-14") || !existing.readAloudScript.includes("last-mission")));
 
     const script = isOldDefaultScript ? defaultNarration : existing.readAloudScript;
 
@@ -1400,15 +2400,39 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
           c.includes("防衛庁") ||
           c.includes("怪異") ||
           c.includes("ハイドロスピーカー") ||
-          c.includes("救難艇")
+          c.includes("救難艇") ||
+          c.includes("16:00") ||
+          c.includes("08:00") ||
+          c.includes("巨大質量") ||
+          c.includes("計算ミスがあっても") ||
+          c.includes("より駿河湾に近い位置") ||
+          c.includes("機械的ペナルティ") ||
+          c.includes("EV-16") ||
+          c.includes("時速6.25km") ||
+          c.includes("EV-25") ||
+          c.includes("EV-30") ||
+          c.includes("朝倉") ||
+          c.includes("ミッション①・②・③") ||
+          (dayNumber === 1 && c.includes("ゲーム開始前アナウンス"))
       ) ||
+      !existing.gmCheckpoints.some((c) => c.includes("霞が関")) ||
       existing.gmCheckpoints[0].includes("全体状況をアナウンスし、制限時間") ||
-      (dayNumber === 1 && !existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理"))) ||
-      (dayNumber === 5 && !existing.gmCheckpoints.some((c) => c.includes("どうして魚雷命中後に復活してしまうのか"))) ||
-      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("朝8時")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")))) ||
-      (dayNumber <= 6 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
+      (dayNumber === 1 && (!existing.gmCheckpoints.some((c) => c.includes("証言カードのペナルティ処理")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber === 2 && (existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("3択中1つ")) || existing.gmCheckpoints.some((c) => c.includes("SP-03")))) ||
+      (dayNumber === 3 && (!existing.gmCheckpoints.some((c) => c.includes("EV-22")) || !existing.gmCheckpoints.some((c) => c.includes("D-2")) || existing.gmCheckpoints[0].includes("目標時間: 25分") || existing.gmCheckpoints.some((c) => c.includes("東京側1枠")))) ||
+      (dayNumber === 4 && (!existing.gmCheckpoints.some((c) => c.includes("自由に閲覧可能")) || !existing.gmCheckpoints.some((c) => c.includes("SP-03")))) ||
+      (dayNumber === 5 && (!existing.gmCheckpoints.some((c) => c.includes("飲み仲間6人")) || existing.gmCheckpoints.some((c) => c.includes("SP-06")) || existing.gmCheckpoints[0].includes("目標時間: 25分"))) ||
+      (dayNumber === 6 && (!existing.gmCheckpoints.some((c) => c.includes("SP-06")) || !existing.gmCheckpoints.some((c) => c.includes("心臓発作")) || existing.gmCheckpoints.some((c) => c.includes("作戦名")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber === 7 && (!existing.gmCheckpoints.some((c) => c.includes("last-mission")) || existing.gmCheckpoints[0].includes("目標時間: 30分"))) ||
+      (dayNumber >= 1 && dayNumber <= 6 && dayNumber !== 5 && !existing.gmCheckpoints.some((c) => c.includes("特別配布カード")));
 
     const checkpoints = isOldCheckpoints ? defaultCheckpoints : existing.gmCheckpoints;
+
+    const oldDefaultTarget = dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25;
+    const targetMinutes =
+      !existing.targetMinutes || existing.targetMinutes === oldDefaultTarget
+        ? defaultTargetMinutes
+        : existing.targetMinutes;
 
     return {
       ...existing,
@@ -1416,15 +2440,13 @@ function getGmNoteForDay(project: MMProject, dayNumber: number): GmProgressionNo
       readAloudScript: script,
       gmCheckpoints: checkpoints,
       bgmCue: existing.bgmCue || defaultBgm,
-      targetMinutes:
-        existing.targetMinutes ||
-        (dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25),
+      targetMinutes,
     };
   }
 
   return {
     dayNumber,
-    targetMinutes: dayNumber === 1 || dayNumber === 6 || dayNumber === 7 ? 30 : 25,
+    targetMinutes: defaultTargetMinutes,
     readAloudScript: defaultNarration,
     gmCheckpoints: defaultCheckpoints,
     bgmCue: defaultBgm,
@@ -1646,6 +2668,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [briefingFilterMode, setBriefingFilterMode] = useState<
     "all" | "midday" | "start"
   >("all");
+  const [specialCardFilterMode, setSpecialCardFilterMode] = useState<
+    "all" | "day1to6" | "day7"
+  >("all");
   const [selectedBriefingId, setSelectedBriefingId] = useState(DAILY_COMMANDER_BRIEFINGS[0]?.id ?? "");
   const [selectedPhaseCardId, setSelectedPhaseCardId] = useState(NAGATSU_PHASE_CARDS[0]?.id ?? "");
   const filteredBriefings = useMemo(
@@ -1659,6 +2684,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const activePhaseCardId = NAGATSU_PHASE_CARDS.find((card) => card.id === selectedPhaseCardId)?.id
     ?? NAGATSU_PHASE_CARDS[0]?.id;
   const [selectedCharId, setSelectedCharId] = useState<string>((project.characters || [])[0]?.id || "pc-1");
+  const [handoutSheetPage, setHandoutSheetPage] = useState<"all" | 1 | 2 | 3>("all");
   const [selectedEvidenceId, setSelectedEvidenceId] = useState<string>(
     (project.evidences || [])[0]?.id || ""
   );
@@ -1669,6 +2695,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [visualMarginOverrides, setVisualMarginOverrides] = useState<Record<string, boolean>>({});
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
+  const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "whale_cards" | "nametags">("goal_boards");
+  const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
+  const [whaleMtgFilter, setWhaleMtgFilter] = useState<
+    "all" | "click_sound" | "japanese_meaning" | "day7_only"
+  >("all");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
   const isDirectEditMode = false;
@@ -1714,6 +2745,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     scrollHandoutDocument(id, kind);
   };
 
+  const selectGoalBoardDocument = (id: string) => {
+    setSelectedGoalBoardId(id);
+    const canvas = previewCanvasRef.current;
+    const target = printableSheetRef.current?.querySelector<HTMLElement>(
+      `[data-goal-board-id="${CSS.escape(id)}"]`
+    );
+    if (canvas && target) {
+      canvas.scrollTo({
+        top: canvas.scrollTop + target.getBoundingClientRect().top - canvas.getBoundingClientRect().top - 16,
+      });
+    }
+  };
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   // 視覚ボード一覧（プロジェクトに未保存の場合は初期ボードを使用）
@@ -1724,13 +2768,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const activeChar =
     charactersList.find((c) => c.id === selectedCharId) || charactersList[0];
 
-  // マスター証拠のマップ（最新の簡易タイトルと説明文）
+  // マスター証拠のマップ（最新の簡易タイトルと説明文・開示Day・並び順）
   const masterEvidenceMap = useMemo(() => {
     const map: Record<string, EvidenceItem> = {};
     (initialProject.evidences || []).forEach((e) => {
       map[e.id] = e;
     });
     return map;
+  }, []);
+
+  const masterEvidenceOrderMap = useMemo(() => {
+    const orderMap: Record<string, number> = {};
+    (initialProject.evidences || []).forEach((e, idx) => {
+      orderMap[e.id] = idx;
+    });
+    return orderMap;
   }, []);
 
   const allEvidences = useMemo(() => {
@@ -1740,9 +2792,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
           e &&
           e.id !== "ev-coda-spectrogram" &&
           e.id !== "ev-folk-song-rhythm" &&
+          e.id !== "ev-volcano-chain-log" &&
+          e.id !== "ev-torishima-sonar-time" &&
+          e.id !== "ev-day1-rescue-time" &&
           !(e.title || "").includes("古謡") &&
           !(e.title || "").includes("スペクトログラム") &&
-          !(e.title || "").includes("スペクロログラム")
+          !(e.title || "").includes("スペクロログラム") &&
+          !(e.title || "").includes("距離観測データ") &&
+          !(e.title || "").includes("ソノブイ探知記録") &&
+          !(e.title || "").includes("目撃時刻調書")
       )
       .map((e) => {
         const master = masterEvidenceMap[e.id];
@@ -1750,13 +2808,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
           ? {
               ...e,
               title: master.title,
-              frontTitleHtml: e.frontTitleHtml ?? master.frontTitleHtml,
+              frontTitleHtml: master.frontTitleHtml ?? e.frontTitleHtml,
               description: master.description,
               glossaryNote: e.glossaryNote ?? master.glossaryNote,
+              foundPhase: master.foundPhase,
+              acquisitionCondition: master.acquisitionCondition ?? e.acquisitionCondition,
             }
           : e;
+      })
+      .sort((a, b) => {
+        const orderA = masterEvidenceOrderMap[a.id] ?? 9999;
+        const orderB = masterEvidenceOrderMap[b.id] ?? 9999;
+        return orderA - orderB;
       });
-  }, [project.evidences, masterEvidenceMap]);
+  }, [project.evidences, masterEvidenceMap, masterEvidenceOrderMap]);
   const filteredEvidences =
     evidenceDayFilter === "all"
       ? allEvidences
@@ -1776,8 +2841,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     Array.isArray(project.timeline) && project.timeline.length > 0
       ? project.timeline
       : initialProject.timeline;
+  const allGmProgressionSteps = useMemo(
+    () => [PRE_GAME_TIMELINE_STEP, ...timelineList],
+    [timelineList]
+  );
   const activeTimelineStep =
-    timelineList.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
+    allGmProgressionSteps.find((t) => t.dayNumber === selectedGmDay) || timelineList[0];
 
   const activeGmNote = getGmNoteForDay(project, selectedGmDay);
 
@@ -1995,6 +3064,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
   // デザインされたシートをそのままA4/PDF印刷する関数
   const handlePrintDesignedSheet = () => {
+    if (category === "gm_prep" && gmPrepTool === "goal_boards") {
+      handlePrintGmGoalBoards();
+      return;
+    }
+    if (category === "gm_prep" && gmPrepTool === "coin_tokens") {
+      handlePrintGmCoinTokens();
+      return;
+    }
+    if (category === "gm_prep" && gmPrepTool === "whale_cards") {
+      handlePrintWhaleMtgCards(whaleMtgFilter);
+      return;
+    }
     // 全体提示の地図・写真カテゴリの場合は、A4用紙（余白0mm・画像のみ最大化・90度回転配置）で印刷
     if (category === "visuals" && activeVisual?.imageUrl) {
       const imgUrl = activeVisual.imageUrl;
@@ -2167,6 +3248,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const isB5HandoutSheet = category === "handouts" && handoutViewMode === "sheet";
     const isSingleEvidenceSheet = category === "evidences" && evidenceViewMode === "single";
+    const isNametagSheet = category === "gm_prep";
     const isDuplexCardSheet =
       (category === "handouts" &&
         (handoutViewMode === "cards" || handoutViewMode === "nagatsu_cards")) ||
@@ -2186,6 +3268,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       margin: ${
         isDuplexCardSheet
           ? "0"
+          : isNametagSheet
+          ? "10mm 10mm"
           : isB5HandoutSheet
           ? "8mm 9mm"
           : isSingleEvidenceSheet
@@ -2273,16 +3357,28 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         height: 133mm !important;
         min-height: 133mm !important;
         max-height: 133mm !important;
-        padding: 4.2mm !important;
+        padding: 3.6mm !important;
         box-shadow: none !important;
         overflow: hidden !important;
       }
       .card-body-12px {
+        font-size: 14px !important;
+      }
+      .card-glossary-12px {
         font-size: 12px !important;
       }
       .card-front-title-20px {
         font-size: 20px !important;
         line-height: 1.375 !important;
+      }
+      .briefing-title-15px {
+        font-size: 15.5px !important;
+      }
+      .briefing-subhead-13px {
+        font-size: 13.5px !important;
+      }
+      .briefing-body-13px {
+        font-size: 13px !important;
       }
       .card-empty-slot {
         width: 92mm !important;
@@ -2291,6 +3387,48 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         max-height: 133mm !important;
         border: none !important;
         background: transparent !important;
+      }
+      .nametag-print-sheet {
+        position: relative !important;
+        width: 190mm !important;
+        height: 277mm !important;
+        margin: 0 auto !important;
+        padding: 0 !important;
+        border: none !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      .nametag-grid-print {
+        display: grid !important;
+        grid-template-columns: 93mm 93mm !important;
+        grid-template-rows: 64mm 64mm 64mm 64mm !important;
+        column-gap: 4mm !important;
+        row-gap: 4mm !important;
+        width: 190mm !important;
+        height: 268mm !important;
+        margin: 0 auto !important;
+      }
+      .nametag-card-print {
+        position: relative !important;
+        width: 93mm !important;
+        height: 64mm !important;
+        min-height: 64mm !important;
+        max-height: 64mm !important;
+        box-sizing: border-box !important;
+        border: 1px dashed #94a3b8 !important;
+        background: #ffffff !important;
+        padding: 4mm 5mm !important;
+        box-shadow: none !important;
+        overflow: hidden !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+        display: flex !important;
+        flex-direction: column !important;
+        justify-content: center !important;
+        align-items: center !important;
+        text-align: center !important;
       }
     }
     ruby {
@@ -2326,6 +3464,746 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     printCharacterHandoutsB5(project.characters, project.title);
   };
 
+  // 全体掲示用・Day別目的シート（A4横置き・全10枚または指定1枚）を印刷 / PDF保存
+  const handlePrintGmGoalBoards = (targetBoardId?: string) => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const formatLineHtml = (line: string) => {
+      const parts = line.split(/(［[A-ZＡ-Ｚ]］|（[^）]+）)/g);
+      return parts
+        .map((part) => {
+          if (/^［[A-ZＡ-Ｚ]］$/.test(part)) {
+            const letter = escapeHtml(part.slice(1, -1));
+            return `<span class="inline-flex items-center justify-center rounded-xl border-[5px] border-slate-900 bg-amber-100 px-4 py-1 mx-2 text-slate-950 font-black whitespace-nowrap">［${letter}］</span>`;
+          }
+          if (part.startsWith("（") && part.endsWith("）")) {
+            return `<span class="inline-block whitespace-nowrap ml-3 text-indigo-900 font-black">${escapeHtml(part)}</span>`;
+          }
+          return escapeHtml(part);
+        })
+        .join("");
+    };
+
+    const formatLineHtmlWithBreaks = (line: string): string => {
+      const sublines = line.split("\n");
+      if (sublines.length === 1) {
+        return `<div class="leading-tight">${formatLineHtml(sublines[0])}</div>`;
+      }
+      return sublines
+        .map((sub) => `<div class="leading-tight">${formatLineHtml(sub)}</div>`)
+        .join('<div class="h-3"></div>');
+    };
+
+    const targetBoards = targetBoardId
+      ? GM_GOAL_BOARDS.filter((b) => b.id === targetBoardId)
+      : GM_GOAL_BOARDS;
+
+    const pagesHtml = targetBoards
+      .map((board) => {
+        return `
+        <div class="goal-a4-landscape-page">
+          <div class="goal-inner-frame">
+            <div class="flex items-center justify-between border-b-4 border-slate-900 pb-4">
+              <div class="flex items-center gap-4">
+                <span class="rounded-lg bg-slate-900 px-6 py-2 text-3xl font-black tracking-widest text-white">
+                  ${escapeHtml(board.phaseBadge)}
+                </span>
+                <span class="text-3xl font-black tracking-widest text-slate-900">
+                  全体目的・達成ミッション
+                </span>
+              </div>
+              <span class="font-mono text-sm font-bold text-slate-400">
+                ${escapeHtml(project.title)} / SHEET ${String(board.sheetNumber).padStart(2, "0")}
+              </span>
+            </div>
+
+            <div class="flex-1 flex flex-col items-center justify-center text-center px-4">
+              <div class="w-full font-black tracking-tight text-slate-950 leading-tight" style="font-size: 48px;">
+                ${formatLineHtmlWithBreaks(board.line1)}
+              </div>
+              ${
+                board.line2
+                  ? `
+                <div class="my-7 w-4/5 border-t-4 border-dashed border-slate-300"></div>
+                <div class="w-full font-black tracking-tight text-slate-950 leading-tight" style="font-size: 48px;">
+                  ${formatLineHtmlWithBreaks(board.line2)}
+                </div>
+              `
+                  : ""
+              }
+            </div>
+          </div>
+        </div>`;
+      })
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - 全体掲示用・Day別目的シート（A4横置き）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .goal-a4-landscape-page {
+      width: 297mm;
+      height: 210mm;
+      padding: 12mm 14mm;
+      margin: 0 auto;
+      background: #ffffff;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      display: flex;
+    }
+    .goal-a4-landscape-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .goal-inner-frame {
+      width: 100%;
+      height: 100%;
+      border: 5px solid #0f172a;
+      border-radius: 12px;
+      padding: 10mm 12mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff;
+    }
+  </style>
+</head>
+<body>
+  ${pagesHtml}
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
+  // 海図用コイントークンシート（コイン直径2.49cm対応・切り抜き直径2.6cm ＝ 26mm・A4縦1枚一括）を印刷 / PDF保存
+  const handlePrintGmCoinTokens = () => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const renderTokenHtml = (tok: CoinTokenItem) => {
+      const svgIcon = getCoinTokenSvgString(tok.kind, tok.rimHex);
+      const isTwoLine = Boolean(tok.mainLine2);
+      return `
+        <div class="token-cell">
+          <div class="token-cut-outer" style="background-color: ${tok.bgHex}; border-color: ${tok.rimHex};">
+            <div class="token-coin-guide" style="border-color: ${tok.rimHex};">
+              <div class="token-icon-wrap">${svgIcon}</div>
+              ${
+                isTwoLine
+                  ? `
+                  <div class="token-main-2line" style="color: ${tok.textHex};">
+                    <span>${escapeHtml(tok.mainLine1)}</span>
+                    <span class="token-divider-line" style="background-color: ${tok.rimHex};"></span>
+                    <span>${escapeHtml(tok.mainLine2 || "")}</span>
+                  </div>
+                `
+                  : `
+                  <div class="token-main-1line" style="color: ${tok.textHex};">
+                    ${escapeHtml(tok.mainLine1)}
+                  </div>
+                  ${
+                    tok.bottomBadge
+                      ? `<div class="token-bottom-badge" style="background-color: ${tok.rimHex};">${escapeHtml(
+                          tok.bottomBadge
+                        )}</div>`
+                      : ""
+                  }
+                `
+              }
+            </div>
+          </div>
+          <div class="token-caption">${escapeHtml(tok.topSubLabel)}</div>
+        </div>
+      `;
+    };
+
+    const sectionsHtml = GM_COIN_TOKEN_SECTIONS.map(
+      (sec) => `
+      <div class="token-section">
+        <div class="token-section-header">
+          <span class="token-section-title">${escapeHtml(sec.sectionTitle)}</span>
+          <span class="token-section-note">${escapeHtml(sec.usageNote)}</span>
+        </div>
+        <div class="token-grid">
+          ${sec.tokens.map(renderTokenHtml).join("")}
+        </div>
+      </div>
+    `
+    ).join("");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - 海図用コイントークン印刷シート（コイン直径2.49cm対応 / 切り抜き直径2.6cm）</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 10mm 12mm;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .sheet-header {
+      border-bottom: 2.5px solid #0f172a;
+      padding-bottom: 3mm;
+      margin-bottom: 4mm;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .sheet-title {
+      font-size: 14pt;
+      font-weight: 900;
+      letter-spacing: 0.04em;
+    }
+    .sheet-subtitle {
+      font-size: 8.5pt;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 1mm;
+    }
+    .sheet-spec-badge {
+      font-size: 8.5pt;
+      font-weight: 800;
+      background: #0f172a;
+      color: #ffffff;
+      padding: 1.5mm 3mm;
+      border-radius: 1.5mm;
+    }
+    .token-section {
+      border: 1.2px solid #cbd5e1;
+      border-radius: 2.5mm;
+      padding: 3mm 4mm;
+      margin-bottom: 3.8mm;
+      background: #ffffff;
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    .token-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      border-bottom: 1px dashed #cbd5e1;
+      padding-bottom: 1.5mm;
+      margin-bottom: 3mm;
+    }
+    .token-section-title {
+      font-size: 9.5pt;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .token-section-note {
+      font-size: 7.5pt;
+      font-weight: 600;
+      color: #475569;
+    }
+    .token-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4mm 5.5mm;
+      align-items: center;
+    }
+    .token-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    /* 外側切り抜き円：直径 26.2mm（2.62cm ＝ コイン2.49cmより少し大きめ） */
+    .token-cut-outer {
+      width: 26.2mm;
+      height: 26.2mm;
+      border-radius: 9999px;
+      border: 1.4px dashed;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    /* 内側コイン実寸リング：直径 24.9mm（2.49cm）太枠 */
+    .token-coin-guide {
+      width: 24.9mm;
+      height: 24.9mm;
+      border-radius: 9999px;
+      border: 1.7mm solid;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 0.8mm;
+      overflow: hidden;
+    }
+    .token-icon-wrap {
+      line-height: 1;
+      margin-bottom: 0.4mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .token-main-1line {
+      font-size: 11.5pt;
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .token-main-2line {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.6pt;
+      font-weight: 900;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+    .token-divider-line {
+      width: 14mm;
+      height: 0.45mm;
+      margin: 0.5mm 0;
+      border-radius: 1mm;
+      opacity: 0.65;
+    }
+    .token-bottom-badge {
+      margin-top: 0.7mm;
+      font-size: 6.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.2mm 2mm;
+      border-radius: 2mm;
+      line-height: 1.15;
+    }
+    .token-caption {
+      margin-top: 1mm;
+      font-size: 6.5pt;
+      font-family: monospace;
+      font-weight: 700;
+      color: #64748b;
+    }
+    .sheet-footer {
+      margin-top: 2mm;
+      font-size: 7.5pt;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <div class="sheet-header">
+    <div>
+      <div class="sheet-title">${escapeHtml(project.title)} ― 海図用コイントークン印刷シート</div>
+      <div class="sheet-subtitle">✂ 外側の破線円（直径2.62cm）または内側の太枠円（コイン実寸・直径2.49cm）に沿って切り抜き、コインに貼り付けてご使用ください</div>
+    </div>
+    <div class="sheet-spec-badge">A4 等倍（100%）印刷 ／ 2.49cmコイン対応（外径2.62cm）</div>
+  </div>
+  ${sectionsHtml}
+  <div class="sheet-footer">
+    <span>収録数：ソノブイ×3 ／ 遭難船×1 ／ 巡視船×1 ／ 暗礁×2 ／ 火山噴火・海底噴火×6 ／ 火山性微動×6 （計19個 ＋ 予備8個）</span>
+    <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください</span>
+  </div>
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
+  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カードをMTGサイズ（63mm × 88mm / A4 9面配置）で印刷 / PDF保存
+  const handlePrintWhaleMtgCards = (
+    targetFilter:
+      | "all"
+      | "click_sound"
+      | "japanese_meaning"
+      | "day7_only" = whaleMtgFilter
+  ) => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const chunkIntoPagesOf9 = (cards: WhaleMtgCardItem[]): (WhaleMtgCardItem | null)[][] => {
+      const pages: (WhaleMtgCardItem | null)[][] = [];
+      for (let i = 0; i < cards.length; i += 9) {
+        const chunk: (WhaleMtgCardItem | null)[] = [];
+        for (let j = 0; j < 9; j++) {
+          chunk.push(cards[i + j] ?? null);
+        }
+        pages.push(chunk);
+      }
+      return pages;
+    };
+
+    const pageGroups: {
+      deckTitle: string;
+      pages: (WhaleMtgCardItem | null)[][];
+    }[] = [];
+
+    if (targetFilter === "all" || targetFilter === "click_sound") {
+      pageGroups.push({
+        deckTitle: "【クジラのクリック音カード】（全28枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9(WHALE_CLICK_MTG_CARDS),
+      });
+    }
+    if (targetFilter === "all" || targetFilter === "japanese_meaning") {
+      pageGroups.push({
+        deckTitle: "【あてはめる日本語カード】（全29枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9(WHALE_JAPANESE_MTG_CARDS),
+      });
+    }
+    if (targetFilter === "all" || targetFilter === "day7_only") {
+      pageGroups.push({
+        deckTitle: "【Day 7 専用】クジラクリック音（4枚）＆ あてはめる日本語（4枚）別シート（全8枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9(WHALE_DAY7_ALL_MTG_CARDS),
+      });
+    }
+
+    const renderMtgCardSlotHtml = (card: WhaleMtgCardItem | null) => {
+      if (!card) {
+        return `<div class="mtg-card-empty"></div>`;
+      }
+      const isClick = card.kind === "click_sound";
+      const borderColor = isClick ? "#0284c7" : "#d97706";
+      const bgColor = isClick ? "#f0f9ff" : "#fffbeb";
+      const headerBg = isClick ? "#0369a1" : "#b45309";
+      const textColor = isClick ? "#0c4a6e" : "#78350f";
+      const deckBadge = isClick ? "クジラのクリック音" : "あてはめる日本語";
+      // 横長（88mm×63mm）化に伴い、全57枚共通の統一フォントサイズを19.5ptへ大幅拡大（最大9文字が1行に余裕で収まるサイズ）
+      const fontSizePt = "19.5pt";
+      const formattedMainHtml = card.mainRuby
+        ? `<ruby>${escapeHtml(card.mainText)}<rt class="mtg-ruby-rt">${escapeHtml(
+            card.mainRuby
+          )}</rt></ruby>`
+        : card.mainText
+            .split("\n")
+            .map((line) => escapeHtml(line))
+            .join("<br />");
+
+      return `
+        <div class="mtg-card-cell" style="background-color: ${bgColor};">
+          <div class="mtg-card-inner" style="border-color: ${borderColor};">
+            <div class="mtg-card-header">
+              <span class="mtg-deck-badge" style="background-color: ${headerBg};">${deckBadge}</span>
+              <span class="mtg-code-label" style="color: ${headerBg};">${escapeHtml(card.codeLabel)}</span>
+            </div>
+
+            <div class="mtg-card-body">
+              <div class="mtg-main-text" style="color: ${textColor}; font-size: ${fontSizePt};">
+                ${formattedMainHtml}
+              </div>
+            </div>
+
+            <div class="mtg-card-footer" style="border-top-color: ${borderColor};">
+              ${
+                card.lockedBadge
+                  ? `<span class="mtg-locked-badge" style="background-color: ${headerBg};">${
+                      card.lockedBadge === "Day 7 専用" ? "" : "🔒 "
+                    }${escapeHtml(card.lockedBadge)}</span>`
+                  : `<span class="mtg-footer-code" style="color: ${headerBg};">${
+                      isClick ? "CLICK SOUND" : "JAPANESE MEANING"
+                    } / 88×63mm</span>`
+              }
+            </div>
+          </div>
+        </div>
+      `;
+    };
+
+    let globalPageIdx = 0;
+    const totalPages = pageGroups.reduce((acc, g) => acc + g.pages.length, 0);
+
+    const allPagesHtml = pageGroups
+      .map((group) =>
+        group.pages
+          .map((nineCards, pIdx) => {
+            globalPageIdx++;
+            return `
+            <div class="mtg-a4-page">
+              <div class="mtg-page-top-guide">
+                <span>${escapeHtml(project.title)} ― ${escapeHtml(group.deckTitle)} （シート ${
+              pIdx + 1
+            }/${group.pages.length}）</span>
+                <span>✂ 外枠（横88mm × 縦63mm：MTG標準カード横長サイズ）に沿って切り抜いてください ［${globalPageIdx}/${totalPages}頁］</span>
+              </div>
+              <div class="mtg-grid-9">
+                ${nineCards.map(renderMtgCardSlotHtml).join("")}
+              </div>
+              <div class="mtg-page-bottom-guide">
+                <span>※印刷時は「倍率100%（実際のサイズ）」を選択してください（市販のMTGレギュラーサイズスリーブ 88×63mm に適合）</span>
+                <span>A4 LANDSCAPE / 9-POCKET HORIZONTAL MTG GRID (264mm × 189mm)</span>
+              </div>
+            </div>
+          `;
+          })
+          .join("\n")
+      )
+      .join("\n");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - クジラクリック音＆日本語カード（MTG横長サイズ 88mm×63mm）</title>
+  <style>
+    @page {
+      size: A4 landscape;
+      margin: 0;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .mtg-a4-page {
+      width: 297mm;
+      height: 210mm;
+      padding: 5.5mm 16.5mm;
+      margin: 0 auto;
+      background: #ffffff;
+      page-break-after: always;
+      break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .mtg-a4-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .mtg-page-top-guide,
+    .mtg-page-bottom-guide {
+      width: 264mm;
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #475569;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    /* 3列 × 3行 ＝ 9枚（1枚 横88mm × 縦63mm、全体 264mm × 189mm） */
+    .mtg-grid-9 {
+      width: 264mm;
+      height: 189mm;
+      display: grid;
+      grid-template-columns: 88mm 88mm 88mm;
+      grid-template-rows: 63mm 63mm 63mm;
+      gap: 0;
+    }
+    .mtg-card-cell {
+      width: 88mm;
+      height: 63mm;
+      border: 0.35mm dashed #64748b;
+      padding: 2.8mm;
+      display: flex;
+    }
+    .mtg-card-empty {
+      width: 88mm;
+      height: 63mm;
+      border: 0.25mm dashed #e2e8f0;
+      background: transparent;
+    }
+    .mtg-card-inner {
+      width: 100%;
+      height: 100%;
+      border: 0.8mm solid;
+      border-radius: 3mm;
+      background: #ffffff;
+      padding: 3mm 3.2mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .mtg-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.35mm solid #cbd5e1;
+      padding-bottom: 1.8mm;
+    }
+    .mtg-deck-badge {
+      font-size: 7.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.6mm 2mm;
+      border-radius: 1.2mm;
+      letter-spacing: 0.02em;
+    }
+    .mtg-code-label {
+      font-size: 9.5pt;
+      font-weight: 900;
+      font-family: monospace;
+    }
+    .mtg-card-body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2mm 1mm;
+    }
+    .mtg-main-text {
+      font-weight: 900;
+      line-height: 1.3;
+      letter-spacing: 0.01em;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+    .mtg-main-text ruby {
+      ruby-align: center;
+    }
+    .mtg-ruby-rt {
+      font-size: 8.5pt;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: 0.08em;
+    }
+    .mtg-card-footer {
+      border-top: 0.35mm dashed;
+      padding-top: 1.8mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 6mm;
+    }
+    .mtg-locked-badge {
+      font-size: 7.5pt;
+      font-weight: 900;
+      color: #ffffff;
+      padding: 0.6mm 2.2mm;
+      border-radius: 1.2mm;
+    }
+    .mtg-footer-code {
+      font-size: 6.8pt;
+      font-weight: 800;
+      font-family: monospace;
+      letter-spacing: 0.04em;
+      opacity: 0.75;
+    }
+  </style>
+</head>
+<body>
+  ${allPagesHtml}
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
   // Day別（単一DayまたはDay 1〜Day 7一括）のGM進行資料をA4印刷 / PDF保存（複数ページまたぎ時に文字切れ・枠切れを起こさないページネーション対応）
   const handlePrintAllGmProgressionSheets = (targetDayNumber?: number) => {
     const escapeHtml = (str: string) =>
@@ -2337,14 +4215,14 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
     const targetSteps =
       typeof targetDayNumber === "number"
-        ? (project.timeline || []).filter((s) => s.dayNumber === targetDayNumber)
-        : project.timeline || [];
+        ? allGmProgressionSteps.filter((s) => s.dayNumber === targetDayNumber)
+        : allGmProgressionSteps;
 
     const pagesHtml = targetSteps
       .map((step, idx) => {
+        const dayLabel = step.dayNumber === 0 ? "ゲーム開始前" : `Day ${step.dayNumber}`;
         const note = getGmNoteForDay(project, step.dayNumber);
         const structuredPhases = GM_DAY_STRUCTURED_PHASES[step.dayNumber] || [];
-        const stepEvidences = allEvidences.filter((e) => e.foundPhase === step.dayNumber);
 
         const phasesHtml =
           structuredPhases.length > 0
@@ -2364,6 +4242,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             .join("")}
                         </div>`
                       : "";
+
+                  const gmOpeningHtml = ph.gmOpeningDescription
+                    ? `<div class="print-no-split rounded-lg border-2 border-teal-700 bg-teal-50/80 p-3 space-y-1.5">
+                        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-teal-200 pb-1">
+                          <span class="inline-block rounded bg-teal-800 px-2.5 py-0.5 text-[12px] font-bold text-white">📢 【GMからの開始描写（各チームの現在地・状況説明）】</span>
+                        </div>
+                        <div class="whitespace-pre-wrap text-[12px] font-bold leading-relaxed text-slate-900 bg-white p-3 rounded border border-teal-300">${escapeHtml(
+                          ph.gmOpeningDescription
+                        )}</div>
+                      </div>`
+                    : "";
 
                   const nagatsuHtml =
                     ph.nagatsuAnnouncements && ph.nagatsuAnnouncements.length > 0
@@ -2398,29 +4287,83 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                   : ga.tone === "rose"
                                   ? "border-rose-600 bg-rose-50/70"
                                   : "border-slate-500 bg-slate-50";
-                              return `
-                              <div class="print-no-split rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
-                                ${
-                                  ga.branchBadge
-                                    ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
-                                        ga.branchBadge
-                                      )}</div>`
-                                    : ""
-                                }
-                                <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
-                                  ga.speakerLabel
-                                )}</div>
-                                <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
-                                  ga.text
-                                )}</div>
-                                ${
-                                  ga.cardActionNote
-                                    ? `<div class="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-2.5 py-1.5">${escapeHtml(
-                                        ga.cardActionNote
-                                      )}</div>`
-                                    : ""
-                                }
-                              </div>`;
+                                const gaBadgesHtml =
+                                  ga.handoutBadges && ga.handoutBadges.length > 0
+                                    ? `<div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                        <span class="text-[12px] font-extrabold text-slate-700">📦 配布・提示：</span>
+                                        ${ga.handoutBadges
+                                          .map(
+                                            (b) =>
+                                              `<span class="rounded border border-slate-300 bg-white px-2 py-0.5 text-[12px] font-bold text-slate-900">${escapeHtml(
+                                                b
+                                              )}</span>`
+                                          )
+                                          .join("")}
+                                      </div>`
+                                    : "";
+                                const subAnnounceHtml =
+                                  ga.subAnnouncements && ga.subAnnouncements.length > 0
+                                    ? ga.subAnnouncements
+                                        .map((sub) => {
+                                          const subBadges =
+                                            sub.handoutBadges && sub.handoutBadges.length > 0
+                                              ? `<div class="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                  <span class="text-[12px] font-extrabold text-slate-700">📦 配布・提示：</span>
+                                                  ${sub.handoutBadges
+                                                    .map(
+                                                      (b) =>
+                                                        `<span class="rounded border border-slate-300 bg-white px-2 py-0.5 text-[12px] font-bold text-slate-900">${escapeHtml(
+                                                          b
+                                                        )}</span>`
+                                                    )
+                                                    .join("")}
+                                                </div>`
+                                              : "";
+                                          return `
+                                          <div class="border-t border-amber-300 pt-2 mt-2 space-y-1.5">
+                                            ${
+                                              sub.subBadge
+                                                ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
+                                                    sub.subBadge
+                                                  )}</div>`
+                                                : ""
+                                            }
+                                            <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
+                                              sub.speakerLabel
+                                            )}</div>
+                                            <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
+                                              sub.text
+                                            )}</div>
+                                            ${subBadges}
+                                          </div>`;
+                                        })
+                                        .join("")
+                                    : "";
+                                return `
+                                <div class="print-no-split rounded-lg border-2 ${borderBg} p-3 space-y-1.5">
+                                  ${
+                                    ga.branchBadge
+                                      ? `<div class="text-[12px] font-extrabold text-slate-900">${escapeHtml(
+                                          ga.branchBadge
+                                        )}</div>`
+                                      : ""
+                                  }
+                                  <div class="text-[12px] font-bold text-slate-800">${escapeHtml(
+                                    ga.speakerLabel
+                                  )}</div>
+                                  <div class="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-2.5 rounded border border-slate-300">${escapeHtml(
+                                    ga.text
+                                  )}</div>
+                                  ${gaBadgesHtml}
+                                  ${subAnnounceHtml}
+                                  ${
+                                    ga.cardActionNote
+                                      ? `<div class="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-2.5 py-1.5">${escapeHtml(
+                                          ga.cardActionNote
+                                        )}</div>`
+                                      : ""
+                                  }
+                                </div>`;
                             })
                             .join("")}
                         </div>`
@@ -2441,9 +4384,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       : "";
 
                   return `
-                  <div class="print-no-split rounded-lg border-2 border-slate-800 bg-white p-3 space-y-2">
+                  <div class="rounded-lg border-2 border-slate-800 bg-white p-2.5 space-y-2">
                     <div class="print-no-split space-y-1.5">
-                      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1.5">
+                      <div class="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-200 pb-1">
                         <div class="flex items-center gap-2">
                           <span class="rounded bg-slate-900 px-2.5 py-0.5 text-[12px] font-extrabold text-white">${escapeHtml(
                             ph.phaseNumber
@@ -2453,11 +4396,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           )}</span>
                         </div>
                       </div>
-                      <div class="rounded border border-amber-400 bg-amber-50 px-3 py-1.5 text-[12px] font-bold text-amber-950">
+                      <div class="rounded border border-amber-400 bg-amber-50 px-2.5 py-1 text-[12px] font-bold text-amber-950">
                         ⏱️ 開始タイミング・発生条件：${escapeHtml(ph.startTrigger)}
                       </div>
                     </div>
                     ${badgesHtml}
+                    ${gmOpeningHtml}
                     ${nagatsuHtml}
                     ${gmAnnounceHtml}
                     ${guidesHtml}
@@ -2469,23 +4413,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               )}</div>`;
 
         return `
-        <div class="${idx > 0 ? "page-break-before" : ""} space-y-3 text-[12px]">
-          <div class="print-no-split space-y-2.5">
-            <div class="rounded-md border border-slate-300 bg-slate-50 p-2.5 text-[12px] text-slate-800 font-bold">
-              🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
-            </div>
-            <div class="rounded-md p-3.5 bg-slate-900 text-white flex items-end justify-between gap-4">
+        <div class="${idx > 0 ? "page-break-before" : ""} space-y-2.5 text-[12px]">
+          <div class="print-no-split">
+            <div class="rounded-md p-3 bg-slate-900 text-white flex items-end justify-between gap-4">
               <div>
-                <span class="block text-[12px] uppercase tracking-wider text-slate-300">Day ${
-                  step.dayNumber
-                } 状況タイトル</span>
+                <span class="block text-[12px] uppercase tracking-wider text-slate-300">${dayLabel} 状況タイトル</span>
                 <h1 class="mt-0.5 text-base font-bold leading-tight">${escapeHtml(
                   step.situationTitle
                 )}</h1>
               </div>
               <div class="flex items-center gap-4 text-[12px] shrink-0">
                 <div>
-                  <span class="block text-[12px] text-slate-300">観測地点</span>
+                  <span class="block text-[12px] text-slate-300">拠点・観測地点</span>
                   <div class="font-semibold">${escapeHtml(step.locationName)}</div>
                 </div>
                 <div class="border-l border-white/25 pl-3">
@@ -2495,13 +4434,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
             </div>
           </div>
-          <div class="space-y-3">
+          <div class="space-y-2.5">
             ${phasesHtml}
           </div>
-          <div class="print-no-split rounded-md border border-slate-300 p-3.5 bg-white">
-            <div class="mb-1.5 text-[12px] font-bold text-slate-900">✅ Day ${
-              step.dayNumber
-            } GM進行チェックリスト</div>
+          <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
+            <div class="mb-1 text-[12px] font-bold text-slate-900">✅ ${dayLabel} GM進行チェックリスト</div>
             <div class="space-y-1">
               ${(note.gmCheckpoints || [])
                 .map(
@@ -2512,25 +4449,6 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </div>`
                 )
                 .join("")}
-            </div>
-          </div>
-          <div class="print-no-split rounded-md border border-slate-300 p-3 bg-white">
-            <div class="mb-1.5 text-[12px] font-bold text-slate-900">📂 Day ${
-              step.dayNumber
-            } 開示証拠資料（${stepEvidences.length}件）</div>
-            <div class="flex flex-wrap gap-1.5">
-              ${
-                stepEvidences.length > 0
-                  ? stepEvidences
-                      .map(
-                        (ev) =>
-                          `<span class="rounded border border-slate-300 bg-slate-50 px-2.5 py-1 text-[12px] font-bold text-slate-800">📄 ${escapeHtml(
-                            ev.title
-                          )}</span>`
-                      )
-                      .join("")
-                  : `<span class="text-[12px] text-slate-500 italic">このフェーズで開示される証拠はありません</span>`
-              }
             </div>
           </div>
         </div>`;
@@ -2560,7 +4478,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   <style>
     @page {
       size: A4 portrait;
-      margin: 12mm 10mm;
+      margin: 10mm 10mm;
     }
     * {
       -webkit-print-color-adjust: exact !important;
@@ -2803,6 +4721,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               全{(project.timeline || []).length}フェーズ
             </span>
           </button>
+
+          <button
+            onClick={() => setCategory("gm_prep")}
+            className={`flex items-center gap-2 rounded-lg px-3.5 py-2 text-xs font-bold transition ${
+              category === "gm_prep"
+                ? "bg-indigo-600 text-white shadow-md ring-1 ring-indigo-400"
+                : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+            }`}
+          >
+            <IdCard className="h-4 w-4" />
+            ⑤ GM事前準備
+            <span className="rounded-full bg-slate-800/80 px-1.5 py-0.5 text-[10px] text-slate-300">
+              目的・トークン・名札
+            </span>
+          </button>
         </div>
       </div>
 
@@ -2874,6 +4807,42 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   🎙️ 長津カード
                 </button>
               </div>
+
+              {/* 特別カードモード時はDay 1〜6 / Day 7秘匿の絞り込みチップを表示 */}
+              {handoutViewMode === "cards" && (
+                <div className="flex flex-wrap gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1.5">
+                  <button
+                    onClick={() => setSpecialCardFilterMode("all")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "all"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    全て({SPECIAL_CHARACTER_CARDS.length})
+                  </button>
+                  <button
+                    onClick={() => setSpecialCardFilterMode("day1to6")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "day1to6"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    Day 1〜6({SPECIAL_CHARACTER_CARDS.filter((c) => c.revealDayNumber <= 6).length})
+                  </button>
+                  <button
+                    onClick={() => setSpecialCardFilterMode("day7")}
+                    className={`rounded px-2 py-1 text-[11px] font-bold transition ${
+                      specialCardFilterMode === "day7"
+                        ? "bg-indigo-600 text-white"
+                        : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    Day 7 配布({SPECIAL_CHARACTER_CARDS.filter((c) => c.revealDayNumber === 7).length})
+                  </button>
+                </div>
+              )}
 
               {/* Day別指令モード時は証拠資料と同じ形式で絞り込みチップを表示 */}
               {handoutViewMode === "daily_briefings" && (
@@ -2950,7 +4919,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 <div className="space-y-2">
                   {(project.characters || []).map((c, idx) => {
                     const isSelected = c.id === activeChar?.id;
-                    const spCard = SPECIAL_CHARACTER_CARDS.find((sc) => sc.characterId === c.id);
+                    const spCards = SPECIAL_CHARACTER_CARDS.filter((sc) => sc.characterId === c.id);
                     return (
                       <button
                         key={c.id}
@@ -2963,20 +4932,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       >
                         <div className="flex items-center justify-between gap-1">
                           <div className="flex items-center gap-1.5">
-                            <span className="text-[10px] font-mono font-bold text-slate-400">
-                              PC-{idx + 1}
-                            </span>
                             <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
                               {c.location === "headquarters" ? "東京本部" : "現地救難隊"}
                             </span>
                           </div>
-                          {spCard && (
+                          {spCards.length > 0 && (
                             <span className="text-[10px] font-mono text-slate-400">
-                              {spCard.revealDayLabel}
+                              {spCards.map((sc) => sc.revealDayLabel).join(" / ")}
                             </span>
                           )}
                         </div>
-                        <div className="mt-1.5 font-bold text-xs text-white">{c.name}</div>
+                        <div className="mt-1.5 font-bold text-xs text-white">{cleanCharacterName(c.name)}</div>
                         <div className="mt-0.5 text-[11px] text-slate-400 truncate">{c.profession}</div>
                       </button>
                     );
@@ -3231,7 +5197,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
-                  GM進行資料（全{(project.timeline || []).length}フェーズ）
+                  GM進行資料（開始前＋全{(project.timeline || []).length}フェーズ）
                 </h3>
               </div>
 
@@ -3260,7 +5226,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               </div>
 
               <div className="space-y-2">
-                {(project.timeline || []).map((step) => {
+                {allGmProgressionSteps.map((step) => {
+                  const isPreGame = step.dayNumber === 0;
                   const isSelected = step.dayNumber === selectedGmDay;
                   const fc = GM_DAY_FLOWCHARTS.find((f) => f.dayNumber === step.dayNumber);
                   return (
@@ -3268,19 +5235,36 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       key={step.dayNumber}
                       onClick={() => {
                         setSelectedGmDay(step.dayNumber);
+                        if (isPreGame && gmGuideViewMode === "flowchart") {
+                          setGmGuideViewMode("daily_sheet");
+                        }
                       }}
                       className={`w-full rounded-xl border p-3 text-left transition ${
                         isSelected
-                          ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                          ? isPreGame
+                            ? "border-teal-400 bg-teal-950/70 shadow-md ring-1 ring-teal-400/50"
+                            : "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                          : isPreGame
+                          ? "border-teal-800/60 bg-slate-950/90 hover:border-teal-600"
                           : "border-slate-800 bg-slate-950/80 hover:border-slate-700"
                       }`}
                     >
                       <div className="flex items-center justify-between">
-                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
-                          Day {step.dayNumber}
+                        <span
+                          className={`rounded px-1.5 py-0.5 text-[10px] font-bold border ${
+                            isPreGame
+                              ? "bg-teal-500/20 border-teal-500/40 text-teal-300"
+                              : "bg-indigo-500/20 border-indigo-500/40 text-indigo-300"
+                          }`}
+                        >
+                          {isPreGame ? "ゲーム開始前" : `Day ${step.dayNumber}`}
                         </span>
                         <span className="text-[10px] font-mono text-slate-400">
-                          {fc?.hasFailureBranch ? "🔀 分岐あり" : step.locationName}
+                          {isPreGame
+                            ? "🎙️ 導入シート"
+                            : fc?.hasFailureBranch
+                            ? "🔀 分岐あり"
+                            : step.locationName}
                         </span>
                       </div>
                       <div className="mt-1.5 font-bold text-xs text-white">
@@ -3290,6 +5274,258 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* ⑤ GM事前準備メニュー */}
+          {category === "gm_prep" && (
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                  GM事前準備ツール
+                </h3>
+                <span className="rounded bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                  A4印刷用
+                </span>
+              </div>
+
+              {/* ツール切替（全体目的シート / コイントークン / クジラ音＆日本語カード / 首下げネームタグ） */}
+              <div className="grid grid-cols-2 gap-1 rounded-lg border border-slate-800 bg-slate-950 p-1">
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("goal_boards")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "goal_boards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🎯 目的シート (10枚)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("coin_tokens")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "coin_tokens"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🪙 コイントークン
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("whale_cards")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "whale_cards"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🐋 クジラ音・日本語
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("nametags")}
+                  className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "nametags"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  🏷️ ネームタグ (8枠)
+                </button>
+              </div>
+
+              {gmPrepTool === "goal_boards" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🎯 全体掲示用・Day別目的シート</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      その日の大きな目的と回答担当者を特大文字で記したA4横置きシート（全10枚）です。会場の全体から見える位置に掲示することで、議論のゴールが明確になります。
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    {GM_GOAL_BOARDS.map((board) => {
+                      const isSelected = selectedGoalBoardId === board.id;
+                      return (
+                        <button
+                          key={board.id}
+                          type="button"
+                          onClick={() => selectGoalBoardDocument(board.id)}
+                          className={`w-full rounded-xl border p-3 text-left transition ${
+                            isSelected
+                              ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                              : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-900"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span
+                              className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                isSelected
+                                  ? "bg-indigo-500/20 border border-indigo-500/40 text-indigo-300"
+                                  : "bg-slate-900 border border-slate-800 text-slate-400"
+                              }`}
+                            >
+                              {board.phaseBadge}
+                            </span>
+                            <span className="text-[10px] font-mono text-slate-400">
+                              A4横・#{String(board.sheetNumber).padStart(2, "0")}
+                            </span>
+                          </div>
+                          <div className="mt-1.5 font-bold text-xs text-white leading-snug">
+                            {board.line1}
+                          </div>
+                          {board.line2 && (
+                            <div className="mt-0.5 font-bold text-xs text-indigo-200 leading-snug">
+                              {board.line2}
+                            </div>
+                          )}
+                          <div className="mt-1 text-[10px] text-slate-400">
+                            {board.timingNote}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              ) : gmPrepTool === "coin_tokens" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🪙 海図用コイントークン（2.49cmコイン対応）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      直径2.49cmのコインに貼れるよう、少し大きめの切り抜き円（外径2.62cm・内枠2.49cm）と大きな文字で設計されたA4一括シートです。
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40 space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                          A4・全19個＋予備8個
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-300">
+                          直径2.49cmコイン用
+                        </span>
+                      </div>
+                      <div className="font-bold text-xs text-white">
+                        海図用コイントークン一括シート
+                      </div>
+                      <div className="text-[11px] text-slate-300 space-y-0.5">
+                        <div>・ソノブイ × 3</div>
+                        <div>・遭難船 × 1 ／ 巡視船 × 1</div>
+                        <div>・暗礁 × 2</div>
+                        <div>・火山噴火／海底噴火 × 6</div>
+                        <div>・火山性微動 × 6</div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : gmPrepTool === "whale_cards" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🐋 クジラ音 ＆ 日本語カード（MTG横長）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      Wi-Fiが使えない環境に備え、クジラのクリック音（28枚）とそれにあてはめる日本語（29枚）をマジック：ザ・ギャザリングと同サイズ（横88mm×縦63mm）でカード化した一覧シートです。
+                    </div>
+                  </div>
+
+                  {/* 表示・印刷対象の絞り込み */}
+                  <div className="space-y-1.5">
+                    <span className="text-[10px] font-bold text-slate-400">
+                      表示・印刷するカード種別
+                    </span>
+                    <div className="space-y-1.5">
+                      {(
+                        [
+                          {
+                            id: "all",
+                            badge: "全65枚（A4横・9頁）",
+                            title: "すべて（Day 6用57枚 ＋ Day 7専用別シート8枚）",
+                          },
+                          {
+                            id: "click_sound",
+                            badge: "全28枚（A4横・4頁）",
+                            title: "🌊 クジラのクリック音カードのみ（音 #01〜#28）",
+                          },
+                          {
+                            id: "japanese_meaning",
+                            badge: "全29枚（A4横・4頁）",
+                            title: "🏷️ あてはめる日本語カードのみ（日本語 #01〜#29）",
+                          },
+                          {
+                            id: "day7_only",
+                            badge: "全8枚（A4横・別シート1頁）",
+                            title: "🐋 Day 7 専用シート（受信音4枚 ＋ 日本語4枚）",
+                          },
+                        ] as const
+                      ).map((opt) => {
+                        const isSelected = whaleMtgFilter === opt.id;
+                        return (
+                          <button
+                            key={opt.id}
+                            type="button"
+                            onClick={() => setWhaleMtgFilter(opt.id)}
+                            className={`w-full rounded-xl border p-2.5 text-left transition ${
+                              isSelected
+                                ? "border-indigo-500 bg-indigo-950/70 shadow-md ring-1 ring-indigo-500/40"
+                                : "border-slate-800 bg-slate-950/70 hover:border-slate-700 hover:bg-slate-900"
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span
+                                className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
+                                  isSelected
+                                    ? "bg-indigo-500/20 border border-indigo-500/40 text-indigo-300"
+                                    : "bg-slate-900 border border-slate-800 text-slate-400"
+                                }`}
+                              >
+                                {opt.badge}
+                              </span>
+                              <span className="text-[10px] font-mono text-slate-400">
+                                横88mm × 縦63mm
+                              </span>
+                            </div>
+                            <div className="mt-1 font-bold text-xs text-white">
+                              {opt.title}
+                            </div>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">🏷️ ネームタグ（首下げ名札中紙）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      市販の首下げ名札ケース（名刺サイズ〜A7）に入る中紙です。文字が中央に大きく配置されており、ホルダーの枠で端が隠れても名前とルビが欠けません。
+                    </div>
+                  </div>
+
+                  <div className="space-y-2">
+                    <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40">
+                      <div className="flex items-center justify-between">
+                        <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                          A4・8面配置
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          全7名 ＋ GM用
+                        </span>
+                      </div>
+                      <div className="mt-1.5 font-bold text-xs text-white flex items-center gap-1.5">
+                        <IdCard className="h-3.5 w-3.5 text-indigo-400" />
+                        首下げネームタグ一括シート
+                      </div>
+                      <div className="mt-1 text-[11px] text-slate-400">
+                        切り取り線（破線）付き・中央セーフエリア配置
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           )}
         </div>
@@ -3308,17 +5544,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
               <div className="space-y-6">
                 {handoutViewMode === "sheet" ? (
                   /* ------------------------------------------------------------
-                     📄 個人ハンドアウト本紙（B5規格特化・無駄な余白ゼロ・高品位レイアウト）
+                     📄 個人ハンドアウト（B5規格・全3枚組：①表紙 ②メンバー紹介 ③個人秘匿）
                      ------------------------------------------------------------ */
-                  <div className="space-y-5 print:space-y-2 font-sans">
-                    {/* 証拠資料と同じ形式の画面上部タイトル ＆ 右上印刷ボタン行 */}
+                  <div className="space-y-6 font-sans">
+                    {/* 画面上部タイトル ＆ 右上印刷ボタン行 */}
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 個人ハンドアウト本紙（B5規格・全{(project.characters || []).length}名）
+                          {project.title} ― 個人ハンドアウト（B5規格・全3枚組・全{(project.characters || []).length}名）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          個人ハンドアウト本紙（選択中：{activeChar.name}）
+                          個人ハンドアウト（選択中：{cleanCharacterName(activeChar.name)} / 3枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3326,14 +5562,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           type="button"
                           onClick={() =>
                             printCharacterHandoutsB5(
-                              activeChar ? [activeChar] : project.characters || [],
-                              project.title
+                              project.characters || [],
+                              project.title,
+                              activeChar.id
                             )
                           }
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          このPCをB5印刷 / PDF保存
+                          このPC（3枚組）をB5印刷 / PDF保存
                         </button>
                         <button
                           type="button"
@@ -3341,278 +5578,335 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                         >
                           <Printer className="h-3.5 w-3.5" />
-                          全員分を一括B5印刷 / PDF保存
+                          全員分（全21枚）を一括B5印刷 / PDF保存
                         </button>
                       </div>
                     </div>
 
-                    {/* ① シート最上部ヘッダー（公的機関ブリーフィング見出し） */}
-                    <div className="border-b-2 border-slate-900 pb-1.5 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex items-center gap-2">
-                        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-500">
-                          合同対策本部 記録資料
-                        </span>
-                        <span className="text-[11px] font-black text-slate-900">
-                          『{project.title}』
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <span className="rounded bg-slate-900 px-2 py-0.5 text-[9.5px] font-bold tracking-wider text-white">
-                          【非公開・個人ハンドアウト】
-                        </span>
-                        <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[9.5px] font-semibold text-slate-700">
-                          拠点：
-                          {activeChar.location === "headquarters"
-                            ? "海上保安庁東京本部"
-                            : "小笠原・現地救難隊"}
-                        </span>
-                      </div>
+                    {/* 3枚組切り替えタブ */}
+                    <div className="no-print flex flex-wrap items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-100 p-1 text-xs font-bold">
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage("all")}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === "all"
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        📄 全3枚を連続表示
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(1)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 1
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ① 1枚目：表紙（役職・氏名）
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(2)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 2
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ② 2枚目：チームメンバー紹介（全7名）
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHandoutSheetPage(3)}
+                        className={`rounded-lg px-3 py-1.5 transition ${
+                          handoutSheetPage === 3
+                            ? "bg-indigo-600 text-white shadow-sm"
+                            : "text-slate-600 hover:bg-white hover:text-slate-900"
+                        }`}
+                      >
+                        ③ 3枚目：内面・記憶・自己紹介
+                      </button>
                     </div>
 
-                    {/* ② 所属・氏名（堂々たるアイデンティティ・プレート） */}
-                    <div className="rounded-lg bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 px-4 py-3 text-white shadow-sm flex flex-wrap items-center justify-between gap-3">
-                      <div className="flex-1 min-w-[200px]">
-                        <div className="text-[10.5px] font-semibold text-slate-300 tracking-wider mb-0.5">
-                          {isDirectEditMode ? (
-                            <input
-                              type="text"
-                              value={activeChar.profession}
-                              placeholder="所属・肩書"
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  profession: e.target.value,
-                                }))
-                              }
-                              className="w-full max-w-md rounded border border-dashed border-slate-500 bg-slate-800/80 px-2 py-0.5 text-xs font-semibold text-white focus:outline-none"
-                            />
-                          ) : (
-                            <span>{activeChar.profession}</span>
-                          )}
-                        </div>
-                        <div className="flex items-baseline gap-2">
-                          {isDirectEditMode ? (
-                            <input
-                              type="text"
-                              value={activeChar.name}
-                              placeholder="氏名"
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({ ...c, name: e.target.value }))
-                              }
-                              className="w-64 rounded border border-dashed border-slate-500 bg-slate-800/80 px-2 py-0.5 text-xl font-black text-white focus:outline-none"
-                            />
-                          ) : (
-                            <h2 className="text-xl sm:text-2xl font-black tracking-wide text-white">
-                              {activeChar.name}
-                            </h2>
-                          )}
-                        </div>
-                      </div>
-
-                      <div className="flex items-center">
-                        <span className="rounded border border-slate-500 bg-white/10 px-2.5 py-1 font-mono text-xs font-bold text-white tracking-widest">
-                          PC-{(project.characters || []).findIndex((c) => c.id === activeChar.id) + 1}
-                        </span>
-                      </div>
-                    </div>
-
-                    {/* ③ 【公開情報エリア】プロフィール ＆ 自己紹介（左右2分割グリッドで完全均等配置・無駄な余白ゼロ） */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                      {/* 左列：全員に公開できるプロフィール */}
-                      <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3 flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2">
-                            <h3 className="text-[11px] font-bold text-slate-800 flex items-center gap-1.5">
-                              <span>🌐</span>
-                              <span>【公開情報】全員に公開できるプロフィール</span>
-                            </h3>
-                            <span className="text-[9px] text-slate-500 font-medium">（自己紹介で開示）</span>
+                    {/* ========================================================
+                        【1枚目】表紙シート（肩書きと名前のみ・白地・最初にプレイヤー達が見る）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 1) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-between min-h-[580px] space-y-6">
+                        {/* ヘッダー */}
+                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                              合同対策本部 公式記録資料
+                            </span>
+                            <span className="text-xs font-black text-slate-900">
+                              『{project.title}』
+                            </span>
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.publicProfile || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: { ...c.handout, publicProfile: e.target.value },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {activeChar.handout?.publicProfile || ""}
-                            </p>
-                          )}
+                          <div className="flex items-center gap-2">
+                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                              拠点：{activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
+                            </span>
+                          </div>
                         </div>
-                      </div>
 
-                      {/* 右列：自己紹介（ロールプレイ台詞） */}
-                      <div className="rounded-lg border border-indigo-200 bg-indigo-50/40 p-3 flex flex-col justify-between">
-                        <div>
-                          <div className="flex items-center justify-between border-b border-indigo-200/80 pb-1.5 mb-2">
-                            <h3 className="text-[11px] font-bold text-indigo-950 flex items-center gap-1.5">
-                              <span>💬</span>
-                              <span>【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
-                            </h3>
-                            {onSendAiPrompt && (
-                              <button
-                                onClick={() =>
-                                  onSendAiPrompt(
-                                    `【${activeChar.name}の自己紹介・記憶の推敲依頼】\n以下の「あなたの記憶」と「自己紹介」をより自然で臨場感ある文章にブラッシュアップしてください：\n\n【あなたの記憶】\n${activeChar.introduction}\n\n【自己紹介】\n${activeChar.handout?.handoutBody || ""}`
-                                  )
-                                }
-                                className="no-print flex items-center gap-1 rounded bg-indigo-700 px-2 py-0.5 text-[9.5px] font-bold text-white hover:bg-indigo-600 shadow-sm"
-                              >
-                                <Sparkles className="h-3 w-3" />
-                                推敲
-                              </button>
+                        {/* 中央配役カード（白地・格式ある二重枠・省インク印刷仕様） */}
+                        <div className="my-auto py-14 px-8 rounded-2xl bg-white border-2 border-slate-900 text-slate-900 text-center shadow-sm flex flex-col items-center justify-center space-y-4">
+                          <span className="rounded-md border border-slate-300 bg-slate-100 px-3 py-1 text-xs font-bold text-slate-700">
+                            {activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
+                          </span>
+                          <div className="text-lg sm:text-xl font-extrabold text-slate-800 tracking-wide">
+                            {activeChar.profession}
+                          </div>
+                          <div className="space-y-1">
+                            {CHARACTER_NAME_RUBIES[activeChar.id] && (
+                              <div className="text-sm font-bold tracking-[0.3em] text-slate-500 pl-[0.3em]">
+                                {CHARACTER_NAME_RUBIES[activeChar.id]}
+                              </div>
                             )}
+                            <div className="text-4xl sm:text-5xl font-black tracking-[0.2em] text-slate-950 pl-[0.2em]">
+                              {cleanCharacterName(activeChar.name)}
+                            </div>
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.handoutBody || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: { ...c.handout, handoutBody: e.target.value },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-indigo-400 bg-white p-2 text-xs leading-relaxed text-slate-900 focus:border-indigo-800 focus:outline-none"
-                            />
-                          ) : (
-                            <blockquote className="border-l-2 border-indigo-500 pl-2 text-[11.5px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
-                            </blockquote>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* ④ 【非公開情報エリア】あなたの内面・行動指針（左右2分割グリッド：誇り vs 喪失） */}
-                    <div className="space-y-1.5">
-                      <div className="flex items-center justify-between px-0.5">
-                        <span className="text-[11px] font-bold text-slate-900 flex items-center gap-1.5">
-                          <Lock className="h-3.5 w-3.5 text-slate-700" />
-                          <span>あなたの内面（非公開）・行動指針</span>
-                        </span>
-                        <span className="text-[9.5px] text-slate-500">
-                          ※他プレイヤーには非公開（あなたのロールプレイや判断の軸となります）
-                        </span>
-                      </div>
-
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                        {/* 左列：誇り・信条・行動指針 */}
-                        <div className="rounded-lg border border-amber-300/80 bg-amber-50/50 p-3">
-                          <div className="text-[10.5px] font-bold text-amber-950 border-b border-amber-200/80 pb-1 mb-1.5 flex items-center gap-1">
-                            <span>✦</span>
-                            <span>誇り・信条・行動指針</span>
+                          <div className="pt-4 text-xs font-semibold text-slate-500 border-t border-slate-200 w-2/3 mx-auto">
+                            合同対策本部 構成員 // 『{project.title}』
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.internalDrama?.pride || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
-                                      pride: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-amber-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-amber-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
-                            </p>
-                          )}
                         </div>
 
-                        {/* 右列：過去の喪失・悔恨 */}
-                        <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3">
-                          <div className="text-[10.5px] font-bold text-slate-800 border-b border-slate-200 pb-1 mb-1.5 flex items-center gap-1">
-                            <span>✦</span>
-                            <span>過去の喪失・悔恨</span>
+                        {/* フッター */}
+                        <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 1/3 頁（表紙）</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* ========================================================
+                        【2枚目】チームメンバー紹介シート（全7名一覧・自分はグレー表示）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 2) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-start min-h-[580px] space-y-4">
+                        {/* ヘッダー */}
+                        <div className="border-b-2 border-slate-900 pb-2 flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                              合同対策本部 チーム編成
+                            </span>
+                            <span className="text-xs font-black text-slate-900">
+                              『{project.title}』
+                            </span>
                           </div>
-                          {isDirectEditMode ? (
-                            <textarea
-                              rows={3}
-                              value={activeChar.handout?.internalDrama?.loss || ""}
-                              onChange={(e) =>
-                                handleUpdateActiveChar((c) => ({
-                                  ...c,
-                                  handout: {
-                                    ...c.handout,
-                                    internalDrama: {
-                                      ...(c.handout?.internalDrama || { pride: "", loss: "" }),
-                                      loss: e.target.value,
-                                    },
-                                  },
-                                }))
-                              }
-                              className="w-full rounded border border-dashed border-slate-300 bg-white p-1.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                            />
-                          ) : (
-                            <p className="text-[11px] leading-relaxed text-slate-800 whitespace-pre-wrap">
-                              {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
-                            </p>
-                          )}
+                          <span className="rounded bg-blue-900 px-2.5 py-0.5 text-[10px] font-bold tracking-wider text-white">
+                            【公開情報】対策本部 参加メンバー一覧（全{(project.characters || []).length}名）
+                          </span>
+                        </div>
+
+                        {/* サブガイドバー */}
+                        <div className="rounded border border-slate-200 bg-slate-100 px-3 py-1.5 text-[11px] text-slate-600 font-semibold flex items-center justify-between">
+                          <span>※自己紹介フェーズや議論の際、各PCの役職や公開プロフィールを手元で確認できる一覧シートです</span>
+                          <span className="text-slate-500 font-bold">（※灰色の枠は【あなた】です）</span>
+                        </div>
+
+                        {/* メンバー一覧（全7名・上詰め配置） */}
+                        <div className="space-y-2 flex-none">
+                          {(project.characters || []).map((m) => {
+                            const isSelf = m.id === activeChar.id;
+                            const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
+                            const mLoc = m.location === "headquarters" ? "東京本部" : "小笠原現地";
+
+                            return (
+                              <div
+                                key={m.id}
+                                className={`rounded-lg border p-3 flex flex-col sm:flex-row items-start sm:items-center gap-3 transition ${
+                                  isSelf
+                                    ? "border-slate-300 bg-slate-100/70 text-slate-400"
+                                    : "border-slate-300 bg-white text-slate-900 shadow-sm"
+                                }`}
+                              >
+                                {/* バッジ列 */}
+                                <div className="flex sm:flex-col items-center justify-center gap-1 min-w-[70px] border-b sm:border-b-0 sm:border-r border-slate-200 pb-1 sm:pb-0 sm:pr-3 w-full sm:w-auto">
+                                  <span
+                                    className={`rounded px-1.5 py-0.5 text-[9px] font-bold ${
+                                      isSelf
+                                        ? "bg-slate-200 text-slate-400"
+                                        : "bg-slate-100 text-slate-700 border border-slate-300"
+                                    }`}
+                                  >
+                                    {mLoc}
+                                  </span>
+                                  {isSelf && (
+                                    <span className="rounded bg-slate-300 px-1.5 py-0.5 text-[9px] font-black text-slate-600">
+                                      あなた
+                                    </span>
+                                  )}
+                                </div>
+
+                                {/* 情報列 */}
+                                <div className="flex-1 space-y-1">
+                                  <div className="flex flex-wrap items-baseline gap-2">
+                                    <span
+                                      className={`text-base font-black tracking-wide ${
+                                        isSelf ? "text-slate-400" : "text-slate-950"
+                                      }`}
+                                    >
+                                      <ruby>
+                                        {cleanCharacterName(m.name)}
+                                        {mRuby && (
+                                          <rt
+                                            className={`text-[10px] ${
+                                              isSelf ? "text-slate-400" : "text-slate-500"
+                                            }`}
+                                          >
+                                            {mRuby}
+                                          </rt>
+                                        )}
+                                      </ruby>
+                                    </span>
+                                    <span
+                                      className={`text-xs sm:text-[13px] font-bold ${
+                                        isSelf ? "text-slate-400" : "text-slate-700"
+                                      }`}
+                                    >
+                                      {m.profession}
+                                    </span>
+                                  </div>
+                                  <p
+                                    className={`text-[13.5px] leading-relaxed ${
+                                      isSelf ? "text-slate-400" : "text-slate-700"
+                                    }`}
+                                  >
+                                    {m.handout?.publicProfile || ""}
+                                  </p>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        {/* フッター */}
+                        <div className="mt-auto pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 2/3 頁（メンバー紹介）</span>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    {/* ⑤ 【非公開情報エリア】あなたの記憶（全幅・ゆったりと読める時系列・背景情報） */}
-                    <div className="rounded-lg border border-slate-300 bg-white p-3.5 shadow-sm">
-                      <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2">
-                        <h3 className="text-[11px] font-bold text-slate-900 flex items-center gap-1.5">
-                          <BookOpen className="h-3.5 w-3.5 text-indigo-700" />
-                          <span>あなたの記憶（当日の状況・背景情報）</span>
-                        </h3>
-                        <span className="rounded bg-rose-50 border border-rose-200 px-2 py-0.5 text-[9.5px] font-bold text-rose-700">
-                          非公開情報：他プレイヤーには見せないでください
-                        </span>
-                      </div>
-                      {isDirectEditMode ? (
-                        <textarea
-                          rows={8}
-                          value={activeChar.introduction}
-                          onChange={(e) =>
-                            handleUpdateActiveChar((c) => ({ ...c, introduction: e.target.value }))
-                          }
-                          className="w-full rounded border border-dashed border-slate-400 bg-white p-2.5 text-xs leading-relaxed text-slate-900 focus:border-slate-800 focus:outline-none"
-                        />
-                      ) : (
-                        <div className="text-[11.5px] leading-[1.7] text-slate-800 tracking-normal whitespace-pre-wrap">
-                          {formatJapaneseParagraphs(activeChar.introduction)}
+                    {/* ========================================================
+                        【3枚目】個人秘匿シート（内面・記憶・自己紹介台詞）
+                       ======================================================== */}
+                    {(handoutSheetPage === "all" || handoutSheetPage === 3) && (
+                      <div className="rounded-lg border-2 border-slate-800 bg-white p-6 sm:p-8 shadow-md flex flex-col justify-start min-h-[580px] space-y-4">
+                        {/* ヘッダー（3段スタック構造） */}
+                        <div className="border-b-2 border-slate-900 pb-2 space-y-1">
+                          <div className="text-[10.5px] font-bold tracking-wider uppercase text-slate-500">
+                            合同対策本部
+                          </div>
+                          <div className="flex items-baseline justify-between gap-2">
+                            <span className="text-base sm:text-lg font-black text-slate-900">
+                              個人記録　{cleanCharacterName(activeChar.name)}
+                            </span>
+                            <span className="rounded border border-slate-300 bg-slate-100 px-2 py-0.5 text-[10px] font-semibold text-slate-700">
+                              拠点：{activeChar.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊"}
+                            </span>
+                          </div>
+                          <div className="rounded bg-slate-900 px-3 py-1 text-center text-xs font-bold tracking-wider text-white">
+                            【非公開情報】他のプレイヤーには見せないでください
+                          </div>
                         </div>
-                      )}
-                    </div>
 
-                    {/* ⑥ B5フッター（公式記録フォーマット） */}
-                    <div className="pt-2 border-t border-slate-200 flex items-center justify-between text-[9.5px] text-slate-500">
-                      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
-                      <span className="font-mono">B5 1/1 頁</span>
-                    </div>
+                        {/* ① あなたの内面・行動指針（誇り vs 喪失） */}
+                        <div className="space-y-2">
+                          <div className="flex items-center justify-between px-0.5">
+                            <span className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                              <Lock className="h-3.5 w-3.5 text-slate-700" />
+                              <span>あなたの内面・行動指針</span>
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                            {/* 誇り・信条 */}
+                            <div className="rounded-lg border border-amber-300/80 bg-amber-50/50 p-3.5">
+                              <div className="text-xs font-bold text-amber-950 border-b border-amber-200/80 pb-1 mb-2 flex items-center gap-1">
+                                <span>✦</span>
+                                <span>誇り・信条・行動指針</span>
+                              </div>
+                              <p className="text-[13.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
+                                {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.pride || "")}
+                              </p>
+                            </div>
+
+                            {/* 過去の喪失・悔恨 */}
+                            <div className="rounded-lg border border-slate-300 bg-slate-50/70 p-3.5">
+                              <div className="text-xs font-bold text-slate-800 border-b border-slate-200 pb-1 mb-2 flex items-center gap-1">
+                                <span>✦</span>
+                                <span>過去の喪失・悔恨</span>
+                              </div>
+                              <p className="text-[13.5px] leading-relaxed text-slate-800 whitespace-pre-wrap">
+                                {formatJapaneseParagraphs(activeChar.handout?.internalDrama?.loss || "")}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* ② あなたの記憶（全幅・自然な高さ） */}
+                        <div className="rounded-lg border border-slate-300 bg-white p-4 shadow-sm flex-none">
+                          <div className="flex items-center justify-between border-b border-slate-200 pb-1.5 mb-2.5">
+                            <h3 className="text-xs font-bold text-slate-900 flex items-center gap-1.5">
+                              <BookOpen className="h-4 w-4 text-indigo-700" />
+                              <span>あなたの記憶（当日の状況・背景情報）</span>
+                            </h3>
+                          </div>
+                          <div
+                            className="text-[14px] leading-relaxed text-slate-800 tracking-normal [&_ruby]:ruby-align-center [&_rt]:text-[10px] [&_rt]:text-slate-500"
+                            dangerouslySetInnerHTML={{
+                              __html: formatJapaneseParagraphsHtml(activeChar.introduction),
+                            }}
+                          />
+                        </div>
+
+                        {/* ③ 自己紹介（開始時ロールプレイ台詞・シートの最後） */}
+                        <div className="rounded-lg border border-indigo-200 bg-indigo-50/50 p-4">
+                          <div className="flex items-center justify-between border-b border-indigo-200 pb-1.5 mb-2.5">
+                            <h3 className="text-xs font-bold text-indigo-950 flex items-center gap-1.5">
+                              <span>💬</span>
+                              <span>自己紹介（開始時ロールプレイ台詞）</span>
+                            </h3>
+                            <span className="text-[10px] font-bold text-indigo-600">
+                              ※ゲーム開始の自己紹介フェーズでそのまま音読してください
+                            </span>
+                          </div>
+                          <blockquote className="border-l-4 border-indigo-500 pl-3 text-[14px] font-medium leading-relaxed italic text-slate-900 whitespace-pre-wrap">
+                            {formatJapaneseParagraphs(activeChar.handout?.handoutBody || "")}
+                          </blockquote>
+                        </div>
+
+                        {/* フッター */}
+                        <div className="mt-auto pt-2 border-t border-slate-200 flex items-center justify-between text-[10px] text-slate-500">
+                          <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+                          <span className="font-mono font-bold">B5 3/3 頁（個人秘匿シート）</span>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 ) : handoutViewMode === "cards" ? (
                   /* ------------------------------------------------------------
-                     🃏 特別配布カード（全7枚・表紙のみページ＆内容のみページ交互・両面印刷対応）
+                     🃏 特別配布カード（全14枚：Day 1〜6 配布7枚 ＋ Day 7 配布7枚・両面印刷対応）
                      ------------------------------------------------------------ */
                   <div className="space-y-6">
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 特別配布カード（全7枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 特別配布カード（全{SPECIAL_CHARACTER_CARDS.length}枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          特別配布カード一覧（表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）
+                          {specialCardFilterMode === "day7"
+                            ? "特別配布カード（Day 7 配布）一覧（全7枚：東京＝青・坂凪＝紫・小笠原＝赤 ／ 両面印刷対応）"
+                            : specialCardFilterMode === "day1to6"
+                            ? "特別配布カード（Day 1〜6 配布）一覧（全7枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）"
+                            : `特別配布カード一覧（全${SPECIAL_CHARACTER_CARDS.length}枚：表紙ページ ／ 内容ページ分離・長辺とじ両面印刷対応）`}
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -3629,15 +5923,16 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                     <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/70 px-4 py-2.5 text-xs text-emerald-950 leading-relaxed">
                       <strong>🖨️ コンビニ・家庭用プリンタの両面印刷（長辺とじ）完全対応：</strong>
-                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します。
+                      奇数ページに<strong>「表紙のみ（4枚）」</strong>、偶数ページに<strong>「内容のみ（4枚・裏表が重なるよう左右反転配置）」</strong>が交互に並びます。そのまま1つのPDFとして<strong>「両面印刷（長辺とじ）」</strong>で出力し、中央の破線に沿って十字に4分割カットすると、表裏がピタッと一致します（※左メニューで「Day 7 配布(7)」を選ぶと、特別配布カード［Day 7 配布］7枚［東京＝青・坂凪＝紫・小笠原＝赤］だけを印刷できます）。
                     </div>
 
                     {(() => {
                       const rawCardsSource =
-                        project.specialCharacterCards && project.specialCharacterCards.length === 7
+                        project.specialCharacterCards &&
+                        project.specialCharacterCards.length === SPECIAL_CHARACTER_CARDS.length
                           ? project.specialCharacterCards
                           : SPECIAL_CHARACTER_CARDS;
-                      const cardsSource = rawCardsSource.map((c) => {
+                      const mergedCards = rawCardsSource.map((c) => {
                         const master = SPECIAL_CHARACTER_CARDS.find((m) => m.id === c.id);
                         return master
                           ? {
@@ -3647,9 +5942,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               description: master.description,
                               rubyHtml: master.rubyHtml,
                               glossaryNote: master.glossaryNote,
+                              revealDayLabel: master.revealDayLabel,
+                              categoryLabel: master.categoryLabel,
+                              accentHex: master.accentHex,
                             }
                           : c;
                       });
+                      const cardsSource = mergedCards.filter((c) =>
+                        specialCardFilterMode === "day7"
+                          ? c.revealDayNumber === 7
+                          : specialCardFilterMode === "day1to6"
+                          ? c.revealDayNumber <= 6
+                          : true
+                      );
 
                       const sheets: ((typeof cardsSource)[number] | null)[][] = [];
                       for (let i = 0; i < cardsSource.length; i += 4) {
@@ -3660,6 +5965,31 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           cardsSource[i + 3] ?? null,
                         ]);
                       }
+
+                      const getSecretCardTheme = (accentHex: string) =>
+                        accentHex === "#7e22ce"
+                          ? {
+                              frontBg: "#faf5ff",
+                              backBg: "#fdfaff",
+                              badgeBg: "#f3e8ff",
+                              badgeBorder: "#c084fc",
+                              badgeText: "#581c87",
+                            }
+                          : accentHex === "#dc2626"
+                          ? {
+                              frontBg: "#fef2f2",
+                              backBg: "#fffafa",
+                              badgeBg: "#fee2e2",
+                              badgeBorder: "#f87171",
+                              badgeText: "#991b1b",
+                            }
+                          : {
+                              frontBg: "#eff6ff",
+                              backBg: "#f8fbff",
+                              badgeBg: "#dbeafe",
+                              badgeBorder: "#60a5fa",
+                              badgeText: "#1e3a8a",
+                            };
 
                       const renderFrontFace = (
                         card: (typeof cardsSource)[number] | null,
@@ -3676,8 +6006,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           );
                         }
                         const charShort = (card.characterName || "").split("（")[0];
-                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
+                        const isSecretCard = card.revealDayNumber === 7;
+                        const secretTheme = getSecretCardTheme(card.accentHex);
+
                         return (
                           <div
                             key={slotKey}
@@ -3687,16 +6020,16 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             }`}
                             style={{
                               borderColor: card.accentHex,
-                              backgroundColor: "#f8fafc",
+                              backgroundColor: isSecretCard ? secretTheme.frontBg : "#f8fafc",
                             }}
                           >
                             <div className="flex items-center justify-between text-xs">
                               <span
                                 className="rounded border px-2 py-0.5 font-bold"
                                 style={{
-                                  backgroundColor: "#eff6ff",
-                                  borderColor: "#93c5fd",
-                                  color: "#1e40af",
+                                  backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
+                                  borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
+                                  color: isSecretCard ? secretTheme.badgeText : "#1e40af",
                                 }}
                               >
                                 {card.revealDayLabel}
@@ -3709,7 +6042,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </span>
                             </div>
 
-                            <div className="my-auto py-5 text-center space-y-2">
+                            <div className="my-auto py-5 text-center space-y-2.5">
                               <div
                                 className="text-[11px] font-bold tracking-widest"
                                 style={{ color: card.accentHex }}
@@ -3737,12 +6070,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               </div>
                             </div>
 
-                            <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
+                            <div
+                              className="border-t border-dashed pt-2 flex items-center justify-between"
+                              style={{
+                                borderColor: isSecretCard ? secretTheme.badgeBorder : "#cbd5e1",
+                              }}
+                            >
+                              <span
+                                className="text-[10.5px] font-bold"
+                                style={{ color: card.accentHex }}
+                              />
                               <span
                                 className="font-mono text-xs font-bold"
                                 style={{ color: card.accentHex }}
                               >
-                                {card.cardCode} / 07
+                                {card.cardCode} / {String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
                               </span>
                             </div>
                           </div>
@@ -3764,44 +6106,58 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           );
                         }
                         const charShort = (card.characterName || "").split("（")[0];
-                        const cardLabel = `特別配布カード（${charShort}）`;
+                        const cardLabel = card.categoryLabel || `特別配布カード（${charShort}）`;
                         const isSelected = card.characterId === activeChar?.id;
+                        const isSecretCard = card.revealDayNumber === 7;
+                        const secretTheme = getSecretCardTheme(card.accentHex);
+
                         return (
                           <div
                             key={slotKey}
                             onClick={() => setSelectedCharId(card.characterId)}
-                            className={`card-face-134mm cursor-pointer rounded-md border-2 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
+                            className={`card-face-134mm cursor-pointer rounded-md border-2 p-5 flex flex-col justify-between min-h-[380px] shadow-sm transition ${
                               isSelected ? "ring-2 ring-indigo-500 print:ring-0" : ""
                             }`}
-                            style={{ borderColor: card.accentHex }}
+                            style={{
+                              borderColor: card.accentHex,
+                              backgroundColor: isSecretCard ? secretTheme.backBg : "#ffffff",
+                            }}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs mb-1.5">
+                              <div className="flex items-center justify-between text-xs mb-1">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: card.accentHex }}
                                 >
                                   {cardLabel}
                                 </span>
-                                <span
-                                  className="rounded border px-2 py-0.5 font-bold"
-                                  style={{
-                                    backgroundColor: "#eff6ff",
-                                    borderColor: "#93c5fd",
-                                    color: "#1e40af",
-                                  }}
-                                >
-                                  {card.revealDayLabel}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span
+                                    className="rounded border px-2 py-0.5 font-bold"
+                                    style={{
+                                      backgroundColor: isSecretCard ? secretTheme.badgeBg : "#eff6ff",
+                                      borderColor: isSecretCard ? secretTheme.badgeBorder : "#93c5fd",
+                                      color: isSecretCard ? secretTheme.badgeText : "#1e40af",
+                                    }}
+                                  >
+                                    {card.revealDayLabel}
+                                  </span>
+                                  <span
+                                    className="font-mono text-[11px] font-bold"
+                                    style={{ color: card.accentHex }}
+                                  >
+                                    {card.cardCode}/{String(SPECIAL_CHARACTER_CARDS.length).padStart(2, "0")}
+                                  </span>
+                                </div>
                               </div>
 
                               <div
-                                className="border-b-2 pb-1.5 mb-2"
+                                className="border-b-2 pb-1 mb-1.5"
                                 style={{ borderColor: card.accentHex }}
                               >
                                 <h3
                                   className="text-base font-extrabold"
-                                  style={{ color: "#0f172a" }}
+                                  style={{ color: isSecretCard ? secretTheme.badgeText : "#0f172a" }}
                                 >
                                   {card.title}
                                 </h3>
@@ -3809,24 +6165,26 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                               {card.rubyHtml ? (
                                 <div
-                                  className="card-body-12px text-[12px] leading-[1.8] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
+                                  className="card-body-12px text-[14px] leading-[1.68] text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                   dangerouslySetInnerHTML={{ __html: card.rubyHtml }}
                                 />
                               ) : (
                                 <div
-                                  className={`card-body-12px text-[12px] ${
-                                    card.glossaryNote ? "leading-[1.48]" : "leading-[1.6]"
-                                  } text-slate-800 whitespace-pre-wrap text-justify`}
+                                  className={`card-body-12px text-[14px] ${
+                                    card.glossaryNote || (card.description || "").length > 260
+                                      ? "leading-[1.42]"
+                                      : "leading-[1.52]"
+                                  } text-slate-800 whitespace-pre-wrap text-left`}
                                 >
                                   {renderColoredCardBody(card.description)}
                                 </div>
                               )}
                             </div>
 
-                            <div className="mt-2 space-y-1.5">
-                              {card.glossaryNote && (
+                            {card.glossaryNote && (
+                              <div className="mt-1.5">
                                 <div
-                                  className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                  className="card-glossary-12px rounded border px-2.5 py-1.5 text-[12px] leading-[1.35] whitespace-pre-wrap"
                                   style={{
                                     backgroundColor: "#f0f9ff",
                                     borderColor: "#7dd3fc",
@@ -3834,16 +6192,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 >
                                   {renderColoredGlossaryNote(card.glossaryNote)}
                                 </div>
-                              )}
-                              <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                                <span
-                                  className="font-mono font-bold"
-                                  style={{ color: card.accentHex }}
-                                >
-                                  {card.cardCode} / 07
-                                </span>
                               </div>
-                            </div>
+                            )}
                           </div>
                         );
                       };
@@ -3961,7 +6311,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               >
                                 {b.badgeLabel}
                               </span>
-                              <h3 className="text-sm font-black text-slate-900">{b.title}</h3>
+                              <h3 className="briefing-title-15px text-[15.5px] font-black text-slate-900">
+                                {b.title}
+                              </h3>
                             </div>
                             <div className="flex items-center gap-2">
                               {b.linkedNagatsuCardCode && (
@@ -3988,7 +6340,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                           {/* 上段：長津からの緊急通信ブリーフィング / 途中アナウンス */}
                           <div
-                            className="rounded border p-3 space-y-1"
+                            className="rounded border p-3 space-y-1.5"
                             style={{
                               backgroundColor: b.isMidDayAddition ? "#f5f7ff" : "#f8fafc",
                               borderColor: b.isMidDayAddition ? "#c7d2fe" : "#cbd5e1",
@@ -3996,7 +6348,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           >
                             <div className="flex flex-wrap items-center justify-between gap-1">
                               <span
-                                className="text-xs font-extrabold"
+                                className="briefing-subhead-13px text-[13.5px] font-extrabold"
                                 style={{
                                   color: b.isMidDayAddition ? "#312e81" : "#1e293b",
                                 }}
@@ -4004,18 +6356,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 {b.nagatsuBriefingTitle}
                               </span>
                               {b.timingNote && (
-                                <span className="text-[10.5px] font-semibold text-slate-500">
+                                <span className="text-[11px] font-semibold text-slate-500">
                                   配布タイミング：{b.timingNote}
                                 </span>
                               )}
                             </div>
                             {b.nagatsuBriefingRubyHtml ? (
                               <p
-                                className="text-[11px] leading-[1.82] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
+                                className="briefing-body-13px text-[13px] leading-[1.78] text-slate-800 font-medium [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold"
                                 dangerouslySetInnerHTML={{ __html: b.nagatsuBriefingRubyHtml }}
                               />
                             ) : (
-                              <p className="text-[11px] leading-[1.82] text-slate-800 font-medium whitespace-pre-wrap">
+                              <p className="briefing-body-13px text-[13px] leading-[1.78] text-slate-800 font-medium whitespace-pre-wrap">
                                 {b.nagatsuBriefingText}
                               </p>
                             )}
@@ -4024,7 +6376,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           {/* 下段：危機管理官 朝潮（PC1）の指揮ミッション */}
                           <div className="rounded border border-slate-300 bg-white p-3 space-y-1.5">
                             <div
-                              className="text-xs font-extrabold border-b border-slate-200 pb-1"
+                              className="briefing-subhead-13px text-[13.5px] font-extrabold border-b border-slate-200 pb-1"
                               style={{
                                 color: b.isMidDayAddition ? "#1e3a8a" : "#0f172a",
                               }}
@@ -4033,10 +6385,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 ? "🧭 危機管理官 朝潮がこの局面で指揮・達成すべき追加ミッション"
                                 : "🧭 危機管理官 朝潮がこのDayで指揮・達成すべきミッション"}
                             </div>
-                            <ul className="space-y-1.5 text-[11px] leading-[1.75] text-slate-800 list-none">
+                            <ul className="briefing-body-13px space-y-1.5 text-[13px] leading-[1.72] text-slate-800 list-none">
                               {b.asashioMissions.map((m, mIdx) => (
                                 <li key={mIdx} className="flex items-start gap-2">
-                                  <span className="mt-0.5 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
+                                  <span className="mt-1 inline-block h-3.5 w-3.5 rounded border border-slate-500 bg-white shrink-0" />
                                   <span>{renderColoredCardBody(m)}</span>
                                 </li>
                               ))}
@@ -4058,10 +6410,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                     <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                       <div>
                         <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全10枚・A4 4分割 両面印刷レイアウト）
+                          {project.title} ― 長津（PC7）専用 フェーズ進行＆ミッション達成時アナウンスカード（全{NAGATSU_PHASE_CARDS.length}枚・A4 4分割 両面印刷レイアウト）
                         </span>
                         <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（NG-02〜NG-10・NG-08は枝番2枚組）
+                          長津（PC7）専用・途中＆達成時アナウンスカード一覧（全{NAGATSU_PHASE_CARDS.length}枚・NG-08は枝番2枚組）
                         </h2>
                       </div>
                       <div className="flex flex-wrap items-center gap-2">
@@ -4147,7 +6499,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                             <div className="border-t border-dashed border-slate-300 pt-2 flex items-center justify-end">
                               <span className="font-mono text-xs font-bold text-slate-500">
-                                {nc.cardCode} / 10
+                                {nc.cardCode} / {String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
                               </span>
                             </div>
                           </div>
@@ -4177,38 +6529,37 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             className={`card-face-134mm rounded-md border-2 border-slate-700 bg-white p-5 flex flex-col justify-between min-h-[380px] shadow-sm ${nc.id === activePhaseCardId ? "ring-2 ring-indigo-500 print:ring-0" : ""}`}
                           >
                             <div>
-                              <div className="flex items-center justify-between text-xs mb-2">
+                              <div className="flex items-center justify-between text-xs mb-1">
                                 <span
                                   className="rounded px-2.5 py-0.5 font-bold text-white"
                                   style={{ backgroundColor: nc.accentHex }}
                                 >
                                   長津アナウンスカード
                                 </span>
-                                <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
-                                  {nc.timingBadge}
-                                </span>
+                                <div className="flex items-center gap-1.5">
+                                  <span className="rounded bg-slate-100 border border-slate-300 px-2 py-0.5 font-bold text-slate-800">
+                                    {nc.timingBadge}
+                                  </span>
+                                  <span className="font-mono text-[11px] font-bold text-slate-500">
+                                    {nc.cardCode}/{String(NAGATSU_PHASE_CARDS.length).padStart(2, "0")}
+                                  </span>
+                                </div>
                               </div>
 
-                              <div className="border-b-2 border-slate-900 pb-1.5 mb-2">
-                                <h4 className="text-sm font-extrabold text-slate-900 tracking-tight">
+                              <div className="border-b-2 border-slate-900 pb-1 mb-1.5">
+                                <h4 className="text-base font-extrabold text-slate-900 tracking-tight">
                                   {nc.title}
                                 </h4>
                               </div>
 
                               <div
-                                className={`card-body-12px text-[12px] ${
+                                className={`card-body-12px text-[14px] ${
                                   nc.cardCode === "NG-09" || nc.cardCode === "NG-10"
-                                    ? "leading-[1.72]"
-                                    : "leading-[1.82]"
+                                    ? "leading-[1.52]"
+                                    : "leading-[1.65]"
                                 } text-slate-800 text-left [&_ruby]:whitespace-nowrap [&_rt]:text-[7.5px] [&_rt]:leading-none [&_rt]:tracking-tight [&_rt]:text-slate-600 [&_rt]:font-semibold`}
                                 dangerouslySetInnerHTML={{ __html: nc.rubyHtml }}
                               />
-                            </div>
-
-                            <div className="border-t border-dashed border-slate-300 pt-2 mt-2 flex items-center justify-end text-xs">
-                              <span className="font-mono font-bold text-slate-500">
-                                {nc.cardCode} / 10
-                              </span>
                             </div>
                           </div>
                         );
@@ -4438,27 +6789,35 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           style={{ borderColor: cardColor.borderHex }}
                         >
                           <div>
-                            <div className="flex items-center justify-between text-xs mb-1.5">
+                            <div className="flex items-center justify-between text-xs mb-1">
                               <span
                                 className="rounded px-2.5 py-0.5 font-bold text-white"
                                 style={{ backgroundColor: cardColor.badgeBg }}
                               >
                                 証拠資料カード（{ownerShort}）
                               </span>
-                              <span
-                                className="rounded border px-2 py-0.5 font-bold"
-                                style={{
-                                  backgroundColor: cardColor.dayBg,
-                                  borderColor: cardColor.dayBorder,
-                                  color: cardColor.dayText,
-                                }}
-                              >
-                                Day {ev.foundPhase} 開示
-                              </span>
+                              <div className="flex items-center gap-1.5">
+                                <span
+                                  className="rounded border px-2 py-0.5 font-bold"
+                                  style={{
+                                    backgroundColor: cardColor.dayBg,
+                                    borderColor: cardColor.dayBorder,
+                                    color: cardColor.dayText,
+                                  }}
+                                >
+                                  Day {ev.foundPhase} 開示
+                                </span>
+                                <span
+                                  className="font-mono text-[11px] font-bold"
+                                  style={{ color: cardColor.headerHex }}
+                                >
+                                  {evCode}/{String(allEvidences.length).padStart(2, "0")}
+                                </span>
+                              </div>
                             </div>
 
                             <div
-                              className="border-b-2 pb-1.5 mb-2"
+                              className="border-b-2 pb-1 mb-1.5"
                               style={{ borderColor: cardColor.borderHex }}
                             >
                               <h3
@@ -4470,20 +6829,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
 
                             <div
-                              className={`card-body-12px text-[12px] ${
+                              className={`card-body-12px text-[14px] ${
                                 ev.glossaryNote
-                                  ? "leading-[1.48]"
-                                  : "leading-[1.6]"
-                              } text-slate-800 whitespace-pre-wrap text-justify`}
+                                  ? "leading-[1.42]"
+                                  : "leading-[1.52]"
+                              } text-slate-800 whitespace-pre-wrap text-left`}
                             >
                               {renderColoredCardBody(ev.description)}
                             </div>
                           </div>
 
-                          <div className="mt-2 space-y-1.5">
-                            {ev.glossaryNote && (
+                          {ev.glossaryNote && (
+                            <div className="mt-1.5">
                               <div
-                                className="rounded border px-2.5 py-1.5 text-[9.5px] leading-[1.35] whitespace-pre-wrap"
+                                className="card-glossary-12px rounded border px-2.5 py-1.5 text-[12px] leading-[1.35] whitespace-pre-wrap"
                                 style={{
                                   backgroundColor: "#f0f9ff",
                                   borderColor: "#7dd3fc",
@@ -4491,16 +6850,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                               >
                                 {renderColoredGlossaryNote(ev.glossaryNote)}
                               </div>
-                            )}
-                            <div className="border-t border-dashed border-slate-300 pt-1.5 flex items-center justify-end text-xs">
-                              <span
-                                className="font-mono font-bold"
-                                style={{ color: cardColor.headerHex }}
-                              >
-                                {evCode} / {String(allEvidences.length).padStart(2, "0")}
-                              </span>
                             </div>
-                          </div>
+                          )}
                         </div>
                       );
                     };
@@ -5112,7 +7463,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             </div>
                           </div>
                           <div className="mt-1.5 pt-1 border-t border-slate-300 text-[9.5px] font-extrabold text-amber-800">
-                            ✔ 朝倉教授記録により確定
+                            ✔ 海野教授記録により確定
                           </div>
                         </div>
 
@@ -5301,7 +7652,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   {/* A4・1枚完結の視覚的成功・失敗分岐フローチャート図 */}
                   <GmOnePageFlowchart
                     projectTitle={project.title}
-                    selectedDay={selectedGmDay}
+                    selectedDay={selectedGmDay === 0 ? 1 : selectedGmDay}
                     onSelectDay={setSelectedGmDay}
                   />
                 </div>
@@ -5311,10 +7662,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM進行資料（Day {activeTimelineStep.dayNumber} 進行台本＆管理シート）
+                        {project.title} ― GM進行資料（
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前"
+                          : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                        進行台本＆管理シート）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                        Day {activeTimelineStep.dayNumber}：{activeTimelineStep.situationTitle}
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前"
+                          : `Day ${activeTimelineStep.dayNumber}`}
+                        ：{activeTimelineStep.situationTitle}
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -5324,7 +7682,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-indigo-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        このDay {activeTimelineStep.dayNumber} のみを印刷 / PDF保存
+                        この
+                        {activeTimelineStep.dayNumber === 0
+                          ? "ゲーム開始前シート"
+                          : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                        のみを印刷 / PDF保存
                       </button>
                       <button
                         type="button"
@@ -5332,7 +7694,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        進行資料を一括印刷 / PDF保存（Day 1〜7）
+                        進行資料を一括印刷 / PDF保存（開始前＋Day 1〜7）
                       </button>
                     </div>
                   </div>
@@ -5341,25 +7703,15 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       【GM進行資料】：フェーズ開始条件・長津アナウンス囲み枠・12px文字サイズ対応
                      ============================================================ */}
                   <div className="space-y-4 text-[12px]">
-                    {/* 🎙️ GM立ち位置・役柄ガイダンスバナー */}
-                    <div className="rounded-md border border-slate-300 bg-slate-50 p-3 text-[12px] text-slate-800 flex flex-wrap items-center justify-between gap-2">
-                      <div className="flex flex-wrap items-center gap-2">
-                        <span className="font-bold text-slate-900 flex items-center gap-1.5 text-[12px]">
-                          <Radio className="h-4 w-4 text-indigo-600 shrink-0" />
-                          🎙️ GM役柄・進行方式：【6名時：GMが長津を担当 ／ 7名時：PC7が長津を担当】
-                        </span>
-                        <span className="text-[12px] text-slate-700">
-                          ｜ 各Day開始時に朝潮（PC1）へ『Day別指令シート』を手渡し、朝潮の指揮で会議を開始させます
-                        </span>
-                      </div>
-                    </div>
-
                     {/* GM進行ヘッダー帯（スレートダークで統一） */}
                     <div className="rounded-md p-4 bg-slate-900 text-white shadow">
                       <div className="flex flex-wrap items-end justify-between gap-4">
                         <div className="flex-1 min-w-[260px]">
                           <span className="block text-[12px] uppercase tracking-wider text-slate-300">
-                            Day {activeTimelineStep.dayNumber} 状況タイトル
+                            {activeTimelineStep.dayNumber === 0
+                              ? "ゲーム開始前"
+                              : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                            状況タイトル
                           </span>
                           <h1 className="mt-0.5 text-lg font-bold leading-tight">
                             {activeTimelineStep.situationTitle}
@@ -5369,7 +7721,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         <div className="flex items-center gap-4 text-[12px] shrink-0">
                           <div>
                             <span className="block text-[12px] uppercase tracking-wider text-slate-300">
-                              観測地点
+                              拠点・観測地点
                             </span>
                             <div className="mt-1 text-sm font-semibold">
                               {activeTimelineStep.locationName}
@@ -5451,6 +7803,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 </div>
                               )}
 
+                              {/* 📢 GMからの開始描写（各チームの現在地・状況説明） */}
+                              {ph.gmOpeningDescription && (
+                                <div className="rounded-lg border-2 border-teal-700 bg-teal-50/80 p-3.5 space-y-2 shadow-sm">
+                                  <div className="flex flex-wrap items-center justify-between gap-2 border-b border-teal-200 pb-1.5">
+                                    <span className="inline-flex items-center gap-1.5 rounded bg-teal-800 px-2.5 py-0.5 text-[12px] font-bold text-white">
+                                      📢 【GMからの開始描写（各チームの現在地・状況説明）】
+                                    </span>
+                                  </div>
+                                  <div className="whitespace-pre-wrap text-[12px] font-bold leading-relaxed text-slate-900 bg-white p-3 rounded border border-teal-300 select-text">
+                                    {ph.gmOpeningDescription}
+                                  </div>
+                                </div>
+                              )}
+
                               {/* 📡 オペレーター（長津）のアナウンス（太枠囲み） */}
                               {ph.nagatsuAnnouncements &&
                                 ph.nagatsuAnnouncements.map((ng, nIdx) => (
@@ -5500,6 +7866,55 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                         <div className="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-3 rounded border border-slate-300 select-text">
                                           {ga.text}
                                         </div>
+                                        {ga.handoutBadges && ga.handoutBadges.length > 0 && (
+                                          <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                            <span className="text-[12px] font-extrabold text-slate-700">
+                                              📦 配布・提示：
+                                            </span>
+                                            {ga.handoutBadges.map((badge, bIdx) => (
+                                              <span
+                                                key={bIdx}
+                                                className="rounded border border-slate-300 bg-white px-2.5 py-0.5 text-[12px] font-bold text-slate-900"
+                                              >
+                                                {badge}
+                                              </span>
+                                            ))}
+                                          </div>
+                                        )}
+                                        {ga.subAnnouncements &&
+                                          ga.subAnnouncements.map((sub, sIdx) => (
+                                            <div
+                                              key={sIdx}
+                                              className="border-t border-amber-300 pt-2.5 mt-2 space-y-1.5"
+                                            >
+                                              {sub.subBadge && (
+                                                <div className="text-[12px] font-extrabold text-slate-900">
+                                                  {sub.subBadge}
+                                                </div>
+                                              )}
+                                              <div className="text-[12px] font-bold text-slate-800">
+                                                {sub.speakerLabel}
+                                              </div>
+                                              <div className="whitespace-pre-wrap text-[12px] leading-relaxed text-slate-900 bg-white p-3 rounded border border-slate-300 select-text">
+                                                {sub.text}
+                                              </div>
+                                              {sub.handoutBadges && sub.handoutBadges.length > 0 && (
+                                                <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
+                                                  <span className="text-[12px] font-extrabold text-slate-700">
+                                                    📦 配布・提示：
+                                                  </span>
+                                                  {sub.handoutBadges.map((badge, bIdx) => (
+                                                    <span
+                                                      key={bIdx}
+                                                      className="rounded border border-slate-300 bg-white px-2.5 py-0.5 text-[12px] font-bold text-slate-900"
+                                                    >
+                                                      {badge}
+                                                    </span>
+                                                  ))}
+                                                </div>
+                                              )}
+                                            </div>
+                                          ))}
                                         {ga.cardActionNote && (
                                           <div className="text-[12px] font-bold text-indigo-950 bg-indigo-100/70 border border-indigo-300 rounded px-3 py-1.5">
                                             {ga.cardActionNote}
@@ -5535,7 +7950,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       <div className="mb-2 flex items-center justify-between">
                         <span className="flex items-center gap-1.5 text-[12px] font-bold text-slate-900">
                           <CheckSquare className="h-4 w-4 text-indigo-600" />
-                          Day {activeTimelineStep.dayNumber} GM進行チェックリスト
+                          {activeTimelineStep.dayNumber === 0
+                            ? "ゲーム開始前"
+                            : `Day ${activeTimelineStep.dayNumber}`}{" "}
+                          GM進行チェックリスト
                         </span>
                       </div>
                       <div className="space-y-1.5">
@@ -5547,39 +7965,631 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         ))}
                       </div>
                     </div>
+                  </div>
+                </div>
+              )
+            )}
 
-                    {/* 📂 このフェーズで開示される証拠資料 */}
-                    <div className="rounded-md border border-slate-300 p-3.5 bg-white shadow-sm">
-                      <div className="mb-2 flex items-center justify-between text-[12px] font-bold text-slate-900">
-                        <span>
-                          📂 Day {activeTimelineStep.dayNumber} 開示証拠資料（
-                          {
-                            allEvidences.filter(
-                              (e) => e.foundPhase === activeTimelineStep.dayNumber
-                            ).length
-                          }
-                          件）
-                        </span>
-                      </div>
-                      <div className="flex flex-wrap gap-2">
-                        {allEvidences
-                          .filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
-                          .map((ev) => (
-                            <div
-                              key={ev.id}
-                              className="flex items-center gap-1.5 rounded border border-slate-300 bg-slate-50 px-3 py-1.5 text-[12px] font-bold text-slate-800"
-                            >
-                              <span className="text-indigo-600 font-mono text-[12px]">📄</span>
-                              <span>{ev.title}</span>
+            {/* ================================================================
+                ⑤ GM事前準備（全体掲示用・Day別目的シート A4横置き全10枚 ＆ 首下げネームタグ中紙シート A4・8面配置）
+               ================================================================ */}
+            {category === "gm_prep" && (
+              gmPrepTool === "goal_boards" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（全体掲示用・Day別目的シート / A4横置き・全10枚）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        全体掲示用・Day別目的シート（A4横置き・超特大文字・全10枚）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handlePrintGmGoalBoards(selectedGoalBoardId)}
+                        className="flex items-center gap-1.5 rounded-lg border border-slate-300 bg-white px-3 py-2 text-xs font-bold text-slate-800 shadow-sm hover:bg-slate-100 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5 text-indigo-600" />
+                        選択中の1枚のみ印刷
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handlePrintGmGoalBoards()}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        全10枚をA4横置きで一括印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 案内ボックス */}
+                  <div className="no-print rounded-lg border border-indigo-200 bg-indigo-50/80 p-4 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-indigo-900">
+                      🎯 全体掲示用・Day別目的シートの活用方法（A4横置き）
+                    </div>
+                    <div>
+                      ・各Dayや途中フェーズの開始時に、<strong>会場のホワイトボードや中央テーブルなど全員から見える位置</strong>に掲示してください。
+                    </div>
+                    <div>
+                      ・制限時間タイマーと合わせて掲示することで、「今この時間内に誰が何を答えればいいのか」が全員に一目で共有され、朝潮（PC1）の手元で指令書が止まる問題が解消されます。
+                    </div>
+                  </div>
+
+                  {/* 全10枚プレビュー一覧（A4横置き比率カード） */}
+                  <div className="space-y-8">
+                    {GM_GOAL_BOARDS.map((board) => {
+                      const isSelected = selectedGoalBoardId === board.id;
+                      const hasTwoLines = Boolean(board.line2);
+                      const fontSize1 = getGoalBoardLineFontSizeClass();
+                      const fontSize2 = getGoalBoardLineFontSizeClass();
+
+                      return (
+                        <div
+                          key={board.id}
+                          data-goal-board-id={board.id}
+                          onClick={() => setSelectedGoalBoardId(board.id)}
+                          className="space-y-2 cursor-pointer"
+                        >
+                          <div className="no-print flex flex-wrap items-center justify-between gap-2 rounded bg-slate-800 px-3.5 py-2 text-xs font-bold text-white">
+                            <div className="flex items-center gap-2">
+                              <span className="rounded bg-indigo-500 px-2 py-0.5 text-[11px] font-black text-white">
+                                シート #{String(board.sheetNumber).padStart(2, "0")}
+                              </span>
+                              <span>{board.sidebarTitle}</span>
                             </div>
-                          ))}
-                        {allEvidences.filter((e) => e.foundPhase === activeTimelineStep.dayNumber)
-                          .length === 0 && (
-                          <span className="text-[12px] text-slate-500 italic">
-                            このフェーズで開示される証拠はありません
-                          </span>
-                        )}
+                            <div className="flex items-center gap-3">
+                              <span className="text-[11px] font-normal text-slate-300">
+                                ⏱️ {board.timingNote}
+                              </span>
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handlePrintGmGoalBoards(board.id);
+                                }}
+                                className="rounded bg-emerald-600 px-2.5 py-1 text-[11px] font-bold text-white hover:bg-emerald-500 transition"
+                              >
+                                この1枚をA4横印刷
+                              </button>
+                            </div>
+                          </div>
+
+                          {/* A4横置き（297:210）プレビュー枠 */}
+                          <div
+                            className={`aspect-[297/210] w-full rounded-lg border-4 border-slate-900 bg-white p-6 sm:p-8 flex flex-col justify-between shadow-md transition ${
+                              isSelected ? "ring-4 ring-indigo-500/70" : ""
+                            }`}
+                          >
+                            {/* 上部ヘッダー帯 */}
+                            <div className="flex items-center justify-between border-b-4 border-slate-900 pb-3">
+                              <div className="flex items-center gap-3">
+                                <span className="rounded-lg bg-slate-900 px-5 py-1.5 text-xl sm:text-2xl font-black tracking-widest text-white">
+                                  {board.phaseBadge}
+                                </span>
+                                <span className="text-xl sm:text-2xl font-black tracking-widest text-slate-900">
+                                  全体目的・達成ミッション
+                                </span>
+                              </div>
+                              <span className="font-mono text-xs font-bold text-slate-400">
+                                {project.title} / SHEET {String(board.sheetNumber).padStart(2, "0")}
+                              </span>
+                            </div>
+
+                            {/* 中央・超特大目的テキスト領域 */}
+                            <div className="my-auto py-6 flex flex-col items-center justify-center text-center px-2">
+                              <div
+                                className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize1}`}
+                              >
+                                {renderGoalBoardLine(board.line1)}
+                              </div>
+
+                              {board.line2 && (
+                                <>
+                                  <div className="my-5 sm:my-7 w-4/5 border-t-4 border-dashed border-slate-300" />
+                                  <div
+                                    className={`w-full font-black tracking-tight text-slate-950 leading-tight ${fontSize2}`}
+                                  >
+                                    {renderGoalBoardLine(board.line2)}
+                                  </div>
+                                </>
+                              )}
+                            </div>
+
+                            {/* 下部フッター余白バランス用 */}
+                            <div className="flex items-center justify-between text-[11px] font-bold text-slate-400 pt-2 border-t border-slate-200">
+                              <span>掲示タイミング：{board.timingNote}</span>
+                              <span>A4 LANDSCAPE / MISSION BOARD</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : gmPrepTool === "coin_tokens" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（海図用コイントークン印刷シート / 直径2.49cmコイン対応）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        海図用コイントークン印刷シート（コイン直径2.49cm対応・外径2.62cm・全19個＋予備8個）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrintGmCoinTokens}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        コイントークンをA4印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・貼り付けガイド */}
+                  <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
+                      <Scissors className="h-4 w-4" />
+                      海図用コイントークンの印刷・工作ガイド（直径2.49cmコイン用）
+                    </div>
+                    <div>
+                      ・<strong>コイン実寸（直径2.49cm ＝ 24.9mm）</strong>に対し、多少大きめに切っても余白が出ないよう<strong>外側破線円を直径2.62cm（26.2mm）</strong>、内側の太色枠を直径2.49cmで設計しています。
+                    </div>
+                    <div>
+                      ・「コイントークンをA4印刷 / PDF保存」から<strong>倍率100%（等倍）</strong>でA4用紙（またはA4シール用紙）に印刷し、丸く切り抜いてコインへ貼り付けてください。
+                    </div>
+                    <div>
+                      ・<strong>Day 1（遭難船1・巡視船1・暗礁2）</strong>、<strong>Day 3（ソノブイ3）</strong>、<strong>Day 2〜7（火山噴火／海底噴火6・火山性微動6）</strong>の計19個に加え、下段に予備8個を収録しています。
+                    </div>
+                  </div>
+
+                  {/* トークン一覧プレビューシート */}
+                  <div className="space-y-5 rounded-lg border border-slate-300 bg-white p-5 shadow-sm">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b-2 border-slate-900 pb-2.5">
+                      <div>
+                        <div className="text-base font-black text-slate-900">
+                          {project.title} ― 海図用コイントークン印刷シート
+                        </div>
+                        <div className="text-xs font-bold text-slate-600">
+                          ✂ 外側破線円：直径2.62cm（26.2mm） ／ 内側太枠円：コイン実寸 直径2.49cm（24.9mm）
+                        </div>
                       </div>
+                      <span className="rounded bg-slate-900 px-3 py-1 text-xs font-extrabold text-white">
+                        A4 等倍（100%）印刷用
+                      </span>
+                    </div>
+
+                    <div className="space-y-4">
+                      {GM_COIN_TOKEN_SECTIONS.map((sec) => (
+                        <div
+                          key={sec.id}
+                          className="rounded-lg border border-slate-200 bg-slate-50/50 p-3.5 space-y-3"
+                        >
+                          <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-dashed border-slate-300 pb-1.5">
+                            <span className="text-xs font-black text-slate-900">
+                              {sec.sectionTitle}
+                            </span>
+                            <span className="text-[11px] font-semibold text-slate-500">
+                              {sec.usageNote}
+                            </span>
+                          </div>
+
+                          <div className="flex flex-wrap items-center gap-4 sm:gap-5 pt-1">
+                            {sec.tokens.map((tok) => {
+                              const svgHtml = getCoinTokenSvgString(tok.kind, tok.rimHex);
+                              const isTwoLine = Boolean(tok.mainLine2);
+                              return (
+                                <div
+                                  key={tok.id}
+                                  className="flex flex-col items-center"
+                                >
+                                  {/* 外側切り抜き円（直径2.62cm相当プレビュー） */}
+                                  <div
+                                    className="rounded-full border-2 border-dashed flex items-center justify-center shadow-sm"
+                                    style={{
+                                      width: "26.2mm",
+                                      height: "26.2mm",
+                                      backgroundColor: tok.bgHex,
+                                      borderColor: tok.rimHex,
+                                    }}
+                                  >
+                                    {/* 内側コイン実寸リング（直径2.49cm相当） */}
+                                    <div
+                                      className="rounded-full flex flex-col items-center justify-center text-center overflow-hidden"
+                                      style={{
+                                        width: "24.9mm",
+                                        height: "24.9mm",
+                                        borderWidth: "1.7mm",
+                                        borderStyle: "solid",
+                                        borderColor: tok.rimHex,
+                                        padding: "0.8mm",
+                                      }}
+                                    >
+                                      <div
+                                        className="leading-none mb-0.5 flex items-center justify-center"
+                                        dangerouslySetInnerHTML={{ __html: svgHtml }}
+                                      />
+                                      {isTwoLine ? (
+                                        <div
+                                          className="flex flex-col items-center justify-center font-black leading-[1.08] tracking-tight whitespace-nowrap"
+                                          style={{
+                                            color: tok.textHex,
+                                            fontSize: "9.6pt",
+                                          }}
+                                        >
+                                          <span>{tok.mainLine1}</span>
+                                          <span
+                                            className="my-0.5 rounded"
+                                            style={{
+                                              width: "14mm",
+                                              height: "0.45mm",
+                                              backgroundColor: tok.rimHex,
+                                              opacity: 0.65,
+                                            }}
+                                          />
+                                          <span>{tok.mainLine2}</span>
+                                        </div>
+                                      ) : (
+                                        <>
+                                          <div
+                                            className="font-black leading-[1.05] tracking-tight whitespace-nowrap"
+                                            style={{
+                                              color: tok.textHex,
+                                              fontSize: "11.5pt",
+                                            }}
+                                          >
+                                            {tok.mainLine1}
+                                          </div>
+                                          {tok.bottomBadge && (
+                                            <div
+                                              className="mt-0.5 rounded font-black text-white leading-tight"
+                                              style={{
+                                                backgroundColor: tok.rimHex,
+                                                fontSize: "6.5pt",
+                                                padding: "0.2mm 2mm",
+                                              }}
+                                            >
+                                              {tok.bottomBadge}
+                                            </div>
+                                          )}
+                                        </>
+                                      )}
+                                    </div>
+                                  </div>
+                                  <span className="mt-1 font-mono text-[10px] font-bold text-slate-500">
+                                    {tok.topSubLabel}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : gmPrepTool === "whale_cards" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 ＋ Day 7専用別シート8枚 / MTG横長サイズ 88mm×63mm）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        クジラクリック音 ＆ あてはめる日本語カード（MTG横長サイズ：横88mm × 縦63mm / A4横・9面配置）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={() => handlePrintWhaleMtgCards(whaleMtgFilter)}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        {whaleMtgFilter === "click_sound"
+                          ? "クリック音カード（28枚）をA4横印刷 / PDF保存"
+                          : whaleMtgFilter === "japanese_meaning"
+                          ? "日本語カード（29枚）をA4横印刷 / PDF保存"
+                          : whaleMtgFilter === "day7_only"
+                          ? "Day 7 専用シート（8枚・1頁）をA4横印刷 / PDF保存"
+                          : "全65枚（Day 6用＋Day 7専用別シート）をA4横印刷 / PDF保存"}
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・使用ガイド */}
+                  <div className="no-print rounded-lg border border-indigo-200 bg-indigo-50/80 p-4 text-xs text-indigo-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-indigo-900">
+                      <Scissors className="h-4 w-4" />
+                      マジック：ザ・ギャザリング（MTG）同サイズ横長カード（横88mm × 縦63mm）の印刷・使用方法
+                    </div>
+                    <div>
+                      ・<strong>1枚 横88mm × 縦63mm（横8.8cm × 縦6.3cm）</strong>のMTG標準カード（横向き）サイズで、A4横置き用紙1枚に<strong>3列 × 3行 ＝ 9枚</strong>ずつ配置されています。
+                    </div>
+                    <div>
+                      ・<strong>倍率100%（実際のサイズ）</strong>で印刷して破線に沿って切り分けると、市販のMTGレギュラーサイズ用スリーブにそのまま入れてご使用いただけます。
+                    </div>
+                    <div>
+                      ・横長レイアウトにより統一文字サイズを大幅に拡大（印刷時 `19.5pt` 太字）しており、テーブル上で一覧として並べた際の視認性が抜群です。
+                    </div>
+                  </div>
+
+                  {/* カード一覧プレビュー（3列グリッド・横長 88:63 比率） */}
+                  <div className="space-y-8">
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "click_sound") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-sky-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🌊 【クジラのクリック音カード】一覧（全{WHALE_CLICK_MTG_CARDS.length}枚 / 音 #01 〜 音 #28）</span>
+                          <span className="font-mono text-[11px] text-sky-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・4シート)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_CLICK_MTG_CARDS.map((card) => {
+                            return (
+                              <div
+                                key={card.id}
+                                className="aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 bg-sky-50 p-2.5 flex shadow-sm"
+                              >
+                                <div className="w-full h-full rounded-lg border-[3px] border-sky-600 bg-white p-3 flex flex-col justify-between">
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span className="rounded bg-sky-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                      クジラのクリック音
+                                    </span>
+                                    <span className="font-mono text-xs font-black text-sky-800">
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div className="font-black text-sky-950 leading-snug whitespace-pre-line text-xl sm:text-2xl">
+                                      {card.mainText}
+                                    </div>
+                                  </div>
+
+                                  <div className="border-t border-dashed border-sky-400 pt-1.5 flex items-center justify-center min-h-[22px]">
+                                    {card.lockedBadge ? (
+                                      <span className="rounded bg-sky-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                        🔒 {card.lockedBadge}
+                                      </span>
+                                    ) : (
+                                      <span className="font-mono text-[9px] font-extrabold text-sky-700/75 tracking-wider">
+                                        CLICK SOUND / 88×63mm
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "japanese_meaning") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-amber-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🏷️ 【あてはめる日本語カード】一覧（全{WHALE_JAPANESE_MTG_CARDS.length}枚 / 補足ヒントなし）</span>
+                          <span className="font-mono text-[11px] text-amber-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・4シート)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_JAPANESE_MTG_CARDS.map((card) => {
+                            return (
+                              <div
+                                key={card.id}
+                                className="aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 bg-amber-50 p-2.5 flex shadow-sm"
+                              >
+                                <div className="w-full h-full rounded-lg border-[3px] border-amber-600 bg-white p-3 flex flex-col justify-between">
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span className="rounded bg-amber-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                      あてはめる日本語
+                                    </span>
+                                    <span className="font-mono text-xs font-black text-amber-800">
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div className="font-black text-amber-950 leading-snug whitespace-pre-line text-xl sm:text-2xl">
+                                      {card.mainRuby ? (
+                                        <ruby>
+                                          {card.mainText}
+                                          <rt className="text-[11px] font-extrabold tracking-widest text-amber-900">
+                                            {card.mainRuby}
+                                          </rt>
+                                        </ruby>
+                                      ) : (
+                                        card.mainText
+                                      )}
+                                    </div>
+                                  </div>
+
+                                  <div className="border-t border-dashed border-amber-400 pt-1.5 flex items-center justify-center min-h-[22px]">
+                                    {card.lockedBadge ? (
+                                      <span className="rounded bg-amber-700 px-2 py-0.5 text-[10px] font-black text-white">
+                                        🔒 {card.lockedBadge}
+                                      </span>
+                                    ) : (
+                                      <span className="font-mono text-[9px] font-extrabold text-amber-700/75 tracking-wider">
+                                        JAPANESE MEANING / 88×63mm
+                                      </span>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "day7_only") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-indigo-900 px-3.5 py-2 text-xs font-bold text-white">
+                          <span>🐋 【Day 7 専用】クジラクリック音（4枚）＆ あてはめる日本語（4枚）別シート（全{WHALE_DAY7_ALL_MTG_CARDS.length}枚）</span>
+                          <span className="font-mono text-[11px] text-indigo-200">MTG LANDSCAPE SIZE: 88mm × 63mm (A4横・別シート1頁)</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-100/70 p-4 rounded-lg border border-slate-200">
+                          {WHALE_DAY7_ALL_MTG_CARDS.map((card) => {
+                            const isClick = card.kind === "click_sound";
+                            return (
+                              <div
+                                key={card.id}
+                                className={`aspect-[88/63] w-full rounded-md border border-dashed border-slate-400 ${
+                                  isClick ? "bg-sky-50" : "bg-amber-50"
+                                } p-2.5 flex shadow-sm`}
+                              >
+                                <div
+                                  className={`w-full h-full rounded-lg border-[3px] ${
+                                    isClick ? "border-sky-600" : "border-amber-600"
+                                  } bg-white p-3 flex flex-col justify-between`}
+                                >
+                                  <div className="flex items-center justify-between border-b border-slate-200 pb-1.5">
+                                    <span
+                                      className={`rounded ${
+                                        isClick ? "bg-sky-700" : "bg-amber-700"
+                                      } px-2 py-0.5 text-[10px] font-black text-white`}
+                                    >
+                                      {isClick ? "クジラのクリック音" : "あてはめる日本語"}
+                                    </span>
+                                    <span
+                                      className={`font-mono text-xs font-black ${
+                                        isClick ? "text-sky-800" : "text-amber-800"
+                                      }`}
+                                    >
+                                      {card.codeLabel}
+                                    </span>
+                                  </div>
+
+                                  <div className="my-auto py-1 flex items-center justify-center text-center">
+                                    <div
+                                      className={`font-black ${
+                                        isClick ? "text-sky-950" : "text-amber-950"
+                                      } leading-snug whitespace-pre-line text-xl sm:text-2xl`}
+                                    >
+                                      {card.mainText}
+                                    </div>
+                                  </div>
+
+                                  <div
+                                    className={`border-t border-dashed ${
+                                      isClick ? "border-sky-400" : "border-amber-400"
+                                    } pt-1.5 flex items-center justify-center min-h-[22px]`}
+                                  >
+                                    <span
+                                      className={`rounded ${
+                                        isClick ? "bg-sky-700" : "bg-amber-700"
+                                      } px-2 py-0.5 text-[10px] font-black text-white`}
+                                    >
+                                      {card.lockedBadge}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行（他タブと完全統一） */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（首下げネームタグ中紙シート）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        首下げネームタグ中紙（全7名 ＋ GM用 / A4・8面一括印刷）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrintDesignedSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        ネームタグをA4印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* ✂️ 印刷・切り分けガイド（画面表示のみ） */}
+                  <div className="no-print rounded-lg border border-emerald-200 bg-emerald-50/80 p-4 text-xs text-emerald-950 space-y-1.5 leading-relaxed">
+                    <div className="font-bold flex items-center gap-1.5 text-sm text-emerald-900">
+                      <Scissors className="h-4 w-4" />
+                      首下げ名札ホルダー用 中紙の印刷・使用方法
+                    </div>
+                    <div>
+                      ・<strong>A4用紙1枚</strong>に7名分（PC1〜PC7）とGM用の計8枠が配置されています。「ネームタグをA4印刷 / PDF保存」からそのまま等倍（100%）で印刷してください。
+                    </div>
+                    <div>
+                      ・印刷後、各カードの**外側の破線（切り取り線）**に沿ってハサミやカッターで切り分け、市販の首下げ名札ケース（名刺サイズ〜イベント用ケース）に入れてご使用ください。
+                    </div>
+                    <div>
+                      ・<strong>中央セーフエリア配置：</strong>名札ホルダーの縁や圧着部で四辺が数ミリ隠れても、名前・ルビ・所属が隠れないようゆったり中央寄りに配置しています。
+                    </div>
+                  </div>
+
+                  {/* ネームタグ A4印刷シート本体（2列 × 4行 = 8枚） */}
+                  <div className="nametag-print-sheet mx-auto bg-white p-3 sm:p-5 print:p-0 rounded border border-slate-200 print:border-0 shadow-sm print:shadow-none">
+                    {/* シート最上部の微小ガイド（印刷時のみ・用紙上端） */}
+                    <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pb-1 border-b border-slate-200 mb-2">
+                      <span>【合同海難対策本部 公式ネームタグ中紙】 A4判・8面 （PC1〜PC7 ＋ GM進行役）</span>
+                      <span>✂ 破線に沿って切り離して市販の首下げ名札ケースへ入れてください</span>
+                    </div>
+
+                    <div className="nametag-grid-print grid grid-cols-1 md:grid-cols-2 gap-3.5 print:grid-cols-2 print:gap-[4mm]">
+                      {NAMETAG_ITEMS.map((item) => (
+                        <div
+                          key={item.id}
+                          className="nametag-card-print relative rounded-md border border-dashed border-slate-400 bg-white p-3.5 sm:p-4 flex flex-col justify-center items-center min-h-[190px] sm:min-h-[200px] print:min-h-0 shadow-sm print:shadow-none text-center"
+                        >
+                          {/* 切り取り線の角マーカーガイド */}
+                          <div className="absolute -top-1.5 -left-1.5 text-[8px] text-slate-400 font-mono no-print">✂</div>
+
+                          {/* ① 所属・役職（肩書き：テーブル越しにも一目でわかるよう大きく太字で配置） */}
+                          <div className="w-full px-2">
+                            <p className="text-[16px] sm:text-[17px] font-black text-slate-900 tracking-wide leading-snug break-words">
+                              {item.profession}
+                            </p>
+                          </div>
+
+                          {/* 区切りライン（視覚的な安定感の演出） */}
+                          <div className="my-2.5 sm:my-3 w-12 border-b-2 border-slate-300 mx-auto" />
+
+                          {/* ② メイン氏名エリア（大きなルビ ＆ どっしりとした堂々たる氏名・完全中央配置） */}
+                          <div className="w-full space-y-1">
+                            {/* ふりがな（ルビ） */}
+                            <div className="text-[13px] sm:text-[14px] font-bold tracking-[0.25em] text-slate-600 pl-[0.25em]">
+                              {item.ruby}
+                            </div>
+                            {/* 氏名 */}
+                            <div className="text-3xl sm:text-[34px] font-black tracking-[0.18em] text-slate-950 pl-[0.18em] leading-tight">
+                              {item.name}
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {/* シート最下部の微小ガイド（印刷時のみ・用紙下端） */}
+                    <div className="hidden print:flex items-center justify-between text-[8px] text-slate-400 pt-1.5 border-t border-slate-200 mt-2">
+                      <span>※四辺に十分な余白（セーフゾーン）を設けているため、ホルダーの枠で端が隠れても文字は隠れません</span>
+                      <span>1/1 頁（全8枠）</span>
                     </div>
                   </div>
                 </div>

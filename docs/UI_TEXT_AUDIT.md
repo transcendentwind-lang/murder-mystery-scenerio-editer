@@ -15,14 +15,14 @@
 - ページ名: [`src/app/layout.tsx`](../src/app/layout.tsx)
 - 新規作成の案内: [`ProjectManagerModal.tsx`](../src/components/ProjectManagerModal.tsx)
 - 推敲ボタン: [`DistributionStudio.tsx`](../src/scenarios/project-deep-sea/DistributionStudio.tsx)
-- 推敲先の状態更新: [`src/app/page.tsx`](../src/app/page.tsx)
+- 推敲先の状態更新: [`src/app/page.editor.tsx`](../src/app/page.editor.tsx)
 
 ## 非表示の旧コード
 
 | コード | 残っている表現・処理 | 現在の表示状態 |
 |---|---|---|
 | [`AiChatPanel.tsx`](../src/components/AiChatPanel.tsx) | `AI Co-Writer（共創パートナー）`、`AIに相談・壁打ち...`、演出・論理検証・推敲の役割選択 | ページに描画されない |
-| [`src/app/page.tsx`](../src/app/page.tsx) のチャット用状態・送信処理 | 共創の案内、検証・推敲済みとする定型返信 | メッセージを表示するパネルがない。送信処理は600ミリ秒後に定型文を作るもので、モデル推論ではない |
+| [`src/app/page.editor.tsx`](../src/app/page.editor.tsx) のチャット用状態・送信処理 | 共創の案内、検証・推敲済みとする定型返信 | メッセージを表示するパネルがない。送信処理は600ミリ秒後に定型文を作るもので、モデル推論ではない |
 | [`DistributionStudio.tsx`](../src/scenarios/project-deep-sea/DistributionStudio.tsx) のデザイン生成関数 | `Geminiデザインエンジンにより…自動構成しました。` | 結果説明を表示するUIと操作入口がない。処理自体もキーワードの条件分岐による設定選択 |
 | [`HandoutEditor.tsx`](../src/components/HandoutEditor.tsx) の推敲依頼処理 | HOの推敲プロンプトを親へ渡す処理 | 現行ページにはこの編集画面を描画していない |
 

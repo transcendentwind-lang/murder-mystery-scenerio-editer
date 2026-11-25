@@ -1,6 +1,6 @@
 import { hasBuiltinScenarioFeatures } from "@/scenarios/catalog";
 import { genericSynopsis, genericHandouts, genericFullScript } from "./genericScriptGenerator";
-import { scenarioAssetUrl } from "@/scenarios/catalog";
+export { printWhaleSonarGuideA4 } from "./sonarGuide";
 import { MMProject, Character } from "@/types/schema";
 import {
   TOKYO_ACTIONS,
@@ -24,7 +24,7 @@ export function generateSynopsisMarkdown(project: MMProject): string {
   const playerCount = project?.playerCount || chars.length || 6;
 
   let md = `# ${project?.title || "無題のシナリオ"}\n\n`;
-  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3.5}時間\n`;
+  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3}時間\n`;
   md += `- **プレイヤー人数**: ${playerCount}名（GM必須）\n`;
   md += `- **ジャンル**: 協力型インシデント・ミステリー / パニックサスペンス\n\n`;
 
@@ -66,7 +66,7 @@ export function generateSynopsisPlainText(project: MMProject): string {
   let text = `=================================================================\n`;
   text += `【シナリオ企画概要書】\n`;
   text += `タイトル: ${project?.title || "無題のシナリオ"}\n`;
-  text += `プレイ人数: ${playerCount}名（GM必須） ｜ 想定時間: 約${project?.durationHours ?? 3.5}時間\n`;
+  text += `プレイ人数: ${playerCount}名（GM必須） ｜ 想定時間: 約${project?.durationHours ?? 3}時間\n`;
   text += `=================================================================\n\n`;
 
   text += `■ 1. 作品コンセプト・世界観\n`;
@@ -152,7 +152,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   const playerCount = project?.playerCount || chars.length || 6;
 
   let md = `# ${project?.title || "無題のシナリオ"}\n\n`;
-  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3.5}時間\n`;
+  md += `- **想定プレイ時間**: 約${project?.durationHours ?? 3}時間\n`;
   md += `- **プレイヤー人数**: ${playerCount}名（GM必須）\n`;
   md += `- **ジャンル**: 協力型インシデント・ミステリー / パニックサスペンス\n\n`;
   md += `---\n\n`;
@@ -174,9 +174,36 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   // --- 第3章：7日間タイムライン完全進行台本 ---
   md += `## 📅 第3章：7日間インシデント進行 ＆ 完全GMシナリオ台本\n\n`;
 
+  // ゲーム開始前アナウンス
+  md += `### 【ゲーム開始前アナウンス】GMからの案内（作品概要・拠点説明・プレイヤー自己紹介・キャラクター選択・ハンドアウト読み込み）\n\n`;
+  md += `\`\`\`text\n`;
+  md += `本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。\n`;
+  md += `この作品は、ライブアクションロールプレイングという種類で、TRPGに近いのですが、サイコロでの判定などはなく、五感を使ったアクションをしていただく内容となっています。今回は特に「音」を使った行動が多くなり、場合によってはご自身の耳で音を確認していただくため、皆様のスマートフォンをご利用いただくことがあります。スマートフォンはすぐに取り出せるよう、お手元にご準備をお願いいたします。\n`;
+  md += `またこの作品の特徴として、体験型クトゥルフとなっています。クトゥルフ神話とは、この世界のどこか、あるいは宇宙の彼方の異世界の神が、この地球を侵略しようとしているといった物語です。現在の常識とは異なる未知の世界、魔術の世界や宇宙的恐怖の世界を体験していく部分があります。クトゥルフのことを全く知らなくても楽しめますが、もしご存じであればさらに納得感が広がるものと思います。\n`;
+  md += `それではまずはこの作品の概要をお知らせしていきましょう。\n`;
+  md += `小笠原諸島は、東京都に所属している離島で、最も人口の多い父島をはじめとした複数の島で構成されています。独自に進化した生態系が評価され、2011年には世界遺産にも登録されました。東京都であるものの東京湾からの距離は約1000km離れています。近年では、島の西側での火山噴火により島が形成され「西之島」と名付けられています。今回の作品は、この小笠原沖で、突如電源喪失した船からの救難信号を受け、太平洋上で遭難した船の捜索にあたります。3名は東京・霞が関にある海上保安庁本部の会議室に集まった「東京本部チーム」、4名は小笠原諸島・父島にある海上保安庁支部の会議室に集まった「小笠原現地チーム」として救助にあたっていただきます。なお、東京・霞が関の本部会議室と父島支部の会議室の通信は常に繋がっている状態としますので、ゲーム中はいつでも自由に会話や情報共有を行っていただけます。\n`;
+  md += `早速ですが、まずはプレイヤーの皆様の自己紹介を簡単にしていただきたいと思います。\n`;
+  md += `（※プレイヤー自己紹介）\n`;
+  md += `ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。\n`;
+  md += `・朝潮（あさしお）は、東京本部の司令塔、皆さんの頼れるリーダーです。最終的な決定権と責任はこの朝潮さんが受け持つことが多いです。\n`;
+  md += `・貝浜（かいはま）は、東京本部の中でも特別な立ち位置で、海上保安庁と海上自衛隊をつなぐ橋渡し役、リエゾンという位置で、防衛省側の人間です。\n`;
+  md += `・長津（ながつ）は、朝潮を信頼するオペレーターで、各所からの連絡を受け持ちます。\n`;
+  md += `・坂凪（さかなぎ）は、海上保安庁の小笠原支部の人間で、巡視船やヘリコプターなどを手配可能な海難救助隊の現場リーダーです。\n`;
+  md += `・太刀魚（たちうお）は、小笠原の父島にある気象庁小笠原観測所の職員です。気象や海流のデータを扱います。\n`;
+  md += `・浪寄（なみより）は、小笠原にある海洋科学大学小笠原研究所の准教授で、深海生物の生態やクジラなどの動物行動学を専門にしています。\n`;
+  md += `・初瀬（はつせ）は、海難救助の救護技術に優れている一方、島の旧家の家系で神社などとのつながりがあるキャラクターです。\n`;
+  md += `それでは、担当するキャラクターを選んでいただきたいと思います。\n`;
+  md += `（※キャラクター選択・決定）\n`;
+  md += `それでは、各自のキャラクターのハンドアウトを読み込んでください。何か不明な点があればGMにお尋ねください。\n`;
+  md += `（※ハンドアウト読み込み）\n`;
+  md += `キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。\n`;
+  md += `それでは、Let’s get down to the story!\n`;
+  md += `\`\`\`\n\n`;
+
   // Day 1
   md += `### 【Day 1】父島南西沖 (0 km) - 荒海からのメーデー・漂流予測と遭難船救助\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
+  md += `- **GMからの開始描写**: 東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。\n`;
   md += `- **発生事象**: 民間チャーター船（40t）が全電源喪失。AIS停波、衛星死角。\n`;
   md += `- **海上保安庁東京本部の行動**: 朝潮（PC1）が遭難船スペック（40t船体は風速の5%で風下へ流される特性）を提示。貝浜（PC2）が衛星・AIS使用不能を報告し、海流と風圧流から現在地を割り出す「平行四辺形のベクトル合成法」を提示。\n`;
   md += `- **現地救難隊の行動**: 太刀魚（PC4）が海洋気象ブイ流速データ（真東へ2.0kt）と現場強風（南西から約30kt）を提示してPC1と連動計算（30kt × 5% ＝ 北東へ1.5kt）。浪寄（PC5）が現場海域に到着するまでの所要時間（約40分）を提示し、長津アナウンスの「発信から現在20分経過」と合わせて「1時間後の到着地点」を推測。初瀬（PC6）が遭難直前無線ログを共有。坂凪（PC3）が暗礁海図と照合し、真東の暗礁群を避けて東北東の漂流予測海域へ巡視船で急行・接舷救助。\n`;
@@ -186,8 +213,9 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   // Day 2
   md += `### 【Day 2】西之島沖 (約180 km) - 異変の顕在化・西之島噴火と深海シグネチャー\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
+  md += `- **GMからの開始描写**: 本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策にあたっています。\n`;
   md += `- **発生事象**: 西之島周辺の海底火山が突発的大噴火。水深800m以深を日速約150km（時速約6km / 3.3ノット）で北上する超巨大影を捕捉。\n`;
-  md += `- **海上保安庁東京本部のアクション（3択中1枠合議選択）**:\n`;
+  md += `- **海上保安庁東京本部のアクション（3択中2枠合議選択）**:\n`;
   (TOKYO_ACTIONS || []).forEach((act) => {
     md += `  - **[${act.id}] ${act.title}** (${act.organization})\n    - 要約: ${act.summary}\n    - 詳細: ${act.detail}\n`;
   });
@@ -200,21 +228,14 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   // Day 3
   md += `### 【Day 3】孀婦岩〜鳥島沖 (約400 km) - 洋上ソナー索敵作戦・Day 3合議制調査・写真分析と防衛合議\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
+  md += `- **GMからの開始描写（Day 3のみヘリコプター搭乗）**: 本日（Day 3）のみ、小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）は父島の会議室を出て大型捜索ヘリコプターに乗り込み、途中の海域に展開する大型巡視船『あきつしま』で洋上給油を受けながら鳥島沖の現場上空へと向かいます。東京本部チームの3名（朝潮・貝浜・長津）は東京・霞が関の会議室におり、ヘリコプター内の4名と無線通信で常時繋がっています。\n`;
   md += `- **発生事象**: 鳥島沖海底カルデラの連動大爆発。海自・海保ヘリによる洋上ソナー索敵作戦。\n`;
   md += `- **プレイヤーの作戦行動**:\n`;
   md += `  - ソノブイ投下（セクターA〜C、深度1〜3）により、セクターB-3で目標の生体反射音を捕捉。\n`;
   md += `  - ヘリによる航空写真撮影（または波形スキャン）を実行。\n`;
-  md += `- **ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出）**:\n`;
-  md += `  - 🎙️ **総合オペレーター 長津のアナウンス**:「噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」\n`;
-  md += `  - 📦 **3名へ配備される証拠カード（情報トランプ構造）**:\n`;
-  md += `    - 太刀魚（PC4）: 『西之島〜鳥島沖 距離観測データ』（西之島0km地点 ➔ 鳥島沖カルデラ 約350km）\n`;
-  md += `    - 貝浜（PC3）: 『鳥島沖 ソノブイ探知記録』（鳥島沖での探知・確認時刻: Day 3 17:00）\n`;
-  md += `    - 浪寄（PC5）: 『遭難船救助・目撃時刻調書』（Day 1西之島近海での異常遭遇時刻: Day 1 09:00）\n`;
-  md += `  - 💡 **推理・計算ロジック（GM正解メモ）**:\n`;
-  md += `    - 経過時間: Day 1 09:00 ➔ Day 3 17:00 ＝ 56時間\n`;
-  md += `    - 移動速度: 約350 km ÷ 56時間 ＝ 時速 6.25 km（日速 約150 km）\n`;
-  md += `    - 翌日（Day 4）の北上予想: 鳥島沖からさらに約150km北上し、須美寿島〜明神礁付近に到達すると算出。\n`;
-  md += `- **東京側アクション（3択中1枠合議選択 / 翌日以降繰り越し可能）**:\n`;
+  md += `- **ソノブイ索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達）**:\n`;
+  md += `  - 🎙️ **総合オペレーター 長津のアナウンス（NG-02 ／ Day 3 途中①指令書）**:「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！」\n`;
+  md += `- **東京側アクション（3択中2枠合議選択 / 翌日以降繰り越し可能）**:\n`;
   (DAY3_TOKYO_ACTIONS || []).forEach((act) => {
     md += `  - **[${act.id}] ${act.title}** (${act.organization})\n    - 要約: ${act.summary}\n    - 詳細: ${act.detail}\n`;
   });
@@ -229,6 +250,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   // Day 4
   md += `### 【Day 4】明神礁 (約550 km) - 明神礁海底噴火・富士山到達危機と深層クロス調査（Day 3繰り越し蓄積対応）\n\n`;
   md += `#### 1. 状況とプレイヤーができること\n`;
+  md += `- **GMからの開始描写（Day 4以降は再び会議室）**: 昨日ヘリコプターで鳥島沖へ出動していた小笠原現地チームの4名も父島へ帰投しており、本日（Day 4）以降は再び、小笠原・父島にある海上保安庁支部の会議室（4名）と、東京・霞が関にある海上保安庁本部の会議室（3名）にそれぞれ集まり、両会議室を通信回線で繋いで対策会議を行っています。\n`;
   md += `- **発生事象**: 明神礁の海底カルデラ噴火。八丈島で火山性群発微動が頻発。日速約150kmで北上する火山フロントが数日後に【富士山直下】に到達し、破局的大噴火を誘発する絶対的危機が発覚。\n`;
   md += `- **東京側アクション（新設2枠 ＋ Day 3未選択枠から1枠合議選択）**:\n`;
   (DAY4_TOKYO_ACTIONS || []).forEach((act) => {
@@ -238,7 +260,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   (DAY4_FIELD_ACTIONS || []).forEach((act) => {
     md += `  - **[${act.id}] ${act.title}** (${act.organization})\n    - 要約: ${act.summary}\n    - 詳細: ${act.detail}\n`;
   });
-  md += `- **調査結果**: 巨大生物は「地磁気」と「隕石が放つ特殊な物質」の2つを感知して北上している可能性が浮上。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっており、それらが『青ヶ島沖・八丈島付近・三宅島付近』の海に落とされていた上、小笠原の海から引き揚げられたクーラーボックスが謎のダイバーグループによって【静岡県・富士山麓の民家】宛てに運ばれ、さらに車で山麓へ運ばれていたことが判明！ 朝倉教授の研究室ノートから人とクジラの盟約口伝が発掘される。\n`;
+  md += `- **調査結果**: 巨大生物は「地磁気」と「隕石が放つ特殊な物質」の2つを感知して北上している可能性が浮上。さらに小笠原・八丈島・三宅島の神社に保管・奉納されていた複数の隕石が盗難にあっており、それらが『青ヶ島沖・八丈島付近・三宅島付近』の海に落とされていた上、小笠原の海から引き揚げられたクーラーボックスが謎のダイバーグループによって【静岡県・富士山麓の民家】宛てに運ばれ、さらに車で山麓へ運ばれていたことが判明！ 海野教授の研究室ノートから人とクジラの盟約口伝が発掘される。\n`;
   md += `- **防衛省の通達**: 内閣法制局の壁（外国の武力攻撃ではないため防衛出動不可）を突破し、『害獣駆除名目』での海上自衛隊部隊の緊急動員が決定される。\n\n`;
 
   // Day 5
@@ -246,7 +268,7 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `#### 1. 状況とプレイヤーができること\n`;
   md += `- **発生事象**: 御蔵島沖海底噴火に伴い八丈島で震度3。最も恐れていた【富士山地下深部からの火山性微動】が観測開始。残距離240km・時速5kmから、富士山噴火までの猶予時間（48時間）を算出。\n`;
   md += `- **防衛省の機密遮断**: 自衛隊は作戦行動を最高軍事機密指定し、対策本部への情報提供を遮断。\n`;
-  md += `- **Day 5 総力調査アクション**: 自衛隊迎撃の間、新設された【F-5A クジラの鳴音（コーダ）構文規則草稿】および未調査プールを開示。\n`;
+  md += `- **Day 5 総力調査アクション**: 自衛隊迎撃の間、東京側の【T-5A 都内にいる元神主の子どもの捜索（吉備津の聴取 EV-26）】および小笠原現地の【F-5A クジラの鳴音（コーダ）構文規則草稿（EV-27）】を開示。\n`;
   md += `- **海自潜水艦の魚雷命中と深海での回復傾向**: 終盤、防衛省作戦本部から貝浜（PC2）へ直通無線（NG-06 ＆ Day 5 途中①指令書）が入電。魚雷群が命中したと思われ、特有の振動と火山性の周期的な微動は一時収まったものの、アクティブソナー（ソナー探知）では【ゆっくりと深海に沈み込みながら、元の大きさに戻っている傾向】が確認される。\n`;
   md += `- **防衛省作戦本部からの緊急意見照会**: 『上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが疑問が残る。あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？』という至急諮問がPC2経由で浪寄准教授（PC5）らに寄せられる。\n\n`;
 
@@ -255,15 +277,14 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `#### 1. 状況とプレイヤーができること\n`;
   md += `- **戦況推移（朝8時ブリーフィング）**: 朝8時の時点で巨大生物がほとんど同じ大きさまで回復し、駿河トラフ境界に向けて北上を再開。それにあわせて富士山地下の火山性微動も再開。駿河湾までは24時間ほどで到達する見込みとなり、防衛省から速やかに対策をまとめるよう指示が出る。\n`;
   md += `- **Day 6 指令書ミッション**:\n`;
-  md += `  - 【ミッション①：未回収だった全調査資料の共有と「太古の解決策」の特定】東京班が回収した残りの資料や『小笠原社記』『神社の祝詞の複製』を照合させ、「太古の島人はどうやってこの巨大生物を鎮めたのか（何が天敵なのか・海中筒で何を響かせたのか）」を解明させてください。\n`;
-  md += `  - 【ミッション②：朝倉教授の実録音響データの解析】朝倉教授の構文規則と4つの実録音響データ（EV-31〜34）を分析、マッコウクジラ音響言語解析システムにアクセスしてください。\n`;
-  md += `  - 【ミッション③：海上自衛隊の魚雷以外の方法で24時間以内に巨大生物を撃退する作戦を立案】これまでの全ての情報から、24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめてください。\n`;
-  md += `- **東京班の夜間捜査による自動回収**: Day 5で選ばれなかった東京情報および朝倉教授の実録音響データ4件（EV-31〜34）が朝までに100%揃う。\n`;
+  md += `  - 【ミッション①：海野教授の実録音響データの解析】海野教授の構文規則（EV-27）と4つの実録音響データ（EV-28〜31）を分析、マッコウクジラ音響言語解析システムにアクセスしてください。\n`;
+  md += `  - 【ミッション②：海上自衛隊の魚雷以外の方法で24時間以内に巨大生物を撃退する作戦を立案】これまでの全ての情報から、24時間後の駿河湾到達までにどうやって巨大生物を撃退するか、具体的な作戦をまとめてください。\n`;
+  md += `- **東京班の夜間捜査による自動回収**: Day 5で選ばれなかった東京情報および海野教授の実録音響データ4件（EV-28〜31）が朝までに100%揃う。\n`;
   md += `- **4段階の開示ロジック（証拠の梯子）**:\n`;
   md += `  1. 【祝詞儀礼の存在】: 噴火や巨大生物出現時、神社では海へ出て祝詞を唱える儀式があった。\n`;
   md += `  2. 【海中筒の音響物理】: 水面での音響反射（インピーダンス不整合）を防ぐため、筒を海中に突っ込んで唱えていた。\n`;
   md += `  3. 【巨大イカ塊捕食の伝承】: 古文書に『巨大生物は地磁気と隕石が放つ特殊な物質を追って北上し、海底付近で特別な振動を起こして海底火山を刺激する』『過去にもマッコウクジラを呼び寄せて巨大なイカの塊りを捕食させた』と記録。\n`;
-  md += `  4. 【朝倉ノートのクジラ言語と柔軟な構文判定】: 伝統の4語祝詞だけでは移動する巨大生物を追いかけるための情報を伝えきれないため、システム上は最大8語（2語×4組）まで許容されている。8語の穴埋めを必須として強制するのではなく、クジラを呼び寄せて巨大生物を撃退するメッセージ（標準構成例：人間とクジラ＋約束、海の下の火山＋探せ、北＋集まれ、大きい・たくさんの餌＋攻撃せよ）が成立していれば柔軟に認める。\n`;
+  md += `  4. 【海野ノートのクジラ言語と柔軟な構文判定】: 伝統の4語祝詞だけでは移動する巨大生物を追いかけるための情報を伝えきれないため、システム上は最大8語（2語×4組）まで許容されている。8語の穴埋めを必須として強制するのではなく、クジラを呼び寄せて巨大生物を撃退するメッセージ（標準構成例：人間とクジラ＋約束、海の下の火山＋探せ、北＋集まれ、大きい・たくさんの餌＋攻撃せよ）が成立していれば柔軟に認める。\n`;
   md += `- **祝詞の神髄**: 日本語の文言そのものではなく、口蓋と舌を強く弾く『吸着破裂音（舌クリック音）』こそが本体。\n`;
   md += `- **『狂気の深淵を覗く』使用時の5分猶予 ＆ 心停止・救命（声かけ）ルール**: アプリで『狂気の深淵を覗く』を使用した場合は5分間の猶予（解読時間＋5分延長）の後、覗いたPCが心臓発作・心停止に陥る。GMの心停止宣言から数分以内に、坂凪（PC3）または初瀬（PC6）による救命処置の口頭宣言（東京班のPCが倒れた場合は通信越しの遠隔救命指示の宣言）と、初瀬の直観（「意識のない人間の耳にも最後まで声は届く」）に基づく仲間からの『名前を呼んで「戻ってこい」「まだ死ぬな」と声をかける』宣言が行われれば息を吹き返す（※身体接触や演技は一切不要）。\n`;
   md += `- **防衛省運用企画局長・岸部との直接電話交渉（Day 6 途中①指令書） ＆ 潜水艦SOFAR層深夜放流（NG-07）**:\n`;
@@ -277,14 +298,14 @@ export function generateFullScriptMarkdown(project: MMProject): string {
   md += `- **戦況と水深設定（朝ブリーフィング）**: 現状、富士山地下の火山性微動は継続しており、目標は水深600〜1,000mを維持して駿河湾付近まで接近。周辺海域に展開する自衛隊潜水艦部隊は合意通り魚雷発射管を開きながらも攻撃を抑制して待機。\n`;
   md += `- **エピローグシークエンスの全貌**:\n`;
   md += `  1. 【運命の夜明け・クジラ群の到達と生体ソナー大捕食】\n`;
-  md += `     - 昨夜から放流された人工音源に応え、夜を徹して太平洋を泳いできたマッコウクジラ群が駿河湾深海へ到達！\n`;
+  md += `     - 昨夜から放流された人工音源に応え、夜を徹して太平洋を泳いできたマッコウクジラ群（一頭の白いクジラに続いて100頭以上、さらに後続1,000頭近く）が駿河湾深海へ到達！\n`;
   md += `     - クジラたちは自らの頭部から放つ生体ソナー（エコーロケーション）で巨大生物を探知し、本能のまま深海へ一斉潜航・大捕食を敢行！\n`;
   md += `     - 巨大生物の超群体は完全に呑み込まれ、富士山地下深部の火山性微動は完全停止。自衛隊は一発の実弾も撃たず発射中止（スタンドダウン）。\n`;
   md += `  2. 【総合オペレーター長津 作戦成功アナウンス（NG-08-1・NG-08-2）】\n`;
-  md += `     - 合同対策本部司令室で水中聴音網（パッシブソナー網）および深海ソナー探知のログを見守る長津オペレーターによる作戦成功アナウンス。\n`;
-  md += `  3. 【海上自衛隊幹部からの直通電話（政治的思惑と最終選択・第3の選択）】\n`;
-  md += `     - 防衛省幹部から直通電話が入り、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部の功績として発表し自衛隊は何もせず解決したとするか」の選択が委ねられる。\n`;
-  md += `     - 💡【A案でのクジラ退避メッセージ】：仮にA案であっても、クジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送ることで魚雷・爆雷を回避してもらうことも可能。\n`;
+  md += `     - 合同対策本部司令室で水中聴音網（パッシブソナー網）および深海ソナー・光学探知のログを見守る長津オペレーターによる作戦成功アナウンス。\n`;
+  md += `  3. 【海上自衛隊幹部からの直通電話 ＆ 特別配布カード（Day 7 配布）全7枚（SP-08〜SP-14）配布（政治的思惑と最終選択・第3の選択）】\n`;
+  md += `     - 防衛省幹部から直通電話が入り、「①功績を出さず国家防衛機密として自衛隊が掃討したことにするか」「②対策本部の功績として発表し自衛隊は何もせず解決したとするか」の選択が委ねられる。あわせて特別配布カード（Day 7 配布）全7枚（🟦青：朝潮・貝浜・長津『組織の論理』、🟪紫：坂凪『組織と現場の狭間』、🟥赤：太刀魚・初瀬『盟約断絶の危機』・浪寄『海野研究の危険性』）が配布される。\n`;
+  md += `     - 💡【A案でのクジラ退避メッセージ】：仮にA案であっても、クジラへの退避メッセージ（例：「ド・ドーッカッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送ることで魚雷・爆雷を回避してもらうことも可能。\n`;
   md += `     - 🟣【第3の選択（GM裁量交渉）】：プレイヤーから「爆雷を投下させず、かつ自衛隊を立てる選択」が提案された場合、幹部（岸部）は『現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない』と返し、その場のGM裁量で交渉を行う（参考案：自衛隊の深海音響作戦が奏功、国民の生命と国土を守ることを優先等）。\n`;
   md += `  4. 【テレビ臨時ニュース（政府公式発表の全国報道・2パターン分岐）】\n`;
   md += `     - プレイヤーの選択に応じ、パターンA（NG-09：海上自衛隊が撃滅と報道）またはパターンB（NG-10：合同対策本部が特別な薬で無力化したヒーローとして報道）が流れる。\n`;
@@ -535,24 +556,60 @@ export function printDocumentText(title: string, markdownOrText: string, imageUr
  * HTMLエスケープヘルパー
  */
 function escapeHtmlForB5(str: string = ""): string {
-  return str
+  const escaped = str
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
+  // Allow safe ruby tags for furigana in handouts
+  return escaped
+    .replace(/&lt;ruby&gt;/g, "<ruby>")
+    .replace(/&lt;\/ruby&gt;/g, "</ruby>")
+    .replace(/&lt;rt&gt;/g, "<rt>")
+    .replace(/&lt;\/rt&gt;/g, "</rt>");
+}
+
+export const CHARACTER_NAME_RUBIES: Record<string, string> = {
+  "pc-1": "あ さ し お",
+  "pc-2": "か い は ま",
+  "pc-3": "さ か な ぎ",
+  "pc-4": "た ち う お",
+  "pc-5": "な み よ り",
+  "pc-6": "は つ せ",
+  "pc-7": "な が つ",
+};
+
+export const CHARACTER_COMPACT_RUBIES: Record<string, string> = {
+  "pc-1": "あさしお",
+  "pc-2": "かいはま",
+  "pc-3": "さかなぎ",
+  "pc-4": "たちうお",
+  "pc-5": "なみより",
+  "pc-6": "はつせ",
+  "pc-7": "ながつ",
+};
+
+/**
+ * キャラクター名からカッコ表記「（あさしお）」等を除去し、純粋な漢字表記のみを抽出するヘルパー
+ */
+export function cleanCharacterName(name: string = ""): string {
+  return name.replace(/（[^）]*）|\([^)]*\)/g, "").trim();
 }
 
 /**
- * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト単体HTML生成
- * 構成：所属・氏名、公開プロフィール、自己紹介、あなたの内面（誇り＆喪失）、あなたの記憶
- * ※秘匿目標・所持品リスト・後ろめたさは排除した完全協力型高密度レイアウト
+ * JIS B5サイズ（182mm × 257mm）用 キャラクターハンドアウト（3枚組）HTML生成
+ * 1枚目：表紙シート（肩書きと名前のみ・白地印刷配慮・最初にプレイヤー達が見る）
+ * 2枚目：チームメンバー紹介シート（全7名一覧・自分はグレー表示・公開プロフィール掲載）
+ * 3枚目：個人秘匿シート（あなたの内面・行動指針 ＆ あなたの記憶 ＆ 最後に自己紹介ロールプレイ台詞）
  */
 export function generateB5HandoutSingleHtml(
   c: Character,
   projectTitle: string,
-  index: number
+  index: number,
+  allCharacters?: Character[]
 ): string {
+  const characters = allCharacters && allCharacters.length > 0 ? allCharacters : [c];
   const memoryText = [c.introduction, c.handout?.backgroundTimeline]
     .filter(Boolean)
     .join("\n\n");
@@ -560,60 +617,122 @@ export function generateB5HandoutSingleHtml(
   const locationText =
     c.location === "headquarters" ? "海上保安庁東京本部" : "小笠原・現地救難隊";
 
-  return `
-  <div class="b5-sheet">
+  const ruby = CHARACTER_NAME_RUBIES[c.id] || "";
+
+  /* ----------------------------------------------------
+     【1枚目】表紙シート（肩書きと名前のみ・白地・最初にプレイヤー達が見る）
+     ---------------------------------------------------- */
+  const page1Html = `
+  <div class="b5-sheet b5-sheet-cover">
     <!-- ヘッダー -->
     <div class="header-band">
       <div class="header-left">
-        <span class="sub-title">合同対策本部 記録資料</span>
+        <span class="sub-title">合同対策本部 公式記録資料</span>
         <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
       </div>
       <div class="header-right">
-        <span class="confidential-badge">【非公開・個人ハンドアウト】</span>
         <span class="location-badge">拠点：${locationText}</span>
       </div>
     </div>
 
-    <!-- 所属・氏名 IDプレート -->
-    <div class="id-plate">
-      <div class="id-info">
-        <div class="profession-label">${escapeHtmlForB5(c.profession)}</div>
-        <div class="character-name">${escapeHtmlForB5(c.name)}</div>
+    <!-- 中央配役カード（白地・格式ある二重枠・省インク印刷仕様） -->
+    <div class="cover-card">
+      <div class="cover-location-tag">${locationText}</div>
+      <div class="cover-profession">${escapeHtmlForB5(c.profession)}</div>
+      ${ruby ? `<div class="cover-ruby">${ruby}</div>` : ""}
+      <div class="cover-name">${escapeHtmlForB5(cleanCharacterName(c.name))}</div>
+      <div class="cover-affiliation">合同対策本部 構成員 // 『${escapeHtmlForB5(projectTitle)}』</div>
+    </div>
+
+    <!-- フッター -->
+    <div class="footer-band">
+      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+      <span class="page-num">B5 1/3 頁（表紙）</span>
+    </div>
+  </div>
+  `;
+
+  /* ----------------------------------------------------
+     【2枚目】チームメンバー紹介シート（全7名一覧・自分はグレー表示）
+     ---------------------------------------------------- */
+  const page2Html = `
+  <div class="b5-sheet b5-sheet-members">
+    <!-- ヘッダー -->
+    <div class="header-band">
+      <div class="header-left">
+        <span class="sub-title">合同対策本部 チーム編成</span>
+        <span class="project-title">『${escapeHtmlForB5(projectTitle)}』</span>
       </div>
-      <div class="id-meta">
-        <div class="pc-badge">PC-${index + 1}</div>
+      <div class="header-right">
+        <span class="public-badge">【公開情報】対策本部 参加メンバー一覧（全${characters.length}名）</span>
       </div>
     </div>
 
-    <!-- 公開情報エリア（2列対称グリッド） -->
-    <div class="grid-2col">
-      <!-- 公開プロフィール -->
-      <div class="card card-public">
-        <div class="card-header">
-          <span class="card-title">🌐 【公開情報】全員に公開できるプロフィール</span>
-          <span class="card-sub-hint">（自己紹介で開示）</span>
-        </div>
-        <div class="card-content">
-          ${escapeHtmlForB5(c.handout?.publicProfile || "").replace(/\n/g, "<br/>")}
-        </div>
-      </div>
+    <!-- サブガイドバー -->
+    <div class="members-guide-bar">
+      <span>※自己紹介フェーズや議論の際、各PCの役職や公開プロフィールを手元で確認できる一覧シートです</span>
+      <span class="self-notice">（※灰色の枠は【あなた】です）</span>
+    </div>
 
-      <!-- 自己紹介（開始時台詞） -->
-      <div class="card card-intro">
-        <div class="card-header intro-header">
-          <span class="card-title">💬 【公開情報】自己紹介（開始時ロールプレイ台詞）</span>
+    <!-- メンバー一覧（全7名） -->
+    <div class="members-list">
+      ${characters
+        .map((m) => {
+          const isSelf = m.id === c.id;
+          const mRuby = CHARACTER_COMPACT_RUBIES[m.id] || "";
+          const mLoc = m.location === "headquarters" ? "東京本部" : "小笠原現地";
+          return `
+        <div class="member-card ${isSelf ? "member-card-self" : ""}">
+          <div class="member-badge-col">
+            <span class="member-loc-tag">${mLoc}</span>
+            ${isSelf ? '<span class="member-self-tag">あなた</span>' : ""}
+          </div>
+          <div class="member-info-col">
+            <div class="member-header-row">
+              <div class="member-name-group">
+                <ruby class="member-name">${escapeHtmlForB5(cleanCharacterName(m.name))}${mRuby ? `<rt>${mRuby}</rt>` : ""}</ruby>
+              </div>
+              <div class="member-profession">${escapeHtmlForB5(m.profession)}</div>
+            </div>
+            <div class="member-profile">
+              ${escapeHtmlForB5(m.handout?.publicProfile || "").replace(/\n/g, " ")}
+            </div>
+          </div>
         </div>
-        <div class="card-content quote-content">
-          ${escapeHtmlForB5(c.handout?.handoutBody || "").replace(/\n/g, "<br/>")}
-        </div>
+        `;
+        })
+        .join("")}
+    </div>
+
+    <!-- フッター -->
+    <div class="footer-band">
+      <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
+      <span class="page-num">B5 2/3 頁（メンバー紹介）</span>
+    </div>
+  </div>
+  `;
+
+  /* ----------------------------------------------------
+     【3枚目】個人秘匿シート（内面・記憶・自己紹介ロールプレイ台詞）
+     ---------------------------------------------------- */
+  const page3Html = `
+  <div class="b5-sheet b5-sheet-secret">
+    <!-- ヘッダー（3段スタック構造） -->
+    <div class="secret-header-band">
+      <div class="secret-header-sub">合同対策本部</div>
+      <div class="secret-header-main">
+        <div class="secret-header-title">個人記録　${escapeHtmlForB5(cleanCharacterName(c.name))}</div>
+        <div class="location-badge">拠点：${locationText}</div>
+      </div>
+      <div class="secret-confidential-bar">
+        【非公開情報】他のプレイヤーには見せないでください
       </div>
     </div>
 
-    <!-- 非公開情報：あなたの内面（2列対称グリッド） -->
+    <!-- ① あなたの内面・行動指針（2列グリッド） -->
     <div class="internal-drama-section">
       <div class="section-title-bar">
-        <span class="section-title">🔒 あなたの内面（非公開）・行動指針</span>
-        <span class="section-notice">※他プレイヤーには非公開（ロールプレイの軸となります）</span>
+        <span class="section-title">🔒 あなたの内面・行動指針</span>
       </div>
       <div class="grid-2col">
         <!-- 誇り・信条 -->
@@ -634,23 +753,39 @@ export function generateB5HandoutSingleHtml(
       </div>
     </div>
 
-    <!-- 非公開情報：あなたの記憶（全幅） -->
+    <!-- ② あなたの記憶（全幅・ゆったりと読める時系列・背景情報） -->
     <div class="card card-memory">
       <div class="card-header memory-header">
         <span class="card-title">📖 あなたの記憶（当日の状況・背景情報）</span>
-        <span class="memory-badge">非公開情報：他プレイヤーには見せないでください</span>
       </div>
       <div class="memory-content">
         ${escapeHtmlForB5(memoryText).replace(/\n/g, "<br/>")}
       </div>
     </div>
 
+    <!-- ③ 自己紹介（開始時のセリフ） -->
+    <div class="card card-intro">
+      <div class="card-header intro-header">
+        <span class="card-title">💬 自己紹介（開始時ロールプレイ台詞）</span>
+        <span class="intro-hint">※ゲーム開始の自己紹介フェーズでそのまま音読してください</span>
+      </div>
+      <div class="card-content quote-content">
+        ${escapeHtmlForB5(c.handout?.handoutBody || "").replace(/\n/g, "<br/>")}
+      </div>
+    </div>
+
     <!-- フッター -->
     <div class="footer-band">
       <span>合同対策本部 記録 // JIS B5 規格ハンドアウト</span>
-      <span class="page-num">B5 1/1 頁</span>
+      <span class="page-num">B5 3/3 頁（個人秘匿シート）</span>
     </div>
   </div>
+  `;
+
+  return `
+    ${page1Html}
+    ${page2Html}
+    ${page3Html}
   `;
 }
 
@@ -660,7 +795,7 @@ export function generateB5HandoutSingleHtml(
 export const B5_HANDOUT_PRINT_STYLES = `
   @page {
     size: B5 portrait;
-    margin: 8mm 9mm;
+    margin: 6mm 8mm;
   }
   * {
     box-sizing: border-box;
@@ -674,28 +809,39 @@ export const B5_HANDOUT_PRINT_STYLES = `
     color: #0f172a;
     font-family: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Yu Gothic Medium", "Segoe UI", Roboto, Meiryo, sans-serif;
     font-size: 10pt;
-    line-height: 1.48;
+    line-height: 1.45;
+  }
+  .b5-character-package {
+    display: contents;
   }
   .b5-sheet {
     width: 100%;
+    height: 232mm;
+    max-height: 232mm;
     box-sizing: border-box;
+    margin: 0;
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 7px;
-    page-break-inside: avoid;
-    break-inside: avoid;
-  }
-  .b5-page-break {
+    justify-content: space-between;
+    page-break-inside: avoid !important;
+    break-inside: avoid !important;
     page-break-after: always !important;
     break-after: page !important;
+    overflow: hidden;
+  }
+  .b5-sheet:last-child,
+  .b5-character-package:last-child .b5-sheet:last-child {
+    page-break-after: auto !important;
+    break-after: auto !important;
   }
   .header-band {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 2px solid #0f172a;
-    padding-bottom: 4px;
+    padding-bottom: 3.5px;
+    margin-bottom: 3px;
   }
   .header-left {
     display: flex;
@@ -727,6 +873,15 @@ export const B5_HANDOUT_PRINT_STYLES = `
     border-radius: 3px;
     letter-spacing: 0.05em;
   }
+  .public-badge {
+    background: #1e3a8a;
+    color: #ffffff;
+    font-size: 7.5pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.05em;
+  }
   .location-badge {
     border: 1px solid #cbd5e1;
     background: #f1f5f9;
@@ -736,100 +891,267 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding: 2px 6px;
     border-radius: 3px;
   }
-  .id-plate {
-    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-    color: #ffffff;
-    border-radius: 5px;
-    padding: 8px 12px;
+
+  /* 1枚目：表紙（役職・氏名） */
+  .cover-card {
+    margin: auto 0;
+    padding: 38px 28px;
+    background: #ffffff;
+    border: 3px double #0f172a;
+    border-radius: 6px;
+    color: #0f172a;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .cover-location-tag {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #334155;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    padding: 3px 14px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+    margin-bottom: 16px;
+  }
+  .cover-profession {
+    font-size: 15pt;
+    font-weight: 800;
+    color: #1e293b;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+  .cover-ruby {
+    font-size: 12pt;
+    font-weight: 700;
+    color: #475569;
+    letter-spacing: 0.25em;
+    padding-left: 0.25em;
+    margin-bottom: 5px;
+  }
+  .cover-name {
+    font-size: 34pt;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: 0.18em;
+    padding-left: 0.18em;
+    line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .cover-affiliation {
+    font-size: 9.5pt;
+    font-weight: 600;
+    color: #64748b;
+    border-top: 1px solid #e2e8f0;
+    padding-top: 12px;
+    width: 60%;
+    letter-spacing: 0.05em;
+  }
+
+  /* 2枚目：チームメンバー紹介シート */
+  .b5-sheet-members {
+    justify-content: flex-start;
+    gap: 5px;
+  }
+  .b5-sheet-members .footer-band {
+    margin-top: auto;
+  }
+  .members-guide-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .profession-label {
-    font-size: 8pt;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 2.5px 8px;
+    font-size: 7.5pt;
+    color: #475569;
     font-weight: 600;
-    color: #94a3b8;
     margin-bottom: 2px;
   }
-  .character-name {
-    font-size: 15pt;
-    font-weight: 900;
-    letter-spacing: 0.03em;
-    color: #ffffff;
+  .self-notice {
+    color: #64748b;
+    font-weight: 700;
   }
-  .id-meta {
-    text-align: right;
+  .members-list {
     display: flex;
     flex-direction: column;
-    align-items: flex-end;
-    gap: 3px;
+    gap: 4px;
+    flex: none;
   }
-  .pc-badge {
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.12);
-    color: #ffffff;
-    font-family: monospace;
-    font-size: 8.5pt;
-    font-weight: 700;
-    padding: 2px 8px;
-    border-radius: 3px;
-    letter-spacing: 0.08em;
+  .member-card {
+    display: flex;
+    align-items: stretch;
+    border: 1px solid #cbd5e1;
+    border-radius: 5px;
+    background: #ffffff;
+    padding: 4px 8px;
+    gap: 8px;
   }
-  .coop-status {
+  .member-card-self {
+    background: #f8fafc !important;
+    border-color: #cbd5e1 !important;
+  }
+  .member-card-self .member-name,
+  .member-card-self .member-name rt,
+  .member-card-self .member-profession,
+  .member-card-self .member-profile {
+    color: #94a3b8 !important;
+  }
+  .member-badge-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.5px;
+    min-width: 56px;
+    border-right: 1px solid #e2e8f0;
+    padding-right: 6px;
+  }
+  .member-loc-tag {
     font-size: 7pt;
     font-weight: 700;
-    color: #6ee7b7;
+    background: #e2e8f0;
+    color: #475569;
+    padding: 1px 4px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .member-self-tag {
+    font-size: 7pt;
+    font-weight: 800;
+    background: #94a3b8;
+    color: #ffffff;
+    padding: 1px 4px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+  .member-info-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5px;
+  }
+  .member-header-row {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .member-name {
+    font-size: 11pt;
+    font-weight: 800;
+    color: #0f172a;
+    letter-spacing: 0.05em;
+  }
+  .member-name rt {
+    font-size: 6.5pt;
+    color: #64748b;
+  }
+  .member-profession {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #475569;
+  }
+  .member-profile {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #334155;
+  }
+
+  /* 3枚目：個人秘匿シート */
+  .b5-sheet-secret {
+    justify-content: flex-start;
+    gap: 6px;
+  }
+  .b5-sheet-secret .footer-band {
+    margin-top: auto;
+  }
+  .secret-header-band {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border-bottom: 2px solid #0f172a;
+    padding-bottom: 3.5px;
+    margin-bottom: 3px;
+  }
+  .secret-header-sub {
+    font-size: 8.5pt;
+    font-weight: 700;
+    color: #64748b;
+    letter-spacing: 0.05em;
+  }
+  .secret-header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .secret-header-title {
+    font-size: 13pt;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: 0.05em;
+  }
+  .secret-confidential-bar {
+    background: #0f172a;
+    color: #ffffff;
+    font-size: 8.5pt;
+    font-weight: 800;
+    padding: 2.5px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.08em;
+    text-align: center;
+    margin-top: 1px;
   }
   .grid-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 7px;
   }
   .card {
     border-radius: 5px;
     border: 1px solid #cbd5e1;
-    padding: 7px 9px;
+    padding: 6px 9px;
     background: #ffffff;
-  }
-  .card-public {
-    background: #f8fafc;
-  }
-  .card-intro {
-    background: #eef2ff;
-    border-color: #c7d2fe;
   }
   .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
+    padding-bottom: 2.5px;
+    margin-bottom: 4px;
   }
   .card-title {
-    font-size: 8.5pt;
-    font-weight: 700;
+    font-size: 9pt;
+    font-weight: 800;
     color: #1e293b;
   }
-  .card-sub-hint {
+  .card-intro {
+    background: #eef2ff;
+    border-color: #c7d2fe;
+    padding: 6px 9px;
+  }
+  .intro-hint {
     font-size: 7pt;
-    color: #64748b;
-  }
-  .card-content {
-    font-size: 8.5pt;
-    line-height: 1.48;
-    color: #1e293b;
+    color: #4f46e5;
+    font-weight: 600;
   }
   .quote-content {
     font-style: italic;
     border-left: 3px solid #6366f1;
-    padding-left: 6px;
+    padding-left: 8px;
     color: #0f172a;
+    font-size: 14px;
+    line-height: 1.48;
   }
   .internal-drama-section {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 3px;
   }
   .section-title-bar {
     display: flex;
@@ -838,81 +1160,82 @@ export const B5_HANDOUT_PRINT_STYLES = `
     padding: 0 2px;
   }
   .section-title {
-    font-size: 8.5pt;
-    font-weight: 700;
+    font-size: 9pt;
+    font-weight: 800;
     color: #0f172a;
-  }
-  .section-notice {
-    font-size: 7pt;
-    color: #64748b;
   }
   .card-pride {
     background: #fffbeb;
     border-color: #fde68a;
   }
   .pride-header {
-    font-size: 8pt;
+    font-size: 8.5pt;
     font-weight: 700;
     color: #78350f;
     border-bottom: 1px solid #fde68a;
     padding-bottom: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
   }
   .card-loss {
     background: #f8fafc;
     border-color: #e2e8f0;
   }
   .loss-header {
-    font-size: 8pt;
+    font-size: 8.5pt;
     font-weight: 700;
     color: #334155;
     border-bottom: 1px solid #e2e8f0;
     padding-bottom: 2px;
-    margin-bottom: 4px;
+    margin-bottom: 3px;
+  }
+  .card-pride .card-content,
+  .card-loss .card-content {
+    font-size: 13.5px;
+    line-height: 1.45;
+    color: #0f172a;
   }
   .card-memory {
     background: #ffffff;
     border-color: #cbd5e1;
-    padding: 8px 10px;
+    padding: 6px 9px;
+    flex: none;
+    display: flex;
+    flex-direction: column;
   }
   .memory-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #e2e8f0;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
-  }
-  .memory-badge {
-    background: #fff1f2;
-    border: 1px solid #fecdd3;
-    color: #be123c;
-    font-size: 7pt;
-    font-weight: 700;
-    padding: 1px 5px;
-    border-radius: 3px;
+    padding-bottom: 2.5px;
+    margin-bottom: 4px;
   }
   .memory-content {
-    font-size: 8.5pt;
-    line-height: 1.58;
+    font-size: 14px;
+    line-height: 1.48;
     color: #0f172a;
   }
   .footer-band {
-    margin-top: 2px;
+    margin-top: 3px;
     border-top: 1px solid #e2e8f0;
-    padding-top: 3px;
+    padding-top: 2.5px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-size: 7pt;
     color: #64748b;
   }
-  .coop-note {
-    font-weight: 600;
-    color: #475569;
-  }
   .page-num {
     font-family: monospace;
+  }
+  ruby {
+    ruby-align: center;
+  }
+  rt {
+    font-size: 0.55em;
+    letter-spacing: 0;
+    line-height: 1;
+    font-weight: normal;
   }
 `;
 
@@ -936,10 +1259,10 @@ export function printCharacterHandoutsB5(
       const sheetHtml = generateB5HandoutSingleHtml(
         c,
         projectTitle,
-        origIndex >= 0 ? origIndex : idx
+        origIndex >= 0 ? origIndex : idx,
+        characters
       );
-      const isLast = idx === targetChars.length - 1;
-      return `<div class="${isLast ? "" : "b5-page-break"}">${sheetHtml}</div>`;
+      return `<div class="b5-character-package">${sheetHtml}</div>`;
     })
     .join("\n");
 
@@ -979,744 +1302,6 @@ export function printCharacterHandoutsB5(
           document.body.removeChild(iframe);
         }
       }, 3000);
-    }, 350);
-  }
-}
-
-/**
- * 『マッコウクジラ音響言語解析システム』プレイヤー提示用シート（A4縦・表裏2ページ）印刷／PDF出力
- * ・1ページ目（表面）：メインタイトル、大型QRコード、アクセスパスワード（whale-study）
- * ・2ページ目（裏面）：操作案内3項目 ＋ 実画面と完全一致する4つの画面サンプル
- *   ① 時間変化・音響波形ログ
- *   ② 【クジラの行動観測モニター】
- *   ③ 🔊 海中にクリック音を流す（発信）ボタン（＋1つ戻す・クリア）
- *   ④ クリック音ボタンのサンプル（音 #01：『ゴゴゴゴ…』海の下の火山 ／ 音 #03：『カ・カ・カカッ！』【未解明：？？？】）
- * ※GitHubのURLは一切記載しない
- */
-export function printWhaleSonarGuideA4(
-  mode: "both" | "front" | "back" = "both"
-): void {
-  const showFront = mode === "both" || mode === "front";
-  const showBack = mode === "both" || mode === "back";
-
-  const fullHtml = `<!DOCTYPE html>
-<html lang="ja">
-<head>
-  <meta charset="UTF-8" />
-  <title>マッコウクジラ音響言語解析システム - プレイヤー提示資料</title>
-  <style>
-    @page {
-      size: A4 portrait;
-      margin: 8mm 10mm;
-    }
-    * {
-      box-sizing: border-box;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
-    }
-    html, body {
-      margin: 0;
-      padding: 0;
-      background: #ffffff;
-      color: #0f172a;
-      font-family: "Hiragino Kaku Gothic ProN", "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
-    }
-    .a4-page {
-      width: 100%;
-      max-width: 184mm;
-      margin: 0 auto;
-      background: #ffffff;
-      page-break-inside: avoid !important;
-      break-inside: avoid !important;
-    }
-    .page-break {
-      page-break-after: always !important;
-      break-after: page !important;
-    }
-    .outer-frame-front {
-      width: 100%;
-      border: 2px solid #0f172a;
-      border-radius: 8px;
-      padding: 5mm 6mm;
-      display: flex;
-      flex-direction: column;
-      gap: 4mm;
-      background: #ffffff;
-    }
-    .outer-frame-back {
-      width: 100%;
-      border: 2px solid #0f172a;
-      border-radius: 8px;
-      padding: 4mm 5.5mm;
-      display: flex;
-      flex-direction: column;
-      gap: 2.4mm;
-      background: #ffffff;
-    }
-    .header-banner {
-      background: #f0f9ff;
-      color: #0f172a;
-      border-radius: 7px;
-      padding: 3mm 5mm;
-      text-align: center;
-      border: 1.5px solid #0284c7;
-      border-bottom: 3px solid #0284c7;
-    }
-    .header-sub {
-      font-size: 8pt;
-      font-weight: 800;
-      letter-spacing: 0.15em;
-      color: #0369a1;
-      margin-bottom: 0.8mm;
-    }
-    .header-title {
-      font-size: 17pt;
-      font-weight: 900;
-      letter-spacing: 0.05em;
-      color: #0f172a;
-      margin: 0;
-      line-height: 1.2;
-    }
-    .qr-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      margin: 1mm 0;
-    }
-    .qr-card {
-      border: 2.5px solid #0f172a;
-      border-radius: 10px;
-      padding: 4mm 5.5mm;
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .qr-card img {
-      width: 60mm;
-      height: 60mm;
-      object-fit: contain;
-      display: block;
-    }
-    .qr-caption {
-      margin-top: 1.8mm;
-      font-size: 9pt;
-      font-weight: 800;
-      color: #0f172a;
-      letter-spacing: 0.04em;
-    }
-    .pw-box {
-      border: 2px solid #0891b2;
-      background: #ecfeff;
-      border-radius: 9px;
-      padding: 3.2mm 5mm;
-      text-align: center;
-    }
-    .pw-label {
-      font-size: 9pt;
-      font-weight: 800;
-      color: #0e7490;
-      letter-spacing: 0.08em;
-      margin-bottom: 1.2mm;
-    }
-    .pw-value {
-      font-family: "Courier New", Consolas, monospace;
-      font-size: 23pt;
-      font-weight: 900;
-      letter-spacing: 0.08em;
-      color: #0f172a;
-      background: #ffffff;
-      border: 2px solid #06b6d4;
-      border-radius: 6px;
-      padding: 1.2mm 5.5mm;
-      display: inline-block;
-      line-height: 1.1;
-    }
-    .pw-note {
-      margin-top: 1.2mm;
-      font-size: 8pt;
-      font-weight: 700;
-      color: #334155;
-    }
-    .steps-box {
-      border: 1.5px solid #cbd5e1;
-      background: #f8fafc;
-      border-radius: 8px;
-      padding: 3mm 4.5mm;
-    }
-    .steps-title {
-      font-size: 9pt;
-      font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 1.8mm;
-      border-bottom: 1px solid #cbd5e1;
-      padding-bottom: 0.8mm;
-    }
-    .step-item {
-      display: flex;
-      align-items: center;
-      gap: 2.2mm;
-      font-size: 9pt;
-      font-weight: 700;
-      color: #1e293b;
-      line-height: 1.38;
-      margin-bottom: 1.4mm;
-    }
-    .step-item:last-child {
-      margin-bottom: 0;
-    }
-    .step-badge {
-      width: 5mm;
-      height: 5mm;
-      border-radius: 999px;
-      background: #0f172a;
-      color: #ffffff;
-      font-size: 8pt;
-      font-weight: 900;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-    .footer-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 7.2pt;
-      font-weight: 700;
-      color: #64748b;
-      border-top: 1px solid #cbd5e1;
-      padding-top: 1.2mm;
-    }
-
-    /* 裏面（2ページ目：操作ガイド＆画面サンプル・1ページ完全収容） */
-    .guide-lead-box {
-      border: 1.5px solid #0891b2;
-      background: #f0fdff;
-      border-radius: 7px;
-      padding: 2.2mm 3.5mm;
-    }
-    .guide-lead-title {
-      font-size: 9pt;
-      font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 1mm;
-      display: flex;
-      align-items: center;
-      gap: 1.5mm;
-    }
-    .guide-bullet {
-      display: flex;
-      align-items: flex-start;
-      gap: 1.8mm;
-      font-size: 8.3pt;
-      font-weight: 800;
-      color: #0f172a;
-      line-height: 1.32;
-      margin-bottom: 0.8mm;
-    }
-    .guide-bullet:last-child {
-      margin-bottom: 0;
-    }
-    .guide-dot {
-      color: #0891b2;
-      font-weight: 900;
-      flex-shrink: 0;
-    }
-
-    /* スマホ画面サンプル枠（トナー節約・コンパクト1ページ収容） */
-    .mock-phone-frame {
-      background: #f8fafc;
-      color: #0f172a;
-      border: 1.5px solid #475569;
-      border-radius: 9px;
-      padding: 2.2mm 3mm;
-      display: flex;
-      flex-direction: column;
-      gap: 1.8mm;
-    }
-    .mock-phone-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid #cbd5e1;
-      padding-bottom: 1mm;
-    }
-    .mock-phone-header-title {
-      font-size: 8pt;
-      font-weight: 900;
-      color: #0369a1;
-      letter-spacing: 0.03em;
-    }
-    .mock-phone-header-badge {
-      font-size: 6.8pt;
-      font-weight: 700;
-      color: #334155;
-      background: #ffffff;
-      border: 1px solid #94a3b8;
-      border-radius: 3px;
-      padding: 0.3mm 1.5mm;
-    }
-    .sample-block {
-      position: relative;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      background: #ffffff;
-      padding: 1.6mm 2.4mm;
-    }
-    .callout-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 1mm;
-    }
-    .callout-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 1mm;
-      background: #e0f2fe;
-      border: 1px solid #0284c7;
-      color: #0369a1;
-      font-size: 7.4pt;
-      font-weight: 900;
-      padding: 0.2mm 1.8mm;
-      border-radius: 999px;
-    }
-    .callout-desc {
-      font-size: 7pt;
-      font-weight: 700;
-      color: #334155;
-    }
-
-    /* ① 波形ログサンプル */
-    .waveform-box {
-      border: 1px solid #0284c7;
-      background: #f8fafc;
-      border-radius: 5px;
-      overflow: hidden;
-    }
-    .waveform-header {
-      background: #f0f9ff;
-      border-bottom: 1px solid #bae6fd;
-      padding: 0.8mm 2mm;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 7.2pt;
-      font-weight: 800;
-      color: #0369a1;
-    }
-    .waveform-replay {
-      font-size: 6.5pt;
-      background: #ffffff;
-      border: 1px solid #0284c7;
-      color: #0369a1;
-      border-radius: 3px;
-      padding: 0.2mm 1.4mm;
-      font-weight: 800;
-    }
-
-    /* ② クジラの行動観測モニターサンプル */
-    .monitor-box {
-      border: 1px solid #94a3b8;
-      background: #f8fafc;
-      border-radius: 5px;
-      padding: 1.4mm 2.5mm;
-      text-align: center;
-    }
-    .monitor-title {
-      font-size: 7.8pt;
-      font-weight: 900;
-      color: #0f172a;
-      margin-bottom: 0.4mm;
-    }
-    .monitor-sub {
-      font-size: 7pt;
-      font-weight: 600;
-      color: #334155;
-      line-height: 1.3;
-    }
-
-    /* ③ 海中にクリック音を流す（発信）サンプル */
-    .seq-bar-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 0.8mm;
-    }
-    .seq-bar-label {
-      font-size: 7.4pt;
-      font-weight: 900;
-      color: #0369a1;
-    }
-    .seq-ctrl-btns {
-      display: flex;
-      gap: 1mm;
-    }
-    .seq-ctrl-btn {
-      background: #f8fafc;
-      border: 1px solid #64748b;
-      color: #1e293b;
-      border-radius: 3px;
-      padding: 0.3mm 1.5mm;
-      font-size: 6.8pt;
-      font-weight: 800;
-    }
-    .seq-slot-box {
-      background: #f8fafc;
-      border: 1px solid #cbd5e1;
-      border-radius: 4px;
-      padding: 1mm 1.8mm;
-      display: flex;
-      align-items: center;
-      gap: 1.2mm;
-      margin-bottom: 1mm;
-    }
-    .seq-chip {
-      background: #eef2ff;
-      border: 1px solid #4f46e5;
-      color: #1e1b4b;
-      border-radius: 3px;
-      padding: 0.3mm 1.5mm;
-      font-size: 7.2pt;
-      font-weight: 800;
-    }
-    .transmit-btn {
-      width: 100%;
-      background: #e0f2fe;
-      border: 1.5px solid #0284c7;
-      color: #0f172a;
-      border-radius: 5px;
-      padding: 1.1mm 2.5mm;
-      text-align: center;
-      font-size: 8.5pt;
-      font-weight: 900;
-      letter-spacing: 0.03em;
-    }
-
-    /* ④ クリック音ボタンサンプル（音 #01 ＆ 音 #03） */
-    .sample-cards-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 2mm;
-    }
-    .sound-card {
-      background: #f8fafc;
-      border-radius: 6px;
-      padding: 1.4mm 2mm;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-    .sound-card-locked {
-      border: 1.5px solid #d97706;
-    }
-    .sound-card-unsolved {
-      border: 1.5px solid #64748b;
-    }
-    .sound-card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .sound-code {
-      background: #ffffff;
-      border: 1px solid #64748b;
-      color: #0369a1;
-      font-family: monospace;
-      font-size: 7.2pt;
-      font-weight: 900;
-      padding: 0.2mm 1.4mm;
-      border-radius: 3px;
-    }
-    .sound-preview-btn {
-      background: #e0f2fe;
-      border: 1px solid #0284c7;
-      color: #0369a1;
-      font-size: 6.8pt;
-      font-weight: 800;
-      padding: 0.2mm 1.4mm;
-      border-radius: 3px;
-    }
-    .sound-onomatopoeia {
-      margin-top: 0.8mm;
-      font-size: 8.2pt;
-      font-weight: 900;
-      color: #92400e;
-    }
-    .sound-meaning-locked {
-      margin-top: 0.6mm;
-      display: inline-block;
-      background: #fef3c7;
-      border: 1px solid #d97706;
-      color: #92400e;
-      font-size: 7.5pt;
-      font-weight: 900;
-      padding: 0.3mm 1.5mm;
-      border-radius: 3px;
-    }
-    .sound-meaning-unsolved {
-      margin-top: 0.6mm;
-      font-size: 7.5pt;
-      font-weight: 800;
-      color: #475569;
-    }
-    .sound-card-footer {
-      margin-top: 1mm;
-      padding-top: 0.8mm;
-      border-top: 1px solid #cbd5e1;
-    }
-    .sound-locked-note {
-      font-size: 6.8pt;
-      font-weight: 800;
-      color: #b45309;
-    }
-    .sound-assign-btn {
-      width: 100%;
-      background: #eef2ff;
-      border: 1px solid #4f46e5;
-      color: #312e81;
-      border-radius: 3px;
-      padding: 0.5mm 1.2mm;
-      text-align: center;
-      font-size: 7.2pt;
-      font-weight: 900;
-    }
-  </style>
-</head>
-<body>
-  ${
-    showFront
-      ? `<!-- =========================================================================
-       1ページ目（表面）：QRコード ＆ アクセスパスワード提示シート（A4・1ページ完全収容）
-       ========================================================================= -->
-  <div class="a4-page ${showBack ? "page-break" : ""}">
-    <div class="outer-frame-front">
-      <div class="header-banner">
-        <div class="header-sub">MARINE MAMMAL ACOUSTIC ANALYSIS TERMINAL</div>
-        <h1 class="header-title">『マッコウクジラ音響言語解析システム』</h1>
-      </div>
-
-      <div class="qr-section">
-        <div class="qr-card">
-          <img src="${scenarioAssetUrl("releases/images/sonar_qr.png")}" alt="マッコウクジラ音響言語解析システム QRコード" />
-          <div class="qr-caption">📱 スマートフォンのカメラで読み取ってください</div>
-        </div>
-      </div>
-
-      <div class="pw-box">
-        <div class="pw-label">🔑 アクセスパスワード（半角英数字・ハイフンあり）</div>
-        <div>
-          <span class="pw-value">whale-study</span>
-        </div>
-        <div class="pw-note">※上記のパスワードを入力して「ロック解除」を押すとシステムが起動します</div>
-      </div>
-
-      <div class="steps-box">
-        <div class="steps-title">【システムへの接続手順と使い方】</div>
-        <div class="step-item">
-          <span class="step-badge">1</span>
-          <span>スマートフォンのカメラで上のQRコードを読み取り、専用画面を開いてください。</span>
-        </div>
-        <div class="step-item">
-          <span class="step-badge">2</span>
-          <span>パスワード欄に <strong>whale-study</strong> と入力してロックを解除してください。</span>
-        </div>
-        <div class="step-item">
-          <span class="step-badge">3</span>
-          <span>詳しい画面の見方と操作方法は、<strong>裏面</strong>をご覧ください。</span>
-        </div>
-      </div>
-
-      <div class="footer-bar">
-        <span>マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（表面）</span>
-        <span>${mode === "both" ? "1 / 2" : "1 / 1"}</span>
-      </div>
-    </div>
-  </div>`
-      : ""
-  }
-
-  ${
-    showBack
-      ? `<!-- =========================================================================
-       2ページ目（裏面）：画面サンプル ＆ 操作説明シート（A4・1ページ完全収容）
-       ========================================================================= -->
-  <div class="a4-page">
-    <div class="outer-frame-back">
-      <div class="header-banner" style="padding: 2mm 4mm;">
-        <div class="header-sub" style="font-size: 7pt; margin-bottom: 0.4mm;">SYSTEM OPERATION GUIDE &amp; SCREEN SAMPLES</div>
-        <h1 class="header-title" style="font-size: 13.5pt;">『マッコウクジラ音響言語解析システム』画面説明</h1>
-      </div>
-
-      <!-- プレイヤー向け操作説明（ご指定の3項目） -->
-      <div class="guide-lead-box">
-        <div class="guide-lead-title">💡 システムの操作方法</div>
-        <div class="guide-bullet">
-          <span class="guide-dot">●</span>
-          <span>クリック音ボタンを押して海中にクリック音を鳴らすと、それに対するクジラの行動が観察できます。</span>
-        </div>
-        <div class="guide-bullet">
-          <span class="guide-dot">●</span>
-          <span>別の内容を流すときは、一度流したクリック音をクリアすることをお勧めします。</span>
-        </div>
-        <div class="guide-bullet">
-          <span class="guide-dot">●</span>
-          <span>言語について想定できたら、日本語を当てはめるボタンを押すことでクリック音を解析していくことができます。</span>
-        </div>
-      </div>
-
-      <!-- スマートフォン画面サンプル（4つの主要パーツ） -->
-      <div class="mock-phone-frame">
-        <div class="mock-phone-header">
-          <span class="mock-phone-header-title">📱 スマートフォン画面サンプル（主要4パート）</span>
-          <span class="mock-phone-header-badge">実際の操作画面イメージ</span>
-        </div>
-
-        <!-- ① 時間変化・音響波形ログ -->
-        <div class="sample-block">
-          <div class="callout-row">
-            <span class="callout-tag">① 時間変化・音響波形ログ</span>
-            <span class="callout-desc">鳴らしたクリック音の波形が時間変化で記録され、再生後も形が残ります</span>
-          </div>
-          <div class="waveform-box">
-            <div class="waveform-header">
-              <span>📈 時間変化・音響波形ログ（再生後も形が残ります）</span>
-              <span class="waveform-replay">▶ もう一度再生</span>
-            </div>
-            <svg viewBox="0 0 600 64" width="100%" height="36" style="display:block; background:#ffffff;">
-              <!-- グリッド線 -->
-              <line x1="0" y1="16" x2="600" y2="16" stroke="#e2e8f0" stroke-width="1" />
-              <line x1="0" y1="34" x2="600" y2="34" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="4 4" />
-              <line x1="0" y1="52" x2="600" y2="52" stroke="#e2e8f0" stroke-width="1" />
-              <line x1="300" y1="0" x2="300" y2="64" stroke="#cbd5e1" stroke-width="1" stroke-dasharray="3 3" />
-              <!-- ラベル -->
-              <text x="12" y="12" fill="#0369a1" font-size="9" font-family="monospace" font-weight="bold">1. 音 #01『ゴゴゴゴ…』(海の下の火山)</text>
-              <text x="312" y="12" fill="#0369a1" font-size="9" font-family="monospace" font-weight="bold">2. 音 #03『カ・カ・カカッ！』</text>
-              <!-- 波形1（低周波の連続振動：ゴゴゴゴ…） -->
-              <path d="M 15 34 Q 25 16, 35 34 T 55 34 T 75 34 T 95 34 T 115 34 T 135 34 T 155 34 T 175 34 T 195 34 T 215 34 T 235 34 T 255 34 L 285 34" fill="none" stroke="#d97706" stroke-width="2" />
-              <!-- 波形2（鋭いパルス：カ・カ・カカッ！） -->
-              <path d="M 315 34 L 335 34 L 340 13 L 345 56 L 350 34 L 385 34 L 390 13 L 395 56 L 400 34 L 435 34 L 440 11 L 445 58 L 450 16 L 455 52 L 460 34 L 580 34" fill="none" stroke="#0284c7" stroke-width="2" />
-            </svg>
-          </div>
-        </div>
-
-        <!-- ② クジラの行動観測モニター -->
-        <div class="sample-block">
-          <div class="callout-row">
-            <span class="callout-tag">② クジラの行動観測モニター</span>
-            <span class="callout-desc">海中にクリック音を流した結果、クジラがどう動いたかが文字で表示されます</span>
-          </div>
-          <div class="monitor-box">
-            <div class="monitor-title">【クジラの行動観測モニター】</div>
-            <div class="monitor-sub">
-              クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、ここにクジラの行動が文字で表示されます。
-            </div>
-          </div>
-        </div>
-
-        <!-- ③ 海中にクリック音を流す（発信）のボタン ＆ クリアボタン -->
-        <div class="sample-block">
-          <div class="callout-row">
-            <span class="callout-tag">③ 発信ボタン ＆ クリア操作</span>
-            <span class="callout-desc">選んだ音を海中に流します（別の内容を流す時は「クリア」を押します）</span>
-          </div>
-          <div class="seq-bar-header">
-            <span class="seq-bar-label">発信するクリック音パターン（2語ごと判定）</span>
-            <div class="seq-ctrl-btns">
-              <span class="seq-ctrl-btn">⌫ 1つ戻す</span>
-              <span class="seq-ctrl-btn" style="border-color:#d97706; background:#fef3c7; color:#92400e;">↺ クリア</span>
-            </div>
-          </div>
-          <div class="seq-slot-box">
-            <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">1.</span> 海の下の火山</span>
-            <span style="color:#64748b; font-weight:bold; font-size:7.5pt;">＋</span>
-            <span class="seq-chip"><span style="color:#0369a1; font-family:monospace;">2.</span> 音 #03（カ・カ・カカッ！）</span>
-          </div>
-          <div class="transmit-btn">
-            🔊 海中にクリック音を流す（発信）
-          </div>
-        </div>
-
-        <!-- ④ クリック音ボタンのサンプル（音 #01 と 音 #03） -->
-        <div class="sample-block">
-          <div class="callout-row">
-            <span class="callout-tag">④ クリック音ボタンのサンプル</span>
-            <span class="callout-desc">左：最初から意味が判明している音 ／ 右：未解明の音（日本語をあてはめ可能）</span>
-          </div>
-          <div class="sample-cards-grid">
-            <!-- サンプル1：音 #01（ゴゴゴゴ… ＝ 海の下の火山） -->
-            <div class="sound-card sound-card-locked">
-              <div>
-                <div class="sound-card-top">
-                  <span class="sound-code">音 #01</span>
-                  <span class="sound-preview-btn">🔊 試聴</span>
-                </div>
-                <div class="sound-onomatopoeia">『ゴゴゴゴ…』</div>
-                <div>
-                  <span class="sound-meaning-locked">🔒 海の下の火山</span>
-                </div>
-              </div>
-              <div class="sound-card-footer">
-                <div class="sound-locked-note">✔ 朝倉教授記録により確定</div>
-              </div>
-            </div>
-
-            <!-- サンプル2：音 #03（カ・カ・カカッ！ ＝ 未解明） -->
-            <div class="sound-card sound-card-unsolved">
-              <div>
-                <div class="sound-card-top">
-                  <span class="sound-code">音 #03</span>
-                  <span class="sound-preview-btn">🔊 試聴</span>
-                </div>
-                <div class="sound-onomatopoeia">『カ・カ・カカッ！』</div>
-                <div class="sound-meaning-unsolved">【未解明：？？？】</div>
-              </div>
-              <div class="sound-card-footer">
-                <div class="sound-assign-btn">🏷️ 日本語をあてはめる</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="footer-bar">
-        <span>マッコウクジラ音響言語解析システム ― プレイヤー提示用シート（裏面：画面サンプル＆操作案内）</span>
-        <span>${mode === "both" ? "2 / 2" : "1 / 1"}</span>
-      </div>
-    </div>
-  </div>`
-      : ""
-  }
-</body>
-</html>`;
-
-  const iframe = document.createElement("iframe");
-  iframe.style.position = "fixed";
-  iframe.style.right = "0";
-  iframe.style.bottom = "0";
-  iframe.style.width = "0";
-  iframe.style.height = "0";
-  iframe.style.border = "0";
-  document.body.appendChild(iframe);
-
-  const doc = iframe.contentWindow?.document;
-  if (doc) {
-    doc.open();
-    doc.write(fullHtml);
-    doc.close();
-    setTimeout(() => {
-      iframe.contentWindow?.focus();
-      iframe.contentWindow?.print();
-      setTimeout(() => {
-        if (document.body.contains(iframe)) {
-          document.body.removeChild(iframe);
-        }
-      }, 3000);
     }, 450);
   }
 }
-
-
-

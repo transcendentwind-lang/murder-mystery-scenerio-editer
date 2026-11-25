@@ -4,10 +4,11 @@ import { scenarioAssetUrl } from "@/scenarios/catalog";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { CrypticWord, CrypticGrammar } from "@/types/schema";
+import { sonarWords } from "@/scenarios/project-deep-sea/sonarWords";
 import { AcousticPulsePoint, buildAudioTimeline } from "@/utils/wordAudio";
 export { getWordAcousticPulses } from "@/utils/wordAudio";
 import { audioEngine } from "@/utils/audioSynth";
-import { printWhaleSonarGuideA4 } from "@/utils/scriptGenerator";
+import { printWhaleSonarGuideA4 } from "@/utils/sonarGuide";
 import {
   Volume2,
   VolumeX,
@@ -26,7 +27,10 @@ import {
   HelpCircle,
   Tag,
   Lock,
+  KeyRound,
   ArrowLeft,
+  ArrowUp,
+  Plus,
   Check,
   Activity,
   Printer,
@@ -212,16 +216,6 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     category: "movement",
   },
   {
-    id: "rule-17-south-gather",
-    name: "南 ＋ 集まれ",
-    sequence: ["word-go-south", "word-gather"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "付近のクジラが発声地点に対して南に集まり始めた",
-    behaviorText: "付近のクジラが発声地点に対して南に集まり始めた",
-    directionBadge: "⬇️ 南に集まり始めた",
-    category: "movement",
-  },
-  {
     id: "rule-18-north-gather",
     name: "北 ＋ 集まれ",
     sequence: ["word-go-north", "word-gather"],
@@ -249,16 +243,6 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     behaviorTitle: "付近のクジラが発声地点に対して西を探し始めた",
     behaviorText: "付近のクジラが発声地点に対して西を探し始めた",
     directionBadge: "⬅️ 西を探し始めた",
-    category: "movement",
-  },
-  {
-    id: "rule-21-south-search",
-    name: "南 ＋ 探せ",
-    sequence: ["word-go-south", "word-search"],
-    responseSoundType: "yes_ack",
-    behaviorTitle: "付近のクジラが発声地点に対して南を探し始めた",
-    behaviorText: "付近のクジラが発声地点に対して南を探し始めた",
-    directionBadge: "⬇️ 南を探し始めた",
     category: "movement",
   },
   {
@@ -291,17 +275,147 @@ export const DEFAULT_BEHAVIOR_RULES: WhaleBehaviorRule[] = [
     directionBadge: "⚔️ 巨大獲物へ攻撃開始",
     category: "action",
   },
+  {
+    id: "rule-25-northeast-gather",
+    name: "北東 ＋ 集まれ",
+    sequence: ["word-go-northeast", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北東に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して北東に集まり始めた",
+    directionBadge: "↗️ 北東に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-26-northwest-gather",
+    name: "北西 ＋ 集まれ",
+    sequence: ["word-go-northwest", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北西に集まり始めた",
+    behaviorText: "付近のクジラが発声地点に対して北西に集まり始めた",
+    directionBadge: "↖️ 北西に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-27-northeast-search",
+    name: "北東 ＋ 探せ",
+    sequence: ["word-go-northeast", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北東を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して北東を探し始めた",
+    directionBadge: "↗️ 北東を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-28-northwest-search",
+    name: "北西 ＋ 探せ",
+    sequence: ["word-go-northwest", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラが発声地点に対して北西を探し始めた",
+    behaviorText: "付近のクジラが発声地点に対して北西を探し始めた",
+    directionBadge: "↖️ 北西を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-29-ogasawara-gather",
+    name: "小笠原 ＋ 集まれ",
+    sequence: ["word-place-ogasawara", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが小笠原の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 小笠原に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-30-hachijojima-gather",
+    name: "八丈島 ＋ 集まれ",
+    sequence: ["word-place-hachijojima", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが八丈島の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 八丈島に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-31-mikurajima-gather",
+    name: "御蔵島 ＋ 集まれ",
+    sequence: ["word-place-mikurajima", "word-gather"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島の海域へ向かって集まり始めた",
+    behaviorText: "付近のクジラたちが御蔵島の海域へ向かって集まり始めた",
+    directionBadge: "🏝️ 御蔵島に集まり始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-32-ogasawara-search",
+    name: "小笠原 ＋ 探せ",
+    sequence: ["word-place-ogasawara", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原の海域を探し始めた",
+    behaviorText: "付近のクジラたちが小笠原の海域を探し始めた",
+    directionBadge: "🏝️ 小笠原を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-33-hachijojima-search",
+    name: "八丈島 ＋ 探せ",
+    sequence: ["word-place-hachijojima", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島の海域を探し始めた",
+    behaviorText: "付近のクジラたちが八丈島の海域を探し始めた",
+    directionBadge: "🏝️ 八丈島を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-34-mikurajima-search",
+    name: "御蔵島 ＋ 探せ",
+    sequence: ["word-place-mikurajima", "word-search"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島の海域を探し始めた",
+    behaviorText: "付近のクジラたちが御蔵島の海域を探し始めた",
+    directionBadge: "🏝️ 御蔵島を探し始めた",
+    category: "movement",
+  },
+  {
+    id: "rule-35-ogasawara-alert",
+    name: "小笠原 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-ogasawara", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが小笠原周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが小笠原周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 小笠原周辺を警戒",
+    category: "action",
+  },
+  {
+    id: "rule-36-hachijojima-alert",
+    name: "八丈島 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-hachijojima", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが八丈島周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが八丈島周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 八丈島周辺を警戒",
+    category: "action",
+  },
+  {
+    id: "rule-37-mikurajima-alert",
+    name: "御蔵島 ＋ 周囲を警戒せよ",
+    sequence: ["word-place-mikurajima", "word-alert"],
+    responseSoundType: "yes_ack",
+    behaviorTitle: "付近のクジラたちが御蔵島周辺の海域を警戒し始めた",
+    behaviorText: "付近のクジラたちが御蔵島周辺の海域を警戒し始めた",
+    directionBadge: "⚠️ 御蔵島周辺を警戒",
+    category: "action",
+  },
 ];
 
 // ==========================================
-// 朝倉教授が最初に示した「最初から日本語が確定している2つの音」
+// 海野教授が最初に示した「最初から日本語が確定している2つの音」
 // ==========================================
 export const LOCKED_INITIAL_MEANINGS: Record<string, string> = {
   "word-subsea-volcano": "海の下の火山",
   "word-alert": "周囲を警戒せよ",
 };
 
-// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全24語）
+// プレイヤーが日本語対応画面で選択できる日本語の候補リスト（全29候補：「南」・複合方角・地名を含む）
 export const JAPANESE_MEANING_CANDIDATES: {
   label: string;
   subHint: string;
@@ -310,7 +424,7 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "集まれ", subHint: "仲間を集める号令" },
   {
     label: "周囲を警戒せよ",
-    subHint: "朝倉教授の記録により最初から確定",
+    subHint: "海野教授の記録により最初から確定",
     isLockedInitial: true,
   },
   { label: "敵がいる", subHint: "外敵・危険生物の存在" },
@@ -332,10 +446,15 @@ export const JAPANESE_MEANING_CANDIDATES: {
   { label: "西", subHint: "方角（西）" },
   { label: "南", subHint: "方角（南）" },
   { label: "北", subHint: "方角（北）" },
+  { label: "北東", subHint: "方角（北東）" },
+  { label: "北西", subHint: "方角（北西）" },
+  { label: "小笠原", subHint: "海域・島名（小笠原）" },
+  { label: "八丈島", subHint: "海域・島名（八丈島）" },
+  { label: "御蔵島", subHint: "海域・島名（御蔵島）" },
   { label: "挨拶／こんにちは", subHint: "出会ったときの挨拶" },
   {
     label: "海の下の火山",
-    subHint: "朝倉教授の記録により最初から確定",
+    subHint: "海野教授の記録により最初から確定",
     isLockedInitial: true,
   },
   { label: "クジラの子ども", subHint: "子クジラを表す概念" },
@@ -368,6 +487,45 @@ export interface RecordedWaveformTrace {
 }
 
 const STORAGE_KEY_PLAYER_LABELS = "mm_workbench_player_word_labels_v2";
+const LAST_MISSION_PASSWORD = "last-mission";
+
+// 「クジラからの未知の言語を聞き取る」画面（last-mission 解除後）の4つのクジラ音声定義
+export const LAST_MISSION_WHALE_VOICES: {
+  id: string;
+  audioWordId: string;
+  code: string;
+  shortCode: string;
+  onomatopoeia: string;
+}[] = [
+  {
+    id: "last-voice-a",
+    audioWordId: "word-human-whale",
+    code: "クジラ音声A",
+    shortCode: "音声A",
+    onomatopoeia: "ド・ドーッカッカッ",
+  },
+  {
+    id: "last-voice-b",
+    audioWordId: "word-promise",
+    code: "クジラ音声B",
+    shortCode: "音声B",
+    onomatopoeia: "チ・トン・チ",
+  },
+  {
+    id: "last-voice-c",
+    audioWordId: "word-unknown-c",
+    code: "クジラ音声C",
+    shortCode: "音声C",
+    onomatopoeia: "ポ・ルル・トーン",
+  },
+  {
+    id: "last-voice-d",
+    audioWordId: "word-unknown-d",
+    code: "クジラ音声D",
+    shortCode: "音声D",
+    onomatopoeia: "タ・タン・ドーン",
+  },
+];
 
 interface AttemptLog {
   id: string;
@@ -382,7 +540,7 @@ interface AttemptLog {
 }
 
 interface WhaleSonarMobileAppProps {
-  words: CrypticWord[];
+  words: readonly Pick<CrypticWord, "id" | "symbol" | "meaning" | "soundPattern">[];
   grammar?: CrypticGrammar;
   standalone?: boolean;
 }
@@ -418,13 +576,37 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   // 狂気の深淵モード（画面全体の枠が赤くなり、日本語を全てあてはめた状態）
   const [isAbyssMode, setIsAbyssMode] = useState(false);
+  // 「狂気の深淵を覗く」ボタンを押した時の確認モーダル表示ステート
+  const [isAbyssConfirmOpen, setIsAbyssConfirmOpen] = useState(false);
+  // 「コード入力（last-mission）」から遷移するサブモード（"main" | "code_input" | "last_mission"）
+  const [subScreenMode, setSubScreenMode] = useState<
+    "main" | "code_input" | "last_mission"
+  >("main");
+  const [codeInputText, setCodeInputText] = useState("");
+  const [codeInputError, setCodeInputError] = useState("");
   // 3回のブラームホーンに合わせて画面を激しく揺らす演出ステート
   const [isAbyssShaking, setIsAbyssShaking] = useState(false);
   // 「1つ戻す」「クリア」ボタンを押した瞬間の発光ステート
   const [flashingActionBtn, setFlashingActionBtn] = useState<
     "backspace" | "clear" | null
   >(null);
+  // 「この音を選択する」ボタンを押した瞬間に1回だけ即座に光らせるステート
+  const [flashingSelectWordId, setFlashingSelectWordId] = useState<string | null>(
+    null
+  );
   const flashTimerRef = useRef<number | null>(null);
+  const selectWordFlashTimerRef = useRef<number | null>(null);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
+  const topMonitorRef = useRef<HTMLDivElement | null>(null);
+  const sequenceSentinelRef = useRef<HTMLDivElement | null>(null);
+  const phoneCardRef = useRef<HTMLDivElement | null>(null);
+  // 画面をスクロールして元の「発信するクリック音パターン」バーが上へ隠れたかどうか（iOS Safari / Android Chrome 全ブラウザ対応の fixed フローティング表示用）
+  const [isSequenceFloating, setIsSequenceFloating] = useState(false);
+  const [floatingBounds, setFloatingBounds] = useState<{
+    top: number;
+    left: number;
+    width: number;
+  } | null>(null);
   const iosHapticLabelRef = useRef<HTMLLabelElement | null>(null);
   const abyssShakeTimersRef = useRef<number[]>([]);
 
@@ -452,24 +634,56 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       playbackControllerRef.current?.abort();
       if (progressTimerRef.current !== null) cancelAnimationFrame(progressTimerRef.current);
       if (flashTimerRef.current !== null) clearTimeout(flashTimerRef.current);
+      if (selectWordFlashTimerRef.current !== null) clearTimeout(selectWordFlashTimerRef.current);
       abyssShakeTimersRef.current.forEach(clearTimeout);
     };
   }, []);
 
-  // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」の順で先頭に配置し、残りを番号順に配置）
-  const safeWords = React.useMemo(() => (Array.isArray(words) ? words : []), [words]);
+  // クリック音ボタンの表示順（確定済みの2語を「音#01: 海の下の火山」「音#02: 周囲を警戒せよ」、続いて「音#03: 集まれ」「音#04: 敵がいる」、#05以降はジャンルが固まらないよう分散させた sonarWords の順序で統一）
+  const safeWords = React.useMemo(() => {
+    const baseList = (Array.isArray(words) ? words : [])
+      .filter((w) => w.id !== "word-go-south")
+      .map((w) =>
+        w.id === "word-human-whale"
+          ? {
+              ...w,
+              soundPattern: "低音長打＋均等2連打（ド・ドーッカッカッ）",
+            }
+          : w
+      );
+    const byId = new Map(baseList.map((w) => [w.id, w]));
+    const canonicalOrdered = sonarWords.map((sw) => byId.get(sw.id) ?? sw);
+    const canonicalIds = new Set(sonarWords.map((sw) => sw.id));
+    const extras = baseList.filter((w) => !canonicalIds.has(w.id));
+    return [...canonicalOrdered, ...extras];
+  }, [words]);
   const orderedWords = React.useMemo(() => {
     const lockedOrder = ["word-subsea-volcano", "word-alert"];
     const locked = lockedOrder
       .map((id) => safeWords.find((w) => w.id === id))
-      .filter((w): w is CrypticWord => Boolean(w));
+      .filter((w): w is (typeof safeWords)[number] => Boolean(w));
     const unlocked = safeWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
     return [...locked, ...unlocked];
   }, [safeWords]);
 
-  // 各wordIdに対するボタン番号（例: "音 #01", "音 #02"...）と音響擬音ラベル（Hz表記を除去）を取得
+  // 各wordIdに対するボタン番号（例: "音 #01", "音 #02"... または "クジラ音声A"...）と音響擬音ラベル（Hz表記を除去）を取得
   const getWordButtonMeta = useCallback(
     (wordId: string) => {
+      const lastVoice = LAST_MISSION_WHALE_VOICES.find((v) => v.id === wordId);
+      if (lastVoice) {
+        const assignedJapanese = playerAssignedLabels[wordId] || "";
+        return {
+          code: lastVoice.code,
+          shortCode: lastVoice.shortCode,
+          onomatopoeia: lastVoice.onomatopoeia,
+          symbol: "🐋",
+          isLocked: false,
+          assignedJapanese,
+          trueMeaning: lastVoice.code,
+          audioWordId: lastVoice.audioWordId,
+        };
+      }
+
       const idx = orderedWords.findIndex((w) => w.id === wordId);
       const numStr = idx >= 0 ? String(idx + 1).padStart(2, "0") : "00";
       const wordObj = safeWords.find((w) => w.id === wordId);
@@ -485,11 +699,13 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
       return {
         code: `音 #${numStr}`,
+        shortCode: `#${numStr}`,
         onomatopoeia,
         symbol: wordObj?.symbol || "●●",
         isLocked,
         assignedJapanese,
         trueMeaning: wordObj ? wordObj.meaning : wordId,
+        audioWordId: wordId,
       };
     },
     [orderedWords, safeWords, playerAssignedLabels]
@@ -606,10 +822,19 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   // ==========================================
   const buildWaveformTrace = useCallback(
     (targetWordIds: string[], customTitle?: string): RecordedWaveformTrace => {
-      const timeline = buildAudioTimeline(targetWordIds);
-      const segments: TimelineWaveformSegment[] = timeline.segments.map((segment) => {
-        const meta = getWordButtonMeta(segment.wordId);
-        return { ...segment, buttonCode: meta.code, assignedLabel: meta.assignedJapanese || "未解明（？？？）" };
+      const audioWordIds = targetWordIds.map(
+        (id) => getWordButtonMeta(id).audioWordId
+      );
+      const timeline = buildAudioTimeline(audioWordIds);
+      const segments: TimelineWaveformSegment[] = timeline.segments.map((segment, idx) => {
+        const originalId = targetWordIds[idx] ?? segment.wordId;
+        const meta = getWordButtonMeta(originalId);
+        return {
+          ...segment,
+          wordId: originalId,
+          buttonCode: meta.code,
+          assignedLabel: meta.assignedJapanese || "未解明（？？？）",
+        };
       });
       const totalDurationMs = timeline.totalDurationMs;
       return {
@@ -941,7 +1166,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
   const playTrace = async (trace: RecordedWaveformTrace, sequenceIndices: number[] = []) => {
     if (!audioEngine) throw new Error("音声を利用できない");
-    const controller = new AbortController();
+    const controller = playbackControllerRef.current ?? new AbortController();
     playbackControllerRef.current = controller;
     const playback = await audioEngine.startTimeline(trace, controller.signal);
     if (!mountedRef.current) { playback.cancel(); return false; }
@@ -966,9 +1191,18 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
     return true;
   };
 
-  // 同時再生を防ぎ、失敗時も操作可能な状態に戻す。
-  const withPlayback = async (action: () => Promise<void>) => {
-    if (playbackBusyRef.current) return;
+  // 同時再生を防ぎ、失敗時も操作可能な状態に戻す（overrideInterrupt=true のときは進行中の単音再生を即座に切り替えて待ち時間をなくす）。
+  const withPlayback = async (action: () => Promise<void>, overrideInterrupt = false) => {
+    if (playbackBusyRef.current) {
+      if (!overrideInterrupt) return;
+      playbackControllerRef.current?.abort();
+      if (progressTimerRef.current !== null) {
+        cancelAnimationFrame(progressTimerRef.current);
+        progressTimerRef.current = null;
+      }
+    }
+    const runController = new AbortController();
+    playbackControllerRef.current = runController;
     playbackBusyRef.current = true;
     setIsPlaying(true);
     setPlaybackError("");
@@ -978,25 +1212,138 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
         setPlaybackError("音声を再生できなかった。もう一度再生を押して確認。");
       }
     } finally {
-      playbackBusyRef.current = false;
-      if (mountedRef.current) {
-        setIsPlaying(false);
-        setActivePlayingIndex(null);
-        setActiveWordId(null);
+      if (playbackControllerRef.current === runController) {
+        playbackBusyRef.current = false;
+        if (mountedRef.current) {
+          setIsPlaying(false);
+          setActivePlayingIndex(null);
+          setActiveWordId(null);
+        }
       }
     }
   };
 
-  const handleAddWordAndPlay = (wordId: string) => withPlayback(async () => {
-    setSelectedSequence((previous) => previous.length < 8 ? [...previous, wordId] : previous);
-    await playTrace(buildWaveformTrace([wordId]), selectedSequence.length < 8 ? [selectedSequence.length] : []);
-  });
+  // 「この音を選択する」ボタンを押した時：即座に1回光ってパターンへ登録し、単音再生を待つことなく連続選択も可能にする
+  const handleAddWordAndPlay = (wordId: string) => {
+    const currentLen = selectedSequence.length;
+    if (currentLen >= 8) return;
+    const nextIndex = currentLen;
+    setSelectedSequence((previous) =>
+      previous.length < 8 ? [...previous, wordId] : previous
+    );
+    setActivePlayingIndex(nextIndex);
+    setFlashingSelectWordId(wordId);
+    if (selectWordFlashTimerRef.current !== null) {
+      window.clearTimeout(selectWordFlashTimerRef.current);
+    }
+    selectWordFlashTimerRef.current = window.setTimeout(() => {
+      setFlashingSelectWordId(null);
+      selectWordFlashTimerRef.current = null;
+    }, 180);
+
+    return withPlayback(async () => {
+      await playTrace(buildWaveformTrace([wordId]), [nextIndex]);
+    }, true);
+  };
+
+  // フローティングバナーから上部の「波形モニター・クジラ行動観測・発信ボタン」へスムーズに戻る
+  const handleScrollToTopMonitor = () => {
+    if (topMonitorRef.current) {
+      topMonitorRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+  };
+
+  // iOS Safari / Android Chrome / PC すべてのブラウザで確実にフローティングバナーを表示するためのスクロール位置監視
+  useEffect(() => {
+    const updateFloatingState = () => {
+      if (assigningTargetWordId || subScreenMode !== "main") {
+        setIsSequenceFloating(false);
+        return;
+      }
+      const sentinel = sequenceSentinelRef.current;
+      const card = phoneCardRef.current;
+      if (!sentinel || !card) {
+        setIsSequenceFloating(false);
+        return;
+      }
+      const container = scrollContainerRef.current;
+      const topThreshold =
+        !standalone && container
+          ? Math.max(0, container.getBoundingClientRect().top)
+          : 0;
+      const sentinelRect = sentinel.getBoundingClientRect();
+      const cardRect = card.getBoundingClientRect();
+
+      if (sentinelRect.top < topThreshold + 4) {
+        setIsSequenceFloating(true);
+        setFloatingBounds({
+          top: topThreshold,
+          left: cardRect.left,
+          width: cardRect.width,
+        });
+      } else {
+        setIsSequenceFloating(false);
+      }
+    };
+
+    updateFloatingState();
+    const container = scrollContainerRef.current;
+    window.addEventListener("scroll", updateFloatingState, { passive: true });
+    window.addEventListener("resize", updateFloatingState);
+    container?.addEventListener("scroll", updateFloatingState, { passive: true });
+
+    return () => {
+      window.removeEventListener("scroll", updateFloatingState);
+      window.removeEventListener("resize", updateFloatingState);
+      container?.removeEventListener("scroll", updateFloatingState);
+    };
+  }, [assigningTargetWordId, subScreenMode, standalone]);
 
   const handlePreviewWordOnly = (e: React.MouseEvent, wordId: string, sequenceIndex?: number) => {
     e.stopPropagation();
     return withPlayback(async () => {
       await playTrace(buildWaveformTrace([wordId]), sequenceIndex === undefined ? [] : [sequenceIndex]);
     });
+  };
+
+  // 「クジラからの未知の言語を聞き取る」画面で「まとめて聞く」を押した時：音声A→B→C→Dを連続再生
+  const handlePlayAllLastMissionVoices = () =>
+    withPlayback(async () => {
+      const voiceIds = LAST_MISSION_WHALE_VOICES.map((v) => v.id);
+      const trace = buildWaveformTrace(
+        voiceIds,
+        "クジラからの未知の言語（音声A〜D 連続波形）"
+      );
+      await playTrace(
+        trace,
+        voiceIds.map((_, idx) => idx)
+      );
+    }, true);
+
+  // 「コード入力」フォーム送信処理（last-mission で解除）
+  const handleSubmitLastMissionCode = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (codeInputText.trim() === LAST_MISSION_PASSWORD) {
+      setCodeInputError("");
+      setSubScreenMode("last_mission");
+      const voiceIds = LAST_MISSION_WHALE_VOICES.map((v) => v.id);
+      setWaveformTrace(
+        buildWaveformTrace(
+          voiceIds,
+          "クジラからの未知の言語（音声A〜D 連続波形）"
+        )
+      );
+      setPlaybackProgressMs(null);
+      handleScrollToTopMonitor();
+    } else {
+      setCodeInputError("コードが正しくありません。");
+    }
   };
 
   // 「日本語をあてはめる」別画面を開く（開いた時にその音の波形も表示）
@@ -1223,8 +1570,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
   });
 
   // 解明済み（あてはめ済み）の語数カウント
-  const assignedCount = Object.keys(playerAssignedLabels).filter(
-    (k) => Boolean(playerAssignedLabels[k])
+  const assignedCount = orderedWords.filter((w) =>
+    Boolean(LOCKED_INITIAL_MEANINGS[w.id] || playerAssignedLabels[w.id])
   ).length;
 
   return (
@@ -1282,7 +1629,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
       )}
 
       {/* メインコンテンツ：📱 プレイヤー用モバイルアプリ画面 */}
-      <div className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6">
+      <div
+        ref={scrollContainerRef}
+        className="flex-1 overflow-y-auto bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 p-3 md:p-6"
+      >
           {/* 深淵モード発動時の3連シェイク＆赤色脈動アニメーション定義 ＋ iOS Safari 触覚振動トリガー */}
           <style>{`
             @keyframes abyss-quake {
@@ -1317,7 +1667,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
           <div className="mx-auto flex max-w-6xl flex-col lg:flex-row items-start justify-center gap-6">
             {/* 左（メイン）：スマホ実機サイズの音響解読＆行動観測アプリ */}
             <div
-              className={`w-full max-w-md mx-auto rounded-[28px] bg-slate-950 overflow-hidden flex flex-col transition-all duration-500 ${
+              ref={phoneCardRef}
+              className={`w-full max-w-md mx-auto rounded-[28px] bg-slate-950 flex flex-col transition-all duration-500 ${
                 isAbyssMode
                   ? "border-4 border-red-600 ring-4 ring-red-500/40 shadow-[0_0_50px_rgba(220,38,38,0.65)]"
                   : "border-2 border-cyan-500/30 shadow-2xl shadow-cyan-950/50"
@@ -1325,7 +1676,8 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
             >
               {/* スマホアプリ上部ステータス＆ヘッダー */}
               <div
-                className={`px-4 py-3 border-b flex items-center justify-between transition-colors duration-500 ${
+                ref={topMonitorRef}
+                className={`rounded-t-[24px] px-4 py-3 border-b flex items-center justify-between transition-colors duration-500 ${
                   isAbyssMode
                     ? "bg-gradient-to-r from-red-950 via-rose-950/80 to-red-950 border-red-500/50"
                     : "bg-gradient-to-r from-slate-900 via-cyan-950/60 to-slate-900 border-cyan-500/20"
@@ -1407,7 +1759,9 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                           className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white transition"
                         >
                           <ArrowLeft className="h-3.5 w-3.5 text-cyan-400" />
-                          クリック音一覧に戻る
+                          {subScreenMode === "last_mission"
+                            ? "未知の言語聞き取り画面に戻る"
+                            : "クリック音一覧に戻る"}
                         </button>
                         <span className="text-[11px] font-bold text-amber-300">
                           日本語対応画面
@@ -1489,14 +1843,24 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                             const isSelectedHere =
                               targetMeta.assignedJapanese === cand.label;
 
-                            // 他のボタンにすでにあてはめられているかチェック
+                            // 他のボタンにすでにあてはめられているかチェック（同じ画面グループ内で比較）
+                            const isLastMissionTarget =
+                              LAST_MISSION_WHALE_VOICES.some(
+                                (v) => v.id === assigningTargetWordId
+                              );
                             const assignedOtherWordId = Object.keys(
                               playerAssignedLabels
-                            ).find(
-                              (wId) =>
-                                wId !== assigningTargetWordId &&
-                                playerAssignedLabels[wId] === cand.label
-                            );
+                            ).find((wId) => {
+                              if (wId === assigningTargetWordId) return false;
+                              const isOtherLastMission =
+                                LAST_MISSION_WHALE_VOICES.some(
+                                  (v) => v.id === wId
+                                );
+                              if (isLastMissionTarget !== isOtherLastMission) {
+                                return false;
+                              }
+                              return playerAssignedLabels[wId] === cand.label;
+                            });
                             const otherMeta = assignedOtherWordId
                               ? getWordButtonMeta(assignedOtherWordId)
                               : null;
@@ -1550,6 +1914,304 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     </div>
                   );
                 })()
+              ) : subScreenMode === "code_input" ? (
+                /* ------------------------------------------
+                   【別画面】コード入力画面（last-mission 解除用）
+                   ------------------------------------------ */
+                <div className="p-4 bg-slate-950 flex-1 flex flex-col space-y-5 rounded-b-[24px]">
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSubScreenMode("main");
+                        setCodeInputError("");
+                      }}
+                      className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white transition"
+                    >
+                      <ArrowLeft className="h-3.5 w-3.5 text-cyan-400" />
+                      元の画面に戻る
+                    </button>
+                    <span className="text-[11px] font-bold text-cyan-300">
+                      コード入力画面
+                    </span>
+                  </div>
+
+                  <div className="rounded-2xl border border-cyan-500/40 bg-slate-900/90 p-5 space-y-4 shadow-lg">
+                    <div className="flex flex-col items-center text-center space-y-2">
+                      <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-cyan-500/15 border border-cyan-500/40 text-cyan-400">
+                        <KeyRound className="h-5 w-5" />
+                      </div>
+                      <h3 className="text-sm font-extrabold text-white">
+                        クジラからの未知の言語を聞き取る
+                      </h3>
+                      <p className="text-xs text-slate-300 leading-relaxed">
+                        移行するためのアクセスコードを入力してください。
+                      </p>
+                    </div>
+
+                    <form onSubmit={handleSubmitLastMissionCode} className="space-y-3.5">
+                      <div className="space-y-1.5">
+                        <label className="block text-xs font-bold text-cyan-300">
+                          アクセスコード
+                        </label>
+                        <input
+                          type="text"
+                          autoCapitalize="none"
+                          autoCorrect="off"
+                          spellCheck={false}
+                          value={codeInputText}
+                          onChange={(e) => {
+                            setCodeInputText(e.target.value);
+                            if (codeInputError) setCodeInputError("");
+                          }}
+                          placeholder="コードを入力..."
+                          autoFocus
+                          className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3.5 py-2.5 text-sm text-white placeholder-slate-500 focus:border-cyan-400 focus:outline-none focus:ring-1 focus:ring-cyan-400 font-mono"
+                        />
+                      </div>
+
+                      {codeInputError && (
+                        <div className="flex items-center gap-1.5 rounded-xl border border-rose-500/40 bg-rose-950/40 px-3 py-2 text-xs font-bold text-rose-300">
+                          <AlertCircle className="h-4 w-4 shrink-0 text-rose-400" />
+                          <span>{codeInputError}</span>
+                        </div>
+                      )}
+
+                      <button
+                        type="submit"
+                        className="w-full rounded-xl bg-gradient-to-r from-cyan-600 via-teal-500 to-indigo-600 py-3 px-4 text-xs font-extrabold text-white shadow-lg shadow-cyan-600/30 hover:from-cyan-500 hover:to-indigo-500 active:scale-[0.99] transition flex items-center justify-center gap-2"
+                      >
+                        <KeyRound className="h-4 w-4" />
+                        コード認証して聞き取り画面へ移行
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              ) : subScreenMode === "last_mission" ? (
+                /* ------------------------------------------
+                   【別画面】クジラからの未知の言語を聞き取る（last-mission 解除後）
+                   ------------------------------------------ */
+                <div className="p-3.5 bg-slate-950 flex-1 flex flex-col space-y-3.5 rounded-b-[24px]">
+                  {/* 上部ナビゲーション */}
+                  <div className="flex items-center justify-between border-b border-slate-800 pb-2.5">
+                    <button
+                      type="button"
+                      onClick={() => setSubScreenMode("main")}
+                      className="flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-bold text-slate-200 hover:bg-slate-800 hover:text-white transition"
+                    >
+                      <ArrowLeft className="h-3.5 w-3.5 text-cyan-400" />
+                      通常の解読画面に戻る
+                    </button>
+                    <span className="rounded-full bg-cyan-950 border border-cyan-500/50 px-2.5 py-0.5 text-[10px] font-extrabold text-cyan-300">
+                      🐋 クジラからの未知の言語を聞き取る
+                    </span>
+                  </div>
+
+                  {/* ① 時間変化で形が残る波形モニター */}
+                  <div className="rounded-xl border border-cyan-500/30 bg-slate-950 overflow-hidden">
+                    <div className="flex items-center justify-between px-2.5 py-1.5 border-b border-slate-800/80 bg-slate-900/80">
+                      <div className="flex items-center gap-1.5 text-[10px] font-bold text-cyan-300">
+                        <Activity className="h-3.5 w-3.5 text-cyan-400" />
+                        <span>
+                          {waveformTrace
+                            ? waveformTrace.title
+                            : "時間変化・音響波形ログ（再生後も形が残ります）"}
+                        </span>
+                      </div>
+                      {waveformTrace && (
+                        <button
+                          type="button"
+                          onClick={handleReplayLastWaveform}
+                          disabled={isPlaying}
+                          className="flex items-center gap-1 rounded bg-cyan-950 border border-cyan-600/50 px-2 py-0.5 text-[10px] font-bold text-cyan-200 hover:bg-cyan-800 disabled:opacity-40 transition"
+                        >
+                          <Play className="h-2.5 w-2.5" />
+                          もう一度再生
+                        </button>
+                      )}
+                    </div>
+
+                    <canvas
+                      ref={canvasRef}
+                      data-playback-ms={playbackProgressMs ?? ""}
+                      data-duration-ms={waveformTrace?.totalDurationMs ?? 0}
+                      width={400}
+                      height={
+                        waveformTrace && waveformTrace.segments.length >= 4
+                          ? 216
+                          : 112
+                      }
+                      className={`w-full block transition-all duration-200 ${
+                        waveformTrace && waveformTrace.segments.length >= 4
+                          ? "h-52"
+                          : "h-28"
+                      }`}
+                    />
+                  </div>
+
+                  {/* ② 「まとめて聞く」連続再生ボタン（クジラ音声A → B → C → D） */}
+                  <div className="rounded-xl border border-cyan-500/40 bg-slate-900/80 p-3 space-y-2.5">
+                    <div className="text-[11px] font-bold text-cyan-200 flex items-center justify-between">
+                      <span>受信したクジラからの4つのクリック音（A〜D）</span>
+                      <span className="text-[10px] font-mono text-slate-400">
+                        4語連続メッセージ
+                      </span>
+                    </div>
+
+                    {/* 4語の並びプレビュー */}
+                    <div className="rounded-lg border border-slate-800 bg-slate-950/90 p-2 flex flex-wrap items-center gap-1.5">
+                      {LAST_MISSION_WHALE_VOICES.map((voice, index) => {
+                        const meta = getWordButtonMeta(voice.id);
+                        const isCurrentStep =
+                          activeWordId === voice.id || activePlayingIndex === index;
+                        return (
+                          <React.Fragment key={voice.id}>
+                            <button
+                              type="button"
+                              onClick={(e) =>
+                                handlePreviewWordOnly(e, voice.id, index)
+                              }
+                              className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
+                                isCurrentStep
+                                  ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
+                                  : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
+                              }`}
+                            >
+                              <span className="text-[10px] font-mono text-cyan-300">
+                                {voice.shortCode}:
+                              </span>
+                              <span>
+                                {meta.assignedJapanese
+                                  ? meta.assignedJapanese
+                                  : `『${voice.onomatopoeia}』`}
+                              </span>
+                            </button>
+                            {index < LAST_MISSION_WHALE_VOICES.length - 1 && (
+                              <span
+                                className={`text-xs font-bold ${
+                                  index % 2 === 1
+                                    ? "text-cyan-400 px-1"
+                                    : "text-slate-500"
+                                }`}
+                              >
+                                {index % 2 === 1 ? "｜" : "＋"}
+                              </span>
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+
+                    <button
+                      type="button"
+                      onClick={handlePlayAllLastMissionVoices}
+                      disabled={isPlaying}
+                      className="w-full rounded-xl bg-gradient-to-r from-cyan-600 via-teal-500 to-indigo-600 py-3 px-4 text-sm font-extrabold text-white shadow-lg shadow-cyan-600/30 hover:from-cyan-500 hover:to-indigo-500 active:scale-[0.99] disabled:opacity-40 transition flex items-center justify-center gap-2"
+                    >
+                      <Volume2
+                        className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
+                      />
+                      {isPlaying ? "連続再生中..." : "まとめて聞く"}
+                    </button>
+                  </div>
+
+                  {/* ③ クジラ音声A〜D の個別ボタン（これまでのボタン同様のデザインで日本語あてはめ可能） */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-[11px] font-bold text-slate-200">
+                        クジラ音声A〜D（個別に音を聴く・日本語をあてはめる）
+                      </span>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      {LAST_MISSION_WHALE_VOICES.map((voice, index) => {
+                        const meta = getWordButtonMeta(voice.id);
+                        const isCurrentPlaying = activeWordId === voice.id;
+                        return (
+                          <div
+                            key={voice.id}
+                            className={`group relative rounded-xl border p-2.5 text-left transition select-none flex flex-col justify-between ${
+                              isCurrentPlaying
+                                ? "border-cyan-300 bg-cyan-950/90 shadow-[0_0_16px_rgba(34,211,238,0.45)] ring-2 ring-cyan-300"
+                                : meta.assignedJapanese
+                                ? "border-emerald-500/40 bg-slate-900/95"
+                                : "border-slate-800 bg-slate-900/90"
+                            }`}
+                          >
+                            <div>
+                              <div className="flex items-center justify-between gap-1">
+                                <span className="rounded bg-slate-950 border border-cyan-700/70 px-1.5 py-0.5 font-mono text-[10px] font-bold text-cyan-300">
+                                  {voice.code}
+                                </span>
+
+                                <button
+                                  type="button"
+                                  onClick={(e) =>
+                                    handlePreviewWordOnly(e, voice.id, index)
+                                  }
+                                  className="rounded-lg bg-slate-800/90 px-1.5 py-1 text-[10px] font-bold text-cyan-300 hover:bg-cyan-600 hover:text-white transition flex items-center gap-1"
+                                >
+                                  <Volume2 className="h-3 w-3" />
+                                  試聴
+                                </button>
+                              </div>
+
+                              {/* カタカナの擬音表示 */}
+                              <div className="mt-1.5 text-xs font-extrabold text-amber-200">
+                                『{voice.onomatopoeia}』
+                              </div>
+
+                              {/* あてはめられた日本語の表示エリア */}
+                              <div className="mt-1">
+                                {meta.assignedJapanese ? (
+                                  <div className="inline-flex items-center gap-1 rounded-md bg-emerald-500/20 border border-emerald-500/40 px-2 py-0.5 text-xs font-extrabold text-emerald-200">
+                                    <Tag className="h-3 w-3 text-emerald-400 shrink-0" />
+                                    {meta.assignedJapanese}
+                                  </div>
+                                ) : (
+                                  <div className="text-[11px] font-bold text-slate-500">
+                                    【未解明：？？？】
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+
+                            {/* 下段：この音を聴く ＆ 日本語をあてはめる */}
+                            <div className="mt-2.5 pt-2 border-t border-slate-800/80 space-y-1.5">
+                              <button
+                                type="button"
+                                onClick={(e) =>
+                                  handlePreviewWordOnly(e, voice.id, index)
+                                }
+                                className="w-full rounded-lg py-1.5 px-2 text-[11px] font-extrabold bg-cyan-600/90 text-white hover:bg-cyan-500 border border-cyan-400/50 transition flex items-center justify-center gap-1 shadow-sm"
+                              >
+                                <Volume2 className="h-3.5 w-3.5 shrink-0" />
+                                {voice.code}を聞く
+                              </button>
+
+                              <button
+                                type="button"
+                                onClick={(e) =>
+                                  handleOpenAssignScreen(e, voice.id)
+                                }
+                                className={`w-full rounded-lg py-1 px-2 text-[10px] font-bold transition flex items-center justify-center gap-1 ${
+                                  meta.assignedJapanese
+                                    ? "bg-slate-800 text-emerald-300 hover:bg-slate-700 border border-emerald-500/30"
+                                    : "bg-indigo-600/30 text-indigo-200 hover:bg-indigo-600 hover:text-white border border-indigo-500/40"
+                                }`}
+                              >
+                                <Tag className="h-3 w-3" />
+                                {meta.assignedJapanese
+                                  ? "日本語を変更する"
+                                  : "日本語をあてはめる"}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                </div>
               ) : (
                 /* ------------------------------------------
                    【メイン画面】波形モニター・クジラ行動表示・クリック音パッド
@@ -1617,10 +2279,10 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         <div className="text-center space-y-1 py-2">
                           <div className="text-xs font-bold text-cyan-300 flex items-center justify-center gap-2">
                             <Waves className="h-4 w-4 animate-bounce" />
-                            海中にクリック音パターンを放流しています……
+                            クリック音パターンのシミュレーションを実行中……
                           </div>
                           <p className="text-[11px] text-cyan-400/80">
-                            クジラたちの反応をソナーで観測中……
+                            クジラたちの反応を解析しています……
                           </p>
                         </div>
                       ) : currentOutcome ? (
@@ -1671,109 +2333,15 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                             【クジラの行動観測モニター】
                           </div>
                           <p className="text-[11px] text-slate-500 leading-relaxed">
-                            クリック音ボタンを組み合わせて「海中にクリック音を流す」を押すと、
+                            クリック音ボタンを組み合わせて「シミュレーション開始」を押すと、
                             <br />
                             ここにクジラの行動が文字で表示されます。
                           </p>
                         </div>
                       )}
                     </div>
-                  </div>
 
-                  {/* ② 組み立て中のクリック音パターン（シーケンスバー） ＆ 発信ボタン */}
-                  <div className="p-3.5 bg-slate-950 border-b border-slate-800 space-y-2.5">
-                    <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
-                        <span>発信するクリック音パターン</span>
-                        <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
-                          {selectedSequence.length} / 8語（2語ごと判定）
-                        </span>
-                      </span>
-
-                      <div className="flex items-center gap-1.5">
-                        <button
-                          onClick={handleBackspace}
-                          disabled={
-                            (selectedSequence.length === 0 &&
-                              flashingActionBtn !== "backspace") ||
-                            isPlaying
-                          }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
-                            flashingActionBtn === "backspace"
-                              ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
-                          }`}
-                        >
-                          <Delete className="h-3 w-3" />
-                          1つ戻す
-                        </button>
-                        <button
-                          onClick={handleClear}
-                          disabled={
-                            (selectedSequence.length === 0 &&
-                              flashingActionBtn !== "clear") ||
-                            isPlaying
-                          }
-                          className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
-                            flashingActionBtn === "clear"
-                              ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.9)]"
-                              : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
-                          }`}
-                        >
-                          <RotateCcw className="h-3 w-3" />
-                          クリア
-                        </button>
-                      </div>
-                    </div>
-
-                    {/* 選択された音のスロット表示（あてはめた日本語があればそれを表示） */}
-                    <div className="min-h-[46px] rounded-xl border border-slate-800 bg-slate-900/80 p-2 flex flex-wrap items-center gap-1.5">
-                      {selectedSequence.length === 0 ? (
-                        <span className="text-xs text-slate-500 px-1">
-                          下のクリック音ボタンをタップしてパターンを作ってください
-                        </span>
-                      ) : (
-                        selectedSequence.map((wId, index) => {
-                          const meta = getWordButtonMeta(wId);
-                          const isCurrentStep = activePlayingIndex === index;
-                          return (
-                            <React.Fragment key={`${wId}-${index}`}>
-                              <button
-                                onClick={(e) => handlePreviewWordOnly(e, wId, index)}
-                                className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
-                                  isCurrentStep
-                                    ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
-                                    : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
-                                }`}
-                                title="タップしてこの音と波形を確認"
-                              >
-                                <span className="text-[10px] font-mono text-cyan-300">
-                                  {index + 1}.
-                                </span>
-                                <span>
-                                  {meta.assignedJapanese
-                                    ? `${meta.assignedJapanese}`
-                                    : `${meta.code}（${meta.onomatopoeia}）`}
-                                </span>
-                              </button>
-                              {index < selectedSequence.length - 1 && (
-                                <span
-                                  className={`text-xs font-bold ${
-                                    index % 2 === 1
-                                      ? "text-cyan-400 px-1"
-                                      : "text-slate-500"
-                                  }`}
-                                >
-                                  {index % 2 === 1 ? "｜" : "＋"}
-                                </span>
-                              )}
-                            </React.Fragment>
-                          );
-                        })
-                      )}
-                    </div>
-
-                    {/* 発信（再生＆判定）メインボタン */}
+                    {/* ★クジラの行動観測モニターのすぐ下に設置：シミュレーション開始（再生＆判定）メインボタン★ */}
                     <button
                       onClick={() => handleTransmitSequence()}
                       disabled={selectedSequence.length === 0 || isPlaying}
@@ -1783,16 +2351,162 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         className={`h-5 w-5 ${isPlaying ? "animate-ping" : ""}`}
                       />
                       {isPlaying
-                        ? "クリック音を海中に放流中..."
-                        : "海中にクリック音を流す（発信）"}
+                        ? "シミュレーション実行中..."
+                        : "シミュレーション開始"}
                     </button>
                   </div>
 
-                  {/* ③ クリック音ボタン一覧（日本語あてはめボタン付き） */}
-                  <div className="p-3.5 space-y-2.5 bg-slate-950">
+                  {/* ② 常時見えるフローティングバナー：発信するクリック音パターン（シーケンスバー） ＆ TOPへ戻るボタン */}
+                  {(() => {
+                    const renderSequenceBannerContent = (isOverlay: boolean) => (
+                      <>
+                        <div className="flex flex-wrap items-center justify-between gap-1.5">
+                          <span className="text-[11px] font-bold text-cyan-300 flex items-center gap-1.5">
+                            <span>発信するクリック音パターン</span>
+                            <span className="rounded bg-slate-900 px-1.5 py-0.5 text-[10px] font-mono text-slate-400">
+                              {selectedSequence.length} / 8語（2語ごと判定）
+                            </span>
+                          </span>
+
+                          <div className="flex items-center gap-1">
+                            <button
+                              type="button"
+                              onClick={handleBackspace}
+                              disabled={
+                                (selectedSequence.length === 0 &&
+                                  flashingActionBtn !== "backspace") ||
+                                isPlaying
+                              }
+                              className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
+                                flashingActionBtn === "backspace"
+                                  ? "border-cyan-200 bg-cyan-400 text-slate-950 font-extrabold ring-2 ring-cyan-300 shadow-[0_0_16px_rgba(34,211,238,0.9)]"
+                                  : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
+                              }`}
+                            >
+                              <Delete className="h-3 w-3" />
+                              1つ戻す
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleClear}
+                              disabled={
+                                (selectedSequence.length === 0 &&
+                                  flashingActionBtn !== "clear") ||
+                                isPlaying
+                              }
+                              className={`flex items-center gap-1 rounded-md border px-2 py-1 text-[11px] ${
+                                flashingActionBtn === "clear"
+                                  ? "border-amber-200 bg-amber-400 text-slate-950 font-extrabold ring-2 ring-amber-300 shadow-[0_0_16px_rgba(251,191,36,0.9)]"
+                                  : "border-slate-700 bg-slate-900 text-slate-300 hover:text-white transition-colors duration-150 disabled:opacity-40"
+                              }`}
+                            >
+                              <RotateCcw className="h-3 w-3" />
+                              クリア
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleScrollToTopMonitor}
+                              className="flex items-center gap-1 rounded-md border border-cyan-500/60 bg-cyan-950/90 px-2 py-1 text-[11px] font-bold text-cyan-200 hover:bg-cyan-800 hover:text-white transition"
+                              title="波形モニター・クジラ行動観測・発信ボタンがある画面上部へ戻ります"
+                            >
+                              <ArrowUp className="h-3 w-3 text-cyan-300" />
+                              TOPへ戻る
+                            </button>
+                          </div>
+                        </div>
+
+                        {/* 選択された音のスロット表示（あてはめた日本語があればそれを表示） */}
+                        <div className="min-h-[44px] rounded-xl border border-slate-800 bg-slate-900/90 p-2 flex flex-wrap items-center gap-1.5">
+                          {selectedSequence.length === 0 ? (
+                            <span className="text-xs text-slate-500 px-1">
+                              下の「この音を選択する」を押してパターンを作ってください
+                            </span>
+                          ) : (
+                            selectedSequence.map((wId, index) => {
+                              const meta = getWordButtonMeta(wId);
+                              const isCurrentStep = activePlayingIndex === index;
+                              return (
+                                <React.Fragment key={`${wId}-${index}`}>
+                                  <button
+                                    type="button"
+                                    onClick={(e) => handlePreviewWordOnly(e, wId, index)}
+                                    className={`rounded-lg px-2 py-1 text-xs font-bold transition flex items-center gap-1 ${
+                                      isCurrentStep
+                                        ? "bg-cyan-400 text-slate-950 ring-2 ring-cyan-200 scale-105 shadow-lg"
+                                        : "bg-indigo-950/90 border border-indigo-500/50 text-indigo-100 hover:bg-indigo-900"
+                                    }`}
+                                    title={
+                                      isOverlay
+                                        ? "フローティングバナー：タップしてこの音と波形を確認"
+                                        : "タップしてこの音と波形を確認"
+                                    }
+                                  >
+                                    <span className="text-[10px] font-mono text-cyan-300">
+                                      {index + 1}.
+                                    </span>
+                                    <span>
+                                      {meta.assignedJapanese
+                                        ? `${meta.shortCode} ${meta.assignedJapanese}`
+                                        : `${meta.shortCode}（${meta.onomatopoeia}）`}
+                                    </span>
+                                  </button>
+                                  {index < selectedSequence.length - 1 && (
+                                    <span
+                                      className={`text-xs font-bold ${
+                                        index % 2 === 1
+                                          ? "text-cyan-400 px-1"
+                                          : "text-slate-500"
+                                      }`}
+                                    >
+                                      {index % 2 === 1 ? "｜" : "＋"}
+                                    </span>
+                                  )}
+                                </React.Fragment>
+                              );
+                            })
+                          )}
+                        </div>
+                      </>
+                    );
+
+                    return (
+                      <>
+                        {/* 元の位置のバー（ここを通り過ぎてスクロールすると fixed フローティングバナーが出現） */}
+                        <div
+                          ref={sequenceSentinelRef}
+                          data-testid="sequence-banner-inline"
+                          className="p-3 bg-slate-950 border-b border-cyan-500/40 space-y-2"
+                        >
+                          {renderSequenceBannerContent(false)}
+                        </div>
+
+                        {/* iOS Safari / Android Chrome / PC 全ブラウザ対応：スクロール時に画面最上部へ完全固定されるフローティングバナー */}
+                        {isSequenceFloating && (
+                          <div
+                            data-testid="sequence-banner-floating"
+                            style={
+                              floatingBounds
+                                ? {
+                                    top: `${floatingBounds.top}px`,
+                                    left: `${floatingBounds.left}px`,
+                                    width: `${floatingBounds.width}px`,
+                                  }
+                                : { top: 0, left: 0, right: 0 }
+                            }
+                            className="fixed z-50 p-3 bg-slate-950/95 backdrop-blur-md border-b-2 border-x border-cyan-400/70 rounded-b-2xl shadow-[0_12px_32px_rgba(2,6,23,0.95)] space-y-2"
+                          >
+                            {renderSequenceBannerContent(true)}
+                          </div>
+                        )}
+                      </>
+                    );
+                  })()}
+
+                  {/* ③ クリック音ボタン一覧（「この音を選択する」ボタン ＆ 「日本語をあてはめる」ボタン） */}
+                  <div className="p-3.5 space-y-2.5 bg-slate-950 rounded-b-[24px]">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-bold text-slate-200">
-                        クリック音ボタン（タップで音を鳴らして追加）
+                        クリック音一覧（「この音を選択する」でパターンに追加）
                       </span>
                       <span className="text-[10px] text-amber-300">
                         「日本語をあてはめる」で意味を記録できます。
@@ -1801,28 +2515,20 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
 
                     <div className="grid grid-cols-2 gap-2">
                       {orderedWords.map((w) => {
-                        const isActive = activeWordId === w.id;
+                        const isSelectFlashing = flashingSelectWordId === w.id;
                         const meta = getWordButtonMeta(w.id);
 
                         return (
                           <div
                             key={w.id}
-                            onClick={() => handleAddWordAndPlay(w.id)}
-                            role="button"
-                            tabIndex={0}
-                            onKeyDown={(e) => {
-                              if (e.key === "Enter" || e.key === " ") {
-                                handleAddWordAndPlay(w.id);
-                              }
-                            }}
-                            className={`group relative rounded-xl border p-2.5 text-left transition cursor-pointer select-none flex flex-col justify-between ${
-                              isActive
-                                ? "border-cyan-400 bg-cyan-950/80 shadow-md shadow-cyan-500/20 ring-1 ring-cyan-400"
+                            className={`group relative rounded-xl border p-2.5 text-left transition select-none flex flex-col justify-between ${
+                              isSelectFlashing
+                                ? "border-cyan-300 bg-cyan-950/90 shadow-[0_0_16px_rgba(34,211,238,0.45)] ring-2 ring-cyan-300"
                                 : meta.isLocked
-                                ? "border-amber-500/40 bg-slate-900/95 hover:border-amber-400"
+                                ? "border-amber-500/40 bg-slate-900/95"
                                 : meta.assignedJapanese
-                                ? "border-emerald-500/40 bg-slate-900/95 hover:border-emerald-400"
-                                : "border-slate-800 bg-slate-900/90 hover:border-cyan-500/50 hover:bg-slate-900"
+                                ? "border-emerald-500/40 bg-slate-900/95"
+                                : "border-slate-800 bg-slate-900/90"
                             }`}
                           >
                             {/* 上段：音響番号 ＋ 試聴アイコン */}
@@ -1870,12 +2576,26 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                               </div>
                             </div>
 
-                            {/* 下段：「日本語をあてはめる」別画面遷移ボタン（確定2語は確定済表示） */}
-                            <div className="mt-2 pt-1.5 border-t border-slate-800/80">
+                            {/* 下段：「この音を選択する」専用ボタン ＋ 「日本語をあてはめる」別画面遷移ボタン */}
+                            <div className="mt-2.5 pt-2 border-t border-slate-800/80 space-y-1.5">
+                              <button
+                                type="button"
+                                onClick={() => handleAddWordAndPlay(w.id)}
+                                disabled={selectedSequence.length >= 8}
+                                className={`w-full rounded-lg py-1.5 px-2 text-[11px] font-extrabold transition flex items-center justify-center gap-1 shadow-sm disabled:opacity-40 ${
+                                  isSelectFlashing
+                                    ? "bg-cyan-300 text-slate-950 ring-2 ring-cyan-100 shadow-[0_0_14px_rgba(34,211,238,0.9)]"
+                                    : "bg-cyan-600/90 text-white hover:bg-cyan-500 border border-cyan-400/50"
+                                }`}
+                              >
+                                <Plus className="h-3.5 w-3.5 shrink-0" />
+                                この音を選択する
+                              </button>
+
                               {meta.isLocked ? (
-                                <div className="text-[10px] font-semibold text-amber-400/90 flex items-center gap-1">
+                                <div className="text-[10px] font-semibold text-amber-400/90 flex items-center justify-center gap-1 py-0.5">
                                   <CheckCircle2 className="h-3 w-3 shrink-0" />
-                                  朝倉教授記録により確定
+                                  海野教授記録により確定
                                 </div>
                               ) : (
                                 <button
@@ -1901,11 +2621,11 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       })}
                     </div>
 
-                    {/* アプリ画面の一番下：狂気の深淵ボタン */}
-                    <div className="pt-3 border-t border-slate-800/80">
+                    {/* アプリ画面の一番下：狂気の深淵ボタン ＆ コード入力ボタン */}
+                    <div className="pt-3 border-t border-slate-800/80 space-y-2.5">
                       <button
                         type="button"
-                        onClick={handleEnterAbyssMode}
+                        onClick={() => setIsAbyssConfirmOpen(true)}
                         className={`w-full rounded-xl border px-3 py-3 text-xs font-extrabold tracking-wide transition-all duration-300 flex items-center justify-center gap-2 ${
                           isAbyssMode
                             ? "border-red-500 bg-gradient-to-r from-red-950 via-red-900/90 to-red-950 text-red-100 shadow-lg shadow-red-950/90 ring-1 ring-red-400/60"
@@ -1915,8 +2635,59 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                         <Eye className="h-4 w-4 shrink-0 text-red-400" />
                         <span>狂気の深淵を覗き込み、クジラの言語をより理解する</span>
                       </button>
+
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCodeInputError("");
+                          setSubScreenMode("code_input");
+                          handleScrollToTopMonitor();
+                        }}
+                        className="w-full rounded-xl border border-cyan-500/40 bg-slate-900/90 px-3 py-2.5 text-xs font-extrabold tracking-wide text-cyan-200 hover:border-cyan-400 hover:bg-cyan-950/70 hover:text-white transition flex items-center justify-center gap-2 shadow-sm"
+                      >
+                        <KeyRound className="h-4 w-4 shrink-0 text-cyan-400" />
+                        <span>コード入力</span>
+                      </button>
                     </div>
                   </div>
+
+                  {/* 「狂気の深淵を覗く」確認モーダル（誤押し防止） */}
+                  {isAbyssConfirmOpen && (
+                    <div className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/85 backdrop-blur-sm p-4">
+                      <div
+                        role="dialog"
+                        aria-modal="true"
+                        className="w-full max-w-sm rounded-2xl border-2 border-red-500/70 bg-slate-950 p-5 shadow-[0_0_40px_rgba(220,38,38,0.5)] space-y-4"
+                      >
+                        <div className="flex items-center gap-2 text-red-400 font-extrabold text-sm">
+                          <Eye className="h-5 w-5 shrink-0 text-red-400" />
+                          <span>狂気の深淵の確認</span>
+                        </div>
+                        <p className="text-xs text-slate-100 leading-relaxed font-medium">
+                          狂気の深淵を覗き込み、クジラの言語をより理解します。検討時間が追加されますのでGMにもお知らせください。本当によろしいですか？
+                        </p>
+                        <div className="grid grid-cols-2 gap-2.5 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => setIsAbyssConfirmOpen(false)}
+                            className="rounded-xl border border-slate-700 bg-slate-900 py-2.5 px-4 text-xs font-extrabold text-slate-200 hover:bg-slate-800 hover:text-white transition"
+                          >
+                            戻る
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsAbyssConfirmOpen(false);
+                              handleEnterAbyssMode();
+                            }}
+                            className="rounded-xl border border-red-400/70 bg-gradient-to-r from-red-700 via-red-600 to-rose-700 py-2.5 px-4 text-xs font-extrabold text-white shadow-lg shadow-red-900/50 hover:from-red-600 hover:to-rose-600 transition"
+                          >
+                            覗く
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </>
               )}
             </div>
@@ -1973,7 +2744,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-400 leading-relaxed">
-                    初期状態では朝倉教授が示した<strong>『ゴゴゴゴ…＝海の下の火山』『ドォン…ドォン…＝周囲を警戒せよ』の2語のみ確定</strong>しており、残りの22語はプレイヤーが実験しながら別画面で日本語をあてはめます。
+                    初期状態では海野教授が示した<strong>『ゴゴゴゴ…＝海の下の火山』『ドォン…ドォン…＝周囲を警戒せよ』の2語のみ確定</strong>しており、残りの22語はプレイヤーが実験しながら別画面で日本語をあてはめます。
                   </p>
                   <div className="grid grid-cols-2 gap-2">
                     <button
@@ -2037,7 +2808,7 @@ export const WhaleSonarMobileApp: React.FC<WhaleSonarMobileAppProps> = ({
                       },
                       {
                         label: "⑤「人間とクジラ」＋「約束」",
-                        sub: "ド・ドーン・カッカッ ＋ チ・トン・チ ➔『ズジーズ・ズ/カッカッというコーダが返ってきた』",
+                        sub: "ド・ドーッカッカッ ＋ チ・トン・チ ➔『ズジーズ・ズ/カッカッというコーダが返ってきた』",
                         seq: ["word-human-whale", "word-promise"],
                         color:
                           "border-pink-500/40 bg-pink-950/30 hover:bg-pink-900/50 text-pink-200",

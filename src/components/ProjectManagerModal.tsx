@@ -1,11 +1,14 @@
 import { isBuiltinProject, BUILTIN_SCENARIO_ID } from "@/scenarios/catalog";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { MMProject } from "@/types/schema";
+import { isProjectJson } from "@/utils/projectJson";
 import {
   createEmptyProject,
   saveProjectToStorage,
   deleteProjectFromStorage,
   exportProjectToJsonFile,
+  exportUnreadableProjectsToJsonFile,
+  getUnreadableStoredProjects,
   normalizeProject,
 } from "@/utils/projectStorage";
 import {
@@ -59,6 +62,11 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
   const [newHasGm, setNewHasGm] = useState<boolean>(true);
   const [newConcept, setNewConcept] = useState("");
   const [newTargetExperience, setNewTargetExperience] = useState("");
+  const [unreadableProjects, setUnreadableProjects] = useState<unknown[]>([]);
+
+  useEffect(() => {
+    if (isOpen) setUnreadableProjects(getUnreadableStoredProjects());
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -128,20 +136,20 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
 
   // JSONインポート
   const handleImportJson = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
+    const file = e.currentTarget.files?.[0];
+    e.currentTarget.value = "";
     if (!file) return;
 
     const reader = new FileReader();
     reader.onload = (event) => {
       try {
         const text = event.target?.result as string;
-        const raw = JSON.parse(text);
-        if (!raw || typeof raw !== "object" || !raw.title || !Array.isArray(raw.characters)) { alert("有効なシナリオデータ形式ではありません。"); return; }
-        const imported = normalizeProject(raw);
-        if (!imported.title || !imported.characters) {
-          alert("有効なシナリオデータ形式ではありません。");
+        const raw: unknown = JSON.parse(text);
+        if (!isProjectJson(raw) || !raw.title.trim()) {
+          alert("シナリオデータの形式に問題があるため、読み込めませんでした。");
           return;
         }
+        const imported = normalizeProject(raw);
         imported.id = `proj_imported_${Date.now()}`;
         imported.updatedAt = new Date().toISOString();
         if (!saveProjectToStorage(imported)) {
@@ -157,6 +165,7 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
         alert("JSONファイルの読み込みに失敗しました。");
       }
     };
+    reader.onerror = () => alert("JSONファイルの読み込みに失敗しました。");
     reader.readAsText(file);
   };
 
@@ -251,6 +260,19 @@ export const ProjectManagerModal: React.FC<ProjectManagerModalProps> = ({
                   </label>
                 </div>
               </div>
+
+              {unreadableProjects.length > 0 && (
+                <div className="rounded-lg border border-amber-600/50 p-3 text-sm text-amber-200">
+                  <p role="status">形式に問題がある保存済みシナリオが{unreadableProjects.length}件あります。元データは書き出せます。</p>
+                  <button
+                    type="button"
+                    className="mt-2 underline"
+                    onClick={() => exportUnreadableProjectsToJsonFile(unreadableProjects)}
+                  >
+                    開けないシナリオの元データを書き出す
+                  </button>
+                </div>
+              )}
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {projects.map((p) => {

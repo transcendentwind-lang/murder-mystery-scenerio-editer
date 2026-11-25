@@ -86,8 +86,8 @@
 - `evidenceId`, `revealedEvidenceIds`, `unlockedEvidenceIds` は証拠IDを参照する。
 - `characterId`, `assignedCharId`, `holderCharId` は人物IDを参照する。
 - 条件状態は条件ID、GMメモはフェーズ番号、外観設定は文書キーで関連付ける。
-- 参照先の存在や全項目の型を厳密に検査するJSONスキーマ検証はない。`normalizeProject` の不足項目補完は、互換性の保証ではない。
-- JSONインポート時の入口の確認は題名・人物データの有無が中心。新しい作品IDを割り当てて追加し、既存作品を上書きしない。
+- JSONの読み込み時は、既知の項目の型と配列・入れ子の構造を確認する。省略できる項目は既存の `normalizeProject` で補完する。人物IDや証拠IDの参照先が存在するかは検査しない。
+- JSONインポートでは題名と人物配列が必須。形式に問題があるデータは保存前に拒否する。読み込めた作品は新しいIDで追加する。
 - 登録された組み込み作品は読み取り専用。原稿への保存・削除を拒否する。旧ブラウザデータは別キーへ退避する。
 
 旧文書の `ProjectMeta` とルートの `meta`、`PublicEvidence`、`PhaseStep`、`ResourceCounter`、`phases`、`resources`、`secretObjective` は現在の正本にない。旧形式を現行のJSON契約として使わない。分単位の旧想定時間と `durationHours` も同じ単位ではない。

@@ -95,16 +95,11 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 第1回 地点指定
               </div>
               <span className="font-mono font-black text-emerald-700 shrink-0">──▶</span>
-              <div className="flex-1 rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1 flex items-center justify-between gap-2">
-                <div>
-                  <span className="font-black text-emerald-900">🟢【1回目で成功】</span>
-                  <span className="ml-1.5 font-semibold text-slate-800">
-                    2つのNPC証言（<code className="font-bold">EV-08 船長</code>・
-                    <code className="font-bold">EV-07 冷凍箱</code>）を<strong>両方ともDay 1で獲得</strong>
-                  </span>
-                </div>
-                <span className="font-mono text-[9.5px] font-bold text-emerald-800 shrink-0">
-                  ──▶ Day 2へ
+              <div className="flex-1 rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1">
+                <span className="font-black text-emerald-900">🟢【1回目で成功】</span>
+                <span className="ml-1.5 font-semibold text-slate-800">
+                  2つのNPC証言（<code className="font-bold">EV-08 船長</code>・
+                  <code className="font-bold">EV-07 冷凍箱</code>）を<strong>両方ともDay 1で獲得</strong>
                 </span>
               </div>
             </div>
@@ -123,34 +118,24 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
 
               <div className="flex-1 space-y-1">
                 {/* 2回目で成功 */}
-                <div className="rounded border-2 border-amber-500 bg-amber-50 px-2.5 py-1 flex items-center justify-between gap-2">
-                  <div>
-                    <span className="font-black text-amber-900">🟡【2回目で成功】</span>
-                    <span className="ml-1.5 text-slate-800">
-                      NPC証言は<strong>1つだけ</strong>Day 1で獲得 ／{" "}
-                      <strong className="text-rose-800 underline">
-                        残り1つは翌日以降の証拠カードとして取得可能
-                      </strong>
-                    </span>
-                  </div>
-                  <span className="font-mono text-[9.5px] font-bold text-amber-900 shrink-0">
-                    ──▶ Day 2へ
+                <div className="w-full rounded border-2 border-amber-500 bg-amber-50 px-2.5 py-1">
+                  <span className="font-black text-amber-900">🟡【2回目で成功】</span>
+                  <span className="ml-1.5 text-slate-800">
+                    NPC証言は<strong>1つだけ</strong>Day 1で獲得 ／{" "}
+                    <strong className="text-rose-800 underline">
+                      残り1つは翌日以降の証拠カードとして取得可能
+                    </strong>
                   </span>
                 </div>
 
                 {/* 2回目も失敗 */}
-                <div className="rounded border-2 border-rose-600 bg-rose-50 px-2.5 py-1 flex items-center justify-between gap-2">
-                  <div>
-                    <span className="font-black text-rose-900">🔴【2回目も失敗】</span>
-                    <span className="ml-1.5 text-slate-800">
-                      <strong>自動的に救助成功</strong>とする（Day 1獲得0個） ／{" "}
-                      <strong className="text-rose-900 underline">
-                        2つとも証言は翌日以降の証拠カードとして取得可能
-                      </strong>
-                    </span>
-                  </div>
-                  <span className="font-mono text-[9.5px] font-bold text-rose-900 shrink-0">
-                    ──▶ Day 2へ
+                <div className="w-full rounded border-2 border-rose-600 bg-rose-50 px-2.5 py-1">
+                  <span className="font-black text-rose-900">🔴【2回目も失敗】</span>
+                  <span className="ml-1.5 text-slate-800">
+                    <strong>自動的に救助成功</strong>とする（Day 1獲得0個） ／{" "}
+                    <strong className="text-rose-900 underline">
+                      2つとも証言は翌日以降の証拠カードとして取得可能
+                    </strong>
                   </span>
                 </div>
               </div>
@@ -187,8 +172,8 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               </div>
             </div>
           </div>
-          <div className="col-span-9 p-2 bg-slate-50/70 flex items-center justify-between gap-2 text-[10.5px]">
-            <div className="space-y-0.5">
+          <div className="col-span-9 p-2 bg-slate-50/70 flex items-center text-[10.5px]">
+            <div className="w-full space-y-0.5">
               <div className="font-bold text-slate-900">
                 🔵【共通進行】各PCが調査アクションを選択し、証拠カードを取得・共有
               </div>
@@ -196,9 +181,6 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 📌 Day 1引き継ぎ反映：Day 1で未取得の証言カード（1枚または2枚）がある場合、このDay 2以降の証拠カード選択枠に追加して取得可能にする
               </div>
             </div>
-            <span className="font-mono text-[9.5px] font-bold text-slate-700 shrink-0">
-              ──▶ Day 3へ
-            </span>
           </div>
         </div>
 
@@ -222,34 +204,34 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
                 <span className="rounded bg-slate-200 px-1.5 py-0.5 font-mono text-[10px] font-black text-slate-900">
                   DAY 3
                 </span>
-                <span className="rounded bg-emerald-700 px-1.5 py-0.5 text-[9px] font-bold text-white">
-                  🟢 物語影響なし
+                <span className="rounded bg-amber-600 px-1.5 py-0.5 text-[9px] font-bold text-white">
+                  🔀 索敵分岐あり
                 </span>
               </div>
               <div className="mt-1 text-[11px] font-bold leading-tight">
-                ソノブイ索敵・速度予測
+                ソノブイ索敵・速度報告
                 <br />
                 ＆ 法的根拠の選択
               </div>
             </div>
           </div>
           <div className="col-span-9 p-2 bg-slate-50/70 grid grid-cols-2 gap-2 text-[10px]">
-            {/* 前半：ソノブイ・速度予測 */}
+            {/* 前半：ソノブイ・速度報告 */}
             <div className="rounded border border-slate-300 bg-white p-1.5 flex flex-col justify-between">
               <div className="font-bold text-slate-900">
-                ① ソノブイ投下（C-3・D-2・E-3）＆ 移動速度・到達予測
+                ① ソノブイ投下（🎯正解：【B-3】 ／ ♨熱水域：【D-2・C-5】［噴火口：E-5］）
               </div>
               <div className="mt-1 flex items-center gap-1 text-[9.5px]">
                 <span className="rounded bg-emerald-50 border border-emerald-400 px-1.5 py-0.5 font-bold text-emerald-900">
-                  正解（6ノット・明神礁）
+                  🟢 B-3特定：成功写真を提示
                 </span>
                 <span>／</span>
                 <span className="rounded bg-amber-50 border border-amber-400 px-1.5 py-0.5 font-bold text-amber-900">
-                  速度・到達地点ミス
+                  🟡 特定失敗：失敗写真を提示
                 </span>
               </div>
               <div className="mt-1 text-[9.5px] text-slate-700 font-medium">
-                ➔ <strong>ミスしても物語上大きな影響なし</strong>（翌朝の明神礁噴火で自然収束）
+                ➔ <strong>失敗時は現地1枠を『EV-22：画像分析』に自動充当</strong> ／ 長津より速度・翌日予測報告（時速約6km・明神礁）
               </div>
             </div>
 
@@ -312,35 +294,21 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
 
           <div className="col-span-9 p-2 bg-slate-50/60 flex flex-col justify-center space-y-1.5 text-[10.5px]">
             {/* 正解：富士山 */}
-            <div className="rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1 flex items-center justify-between gap-2">
-              <div>
-                <span className="font-black text-emerald-900">🟢【正解：「富士山（駿河湾）」と結論】</span>
-                <span className="ml-1.5 font-medium text-slate-800">
-                  自衛隊が早期に駿河湾沖へ展開（通常位置で迎撃へ）
-                </span>
-              </div>
-              <span className="font-mono text-[9.5px] font-bold text-emerald-900 shrink-0">
-                ──▶ Day 5（通常）へ
+            <div className="w-full rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1">
+              <span className="font-black text-emerald-900">🟢【正解：「富士山（駿河湾）」と結論】</span>
+              <span className="ml-1.5 font-medium text-slate-800">
+                Day 6の岸部局長との交渉が通常の第一声で進行
               </span>
             </div>
 
             {/* 誤答：東京湾 */}
-            <div className="rounded border-2 border-rose-600 bg-rose-50 px-2.5 py-1 flex items-center justify-between gap-2">
-              <div>
-                <span className="font-black text-rose-900">🔴【誤答：「東京湾」と結論】</span>
-                <span className="ml-1.5 text-slate-800">
-                  ペナルティなし ／ ⚠️{" "}
-                  <strong className="text-rose-900 underline">
-                    ① Day 5で自衛隊の攻撃が遅れ、より駿河湾に近い位置で攻撃
-                  </strong>{" "}
-                  ＋{" "}
-                  <strong className="text-rose-900 underline">
-                    ② Day 6の岸部局長との交渉で嫌味を言われる
-                  </strong>
-                </span>
-              </div>
-              <span className="font-mono text-[9.5px] font-bold text-rose-900 shrink-0">
-                ──▶ Day 5（遅延）へ
+            <div className="w-full rounded border-2 border-rose-600 bg-rose-50 px-2.5 py-1">
+              <span className="font-black text-rose-900">🔴【誤答：「東京湾」と結論】</span>
+              <span className="ml-1.5 text-slate-800">
+                ペナルティなし（Day 4・Day 5の進行は共通） ／ ⚠️{" "}
+                <strong className="text-rose-900 underline">
+                  Day 6の岸部局長との交渉で嫌味を言われる
+                </strong>
               </span>
             </div>
           </div>
@@ -377,18 +345,12 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
               </div>
             </div>
           </div>
-          <div className="col-span-9 p-2 bg-slate-50/70 flex items-center justify-between gap-2 text-[10.5px]">
-            <div className="space-y-0.5">
+          <div className="col-span-9 p-2 bg-slate-50/70 flex items-center text-[10.5px]">
+            <div className="w-full space-y-0.5">
               <div className="font-bold text-slate-900">
                 🔵【共通進行】長津より残距離240km・時速5kmで【残り48時間】と報告 ／ 魚雷命中後も深海で元の大きさに戻る傾向（NG-06・Day 5 途中①）
               </div>
-              <div className="text-[10px] text-rose-900 font-semibold">
-                📌 Day 4「東京湾」結論時の変化：自衛隊の展開が遅れたため、<strong>「より駿河湾に近い位置」で攻撃が行われた描写</strong>になる（以降の進行・数値は共通）
-              </div>
             </div>
-            <span className="font-mono text-[9.5px] font-bold text-slate-700 shrink-0">
-              ──▶ Day 6へ
-            </span>
           </div>
         </div>
 
@@ -434,27 +396,17 @@ export const GmOnePageFlowchart: React.FC<GmOnePageFlowchartProps> = ({
 
           <div className="col-span-9 p-2 bg-slate-50/60 flex flex-col justify-center space-y-1.5 text-[10.5px]">
             {/* 1発説得成功 */}
-            <div className="rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1 flex items-center justify-between gap-2">
-              <div>
-                <span className="font-black text-emerald-900">
-                  🟢【祝詞 ＋ ①音響層（水深1,000m SOFAR層） ＋ ②移動時間（6〜8時間）をすべて提示】
-                </span>
-                <span className="ml-1.5 font-bold text-slate-800">➔ 一発で交渉成立！</span>
-              </div>
-              <span className="font-mono text-[9.5px] font-bold text-emerald-900 shrink-0">
-                ──▶ Day 7へ
+            <div className="w-full rounded border-2 border-emerald-600 bg-emerald-50 px-2.5 py-1">
+              <span className="font-black text-emerald-900">
+                🟢【祝詞 ＋ ①音響層（水深1,000m SOFAR層） ＋ ②移動時間（6〜8時間）をすべて提示】
               </span>
+              <span className="ml-1.5 font-bold text-slate-800">➔ 一発で交渉成立！</span>
             </div>
 
             {/* 反論による誘導ルート */}
-            <div className="rounded border-2 border-amber-500 bg-amber-50/90 p-1.5 space-y-1">
-              <div className="flex items-center justify-between">
-                <span className="font-black text-amber-950">
-                  🟡【祝詞は説得できるが、「音響層」や「移動時間」が抜けていた場合】➔ 岸部局長が反論して考えさせる
-                </span>
-                <span className="font-mono text-[9.5px] font-bold text-amber-950 shrink-0">
-                  解答導出 ──▶ Day 7へ
-                </span>
+            <div className="w-full rounded border-2 border-amber-500 bg-amber-50/90 p-1.5 space-y-1">
+              <div className="font-black text-amber-950">
+                🟡【祝詞は説得できるが、「音響層」や「移動時間」が抜けていた場合】➔ 岸部局長が反論して考えさせる
               </div>
               <div className="grid grid-cols-2 gap-1.5 text-[9.5px]">
                 <div className="rounded border border-amber-400 bg-white px-2 py-1 leading-snug">

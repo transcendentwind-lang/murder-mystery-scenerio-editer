@@ -1,6 +1,6 @@
 # 現在の構成
 
-確認日: 2026-11-10。現在の実装を説明する文書。目指す体験は[PRODUCT_VISION.md](PRODUCT_VISION.md)、利用手順は[USER_GUIDE.md](USER_GUIDE.md)を参照。
+確認日: 2026-11-17。現在の実装を説明する文書。目指す体験は[PRODUCT_VISION.md](PRODUCT_VISION.md)、利用手順は[USER_GUIDE.md](USER_GUIDE.md)を参照。
 
 ## 実装の構成
 
@@ -8,7 +8,7 @@ Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Re
 
 | 層 | 主なファイル | 役割 |
 |---|---|---|
-| 画面の統合 | [`src/app/page.tsx`](../src/app/page.tsx) | 選択作品、タブ、更新と保存の連携 |
+| 画面の統合 | [`src/app/page.editor.tsx`](../src/app/page.editor.tsx) | 選択作品、タブ、更新と保存の連携 |
 | 作品管理 | [`ProjectManagerModal.tsx`](../src/components/ProjectManagerModal.tsx) | 作成・切り替え・複製・削除・JSON入出力 |
 | 制作 | [`TimelineBoard.tsx`](../src/components/TimelineBoard.tsx)、[`CharactersEvidenceManager.tsx`](../src/components/CharactersEvidenceManager.tsx) | フェーズ・人物・証拠・情報対応表・条件表 |
 | 当日の進行 | [`GmDashboard.tsx`](../src/components/GmDashboard.tsx) | フェーズ別進行、証拠確認、タイマー |
@@ -56,7 +56,7 @@ Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Re
 
 資料画面の入口で、組み込み作品の専用閲覧・印刷と編集用作品の汎用エディタを分岐する。汎用画面は当該作品の人物・証拠・図版・GMメモだけを参照する。未設定は空欄・未作成として扱い、他作品の図版・台本・カードで補わない。企画書・台本の出力も、専用機能の明示的な参照がない作品では汎用生成器を使う。
 
-作品資料の正本は `assets/scenarios/<作品ID>/` に集約し、`manifest.json` で全ファイルを登録する。`sources` は編集原本、`releases` は現行配布物、`archive` は比較用保管資料。トップディレクトリにあったPDFは現行ファイルと一致しないため内容を改変せず保管する。資料一覧はこの目録を直接参照する。
+作品資料の正本は `assets/scenarios/<作品ID>/` に集約し、`manifest.json` で全ファイルを登録する。`sources` は編集原本、`releases` は現行配布物（画像・PDF・動画）、`archive` は比較用保管資料。トップディレクトリにあったPDFは現行ファイルと一致しないため内容を改変せず保管する。資料一覧はこの目録を直接参照し、画像・文書・動画の形式に応じてプレビューを切り替える。組み込み作品のGM進行画面からもオープニング用の地理紹介動画および終盤用のソナー監視動画を参照・保存できる。
 
 `prepare-scenario-assets.mjs` は目録とファイル・ハッシュを照合し、作者環境では全資料を、参加者向け静的ビルドでは許可された資料だけを `public/scenarios` へ配置する。旧 `/images`・`/pdfs` URLも公開対象だけ同じ正本から互換コピーを生成する。生成フォルダはGit管理しない。静的ビルド後は `finalize-participant-export.mjs` で対象外資料とローカル追加作品データの混入を検査・除外する。ローカル追加作品の原本自体は削除しない。
 
@@ -70,7 +70,7 @@ Next.js 16系のApp Router、React 19系、TypeScript、Tailwind CSS、Lucide Re
 
 ## 実行と公開
 
-作者・GM向けはローカルの `/`、参加者用の独立画面は `/sonar`。独立画面は常に組み込みデータを参照し、作者が選択・編集した作品とは同期しない。
+作者・GM向けはローカルの `/`、参加者用の独立画面は `/sonar`。独立画面は組み込みの音響語彙を参照し、作者が選択・編集した作品とは同期しない。参加者向けビルドは編集画面の入口を除外し、参加者画面に必要なソースだけを許可する。
 
 通常サーバーでは [`src/proxy.ts`](../src/proxy.ts) がlocalhost・127.0.0.1以外のホスト名による `/` アクセスを `/sonar` へ誘導する。これは画面誘導であり、編集機能全体のアクセス制御ではない。
 

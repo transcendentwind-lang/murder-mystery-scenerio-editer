@@ -434,10 +434,10 @@ class UnderwaterAudioEngine {
   }
 
   /**
-   * 元神主の子ども【吉備津】の口伝クリック音サンプル（2語＋2語＝計4語）
-   * 「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」
-   * （人と勇魚、契り、大獲物ぞ、集ひ来）
-   * 音響・祝詞解析スタジオの単語定義（word-human-whale, word-promise, word-giant-prey, word-gather）と完全に同一の音響を連続再生
+   * 元神主の子ども【吉備津】の口伝クリック音サンプル（2語×3組＝計6語）
+   * 「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」
+   * （人と勇魚、契り、小笠原へ、集ひ来よ、大獲物ぞ、集ひ来よ）
+   * 音響・祝詞解析スタジオの単語定義（word-human-whale, word-promise, word-place-ogasawara, word-gather, word-giant-prey, word-gather）と完全に同一の音響を連続再生
    */
   public async playKibitsuOralClickDemo(): Promise<void> {
     this.initContext();
@@ -445,7 +445,7 @@ class UnderwaterAudioEngine {
 
     const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
-    // 拍1: （ド・ドーン・カッカッ）「ひとといさ」【解析スタジオ: 人間とクジラ（word-human-whale）】
+    // 拍1: （ド・ドーッカッカッ）「ひとといさな」【解析スタジオ: 人間とクジラ（word-human-whale）】
     await this.playWordSound("word-human-whale", 1.0);
     await sleep(450);
 
@@ -453,11 +453,19 @@ class UnderwaterAudioEngine {
     await this.playWordSound("word-promise", 1.0);
     await sleep(500);
 
-    // 拍3: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」【解析スタジオ: 大きい・たくさんの餌（word-giant-prey）】
+    // 拍3: （ボ・ボーン・ポポ）「おがさわらへ」【解析スタジオ: 小笠原（word-place-ogasawara）】
+    await this.playWordSound("word-place-ogasawara", 1.0);
+    await sleep(450);
+
+    // 拍4: （カ・カ・カカッ！）「つ・ど・ひ・こ・よ！」【解析スタジオ: 集まれ（word-gather）】
+    await this.playWordSound("word-gather", 1.0);
+    await sleep(500);
+
+    // 拍5: （チチチチチチッ！）「お・ほ・え・も・の・ぞ！」【解析スタジオ: 大きい・たくさんの餌（word-giant-prey）】
     await this.playWordSound("word-giant-prey", 1.0);
     await sleep(450);
 
-    // 拍4: （カ・カ・カカッ！）「つ・ど・ひ・こ！」【解析スタジオ: 集まれ（word-gather）】
+    // 拍6: （カ・カ・カカッ！）「つ・ど・ひ・こ・よ！」【解析スタジオ: 集まれ（word-gather）】
     await this.playWordSound("word-gather", 1.0);
   }
 

@@ -211,8 +211,8 @@ export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
     organization: "小笠原神社",
     evidenceId: "ev-shrine-curse-stone",
     badge: "小笠原神社聞き取り",
-    summary: "小笠原神社の聞き取り調査。【神社の倉庫に保管されていた隕石が組織的に盗み出されていた】ことが発覚（八丈島・三宅島でも同様の盗難）。また、神主からは神社に伝わる古文書「盟約の祝詞」が存在し、巨大な生き物や火山の噴火が見られる場合には『船で海へ出て海中に長い筒を差し入れて読み上げる』ことになっていると聞き取った。ところが今回、この古文書も盗難にあっており、儀式が進められないという。現在の神主はこの祝詞の内容は分からず、もしこの祝詞を知っているとすると、就職のために東京に出た元神主の子どもである【吉備津】または、島の旧家の祭事を担当していた家の人物に確認するしかないという。",
-    detail: "小笠原神社の聞き取り調査。【神社の倉庫に保管されていた隕石が組織的に盗み出されていた】ことが発覚（八丈島・三宅島でも同様の盗難）。また、神主からは神社に伝わる古文書「盟約の祝詞」が存在し、巨大な生き物や火山の噴火が見られる場合には『船で海へ出て海中に長い筒を差し入れて読み上げる』ことになっていると聞き取った。ところが今回、この古文書も盗難にあっており、儀式が進められないという。現在の神主はこの祝詞の内容は分からず、もしこの祝詞を知っているとすると、就職のために東京に出た元神主の子どもである【吉備津】または、島の旧家の祭事を担当していた家の人物に確認するしかないという。",
+    summary: "小笠原神社の聞き取り調査。【神社の倉庫に保管されていた隕石が組織的に盗み出されていた】ことが発覚（八丈島・三宅島でも同様の盗難）。また、神主からは神社に伝わる古文書「盟約の祝詞」が存在し、巨大な生き物や火山の噴火が見られる場合には『船で海へ出て海中に長い筒を差し入れて読み上げる』ことになっていると聞き取った。ところが今回、この古文書も盗難にあっており、儀式が進められないという。現在の神主はこの祝詞の内容は分からず、もしこの祝詞を知っているとすると、就職のために東京に出た元神主の子どもである【吉備津（きびつ）】または、島の旧家の出自を持つ神社に縁のある人物に確認するしかないという。",
+    detail: "小笠原神社の聞き取り調査。【神社の倉庫に保管されていた隕石が組織的に盗み出されていた】ことが発覚（八丈島・三宅島でも同様の盗難）。また、神主からは神社に伝わる古文書「盟約の祝詞」が存在し、巨大な生き物や火山の噴火が見られる場合には『船で海へ出て海中に長い筒を差し入れて読み上げる』ことになっていると聞き取った。ところが今回、この古文書も盗難にあっており、儀式が進められないという。現在の神主はこの祝詞の内容は分からず、もしこの祝詞を知っているとすると、就職のために東京に出た元神主の子どもである【吉備津（きびつ）】または、島の旧家の出自を持つ神社に縁のある人物に確認するしかないという。",
   },
   {
     id: "F-3C",
@@ -235,32 +235,20 @@ export const DAY3_FIELD_ACTIONS: Day2ActionOption[] = [
 ];
 
 // ==========================================
-// Day 4 合議制アクション（旧Day 5から前倒し新設）
+// Day 4 合議制アクション（即応総力体制一括開示）
 // ※Day 3で未選択の項目も繰り越し調査可能
 // ==========================================
-export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [
-  {
-    id: "T-4B",
-    title: "T-4B: 都内にいる元神主の子どもの捜索",
-    organization: "警視庁捜査共助課 / 小笠原神社関係者",
-    evidenceId: "ev-shrine-lineage",
-    badge: "元神主の子どもの口伝",
-    summary: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
-    detail: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーン・カッカッ）（チ・トン・チ）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさ）、契り（ちぎり）、大獲物ぞ（おほえものぞ）、集ひ来（つどひこ）』となる。",
-    hasAudio: true,
-    audioCue: "kibitsu-click",
-  },
-];
+export const DAY4_TOKYO_ACTIONS: Day2ActionOption[] = [];
 
 export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-4A",
-    title: "F-4A: 朝倉教授の研究ノートについての調査",
-    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
+    title: "F-4A: 海野教授の研究ノートについての調査",
+    organization: "海洋科学大学 小笠原研究所 海野研究室",
     evidenceId: "ev-asakura-notes-origin",
     badge: "学術起源＆盟約口伝ノート",
-    summary: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
-    detail: "名誉教授ロバート・ディーツ博士に師事した朝倉教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
+    summary: "名誉教授ロバート・ディーツ博士に師事した海野教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
+    detail: "名誉教授ロバート・ディーツ博士に師事した海野教授の学術原点と、紙ではなく口伝で伝えられてきた『座礁しかけた鯨の救出』『漂流者の救助』を通じて【島人と鯨とが助け合う約束を交わした】伝承を記した未発表ノートを回収する。",
   },
   {
     id: "F-4D",
@@ -275,11 +263,25 @@ export const DAY4_FIELD_ACTIONS: Day2ActionOption[] = [
   },
 ];
 
+export const DAY5_NEW_TOKYO_ACTIONS: Day2ActionOption[] = [
+  {
+    id: "T-4B",
+    title: "T-5A: 都内にいる元神主の子どもの捜索",
+    organization: "警視庁捜査共助課 / 小笠原神社関係者",
+    evidenceId: "ev-shrine-lineage",
+    badge: "元神主の子どもの口伝",
+    summary: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさな）、契り（ちぎり）、小笠原（おがさわら）へ、集ひ来よ（つどひこよ）、大獲物（おおえもの）ぞ、集ひ来よ（つどひこよ）』となる。",
+    detail: "数年前に東京へ転居した小笠原神社元神主の遺族【吉備津】に対する聴取記録。生前の父から『祝詞は声高に日本語を読むのではなく、【舌を弾いてクリック音を海中筒から放つ】ものだ』と教わっていた。祝詞の音響構成は「（ド・ドーッカッカッ）（チ・トン・チ）（ボ・ボーン・ポポ）（カ・カ・カカッ！）（チチチチチチッ！）（カ・カ・カカッ！）」であり、日本語をあてはめたとき、その盟約の祝詞は『人と勇魚（いさな）、契り（ちぎり）、小笠原（おがさわら）へ、集ひ来よ（つどひこよ）、大獲物（おおえもの）ぞ、集ひ来よ（つどひこよ）』となる。",
+    hasAudio: true,
+    audioCue: "kibitsu-click",
+  },
+];
+
 export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
   {
     id: "F-5A",
     title: "F-5A: クジラの鳴音（コーダ）に関する論文草稿の調査",
-    organization: "海洋科学大学 小笠原研究所 朝倉研究室",
+    organization: "海洋科学大学 小笠原研究所 海野研究室",
     evidenceId: "ev-asakura-notes-syntax",
     badge: "コーダ構文規則ドラフト",
     summary: "クリック間隔（ICI）と2語成語規則によって構成される高度な言語体系。この構文規則と音響実録ログにより、人間側からクジラ言語でメッセージを組み立てる道筋が拓かれる。（マッコウクジラのコーダは【了解した】を示す「（カッ）」のみ【1語単独で機能】し、他はすべて【2語単位で1つの意味・行動指示（2語成語）】となり、【2語成語のペアを複数繋ぎ合わせる】ことで会話しているという動物言語学の先駆的構文規則を発見）",
@@ -288,7 +290,7 @@ export const DAY5_NEW_FIELD_ACTIONS: Day2ActionOption[] = [
 ];
 
 // 後方互換性エイリアス
-export const DAY5_TOKYO_ACTIONS = DAY4_TOKYO_ACTIONS;
+export const DAY5_TOKYO_ACTIONS = DAY5_NEW_TOKYO_ACTIONS;
 export const DAY5_FIELD_ACTIONS = [...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
 
 interface GmDashboardProps {
@@ -307,8 +309,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
   const { selections: investigationSelections, change: changeInvestigation } = useInvestigationSelections(project.id, {
     3: { tokyo: "T-3A", field: ["F-3A", "F-3B"] },
-    4: { tokyo: "T-4B", field: ["F-4A", "F-4D"] },
-    5: { tokyo: "T-3B", field: ["F-5A", "F-3C"] },
+    4: { tokyo: "T-3B", field: ["F-4A", "F-4D"] },
+    5: { tokyo: "T-4B", field: ["F-5A", "F-3C"] },
   });
   const selectedDay3TokyoAction = investigationSelections[3].tokyo;
   const setSelectedDay3TokyoAction = (id: string) => changeInvestigation(3, "tokyo", id);
@@ -336,6 +338,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const [isDay1ModalOpen, setIsDay1ModalOpen] = useState(false);
   const [day1ViewMode, setDay1ViewMode] = useState<"investigation" | "tactical">("tactical");
   const [isFlowchartModalOpen, setIsFlowchartModalOpen] = useState(false);
+  const [isGeoIntroVideoOpen, setIsGeoIntroVideoOpen] = useState(false);
+  const [isDay7SonarVideoOpen, setIsDay7SonarVideoOpen] = useState(false);
   // Day 1 漂流予測の失敗回数（0: 1発成功［証言2個］, 1: 1回失敗➔2回目成功［証言1個・1個Day2以降へ］, 2: 2回失敗➔自動成功［証言0個・2個ともDay2以降へ］）
   const [day1FailureCount, setDay1FailureCount] = useProjectProgress<0 | 1 | 2>(project.id, "gm.day1FailureCount", 0);
   const [day1SingleTestimonyId, setDay1SingleTestimonyId] = useProjectProgress<"ev-captain-testimony" | "ev-diver-box-photo">(project.id, "gm.day1SingleTestimonyId", "ev-captain-testimony");
@@ -349,6 +353,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         setIsTacticalModalOpen(false);
         setIsDay1ModalOpen(false);
         setIsFlowchartModalOpen(false);
+        setIsGeoIntroVideoOpen(false);
+        setIsDay7SonarVideoOpen(false);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -375,7 +381,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
   const handleToggleDay5FieldAction = (id: string) => changeInvestigation(5, "field", id);
 
   // 全アクション・繰り越しプールの計算
-  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS];
+  const ALL_TOKYO_ACTIONS = [...DAY3_TOKYO_ACTIONS, ...DAY4_TOKYO_ACTIONS, ...DAY5_NEW_TOKYO_ACTIONS];
   const ALL_FIELD_ACTIONS = [...DAY3_FIELD_ACTIONS, ...DAY4_FIELD_ACTIONS, ...DAY5_NEW_FIELD_ACTIONS];
   const ALL_ACTION_DEFS = [...ALL_TOKYO_ACTIONS, ...ALL_FIELD_ACTIONS];
 
@@ -785,6 +791,24 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         {/* テキストエクスポート＆分岐フローチャートボタン群 */}
         <div className="flex flex-wrap items-center gap-2">
           <button
+            onClick={() => setIsGeoIntroVideoOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-sky-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-sky-500 transition shadow"
+            title="本編開始前に参加者へ紹介する小笠原諸島の地理ガイド動画を表示します"
+          >
+            <Play className="h-3.5 w-3.5" />
+            オープニング地理紹介動画
+          </button>
+
+          <button
+            onClick={() => setIsDay7SonarVideoOpen(true)}
+            className="flex items-center gap-1.5 rounded-lg bg-teal-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-teal-500 transition shadow"
+            title="Day 7のクライマックスで駿河湾口へクジラ群が集結・潜航するソナー監視動画を表示します"
+          >
+            <Radar className="h-3.5 w-3.5" />
+            Day 7 駿河湾ソナー動画
+          </button>
+
+          <button
             onClick={() => setIsFlowchartModalOpen(true)}
             className="flex items-center gap-1.5 rounded-lg bg-rose-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-rose-500 transition shadow"
             title="各Dayごとの成功・失敗分岐フローチャート（GM進行資料）を表示します"
@@ -864,18 +888,22 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
         {/* 左側：Day切り替えと演出台詞スクリプト */}
         <div className="col-span-8 min-w-0 flex flex-col rounded-xl border border-slate-800 bg-slate-900/60 p-5 overflow-y-auto">
           {/* Dayタブ */}
-          <div className="mb-4 flex items-center gap-1.5 border-b border-slate-800 pb-3">
-            {[1, 2, 3, 4, 5, 6, 7].map((d) => (
+          <div className="mb-4 flex flex-wrap items-center gap-1.5 border-b border-slate-800 pb-3">
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((d) => (
               <button
                 key={d}
                 onClick={() => setCurrentDay(d)}
                 className={`rounded-lg px-3 py-1.5 text-xs font-bold transition ${
                   currentDay === d
-                    ? "bg-indigo-600 text-white shadow"
+                    ? d === 0
+                      ? "bg-teal-600 text-white shadow"
+                      : "bg-indigo-600 text-white shadow"
+                    : d === 0
+                    ? "border border-teal-800/80 bg-teal-950/40 text-teal-300 hover:text-white"
                     : "border border-slate-800 bg-slate-950 text-slate-400 hover:text-slate-200"
                 }`}
               >
-                Day {d}
+                {d === 0 ? "ゲーム開始前" : `Day ${d}`}
               </button>
             ))}
           </div>
@@ -883,13 +911,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
           <div className="space-y-4">
             <div className="rounded-lg border border-slate-800 bg-slate-950 p-4">
               <span className="text-[11px] font-bold text-indigo-400 uppercase">
-                DAY {currentDay} 状況概要
+                {currentDay === 0 ? "ゲーム開始前 導入概要" : `DAY ${currentDay} 状況概要`}
               </span>
               <h3 className="text-base font-bold text-white mt-1">
-                {currentTimelineStep?.situationTitle}
+                {currentDay === 0
+                  ? "GMからの開始前案内・作品概要・拠点説明・キャラクター選択・ハンドアウト読み込み"
+                  : currentTimelineStep?.situationTitle}
               </h3>
               <p className="mt-1 text-xs text-slate-300 leading-relaxed">
-                {currentTimelineStep?.incidentOverview}
+                {currentDay === 0
+                  ? "本編（Day 1）開始前にGMから参加者へ行う導入ガイダンス。作品のルール、小笠原諸島と拠点（東京・霞が関の本部会議室3名／小笠原・父島の支部会議室4名・常時通信接続）の前提説明、プレイヤー自己紹介、キャラクター紹介・選択、およびハンドアウト読み込みを行います。"
+                  : currentTimelineStep?.incidentOverview}
               </p>
             </div>
 
@@ -1042,6 +1074,66 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 </span>
               </div>
 
+              {currentDay === 0 && (
+                <div className="space-y-3 text-xs leading-relaxed">
+                  {/* ゲーム開始前 フェーズ1 */}
+                  <div className="rounded-lg border-2 border-teal-600/80 bg-teal-950/30 p-3.5 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-bold text-teal-300">
+                        【ゲーム開始前 フェーズ1：ご挨拶・作品概要・拠点説明 ＆ プレイヤー自己紹介】
+                      </span>
+                      <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
+                        ⏱️ 開始条件：ゲーム開始前（プレイヤー全員が着席した時点）
+                      </span>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-slate-950/90 p-3 text-[11px] text-slate-200 whitespace-pre-wrap leading-relaxed select-text">
+{`本日は、「燃える海を渡る声」にご参加いただきありがとうございます。私はGMを務める天藍蒼穹（てんらんそうきゅう）といいます。よろしくお願いします。
+
+この作品は、ライブアクションロールプレイングという種類で、TRPGに近いのですが、サイコロでの判定などはなく、五感を使ったアクションをしていただく内容となっています。今回は特に「音」を使った行動が多くなり、場合によってはご自身の耳で音を確認していただくため、皆様のスマートフォンをご利用いただくことがあります。スマートフォンはすぐに取り出せるよう、お手元にご準備をお願いいたします。
+
+またこの作品の特徴として、体験型クトゥルフとなっています。クトゥルフ神話とは、この世界のどこか、あるいは宇宙の彼方の異世界の神が、この地球を侵略しようとしているといった物語です。現在の常識とは異なる未知の世界、魔術の世界や宇宙的恐怖の世界を体験していく部分があります。クトゥルフのことを全く知らなくても楽しめますが、もしご存じであればさらに納得感が広がるものと思います。
+
+それではまずはこの作品の概要をお知らせしていきましょう。
+小笠原諸島は、東京都に所属している離島で、最も人口の多い父島をはじめとした複数の島で構成されています。独自に進化した生態系が評価され、2011年には世界遺産にも登録されました。東京都であるものの東京湾からの距離は約1000km離れています。近年では、島の西側での火山噴火により島が形成され「西之島」と名付けられています。今回の作品は、この小笠原沖で、突如電源喪失した船からの救難信号を受け、太平洋上で遭難した船の捜索にあたります。3名は東京・霞が関にある海上保安庁本部の会議室に集まった「東京本部チーム」、4名は小笠原諸島・父島にある海上保安庁支部の会議室に集まった「小笠原現地チーム」として救助にあたっていただきます。なお、東京・霞が関の本部会議室と父島支部の会議室の通信は常に繋がっている状態としますので、ゲーム中はいつでも自由に会話や情報共有を行っていただけます。
+
+早速ですが、まずはプレイヤーの皆様の自己紹介を簡単にしていただきたいと思います。
+（※プレイヤー自己紹介）`}
+                    </div>
+                  </div>
+
+                  {/* ゲーム開始前 フェーズ2 */}
+                  <div className="rounded-lg border-2 border-teal-600/80 bg-teal-950/30 p-3.5 space-y-2">
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <span className="font-bold text-teal-300">
+                        【ゲーム開始前 フェーズ2：キャラクター紹介・担当選択 ＆ ハンドアウト読み込み】
+                      </span>
+                      <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
+                        ⏱️ 開始条件：プレイヤー全員の自己紹介が完了した時点
+                      </span>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-slate-950/90 p-3 text-[11px] text-slate-200 whitespace-pre-wrap leading-relaxed select-text">
+{`ありがとうございます。それでは、皆様に選んでいただくキャラクターの紹介をしていきましょう。キャラクターは7人。もし6人の場合、長津は不在となります。
+・朝潮（あさしお）は、東京本部の司令塔、皆さんの頼れるリーダーです。最終的な決定権と責任はこの朝潮さんが受け持つことが多いです。
+・貝浜（かいはま）は、東京本部の中でも特別な立ち位置で、海上保安庁と海上自衛隊をつなぐ橋渡し役、リエゾンという位置で、防衛省側の人間です。
+・長津（ながつ）は、朝潮を信頼するオペレーターで、各所からの連絡を受け持ちます。
+・坂凪（さかなぎ）は、海上保安庁の小笠原支部の人間で、巡視船やヘリコプターなどを手配可能な海難救助隊の現場リーダーです。
+・太刀魚（たちうお）は、小笠原の父島にある気象庁小笠原観測所の職員です。気象や海流のデータを扱います。
+・浪寄（なみより）は、小笠原にある海洋科学大学小笠原研究所の准教授で、深海生物の生態やクジラなどの動物行動学を専門にしています。
+・初瀬（はつせ）は、海難救助の救護技術に優れている一方、島の旧家の家系で神社などとのつながりがあるキャラクターです。
+
+それでは、担当するキャラクターを選んでいただきたいと思います。
+（※キャラクター選択・決定）
+
+それでは、各自のキャラクターのハンドアウトを読み込んでください。何か不明な点があればGMにお尋ねください。
+（※ハンドアウト読み込み）
+
+キャラクターの自己紹介は、チーム結成する際の挨拶としてゲーム開始後に行いますので、ご準備をよろしくお願いします。ありがとうございます。東京・霞が関の本部会議室と、小笠原・父島の支部会議室にはそれぞれ対策メンバーが集まり、両拠点の通信回線はすでに繋がっている状態から物語が動き出します。
+それでは、Let’s get down to the story!`}
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {currentDay === 1 && (
                 <div className="space-y-3 text-xs leading-relaxed">
                   <div className="rounded-lg border-2 border-indigo-600/80 bg-indigo-950/40 p-3 space-y-2">
@@ -1052,6 +1144,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       <span className="rounded bg-amber-950/80 border border-amber-700/70 px-2 py-0.5 text-[11px] font-bold text-amber-200">
                         ⏱️ 開始条件：ゲーム開始時（全員がハンドアウトを読み終えた時点）
                       </span>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「これより本編を開始します。現在、東京・霞が関にある海上保安庁本部の会議室には朝潮・貝浜・長津（6名時はGMが担当）の3名が、約1,000km離れた小笠原諸島・父島にある海上保安庁支部の会議室には坂凪・太刀魚・浪寄・初瀬の4名が集まっており、両会議室が通信回線で結ばれています。」
                     </div>
                     <div className="rounded border-2 border-indigo-500/80 bg-slate-950/90 p-2.5">
                       <div className="text-[11px] font-bold text-indigo-300 mb-1">
@@ -1267,6 +1362,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         【フェーズ1：状況通達 ＆ 緊急チーム維持命令】
                       </span>
                     </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 2を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策にあたっています。」
+                    </div>
                     <div className="rounded border border-red-900/40 bg-slate-950/80 p-2.5 text-[11px] text-red-200">
                       <p className="font-semibold text-white">
                         🚨 緊急速報：西之島周辺海底火山が突発的大規模噴火
@@ -1280,7 +1378,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         （🎙️ 総合オペレーター 長津）:「長津です。皆様、お疲れ様です。気象庁および上層部より緊急アラートを受信いたしました。西之島沖にて海底火山の突発噴火が発生。周辺船舶の避難誘導および火山活動の厳重監視を行う必要があるため、当合同対策チームは当面の間【即応体制を維持】せよとの通達です。現場海域の船舶の避難は完了していますが、新しい指示がでています。西之島周辺海域を中心として『火山性の地殻振動』が観測されており、同時に海中を移動する巨大な生物の目撃情報が相次いで寄せられています。すべての調査に一度に手を回す余裕はありませんので、優先度を決めて調査をお願いします。」
                       </p>
                       <div className="pt-2 border-t border-slate-800/80 text-[11px] text-cyan-300/95 leading-relaxed font-medium">
-                        🗣️ <strong>GMからの案内</strong>: 「今回の調査では、東京本部側では3つの調査項目から1つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
+                        🗣️ <strong>GMからの案内</strong>: 「今回の調査では、東京本部側では3つの調査項目から2つ、小笠原現地では4つの調査項目から2つを選ぶことができます。このタイミング以降では選択されなかった情報は、あとのタイミングの行動で調べることができます」
                       </div>
                     </div>
                     <div className="text-[11px] text-amber-300/90 bg-amber-950/30 rounded p-2 border border-amber-900/40">
@@ -1549,22 +1647,25 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               {currentDay === 3 && (
                 <div className="space-y-4 text-xs leading-relaxed">
                   {/* フェーズ1：鳥島沖海底大噴火 GMアナウンス */}
-                  <div className="rounded-lg border border-amber-900/60 bg-amber-950/25 p-3.5 shadow-sm">
+                  <div className="rounded-lg border border-amber-900/60 bg-amber-950/25 p-3.5 shadow-sm space-y-2.5">
                     <div className="flex items-center gap-2">
                       <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                       <span className="font-bold text-amber-300">
                         【フェーズ1：鳥島沖海底大噴火 ＆ 緊急洋上捜索命令】
                       </span>
                     </div>
-                    <div className="mt-2 rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（Day 3のみ小笠原現地4人全員がヘリコプターへ搭乗）</strong>：「Day 3を迎えました。本日（Day 3）のみ、小笠原現地チームの4人全員（坂凪・太刀魚・浪寄・初瀬）は父島の会議室を出て大型捜索ヘリコプターに乗り込み、途中の海域に展開する大型巡視船『あきつしま』で洋上給油を受けながら鳥島沖の現場上空へと向かいます。東京本部チームの3名（朝潮・貝浜・長津）は東京・霞が関の会議室におり、ヘリコプター内の4名と無線通信で常時繋がっています。」
+                    </div>
+                    <div className="rounded border border-amber-900/40 bg-slate-950/80 p-2.5 text-[11px] text-amber-200">
                       <p className="font-semibold text-white">
-                        🚨 緊急速報：鳥島沖海底カルデラが連動大爆発（Day 2未明）
+                        🚨 緊急速報：鳥島沖海底カルデラが連動大爆発
                       </p>
                       <p className="mt-0.5 text-slate-300">
-                        西之島から北へ約380km。時速約6km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
+                        西之島から北へ約350km。時速約6km（日速約150km）のペースで北上する巨大物体が海底火山を次々と刺激して連動噴火を誘発していることが確定。
                       </p>
                     </div>
-                    <p className="text-slate-300 mt-2.5 italic whitespace-pre-line">
+                    <p className="text-slate-300 italic whitespace-pre-line">
                       （🎙️ 総合オペレーター 長津）:「気象庁より緊急アラートを受信いたしました。昨日の西之島での噴火に続き、本日はさらに北方に位置する【鳥島沖】にて海底火山の噴火が発生しました。周辺海域では昨日と同様の『火山性の地殻振動』とともに、再び巨大生物の目撃情報が寄せられており、上層部より『巨大生物の現在位置を特定し、可能であれば写真でその姿を捉えてほしい』との緊急要請が出ています。
 　これより小笠原基地から小笠原現地メンバーを乗せた大型捜索ヘリコプターが現場へ向かいますが、ヘリコプターでは鳥島沖まで航続距離に問題があるため、途中の海域に展開している大型巡視船『あきつしま』で洋上給油を受けて鳥島沖に展開してください。
 　現場海域ではアクティブソナー付きのソノブイ（計3基）を投下して巨大生物の現在位置を特定し、浮上してくることがあれば写真撮影を試みてください。また、午後にはヘリコプターは帰投できますので、索敵と並行して本日の優先調査も進めてください」
@@ -1618,7 +1719,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         <span className="font-mono text-cyan-400">タイムリミット: 残り4日（Day 7駿河湾到達）</span>
                       </div>
                       <p>
-                        ・<strong>連動噴火のドミノ倒し</strong>：Day 1（西之島）➔ Day 2（鳥島沖海底カルデラ）。距離約380kmを24時間で正確に到達しており、深海800mを時速約6kmで北上する物体が、通過した先々のマグマ溜まりを刺激して噴火させている動かぬ証拠。
+                        ・<strong>連動噴火のドミノ倒し</strong>：Day 1 09:00（西之島近海）➔ Day 3 17:00（鳥島沖海底カルデラ）。距離約350kmを56時間で到達しており、深海を時速6.25km（日速約150km）で北上する物体が、通過した先々のマグマ溜まりを刺激して噴火させている動かぬ証拠。
                       </p>
                       <p>
                         ・<strong>未噴火海域（北方）</strong>：須美寿島、青ヶ島、八丈島、三宅島、伊豆諸島、駿河湾・富士山直下は現時点で未噴火。このペースで直進すると4日後に本土直下へ到達。
@@ -1706,70 +1807,28 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         セクターB-3（水深約400m）。
                       </p>
                       <p>
-                        📋 <strong className="text-white">位置特定・浮上撮影成功時</strong>：
-                        プレイヤーがB-3または隣接セクターにソノブイを展開して位置を絞り込んだ場合、潜航していた巨大生物が海面近く（水深10〜20m）へ浮上。急行した捜索ヘリが上空後方から目視確認し、海面下にうごめく巨大な触手と胴体を捉えた写真の撮影に成功します（特定失敗時は約20km彼方に波紋のみを確認）。
+                        📋 <strong className="text-white">位置特定成功時 ＆ 失敗時の処理</strong>：
+                        プレイヤーがB-3を特定できた場合は<strong>成功時の撮影写真（近接浮上）</strong>のみを提示します。B-3の特定に失敗した場合は成功時の写真は提示せず、<strong>失敗時の撮影写真（約20km彼方の航跡波）</strong>を提示し、小笠原現地の調査枠（2枠）のうち1枠を自動的に<strong>『F-3D：撮影した画像の分析（EV-22）』</strong>へ充当して公開（浪寄へ配布）してください。
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ3.5：アクティブソノブイ終了後 オペレーター緊急指令 ＆ 3名への情報開示（速度・到達予測の算出） */}
+                  {/* フェーズ3.5：アクティブソノブイ終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達） */}
                   <div className="rounded-xl border border-amber-900/60 bg-slate-900 p-4 space-y-3 shadow-md">
                     <div className="flex items-center gap-2 border-b border-slate-800 pb-2">
                       <Radio className="h-4 w-4 text-amber-400 animate-pulse" />
                       <span className="font-bold text-amber-300 text-xs">
-                        【フェーズ3.5：ソノブイ索敵終了後 オペレーター緊急指令 ＆ 3名への証拠配布】
+                        【フェーズ3.5：ソノブイ索敵終了後 オペレーター緊急報告（北上速度・翌日到達予想の伝達）】
                       </span>
                     </div>
 
                     <div className="rounded bg-slate-950/80 border border-amber-900/40 p-3 text-[11px] text-amber-200">
                       <p className="font-semibold text-white mb-1">
-                        🎙️ 総合オペレーター 長津のアナウンス（成否問わず読み上げ）:
+                        🎙️ 総合オペレーター 長津のアナウンス（NG-02 ／ Day 3 途中①指令書）:
                       </p>
                       <blockquote className="border-l-2 border-amber-500 pl-3 py-1 text-slate-200 italic leading-relaxed">
-                        「――噴火時刻と巨大生物の動きに関連があるように思えます。もしこのまま北上した場合、この先どうなるか検討が必要だと思います。物体の移動スピードと、現時点で、明日はどのあたりまで北上するか予想を出してください」
+                        「――洋上捜索ヘリより緊急入電！ アクティブソナーにより鳥島沖の深海で巨大生物の現在位置を捕捉いたしました！ これまでの移動経路と時刻から算出すると、巨大生物は【時速約6km・日速約150km】のペースで北上を続けており、このまま進めば明日（Day 4）にはさらに北方の【明神礁（みょうじんしょう）周辺】へ到達する見込みです！」
                       </blockquote>
-                    </div>
-
-                    <div className="rounded-lg bg-slate-950 p-3 border border-slate-800 space-y-2 text-[11px] text-slate-300">
-                      <span className="font-bold text-white text-xs block mb-1">
-                        📦 GMから3名のプレイヤーへ以下の証拠カードを個別配備:
-                      </span>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <div className="rounded border border-indigo-900/60 bg-indigo-950/30 p-2">
-                          <span className="font-bold text-indigo-300 block text-[10px]">太刀魚（PC4／気象庁）</span>
-                          <span className="font-semibold text-white text-[11px]">西之島〜鳥島沖 距離観測データ</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">西之島〜鳥島沖カルデラ間の直線距離: <strong>約350 km</strong></p>
-                        </div>
-                        <div className="rounded border border-cyan-900/60 bg-cyan-950/30 p-2">
-                          <span className="font-bold text-cyan-300 block text-[10px]">貝浜（PC3／海上保安庁）</span>
-                          <span className="font-semibold text-white text-[11px]">鳥島沖 ソノブイ探知記録</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">鳥島沖での巨大生物探知・確認時刻: <strong>Day 3 17:00</strong></p>
-                        </div>
-                        <div className="rounded border border-emerald-900/60 bg-emerald-950/30 p-2">
-                          <span className="font-bold text-emerald-300 block text-[10px]">浪寄（PC5／大学准教授）</span>
-                          <span className="font-semibold text-white text-[11px]">遭難船救助・目撃時刻調書</span>
-                          <p className="text-[10px] text-slate-400 mt-0.5">Day 1西之島近海での異常遭遇時刻: <strong>Day 1 09:00</strong></p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* GM用正解メモ・計算アシスト */}
-                    <div className="rounded-lg bg-emerald-950/20 border border-emerald-900/50 p-3 text-[11px] text-slate-300 space-y-1.5">
-                      <span className="font-bold text-emerald-300 text-xs block">
-                        💡 【GM用正解メモ・計算アシスト（プレイヤーへの誘導用）】
-                      </span>
-                      <p>
-                        ・<strong>経過時間の計算</strong>: Day 1 09:00 ➔ Day 3 17:00 ＝ <strong>56 時間</strong>（48時間 ＋ 8時間）
-                      </p>
-                      <p>
-                        ・<strong>移動速度の計算</strong>: 約350 km ÷ 56 時間 ＝ <strong className="text-white">時速 6.25 km</strong>（日速 約150 km）
-                      </p>
-                      <p>
-                        ・<strong>翌日（Day 4）の北上予想</strong>: 明日（Day 4）にはさらに約150km北上するため、海図上で<strong className="text-white">須美寿島〜明神礁付近</strong>に到達する見込み。
-                      </p>
-                      <p className="text-[10px] text-slate-400">
-                        ※プレイヤー同士が情報を持ち寄って「時速6km」「明日は明神礁のあたり」と推測できたら大成功です！
-                      </p>
                     </div>
                   </div>
 
@@ -1788,16 +1847,16 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ5：Day 3 合議制アクション操作パネル（東京1枠 ＋ 現地2枠） */}
+                  {/* フェーズ5：Day 3 合議制アクション操作パネル（東京2枠 ＋ 現地2枠） */}
                   <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
                     <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
                         <Users className="h-4 w-4 text-indigo-400" />
-                        【フェーズ5：Day 3 合議制アクション（東京1枠 ＋ 現地2枠）】
+                        【フェーズ5：Day 3 合議制アクション（東京2枠 ＋ 現地2枠）】
                       </span>
                       <div className="flex items-center gap-2 text-[10px]">
                         <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
-                          東京: 1枠
+                          東京: 2枠
                         </span>
                         <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
                           現地: {selectedDay3FieldActions.length}/2枠
@@ -1806,7 +1865,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     <p className="text-[11px] text-slate-400">
-                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です。
+                      💡 <strong>繰り越し蓄積システム</strong>: ここで選ばれなかった項目は消滅せず、翌日（Day 4）やDay 5でも選択・確認可能です（※ソノブイ索敵に失敗した場合は、現地調査2枠のうち1枠を『F-3D：撮影した画像の分析（EV-22）』に自動充当し、残り1枠を選択させます）。
                     </p>
 
                     {/* 海上保安庁東京本部アクション */}
@@ -1891,7 +1950,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           📢 GM進行ナレーション:
                         </strong>
                         <p className="italic text-slate-200">
-                          （🎙️ 総合オペレーター 長津）:「――洋上捜索ヘリより緊急入電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大質量、そして20本以上の無数の触手群を確認！ 現場の海上保安庁警備救難部より、当合同対策チームへ緊急の諮問が下されております」
+                          （🎙️ 総合オペレーター 長津）:「――洋上捜索ヘリより緊急入電！撮影した深海写真データをメインスクリーンへ展開します……海面下に潜む漆黒の巨大生物、そして20本以上の無数の触手群を確認！」
                         </p>
                       </div>
 
@@ -1899,10 +1958,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         {/* PC5への相談 */}
                         <div className="rounded border border-teal-900/80 bg-teal-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-teal-300 text-xs flex items-center gap-1">
-                            <Users className="h-3.5 w-3.5" /> ① 海上保安庁 ➔ 浪寄准教授（PC5: 海洋生物学者）への相談:
+                            <Users className="h-3.5 w-3.5" /> ① 浪寄准教授（PC5: 海洋生物学者）への相談:
                           </span>
                           <p className="italic text-slate-200">
-                            「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大質量。専門家としての所見を提示してください」
+                            「浪寄准教授、この写真に写る物体の生物学的特徴をどう分析されますか？通常のダイオウイカ（10本）と明らかに異なる無数の触手、そして数百mの巨大生物。専門家としての所見を提示してください」
                           </p>
                           <div className="mt-1 text-[10px] text-teal-200/90 bg-teal-950/60 rounded p-1.5 border border-teal-800/60">
                             💡 <strong>GMメモ</strong>: 浪寄准教授（PC5）から「超群体（コロニー）仮説」「変異体仮説」「火山熱源誘引説」のいずれか（特に群体の疑い）を提示させます。
@@ -1912,7 +1971,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         {/* PC2への要請 */}
                         <div className="rounded border border-indigo-900/80 bg-indigo-950/30 p-2.5 space-y-1">
                           <span className="font-bold text-indigo-300 text-xs flex items-center gap-1">
-                            <ShieldAlert className="h-3.5 w-3.5" /> ② 海上保安庁 ➔ 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
+                            <ShieldAlert className="h-3.5 w-3.5" /> ② 貝浜リエゾン（PC2: 防衛省リエゾン）への要請:
                           </span>
                           <p className="italic text-slate-200">
                             「貝浜リエゾン、海上保安庁法20条に基づく警察比例の原則では、この規模の潜航目標に対する排除・対処は不可能です。法的に自衛隊の防衛出動、あるいは海上警備行動を要請すべきか、防衛省としての判断を求めます」
@@ -2010,7 +2069,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                       <div className="flex items-center gap-2">
                         <a
-                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg")}
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -2049,6 +2108,9 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     {/* 📢 【GM読み上げ台本：Day 4 開幕状況報告】 */}
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（Day 4以降は再び両拠点の会議室で進行）</strong>：「Day 4を迎えました。昨日ヘリコプターで鳥島沖へ出動していた小笠原現地チームの4名も父島へ帰投しており、本日（Day 4）以降は再び、小笠原・父島にある海上保安庁支部の会議室（4名）と、東京・霞が関にある海上保安庁本部の会議室（3名）にそれぞれ集まり、両会議室を通信回線で繋いで対策会議を行っています。」
+                    </div>
                     <div className="rounded-lg bg-slate-950/90 border border-slate-800 p-3 space-y-2">
                       <strong className="text-amber-300 block font-bold text-xs flex items-center gap-1.5">
                         <Radio className="h-4 w-4 text-amber-400" />
@@ -2342,7 +2404,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </span>
                       <div className="flex items-center gap-1.5">
                         <a
-                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg")}
+                          href={scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg")}
                           target="_blank"
                           rel="noreferrer"
                           className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2 py-0.5 text-[10px] text-slate-300 transition border border-slate-700"
@@ -2380,6 +2442,10 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
 
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 5を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
+                    </div>
+
                     <div className="rounded-lg bg-black/50 border border-rose-900/50 p-2.5 text-[11px] text-rose-100 space-y-1">
                       <strong className="text-rose-300 block font-bold">📢 【GMナレーション：民間放送局の臨時ニュース（富士山地下微動 ＆ 伊豆七島避難準備指示）】</strong>
                       <p className="italic text-slate-200 leading-relaxed">
@@ -2388,178 +2454,17 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ1.5：防衛省・火山噴火予知連絡会からの連絡「危機到達まで残り48時間」 */}
-                  <div className="rounded-xl border border-rose-800/80 bg-[#1f1018] p-3.5 space-y-2.5 shadow-md">
-                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
-                      <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
-                        <Clock className="h-4 w-4 text-rose-400 animate-pulse" />
-                        【フェーズ1.5：防衛省・火山噴火予知連絡会からの連絡「危機到達まで残り48時間」】
-                      </span>
-                      <span className="text-[10px] text-rose-300 font-mono bg-rose-950 px-2 py-0.5 rounded border border-rose-800">
-                        タイムリミット共有
-                      </span>
-                    </div>
-                    <div className="rounded-lg bg-black/60 border border-rose-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
-                      <strong className="text-rose-300 block font-bold">
-                        📢 【長津のアナウンス（『DAY 5 指令書』と同文）】:
-                      </strong>
-                      <p className="italic leading-relaxed font-mono text-slate-100">
-                        （🎙️ 総合オペレーター 長津）:「――防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです！」
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* フェーズ2：防衛省からの「機密指定」通達とプレイヤー独自行動 */}
-                  <div className="rounded-xl border border-blue-900/60 bg-[#0d1527] p-3.5 space-y-2.5 shadow-md">
-                    <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
-                      <Shield className="h-4 w-4 text-blue-400" />
-                      【フェーズ2：防衛省通達「軍事機密指定」による情報遮断 ＆ 自由行動】
-                    </span>
-                    <div className="rounded-lg bg-blue-950/40 border border-blue-800/60 p-2.5 text-[11px] text-blue-200 space-y-1.5">
-                      <strong className="text-blue-300 block font-bold">🛡️ 【防衛省通達セリフ（GM読み上げ用）】</strong>
-                      <p className="italic text-slate-200 leading-relaxed">
-                        （🎙️ 総合オペレーター 長津）:「――防衛省より緊急回線で入電。『これより自衛隊が実施する実弾迎撃作戦は【最高軍事機密】に移行する。交戦状況に関する情報提供はここを以て遮断する。対策本部は作戦干渉を解かれ、独自の調査任務に戻られたし』との通達です」
-                      </p>
-                      <p className="text-slate-400 text-[10px] pt-1 border-t border-blue-900/50">
-                        💡 <strong>GM進行のコツ</strong>: 自衛隊が部隊を展開してくれたことで、プレイヤーは自衛隊を信じて一息つきつつ、「自分たちにしかできない調査（富士山麓の荷物の真相、神主の子どもの捜索、音響遺品等）」に自由に動ける時間となります。
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* フェーズ2.5：Day 5 総力調査アクション操作パネル（未選択プール全開放） */}
-                  <div className="rounded-xl border border-indigo-900/60 bg-slate-900 p-3.5 space-y-3 shadow-md">
-                    <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                        <Users className="h-4 w-4 text-indigo-400" />
-                        【フェーズ2.5：Day 5 総力調査アクション（東京1枠 ＋ 現地2枠 / 未選択プール全開放）】
-                      </span>
-                      <div className="flex items-center gap-2 text-[10px]">
-                        <span className="rounded bg-indigo-950 px-2 py-0.5 font-bold text-indigo-300 border border-indigo-800">
-                          東京: 1枠
-                        </span>
-                        <span className="rounded bg-teal-950 px-2 py-0.5 font-bold text-teal-300 border border-teal-800">
-                          現地: {selectedDay5FieldActions.length}/2枠
-                        </span>
-                      </div>
-                    </div>
-
-                    <p className="text-[11px] text-slate-400">
-                      💡 <strong>総ざらい総力調査</strong>: 自衛隊迎撃の間、プレイヤー陣営は残された未確認情報の総力調査を実施します。Day 3・Day 4で未調査の全プールから、東京1枠・現地2枠を選択して開示してください（残りはDay 6冒頭で完全回収されます）。
-                    </p>
-
-                    {/* 海上保安庁東京本部アクション */}
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-indigo-300 text-[11px]">
-                          🏢 海上保安庁東京本部アクション（未調査{day5AvailableTokyoActions.length}枠中1枠選択）:
-                        </span>
-                        {pastChosenTokyo.length > 0 && (
-                          <span className="text-[10px] text-emerald-400 font-mono">
-                            ✅ 過去調査済: {pastChosenTokyo.join(", ")}
-                          </span>
-                        )}
-                      </div>
-                      {day5AvailableTokyoActions.length === 0 ? (
-                        <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
-                          東京側の未調査項目はすべて調査完了しています。
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
-                          {day5AvailableTokyoActions.map((a) => {
-                            const isSelected = selectedDay5TokyoAction === a.id;
-                            const isFromDay3 = DAY3_TOKYO_ACTIONS.some((d3) => d3.id === a.id);
-                            return (
-                              <button
-                                key={a.id}
-                                type="button"
-                                onClick={() => setSelectedDay5TokyoAction(a.id)}
-                                className={`rounded-lg p-2 text-left border transition ${
-                                  isSelected
-                                    ? "border-indigo-400 bg-indigo-950/70 shadow ring-1 ring-indigo-400"
-                                    : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                                }`}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-1.5 flex-wrap">
-                                    <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                                    <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-indigo-900 text-indigo-200"}`}>
-                                      {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
-                                    </span>
-                                  </div>
-                                  <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-indigo-600 text-white font-bold" : "text-slate-500"}`}>
-                                    {isSelected ? "選択中" : "未選択"}
-                                  </span>
-                                </div>
-                                <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 小笠原現地アクション */}
-                    <div>
-                      <div className="flex items-center justify-between mb-1">
-                        <span className="font-bold text-teal-300 text-[11px]">
-                          🏝️ 小笠原現地アクション（未調査{day5AvailableFieldActions.length}枠中2枠選択）:
-                        </span>
-                        {pastChosenField.length > 0 && (
-                          <span className="text-[10px] text-emerald-400 font-mono">
-                            ✅ 過去調査済: {pastChosenField.join(", ")}
-                          </span>
-                        )}
-                      </div>
-                      {day5AvailableFieldActions.length === 0 ? (
-                        <div className="rounded border border-slate-800 bg-slate-950/60 p-2.5 text-center text-[11px] text-slate-400">
-                          現地側の未調査項目はすべて調査完了しています。
-                        </div>
-                      ) : (
-                        <div className="grid grid-cols-2 gap-2">
-                          {day5AvailableFieldActions.map((a) => {
-                            const isSelected = selectedDay5FieldActions.includes(a.id);
-                            const isFromDay3 = DAY3_FIELD_ACTIONS.some((d3) => d3.id === a.id);
-                            return (
-                              <button
-                                key={a.id}
-                                type="button"
-                                onClick={() => handleToggleDay5FieldAction(a.id)}
-                                className={`rounded-lg p-2 text-left border transition ${
-                                  isSelected
-                                    ? "border-teal-400 bg-teal-950/70 shadow ring-1 ring-teal-400"
-                                    : "border-slate-800 bg-slate-950/60 hover:bg-slate-800"
-                                }`}
-                              >
-                                <div className="flex items-center justify-between">
-                                  <div className="flex items-center gap-1.5 flex-wrap">
-                                    <span className="font-bold text-white text-[11px]">{a.id} {a.badge}</span>
-                                    <span className={`text-[9px] px-1 rounded font-semibold ${isFromDay3 ? "bg-amber-950 text-amber-300 border border-amber-800/80" : "bg-teal-900 text-teal-200"}`}>
-                                      {isFromDay3 ? "Day 3繰越" : "Day 4繰越"}
-                                    </span>
-                                  </div>
-                                  <span className={`text-[9px] px-1 rounded ${isSelected ? "bg-teal-600 text-white font-bold" : "text-slate-500"}`}>
-                                    {isSelected ? "選択中" : "未選択"}
-                                  </span>
-                                </div>
-                                <div className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">{a.summary}</div>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* フェーズ3：Day 5 結末（防衛省から貝浜への緊急打診：魚雷命中後のソナー観測報告と浪寄への諮問） */}
+                  {/* フェーズ1.5：魚雷攻撃失敗（深海での復活）＆ 防衛省作戦本部からの緊急入電（NG-06 ＆ DAY 5 指令書） */}
                   <div className="rounded-xl border border-red-800 bg-[#1e0d14] p-3.5 space-y-2.5 shadow-lg">
                     <span className="font-bold text-red-400 text-xs flex items-center gap-1.5 border-b border-red-900/50 pb-1.5">
                       <ShieldAlert className="h-4 w-4 text-red-400 animate-pulse" />
-                      【フェーズ3（Day 5 結末）：防衛省作戦本部からの緊急入電（NG-06 ＆ Day 5 途中①指令書）】
+                      【フェーズ1.5（Day 5 開始時）：危機到達まで残り48時間 ＆ 海上自衛隊の魚雷攻撃失敗・防衛省からの緊急照会（NG-06 ＆ DAY 5 指令書）】
                     </span>
                     <div className="rounded-lg bg-black/60 border border-red-700/80 p-3 text-[11px] text-red-200 space-y-2">
-                      <strong className="text-red-300 block font-bold">💥 【防衛省作戦本部より貝浜（PC2）への無線（GM読み上げ用台本）】</strong>
-                      <p className="italic text-slate-300 text-[10px]">
-                        （🎙️ 総合オペレーター 長津）:「――暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
+                      <strong className="text-red-300 block font-bold">💥 【防衛省作戦本部より貝浜（PC2）への直通無線（GM読み上げ用台本）】</strong>
+                      <p className="italic text-slate-200 leading-relaxed font-mono">
+                        （🎙️ 総合オペレーター 長津）:「――防衛省および火山噴火予知連絡会より連絡が入電！『駿河湾奥までの残距離は【約240km】、現在の巡航速度は【時速5km】であり、危機到達まで【残り48時間】と思われる』とのことです！<br />
+                        　続けて暗号ホットラインに着信！ 貝浜リエゾン（PC2）へ、防衛省作戦本部より直通無線が接続されました！」
                       </p>
                       {day4GmDestinationDecision === "tokyo" && (
                         <div className="rounded bg-amber-950/70 border border-amber-700/80 p-2 text-[10.5px] text-amber-200">
@@ -2570,14 +2475,92 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         </div>
                       )}
                       <p className="italic text-slate-100 leading-relaxed font-mono">
-                        【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。しかし、目標が発している特有の振動が起きておらず、それにあわせて火山性の周期的な微動が収まっていることを確認できている。アクティブソナー（ソナー探知）での確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授（PC5）の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ富士山を目指すのか？！」
+                        【防衛省作戦本部】:「――貝浜、防衛省作戦本部だ！ 海上自衛隊が発射した魚雷群が命中したと思われるが、目標の活動が停止しているかどうかは不明だ。一時的に特有の振動と火山性の周期的な微動は収まったものの、アクティブソナー（ソナー探知）での確認では、【ゆっくりと深海に沈みこみながら、元の大きさに戻っている傾向】が確認できる。上層部ではさらに魚雷を投下する飽和攻撃で殲滅できると主張しているが、疑問が残る。浪寄准教授（PC5）の意見を確認しておいてくれ！ あいつらはどうして魚雷の命中後に復活してしまうのか？ なぜ北上し、富士山を目指すのか？！」
                       </p>
                       <div className="rounded bg-red-950/70 border border-red-800/80 p-2 text-[10px] text-amber-200 space-y-1">
-                        <strong>🎯 GM聞き出しポイント（貝浜 / PC2 ➔ 浪寄 / PC5らへ確認させる問い）:</strong>
+                        <strong>🎯 GM聞き出しポイント（まずは全体目的シート「どうして復活する？（浪寄）／なぜ北上するのか？（朝潮）」を掲示して回答させる）:</strong>
                         <ul className="list-disc list-inside space-y-0.5 pl-1 text-slate-200">
-                          <li>「どうして魚雷が命中した後に、ゆっくり深海に沈み込みながら元の大きさへ復活してしまうのか？」（➔ 1匹の巨大生物ではなく、無数のダイオウイカの【群体（コロニー）】であるため）</li>
-                          <li>「そして、なぜ一直線に富士山を目指しているのか？」（➔ 地磁気と、小笠原・八丈島・三宅島から盗まれて海に落とされた複数の隕石、および富士山麓へ運ばれた隕石を追っているため）</li>
+                          <li>「どうして魚雷が命中した後に、ゆっくり深海に沈み込みながら元の大きさへ復活してしまうのか？」（➔ 1匹の巨大生物ではなく、無数のダイオウイカの【超群体（コロニー）】であるため）</li>
+                          <li>「そして、なぜ一直線に北上し富士山を目指しているのか？」（➔ 地磁気と、小笠原・八丈島・三宅島から盗まれて海に落とされた複数の隕石、および富士山麓へ運ばれた約30kgの隕石を追っているため）</li>
+                          <li>「通常兵器（魚雷）では倒せない以上、ダイオウイカの天敵である【マッコウクジラ】を【神社の盟約の祝詞】と【海野教授のクジラ言語研究】で呼び寄せるしかない！」という共通認識を確認し、フェーズ2（東京×小笠原の分断マップ捜索）へ進みます。</li>
                         </ul>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* フェーズ2：東京本部 × 小笠原現地 分断・同時進行マップ捜索ミッション */}
+                  <div className="rounded-xl border border-indigo-700/80 bg-[#0d1527] p-3.5 space-y-3 shadow-md">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-indigo-800/60 pb-2">
+                      <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
+                        <Compass className="h-4 w-4 text-indigo-400" />
+                        【フェーズ2：東京本部 × 小笠原現地 分断・同時進行マップ捜索ミッション（各人2〜3アクション・計21アクション目安）】
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <a
+                          href={scenarioAssetUrl("releases/images/day5_tokyo_search_map.svg")}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 rounded bg-emerald-700 hover:bg-emerald-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <ExternalLink className="h-3 w-3" /> 🗼 東京8拠点マップを開く
+                        </a>
+                        <a
+                          href={scenarioAssetUrl("releases/images/day5_chichijima_search_map.svg")}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="flex items-center gap-1 rounded bg-sky-700 hover:bg-sky-600 px-2.5 py-1 text-[10px] font-bold text-white transition shadow"
+                        >
+                          <ExternalLink className="h-3 w-3" /> 🏝️ 父島A2・8拠点マップを開く
+                        </a>
+                      </div>
+                    </div>
+
+                    <div className="rounded-lg bg-black/50 border border-indigo-900/60 p-2.5 text-[11px] text-slate-200 space-y-1.5">
+                      <strong className="text-indigo-300 block font-bold">
+                        📢 【長津のアナウンス（『DAY 5 途中① 指令書』と同文）】:
+                      </strong>
+                      <p className="italic leading-relaxed font-mono text-slate-100">
+                        （🎙️ 総合オペレーター 長津）:「――魚雷では超群体を撃滅できないことがはっきりしました。我々に残された唯一の手段は、ダイオウイカの天敵である【マッコウクジラ】を、神社の【盟約の祝詞】と海野教授の【クジラ言語研究】によって呼び寄せることです！<br />
+                        　これより東京本部チーム（3名）と小笠原現地チーム（4名）は二手に分かれ、時間を使って各拠点を回る【現地捜索ミッション】を開始してください！<br />
+                        ・【東京本部チーム】は、祝詞のクリック音を知る元神主の子ども【吉備津（きびつ）】を東京都内8拠点のマップから捜索してください。最初の手がかりは名前と『① 本人住所（江東区）』（※電話番号は不明）です。<br />
+                        ・【小笠原現地チーム】は、海野教授が島の飲み仲間たちにバックアップを分けて預けていた【3つの研究内容（①草稿・②解析システムのパスワード書類・③実録音響データ4つ）】を父島8拠点のA2マップからすべて回収してください。3つすべてが見つからない限り作戦は進行できません！」
+                      </p>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
+                      {/* 東京本部8拠点 */}
+                      <div className="rounded-lg border border-emerald-800/70 bg-emerald-950/20 p-3 space-y-2">
+                        <div className="font-bold text-emerald-300 text-xs border-b border-emerald-900/50 pb-1">
+                          🗼 東京本部チーム：東京都内 広域捜索マップ（全8拠点）GM読み上げ表
+                        </div>
+                        <div className="space-y-1.5 text-slate-200 leading-relaxed">
+                          <p><strong className="text-emerald-300">① 本人住所（江東区）［初期手がかり］</strong>：不在（待つ時間は惜しい）。近所の人から<strong>【吉備津の詳しい容貌】</strong>と、勤め先が<strong>【② 海洋研究開発機構（千代田区）】</strong>だと判明。（※①で容貌が判明した後は、いきなり⑧竹芝桟橋へ行っても即発見可能！）</p>
+                          <p><strong className="text-emerald-300">② 海洋研究開発機構（千代田区）</strong>：この数日連続噴火のニュースを気にしており、今日は休みをとって小笠原の祝詞を確認しに<strong>【③ 吉備津神社】</strong>へ向かったと判明。</p>
+                          <p><strong className="text-emerald-300">③ 吉備津神社（外神田・神田明神の場所）</strong>：小笠原の祝詞を確認しに来たが、「その書類は<strong>【④ 国立国会図書館】に預けてある</strong>」と伝えたため国会図書館へ向かったと判明。</p>
+                          <p><strong className="text-emerald-300">④ 国立国会図書館（永田町）</strong>：預けられた祝詞書類の内容を見て、海野教授に連絡を取ろうとして品川の<strong>【⑦ 海洋科学大学】</strong>へ急行したと判明。</p>
+                          <p><strong className="text-emerald-300">⑤ 科学技術館（北の丸公園）</strong>：耳の聞こえない両親の通訳を行わなければならない子どものことを<strong>【コーダ（CODA）】</strong>といい、現在はAI技術が手話を音声に変え、スマホがあれば通訳がいなくとも音声交流できる技術が開発されていることが分かる。</p>
+                          <p><strong className="text-emerald-300">⑥ 国立科学博物館（上野）</strong>：小笠原のクジラ研究が紹介されており、マッコウクジラには<strong>【コーダ】</strong>という言語があることが分かる。</p>
+                          <p><strong className="text-emerald-300">⑦ 海洋科学大学（品川）［★小笠原推理の鍵］</strong>：海野教授はすでに亡くなっていたと知り、ショックを受けて<strong>【⑧ 竹芝桟橋ターミナル】</strong>へ向かったと判明。さらに元同僚から、海野教授が研究完成による浪寄や周囲への危険を避け、島の飲み仲間に分けて預けた際の<strong>『保管・3つの鉄則』メモ</strong>が判明（①草稿＝酒に酔って口を滑らせる人間には預けない［下戸に託す］、②パスワード書類＝PCが得意な人だと中身を開いて完成させてしまうため、あえてPCに触れないアナログ派［紙派］に預ける、③実録音響テープ＝父島の高温多湿で劣化するため、低温保管庫を使えて録音機材の手入れができる人間に預ける）。</p>
+                          <p><strong className="text-emerald-300">⑧ 竹芝桟橋ターミナル（浜松町）</strong>：（※①で容貌判明後なら即発見！）海を見つめている<strong>【吉備津】</strong>を発見！ 祝詞のクリック音構成（<strong>『EV-26』</strong>）と、Day 7で使用する<strong>【吉備津の直通連絡先】</strong>を入手！（※⑦未訪問で直行した場合は、吉備津から「品川の大学で元同僚から聞いた」として上記の<strong>『保管・3つの鉄則』</strong>も補足される）</p>
+                        </div>
+                      </div>
+
+                      {/* 小笠原現地8拠点 */}
+                      <div className="rounded-lg border border-sky-800/70 bg-sky-950/20 p-3 space-y-2">
+                        <div className="font-bold text-sky-300 text-xs border-b border-sky-900/50 pb-1">
+                          🏝️ 小笠原現地チーム：父島 現地調査マップ（A2・全8拠点）GM読み上げ表
+                        </div>
+                        <div className="space-y-1.5 text-slate-200 leading-relaxed">
+                          <p className="text-amber-300 text-[10.5px] font-semibold">※推理ルール：出会う島民全員が海野教授を知っている。飲み仲間6人（神代・磯辺・潮見・柏木・湊・網野）の証言と、東京⑦の『保管・3つの鉄則』を突き合わせて3施設の担当者（神代・潮見・湊）を推理・特定し回収する（先に④⑤⑥へ訪れていた場合、推理後の名前連絡・再訪問はアクション消費なし）。</p>
+                          <p><strong className="text-sky-300">① 海洋科学大学 小笠原研究所（事務員）</strong>：「海野教授は『研究が完成すると浪寄さんにも迷惑がかかる』と気にして、よく飲み歩いていた島の仲間6人（<strong>神代・磯辺・潮見・柏木・湊・網野</strong>）のうち3人にバックアップを分けて預けていました。選び方の基準は<strong>東京・品川の大学</strong>にメモを残しているそうですよ」</p>
+                          <p><strong className="text-sky-300">② パパズドルフィン（船長兼宿の主人）</strong>：「海野先生はよく6人の飲み仲間とうちの座敷で飲んでいたよ。6人の中で<strong>お酒を飲めない下戸は『神代』と『湊』だけ</strong>で、<strong>『磯辺』</strong>は酔うと何でも喋ってしまう酒豪だったな。<strong>神代と磯辺</strong>はよく<strong>小笠原神社</strong>に出入りしていたよ」</p>
+                          <p><strong className="text-sky-300">③ ウェザーステーション展望台（ベテランガイド）</strong>：「海野先生とはよくここでクジラを眺めたよ。飲み仲間6人の中で<strong>PCや録音機材が得意なのは『柏木』と『湊』だけ</strong>で、<strong>『潮見』</strong>はパソコンに触れない筋金入りの紙派だったな。<strong>潮見と柏木</strong>はよく<strong>気象庁の小笠原観測所</strong>に出入りしていたよ」</p>
+                          <p><strong className="text-sky-300">④ 小笠原神社（神職）［★正解：神代］</strong>：「海野先生のクジラ構文規則の草稿ですか？ 数年前、先生と飲み歩いていた神社関係者のどなたかが社務所の奥に保管していた記憶があります。当時出入りしていた方も多いので、どなたの名義か（名前）が分かればすぐにお出しできますよ」 ➔ <strong>【神代（かみしろ）】</strong>と特定して伝えると、✅<strong>【① クジラ構文規則の草稿（EV-27）】</strong>を入手！</p>
+                          <p><strong className="text-sky-300">⑤ 気象庁 小笠原観測所（所長）［★正解：潮見］</strong>：「海野教授の解析システムのパスワード書類ですね？ 数年前に飲み仲間の誰かが『もしもの時の封筒』を所内の書庫に預けていた話があります。当時のファイルが膨大ですので、どの担当者のファイルか（名前）が分かればすぐ引き出せますよ」 ➔ <strong>【潮見（しおみ）】</strong>と特定して伝えると、✅<strong>【② 解析システムへのアクセス（whale-study）】</strong>を入手！</p>
+                          <p><strong className="text-sky-300">⑥ 小笠原水産センター（担当者）［★正解：湊］</strong>：「海野先生の磁気テープ（実録音響データ）ですね？ うちの低温保管庫の奥に、数年前に飲み仲間のどなたかが預けた私物ケースが残っているはずです。名義ごとに管理していますので、どなたの名義か（名前）を教えていただければすぐお出しできますよ」 ➔ <strong>【湊（みなと）】</strong>と特定して伝えると、✅<strong>【③ 実録音響データ4つ（EV-28〜31）】</strong>を入手！</p>
+                          <p><strong className="text-sky-300">⑦ 小笠原海洋センター（鯨類保全スタッフ）</strong>：「海野先生は『白いマッコウクジラは100頭に1頭の極めて知能の高いリーダー個体』だと仰っていましたよ。飲み仲間の<strong>『柏木』</strong>はPCが得意すぎて勝手にデータを解析しようとして怒られていましたし、<strong>『神代』</strong>はとても口が堅い方でした」</p>
+                          <p><strong className="text-sky-300">⑧ 二見港（港湾案内所の職員）</strong>：「飲み仲間の<strong>『湊』と『網野』</strong>はよく<strong>小笠原水産センター</strong>に出入りしていたな。漁師の<strong>網野</strong>は『機械やテープはさっぱりだ』と笑っていたけど、<strong>湊</strong>は録音機材の湿気対策に詳しかったよ。先生は<strong>品川の大学</strong>に預け先の基準をメモしてあると言っていたな」</p>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -2598,10 +2581,14 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </span>
                     </div>
 
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 6（決戦前日・朝8時）を迎えました。本日も東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）にそれぞれメンバーが集まり、両会議室を通信回線で繋いで対策会議を行っています。」
+                    </div>
+
                     <div className="rounded bg-rose-950/50 border border-rose-900/60 p-2.5 text-[11px] space-y-1">
                       <strong className="text-rose-300 block">朝のブリーフィング（朝8時・巨大生物の回復と北上再開）:</strong>
                       <p className="italic text-rose-100 leading-relaxed font-mono">
-                        （🎙️ 総合オペレーター 長津）:「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、朝倉教授の遺品である実録音響データをすべて開示します！」
+                        （🎙️ 総合オペレーター 長津）:「予想通りというべきか、本日の【朝8時】の時点で巨大生物がほとんど同じ大きさまで回復。駿河トラフ境界に向けて北上を再開しています。それにあわせて【富士山地下の火山性微動が再開】しました。駿河湾までは【24時間ほどで到達する見込み】で、防衛省からは速やかに対策をまとめるようにと指示がでています。なお、東京班が徹夜で回収した残りの捜査資料と、海野教授の遺品である実録音響データをすべて開示します！」
                       </p>
                     </div>
                   </div>
@@ -2636,7 +2623,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     <div className="rounded bg-amber-950/40 border border-amber-800/60 p-2 text-[11px] text-amber-200 space-y-1">
                       <strong>⚠️ GM進行ヒント（プレイヤーが「祝詞を読めばいいのか？」と誤解した時の誘導）:</strong>
                       <p className="text-slate-200 leading-relaxed">
-                        「祝詞を普通に日本語として読んでも、空気と水面の境界面で99.9%が跳ね返り反射して深海には届きません。祝詞の言の葉（言葉）そのものに力があるのではなく、舌を弾いて『クリック音』を発生させることが本体です。太古の島人は、音響物理を知らない後世の人間にこのクリック音を誤りなく継承させるため、『人と勇魚の契り　大獲物ぞ　集ひ来よ』という祝詞の型と口伝に残したのです。」
+                        「祝詞を普通に日本語として読んでも、空気と水面の境界面で99.9%が跳ね返り反射して深海には届きません。祝詞の言の葉（言葉）そのものに力があるのではなく、舌を弾いて『クリック音』を発生させることが本体です。太古の島人は、音響物理を知らない後世の人間にこのクリック音を誤りなく継承させるため、『人と勇魚の契り　小笠原へ集ひ来よ　大獲物ぞ　集ひ来よ』という祝詞の型と口伝に残したのです。」
                       </p>
                     </div>
                   </div>
@@ -2645,7 +2632,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                   <div className="rounded-xl border border-cyan-900/60 bg-[#0d1829] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-cyan-900/40 pb-1.5">
                       <span className="font-bold text-cyan-300 text-xs flex items-center gap-1.5">
-                        <span>🎋 【フェーズ2：海中筒作法 ＆ 朝倉ノートへ繋がる4段階の証拠ロジック】</span>
+                        <span>🎋 【フェーズ2：海中筒作法 ＆ 海野ノートへ繋がる4段階の証拠ロジック】</span>
                       </span>
                       <button
                         onClick={() => handlePlayAudioCue("sea-tube")}
@@ -2659,28 +2646,28 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </p>
                     <div className="text-[11px] text-slate-300 bg-cyan-950/30 p-2.5 rounded border border-cyan-900/40 space-y-1.5">
                       <strong className="text-cyan-200 font-bold block">
-                        🪜 【朝倉ノートの存在価値を最大化する4段階開示ロジック（GM演出の梯子）】
+                        🪜 【海野ノートの存在価値を最大化する4段階開示ロジック（GM演出の梯子）】
                       </strong>
                       <p className="text-slate-200 leading-relaxed">
-                        以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ朝倉教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
+                        以下の4つの証拠を順番に確認させることで、プレイヤー全員に「なぜ海野教授のクジラ音響ノートが必要なのか」を完璧に理解させます：
                       </p>
                       <ul className="list-disc list-inside space-y-0.5 pl-1 text-[10px] text-slate-300">
                         <li><strong>① 儀礼の存在</strong>: 噴火や巨大生物出現時、神社では海へ出て海中筒から水底へ祝詞を響かせる儀礼があった</li>
-                        <li><strong>② 祝詞の複製と口伝</strong>: 初瀬の『神社の祝詞の複製』（『人と勇魚の契り　大獲物ぞ　集ひ来よ』・言の葉を読むのみでは水底へ届かじ）と、元神主遺族（吉備津）の証言（舌を弾くクリック音）が合致</li>
+                        <li><strong>② 祝詞の複製と口伝</strong>: 初瀬の『神社の祝詞の複製』（『人と勇魚の契り　小笠原へ集ひ来よ　大獲物ぞ　集ひ来よ』・言の葉を読むのみでは水底へ届かじ）と、元神主遺族（吉備津）の証言（舌を弾くクリック音）が合致</li>
                         <li><strong>③ 巨大生物の動機と火山刺激</strong>: 巨大生物は地磁気と隕石が放つ特殊な物質を追って北上し、海底付近で特別な振動を起こして海底火山を目覚めさせている</li>
                         <li><strong>④ 太古の解決史</strong>: 『小笠原社記（抄）』に、太古に海中筒の祈りでマッコウクジラを呼び集め、深海の巨大生物（巨大なイカの塊り）を捕食させて鎮めた前例がある</li>
                       </ul>
                       <p className="text-amber-300 text-[10px] pt-1 border-t border-cyan-900/60 font-semibold">
-                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラを駿河湾へ導けない。そこで必要になるのが――朝倉教授のクジラ言語ノートだ！」
+                        ➔ 「相手は巨大なイカの塊り、先人はクジラに食べさせて解決した。ならば現代の我々もクジラに呼びかけねばならない！ しかし太古の祝詞だけでは太平洋全域のクジラを駿河湾へ導けない。そこで必要になるのが――海野教授のクジラ言語ノートだ！」
                       </p>
                     </div>
                   </div>
 
-                  {/* フェーズ3：朝倉教授ノート3段階開示 ＆ 5大コーダ実録 */}
+                  {/* フェーズ3：海野教授ノート3段階開示 ＆ 5大コーダ実録 */}
                   <div className="rounded-xl border border-indigo-900/60 bg-[#120f26] p-3.5 space-y-2.5 shadow-md">
                     <div className="flex items-center justify-between border-b border-indigo-900/40 pb-1.5">
                       <span className="font-bold text-indigo-300 text-xs flex items-center gap-1.5">
-                        <span>🐋 【フェーズ3：故・朝倉教授ノート 3段階開示 ＆ 5大コーダ実録テープ】</span>
+                        <span>🐋 【フェーズ3：故・海野教授ノート 3段階開示 ＆ 5大コーダ実録テープ】</span>
                       </span>
                       <div className="flex items-center gap-1.5">
                         <button
@@ -2698,11 +2685,11 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                       </div>
                     </div>
                     <p className="italic text-slate-200 font-mono leading-relaxed bg-black/40 p-2.5 rounded border border-indigo-950">
-                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。朝倉教授の遺品テープと研究ノート。マッコウクジラは深海で独自のクリック言語体系（コーダ）を操り、仲間同士で高度な会話を交わしていたのです！」
+                      「スピーカーから、深海の冷たい水音とともに乾いたクリック音が鳴り響きます。海野教授の遺品テープと研究ノート。マッコウクジラは深海で独自のクリック言語体系（コーダ）を操り、仲間同士で高度な会話を交わしていたのです！」
                     </p>
                     <div className="text-[11px] text-slate-300 bg-indigo-950/30 p-2.5 rounded border border-indigo-900/40 space-y-1.5">
                       <strong className="text-amber-200 font-bold block">
-                        📚 朝倉教授ノートの3段階構成 ＆ 5大コーダ実録:
+                        📚 海野教授ノートの3段階構成 ＆ 5大コーダ実録:
                       </strong>
                       <div className="grid grid-cols-3 gap-2 text-[10px]">
                         <div className="rounded bg-slate-900 p-2 border border-slate-800">
@@ -2839,8 +2826,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                           <div className="text-emerald-300 bg-emerald-950/40 p-1.5 rounded border border-emerald-900/60 space-y-0.5">
                             <strong>🎯 反論から導き出させる解答（どちらの伝達方法でも正解）:</strong>
                             <p>・Day 5で魚雷が命中しても深海で元の大きさに復活してしまった事実（通常兵器は無効＋火山刺激リスク）。天敵はマッコウクジラのみ。</p>
-                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず届く深海音響チャネル）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
-                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（朝倉日誌EV-27・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法A（人工音源を大出力で放流）</strong>：潜水艦で水深1,000mのSOFAR層（音が減衰せず遠くまで届く層）へ潜り、水中スピーカー（水中音響送信機）で人工音源を大出力で放流する（太刀魚SP-03・浪寄SP-06）。</p>
+                            <p>・<strong>伝達方法B（クジラの共鳴リレー）</strong>：音を受け取ったクジラ側が仲間同士の共鳴リレーで広域の群れへ次々と伝播させる（海野日誌EV-27・浪寄SP-06）。</p>
                           </div>
                         </div>
 
@@ -2887,7 +2874,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         📢 【長津の深夜潜水艦放流開始アナウンス（GM読み上げ用 ／ 長津カード NG-07）】:
                       </strong>
                       <p className="italic leading-relaxed font-mono text-cyan-100">
-                        （🎙️ 総合オペレーター 長津）:「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波は深海音響チャネル（SOFAR層）に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」
+                        （🎙️ 総合オペレーター 長津）:「――海上自衛隊の潜水艦が水深1,000mの深海SOFAR層へ到達！ 水中スピーカー（水中音響送信機）より、人工音源（新言語祝詞）の大出力での放流を開始いたしました！ 音波はSOFAR層に乗って、太平洋全域へと急速に拡散しています！ あとは夜明けの決戦までに、マッコウクジラの大群が駿河湾へ集結してくれるのを祈りましょう！」
                       </p>
                     </div>
                   </div>
@@ -2914,14 +2901,27 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
 
                   {/* フェーズ1：運命の夜明け・クジラ群の到達と生体ソナー大捕食 */}
                   <div className="rounded-xl border border-rose-900/60 bg-[#160f1c] p-3.5 space-y-2 shadow-md">
-                    <div className="flex items-center justify-between border-b border-rose-900/40 pb-1.5">
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-rose-900/40 pb-1.5">
                       <span className="font-bold text-rose-300 text-xs flex items-center gap-1.5">
                         <Clock className="h-4 w-4 text-rose-400" />
                         【フェーズ1：運命の夜明け・駿河湾付近まで接近 ＆ 夜通し泳いだクジラ群の到達・大捕食】
                       </span>
-                      <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
-                        微動完全停止・作戦成功
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setIsDay7SonarVideoOpen(true)}
+                          className="flex items-center gap-1 rounded-md bg-teal-600 hover:bg-teal-500 px-2.5 py-1 text-[11px] font-bold text-white shadow transition"
+                        >
+                          <Radar className="h-3.5 w-3.5" />
+                          駿河湾ソナー監視動画を再生
+                        </button>
+                        <span className="text-[10px] font-mono text-emerald-400 font-bold bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800/80">
+                          微動完全停止・作戦成功
+                        </span>
+                      </div>
+                    </div>
+                    <div className="rounded border border-teal-500/60 bg-teal-950/40 p-2.5 text-[11px] text-teal-100">
+                      📢 <strong className="text-teal-300">GMからの開始描写（各チームの現在地）</strong>：「Day 7（最終決戦の夜明け）を迎えました。東京・霞が関にある海上保安庁本部の会議室（3名）と、小笠原・父島にある海上保安庁支部の会議室（4名）を通信回線で繋ぎ、両会議室から固唾を呑んで駿河湾の状況を見守っています。」
                     </div>
                     <div className="rounded bg-black/50 border border-rose-950 p-2.5 text-[11px] text-slate-200 space-y-1.5">
                       <strong className="text-cyan-300 block font-bold">🌊 夜明けの接近報告 ＆ 深海での決着ナレーション（GM読み上げ用）:</strong>
@@ -2967,13 +2967,13 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
                   </div>
 
-                  {/* フェーズ3：海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示） */}
+                  {/* フェーズ3：海上自衛隊幹部からの直通電話 ＆ 岸部からの小笠原班への緊急解析要請（last-mission ➔ 吉備津への連絡） */}
                   <div className="rounded-xl border border-blue-900/80 bg-[#0d162b] p-3.5 space-y-2.5 shadow-md">
                     <span className="font-bold text-blue-300 text-xs flex items-center gap-1.5 border-b border-blue-900/40 pb-1.5">
                       <Shield className="h-4 w-4 text-blue-400" />
-                      【フェーズ3：海上自衛隊幹部からの直通電話（政治的思惑と最終選択の提示）】
+                      【フェーズ3：防衛省幹部からの直通電話・秘匿カード配布 ＆ 岸部からの小笠原班への緊急解析要請（last-mission ➔ 吉備津連絡）】
                     </span>
-                    <div className="rounded bg-black/60 border border-blue-800/60 p-3 text-[11px] text-blue-100 space-y-2 font-mono">
+                    <div className="rounded bg-black/60 border border-blue-800/60 p-3 text-[11px] text-blue-100 space-y-2.5 font-mono">
                       <p className="text-slate-400 text-[10px] italic">
                         （長津の歓声が響く司令室。突如、防衛省直通のホットライン赤電話が鳴り響く）
                       </p>
@@ -2985,20 +2985,54 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         世間には『海上自衛隊が役に立った』という証明にもなるし、総理も自分の決断に自信が持てる。<br /><br />
                         <strong className="text-cyan-200 font-bold">君たちの功績を出さず、国家防衛上の機密として処理したい。だが、君たちの功績として発表し、海上自衛隊は何もせずに解決できたとすることも、今ならばできる。クジラの祝詞などの詳細は伏せるがね。機転を効かせたヒーローとしてメディアにも取り上げてもらうことになる。今、どちらを選ぶか決めてほしい。このあとの政府の発表内容に関わる</strong>」
                       </p>
-                      <div className="rounded bg-blue-950/60 border border-blue-700/60 p-2 text-[10px] text-amber-300 font-bold space-y-1">
-                        <div>
-                          👉 GM進行メモ: ここで一度プレイヤーたちに、「①功績を出さず国家防衛上の機密として処理させるか」「②対策本部の功績として発表し自衛隊の活動を不要にするか」を判断・回答させてください。
-                        </div>
-                        <div className="text-cyan-200 font-normal">
-                          💡 <strong>A案でもクジラを逃がせるガイド</strong>：仮に①（A案）を選んだ場合でも、クジラへの退避メッセージ（例：「ド・ドーン・カッカッ（人間とクジラ）」「チ・トン・チ（約束）」「ポ・ポポン（南）」「タタ・タト・トン（逃げろ）」など、「逃げろ」を含むメッセージ）を送れば、クジラたちに魚雷・爆雷を回避してもらうことができます。
-                        </div>
-                        <div className="text-purple-200 font-normal">
-                          🟣 <strong>第3の選択（爆雷を投下させず、自衛隊を立てる選択）を交渉してきた場合</strong>：<br />
-                          「現場も無意味な攻撃を望んではいない。だが、その方法は総理の指示と違う行動をとることになる。あらためて進言するが、我々は総理に嘘を吐くことはできない。ご納得いただけるかは分からない」と返し、その場のGM裁量で交渉を行ってください（参考案：自衛隊の深海音響作戦が奏功、国民の生命と国土を守ることを優先等）。
-                        </div>
+                      <div className="rounded bg-blue-950/60 border border-blue-700/60 p-2 text-[10px] text-amber-300 font-bold">
+                        👉 GM進行メモ①: ここでDay 7秘匿カード全7枚（SP-08〜SP-14）を配布し、続けて【岸部（運用企画局長）から小笠原現地メンバーへの緊急連絡】を割り込ませます。
                       </div>
+
+                      <div className="rounded bg-amber-950/50 border border-amber-700/70 p-2.5 space-y-1.5 text-amber-100">
+                        <strong className="text-amber-300 block font-bold text-xs">
+                          📞 【続けて入る追加の電話：岸部（運用企画局長）から小笠原現地メンバーへの緊急連絡】
+                        </strong>
+                        <p className="italic leading-relaxed">
+                          （🎙️ 防衛省 運用企画局長・岸部）:「――待ってくれ、私だ、岸部だ！ 小笠原現地の諸君もそのまま聞いてくれ！<br />
+                          　実は今、現場海域に展開している海上自衛隊の潜水艦部隊から、『ソナー上ではもはや撃つべき対象が確認できず、これ以上魚雷を撃つ必要性が本当にあるのか？』という確認と疑問の声が複数上がっている！<br />
+                          　さらに、現場のクジラたちが先ほどから【同じコーダ（クリック音の信号）】を何度も繰り返し発信しているのだ。合同対策本部の諸君なら、このクジラの言葉の意味が分かるのではないか、と現場が確認を求めている。<br />
+                          　特に小笠原現地メンバーの意見と解析結果を至急聞きたい！ 総理の最終判断については、私が少し時間を稼いでおく。アプリ画面右上の『コード入力』に【last-mission】と入力して、今クジラたちが発している音を至急確認してくれ！」
+                        </p>
+                      </div>
+
+                      <div className="rounded bg-emerald-950/50 border border-emerald-700/70 p-2.5 space-y-1.5 text-emerald-100">
+                        <strong className="text-emerald-300 block font-bold text-xs">
+                          🐋 【コード『last-mission』の4音声確認 ➔ 吉備津（きびつ）への電話連絡】
+                        </strong>
+                        <p className="text-[10.5px] text-slate-200 leading-relaxed">
+                          1. 全員がアプリ右上の『コード入力』に<strong>【last-mission】</strong>を入力すると、4つのクジラ音声が再生されます：<br />
+                          　・Voice A（ド・ドーッカッカッ）＝<strong>【人間とクジラ】</strong><br />
+                          　・Voice B（チ・トン・チ）＝<strong>【約束】</strong><br />
+                          　・Voice C（ポ・ルル・トーン）＋ Voice D（タ・タン・ドーン）＝ 海野教授のサンプリングにもシミュレーションにもない<strong>【未知の2語】</strong>！<br />
+                          2. Day 5の最後で東京班が入手した<strong>【吉備津の直通連絡先】</strong>に電話してこの音を尋ねると、吉備津が答えます：
+                        </p>
+                        <p className="italic text-emerald-200 bg-black/40 p-2 rounded border border-emerald-800/60">
+                          （🎙️ 元神主の子ども・吉備津）:「――ああ、その音（『ポ・ルル・トーン』『タ・タン・ドーン』）ならわかります！ 古文書に記されていた祝詞の返礼の合図です。クジラからの合図で、人間に対して『ありがとう』『ごちそうさま』、または『（人間との約束が）完了した』という意味ですよ！」
+                        </p>
+                      </div>
+
+                      <div className="rounded bg-indigo-950/50 border border-indigo-700/70 p-2.5 space-y-1.5 text-indigo-100">
+                        <strong className="text-cyan-300 block font-bold text-xs">
+                          ✅ 【岸部へクジラの言葉の意味を報告 ➔ 実弾攻撃の完全中止と最終公表方法（2択）の選択】
+                        </strong>
+                        <p className="italic leading-relaxed">
+                          （🎙️ 防衛省 運用企画局長・岸部）:「――なんだと……！『人間とクジラの約束は完了した』『ありがとう、ごちそうさま』……クジラ自身が、巨大生物の完全な捕食と盟約の完了を我々に伝えてきていたというのか！<br />
+                          　……これで確証が得られた。目標は完全に消滅しており、もはや魚雷を撃つ必要など微塵もない！ 総理にも私から責任を持って進言し、実弾掃討攻撃は完全に中止させる！<br />
+                          　その上で、総理および国民への最終的な説明・公表方法としては、次のどちらの形でも通すことができる。<br />
+                          　<strong>選択肢A：【自衛隊の作戦によって巨大生物が完全消滅した（自衛隊の功績）】</strong>として発表するか。<br />
+                          　<strong>選択肢B：【合同対策本部の作戦が奏功し、完全消滅を自衛隊が確認できた（自分たちの功績）】</strong>として発表するか。<br />
+                          　クジラたちの命も盟約も守られた今、この歴史的勝利をどちらの形で世に発表するか――朝潮危機管理官、最後の決断を聞かせてくれ！」
+                        </p>
+                      </div>
+
                       <p className="italic leading-relaxed pt-1">
-                        （🎙️ 防衛省・自衛艦隊幹部）:「……わかった。このあと、政府からの発表がある。<br />
+                        （🎙️ 防衛省 運用企画局長・岸部）:「……わかった。このあと、政府からの公式発表がある。<br />
                         <strong className="text-amber-300 text-xs font-bold">いずれにしても、君たちが正しかった。感謝する</strong>」
                       </p>
                       <p className="text-slate-400 text-[10px] italic">
@@ -3017,7 +3051,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     {/* パターンA */}
                     <div className="rounded bg-black/60 border border-red-800/60 p-3 text-[11px] text-red-100 space-y-2 font-mono">
                       <div className="text-amber-300 font-bold text-xs border-b border-red-900/50 pb-1">
-                        ▼ パターンA：「功績を出さず、海上自衛隊の戦果として処理する」を選んだ場合
+                        ▼ パターンA：「自衛隊の作戦によって完全消滅した（自衛隊の功績）」を選んだ場合（NG-09）
                       </div>
                       <p className="text-slate-400 text-[10px] italic">
                         （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
@@ -3026,16 +3060,15 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         （🎙️ ニュースアナウンサー）:「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。<br /><br />
                         伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、<strong>一連の危機事態が完全に沈静化した</strong>と発表しました。<br /><br />
                         政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。<br /><br />
-                        これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。潜水艦部隊および護衛艦による一斉射撃と実弾掃討作戦を敢行し、<strong>海上自衛隊の迅速な武力行使によって、この巨大生物を完全に撃滅・駆除した</strong>とのことです。<br /><br />
-                        巨大生物の駆除に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。<br /><br />
-                        会見の最後で総理大臣は、『自衛隊の果敢な決断と迅速な行動が、国土と国民の生命を守り抜いた』と、部隊の功績を高く評価する声明を発表しています――」
+                        これに対し、政府の『有害鳥獣駆除』方針に基づき緊急出動していた海上自衛隊が、今朝未明、駿河湾口沖合の深海においてこの巨大生物を捕捉。<strong>潜水艦部隊による特命深海作戦を敢行し、この巨大生物の完全消滅を確認した</strong>とのことです。<br /><br />
+                        これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『自衛隊の果敢な決断と迅速な作戦行動が、国土と国民の生命を守り抜いた』と声明を発表しています――」
                       </p>
                     </div>
 
                     {/* パターンB */}
                     <div className="rounded bg-black/60 border border-emerald-800/60 p-3 text-[11px] text-emerald-100 space-y-2 font-mono">
                       <div className="text-emerald-300 font-bold text-xs border-b border-emerald-900/50 pb-1">
-                        ▼ パターンB：「対策本部の功績として発表し、自衛隊の活動は不要にする」を選んだ場合
+                        ▼ パターンB：「合同対策本部の作戦が奏功し、完全消滅は自衛隊が確認できた（自分たちの功績）」を選んだ場合（NG-10）
                       </div>
                       <p className="text-slate-400 text-[10px] italic">
                         （画面が切り替わり、ニューススタジオの引き締まったアナウンサーの声が流れる）
@@ -3044,9 +3077,8 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                         （🎙️ ニュースアナウンサー）:「――ここで、政府・非常災害対策本部からの臨時記者会見の模様をお伝えします。<br /><br />
                         伊豆諸島から駿河湾にかけて続いていた連続海底噴火と、富士山地下深部で観測されていた火山性微動について、内閣官房長官は先ほど、<strong>一連の危機事態が完全に沈静化した</strong>と発表しました。<br /><br />
                         政府の発表によりますと、西之島沖から駿河トラフにかけて北上していた『未確認の超巨大海洋生物』が、海底のマグマ網を刺激し、富士山の火山活動を誘発していた可能性が高いことが判明しました。<br /><br />
-                        政府は万一に備えて海上自衛隊を出動させていましたが、今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせ、<strong>深海へ特別な薬を撃ち込む独自の無力化作戦を敢行。見事にこの巨大生物を沈静化・駆除することに成功したため、海上自衛隊による武力攻撃は不要となった</strong>とのことです。<br /><br />
-                        巨大生物の無力化に伴い、気象庁は本日午前、富士山地下深部における火山性微動が完全に停止したことを確認。これを受け、政府および気象庁は、富士山の噴火警戒レベルを【レベル1（活火山であることに留意）】へと引き下げました。また、伊豆諸島各島に出されていた避難準備指示もすべて解除されました。<br /><br />
-                        会見の最後で総理大臣は、『一発の砲火も交えることなく、現場の機転と科学の力で日本を救った合同対策本部のメンバーたちは、まさに我が国の誇りでありヒーローである』と、その功績を最大限に称える声明を発表しています――」
+                        今朝未明、海上保安庁・気象庁・海洋科学大学などによる『合同対策本部』の特別チームが機転を効かせた<strong>独自の無力化作戦を敢行して見事に奏功し、現場に展開していた海上自衛隊の潜水艦部隊がその完全消滅を確認したため、実弾による武力攻撃は不要となった</strong>とのことです。<br /><br />
+                        これを受け気象庁は富士山の噴火警戒レベルを【レベル1】へ引き下げ、総理大臣は『一発の砲火も交えることなく、現場の機転と科学の力で日本を救った合同対策本部のメンバーは、我が国の誇りでありヒーローである』と称える声明を発表しています――」
                       </p>
                     </div>
                   </div>
@@ -3373,7 +3405,7 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
               </div>
               <div className="flex items-center gap-2">
                 <a
-                  href={chartModalDay === 5 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day5.svg") : chartModalDay === 4 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_day4.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart.svg")}
+                  href={chartModalDay === 5 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day5.svg") : chartModalDay === 4 ? scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day4.svg") : scenarioAssetUrl("releases/images/eruption_monitoring_chart_portrait_day3.svg")}
                   target="_blank"
                   rel="noreferrer"
                   className="flex items-center gap-1 rounded bg-slate-800 hover:bg-slate-700 px-2.5 py-1 text-xs text-slate-300 transition border border-slate-700"
@@ -3423,12 +3455,12 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 <>
                   <div className="flex items-center justify-between font-semibold text-rose-300">
                     <span>【噴火日程および連動性観測所見】</span>
-                    <span className="font-mono text-cyan-400">移動速度: 時速約6km (日速約150km)</span>
+                    <span className="font-mono text-cyan-400">移動速度: 時速6.25km (日速約150km)</span>
                   </div>
                   <p className="text-[11px] text-slate-300 leading-relaxed">
-                    ・<strong>西之島（Day 1 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
-                    ・<strong>鳥島沖（Day 2 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
-                    ・<strong>北上ベクトル</strong>：西之島から鳥島までの距離は約380km。24時間で正確に到達しており、時速約6km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
+                    ・<strong>西之島（Day 2 噴火）</strong>：突発的大規模噴火発生。周辺船舶へ緊急退避命令。<br />
+                    ・<strong>鳥島沖（Day 3 噴火）</strong>：鳥島海底カルデラが連動大爆発。噴煙高度数千メートル。<br />
+                    ・<strong>北上ベクトル</strong>：西之島から鳥島沖までの距離は約350km。Day 1 09:00（西之島近海）からDay 3 17:00（鳥島沖）までの56時間で到達しており、時速6.25km（日速約150km）のペースで深海を北上する物体が、通過した先々の火山を順次爆発させている動かぬ証拠。<br />
                     ・<strong>未噴火警戒域</strong>：北方の青ヶ島、八丈島、三宅島、伊豆大島、富士山方面は現時点で未噴火（残り4日で富士山直下に到達）。
                   </p>
                 </>
@@ -3679,6 +3711,120 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                 projectTitle={project.title}
                 selectedDay={currentDay}
                 onSelectDay={(d) => setCurrentDay(d)}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* オープニング事前案内：小笠原諸島の地理紹介動画モーダル（ゲーム外ガイド） */}
+      {isGeoIntroVideoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setIsGeoIntroVideoOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-sky-950 border border-sky-700 text-sky-300">
+                  <Navigation className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    オープニング地理紹介動画：小笠原諸島の位置と距離
+                  </h3>
+                  <p className="text-[11px] text-slate-300">
+                    本編開始前のゲーム外ガイドとして、東京湾から南へ約1,000km（船で24時間）・父島を含む群島であることを紹介する映像です。
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href={scenarioAssetUrl("releases/videos/ogasawara_geography_intro.mp4")}
+                  download="ogasawara_geography_intro.mp4"
+                  className="flex items-center gap-1.5 rounded-lg bg-sky-600 hover:bg-sky-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  MP4保存
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsGeoIntroVideoOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-y-auto">
+              <video
+                controls
+                autoPlay
+                preload="auto"
+                aria-label="オープニング地理紹介動画：小笠原諸島の位置と距離"
+                src={scenarioAssetUrl("releases/videos/ogasawara_geography_intro.mp4")}
+                className="w-full rounded-xl border border-slate-800 bg-slate-900 shadow-lg"
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Day 7 クライマックス演出：駿河湾口 深海ソナー監視動画モーダル */}
+      {isDay7SonarVideoOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 p-4 backdrop-blur-sm"
+          onClick={() => setIsDay7SonarVideoOpen(false)}
+        >
+          <div
+            className="relative max-w-5xl w-full rounded-2xl border border-slate-700 bg-slate-950 p-6 shadow-2xl overflow-hidden flex flex-col max-h-[94vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-3">
+                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-teal-950 border border-teal-700 text-teal-300">
+                  <Radar className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-sm text-white">
+                    【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）
+                  </h3>
+                  <p className="text-[11px] text-slate-300">
+                    海上自衛隊が湾内で待機するなか、駿河湾口の巨大群体へクジラ群が続々と集結・潜水し、目標反応が消失するまでの監視映像です。
+                  </p>
+                </div>
+              </div>
+              <div className="flex flex-wrap items-center gap-2">
+                <a
+                  href={scenarioAssetUrl("releases/videos/day7_suruga_sonar_convergence.mp4")}
+                  download="day7_suruga_sonar_convergence.mp4"
+                  className="flex items-center gap-1.5 rounded-lg bg-teal-600 hover:bg-teal-500 px-3 py-1.5 text-xs font-bold text-white shadow transition"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  MP4保存
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setIsDay7SonarVideoOpen(false)}
+                  className="flex items-center gap-1 rounded-lg bg-slate-800 hover:bg-slate-700 px-2.5 py-1.5 text-xs font-semibold text-slate-300 hover:text-white transition border border-slate-700"
+                >
+                  <X className="h-4 w-4" /> 閉じる
+                </button>
+              </div>
+            </div>
+
+            <div className="mt-4 flex-1 overflow-y-auto">
+              <video
+                controls
+                autoPlay
+                preload="auto"
+                aria-label="【Day 7】駿河湾口 統合ソナー監視映像（クジラ群集結・深海潜航）"
+                src={scenarioAssetUrl("releases/videos/day7_suruga_sonar_convergence.mp4")}
+                className="w-full rounded-xl border border-slate-800 bg-slate-900 shadow-lg"
               />
             </div>
           </div>

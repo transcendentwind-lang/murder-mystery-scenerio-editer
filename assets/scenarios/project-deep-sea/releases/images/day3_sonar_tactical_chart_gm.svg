@@ -296,12 +296,12 @@
     <circle cx="0" cy="0" r="22" fill="none" stroke="#94a3b8" stroke-width="1" />
     <line x1="0" y1="-22" x2="0" y2="22" stroke="#94a3b8" stroke-width="1" />
     <line x1="-22" y1="0" x2="22" y2="0" stroke="#94a3b8" stroke-width="1" />
-    <polygon points="0,-22 -4,-8 0,-12 4,-8" fill="#0284c7" />
-    <polygon points="0,22 -4,8 0,12 4,8" fill="#64748b" />
-    <text x="0" y="-26" fill="#0284c7" font-size="9.5" font-weight="bold" text-anchor="middle">N</text>
-    <text x="0" y="33" fill="#64748b" font-size="8.5" text-anchor="middle">S</text>
-    <text x="30" y="3" fill="#64748b" font-size="8.5" text-anchor="middle">E</text>
-    <text x="-30" y="3" fill="#64748b" font-size="8.5" text-anchor="middle">W</text>
+    <polygon points="0,-19 -4,-7 0,-11 4,-7" fill="#0284c7" />
+    <polygon points="0,19 -4,7 0,11 4,7" fill="#64748b" />
+    <text x="0" y="-28" fill="#0284c7" font-size="9.5" font-weight="bold" text-anchor="middle">N</text>
+    <text x="0" y="35" fill="#64748b" font-size="8.5" text-anchor="middle">S</text>
+    <text x="32" y="3" fill="#64748b" font-size="8.5" text-anchor="middle">E</text>
+    <text x="-32" y="3" fill="#64748b" font-size="8.5" text-anchor="middle">W</text>
   </g>
 
   <!-- 海図凡例（LEGEND：枠外右上・GM正解項目入り） -->

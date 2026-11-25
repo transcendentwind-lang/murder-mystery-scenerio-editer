@@ -119,14 +119,7 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
             { delayMs: 200, freq: 2250, duration: 0.018, volume: 0.85 },
             { delayMs: 330, freq: 1550, duration: 0.025, volume: 0.9 },
           ]);
-      case "word-go-south": // 14. ポ・ポポン（南）
-        return melodic(
-          [
-            { delayMs: 0, freq: 2100, duration: 0.018, volume: 0.82 },
-            { delayMs: 220, freq: 1750, duration: 0.02, volume: 0.86 },
-            { delayMs: 360, freq: 1450, duration: 0.026, volume: 0.92 },
-          ]);
-      case "word-go-north": // 15. ピ・ピピッ（北）
+      case "word-go-north": // 14. ピ・ピピッ（北）
         return melodic(
           [
             { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
@@ -178,13 +171,69 @@ export function getWordAudioPattern(wordId: string): WordAudioPattern {
       case "word-ack": // 23. カッ（了解した）
       case "word-yes":
         return { pulses: [{ delayMs: 0, freqHz: 2950, durationMs: 18, amplitude: 0.95 }], durationMs: 260 };
-      case "word-human-whale": // 24. ド・ドーン・カッカッ（人間とクジラ）
+      case "word-human-whale": // 23. ド・ドーッカッカッ（人間とクジラ：前半は word-whale、後半は word-human と同じテンポ）
         return melodic(
           [
-            { delayMs: 0, freq: 1650, duration: 0.025, volume: 0.88 },
-            { delayMs: 260, freq: 1350, duration: 0.038, volume: 0.94 },
-            { delayMs: 560, freq: 2350, duration: 0.016, volume: 0.88 },
-            { delayMs: 720, freq: 2350, duration: 0.016, volume: 0.92 },
+            { delayMs: 0, freq: 1650, duration: 0.025, volume: 0.85 },
+            { delayMs: 280, freq: 1350, duration: 0.042, volume: 0.95 },
+            { delayMs: 470, freq: 2350, duration: 0.016, volume: 0.88 },
+            { delayMs: 660, freq: 2350, duration: 0.016, volume: 0.9 },
+          ]);
+      case "word-go-northeast": // 24. ピ・ピツ・ピィッ！（北東）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
+            { delayMs: 170, freq: 2850, duration: 0.015, volume: 0.88 },
+            { delayMs: 280, freq: 1850, duration: 0.02, volume: 0.86 },
+            { delayMs: 470, freq: 3300, duration: 0.016, volume: 0.94 },
+          ]);
+      case "word-go-northwest": // 25. ピ・ピポ・ポン（北西）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2400, duration: 0.016, volume: 0.82 },
+            { delayMs: 170, freq: 2850, duration: 0.015, volume: 0.88 },
+            { delayMs: 310, freq: 2250, duration: 0.018, volume: 0.86 },
+            { delayMs: 450, freq: 1550, duration: 0.025, volume: 0.92 },
+          ]);
+      case "word-place-ogasawara": // 26. ボ・ボーン・ポポ（小笠原）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1450, duration: 0.026, volume: 0.88 },
+            { delayMs: 190, freq: 1250, duration: 0.044, volume: 0.95 },
+            { delayMs: 390, freq: 1950, duration: 0.018, volume: 0.88 },
+            { delayMs: 510, freq: 1950, duration: 0.018, volume: 0.9 },
+          ]);
+      case "word-place-hachijojima": // 27. ゴ・ゴ・トトーン（八丈島）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1350, duration: 0.026, volume: 0.9 },
+            { delayMs: 160, freq: 1350, duration: 0.026, volume: 0.9 },
+            { delayMs: 340, freq: 2150, duration: 0.018, volume: 0.88 },
+            { delayMs: 470, freq: 1900, duration: 0.036, volume: 0.94 },
+          ]);
+      case "word-place-mikurajima": // 28. クル・ル・ピポン（御蔵島）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2750, duration: 0.015, volume: 0.86 },
+            { delayMs: 90, freq: 2950, duration: 0.015, volume: 0.88 },
+            { delayMs: 220, freq: 2750, duration: 0.015, volume: 0.86 },
+            { delayMs: 370, freq: 3150, duration: 0.016, volume: 0.9 },
+            { delayMs: 500, freq: 2050, duration: 0.026, volume: 0.92 },
+          ]);
+      case "word-unknown-c": // クジラ音声C（未知の言語：ポ・ルル・トーン）
+        return melodic(
+          [
+            { delayMs: 0, freq: 1950, duration: 0.022, volume: 0.88 },
+            { delayMs: 170, freq: 2450, duration: 0.016, volume: 0.9 },
+            { delayMs: 270, freq: 2650, duration: 0.016, volume: 0.92 },
+            { delayMs: 430, freq: 2150, duration: 0.042, volume: 0.95 },
+          ]);
+      case "word-unknown-d": // クジラ音声D（未知の言語：タ・タン・ドーン）
+        return melodic(
+          [
+            { delayMs: 0, freq: 2550, duration: 0.016, volume: 0.88 },
+            { delayMs: 160, freq: 2150, duration: 0.022, volume: 0.92 },
+            { delayMs: 360, freq: 1380, duration: 0.045, volume: 0.96 },
           ]);
       default:
         return clicks([0, 200, 400], 2400);}

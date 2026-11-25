@@ -250,7 +250,7 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
           <circle r="14" fill="none" stroke="#f59e0b" strokeWidth="2" strokeDasharray="4 2" />
           <circle r="4" fill="#fbbf24" />
           <line x1="0" y1="0" x2="-45" y2="-22" stroke="#fbbf24" strokeWidth="2" markerEnd="url(#arrow-vector)" />
-          <g transform="translate(-235, -14)">
+          <g transform="translate(-260, -39)">
             <rect width="215" height="34" rx="4" fill="#7f1d1d" stroke="#fca5a5" strokeWidth="1.3" />
             <text x="107" y="14" fill="#ffffff" fontSize="9.5" fontWeight="bold" textAnchor="middle">
               ⚠️ 朝8時回復・駿河トラフ境界へ北上再開
@@ -301,8 +301,8 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
           <text x="0" y="32" fill="#cbd5e1" fontSize="8" fontFamily="monospace" textAnchor="middle">
             33°45&apos;N, 139°30&apos;E
           </text>
-          <line x1="-12" y1="-3" x2="-45" y2="-10" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="2,2" />
-          <g transform="translate(-235, -28)">
+          <line x1="-12" y1="2" x2="-65" y2="12" stroke="#ef4444" strokeWidth="1.5" strokeDasharray="2,2" />
+          <g transform="translate(-250, -4)">
             <rect
               width="185"
               height="36"
@@ -642,13 +642,13 @@ export const EruptionMonitoringChart: React.FC<EruptionMonitoringChartProps> = (
       {/* コンパスローズ (方位記号) */}
       <g transform="translate(1100, 120)">
         <circle r="32" fill="#0f172a" stroke="#334155" strokeWidth="1" opacity="0.9" />
-        <polygon points="0,-28 5,-8 0,0 -5,-8" fill="#ef4444" />
-        <polygon points="0,28 5,8 0,0 -5,8" fill="#64748b" />
-        <polygon points="28,0 8,5 0,0 8,-5" fill="#64748b" />
-        <polygon points="-28,0 -8,5 0,0 -8,-5" fill="#64748b" />
-        <text x="0" y="-32" fill="#ef4444" fontSize="11" fontWeight="bold" textAnchor="middle">N</text>
-        <text x="34" y="4" fill="#94a3b8" fontSize="9" textAnchor="start">E</text>
-        <text x="0" y="40" fill="#94a3b8" fontSize="9" textAnchor="middle">S</text>
+        <polygon points="0,-24 5,-7 0,0 -5,-7" fill="#ef4444" />
+        <polygon points="0,24 5,7 0,0 -5,7" fill="#64748b" />
+        <polygon points="24,0 7,5 0,0 7,-5" fill="#64748b" />
+        <polygon points="-24,0 -7,5 0,0 -7,-5" fill="#64748b" />
+        <text x="0" y="-36" fill="#ef4444" fontSize="11" fontWeight="bold" textAnchor="middle">N</text>
+        <text x="36" y="4" fill="#94a3b8" fontSize="9" textAnchor="start">E</text>
+        <text x="0" y="44" fill="#94a3b8" fontSize="9" textAnchor="middle">S</text>
         <text x="-36" y="4" fill="#94a3b8" fontSize="9" textAnchor="end">W</text>
       </g>
     </svg>

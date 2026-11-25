@@ -10,7 +10,7 @@ test("単音の試聴ではクリックした位置だけ、連続再生では�
   await page.goto("/sonar");
   const slots = page.getByTitle("タップしてこの音と波形を確認", { exact: true });
   const replay = page.getByRole("button", { name: "もう一度再生", exact: true });
-  const sound = page.getByRole("button").filter({ has: page.getByRole("button", { name: "試聴", exact: true }) }).first();
+  const sound = page.getByRole("button", { name: "この音を選択する", exact: true }).first();
   // 同じ音を繰り返し追加し、語IDでは位置を区別できない場合も確認する。
   for (let index = 0; index < 3; index++) {
     await sound.click();
@@ -35,7 +35,7 @@ test("単音の試聴ではクリックした位置だけ、連続再生では�
   await expect(replay).toBeDisabled();
   for (let index = 0; index < 3; index++) await expect(slots.nth(index)).not.toHaveClass(/bg-cyan-400/);
   await expect(replay).toBeEnabled();
-  await page.getByRole("button", { name: /海中にクリック音を流す/ }).click();
+  await page.getByRole("button", { name: /シミュレーション開始/ }).click();
   for (let index = 0; index < 3; index++) {
     await expect(slots.nth(index)).toHaveClass(/bg-cyan-400/);
   }
@@ -110,4 +110,35 @@ test("実ブラウザーで発音予定時刻と波形再生位置を同じ音�
   await page.getByRole("button", { name: "③ GM進行", exact: true }).click();
   await expect(page.locator("canvas[data-playback-ms]")).toHaveCount(0);
   expect(await page.evaluate(() => (window as any).audioCancelled)).toBeGreaterThan(0);
+});
+
+test("スマホ画面のスクロール時に発信するクリック音パターンのフローティングバナーが画面上部へ固定表示される", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 664 });
+  await page.addInitScript(() => localStorage.setItem("mm_sonar_player_auth_v1", "whale-study"));
+  await page.goto("/sonar");
+  await expect(page.getByTestId("sequence-banner-floating")).toHaveCount(0);
+  await page.evaluate(() => window.scrollTo({ top: 520, behavior: "instant" }));
+  const floating = page.getByTestId("sequence-banner-floating");
+  await expect(floating).toBeVisible();
+  const box = await floating.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.y).toBeCloseTo(0, 0);
+});
+
+test("狂気の深淵の確認ダイアログで戻る・覗くを選択でき、コード入力からlast-missionで未知の言語画面へ移行できる", async ({ page }) => {
+  await page.addInitScript(() => localStorage.setItem("mm_sonar_player_auth_v1", "whale-study"));
+  await page.goto("/sonar");
+  await page.getByRole("button", { name: "狂気の深淵を覗き込み、クジラの言語をより理解する", exact: true }).click();
+  await expect(page.getByText("狂気の深淵を覗き込み、クジラの言語をより理解します。検討時間が追加されますのでGMにもお知らせください。本当によろしいですか？")).toBeVisible();
+  await page.getByRole("button", { name: "戻る", exact: true }).click();
+  await expect(page.getByText("解読状況: 2 / 28 語あてはめ済")).toBeVisible();
+
+  await page.getByRole("button", { name: "コード入力", exact: true }).click();
+  await page.getByPlaceholder("コードを入力...").fill("last-mission");
+  await page.getByRole("button", { name: "コード認証して聞き取り画面へ移行", exact: true }).click();
+  await expect(page.getByRole("button", { name: "まとめて聞く", exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声A", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声B", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声C", { exact: true })).toBeVisible();
+  await expect(page.getByText("クジラ音声D", { exact: true })).toBeVisible();
 });

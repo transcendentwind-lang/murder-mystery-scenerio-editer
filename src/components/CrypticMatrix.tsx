@@ -148,7 +148,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
               【Day 1 〜 Day 6：音響・祝詞・新言語の提示と手がかりの連鎖】
             </span>
             <span className="text-[11px] text-amber-400/80">
-              ※4段階ロジック（祝詞儀礼 ➔ 海中筒の音響物理 ➔ 古代の捕食伝承 ➔ 朝倉ノートのクジラ言語）
+              ※4段階ロジック（祝詞儀礼 ➔ 海中筒の音響物理 ➔ 古代の捕食伝承 ➔ 海野ノートのクジラ言語）
             </span>
           </div>
           <div className="grid grid-cols-6 gap-2 text-[11px]">
@@ -170,7 +170,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-amber-400 mb-1">Day 5: コーダ言語の解明</span>
-              <p className="text-slate-300">朝倉ノートからクジラのクリック音列（コーダ）言語体系を発見。海中筒＝音響インピーダンス整合装置。</p>
+              <p className="text-slate-300">海野ノートからクジラのクリック音列（コーダ）言語体系を発見。海中筒＝音響インピーダンス整合装置。</p>
             </div>
             <div className="rounded border border-slate-800 bg-slate-900/80 p-2.5">
               <span className="block font-bold text-emerald-400 mb-1">Day 6: 舌クリック新言語</span>
@@ -273,7 +273,7 @@ export const CrypticMatrix: React.FC<CrypticMatrixProps> = ({
                 <li>初瀬 / PC6（救護・神職）: 祝詞巻物・口伝の点刻記号（「人間とクジラ」「約束」）</li>
                 <li>太刀魚 / PC4（観測）: 連動海底火山の熱水・地鳴り音響ログ（「海の下の火山」）</li>
                 <li>貝浜 / PC2（音響）: 音響航法の方位コーダ（「北」などの東西南北）</li>
-                <li>浪寄 / PC5（生物）: 朝倉教授ノートの探索・号令・攻撃コーダ（「探せ」「集まれ」「攻撃せよ」）</li>
+                <li>浪寄 / PC5（生物）: 海野教授ノートの探索・号令・攻撃コーダ（「探せ」「集まれ」「攻撃せよ」）</li>
                 <li>坂凪 / PC3（船長）: 大獲物のクリック音リズム（「大きい・たくさんの餌」）</li>
                 <li>朝潮 / PC1（司令）: 海上自衛隊大出力ソナー網の軍事アクセス承認と全回線統合</li>
               </ul>
