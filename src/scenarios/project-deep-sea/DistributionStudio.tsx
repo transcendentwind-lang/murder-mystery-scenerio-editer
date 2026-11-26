@@ -2821,7 +2821,13 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   }, []);
 
   const allEvidences = useMemo(() => {
-    return (project.evidences || [])
+    const existingList = project.evidences || [];
+    const existingIds = new Set(existingList.map((e) => e?.id));
+    const missingMasterEvidences =
+      project.id === "project-deep-sea"
+        ? (initialProject.evidences || []).filter((me) => !existingIds.has(me.id))
+        : [];
+    return [...existingList, ...missingMasterEvidences]
       .filter(
         (e) =>
           e &&
@@ -6749,6 +6755,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       const ownerChar = (project.characters || []).find((c) => c.id === ev.ownerId);
                       const ownerShort = ownerChar
                         ? (ownerChar.name || "").split("（")[0]
+                        : ev.ownerId === "pc-7"
+                        ? "長津"
                         : "全体公開";
                       const isSelected = ev.id === activeEvidence?.id;
                       const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);
@@ -6838,6 +6846,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       const ownerChar = (project.characters || []).find((c) => c.id === ev.ownerId);
                       const ownerShort = ownerChar
                         ? (ownerChar.name || "").split("（")[0]
+                        : ev.ownerId === "pc-7"
+                        ? "長津"
                         : "全体公開";
                       const isSelected = ev.id === activeEvidence?.id;
                       const cardColor = getEvidenceCardColorTheme(ev.ownerId, ev.foundPhase);

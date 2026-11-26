@@ -767,6 +767,22 @@ export const initialProject: MMProject = {
       visibility: "shareable",
       category: "audio",
     },
+    {
+      id: "ev-nagatsu-drift-calc",
+      title: "漂流予測 計算メモ",
+      frontTitleHtml: "漂流予測<br>計算メモ",
+      description: `［　］からの風＝風によって船が押し流される方向［　］
+風による流される強さ　風速［　］ノット×リーウェイ率［　］＝［　］ノット
+潮によって船が押し流される方向［　］
+潮による流される強さ　流速［　］ノット
+1ノットは、1時間あたりの距離だから、経過時間と現地に向かう時間を考えると、［　］時間。
+あとは暗礁に注意しながら目視で確認しながらいけば見つかるだろう。`,
+      ownerId: "pc-7",
+      foundPhase: 1,
+      visibility: "shareable",
+      category: "data",
+      acquisitionCondition: "Day 1: 長津（PC7）初期保有（遭難船の漂流計算用）",
+    },
   ],
 
   timeline: [
