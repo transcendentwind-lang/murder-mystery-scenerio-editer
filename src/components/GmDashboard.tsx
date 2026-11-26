@@ -2529,20 +2529,22 @@ export const GmDashboard: React.FC<GmDashboardProps> = ({ project, onNavigateToC
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-[11px]">
-                      {/* 東京本部8拠点 */}
+                      {/* 東京本部9拠点（8拠点＋隠し拠点） */}
                       <div className="rounded-lg border border-emerald-800/70 bg-emerald-950/20 p-3 space-y-2">
                         <div className="font-bold text-emerald-300 text-xs border-b border-emerald-900/50 pb-1">
-                          🗼 東京本部チーム：東京都内 広域捜索マップ（全8拠点）GM読み上げ表
+                          🗼 東京本部チーム：東京都内 広域捜索マップ（全8拠点＋隠し拠点）GM読み上げ表
                         </div>
                         <div className="space-y-1.5 text-slate-200 leading-relaxed">
-                          <p><strong className="text-emerald-300">① 本人住所（江東区）［初期手がかり］</strong>：不在（待つ時間は惜しい）。近所の人から<strong>【吉備津の詳しい容貌】</strong>と、勤め先が<strong>【② 海洋研究開発機構（千代田区）】</strong>だと判明。（※①で容貌が判明した後は、いきなり⑧竹芝桟橋へ行っても即発見可能！）</p>
-                          <p><strong className="text-emerald-300">② 海洋研究開発機構（千代田区）</strong>：この数日連続噴火のニュースを気にしており、今日は休みをとって小笠原の祝詞を確認しに<strong>【③ 吉備津神社】</strong>へ向かったと判明。</p>
-                          <p><strong className="text-emerald-300">③ 吉備津神社（外神田・神田明神の場所）</strong>：小笠原の祝詞を確認しに来たが、「その書類は<strong>【④ 国立国会図書館】に預けてある</strong>」と伝えたため国会図書館へ向かったと判明。</p>
-                          <p><strong className="text-emerald-300">④ 国立国会図書館（永田町）</strong>：預けられた祝詞書類の内容を見て、海野教授に連絡を取ろうとして品川の<strong>【⑦ 海洋科学大学】</strong>へ急行したと判明。</p>
-                          <p><strong className="text-emerald-300">⑤ 科学技術館（北の丸公園）［★小笠原パズルの鍵：柏木］</strong>：海野教授の友達6人目の解説員・<strong>【柏木（かしわぎ）】</strong>が勤務。「小笠原の海野教授ですか！ よく一緒に潜っていましたよ。教授のダイブコンピュータは、パパズドルフィンの倉庫にまだあるはずです。私が黒い機材ケースに入れて奥の棚へしまいましたから。あと、水中マイクは水産センターの低温庫、防水カメラは小笠原神社の古文書整理棚に置いたままだったと思いますよ」（※館内展示から、耳の聞こえない両親の通訳をする子どもを<strong>【コーダ（CODA）】</strong>といい、AIが手話を音声に変える技術も分かる）。</p>
-                          <p><strong className="text-emerald-300">⑥ 国立科学博物館（上野）</strong>：小笠原のクジラ研究が紹介されており、マッコウクジラには<strong>【コーダ】</strong>という言語があることが分かる。</p>
-                          <p><strong className="text-emerald-300">⑦ 海洋科学大学（品川）</strong>：海野教授を訪ねて来たものの、<strong>海野教授はすでに亡くなっていた</strong>ことが分かり、ショックを受けて<strong>【⑧ 竹芝桟橋ターミナル】</strong>へ向かったと判明。</p>
-                          <p><strong className="text-emerald-300">⑧ 竹芝桟橋ターミナル（浜松町）</strong>：（※①で容貌判明後なら即発見！）海を見つめている<strong>【吉備津】</strong>を発見！ 祝詞のクリック音構成（<strong>『EV-26』</strong>）と、Day 7で使用する<strong>【吉備津の直通連絡先】</strong>を入手！</p>
+                          <p><strong className="text-emerald-300">① 元住所（江東区・深川／木場）［大家：60代女性］</strong>：2年前に転居済み。<strong>【30代くらいの細身・黒縁の丸眼鏡・紺のショルダーバッグに『クジラの尾びれの木彫り』】</strong>で、千代田区の<strong>【② 海洋研究開発機構】</strong>勤務。木場のような庶民的な下町が好きで、「晴海・豊洲・お台場・有明みたいな新しいタワマン街は合わないから、<strong>木場より西側の、昔ながらの下町が残る湾岸</strong>へ移る」と話していた。</p>
+                          <p><strong className="text-emerald-300">② 海洋研究開発機構（千代田区・内幸町）［受付➔同僚：30代男性］</strong>：令状なしでは住所・番号不可。同僚「今朝急遽有休。昨日『古い祝詞を確かめに<strong>【③ 外神田の神社】</strong>へ行く』と言っていた。<strong>竹芝桟橋から徒歩20〜30分の湾岸</strong>で路地裏の古いアパート暮らし（都心はオフィス街、新木場・海の森・城南島・品川大井埠頭は倉庫や公園ばかり）。プライベートなら彼がよく通う<strong>『東京の、小笠原出身者が集まる酒場』</strong>なら知ってるかも？」</p>
+                          <p><strong className="text-emerald-300">③ 吉備津神社（千代田区・外神田）［神職：年配男性］</strong>：今朝、丸眼鏡とクジラの木彫りの吉備津が来訪。古文書は<strong>【④ 永田町の国立国会図書館】</strong>へ預けてあると伝えると飛び出した。住まいは「<strong>前の木場より西側の湾岸の下町</strong>。高いビルの合間にも昔ながらの古い長屋が残っている」とのこと。</p>
+                          <p><strong className="text-emerald-300">④ 国立国会図書館（千代田区・永田町）［館内売店の店員：女性］</strong>：丸眼鏡でクジラの木彫りの男性が、お昼前に資料コピーを抱えて<strong>【⑦ 品川の海洋科学大学】</strong>へ直行すると出て行った。落としたレシートが<strong>湾岸の下町にある有名な精肉店</strong>のもので、「僕の古いアパート、あの商店街からすぐ」と話していた。</p>
+                          <p><strong className="text-emerald-300">⑤ 科学技術館（千代田区・北の丸公園）［展示解説員・柏木 ★小笠原パズルの鍵］</strong>：「先日、<strong>【コーダ（CODA）】</strong>と<strong>AI手話音声変換</strong>の展示を熱心に見ておられました。帰り際『ここから地下鉄ですぐ、<strong>湾岸の古い下町と高層ビルが並ぶあたり</strong>に住んでいる』とのことでした」。※海野教授について尋ねた場合（柏木の証言）：「ダイブコンピュータはパパズドルフィン倉庫の黒いケース、水中マイクは水産センター低温庫、防水カメラは小笠原神社の古文書整理棚にあります」</p>
+                          <p><strong className="text-emerald-300">⑥ 国立科学博物館（台東区・上野）［鯨類担当学芸員］</strong>：先日『小笠原のマッコウクジラ展示』でクリック音言語<strong>【コーダ】</strong>に食い入っていた。「<strong>古い木造アパートの窓からすぐ南に晴海のタワマン群が見える</strong>」と話していた（晴海は新しいタワマン街なので、その<strong>すぐ北の古い下町</strong>）。</p>
+                          <p><strong className="text-emerald-300">⑦ 海洋科学大学（港区港南・品川）［研究棟スタッフ］</strong>：さっき丸眼鏡にクジラの木彫りの男性が来訪。<strong>海野教授は数年前に亡くなられた</strong>と伝えると肩を落とし、「一度<strong>【⑧ 竹芝桟橋】</strong>で故郷の海を見てから家へ帰る」と出て行った。</p>
+                          <p><strong className="text-emerald-300">⑧ 竹芝桟橋ターミナル（港区海岸・浜松町）［小笠原物産売店の店員］</strong>：1時間前までデッキにいたが「もう帰ります」と<strong>ついさっき帰宅済み</strong>。以前「家は<strong>ここから北東の湾岸で、新しいタワマンばかりの晴海より手前の、昔ながらの下町側</strong>」と話していた。</p>
+                          <p><strong className="text-amber-300">★【隠し拠点・地図非掲載】小笠原酒場ボニンブルー（有楽町駅と新橋駅の間の海側）［マスター］</strong>：「おや、坂凪船長（や太刀魚くん）の知り合いかい！ 丸眼鏡にクジラの木彫りの吉備津くんなら一昨日も来てたよ。彼はいつも<strong>『この店から南東へ歩いて15〜20分』</strong>って帰っていくよ。」</p>
+                          <p><strong className="text-emerald-200">✅【クリア判定：月島・勝どきを特定して訪問】</strong>：商店街そばの路地裏アパート付近で<strong>【吉備津】</strong>本人を発見！ 祝詞のクリック音構成（<strong>『EV-26』</strong>）と、Day 7で使用する<strong>【吉備津の直通連絡先】</strong>を入手！</p>
                         </div>
                       </div>
 
