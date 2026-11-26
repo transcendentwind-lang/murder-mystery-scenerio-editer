@@ -9,8 +9,8 @@
       "format": "md",
       "participantApp": false,
       "legacyUrl": null,
-      "bytes": 1480,
-      "sha256": "99f60bb47b12315b71424b54ec3fbe8bc0e56ba2e964c0d2368087e9d3919360"
+      "bytes": 1733,
+      "sha256": "04196ee44dacab8dff2d932feada64f5c3f5eb7ac193d6adec145247fdcd411b"
     },
     {
       "id": "material-02",
@@ -231,6 +231,127 @@
       "legacyUrl": "/images/theater_map_wide.jpg",
       "bytes": 580578,
       "sha256": "04af58bc835c1eb4ab429e66c42a338e362a38e8ff02d6bd9cd76d17d2bcb68b"
+    },
+    {
+      "id": "material-39",
+      "path": "releases/images/monitor-png/day0_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 0】伊豆・小笠原諸島 広域監視海図（白地図・プレイヤー書き込み用）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1645461,
+      "sha256": "25fc486039f27d0fceb99ae6f274ccc354bc30c0e976f4dcbbd32396f4a99831"
+    },
+    {
+      "id": "material-40",
+      "path": "releases/images/monitor-png/day1_nautical_chart_white.png",
+      "title": "【高画質PNG】【Day 1】小笠原南西海域 航海用海図（白地図・プレイヤー提示用）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1063049,
+      "sha256": "23bc1036ebc0c6e0bcbc8fa4f183db24a92f3e86902eda384d08269ba07ea1e5"
+    },
+    {
+      "id": "material-41",
+      "path": "releases/images/monitor-png/day3_sonar_tactical_chart.png",
+      "title": "【高画質PNG】【Day 3】鳥島沖 洋上ソナー索敵作戦図（36セクター索敵盤・プレイヤー提示用）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1250539,
+      "sha256": "1530b4bac185149b31046a1b0aebb5b2700273ca9e18b0d37ea8246a21dd8e9d"
+    },
+    {
+      "id": "material-42",
+      "path": "releases/images/monitor-png/day3_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 3】伊豆・小笠原火山弧 全域火山活動監視図",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1710315,
+      "sha256": "e1936743892da4cd50da5ef4c934801f9c2f28934d4fe56541410d25964d7eaf"
+    },
+    {
+      "id": "material-43",
+      "path": "releases/images/monitor-png/day4_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 4】明神礁 連動大噴火 ＆ 地震観測図",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1758274,
+      "sha256": "e9c94fa25df1e8ccc275b2c3918990f7de1e82e0d681a2a0ce01b4bd21865079"
+    },
+    {
+      "id": "material-44",
+      "path": "releases/images/monitor-png/day4_shrine_chronicle.png",
+      "title": "【高画質PNG】【Day 4】小笠原社記（抄）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 9376497,
+      "sha256": "010a5b82fe26b726a3a54a2560c5b53ef210fbd1c0fa31dac121e5316dda6ad8"
+    },
+    {
+      "id": "material-45",
+      "path": "releases/images/monitor-png/day5_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 5】御蔵島沖海底噴火 ＆ 富士山地下火山性微動観測図",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1835532,
+      "sha256": "d3f7523fccf169c6a02745483580e4f3205b7854de0885c07cbd915856c643b9"
+    },
+    {
+      "id": "material-46",
+      "path": "releases/images/monitor-png/day5_tokyo_search_map.png",
+      "title": "【高画質PNG】【Day 5】東京都内 広域捜索図（東京都心〜東京湾岸地域）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1960607,
+      "sha256": "8c9f97fb2bea80b2de62be2299e7aa81b83b4284ff65e2c9e40ff98b8ff35e7d"
+    },
+    {
+      "id": "material-47",
+      "path": "releases/images/monitor-png/day5_chichijima_search_map.png",
+      "title": "【高画質PNG】【Day 5】小笠原諸島・父島 現地調査図（二見湾・父島全域）",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 3511506,
+      "sha256": "76cb08c26d027c04ae904d3c6c7d4636e87f6be073c9f1d6a78535cce3b1ba81"
+    },
+    {
+      "id": "material-48",
+      "path": "releases/images/monitor-png/day6_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 6】巨大生物の完全回復・駿河トラフ北上再開 ＆ 富士山地下微動再開図",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1848630,
+      "sha256": "4ac97231eb995594673f01bb83e33ee8b2cd71574c760a0d0afa1ec49b5e3e8f"
+    },
+    {
+      "id": "material-49",
+      "path": "releases/images/monitor-png/day7_eruption_monitoring_chart.png",
+      "title": "【高画質PNG】【Day 7】駿河湾付近への目標接近 ＆ 富士山地下火山性微動継続・最終決戦監視図",
+      "kind": "release",
+      "format": "png",
+      "participantApp": false,
+      "legacyUrl": null,
+      "bytes": 1859361,
+      "sha256": "5778bf2b121b66857f83bb9f266a60d39fc6ca2a12ff6f24691665e3e47a7a90"
     },
     {
       "id": "material-27",
