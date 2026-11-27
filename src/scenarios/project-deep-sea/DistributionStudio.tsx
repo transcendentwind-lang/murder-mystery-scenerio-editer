@@ -2,7 +2,11 @@
 
 import { scenarioAssetUrl } from "@/scenarios/catalog";
 import { sonarWords } from "./sonarWords";
-import { JAPANESE_MEANING_CANDIDATES, LOCKED_INITIAL_MEANINGS } from "@/components/WhaleSonarMobileApp";
+import {
+  DEFAULT_BEHAVIOR_RULES,
+  JAPANESE_MEANING_CANDIDATES,
+  LOCKED_INITIAL_MEANINGS,
+} from "@/components/WhaleSonarMobileApp";
 
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import {
@@ -648,9 +652,10 @@ const getCoinTokenSvgString = (kind: CoinTokenKind, colorHex: string): string =>
  */
 interface WhaleMtgCardItem {
   id: string;
-  kind: "click_sound" | "japanese_meaning";
+  kind: "click_sound" | "japanese_meaning" | "abyss";
   codeLabel: string;
   mainText: string;
+  subText?: string;
   mainRuby?: string;
   lockedBadge?: string;
 }
@@ -787,6 +792,175 @@ const WHALE_DAY7_ALL_MTG_CARDS: WhaleMtgCardItem[] = [
   ...WHALE_DAY7_CLICK_MTG_CARDS,
   ...WHALE_DAY7_JAPANESE_MTG_CARDS,
 ];
+
+/**
+ * Day 6 アナログ実施用「狂気の深淵を覗く」専用カード（MTG横長サイズ 88mm×63mm・赤×黒デザイン）
+ */
+const WHALE_ABYSS_MTG_CARD: WhaleMtgCardItem = {
+  id: "mtg-abyss-card",
+  kind: "abyss",
+  codeLabel: "ABYSS // 禁忌",
+  mainText: "狂気の深淵を覗く",
+  subText: "狂気の深淵を覗き込み、クジラの言語をより理解する",
+  lockedBadge: "使用する際はGMへ宣言",
+};
+
+/**
+ * GM用 クジラ言語アナログ判定早見表データ（アプリの DEFAULT_BEHAVIOR_RULES・sonarWords と自動同期）
+ */
+interface WhaleWordLookupItem {
+  id: string;
+  code: string;
+  onomatopoeia: string;
+  meaning: string;
+  isLockedInitial: boolean;
+}
+
+const WHALE_WORD_ORDERED_LIST: WhaleWordLookupItem[] = (() => {
+  const lockedOrder = ["word-subsea-volcano", "word-alert"];
+  const locked = lockedOrder
+    .map((id) => sonarWords.find((w) => w.id === id))
+    .filter((w): w is (typeof sonarWords)[number] => Boolean(w));
+  const unlocked = sonarWords.filter((w) => !LOCKED_INITIAL_MEANINGS[w.id]);
+  const ordered = [...locked, ...unlocked];
+
+  return ordered.map((w, idx) => {
+    const rawOnomatopoeia =
+      w.soundPattern.match(/（(.+?)）/)?.[1] || w.soundPattern;
+    const onomatopoeia = rawOnomatopoeia.split("/")[0].trim();
+    return {
+      id: w.id,
+      code: `#${String(idx + 1).padStart(2, "0")}`,
+      onomatopoeia,
+      meaning: w.meaning,
+      isLockedInitial: Boolean(LOCKED_INITIAL_MEANINGS[w.id]),
+    };
+  });
+})();
+
+const WHALE_WORD_LOOKUP_MAP: Record<string, WhaleWordLookupItem> = Object.fromEntries(
+  WHALE_WORD_ORDERED_LIST.map((item) => [item.id, item])
+);
+
+interface WhaleJudgeCategoryGroup {
+  id: string;
+  title: string;
+  accentHex: string;
+  bgHex: string;
+  rows: {
+    w1Code: string;
+    w1Sound: string;
+    w2Code: string;
+    w2Sound: string;
+    meaningPair: string;
+    outcome: string;
+    isSpecialEcho?: boolean;
+  }[];
+}
+
+const WHALE_JUDGE_CATEGORY_GROUPS: WhaleJudgeCategoryGroup[] = (() => {
+  const placeIds = new Set([
+    "word-place-ogasawara",
+    "word-place-hachijojima",
+    "word-place-mikurajima",
+  ]);
+  const dirIds = new Set([
+    "word-go-east",
+    "word-go-west",
+    "word-go-north",
+    "word-go-northeast",
+    "word-go-northwest",
+  ]);
+  const familyIds = new Set([
+    "word-whale",
+    "word-child-here",
+    "word-calf",
+  ]);
+
+  const groups: WhaleJudgeCategoryGroup[] = [
+    {
+      id: "ritual",
+      title: "① 挨拶・盟約（特別なコーダが返る：2組）",
+      accentHex: "#6d28d9",
+      bgHex: "#f5f3ff",
+      rows: [],
+    },
+    {
+      id: "action",
+      title: "② 火山・敵・餌への行動（9組）",
+      accentHex: "#b91c1c",
+      bgHex: "#fef2f2",
+      rows: [],
+    },
+    {
+      id: "family",
+      title: "③ 親クジラ・子クジラの行動（5組）",
+      accentHex: "#0f766e",
+      bgHex: "#f0fdfa",
+      rows: [],
+    },
+    {
+      id: "direction",
+      title: "④ 方角への移動・索敵（10組）",
+      accentHex: "#0369a1",
+      bgHex: "#f0f9ff",
+      rows: [],
+    },
+    {
+      id: "place",
+      title: "⑤ 特定の海域（島名）への移動・索敵・警戒（9組）",
+      accentHex: "#b45309",
+      bgHex: "#fffbeb",
+      rows: [],
+    },
+  ];
+
+  DEFAULT_BEHAVIOR_RULES.forEach((rule) => {
+    const w1 = WHALE_WORD_LOOKUP_MAP[rule.sequence[0]];
+    const w2 = WHALE_WORD_LOOKUP_MAP[rule.sequence[1]];
+    if (!w1 || !w2) return;
+    const row = {
+      w1Code: w1.code,
+      w1Sound: w1.onomatopoeia,
+      w2Code: w2.code,
+      w2Sound: w2.onomatopoeia,
+      meaningPair: rule.name,
+      outcome: rule.behaviorTitle,
+      isSpecialEcho: rule.responseSoundType !== "yes_ack",
+    };
+
+    if (rule.category === "ritual") {
+      groups[0].rows.push(row);
+    } else if (placeIds.has(rule.sequence[0])) {
+      groups[4].rows.push(row);
+    } else if (dirIds.has(rule.sequence[0])) {
+      groups[3].rows.push(row);
+    } else if (familyIds.has(rule.sequence[0])) {
+      groups[2].rows.push(row);
+    } else {
+      groups[1].rows.push(row);
+    }
+  });
+
+  return groups;
+})();
+
+const ABYSS_EYE_WATERMARK_SVG = `<svg viewBox="0 0 220 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  <defs>
+    <radialGradient id="abyssIrisGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#ff1e3c" stop-opacity="0.95" />
+      <stop offset="55%" stop-color="#991b1b" stop-opacity="0.7" />
+      <stop offset="100%" stop-color="#1a0305" stop-opacity="0.1" />
+    </radialGradient>
+  </defs>
+  <path d="M12 60 C55 12, 165 12, 208 60 C165 108, 55 108, 12 60 Z" stroke="#dc2626" stroke-width="2.2" stroke-opacity="0.55" fill="#1b0306" fill-opacity="0.45" />
+  <path d="M28 60 C66 22, 154 22, 192 60 C154 98, 66 98, 28 60 Z" stroke="#ef4444" stroke-width="1.2" stroke-opacity="0.4" stroke-dasharray="4 3" />
+  <circle cx="110" cy="60" r="34" fill="url(#abyssIrisGrad)" stroke="#ef4444" stroke-width="1.5" stroke-opacity="0.65" />
+  <circle cx="110" cy="60" r="24" stroke="#fca5a5" stroke-width="0.9" stroke-opacity="0.35" stroke-dasharray="2 3" />
+  <ellipse cx="110" cy="60" rx="6.5" ry="26" fill="#050102" stroke="#ff2a46" stroke-width="1.2" stroke-opacity="0.8" />
+  <path d="M4 34 Q42 46 22 60 Q42 74 4 86" stroke="#991b1b" stroke-width="1.4" stroke-opacity="0.5" fill="none" />
+  <path d="M216 34 Q178 46 198 60 Q178 74 216 86" stroke="#991b1b" stroke-width="1.4" stroke-opacity="0.5" fill="none" />
+</svg>`;
 
 /**
  * 日本語の段落文章整形ヘルパー
@@ -2730,10 +2904,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
   const [visualMarginOverrides, setVisualMarginOverrides] = useState<Record<string, boolean>>({});
   const [selectedGmDay, setSelectedGmDay] = useState<number>(1);
   const [gmGuideViewMode, setGmGuideViewMode] = useState<"flowchart" | "daily_sheet">("flowchart");
-  const [gmPrepTool, setGmPrepTool] = useState<"goal_boards" | "coin_tokens" | "whale_cards" | "nametags">("goal_boards");
+  const [gmPrepTool, setGmPrepTool] = useState<
+    "goal_boards" | "coin_tokens" | "whale_cards" | "whale_judge_sheet" | "nametags"
+  >("goal_boards");
   const [selectedGoalBoardId, setSelectedGoalBoardId] = useState<string>(GM_GOAL_BOARDS[0]?.id ?? "goal-day1");
   const [whaleMtgFilter, setWhaleMtgFilter] = useState<
-    "all" | "click_sound" | "japanese_meaning" | "day7_only"
+    "all" | "click_sound" | "japanese_meaning" | "abyss_only" | "day7_only"
   >("all");
 
   // 画面内テキスト直接編集モードは常にOFF（完成プレビュー固定）
@@ -3932,12 +4108,442 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
   };
 
-  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カードをMTGサイズ（63mm × 88mm / A4 9面配置）で印刷 / PDF保存
+  // GM用 クジラ言語 アナログ判定早見表（A4縦・2頁構成）を印刷 / PDF保存
+  const handlePrintWhaleJudgeSheet = () => {
+    const escapeHtml = (str: string) =>
+      str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+
+    const categorySectionsHtml = WHALE_JUDGE_CATEGORY_GROUPS.map((group) => {
+      const rowsHtml = group.rows
+        .map(
+          (row) => `
+          <tr>
+            <td class="col-seq">
+              <span class="sound-pill">${escapeHtml(row.w1Code)} ${escapeHtml(row.w1Sound)}</span>
+              <span class="plus-mark">＋</span>
+              <span class="sound-pill">${escapeHtml(row.w2Code)} ${escapeHtml(row.w2Sound)}</span>
+            </td>
+            <td class="col-jp">${escapeHtml(row.meaningPair)}</td>
+            <td class="col-out${row.isSpecialEcho ? " special-out" : ""}">${escapeHtml(row.outcome)}</td>
+          </tr>`
+        )
+        .join("");
+
+      return `
+        <div class="cat-block">
+          <div class="cat-header" style="background-color: ${group.accentHex};">
+            ${escapeHtml(group.title)}
+          </div>
+          <table class="judge-table">
+            <tbody>
+              ${rowsHtml}
+            </tbody>
+          </table>
+        </div>`;
+    }).join("");
+
+    const halfCount = Math.ceil(WHALE_WORD_ORDERED_LIST.length / 2);
+    const leftWords = WHALE_WORD_ORDERED_LIST.slice(0, halfCount);
+    const rightWords = WHALE_WORD_ORDERED_LIST.slice(halfCount);
+    const vocabRowsHtml = leftWords
+      .map((lw, idx) => {
+        const rw = rightWords[idx];
+        return `
+          <tr>
+            <td class="v-code">${escapeHtml(lw.code)}</td>
+            <td class="v-sound">${escapeHtml(lw.onomatopoeia)}</td>
+            <td class="v-jp">${escapeHtml(lw.meaning)}${
+              lw.isLockedInitial ? ' <span class="init-tag">初期確定</span>' : ""
+            }</td>
+            <td class="v-sep"></td>
+            <td class="v-code">${rw ? escapeHtml(rw.code) : ""}</td>
+            <td class="v-sound">${rw ? escapeHtml(rw.onomatopoeia) : ""}</td>
+            <td class="v-jp">${
+              rw
+                ? `${escapeHtml(rw.meaning)}${
+                    rw.isLockedInitial ? ' <span class="init-tag">初期確定</span>' : ""
+                  }`
+                : ""
+            }</td>
+          </tr>`;
+      })
+      .join("");
+
+    const printWin = document.createElement("iframe");
+    printWin.style.position = "fixed";
+    printWin.style.right = "0";
+    printWin.style.bottom = "0";
+    printWin.style.width = "0";
+    printWin.style.height = "0";
+    printWin.style.border = "0";
+    document.body.appendChild(printWin);
+
+    const doc = printWin.contentWindow?.document;
+    if (doc) {
+      doc.open();
+      doc.write(`<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>${escapeHtml(project.title)} - GM用 クジラ言語 アナログ判定早見表（A4・2頁）</title>
+  <style>
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      box-sizing: border-box;
+    }
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #ffffff;
+      color: #0f172a;
+      font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    }
+    .a4-sheet {
+      width: 210mm;
+      height: 297mm;
+      padding: 8mm 10mm;
+      margin: 0 auto;
+      background: #ffffff;
+      page-break-after: always;
+      break-after: page;
+      display: flex;
+      flex-direction: column;
+      gap: 3mm;
+    }
+    .a4-sheet:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 0.7mm solid #0f172a;
+      padding-bottom: 1.5mm;
+    }
+    .sheet-title {
+      font-size: 13pt;
+      font-weight: 900;
+      color: #0f172a;
+    }
+    .sheet-sub {
+      font-size: 7.5pt;
+      font-weight: 700;
+      color: #475569;
+    }
+    .page-badge {
+      font-size: 8pt;
+      font-weight: 900;
+      color: #ffffff;
+      background: #1e293b;
+      padding: 0.8mm 2.5mm;
+      border-radius: 1.2mm;
+      font-family: monospace;
+    }
+    .rules-box {
+      border: 0.45mm solid #334155;
+      background: #f8fafc;
+      border-radius: 1.8mm;
+      padding: 2mm 3mm;
+      font-size: 7.4pt;
+      line-height: 1.42;
+    }
+    .rules-title {
+      font-weight: 900;
+      font-size: 8pt;
+      color: #0f172a;
+      margin-bottom: 0.8mm;
+    }
+    .cat-block {
+      break-inside: avoid;
+    }
+    .cat-header {
+      color: #ffffff;
+      font-size: 7.6pt;
+      font-weight: 900;
+      padding: 0.7mm 2.2mm;
+      border-radius: 1mm 1mm 0 0;
+    }
+    .judge-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 7pt;
+      line-height: 1.28;
+    }
+    .judge-table td {
+      border: 0.2mm solid #cbd5e1;
+      padding: 0.65mm 1.5mm;
+      vertical-align: middle;
+    }
+    .judge-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+    .col-seq {
+      width: 42%;
+      white-space: nowrap;
+      font-weight: 700;
+    }
+    .sound-pill {
+      display: inline-block;
+      background: #e0f2fe;
+      color: #0c4a6e;
+      border: 0.2mm solid #7dd3fc;
+      border-radius: 0.8mm;
+      padding: 0.1mm 1mm;
+      font-size: 6.7pt;
+      font-weight: 800;
+    }
+    .plus-mark {
+      margin: 0 0.6mm;
+      color: #64748b;
+      font-weight: 900;
+    }
+    .col-jp {
+      width: 24%;
+      font-weight: 700;
+      color: #334155;
+    }
+    .col-out {
+      width: 34%;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .special-out {
+      color: #6d28d9;
+      background: #faf5ff !important;
+    }
+    .vocab-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.2pt;
+      line-height: 1.35;
+    }
+    .vocab-table th {
+      background: #0f172a;
+      color: #ffffff;
+      font-weight: 900;
+      padding: 1.3mm 1.8mm;
+      font-size: 7.8pt;
+      text-align: left;
+    }
+    .vocab-table td {
+      border: 0.25mm solid #cbd5e1;
+      padding: 1.15mm 1.8mm;
+      vertical-align: middle;
+    }
+    .vocab-table tr:nth-child(even) td {
+      background: #f8fafc;
+    }
+    .v-code {
+      width: 7%;
+      font-family: monospace;
+      font-weight: 900;
+      color: #0369a1;
+      text-align: center;
+    }
+    .v-sound {
+      width: 20%;
+      font-weight: 800;
+      color: #0f172a;
+    }
+    .v-jp {
+      width: 22%;
+      font-weight: 700;
+      color: #334155;
+    }
+    .v-sep {
+      width: 2%;
+      background: #e2e8f0 !important;
+      border-top: none !important;
+      border-bottom: none !important;
+    }
+    .init-tag {
+      display: inline-block;
+      background: #0369a1;
+      color: #ffffff;
+      font-size: 6.5pt;
+      font-weight: 900;
+      padding: 0.2mm 1.2mm;
+      border-radius: 0.8mm;
+      margin-left: 1mm;
+    }
+    .memo-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3.5mm;
+    }
+    .memo-box {
+      border: 0.45mm solid #cbd5e1;
+      border-radius: 1.8mm;
+      padding: 2.5mm 3mm;
+      font-size: 8pt;
+      line-height: 1.48;
+      background: #ffffff;
+    }
+    .memo-box.abyss-memo {
+      border-color: #b91c1c;
+      background: #fef2f2;
+    }
+    .memo-box.day7-memo {
+      border-color: #4338ca;
+      background: #eef2ff;
+      grid-column: span 2;
+    }
+    .memo-head {
+      font-size: 8.8pt;
+      font-weight: 900;
+      margin-bottom: 1.2mm;
+      border-bottom: 0.3mm solid rgba(15, 23, 42, 0.15);
+      padding-bottom: 0.8mm;
+    }
+    .day7-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8pt;
+      margin-top: 1mm;
+    }
+    .day7-table td {
+      border: 0.25mm solid #c7d2fe;
+      padding: 1mm 2mm;
+      background: #ffffff;
+    }
+    .sheet-foot {
+      margin-top: auto;
+      border-top: 0.3mm dashed #cbd5e1;
+      padding-top: 1.2mm;
+      font-size: 7pt;
+      color: #64748b;
+      display: flex;
+      justify-content: space-between;
+    }
+  </style>
+</head>
+<body>
+  <!-- 1頁目：基本ルール＋全35パターン行動判定表 -->
+  <div class="a4-sheet">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-sub">${escapeHtml(project.title)} ― GM用 アナログ進行カンペ（スマホ・イヤフォン不使用時対応）</div>
+        <div class="sheet-title">🐋 クジラ言語 アナログ判定早見表（全35パターン・語順厳守）</div>
+      </div>
+      <span class="page-badge">A4縦 1 / 2 頁</span>
+    </div>
+
+    <div class="rules-box">
+      <div class="rules-title">📌 基本判定ルール（最大8枚まで・先頭から2枚1組のペアで順番に判定）</div>
+      <div>・<strong>1枚のみ</strong>：<code>#28 カッ（了解した）</code> のみ成立 → <strong>「クジラから『カッ（了解した）』というクリック音が返ってきた」</strong>。それ以外の1枚単独は「クジラは反応していない（『了解した』以外は2語の組み合わせと正しい順番が必要）」。</div>
+      <div>・<strong>2枚以上</strong>：<code>[1・2枚目] [3・4枚目] [5・6枚目] [7・8枚目]</code> に区切って判定し、成立したペアの行動を<strong>並んだ順番通りにすべて</strong>伝える（奇数枚の余り1枚は無視）。基本は「カッ」と返り行動開始（①の2組のみ専用コーダ応答）。</div>
+      <div>・<strong>0組成立時</strong>：語順が逆のペアが含まれる → <strong>「クジラは反応していない（語順が逆のようだ）」</strong> ／ 該当なし → <strong>「クリック音は海へ反響したが、クジラは反応していない」</strong>。</div>
+    </div>
+
+    ${categorySectionsHtml}
+
+    <div class="sheet-foot">
+      <span>※全35パターンはアプリ『マッコウクジラ音響言語解析システム』の判定ルールと完全一致しています</span>
+      <span>GM ONLY // プレイヤーへは見せないでください</span>
+    </div>
+  </div>
+
+  <!-- 2頁目：全28音 正解対応表 ＆ 狂気の深淵・Day 7 アナログ進行メモ -->
+  <div class="a4-sheet">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-sub">${escapeHtml(project.title)} ― GM用 アナログ進行カンペ（狂気の深淵・Day 7 対応含む）</div>
+        <div class="sheet-title">📖 全28音（#01〜#28）正解対応表 ＆ アナログ運用メモ</div>
+      </div>
+      <span class="page-badge">A4縦 2 / 2 頁</span>
+    </div>
+
+    <table class="vocab-table">
+      <thead>
+        <tr>
+          <th>番号</th>
+          <th>クリック音</th>
+          <th>正解の日本語</th>
+          <th class="v-sep"></th>
+          <th>番号</th>
+          <th>クリック音</th>
+          <th>正解の日本語</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${vocabRowsHtml}
+      </tbody>
+    </table>
+
+    <div class="memo-grid">
+      <div class="memo-box">
+        <div class="memo-head" style="color: #0369a1;">💡 アナログ運用時の注意点 ＆ 完成例</div>
+        <div>・<strong>2語成語に使われない音（2枚）</strong>：<code>#14 ゴポ・ポポポ</code>（［大人］自分の場所はここだ）、<code>#23 カッカッ</code>（人間 ※「人間とクジラ＋約束」の返答読解ヒント）。</div>
+        <div>・<strong>ダミー日本語カード（1枚）</strong>：<code>日本語 #14「南」</code> に対応する音カードは存在しません（音28枚に対し日本語29枚）。</div>
+        <div style="margin-top: 1.5mm;"><strong>✅ 代表的な8語完成例（2語×4組）</strong>：<br />
+        <code>[#17＋#08]</code> 人間とクジラ＋約束<br />
+        <code>[#01＋#15]</code> 海の下の火山＋探せ<br />
+        <code>[#16＋#03]</code> 北＋集まれ<br />
+        <code>[#22＋#26]</code> 大きい・たくさんの餌＋攻撃せよ</div>
+      </div>
+
+      <div class="memo-box abyss-memo">
+        <div class="memo-head" style="color: #991b1b;">👁 「狂気の深淵を覗く」カード使用時のGM処理</div>
+        <div>・Day 6 開始時にテーブルへ赤黒の<strong>「狂気の深淵を覗く」カード</strong>を置いておきます。</div>
+        <div>・プレイヤーが使用を宣言したら、GMは上表の全28音と日本語の対応をすべて開示します（全単語を即座に解読可能）。</div>
+        <div style="margin-top: 1.2mm;">・<strong>【5分後の心停止イベント】</strong>宣言から<strong>5分経過後（＋5分猶予）</strong>、覗いたPCが激しい心臓発作で<strong>心停止</strong>したことを宣言します。数分以内に <strong>①坂凪または初瀬の救命処置宣言（東京班なら遠隔指示）＋ ②名前を呼び「戻ってこい」「まだ死ぬな」の声かけ宣言</strong> で蘇生します。</div>
+      </div>
+
+      <div class="memo-box day7-memo">
+        <div class="memo-head" style="color: #3730a3;">🐋 Day 7 専用（last-mission）アナログ対応：受信したクジラの4音声</div>
+        <div>岸部局長から「クジラが同じコーダを繰り返している」と連絡が入った際、Day 7 専用MTGシート（音声A〜D）を提示します。</div>
+        <table class="day7-table">
+          <tbody>
+            <tr>
+              <td><strong>Day 7 音声A</strong>：ド・ドーッカッカッ ➔ <strong>人間とクジラ</strong>（既知）</td>
+              <td><strong>Day 7 音声B</strong>：チ・トン・チ ➔ <strong>約束</strong>（既知）</td>
+            </tr>
+            <tr>
+              <td><strong>Day 7 音声C</strong>：ポ・ルル・トーン ➔ <strong>ありがとう</strong>（未知 ➔ 吉備津へ電話）</td>
+              <td><strong>Day 7 音声D</strong>：タ・タン・ドーン ➔ <strong>ごちそうさま／完了した</strong>（未知 ➔ 吉備津へ電話）</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="sheet-foot">
+      <span>※両面印刷（長辺とじ）で1枚にまとめると、GMの手元ですぐ裏返して全ルールと正解表を確認できます</span>
+      <span>GM ONLY // プレイヤーへは見せないでください</span>
+    </div>
+  </div>
+</body>
+</html>`);
+      doc.close();
+      setTimeout(() => {
+        printWin.contentWindow?.focus();
+        printWin.contentWindow?.print();
+        setTimeout(() => {
+          if (document.body.contains(printWin)) {
+            document.body.removeChild(printWin);
+          }
+        }, 3000);
+      }, 700);
+    }
+  };
+
+  // オフライン（Wi-Fi不使用時）用 クジラクリック音カード ＆ 日本語カード ＆ 狂気の深淵カードをMTGサイズ（88mm × 63mm / A4横 9面配置）で印刷 / PDF保存
   const handlePrintWhaleMtgCards = (
     targetFilter:
       | "all"
       | "click_sound"
       | "japanese_meaning"
+      | "abyss_only"
       | "day7_only" = whaleMtgFilter
   ) => {
     const escapeHtml = (str: string) =>
@@ -3970,10 +4576,20 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         pages: chunkIntoPagesOf9(WHALE_CLICK_MTG_CARDS),
       });
     }
-    if (targetFilter === "all" || targetFilter === "japanese_meaning") {
+    if (targetFilter === "all") {
+      pageGroups.push({
+        deckTitle: "【あてはめる日本語カード（29枚）＋ 狂気の深淵を覗くカード（1枚）】（全30枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9([...WHALE_JAPANESE_MTG_CARDS, WHALE_ABYSS_MTG_CARD]),
+      });
+    } else if (targetFilter === "japanese_meaning") {
       pageGroups.push({
         deckTitle: "【あてはめる日本語カード】（全29枚 / MTG横長サイズ 88mm×63mm）",
         pages: chunkIntoPagesOf9(WHALE_JAPANESE_MTG_CARDS),
+      });
+    } else if (targetFilter === "abyss_only") {
+      pageGroups.push({
+        deckTitle: "【Day 6 アナログ用】狂気の深淵を覗くカード（1枚 / MTG横長サイズ 88mm×63mm）",
+        pages: chunkIntoPagesOf9([WHALE_ABYSS_MTG_CARD]),
       });
     }
     if (targetFilter === "all" || targetFilter === "day7_only") {
@@ -3986,6 +4602,39 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     const renderMtgCardSlotHtml = (card: WhaleMtgCardItem | null) => {
       if (!card) {
         return `<div class="mtg-card-empty"></div>`;
+      }
+      if (card.kind === "abyss") {
+        return `
+          <div class="mtg-card-cell mtg-abyss-cell">
+            <div class="mtg-abyss-inner">
+              <div class="mtg-abyss-watermark">${ABYSS_EYE_WATERMARK_SVG}</div>
+              <div class="mtg-abyss-corner mtg-abyss-tl"></div>
+              <div class="mtg-abyss-corner mtg-abyss-tr"></div>
+              <div class="mtg-abyss-corner mtg-abyss-bl"></div>
+              <div class="mtg-abyss-corner mtg-abyss-br"></div>
+
+              <div class="mtg-abyss-header">
+                <span class="mtg-abyss-badge">👁 禁忌アクション</span>
+                <span class="mtg-abyss-code">${escapeHtml(card.codeLabel)}</span>
+              </div>
+
+              <div class="mtg-abyss-body">
+                <div class="mtg-abyss-title">${escapeHtml(card.mainText)}</div>
+                ${
+                  card.subText
+                    ? `<div class="mtg-abyss-sub">${escapeHtml(card.subText)}</div>`
+                    : ""
+                }
+              </div>
+
+              <div class="mtg-abyss-footer">
+                <span class="mtg-abyss-footer-badge">⚠ ${escapeHtml(
+                  card.lockedBadge || "使用する際はGMへ宣言"
+                )}</span>
+              </div>
+            </div>
+          </div>
+        `;
       }
       const isClick = card.kind === "click_sound";
       const borderColor = isClick ? "#0284c7" : "#d97706";
@@ -4225,6 +4874,127 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       font-family: monospace;
       letter-spacing: 0.04em;
       opacity: 0.75;
+    }
+    /* 狂気の深淵を覗くカード（赤×黒のおどろおどろしい意匠） */
+    .mtg-abyss-cell {
+      background: #090204;
+      border: 0.4mm dashed #991b1b;
+      padding: 2.2mm;
+    }
+    .mtg-abyss-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      border: 0.9mm solid #dc2626;
+      outline: 0.45mm solid #7f1d1d;
+      outline-offset: -1.6mm;
+      border-radius: 2.6mm;
+      background: radial-gradient(circle at 50% 48%, #4a060e 0%, #1d0206 54%, #060103 100%);
+      padding: 2.8mm 3.4mm;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: inset 0 0 10mm rgba(185, 28, 28, 0.55);
+    }
+    .mtg-abyss-watermark {
+      position: absolute;
+      inset: 5mm 4mm;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0.45;
+      pointer-events: none;
+    }
+    .mtg-abyss-watermark svg {
+      width: 100%;
+      height: 100%;
+    }
+    .mtg-abyss-corner {
+      position: absolute;
+      width: 3.5mm;
+      height: 3.5mm;
+      border-color: #ef4444;
+      border-style: solid;
+      pointer-events: none;
+    }
+    .mtg-abyss-tl { top: 1.5mm; left: 1.5mm; border-width: 0.7mm 0 0 0.7mm; }
+    .mtg-abyss-tr { top: 1.5mm; right: 1.5mm; border-width: 0.7mm 0.7mm 0 0; }
+    .mtg-abyss-bl { bottom: 1.5mm; left: 1.5mm; border-width: 0 0 0.7mm 0.7mm; }
+    .mtg-abyss-br { bottom: 1.5mm; right: 1.5mm; border-width: 0 0.7mm 0.7mm 0; }
+    .mtg-abyss-header {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 0.35mm solid rgba(239, 68, 68, 0.55);
+      padding-bottom: 1.5mm;
+    }
+    .mtg-abyss-badge {
+      font-size: 7.2pt;
+      font-weight: 900;
+      color: #fef2f2;
+      background: #991b1b;
+      border: 0.3mm solid #f87171;
+      padding: 0.5mm 2mm;
+      border-radius: 1mm;
+      letter-spacing: 0.08em;
+    }
+    .mtg-abyss-code {
+      font-size: 8.2pt;
+      font-weight: 900;
+      font-family: monospace;
+      color: #fca5a5;
+      letter-spacing: 0.08em;
+    }
+    .mtg-abyss-body {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      gap: 1.8mm;
+      padding: 1mm;
+    }
+    .mtg-abyss-title {
+      font-family: "Hiragino Mincho ProN", "Yu Mincho", serif;
+      font-size: 18pt;
+      font-weight: 900;
+      color: #fff1f2;
+      letter-spacing: 0.1em;
+      text-shadow: 0 0 2.5mm #dc2626, 0 0 5mm #7f1d1d, 0 0.5mm 0 #000000;
+      line-height: 1.2;
+    }
+    .mtg-abyss-sub {
+      font-size: 8.2pt;
+      font-weight: 800;
+      color: #fecaca;
+      letter-spacing: 0.03em;
+      line-height: 1.35;
+      text-shadow: 0 0.3mm 1mm #000000;
+    }
+    .mtg-abyss-footer {
+      position: relative;
+      z-index: 1;
+      border-top: 0.35mm dashed rgba(239, 68, 68, 0.65);
+      padding-top: 1.5mm;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .mtg-abyss-footer-badge {
+      font-size: 7pt;
+      font-weight: 900;
+      color: #fee2e2;
+      background: rgba(127, 29, 29, 0.9);
+      border: 0.3mm solid #ef4444;
+      padding: 0.5mm 2.4mm;
+      border-radius: 1mm;
+      letter-spacing: 0.06em;
     }
   </style>
 </head>
@@ -5395,8 +6165,19 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 </button>
                 <button
                   type="button"
-                  onClick={() => setGmPrepTool("nametags")}
+                  onClick={() => setGmPrepTool("whale_judge_sheet")}
                   className={`rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
+                    gmPrepTool === "whale_judge_sheet"
+                      ? "bg-indigo-600 text-white shadow"
+                      : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  📋 クジラ判定早見表
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGmPrepTool("nametags")}
+                  className={`col-span-2 rounded-md px-1.5 py-1.5 text-[10px] font-bold transition ${
                     gmPrepTool === "nametags"
                       ? "bg-indigo-600 text-white shadow"
                       : "text-slate-400 hover:text-slate-200"
@@ -5510,8 +6291,8 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         [
                           {
                             id: "all",
-                            badge: "全65枚（A4横・9頁）",
-                            title: "すべて（Day 6用57枚 ＋ Day 7専用別シート8枚）",
+                            badge: "全66枚（A4横・9頁）",
+                            title: "すべて（Day 6用58枚［深淵含む］＋ Day 7専用8枚）",
                           },
                           {
                             id: "click_sound",
@@ -5522,6 +6303,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                             id: "japanese_meaning",
                             badge: "全29枚（A4横・4頁）",
                             title: "🏷️ あてはめる日本語カードのみ（日本語 #01〜#29）",
+                          },
+                          {
+                            id: "abyss_only",
+                            badge: "1枚（A4横・1頁）",
+                            title: "👁️ 狂気の深淵を覗くカードのみ（赤×黒・Day 6アナログ用）",
                           },
                           {
                             id: "day7_only",
@@ -5562,6 +6348,28 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           </button>
                         );
                       })}
+                    </div>
+                  </div>
+                </>
+              ) : gmPrepTool === "whale_judge_sheet" ? (
+                <>
+                  <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
+                    <div className="font-bold text-slate-200">📋 クジラ言語 アナログ判定早見表（GM用）</div>
+                    <div className="text-[11px] text-slate-400 leading-relaxed">
+                      スマホやイヤフォンを使えない場合に、GMがアナログカードでクジラの反応を即座に判定するためのA4縦2頁カンペシートです。
+                    </div>
+                  </div>
+                  <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40 space-y-1.5">
+                    <div className="flex items-center justify-between">
+                      <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
+                        A4縦・全2頁（両面1枚対応）
+                      </span>
+                      <span className="text-[10px] font-mono text-slate-300">GM専用</span>
+                    </div>
+                    <div className="font-bold text-xs text-white">収録内容</div>
+                    <div className="text-[11px] text-slate-300 space-y-0.5">
+                      <div>・1頁目：基本判定ルール ＋ 全35パターン行動一覧</div>
+                      <div>・2頁目：全28音 正解対応表 ＋ 狂気の深淵・Day 7 メモ</div>
                     </div>
                   </div>
                 </>
@@ -8387,10 +9195,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM事前準備（クジラクリック音カード28枚 ＆ 日本語カード29枚 ＋ Day 7専用別シート8枚 / MTG横長サイズ 88mm×63mm）
+                        {project.title} ― GM事前準備（クリック音28枚 ＋ 日本語29枚 ＋ 狂気の深淵1枚 ＋ Day 7専用8枚 / MTG横長サイズ 88mm×63mm）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
-                        クジラクリック音 ＆ あてはめる日本語カード（MTG横長サイズ：横88mm × 縦63mm / A4横・9面配置）
+                        クジラクリック音・日本語 ＆ 狂気の深淵カード（MTG横長サイズ：横88mm × 縦63mm / A4横・9面配置）
                       </h2>
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -8404,9 +9212,11 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                           ? "クリック音カード（28枚）をA4横印刷 / PDF保存"
                           : whaleMtgFilter === "japanese_meaning"
                           ? "日本語カード（29枚）をA4横印刷 / PDF保存"
+                          : whaleMtgFilter === "abyss_only"
+                          ? "狂気の深淵を覗くカード（1枚）をA4横印刷 / PDF保存"
                           : whaleMtgFilter === "day7_only"
                           ? "Day 7 専用シート（8枚・1頁）をA4横印刷 / PDF保存"
-                          : "全65枚（Day 6用＋Day 7専用別シート）をA4横印刷 / PDF保存"}
+                          : "全66枚（Day 6用［深淵含む］＋Day 7専用別シート）をA4横印刷 / PDF保存"}
                       </button>
                     </div>
                   </div>
@@ -8537,6 +9347,67 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                       </div>
                     )}
 
+                    {(whaleMtgFilter === "all" || whaleMtgFilter === "abyss_only") && (
+                      <div className="space-y-3">
+                        <div className="flex items-center justify-between rounded bg-gradient-to-r from-black via-red-950 to-black border border-red-800 px-3.5 py-2 text-xs font-bold text-red-100">
+                          <span>👁️ 【Day 6 アナログ用】狂気の深淵を覗くカード（1枚・赤×黒 禁忌デザイン）</span>
+                          <span className="font-mono text-[11px] text-red-300">MTG LANDSCAPE SIZE: 88mm × 63mm</span>
+                        </div>
+
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 bg-slate-950/90 p-4 rounded-lg border border-red-950">
+                          <div className="aspect-[88/63] w-full rounded-md border border-dashed border-red-700 bg-[#090204] p-2 flex shadow-xl">
+                            <div
+                              className="relative w-full h-full rounded-lg border-[3px] border-red-600 p-3 flex flex-col justify-between overflow-hidden"
+                              style={{
+                                background:
+                                  "radial-gradient(circle at 50% 48%, #4a060e 0%, #1d0206 54%, #060103 100%)",
+                                boxShadow: "inset 0 0 28px rgba(185, 28, 28, 0.55)",
+                              }}
+                            >
+                              <div
+                                className="pointer-events-none absolute inset-4 flex items-center justify-center opacity-45"
+                                dangerouslySetInnerHTML={{ __html: ABYSS_EYE_WATERMARK_SVG }}
+                              />
+                              <div className="pointer-events-none absolute top-1.5 left-1.5 h-3 w-3 border-t-2 border-l-2 border-red-500" />
+                              <div className="pointer-events-none absolute top-1.5 right-1.5 h-3 w-3 border-t-2 border-r-2 border-red-500" />
+                              <div className="pointer-events-none absolute bottom-1.5 left-1.5 h-3 w-3 border-b-2 border-l-2 border-red-500" />
+                              <div className="pointer-events-none absolute bottom-1.5 right-1.5 h-3 w-3 border-b-2 border-r-2 border-red-500" />
+
+                              <div className="relative z-10 flex items-center justify-between border-b border-red-600/60 pb-1">
+                                <span className="rounded border border-red-400/70 bg-red-900 px-2 py-0.5 text-[10px] font-black tracking-wider text-red-50">
+                                  👁 禁忌アクション
+                                </span>
+                                <span className="font-mono text-[10px] font-black tracking-wider text-red-300">
+                                  {WHALE_ABYSS_MTG_CARD.codeLabel}
+                                </span>
+                              </div>
+
+                              <div className="relative z-10 my-auto py-1 flex flex-col items-center justify-center text-center gap-1.5">
+                                <div
+                                  className="font-serif font-black tracking-widest text-rose-50 leading-tight text-xl sm:text-2xl"
+                                  style={{
+                                    textShadow:
+                                      "0 0 10px rgba(220,38,38,0.95), 0 0 20px rgba(127,29,29,0.9), 0 2px 2px #000",
+                                  }}
+                                >
+                                  {WHALE_ABYSS_MTG_CARD.mainText}
+                                </div>
+                                <div className="text-[10.5px] font-extrabold text-red-200 leading-snug drop-shadow">
+                                  {WHALE_ABYSS_MTG_CARD.subText}
+                                </div>
+                              </div>
+
+                              <div className="relative z-10 border-t border-dashed border-red-600/70 pt-1.5 flex items-center justify-center">
+                                <span className="rounded border border-red-500/80 bg-red-950/90 px-2 py-0.5 text-[10px] font-black tracking-wider text-red-100">
+                                  ⚠ {WHALE_ABYSS_MTG_CARD.lockedBadge}
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     {(whaleMtgFilter === "all" || whaleMtgFilter === "day7_only") && (
                       <div className="space-y-3">
                         <div className="flex items-center justify-between rounded bg-indigo-900 px-3.5 py-2 text-xs font-bold text-white">
@@ -8606,6 +9477,153 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         </div>
                       </div>
                     )}
+                  </div>
+                </div>
+              ) : gmPrepTool === "whale_judge_sheet" ? (
+                <div className="space-y-6">
+                  {/* 画面上部見出し ＆ 右上印刷ボタン行 */}
+                  <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <span className="text-xs font-bold tracking-widest text-slate-500 block">
+                        {project.title} ― GM事前準備（アナログ対応用・クジラ言語判定カンペ / A4縦・全2頁）
+                      </span>
+                      <h2 className="text-lg font-bold text-slate-900 mt-0.5">
+                        GM用 クジラ言語 アナログ判定早見表（全35パターン ＋ 全28音正解表）
+                      </h2>
+                    </div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <button
+                        type="button"
+                        onClick={handlePrintWhaleJudgeSheet}
+                        className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
+                      >
+                        <Printer className="h-3.5 w-3.5" />
+                        判定早見表（A4縦・2頁）を印刷 / PDF保存
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* 基本ルール案内 */}
+                  <div className="rounded-lg border-2 border-slate-700 bg-slate-50 p-4 text-xs text-slate-900 space-y-1.5 leading-relaxed">
+                    <div className="font-black text-sm text-slate-900">
+                      📌 アナログ判定の基本ルール（最大8枚まで・先頭から2枚1組のペアで順番に判定）
+                    </div>
+                    <div>
+                      ・<strong>1枚のみ</strong>：<code>#28 カッ（了解した）</code> のみ成立 → <strong>「クジラから『カッ（了解した）』というクリック音が返ってきた」</strong>。それ以外の1枚単独は「クジラは反応していない（『了解した』以外は2語の組み合わせと正しい順番が必要）」。
+                    </div>
+                    <div>
+                      ・<strong>2枚以上</strong>：<code>[1・2枚目] [3・4枚目] [5・6枚目] [7・8枚目]</code> に区切って判定し、成立したペアの行動を<strong>並んだ順番通りにすべて</strong>伝えます（奇数枚の余り1枚は無視）。基本は「カッ」と返り行動開始（①挨拶・盟約の2組のみ専用コーダ応答）。
+                    </div>
+                    <div>
+                      ・<strong>0組成立時</strong>：どれか1組でも語順が逆 → <strong>「クジラは反応していない（語順が逆のようだ）」</strong> ／ 該当なし → <strong>「クリック音は海へ反響したが、クジラは反応していない」</strong>。
+                    </div>
+                  </div>
+
+                  {/* 1頁目相当：全35パターン行動一覧 */}
+                  <div className="space-y-4">
+                    {WHALE_JUDGE_CATEGORY_GROUPS.map((group) => (
+                      <div key={group.id} className="rounded-lg border border-slate-300 overflow-hidden shadow-sm">
+                        <div
+                          className="px-3.5 py-2 text-xs font-black text-white"
+                          style={{ backgroundColor: group.accentHex }}
+                        >
+                          {group.title}
+                        </div>
+                        <div className="overflow-x-auto bg-white">
+                          <table className="w-full text-xs border-collapse">
+                            <thead>
+                              <tr className="bg-slate-100 text-slate-700 border-b border-slate-200">
+                                <th className="py-1.5 px-2.5 text-left font-extrabold w-[42%]">並べる順番（1枚目 ＋ 2枚目）</th>
+                                <th className="py-1.5 px-2.5 text-left font-extrabold w-[24%]">日本語の意味</th>
+                                <th className="py-1.5 px-2.5 text-left font-extrabold w-[34%]">GMが伝えるクジラの行動・返答</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {group.rows.map((row, rIdx) => (
+                                <tr key={rIdx} className="border-b border-slate-200 odd:bg-white even:bg-slate-50/70">
+                                  <td className="py-1.5 px-2.5 whitespace-nowrap font-bold">
+                                    <span className="inline-block rounded border border-sky-300 bg-sky-50 px-1.5 py-0.5 text-[11px] font-extrabold text-sky-900">
+                                      {row.w1Code} {row.w1Sound}
+                                    </span>
+                                    <span className="mx-1.5 text-slate-400 font-black">＋</span>
+                                    <span className="inline-block rounded border border-sky-300 bg-sky-50 px-1.5 py-0.5 text-[11px] font-extrabold text-sky-900">
+                                      {row.w2Code} {row.w2Sound}
+                                    </span>
+                                  </td>
+                                  <td className="py-1.5 px-2.5 font-bold text-slate-700">{row.meaningPair}</td>
+                                  <td
+                                    className={`py-1.5 px-2.5 font-extrabold ${
+                                      row.isSpecialEcho ? "text-purple-800 bg-purple-50/60" : "text-slate-900"
+                                    }`}
+                                  >
+                                    {row.outcome}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* 2頁目相当：全28音 正解対応表 ＆ アナログ運用メモ */}
+                  <div className="space-y-4 pt-2 border-t-2 border-dashed border-slate-300">
+                    <div className="rounded-lg border border-slate-300 overflow-hidden shadow-sm">
+                      <div className="bg-slate-900 px-3.5 py-2 text-xs font-black text-white">
+                        📖 全28音（#01〜#28）正解対応表（狂気の深淵カード使用時にも即参照可能）
+                      </div>
+                      <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-slate-200 bg-white text-xs">
+                        {[
+                          WHALE_WORD_ORDERED_LIST.slice(0, Math.ceil(WHALE_WORD_ORDERED_LIST.length / 2)),
+                          WHALE_WORD_ORDERED_LIST.slice(Math.ceil(WHALE_WORD_ORDERED_LIST.length / 2)),
+                        ].map((col, cIdx) => (
+                          <table key={cIdx} className="w-full border-collapse">
+                            <tbody>
+                              {col.map((item) => (
+                                <tr key={item.id} className="border-b border-slate-200 odd:bg-white even:bg-slate-50/60">
+                                  <td className="py-1.5 px-2 font-mono font-black text-sky-800 w-12 text-center">
+                                    {item.code}
+                                  </td>
+                                  <td className="py-1.5 px-2 font-extrabold text-slate-900">
+                                    {item.onomatopoeia}
+                                  </td>
+                                  <td className="py-1.5 px-2 font-bold text-slate-700">
+                                    {item.meaning}
+                                    {item.isLockedInitial && (
+                                      <span className="ml-1.5 rounded bg-sky-700 px-1.5 py-0.5 text-[10px] font-black text-white">
+                                        初期確定
+                                      </span>
+                                    )}
+                                  </td>
+                                </tr>
+                              ))}
+                            </tbody>
+                          </table>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs leading-relaxed">
+                      <div className="rounded-lg border border-sky-300 bg-sky-50/60 p-3.5 space-y-1.5">
+                        <div className="font-black text-sky-900 border-b border-sky-200 pb-1">
+                          💡 アナログ運用時の注意点 ＆ 完成例
+                        </div>
+                        <div>・<strong>2語成語に使われない音（2枚）</strong>：<code>#14 ゴポ・ポポポ</code>（［大人］自分の場所はここだ）、<code>#23 カッカッ</code>（人間 ※「人間とクジラ＋約束」の返答読解ヒント）。</div>
+                        <div>・<strong>ダミー日本語（1枚）</strong>：<code>日本語 #14「南」</code> に対応する音カードはありません。</div>
+                        <div className="pt-1">
+                          <strong>✅ 代表的な8語完成例</strong>：<code>[#17＋#08]</code> 人間とクジラ＋約束 ／ <code>[#01＋#15]</code> 海の下の火山＋探せ ／ <code>[#16＋#03]</code> 北＋集まれ ／ <code>[#22＋#26]</code> 大きい・たくさんの餌＋攻撃せよ
+                        </div>
+                      </div>
+
+                      <div className="rounded-lg border border-red-300 bg-red-50/70 p-3.5 space-y-1.5">
+                        <div className="font-black text-red-900 border-b border-red-200 pb-1">
+                          👁 「狂気の深淵を覗く」カード使用時のGM処理
+                        </div>
+                        <div>・宣言があったら、上表の全28音と日本語の対応をすべて開示します。</div>
+                        <div>・<strong>5分後（＋5分猶予）</strong>に覗いたPCの<strong>心臓発作・心停止</strong>を宣言し、数分以内に<strong>①坂凪または初瀬の救命処置宣言（東京班は遠隔指示）＋ ②名前を呼び「戻ってこい」「まだ死ぬな」の声かけ宣言</strong>で蘇生します。</div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               ) : (
