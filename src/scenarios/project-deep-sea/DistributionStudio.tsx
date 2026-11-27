@@ -801,7 +801,7 @@ const WHALE_ABYSS_MTG_CARD: WhaleMtgCardItem = {
   kind: "abyss",
   codeLabel: "ABYSS // 禁忌",
   mainText: "狂気の深淵を覗く",
-  subText: "狂気の深淵を覗き込み、クジラの言語をより理解する",
+  subText: "狂気の深淵を覗き込み、\nクジラの言語をより理解する",
   lockedBadge: "使用する際はGMへ宣言",
 };
 
@@ -4108,7 +4108,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
   };
 
-  // GM用 クジラ言語 アナログ判定早見表（A4縦・2頁構成）を印刷 / PDF保存
+  // GM用 クジラ言語 アナログ判定早見表（A4縦・ゆとり3頁構成）を印刷 / PDF保存
   const handlePrintWhaleJudgeSheet = () => {
     const escapeHtml = (str: string) =>
       str
@@ -4117,15 +4117,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
 
-    const categorySectionsHtml = WHALE_JUDGE_CATEGORY_GROUPS.map((group) => {
+    const renderCategoryGroupHtml = (group: WhaleJudgeCategoryGroup) => {
       const rowsHtml = group.rows
         .map(
           (row) => `
           <tr>
             <td class="col-seq">
-              <span class="sound-pill">${escapeHtml(row.w1Code)} ${escapeHtml(row.w1Sound)}</span>
-              <span class="plus-mark">＋</span>
-              <span class="sound-pill">${escapeHtml(row.w2Code)} ${escapeHtml(row.w2Sound)}</span>
+              <div class="seq-wrap">
+                <span class="sound-pill">${escapeHtml(row.w1Code)} ${escapeHtml(row.w1Sound)}</span>
+                <span class="plus-mark">＋</span>
+                <span class="sound-pill">${escapeHtml(row.w2Code)} ${escapeHtml(row.w2Sound)}</span>
+              </div>
             </td>
             <td class="col-jp">${escapeHtml(row.meaningPair)}</td>
             <td class="col-out${row.isSpecialEcho ? " special-out" : ""}">${escapeHtml(row.outcome)}</td>
@@ -4139,12 +4141,28 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
             ${escapeHtml(group.title)}
           </div>
           <table class="judge-table">
+            <thead>
+              <tr>
+                <th class="col-seq">並べる順番（1枚目 ＋ 2枚目）</th>
+                <th class="col-jp">日本語の意味</th>
+                <th class="col-out">GMが伝えるクジラの反応</th>
+              </tr>
+            </thead>
             <tbody>
               ${rowsHtml}
             </tbody>
           </table>
         </div>`;
-    }).join("");
+    };
+
+    // 1頁目：①挨拶・盟約（2）＋ ②火山・敵・餌（9）＋ ③親子クジラ（5）＝ 16組
+    const page1GroupsHtml = WHALE_JUDGE_CATEGORY_GROUPS.slice(0, 3)
+      .map(renderCategoryGroupHtml)
+      .join("");
+    // 2頁目：④方角（10）＋ ⑤海域・島名（9）＝ 19組
+    const page2GroupsHtml = WHALE_JUDGE_CATEGORY_GROUPS.slice(3)
+      .map(renderCategoryGroupHtml)
+      .join("");
 
     const halfCount = Math.ceil(WHALE_WORD_ORDERED_LIST.length / 2);
     const leftWords = WHALE_WORD_ORDERED_LIST.slice(0, halfCount);
@@ -4189,7 +4207,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>${escapeHtml(project.title)} - GM用 クジラ言語 アナログ判定早見表（A4・2頁）</title>
+  <title>${escapeHtml(project.title)} - GM用 クジラ言語 アナログ判定早見表（A4・3頁）</title>
   <style>
     @page {
       size: A4 portrait;
@@ -4209,15 +4227,18 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
     .a4-sheet {
       width: 210mm;
-      height: 297mm;
-      padding: 8mm 10mm;
+      height: 296mm;
+      padding: 9mm 10mm 8mm;
       margin: 0 auto;
       background: #ffffff;
       page-break-after: always;
       break-after: page;
+      page-break-inside: avoid;
+      break-inside: avoid;
       display: flex;
       flex-direction: column;
-      gap: 3mm;
+      gap: 3.5mm;
+      overflow: hidden;
     }
     .a4-sheet:last-child {
       page-break-after: auto;
@@ -4228,84 +4249,107 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       justify-content: space-between;
       align-items: flex-end;
       border-bottom: 0.7mm solid #0f172a;
-      padding-bottom: 1.5mm;
+      padding-bottom: 1.8mm;
+      flex-shrink: 0;
     }
     .sheet-title {
       font-size: 13pt;
       font-weight: 900;
       color: #0f172a;
+      line-height: 1.25;
     }
     .sheet-sub {
       font-size: 7.5pt;
       font-weight: 700;
       color: #475569;
+      margin-bottom: 0.5mm;
     }
     .page-badge {
-      font-size: 8pt;
+      font-size: 8.5pt;
       font-weight: 900;
       color: #ffffff;
       background: #1e293b;
-      padding: 0.8mm 2.5mm;
+      padding: 1mm 3mm;
       border-radius: 1.2mm;
       font-family: monospace;
+      white-space: nowrap;
     }
     .rules-box {
-      border: 0.45mm solid #334155;
+      border: 0.5mm solid #334155;
       background: #f8fafc;
       border-radius: 1.8mm;
-      padding: 2mm 3mm;
-      font-size: 7.4pt;
-      line-height: 1.42;
+      padding: 2.5mm 3.5mm;
+      font-size: 7.8pt;
+      line-height: 1.48;
+      flex-shrink: 0;
     }
     .rules-title {
       font-weight: 900;
-      font-size: 8pt;
+      font-size: 8.5pt;
       color: #0f172a;
-      margin-bottom: 0.8mm;
+      margin-bottom: 1mm;
     }
     .cat-block {
-      break-inside: avoid;
+      flex-shrink: 0;
     }
     .cat-header {
       color: #ffffff;
-      font-size: 7.6pt;
+      font-size: 8.5pt;
       font-weight: 900;
-      padding: 0.7mm 2.2mm;
-      border-radius: 1mm 1mm 0 0;
+      padding: 1.1mm 2.8mm;
+      border-radius: 1.2mm 1.2mm 0 0;
     }
     .judge-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
-      font-size: 7pt;
-      line-height: 1.28;
+      font-size: 7.8pt;
+      line-height: 1.32;
+    }
+    .judge-table th {
+      background: #e2e8f0;
+      color: #1e293b;
+      font-size: 7.2pt;
+      font-weight: 900;
+      text-align: left;
+      padding: 1mm 1.8mm;
+      border: 0.25mm solid #cbd5e1;
     }
     .judge-table td {
-      border: 0.2mm solid #cbd5e1;
-      padding: 0.65mm 1.5mm;
+      border: 0.25mm solid #cbd5e1;
+      padding: 1.1mm 1.8mm;
       vertical-align: middle;
+      overflow-wrap: break-word;
+      word-break: break-word;
     }
-    .judge-table tr:nth-child(even) td {
+    .judge-table tbody tr:nth-child(even) td {
       background: #f8fafc;
     }
     .col-seq {
-      width: 42%;
-      white-space: nowrap;
-      font-weight: 700;
+      width: 44%;
+    }
+    .seq-wrap {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.8mm;
     }
     .sound-pill {
       display: inline-block;
       background: #e0f2fe;
       color: #0c4a6e;
-      border: 0.2mm solid #7dd3fc;
-      border-radius: 0.8mm;
-      padding: 0.1mm 1mm;
-      font-size: 6.7pt;
+      border: 0.25mm solid #7dd3fc;
+      border-radius: 1mm;
+      padding: 0.35mm 1.2mm;
+      font-size: 7.3pt;
       font-weight: 800;
+      white-space: nowrap;
     }
     .plus-mark {
-      margin: 0 0.6mm;
       color: #64748b;
       font-weight: 900;
+      font-size: 7.5pt;
+      flex-shrink: 0;
     }
     .col-jp {
       width: 24%;
@@ -4313,7 +4357,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       color: #334155;
     }
     .col-out {
-      width: 34%;
+      width: 32%;
       font-weight: 800;
       color: #0f172a;
     }
@@ -4323,6 +4367,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     }
     .vocab-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
       font-size: 8.2pt;
       line-height: 1.35;
@@ -4331,34 +4376,38 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       background: #0f172a;
       color: #ffffff;
       font-weight: 900;
-      padding: 1.3mm 1.8mm;
+      padding: 1.5mm 1.8mm;
       font-size: 7.8pt;
       text-align: left;
+      border: 0.25mm solid #0f172a;
     }
     .vocab-table td {
       border: 0.25mm solid #cbd5e1;
-      padding: 1.15mm 1.8mm;
+      padding: 1.3mm 1.6mm;
       vertical-align: middle;
+      overflow-wrap: break-word;
     }
-    .vocab-table tr:nth-child(even) td {
+    .vocab-table tbody tr:nth-child(even) td {
       background: #f8fafc;
     }
     .v-code {
-      width: 7%;
+      width: 6.5%;
       font-family: monospace;
       font-weight: 900;
       color: #0369a1;
       text-align: center;
     }
     .v-sound {
-      width: 20%;
+      width: 19.5%;
       font-weight: 800;
       color: #0f172a;
+      font-size: 7.8pt;
     }
     .v-jp {
-      width: 22%;
+      width: 23%;
       font-weight: 700;
       color: #334155;
+      font-size: 7.8pt;
     }
     .v-sep {
       width: 2%;
@@ -4370,11 +4419,12 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       display: inline-block;
       background: #0369a1;
       color: #ffffff;
-      font-size: 6.5pt;
+      font-size: 6.3pt;
       font-weight: 900;
-      padding: 0.2mm 1.2mm;
+      padding: 0.2mm 1.1mm;
       border-radius: 0.8mm;
-      margin-left: 1mm;
+      margin-left: 0.8mm;
+      white-space: nowrap;
     }
     .memo-grid {
       display: grid;
@@ -4384,9 +4434,9 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     .memo-box {
       border: 0.45mm solid #cbd5e1;
       border-radius: 1.8mm;
-      padding: 2.5mm 3mm;
-      font-size: 8pt;
-      line-height: 1.48;
+      padding: 2.8mm 3.2mm;
+      font-size: 8.2pt;
+      line-height: 1.5;
       background: #ffffff;
     }
     .memo-box.abyss-memo {
@@ -4399,43 +4449,45 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       grid-column: span 2;
     }
     .memo-head {
-      font-size: 8.8pt;
+      font-size: 9pt;
       font-weight: 900;
-      margin-bottom: 1.2mm;
+      margin-bottom: 1.4mm;
       border-bottom: 0.3mm solid rgba(15, 23, 42, 0.15);
       padding-bottom: 0.8mm;
     }
     .day7-table {
       width: 100%;
+      table-layout: fixed;
       border-collapse: collapse;
-      font-size: 8pt;
-      margin-top: 1mm;
+      font-size: 8.2pt;
+      margin-top: 1.2mm;
     }
     .day7-table td {
       border: 0.25mm solid #c7d2fe;
-      padding: 1mm 2mm;
+      padding: 1.4mm 2.2mm;
       background: #ffffff;
     }
     .sheet-foot {
       margin-top: auto;
       border-top: 0.3mm dashed #cbd5e1;
-      padding-top: 1.2mm;
-      font-size: 7pt;
+      padding-top: 1.4mm;
+      font-size: 7.2pt;
       color: #64748b;
       display: flex;
       justify-content: space-between;
+      flex-shrink: 0;
     }
   </style>
 </head>
 <body>
-  <!-- 1頁目：基本ルール＋全35パターン行動判定表 -->
+  <!-- 1頁目：基本ルール＋①挨拶・盟約／②火山・敵・餌／③親子クジラ（計16組） -->
   <div class="a4-sheet">
     <div class="sheet-head">
       <div>
         <div class="sheet-sub">${escapeHtml(project.title)} ― GM用 アナログ進行カンペ（スマホ・イヤフォン不使用時対応）</div>
-        <div class="sheet-title">🐋 クジラ言語 アナログ判定早見表（全35パターン・語順厳守）</div>
+        <div class="sheet-title">🐋 クジラ言語 アナログ判定早見表（①挨拶・盟約 ／ ②行動 ／ ③親子）</div>
       </div>
-      <span class="page-badge">A4縦 1 / 2 頁</span>
+      <span class="page-badge">A4縦 1 / 3 頁</span>
     </div>
 
     <div class="rules-box">
@@ -4445,34 +4497,52 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       <div>・<strong>0組成立時</strong>：語順が逆のペアが含まれる → <strong>「クジラは反応していない（語順が逆のようだ）」</strong> ／ 該当なし → <strong>「クリック音は海へ反響したが、クジラは反応していない」</strong>。</div>
     </div>
 
-    ${categorySectionsHtml}
+    ${page1GroupsHtml}
 
     <div class="sheet-foot">
-      <span>※全35パターンはアプリ『マッコウクジラ音響言語解析システム』の判定ルールと完全一致しています</span>
+      <span>※全35パターン（1頁目16組＋2頁目19組）はアプリ『マッコウクジラ音響言語解析システム』の判定ルールと完全一致</span>
       <span>GM ONLY // プレイヤーへは見せないでください</span>
     </div>
   </div>
 
-  <!-- 2頁目：全28音 正解対応表 ＆ 狂気の深淵・Day 7 アナログ進行メモ -->
+  <!-- 2頁目：④方角（10組）＋ ⑤海域・島名（9組）＝ 計19組 -->
+  <div class="a4-sheet">
+    <div class="sheet-head">
+      <div>
+        <div class="sheet-sub">${escapeHtml(project.title)} ― GM用 アナログ進行カンペ（移動・索敵・警戒パターン）</div>
+        <div class="sheet-title">🧭 クジラ言語 アナログ判定早見表（④方角 ／ ⑤海域・島名）</div>
+      </div>
+      <span class="page-badge">A4縦 2 / 3 頁</span>
+    </div>
+
+    ${page2GroupsHtml}
+
+    <div class="sheet-foot">
+      <span>※語順は必ず「方角・海域が1枚目 ＋ 集まれ／探せ／警戒せよが2枚目」です（逆順の場合は語順不一致を案内）</span>
+      <span>GM ONLY // プレイヤーへは見せないでください</span>
+    </div>
+  </div>
+
+  <!-- 3頁目：全28音 正解対応表 ＆ 狂気の深淵・Day 7 アナログ進行メモ -->
   <div class="a4-sheet">
     <div class="sheet-head">
       <div>
         <div class="sheet-sub">${escapeHtml(project.title)} ― GM用 アナログ進行カンペ（狂気の深淵・Day 7 対応含む）</div>
         <div class="sheet-title">📖 全28音（#01〜#28）正解対応表 ＆ アナログ運用メモ</div>
       </div>
-      <span class="page-badge">A4縦 2 / 2 頁</span>
+      <span class="page-badge">A4縦 3 / 3 頁</span>
     </div>
 
     <table class="vocab-table">
       <thead>
         <tr>
-          <th>番号</th>
-          <th>クリック音</th>
-          <th>正解の日本語</th>
+          <th class="v-code">番号</th>
+          <th class="v-sound">クリック音</th>
+          <th class="v-jp">正解の日本語</th>
           <th class="v-sep"></th>
-          <th>番号</th>
-          <th>クリック音</th>
-          <th>正解の日本語</th>
+          <th class="v-code">番号</th>
+          <th class="v-sound">クリック音</th>
+          <th class="v-jp">正解の日本語</th>
         </tr>
       </thead>
       <tbody>
@@ -4518,7 +4588,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
     </div>
 
     <div class="sheet-foot">
-      <span>※両面印刷（長辺とじ）で1枚にまとめると、GMの手元ですぐ裏返して全ルールと正解表を確認できます</span>
+      <span>※全3頁構成（1頁目：行動・親子 ／ 2頁目：方角・海域 ／ 3頁目：全28音正解表＆運用メモ）</span>
       <span>GM ONLY // プレイヤーへは見せないでください</span>
     </div>
   </div>
@@ -4622,7 +4692,10 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                 <div class="mtg-abyss-title">${escapeHtml(card.mainText)}</div>
                 ${
                   card.subText
-                    ? `<div class="mtg-abyss-sub">${escapeHtml(card.subText)}</div>`
+                    ? `<div class="mtg-abyss-sub">${card.subText
+                        .split("\n")
+                        .map((line) => escapeHtml(line))
+                        .join("<br />")}</div>`
                     : ""
                 }
               </div>
@@ -4965,16 +5038,17 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
       font-size: 18pt;
       font-weight: 900;
       color: #fff1f2;
-      letter-spacing: 0.1em;
+      letter-spacing: 0.08em;
+      white-space: nowrap;
       text-shadow: 0 0 2.5mm #dc2626, 0 0 5mm #7f1d1d, 0 0.5mm 0 #000000;
       line-height: 1.2;
     }
     .mtg-abyss-sub {
-      font-size: 8.2pt;
+      font-size: 8.5pt;
       font-weight: 800;
       color: #fecaca;
       letter-spacing: 0.03em;
-      line-height: 1.35;
+      line-height: 1.45;
       text-shadow: 0 0.3mm 1mm #000000;
     }
     .mtg-abyss-footer {
@@ -6356,20 +6430,21 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="rounded-lg border border-slate-800 bg-slate-950 p-2.5 text-xs text-slate-300 space-y-1">
                     <div className="font-bold text-slate-200">📋 クジラ言語 アナログ判定早見表（GM用）</div>
                     <div className="text-[11px] text-slate-400 leading-relaxed">
-                      スマホやイヤフォンを使えない場合に、GMがアナログカードでクジラの反応を即座に判定するためのA4縦2頁カンペシートです。
+                      スマホやイヤフォンを使えない場合に、GMがアナログカードでクジラの反応を即座に判定するためのA4縦3頁カンペシートです。
                     </div>
                   </div>
                   <div className="w-full rounded-xl border border-indigo-500 bg-indigo-950/70 p-3 text-left shadow-md ring-1 ring-indigo-500/40 space-y-1.5">
                     <div className="flex items-center justify-between">
                       <span className="rounded bg-indigo-500/20 border border-indigo-500/40 px-1.5 py-0.5 text-[10px] font-bold text-indigo-300">
-                        A4縦・全2頁（両面1枚対応）
+                        A4縦・全3頁
                       </span>
                       <span className="text-[10px] font-mono text-slate-300">GM専用</span>
                     </div>
                     <div className="font-bold text-xs text-white">収録内容</div>
                     <div className="text-[11px] text-slate-300 space-y-0.5">
-                      <div>・1頁目：基本判定ルール ＋ 全35パターン行動一覧</div>
-                      <div>・2頁目：全28音 正解対応表 ＋ 狂気の深淵・Day 7 メモ</div>
+                      <div>・1頁目：基本判定ルール ＋ 挨拶・行動・親子（16組）</div>
+                      <div>・2頁目：方角・海域パターン一覧（19組）</div>
+                      <div>・3頁目：全28音 正解対応表 ＋ 狂気の深淵・Day 7 メモ</div>
                     </div>
                   </div>
                 </>
@@ -9384,7 +9459,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
 
                               <div className="relative z-10 my-auto py-1 flex flex-col items-center justify-center text-center gap-1.5">
                                 <div
-                                  className="font-serif font-black tracking-widest text-rose-50 leading-tight text-xl sm:text-2xl"
+                                  className="font-serif font-black tracking-wider text-rose-50 leading-tight whitespace-nowrap text-xl sm:text-2xl"
                                   style={{
                                     textShadow:
                                       "0 0 10px rgba(220,38,38,0.95), 0 0 20px rgba(127,29,29,0.9), 0 2px 2px #000",
@@ -9392,7 +9467,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                                 >
                                   {WHALE_ABYSS_MTG_CARD.mainText}
                                 </div>
-                                <div className="text-[10.5px] font-extrabold text-red-200 leading-snug drop-shadow">
+                                <div className="text-[10.5px] font-extrabold text-red-200 leading-snug whitespace-pre-line drop-shadow">
                                   {WHALE_ABYSS_MTG_CARD.subText}
                                 </div>
                               </div>
@@ -9485,7 +9560,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                   <div className="no-print border-b-2 border-slate-800 pb-3 flex flex-wrap items-center justify-between gap-3">
                     <div>
                       <span className="text-xs font-bold tracking-widest text-slate-500 block">
-                        {project.title} ― GM事前準備（アナログ対応用・クジラ言語判定カンペ / A4縦・全2頁）
+                        {project.title} ― GM事前準備（アナログ対応用・クジラ言語判定カンペ / A4縦・全3頁）
                       </span>
                       <h2 className="text-lg font-bold text-slate-900 mt-0.5">
                         GM用 クジラ言語 アナログ判定早見表（全35パターン ＋ 全28音正解表）
@@ -9498,7 +9573,7 @@ export const BuiltinDistributionStudio: React.FC<DocumentDesignStudioProps> = ({
                         className="flex items-center gap-1.5 rounded-lg bg-emerald-600 px-3.5 py-2 text-xs font-bold text-white shadow hover:bg-emerald-500 transition"
                       >
                         <Printer className="h-3.5 w-3.5" />
-                        判定早見表（A4縦・2頁）を印刷 / PDF保存
+                        判定早見表（A4縦・3頁）を印刷 / PDF保存
                       </button>
                     </div>
                   </div>
